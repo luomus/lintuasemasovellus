@@ -1,2 +1,2 @@
 # Lintuasemasovellus
-Helsingin Yliopiston Ohjelmistotuotantoprojekti syksy 2020
+Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
