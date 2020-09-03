@@ -21,6 +21,8 @@ Jos asennat/päivität paketteja, päivitä riippuvuudet aktiivisessa virtuaaliy
 
 Jos riipuuvudet tarvitsee päivittää, esimerkiksi `git pull` jälkeen, suorita `pip install -r requirements.txt` aktiivisessa virtuaaliympäristössä (tai `. install.sh`).
 
+Kehityspalvelin käynnistetään suorittamalla `flask run` api/ hakemistossa. Käytössä on python-dotenv moduuli jolloin flask lataa ympäristömuuttujat `.flaskenv` tiedostosta.
+
 ### Frontend
 
 TODO
