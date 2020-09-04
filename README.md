@@ -11,7 +11,7 @@ Asenna Python3.
 API projektia varten konffaa Pythonin virtuaaliympäristö(venv). Alla ohjeet Ubuntu/Debian pohjaisille Linux jakeluille asennuskriptin käyttöön.
 
 * Kloonaa projekti
-* Siirry `api/` hakemistoon
+* Siirry `lintuasema-backend/` hakemistoon
 * Suorita `. install.sh`
 * Skripti aktivoi virtuaaliympäristön, kun lopetat työskentelyn poistu virtuaaliympäristöstä `deactivate` komennolla
 
@@ -21,7 +21,7 @@ Jos asennat/päivität paketteja, päivitä riippuvuudet aktiivisessa virtuaaliy
 
 Jos riipuuvudet tarvitsee päivittää, esimerkiksi `git pull` jälkeen, suorita `pip install -r requirements.txt` aktiivisessa virtuaaliympäristössä (tai `. install.sh`).
 
-Kehityspalvelin käynnistetään suorittamalla `flask run` api/ hakemistossa. Käytössä on python-dotenv moduuli jolloin flask lataa ympäristömuuttujat `.flaskenv` tiedostosta.
+Kehityspalvelin käynnistetään suorittamalla `flask run` lintuasema-backend/ hakemistossa. Käytössä on python-dotenv moduuli jolloin flask lataa ympäristömuuttujat `.flaskenv` tiedostosta.
 
 ### Frontend
 
@@ -34,6 +34,10 @@ Jos haluat myös backendin käyttöön, aja lisäksi esim. toisella komentorivil
 Komento `npm install <paketti> --save` asentaa uuden paketin ja asettaa sen projektin ajonaikaiseksi riippuvuudeksi. Vastaavasti komento `npm install <paketti> --save-dev` asentaa uuden paketin ja asettaa sen kehitysaikaiseksi riippuvuudeksi. Riippuvuudet tallentuvat tällä tavoin package.json -tiedostoon frontend-hakemistossa. 
 
 Komennon `npm update` ajaminen juurihakemistossa päivittää projektin riippuvuudet kunnioittaen samalla asetettuja semanttisia versionumeroita package.json -tiedostossa. 
+
+#### Buildaaminen
+
+Saadaksesi käyttöön produktiokelpoisen fronttikoodin, aja `npm build` frontendin juuressa. Komento tuottaa build-nimisen hakemiston frontendin juureen. Jos haluat koodin backendin käyttöön, kopioi hakemisto sisältöineen backendin juurihakemistoon (esim. `cp -r build/ ../lintuasemasovellus-backend`). Tämä tulee tehdä ennen deployausta. 
 
 ## Definition of Done
 
