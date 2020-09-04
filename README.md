@@ -37,7 +37,7 @@ Komennon `npm update` ajaminen juurihakemistossa päivittää projektin riippuvu
 
 #### Buildaaminen
 
-Saadaksesi käyttöön produktiokelpoisen fronttikoodin, aja `npm build` frontendin juuressa. Komento tuottaa build-nimisen hakemiston frontendin juureen. Jos haluat koodin backendin käyttöön, kopioi hakemisto sisältöineen backendin juurihakemistoon (esim. `cp -r build/ ../lintuasemasovellus-backend`). Tämä tulee tehdä ennen deployausta. 
+Saadaksesi käyttöön produktiokelpoisen fronttikoodin, aja `npm run build` frontendin juuressa. Komento tuottaa build-nimisen hakemiston frontendin juureen. Jos haluat koodin backendin käyttöön, kopioi hakemisto sisältöineen backendin juurihakemistoon (esim. `cp -r build/ ../lintuasemasovellus-backend`). Tämä tulee tehdä ennen deployausta. 
 
 ## Definition of Done
 
