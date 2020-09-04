@@ -1,0 +1,2 @@
+FLASK_APP=lintuasemasovellus.py
+FLASK_ENV=development
