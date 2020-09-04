@@ -7,3 +7,6 @@ def index():
     response = make_response("Hello world", 200)
     response.mimetype = "text/plain"
     return response
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True)
