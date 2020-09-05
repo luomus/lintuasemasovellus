@@ -6,6 +6,6 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python"]
+ENV FLASK_APP lintuasemasovellus.py
 
-CMD ["lintuasemasovellus.py"]
+ENTRYPOINT ["./boot.sh"]
