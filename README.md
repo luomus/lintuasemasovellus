@@ -2,6 +2,8 @@
 
 Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
+[Backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
+
 ## Kehitysympäristön asennus
 
 ### API/Backend
