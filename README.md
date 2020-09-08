@@ -37,11 +37,11 @@ Jos haluat myös backendin käyttöön, aja lisäksi esim. toisella komentorivil
 
 Komento `npm install <paketti> --save` asentaa uuden paketin ja asettaa sen projektin ajonaikaiseksi riippuvuudeksi. Vastaavasti komento `npm install <paketti> --save-dev` asentaa uuden paketin ja asettaa sen kehitysaikaiseksi riippuvuudeksi. Riippuvuudet tallentuvat tällä tavoin package.json -tiedostoon frontend-hakemistossa. 
 
-Komennon `npm update` ajaminen juurihakemistossa päivittää projektin riippuvuudet kunnioittaen samalla asetettuja semanttisia versionumeroita package.json -tiedostossa. 
+Komennon `npm update` ajaminen frontend-hakemistossa päivittää projektin riippuvuudet kunnioittaen samalla asetettuja semanttisia versionumeroita package.json -tiedostossa. 
 
 #### Buildaaminen
 
-Saadaksesi käyttöön produktiokelpoisen fronttikoodin, aja `npm run build` frontendin juuressa. Komento tuottaa build-nimisen hakemiston frontendin juureen. Jos haluat koodin backendin käyttöön, kopioi hakemisto sisältöineen backendin juurihakemistoon (esim. `cp -r build/ ../lintuasemasovellus-backend`). Tämä tulee tehdä ennen deployausta. 
+Saadaksesi käyttöön produktiokelpoisen fronttikoodin, aja `npm run build` frontendin juuressa. Komento tuottaa build-nimisen hakemiston frontendin juureen. Jos haluat koodin backendin käyttöön, kopioi hakemisto sisältöineen backendin juurihakemistoon (esim. `cp -r build/ ../lintuasema-backend`). Komento `npm run build-copy` ajaa buildin ja kopioi sen backendiin. Tämä tulee tehdä ennen deployausta. 
 
 ## Definition of Done
 
