@@ -2,6 +2,7 @@ from app import init_app, redirect
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import requests
 
 
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
@@ -18,7 +19,8 @@ if __name__ == '__main__':
 
 @app.route('/login')
 def login():
-    return AUTH_TOKEN
-    # redirect("https://apitest.laji.fi/login?access_token=<token>")
+    token = {'acces_token': AUTH_TOKEN}
+    r = requests.get('https://apitest.laji.fi/login', params=token)
+    return r.json()
 
 
