@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 
 def init_app():
     app = Flask(__name__, static_folder='../build', static_url_path='/')

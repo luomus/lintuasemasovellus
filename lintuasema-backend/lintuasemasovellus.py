@@ -1,4 +1,4 @@
-from app import init_app
+from app import init_app, redirect
 import os
 
 app = init_app()
@@ -10,3 +10,9 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=port)
+
+@app.route('/login')
+def login():
+    redirect("https://apitest.laji.fi/login?access_token=<token>")
+
+
