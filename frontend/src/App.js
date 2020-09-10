@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./globalComponents/Header";
 import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
@@ -19,7 +18,6 @@ const App = () => {
 
   return (
     <div>
-      <Header />
       <NavBar />
       <Switch>
         <Route path="/">
