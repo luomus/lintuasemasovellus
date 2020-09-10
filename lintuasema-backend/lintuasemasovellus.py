@@ -1,5 +1,10 @@
 from app import init_app, redirect
+from dotenv import load_dotenv
+load_dotenv()
 import os
+
+
+AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 
 app = init_app()
 port = int(os.environ.get("PORT", 5000))
@@ -13,6 +18,7 @@ if __name__ == '__main__':
 
 @app.route('/login')
 def login():
-    redirect("https://apitest.laji.fi/login?access_token=<token>")
+    return AUTH_TOKEN
+    # redirect("https://apitest.laji.fi/login?access_token=<token>")
 
 
