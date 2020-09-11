@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
 @app.route('/login')
 def login():
-    token = {'acces_token': AUTH_TOKEN}
+    token = {'access_token': AUTH_TOKEN}
     r = requests.get('https://apitest.laji.fi/login', params=token)
     return r.json()
 
