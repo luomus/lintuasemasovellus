@@ -10,7 +10,7 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 ### Dokumentaatio
 
-[Definion of Done]()
+[Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
 
 ## Ohjeita kehittäjille
 
