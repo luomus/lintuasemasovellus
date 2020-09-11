@@ -2,13 +2,21 @@
 
 Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
+## Projektiin liittyviä linkkejä
+
 [Backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
 
 [Sovellus Herokussa](https://lintuasemasovellus.herokuapp.com/)
 
-## Kehitysympäristön asennus
+### Dokumentaatio
 
-### API/Backend
+[Definion of Done]()
+
+## Ohjeita kehittäjille
+
+### Kehitysympäristön asennus
+
+#### API/Backend
 
 Asenna Python3.
 
@@ -27,7 +35,7 @@ Jos riipuuvudet tarvitsee päivittää, esimerkiksi `git pull` jälkeen, suorita
 
 Kehityspalvelin käynnistetään suorittamalla `flask run` lintuasema-backend/ hakemistossa. Käytössä on python-dotenv moduuli jolloin flask lataa ympäristömuuttujat `.flaskenv` tiedostosta.
 
-### Frontend
+#### Frontend
 
 Projekti käyttää frontendkehityksessä npm-paketinhallintajärjestelmää ja se on bootstrapattu create-react-app-skriptillä.
 
@@ -49,15 +57,4 @@ Dockeria ei tarvitse sovelluksen ajamiseen, joten jos yllä olevilla komennoilla
 
 
 
-## Definition of Done
 
-Alla määritelmä sille, mitä vaatimuksia User Story:n tulee täyttää, että sen katsotaan olevan valmis. Vaatimuksia voidaan tarvittaessa tarkentaa projektin edetessä. 
-
-* analysoitu
-* suunniteltu
-* ohjelmoitu
-* testattu
-* testaus automatisoitu
-* dokumentoitu
-* integroitu muuhun ohjelmistoon
-* viety tuotantoympäristöön
