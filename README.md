@@ -4,13 +4,17 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 ## Projektiin liittyviä linkkejä
 
-[Backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
-
 [Sovellus Herokussa](https://lintuasemasovellus.herokuapp.com/)
 
 ### Dokumentaatio
 
+### Projektin edistyminen
+
+[Backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
+
 [Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
+
+[Tuntikirjanpito](https://docs.google.com/spreadsheets/d/1V68aoQnG-gI77wLIuzaikG_-l8oi5lEpZsDesqOSz5o/edit?usp=sharing)
 
 ## Ohjeita kehittäjille
 
