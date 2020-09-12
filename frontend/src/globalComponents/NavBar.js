@@ -33,6 +33,11 @@ const NavBar = () => {
             </Link>
           </li>
           <li>
+            <Link to = "/list">
+              Listaa havainnot
+              </Link>
+              </li>
+          <li>
             <Link to ="/">
             About
             </Link>
