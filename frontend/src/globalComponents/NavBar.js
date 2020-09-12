@@ -28,7 +28,7 @@ const NavBar = () => {
             </Link>
           </li>
           <li>
-            <Link to = "/lomake">
+            <Link to = "/form">
             Lisää havaintoja
             </Link>
           </li>
