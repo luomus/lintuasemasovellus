@@ -3,7 +3,8 @@ import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
 import Footer from "./globalComponents/Footer";
-import { Form, List } from "./pages";
+import { Form } from "./pages";
+import { HavaintoList } from "./pages";
 
 const App = () => {
 
@@ -16,7 +17,7 @@ const App = () => {
           <Form />
         </Route>
         <Route path="/list">
-          <List />
+          <HavaintoList />
         </Route>
         <Route path="/">
           <HomePage />
