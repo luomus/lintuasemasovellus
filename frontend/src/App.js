@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
 import Footer from "./globalComponents/Footer";
-import { getHello } from "./services";
 
 
 const App = () => {
 
-  const [text, setText] = useState("");
-
-  useEffect(() => {
-    getHello()
-      .then(res => res.data)
-      .then(response => setText(response));
-  }, []);
 
   return (
     <div>
       <NavBar />
       <Switch>
+        <Route path="/lomake">
+
+        </Route>
         <Route path="/">
-          {text}
           <HomePage />
         </Route>
+
       </Switch>
       <Footer />
     </div>

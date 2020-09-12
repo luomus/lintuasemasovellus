@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.css";
 import Header from "./Header";
+import { getAuth } from "../services";
+
 
 const NavBar = () => {
+
+
+  const [authJson, setAuthJson] = useState({});
+
+  const kirjauduButton = () => {
+    getAuth()
+      .then(res => res.data)
+      .then(authjson => setAuthJson(authjson));
+  };
+
+  console.log(authJson);
+
   return (
     <div>
       <nav className="navbar">
@@ -14,7 +28,7 @@ const NavBar = () => {
             </Link>
           </li>
           <li>
-            <Link to = "/">
+            <Link to = "/lomake">
             Lisää havaintoja
             </Link>
           </li>
@@ -24,7 +38,7 @@ const NavBar = () => {
             </Link>
           </li>
           <li>
-            <a id="login-link" href="http://www.google.com">Kirjaudu</a>
+            <button onClick={kirjauduButton}>Kirjaudu</button>
           </li>
         </ul>
       </nav>
