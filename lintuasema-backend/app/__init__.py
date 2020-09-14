@@ -1,7 +1,7 @@
 from flask import Flask, redirect
 
-import cx_Oracle
-import app.oracleConfig
+""" import cx_Oracle
+import app.oracleConfig """
 
 def init_app():
     app = Flask(__name__, static_folder='../build', static_url_path='/')
@@ -11,7 +11,7 @@ def init_app():
 
     return app
 
-connection = None
+""" connection = None
 dsn_tns = cx_Oracle.makedsn(oracleConfig.hostname, oracleConfig.port, service_name=oracleConfig.serviceid) 
 
 try:
@@ -25,3 +25,4 @@ try:
 
 except cx_Oracle.Error as error:
     print(error)
+ """
