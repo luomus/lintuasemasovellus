@@ -1,38 +1,40 @@
 import React from "react";
-import {useState} from "react";
-import {useEffect} from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const esim = [
-    {
-        suomeksi:"jokunimi", ruotsiksi:"ruotsinimi", tieteellinen:"tieteellinennimi", sijainti:"paikka", havainnoija:"henkilö", aika:"aika" 
-    }
-] 
+  {
+    suomeksi: "jokunimi",
+    ruotsiksi: "ruotsinimi",
+    tieteellinen: "tieteellinennimi",
+    sijainti: "paikka",
+    havainnoija: "henkilö",
+    aika: "aika"
+  }
+];
 
 export const HavaintoList = () => {
-    const [list, setList] = useState([]) 
+  const [list, setList] = useState([]);
 
-console.log(list)
+  console.log(list);
 
-    useEffect(()=>{
-        console.log(list)
+  useEffect(() => {
+    setList(esim);
+  }, []);
 
-
-
-setList(esim) 
-    },[])
-    console.log(list)
-    if (!list) return null
-    return(
-        <div>
-            {list.map((entry)=>{
-                return(
-                    <div>
-                        <div>
-                            {entry.suomeksi}
-                            </div>
-                        </div>
-                )
-            })}
+  console.log(list);
+  if (!list) return null;
+  return (
+    <div>
+      {list.map((entry, i) => {
+        return (
+          <div key={i}>
+            <div>
+              {entry.suomeksi}
             </div>
-    )  
-}
+          </div>
+        );
+      })}
+    </div>
+  );
+};

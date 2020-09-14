@@ -35,15 +35,22 @@ const NavBar = () => {
           <li>
             <Link to = "/list">
               Listaa havainnot
-              </Link>
-              </li>
+            </Link>
+          </li>
           <li>
             <Link to ="/">
             About
             </Link>
           </li>
           <li>
-            <button onClick={kirjauduButton}>Kirjaudu</button>
+            <a
+              onClick={ kirjauduButton }
+              style={ { cursor: "pointer" } }
+              id="login-link"
+              href="javascript:void(0)"
+            >
+              Kirjaudu
+            </a>
           </li>
         </ul>
       </nav>
