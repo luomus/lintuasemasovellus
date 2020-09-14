@@ -23,9 +23,9 @@ if __name__ == '__main__':
 @app.route('/login', methods=['POST', 'GET'])
 def loginconfirm():
     personToken = request.form['token']
-    #nextParam = request.form['next'] ei ilmeisesti toimi?
+    req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN)
 
-    return "Metodi: " + request.method + ', personToken: ' + personToken 
+    return req.json()
 
 
 @app.route('/loginRedirect', methods=['POST', 'GET'])
