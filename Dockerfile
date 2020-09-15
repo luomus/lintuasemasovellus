@@ -18,6 +18,6 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["flask"]
 
-CMD ["lintuasemasovellus.py"]
+CMD ["run", "--host=0.0.0.0", "--port=3000"]
