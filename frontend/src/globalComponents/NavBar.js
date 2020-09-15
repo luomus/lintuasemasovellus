@@ -1,22 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.css";
 import Header from "./Header";
-import { getAuth } from "../services";
+import { loginUrl } from "../constants";
 
 
 const NavBar = () => {
 
-
-  const [authJson, setAuthJson] = useState({});
-
-  const kirjauduButton = () => {
-    getAuth()
-      .then(res => res.data)
-      .then(authjson => setAuthJson(authjson));
-  };
-
-  console.log(authJson);
 
   return (
     <div>
@@ -44,10 +34,8 @@ const NavBar = () => {
           </li>
           <li>
             <a
-              onClick={ kirjauduButton }
-              style={ { cursor: "pointer" } }
               id="login-link"
-              href="javascript:void(0)"
+              href={`${loginUrl}`}
             >
               Kirjaudu
             </a>
