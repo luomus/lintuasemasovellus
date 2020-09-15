@@ -11,7 +11,7 @@ AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 TARGET = os.getenv('TARGET')
 
 app = init_app()
-port = int(os.environ.get("PORT", 3000))
+port = int(os.environ.get("PORT", 5000))
 
 @app.route('/')
 def index():
