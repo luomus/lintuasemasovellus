@@ -10,7 +10,7 @@ from flask import Flask, render_template, request, redirect, session, url_for
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 TARGET = os.getenv('TARGET')
 
-app = init_app()
+app = Flask(__name__, static_folder='./build', static_url_path='/')
 port = int(os.environ.get("PORT", 5000))
 
 @app.route('/')
