@@ -1,4 +1,4 @@
-from app import db #mihin tiedostoon viittaa
+from app.db import db #mihin tiedostoon viittaa
 from app.api.models import Base #models tiedosto pitää tehdä jonne Base
   
 class ObservationSession(Base):
