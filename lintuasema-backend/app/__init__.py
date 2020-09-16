@@ -19,11 +19,11 @@ def init_app():
     app.register_blueprint(api_blueprint)
     db = SQLAlchemy(app)
 
-    from app.classes.day import models
-    from app.classes.location import models
-    from app.classes.observationsession import models
-    from app.classes.observationstation import models
-    from app.classes.user import models
+    from app.api.classes.day import models
+    from app.api.classes.location import models
+    from app.api.classes.observationsession import models
+    from app.api.classes.observationstation import models
+    from app.api.classes.user import models
     
     db.create_all()
     res = db.engine.execute("SELECT 1 FROM DUAL") #oraclen erikoistietokantataulu, jossa aina yksi rivi ja yksi sarake
