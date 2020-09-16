@@ -1,4 +1,4 @@
-from.application import db //TODO tsekkaa oikea tiedosto
+from.application import db #TODO tsekkaa oikea tiedosto
 from application.api.models import Base
 
 public class Location(Base):
