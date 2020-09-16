@@ -1,5 +1,5 @@
-from.application import db #TODO tsekkaa oikea tiedosto
-from application.api.models import Base
+from app import db #TODO tsekkaa oikea tiedosto
+from app.api.models import Base
 
 class ObservationStation(Base)
 

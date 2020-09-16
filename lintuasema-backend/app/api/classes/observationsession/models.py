@@ -1,5 +1,5 @@
-from application import db #mihin tiedostoon viittaa
-from application.api.models import Base #models tiedosto pitää tehdä jonne Base
+from app import db #mihin tiedostoon viittaa
+from app.api.models import Base #models tiedosto pitää tehdä jonne Base
   
 class ObservationSession(Base):
 
