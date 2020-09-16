@@ -1,8 +1,8 @@
-FROM node:latest
+FROM node:latest AS builder
 
-COPY ./frontend /app
+COPY /frontend /front
 
-WORKDIR /app
+WORKDIR /front
 
 RUN npm install
 
@@ -12,9 +12,11 @@ RUN npm run build
 
 FROM python:latest
 
-COPY ./lintuasema-backend /app
+COPY /lintuasema-backend /back
 
-WORKDIR /app
+COPY --from=builder /front/build/ /back/build/
+
+WORKDIR /back
 
 RUN pip install -r requirements.txt
 
