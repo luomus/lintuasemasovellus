@@ -4,7 +4,7 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 ## Projektiin liittyviä linkkejä
 
-[Sovellus Herokussa](https://lintuasemasovellus.herokuapp.com/)
+[Sovellus Rahdissa](https://lintuasema-lintuasema-staging.rahtiapp.fi/)
 
 ### Dokumentaatio
 
