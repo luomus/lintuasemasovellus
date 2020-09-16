@@ -10,8 +10,8 @@ from flask import Flask, render_template, request, redirect, session, url_for
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 TARGET = os.getenv('TARGET')
 
-app = Flask(__name__, static_folder='/build', static_url_path='/', template_folder='/build')
-port = int(os.environ.get("PORT", 5000))
+app = init_app()
+port = int(os.environ.get("PORT", 3000))
 
 @app.route('/')
 def index():
