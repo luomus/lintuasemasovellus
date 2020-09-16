@@ -28,6 +28,8 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 [Docker-ohje](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/dockerGuide.md)
 
+[Cypress-ohje](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/cypressGuide.md)
+
 
 
 
