@@ -1,7 +1,7 @@
-from app import db #TODO tsekkaa oikea tiedosto
-from app.api.models import Base
+# from app import db #TODO tsekkaa oikea tiedosto
+# from app.api.models import Base
 
-class ObservationStation(Base)
+# class ObservationStation(Base)
 
-    name = db.Column(db.Column(db.String(144), nullable=False))
+#     name = db.Column(db.Column(db.String(144), nullable=False))
     
