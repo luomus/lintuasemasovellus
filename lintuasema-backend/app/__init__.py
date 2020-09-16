@@ -16,6 +16,7 @@ import app.oracleConfig
 def init_app():
     
     app = Flask(__name__, static_folder='../build', static_url_path='/')
+    return app
 
     dnsStr = cx_Oracle.makedsn('oracle.luomus.fi', 1521, service_name='oracle.luomus.fi')
     dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')
