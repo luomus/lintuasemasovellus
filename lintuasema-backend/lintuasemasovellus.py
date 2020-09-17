@@ -32,6 +32,11 @@ def loginconfirm():
     #req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN)
     return redirect('/')
 
+@app.route('/logout', methods=['POST', 'GET'])
+def logoutCleanup():
+    session.pop('token', None)
+    return redirect('/')
+
 @app.route('/get/token', methods=['GET', 'POST'])
 def getSessionToken():
     return jsonify(token=session['token'], auth_token=AUTH_TOKEN)

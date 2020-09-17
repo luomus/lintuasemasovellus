@@ -1,9 +1,13 @@
 import axios from "axios";
-import { authUrl } from "../constants";
+import { authUrl, logoutUrl } from "../constants";
 
 export const getToken = async () => {
   const tokens = await axios.get(authUrl);
   return tokens;
+};
+
+export const getLogout = async () => {
+  await axios.get(logoutUrl);
 };
 
 export const getAuth = async (token, auth_token) => {
