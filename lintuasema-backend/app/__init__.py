@@ -9,9 +9,10 @@ from app.api.classes.observationstation import models
 from app.api.classes.user import models
 from app.db import db
 
+from app.api.classes.observationsession import views
+
 import cx_Oracle
 import app.oracleConfig
-
 
 def init_app():
     
