@@ -27,14 +27,14 @@ const NavBar = () => {
       href="#"
       id="logout-link"
     >
-      logout
+      Kirjaudu ulos
     </a>
     :
     <a
       id="login-link"
       href={`${loginUrl}`}
     >
-      Kirjaudu
+      Kirjaudu sisään
     </a>;
 
   const welcomeText = user.id
