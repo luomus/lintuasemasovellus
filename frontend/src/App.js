@@ -3,8 +3,7 @@ import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
 import Footer from "./globalComponents/Footer";
-import { Form } from "./pages";
-import { HavaintoList } from "./pages";
+import { Form, ObservationSessionForm, ObservationSessionList, HavaintoList } from "./pages";
 import { getAuth, getToken } from "./services/user";
 
 const App = () => {
@@ -33,6 +32,12 @@ const App = () => {
       <Switch>
         <Route path="/form">
           <Form />
+        </Route>
+        <Route path="/havainnointiform">
+          <ObservationSessionForm />
+        </Route>
+        <Route path="/havainnointilist">
+          <ObservationSessionList />
         </Route>
         <Route path="/list">
           <HavaintoList />
