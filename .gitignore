@@ -19,7 +19,6 @@
 *.env.test.local
 *.env.production.local
 
-oracleConfig.py
 
 *npm-debug.log*
 *yarn-debug.log*
