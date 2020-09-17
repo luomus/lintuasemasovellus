@@ -27,7 +27,7 @@ export const ObservationSessionForm = () => {
           changeListener={(event) => setDate(event.target.value)}
           value={date}
         />
-        
+
         <p><button type="submit">Tallenna</button></p>
 
       </form>
