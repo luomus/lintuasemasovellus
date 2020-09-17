@@ -15,6 +15,6 @@ def add_observation():
 
     return redirect(url_for("observations_index"))
 
-@bp.route('/havainnointilist', methods=["POST"])
+@bp.route('/havainnointilist', methods=["GET"])
 def observations_index():
     return render_template("/havainnointilist", observations = ObservationSession.query.all())
