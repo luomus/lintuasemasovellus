@@ -22,4 +22,8 @@
     text-align: right;
 }
 
+.navbar ul li a#logout-link {
+    float: right;
+    text-align: right;
+}
 
