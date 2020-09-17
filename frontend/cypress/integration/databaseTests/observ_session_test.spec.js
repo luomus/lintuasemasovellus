@@ -17,7 +17,7 @@ describe('AddObservationSession', function() {
       cy.contains('Lisää havainnointikerta').click()
       cy.get('input:first').type(observStation)
       cy.get('input:last').type(date)
-      cy.contains('Tallenna').click()
+      //cy.contains('Tallenna').click()
     })
     it('There is a button for listing all observation sessions', function() {
       cy.visit('http://localhost:3000')
