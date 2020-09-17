@@ -28,7 +28,7 @@ def init_app():
     app.register_blueprint(api_blueprint)
     
     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
-    with app.app_context(): #appioliota käyttäen luodaan tietokantataulut
+    with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
         db.create_all()
   
     return app
