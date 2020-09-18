@@ -63,7 +63,7 @@ const NavBar = () => {
           </li>
           <li>
             <Link to = "/havainnointilist">
-              Listaa havainnointikerrat
+              Näytä havainnointikerrat
             </Link>
           </li>
           <li>
@@ -73,7 +73,7 @@ const NavBar = () => {
           </li>
           <li>
             <Link to = "/list">
-              Listaa havainnot
+              Näytä havainnot
             </Link>
           </li>
           <li>
