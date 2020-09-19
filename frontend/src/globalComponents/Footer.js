@@ -1,12 +1,30 @@
 import React from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import { Box } from "@material-ui/core";
+
+
+
+
+const useStyles = makeStyles({
+  footer: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    height: 50,
+    background: "white",
+    textAlign: "center"
+  },
+});
 
 const Footer = () => {
+  const classes = useStyles();
+
   return (
-    <footer>
+    <Box className={classes.footer} boxShadow={3}>
       <p>
-        Something goes in here.
+        Lintuasemasovellus | Ohjelmistotuotantoprojekti 2020
       </p>
-    </footer>
+    </Box>
   );
 };
 

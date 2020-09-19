@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Typography, Box } from "@material-ui/core";
-import { Dehaze } from "@material-ui/icons";
+import { AppBar, Toolbar, IconButton, Typography, Box, Button } from "@material-ui/core";
+import { Dehaze, AccountCircle } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
 import { loginUrl } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,17 @@ import { setUser } from "../reducers/userReducer";
 const useStyles = makeStyles({
   drawerContainer: {
     background: "white",
-    padding: '20px 30px',
+    padding: "20px 30px",
+  },
+  userButton: {
+    float: "right",
+    size: "small",
+    color: "white",
+    backgroundColor: "olivegreen",
+
+  },
+  rightMenu: {
+    marginLeft: "auto",
   },
 });
 
@@ -42,26 +52,29 @@ const NavBar = () => {
 
   const logoutLogin = user.id
     ?
-    <a
+    <Button className={classes.userButton}
+
       onClick={logoutHandler}
       href="#"
       id="logout-link"
+      startIcon={<AccountCircle />}
     >
       Kirjaudu ulos
-    </a>
+    </Button>
     :
-    <a
+    <Button className={classes.userButton}
       id="login-link"
       href={`${loginUrl}`}
+      startIcon={<AccountCircle />}
     >
       Kirjaudu sisään
-    </a>;
+    </Button>;
 
   const welcomeText = user.id
     ?
-    <a>
+    <Typography>
       Tervetuloa sovellukseen {user.fullName}!
-      </a>
+      </Typography>
     :
     null;
 
@@ -70,9 +83,11 @@ const NavBar = () => {
 
   return (
     <div>
-      <Box component="navbar">
+      
         <AppBar position="static" style={{ background: "darkolivegreen" }} >
           <Toolbar>
+          
+
             <IconButton onClick={toggleMenu("right", true)}>
               <Dehaze style={{ color: "white" }} />
             </IconButton>
@@ -88,15 +103,16 @@ const NavBar = () => {
                 <NavBarLinks />
               </Box>
             </Drawer>
-          <ul>
+            <section className={classes.rightMenu}>
             {welcomeText}
-
             {logoutLogin}
-          </ul>
+            </section>
+
           </Toolbar>
+
         </AppBar>
-      </Box>
-    <hr></hr>
+      
+      <hr></hr>
     </div >
   );
 };
