@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import { AppBar, Toolbar, ListItem, IconButton, ListItemText, Avatar, Divider, List, Typography, Box } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+import { AppBar, Toolbar, IconButton, Typography, Box } from "@material-ui/core";
 import { Dehaze } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
 import { loginUrl } from "../constants";
@@ -9,7 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/user";
 import { setUser } from "../reducers/userReducer";
 
+
+const useStyles = makeStyles({
+  drawerContainer: {
+    background: "white",
+    padding: '20px 30px',
+  },
+});
+
 const NavBar = () => {
+  const classes = useStyles();
 
   const [state, setState] = useState({
     right: false
@@ -50,13 +59,13 @@ const NavBar = () => {
 
   const welcomeText = user.id
     ?
-    <li>
-      <a>
-        Tervetuloa sovellukseen {user.fullName}!
+    <a>
+      Tervetuloa sovellukseen {user.fullName}!
       </a>
-    </li>
     :
     null;
+
+
 
 
   return (
@@ -71,22 +80,24 @@ const NavBar = () => {
               Lintuasemasovellus
               </Typography>
 
-            <Drawer open={state.right}
+            <Drawer
+              open={state.right}
               onClose={toggleMenu("right", false)}>
-              <Box onClick={toggleMenu("right", false)} >
+              <Box onClick={toggleMenu("right", false)}
+                className={classes.drawerContainer} component="div">
                 <NavBarLinks />
               </Box>
             </Drawer>
-            <ul>
-              {welcomeText}
-              <br />
-              {logoutLogin}
-            </ul>
+          <ul>
+            {welcomeText}
+
+            {logoutLogin}
+          </ul>
           </Toolbar>
         </AppBar>
       </Box>
-      <hr></hr>
-    </div>
+    <hr></hr>
+    </div >
   );
 };
 
