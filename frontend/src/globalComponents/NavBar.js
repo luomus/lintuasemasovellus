@@ -73,7 +73,9 @@ const NavBar = () => {
 
             <Drawer open={state.right}
               onClose={toggleMenu("right", false)}>
-              <NavBarLinks />
+              <Box onClick={toggleMenu("right", false)} >
+                <NavBarLinks />
+              </Box>
             </Drawer>
             <ul>
               {welcomeText}
