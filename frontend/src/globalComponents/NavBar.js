@@ -1,13 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./NavBar.css";
-import Header from "./Header";
+import React, { useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import { AppBar, Toolbar, ListItem, IconButton, ListItemText, Avatar, Divider, List, Typography, Box } from "@material-ui/core";
+import { Dehaze } from "@material-ui/icons";
+import NavBarLinks from "./NavBarLinks";
 import { loginUrl } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/user";
 import { setUser } from "../reducers/userReducer";
 
 const NavBar = () => {
+
+  const [state, setState] = useState({
+    right: false
+  }
+  )
+
+  const toggleMenu = (slider, open) => () => {
+    setState({ ...state, [slider]: open });
+  };
 
   const user = useSelector(state => state.user);
 
@@ -47,46 +58,31 @@ const NavBar = () => {
     :
     null;
 
+
   return (
     <div>
-      <nav className="navbar">
-        <ul>
-          <li>
-            <Link to = "/">
-              <Header />
-            </Link>
-          </li>
-          <li>
-            <Link to = "/havainnointiform">
-              Lisää havainnointikerta
-            </Link>
-          </li>
-          <li>
-            <Link to = "/havainnointilist">
-              Näytä havainnointikerrat
-            </Link>
-          </li>
-          <li>
-            <Link to = "/form">
-            Lisää havaintoja
-            </Link>
-          </li>
-          <li>
-            <Link to = "/list">
-              Näytä havainnot
-            </Link>
-          </li>
-          <li>
-            <Link to ="/">
-            About
-            </Link>
-          </li>
-          {welcomeText}
-          <li>
-            {logoutLogin}
-          </li>
-        </ul>
-      </nav>
+      <Box component="navbar">
+        <AppBar position="static" style={{ background: "darkolivegreen" }} >
+          <Toolbar>
+            <IconButton onClick={toggleMenu("right", true)}>
+              <Dehaze style={{ color: "white" }} />
+            </IconButton>
+            <Typography variant="h5">
+              Lintuasemasovellus
+              </Typography>
+
+            <Drawer open={state.right}
+              onClose={toggleMenu("right", false)}>
+              <NavBarLinks />
+            </Drawer>
+            <ul>
+              {welcomeText}
+              <br />
+              {logoutLogin}
+            </ul>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <hr></hr>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import CssBaseline from '@material-ui/core/CssBaseline';
 import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
@@ -27,6 +28,7 @@ const App = () => {
 
 
   return (
+    <CssBaseline>
     <div>
       <NavBar />
       <Switch>
@@ -49,6 +51,7 @@ const App = () => {
       </Switch>
       <Footer />
     </div>
+    </CssBaseline>
   );
 
 };
