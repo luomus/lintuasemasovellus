@@ -9,3 +9,7 @@ sudo sh -c "echo $HOME/Desktop/instantclient_19_8 > \
 
 
 sudo ldconfig
+
+
+### Vaihtoehtoinen asennus:
+`docker run banglamon/oracle193db:19.3.0-ee`
