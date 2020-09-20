@@ -112,7 +112,7 @@ const NavBar = () => {
 
         </AppBar>
       
-      <hr></hr>
+     
     </div >
   );
 };
