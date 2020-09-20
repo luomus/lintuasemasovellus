@@ -1,34 +1,36 @@
-import React, { useState } from "react";
-import Button from '@material-ui/core/Button';
+import React from "react";
+import { Box, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+
 
 
 
 const NavBarLinks = () => {
     return (
-        <links>
-            <Button href="/">
+        <Box>
+            <Button component={Link} to="/">
                 Etusivu
   </Button>
             <br />
-            <Button href="/havainnointiform">
+            <Button component={Link} to="/havainnointiform">
                 Lisää havainnointikerta
 </Button>
 
             <br />
-            <Button href="/havainnointilist">
+            <Button component={Link} to="/havainnointilist">
                 Näytä havainnointikerrat
 </Button>
 
             <br />
-            <Button href="/form">
+            <Button component={Link} to="/form">
                 Lisää havaintoja
 </Button>
 
             <br />
-            <Button href="/list">
+            <Button component={Link} to="/list">
                 Näytä havainnot
 </Button>
-        </links>
+        </Box>
     );
 };
 
