@@ -1,16 +1,17 @@
 import React from "react";
-import { useState } from "react";
+import { useInputField } from "../../hooks/inputField";
 import Inputfield from "./Inputfield";
 
 
 
 export const Form = () => {
-  const [finnishName, setFinnishName] = useState("");
-  const [swedishName, setSwedishName] = useState("");
-  const [latName, setLatName] = useState("");
-  const [location, setLocation] = useState("");
-  const [spotter, setSpotter] = useState("");
-  const [time, setTime] = useState("");
+
+  const finnishName = useInputField();
+  const swedishName = useInputField();
+  const latName = useInputField();
+  const location = useInputField();
+  const spotter = useInputField();
+  const time = useInputField();
 
   const addHavainto = (event) => {
     event.preventDefault();
@@ -22,33 +23,27 @@ export const Form = () => {
       <form onSubmit={addHavainto}>
         <Inputfield
           labelText="Suomenkielinen nimi"
-          changeListener={(event) => setFinnishName(event.target.value)}
-          value={finnishName}
+          {...finnishName}
         />
         <Inputfield
           labelText="Ruotsinkielinen nimi"
-          changeListener={(event) => setSwedishName(event.target.value)}
-          value={swedishName}
+          {...swedishName}
         />
         <Inputfield
           labelText="Tieteellinen nimi"
-          changeListener={(event) => setLatName(event.target.value)}
-          value={latName}
+          {...latName}
         />
         <Inputfield
           labelText="Sijainti"
-          changeListener={(event) => setLocation(event.target.value)}
-          value={location}
+          {...location}
         />
         <Inputfield
           labelText="Havainnoijan nimi"
-          changeListener={(event) => setSpotter(event.target.value)}
-          value={spotter}
+          {...spotter}
         />
         <Inputfield
           labelText="Aika"
-          changeListener={(event) => setTime(event.target.value)}
-          value={time}
+          {...time}
         />
         <p><button type="submit">Tallenna</button></p>
 

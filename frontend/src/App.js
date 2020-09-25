@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from "@material-ui/core/CssBaseline";
 import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
@@ -8,6 +8,7 @@ import { Form, ObservationSessionForm, ObservationSessionList, HavaintoList } fr
 import { getAuth, getToken } from "./services/user";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
+import { getHavainnointilist, postHavainnointiform } from "./services/havainnointilist";
 
 const App = () => {
 
@@ -15,13 +16,24 @@ const App = () => {
 
   const user = useSelector(state => state.user);
 
+  const userIsSet = Boolean(user.id);
+
   useEffect(() => {
+    if (userIsSet) return;
     getToken()
       .then(resp => resp.data)
       .then(tokenJson => getAuth(tokenJson.token, tokenJson.auth_token)
         .then(resp => resp.data)
         .then(res => dispatch(setUser(res)))
       );
+  }, [dispatch, userIsSet]);
+
+  useEffect(() => {
+    postHavainnointiform({ observatory: "testi", date: "19/03/2000" })
+      .then(() => {
+        getHavainnointilist()
+          .then(res => console.log(res));
+      });
   }, []);
 
   console.log("user:", user);
@@ -29,28 +41,28 @@ const App = () => {
 
   return (
     <CssBaseline>
-    <div>
-      <NavBar />
-      <Switch>
-        <Route path="/form">
-          <Form />
-        </Route>
-        <Route path="/havainnointiform">
-          <ObservationSessionForm />
-        </Route>
-        <Route path="/havainnointilist">
-          <ObservationSessionList />
-        </Route>
-        <Route path="/list">
-          <HavaintoList />
-        </Route>
-        <Route path="/">
-          <HomePage />
-        </Route>
+      <div>
+        <NavBar />
+        <Switch>
+          <Route path="/form">
+            <Form />
+          </Route>
+          <Route path="/havainnointiform">
+            <ObservationSessionForm />
+          </Route>
+          <Route path="/havainnointilist">
+            <ObservationSessionList />
+          </Route>
+          <Route path="/list">
+            <HavaintoList />
+          </Route>
+          <Route path="/">
+            <HomePage />
+          </Route>
 
-      </Switch>
-      <Footer />
-    </div>
+        </Switch>
+        <Footer />
+      </div>
     </CssBaseline>
   );
 

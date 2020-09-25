@@ -3,6 +3,7 @@ module.exports = {
         'react': { 'version': 'latest' }
     },
     'env': {
+        'node': true,
         'browser': true,
         'es6': true
     },

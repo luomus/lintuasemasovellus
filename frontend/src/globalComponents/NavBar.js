@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Drawer from '@material-ui/core/Drawer';
-import { makeStyles } from '@material-ui/core/styles';
+import Drawer from "@material-ui/core/Drawer";
+import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Typography, Box, Button } from "@material-ui/core";
 import { Dehaze, AccountCircle } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
@@ -33,7 +33,7 @@ const NavBar = () => {
   const [state, setState] = useState({
     right: false
   }
-  )
+  );
 
   const toggleMenu = (slider, open) => () => {
     setState({ ...state, [slider]: open });
@@ -74,45 +74,36 @@ const NavBar = () => {
     ?
     <Typography>
       Tervetuloa sovellukseen {user.fullName}!
-      </Typography>
+    </Typography>
     :
     null;
 
 
-
-
   return (
     <div>
-      
-        <AppBar position="static" style={{ background: "darkolivegreen" }} >
-          <Toolbar>
-          
 
-            <IconButton onClick={toggleMenu("right", true)}>
-              <Dehaze style={{ color: "white" }} />
-            </IconButton>
-            <Typography variant="h5">
+      <AppBar position="static" style={{ background: "darkolivegreen" }} >
+        <Toolbar>
+          <IconButton onClick={toggleMenu("right", true)}>
+            <Dehaze style={{ color: "white" }} />
+          </IconButton>
+          <Typography variant="h5">
               Lintuasemasovellus
-              </Typography>
-
-            <Drawer
-              open={state.right}
-              onClose={toggleMenu("right", false)}>
-              <Box onClick={toggleMenu("right", false)}
-                className={classes.drawerContainer} component="div">
-                <NavBarLinks />
-              </Box>
-            </Drawer>
-            <section className={classes.rightMenu}>
+          </Typography>
+          <Drawer
+            open={state.right}
+            onClose={toggleMenu("right", false)}>
+            <Box onClick={toggleMenu("right", false)}
+              className={classes.drawerContainer} component="div">
+              <NavBarLinks />
+            </Box>
+          </Drawer>
+          <section className={classes.rightMenu}>
             {welcomeText}
             {logoutLogin}
-            </section>
-
-          </Toolbar>
-
-        </AppBar>
-      
-     
+          </section>
+        </Toolbar>
+      </AppBar>
     </div >
   );
 };

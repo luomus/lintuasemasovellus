@@ -10,17 +10,19 @@ const Inputfield = (props) => {
         {props.labelText}
       </div>
       <input
+        type={props.type}
         value={props.value}
-        onChange={props.changeListener}
+        onChange={props.onChange}
       ></input>
     </>
   );
 };
 
 Inputfield.propTypes = {
+  type: PropTypes.string.isRequired,
   labelText: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  changeListener: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired
 };
 
 export default Inputfield;

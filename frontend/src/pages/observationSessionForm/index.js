@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { postHavainnointiform } from "../../services/havainnointilist";
 import Inputfield from "./Inputfield";
 
 
@@ -9,9 +10,14 @@ export const ObservationSessionForm = () => {
   const [date, setDate] = useState("");
 
 
-  const addHavainnointi = (event) => {
+  const addHavainnointi = async (event) => {
     event.preventDefault();
     // do things with form
+    postHavainnointiform({ date: date })
+      .then(() => console.log("success"))
+      .catch(() => console.error("problem"));
+    setObservatory("");
+    setDate("");
   };
 
   return (
