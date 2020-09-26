@@ -6,7 +6,7 @@ import { Dehaze, AccountCircle } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
 import { loginUrl } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { getLogout } from "../services/user";
+import { getLogout } from "../services";
 import { setUser } from "../reducers/userReducer";
 
 

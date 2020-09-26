@@ -5,10 +5,9 @@ import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
 import Footer from "./globalComponents/Footer";
 import { Form, ObservationSessionForm, ObservationSessionList, HavaintoList } from "./pages";
-import { getAuth, getToken } from "./services/user";
+import { getAuth, getToken } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
-import { getHavainnointilist, postHavainnointiform } from "./services/havainnointilist";
 
 const App = () => {
 
@@ -27,14 +26,6 @@ const App = () => {
         .then(res => dispatch(setUser(res)))
       );
   }, [dispatch, userIsSet]);
-
-  useEffect(() => {
-    postHavainnointiform({ observatory: "testi", date: "19/03/2000" })
-      .then(() => {
-        getHavainnointilist()
-          .then(res => console.log(res));
-      });
-  }, []);
 
   console.log("user:", user);
 

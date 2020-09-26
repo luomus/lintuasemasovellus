@@ -1,23 +1,28 @@
 import React from "react";
 import { useState } from "react";
-import { postHavainnointiform } from "../../services/havainnointilist";
+import { postDay } from "../../services";
 import Inputfield from "./Inputfield";
 
 
 
 export const ObservationSessionForm = () => {
   const [observatory, setObservatory] = useState("");
-  const [date, setDate] = useState("");
+  const [day, setDay] = useState("");
 
+  /*
+  * Muuta minut:
+  * Tällä hetkellä lukee vain day-kentän tiedot ja lähettää ne
+  * backendin routeen /api/addDay
+  */
 
-  const addHavainnointi = async (event) => {
+  const addHavainnointi = (event) => {
     event.preventDefault();
     // do things with form
-    postHavainnointiform({ date: date })
+    postDay({ day: day })
       .then(() => console.log("success"))
-      .catch(() => console.error("problem"));
+      .catch(() => console.error("Error in post request for havainnointiform"));
     setObservatory("");
-    setDate("");
+    setDay("");
   };
 
   return (
@@ -30,8 +35,8 @@ export const ObservationSessionForm = () => {
         />
         <Inputfield
           labelText="Päivämäärä"
-          changeListener={(event) => setDate(event.target.value)}
-          value={date}
+          changeListener={(event) => setDay(event.target.value)}
+          value={day}
         />
 
         <p><button type="submit">Tallenna</button></p>

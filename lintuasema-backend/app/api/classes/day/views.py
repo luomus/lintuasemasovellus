@@ -1,31 +1,29 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for,\
+    jsonify
 
 from app.api.classes.day.models import Day
 
 from app.api import bp
 from app.db import db
 
-@bp.route('/addDay', methods=['GET'])
+@bp.route('/api/addDay', methods=['POST'])
 def add_day():
 
-    print('test')
-
-    o = Day(day='123')
+    req = request.get_json()
+    o = Day(day=req['day'])
 
     db.session().add(o)
     db.session().commit()
 
-    return redirect(url_for("index"))
+    return redirect('/')
 
 
-@bp.route('/listDays', methods=['GET'])
+@bp.route('/api/listDays', methods=['GET'])
 def list_day():
 
-    days=Day.query.all()
+    dayObjects = Day.query.all()
+    ret = []
+    for each in dayObjects:
+        ret.append({ 'day': each.day })
 
-    s = 'moi'
-
-    for x in days:
-        s = s + x.day
-
-    return s
+    return jsonify(ret)

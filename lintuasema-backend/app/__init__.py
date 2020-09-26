@@ -1,5 +1,6 @@
 from flask import Flask, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from sqlalchemy.engine import create_engine
 from app.api import bp as api_blueprint
 from app.api.classes.day import models
@@ -18,6 +19,7 @@ import app.oracleConfig
 def init_app():
 
     app = Flask(__name__, static_folder='../build', static_url_path='/')
+    cors = CORS(app)
 
     dnsStr = cx_Oracle.makedsn('oracle.luomus.fi', 1521, service_name='oracle.luomus.fi')
     dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')

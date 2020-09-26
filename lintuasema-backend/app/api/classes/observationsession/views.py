@@ -9,25 +9,14 @@ from app.db import db
 
 @bp.route('/api/havainnointiform', methods=['POST'])
 def add_observation():
-    #print("post route triggered")
     content = request.get_json()
-    #o = ObservationSession()
-    day = Day(content["date"])
-    #observation_station = ObservationStation(content["observatory"])
-    db.session().add(day)
-    #db.session().add(observation_station)
-    db.session().commit()
-    
-    #o = ObservationSession(request.form.get("observatory"), request.form.get("date"))
-
-    #db.session().add(o)
+    # TODO: do something with json...
+    #day = Day(content['date'])
+    #db.session().add(day)
     #db.session().commit()
 
-    return redirect("/")
+    return redirect('/')
 
 @bp.route('/api/havainnointilist', methods=["GET"])
 def observations_index():
-    print("get route triggered")
-    objectday = Day.query.first()
-    
-    return jsonify(day = objectday.day)
+    return redirect('/')
