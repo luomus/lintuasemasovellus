@@ -12,6 +12,8 @@ RUN npm run build
 
 FROM python:latest
 
+RUN mkdir -p /opt/oracle
+
 WORKDIR /opt/oracle
 
 RUN apt-get update && apt-get install -y libaio1 wget unzip \
