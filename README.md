@@ -20,6 +20,8 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 ### Kehitysympäristön asennus
 
+[Ohjelman käynnistäminen paikallisesti](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/localStartOfProject.md)
+
 [API/Backend](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingBackendEnvironment.md)
 
 [Frontend](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingFrontendEnvironment.md)
