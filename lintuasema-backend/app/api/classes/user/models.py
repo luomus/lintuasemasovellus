@@ -5,10 +5,14 @@ class User(Base):
 
      __tablename__ = "account" #user yleisesti ei suositeltava nimi, joten tällä vaihdetaan sopiva nimi taululle
 
-     firstName=db.Column(db.String(144), nullable=False)
-     lastName=db.Column(db.String(144), nullable=False)
+     userId=db.Column(db.String(144), nullable=False)
+     fullName=db.Column(db.String(144), nullable=False)
      email=db.Column(db.String(144), nullable=False)
-     userName=db.Column(db.String(144), nullable=False)
+
+     def __init__ (self, userId, fullName, email):
+          self.userId=userId
+          self.fullName=fullName
+          self.email=email
 
 
 

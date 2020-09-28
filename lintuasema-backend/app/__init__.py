@@ -12,6 +12,7 @@ from app.db import db
 
 from app.api.classes.observationsession import views
 from app.api.classes.day import views
+from app.api.classes.user import views
 
 import cx_Oracle
 import app.oracleConfig
