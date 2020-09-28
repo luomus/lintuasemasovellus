@@ -14,6 +14,21 @@ class User(Base):
           self.fullName=fullName
           self.email=email
 
+     def get_id(self):
+          return self.id
+
+     def get_userId(self):
+          return self.userId
+
+     def is_active(self):
+          return True
+
+     def is_anonymous(self):
+          return False
+
+     def is_authenticated(self):
+          return True
+
 
 
     

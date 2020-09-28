@@ -1,4 +1,13 @@
-from flask import Flask, redirect
+from flask import (Flask, render_template, 
+    request, redirect, session, url_for,
+    make_response, jsonify)
+from flask_login import (
+    LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+)
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy.engine import create_engine
@@ -9,6 +18,8 @@ from app.api.classes.observationsession import models
 from app.api.classes.observationstation import models
 from app.api.classes.user import models
 from app.db import db
+import os
+import requests
 
 from app.api.classes.observationsession import views
 from app.api.classes.day import views
@@ -17,10 +28,24 @@ from app.api.classes.user import views
 import cx_Oracle
 import app.oracleConfig
 
+from app.api.classes.user.models import User
+from os import urandom
+
+from flask_login import LoginManager
+
+
 def init_app():
 
     app = Flask(__name__, static_folder='../build', static_url_path='/')
     cors = CORS(app)
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    app.config["SECRET_KEY"] = urandom(32)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
 
     dnsStr = cx_Oracle.makedsn('oracle.luomus.fi', 1521, service_name='oracle.luomus.fi')
     dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')
