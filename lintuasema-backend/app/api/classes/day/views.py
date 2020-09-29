@@ -13,7 +13,7 @@ from app.db import db
 def add_day():
 
     req = request.get_json()
-    o = Day(day=req['day'])
+    o = Day(day=req['day'], comment='Moi', observers='Teppo Testaaja', observationStation_id=1) #testiversio, pitää muuttaa
 
     db.session().add(o)
     db.session().commit()
