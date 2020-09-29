@@ -54,12 +54,3 @@ def login():
     return redirect('https://fmnh-ws-test.it.helsinki.fi/laji-auth/login?target=%s&redirectMethod=GET&next=' % (TARGET))
     # return redirect('https://login.laji.fi/login?target=%s&redirectMethod=POST&next=/index' % (TARGET))
 
-
-@bp.route('/test', methods=['GET'])
-def test():
-    if current_user.is_authenticated:
-        return (
-            current_user.get_userId()
-        )
-    else:
-        return "<p>log in</p>"
