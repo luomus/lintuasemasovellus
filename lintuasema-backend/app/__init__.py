@@ -12,10 +12,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy.engine import create_engine
 from app.api import bp as api_blueprint
+from app.api.classes.observationstation import models
 from app.api.classes.day import models
 from app.api.classes.location import models
 from app.api.classes.observationsession import models
-from app.api.classes.observationstation import models
 from app.api.classes.user import models
 from app.db import db
 import os
@@ -29,6 +29,7 @@ import cx_Oracle
 import app.oracleConfig
 
 from app.api.classes.user.models import User
+from app.api.classes.observationstation.models import ObservationStation
 from os import urandom
 
 from flask_login import LoginManager
@@ -68,6 +69,10 @@ def init_app():
            db.drop_all()
            db.create_all()
            print('Taulut luotu')
+           observationStation = ObservationStation(name="Hangon lintuasema")
+           db.session().add(observationStation)
+           db.session().commit()
+           print('Lintuasema luotu')
        except Exception as e:
            print(e)
 
