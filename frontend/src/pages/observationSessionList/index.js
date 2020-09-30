@@ -28,6 +28,8 @@ export const ObservationSessionList = () => {
           list.map((entry, i) => {
             return <li key={i}>
               {entry.day}
+              {entry.observers}
+              {entry.comment}
             </li>;
           })
         }

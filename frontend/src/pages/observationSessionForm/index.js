@@ -8,6 +8,8 @@ import Inputfield from "./Inputfield";
 export const ObservationSessionForm = () => {
   const [observatory, setObservatory] = useState("");
   const [day, setDay] = useState("");
+  const [observers, setObservers] = useState("");
+  const [comment, setComment] = useState("");
 
   /*
   * Muuta minut:
@@ -18,11 +20,13 @@ export const ObservationSessionForm = () => {
   const addHavainnointi = (event) => {
     event.preventDefault();
     // do things with form
-    postDay({ day: day })
+    postDay({ day: day, observers: observers, comment: comment })
       .then(() => console.log("success"))
       .catch(() => console.error("Error in post request for havainnointiform"));
     setObservatory("");
     setDay("");
+    setObservers("");
+    setComment("");
   };
 
   return (
@@ -40,7 +44,16 @@ export const ObservationSessionForm = () => {
           changeListener={(event) => setDay(event.target.value)}
           value={day}
         />
-
+        <Inputfield
+          labelText="Havainnoija(t)"
+          changeListener={(event) => setObservers(event.target.value)}
+          value={observers}
+        />
+        <Inputfield
+          labelText="Kommentti"
+          changeListener={(event) => setComment(event.target.value)}
+          value={comment}
+        />
         <p><button type="submit">Tallenna</button></p>
 
       </form>
