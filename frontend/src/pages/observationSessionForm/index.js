@@ -28,11 +28,13 @@ export const ObservationSessionForm = () => {
   return (
     <div>
       <form onSubmit={addHavainnointi}>
-        <Inputfield
-          labelText="Lintuasema"
-          changeListener={(event) => setObservatory(event.target.value)}
-          value={observatory}
-        />
+        <label>
+          Lintuasema<br />
+          <select>
+            <option value="Hangon Lintuasema">Hangon Lintuasema</option>
+            <option value="Jurmon Lintuasema">Jurmon Lintuasema</option>
+          </select>
+        </label>
         <Inputfield
           labelText="Päivämäärä"
           changeListener={(event) => setDay(event.target.value)}
