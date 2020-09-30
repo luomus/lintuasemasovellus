@@ -21,6 +21,6 @@ describe('AddObservationSession', function() {
     })
     it('There is a button for listing all observation sessions', function() {
       cy.visit('http://localhost:3000')
-      cy.contains('Listaa havainnointikerrat')
+      cy.contains('Näytä havainnointikerrat') //muutettu Annun toimesta
     })
   })

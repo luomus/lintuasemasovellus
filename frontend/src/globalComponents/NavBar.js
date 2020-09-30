@@ -84,7 +84,7 @@ const NavBar = () => {
 
       <AppBar position="static" style={{ background: "darkolivegreen" }} >
         <Toolbar>
-          <IconButton onClick={toggleMenu("right", true)}>
+          <IconButton id="navigationbar" onClick={toggleMenu("right", true)}> {/*navigationbar nimi lisätty testejä varten, että löytyy helpommin*/ }
             <Dehaze style={{ color: "white" }} />
           </IconButton>
           <Typography variant="h5">
