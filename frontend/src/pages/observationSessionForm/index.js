@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { postDay } from "../../services";
-import Inputfield from "./Inputfield";
-import {Paper, Snackbar, Select, TextField, Button, Typography, MenuItem, FormControl, InputLabel, FormGroup} from "@material-ui/core";
+import { Paper, Snackbar, Select, TextField, Button, Typography, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import { getStation } from "../../mappings/observationMap";
@@ -100,7 +99,7 @@ export const ObservationSessionForm = () => {
             multiline
             onChange={(event) => setComment(event.target.value)}
             value={comment}
-          /><br /> 
+          /><br />
           <p><Button variant="contained" color="primary" disableElevation type="submit" onClick={handleClick}>Tallenna</Button></p>
           <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">

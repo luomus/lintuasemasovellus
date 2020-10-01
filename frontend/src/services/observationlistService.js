@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const getObservationlist = async () => {
-  await axios.get("/api/havainnointilist");
+  const res = await axios.get("/api/havainnointilist");
+  return res.data;
 };
 
 export const postObservationform = async (form) => {
