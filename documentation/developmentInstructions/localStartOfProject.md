@@ -10,9 +10,6 @@ Käynnistääksesi sovelluksen siten, että samalla asentuu tarvittavat ohjelman
 
 Jos koneellasi on jo asennettuna kaikki tarpeellinen, käynnistyy sovellus komennolla
 
-`flask run`
-
-tai 
 
 `. start.sh`
 
