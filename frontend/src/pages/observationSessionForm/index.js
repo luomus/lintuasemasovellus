@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { postDay } from "../../services";
 import Inputfield from "./Inputfield";
-import {Paper, Snackbar, Select, TextField, Button} from '@material-ui/core';
+import {Paper, Snackbar, Select, TextField, Button, Typography, MenuItem, FormControl, InputLabel} from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -11,6 +11,13 @@ const useStyles = makeStyles({
   paper: {
     background: "white",
     padding: "20px 30px",
+  },
+  formControl: {
+    margin: "1em",
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: "2em",
   },
 });
 
@@ -29,7 +36,7 @@ export const ObservationSessionForm = () => {
   const addHavainnointi = (event) => {
     event.preventDefault();
     // do things with form
-    postDay({ day: day, observers: observers, comment: comment })
+    postDay({ day: day, observers: observers, comment: comment, observatory_id: observatory })
       .then(() => console.log("success"))
       .catch(() => console.error("Error in post request for havainnointiform"));
     setObservatory("");
@@ -57,14 +64,21 @@ export const ObservationSessionForm = () => {
   return (
     <div>
       <Paper className={classes.paper}>
-      <form onSubmit={addHavainnointi}>
-        <label>
-          Lintuasema<br />
-          <select>
-            <option value="Hangon Lintuasema">Hangon Lintuasema</option>
-            <option value="Jurmon Lintuasema">Jurmon Lintuasema</option>
-          </select>
-        </label><br /> 
+      <Typography variant="h5" component="h2">
+        Uusi Päivä
+      </Typography>
+      <FormControl className={classes.formControl} onSubmit={addHavainnointi}>
+        <InputLabel id="Lintuasema">Lintuasema</InputLabel>
+        <Select 
+          labelId="observatory"
+          id ="select"
+          value={observatory}
+          onChange={(event) => setObservatory(event.target.value)}
+          >         
+          <MenuItem value ="1">Hangon Lintuasema</MenuItem>
+          <MenuItem value ="2">Jurmon Lintuasema</MenuItem>
+        </Select>
+        <br />
         <TextField required
           id="date-required"
           label="Päivämäärä"
@@ -78,6 +92,7 @@ export const ObservationSessionForm = () => {
           value={observers}
         /><br /> 
         <TextField
+          rows={5}
           id="comment"
           label="Kommentti"
           multiline
@@ -90,7 +105,7 @@ export const ObservationSessionForm = () => {
             Lomake lähetetty!
         </Alert>
         </Snackbar>
-      </form>
+      </FormControl>
       </Paper>
     </div>
   );
