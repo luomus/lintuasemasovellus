@@ -17,7 +17,7 @@ export const HomePage = () => {
 
   return (
     <div>
-      <Grid container spacing={40}>
+      <Grid container spacing={10}>
         <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>
             Tämä on täytetekstiä. Suomessa sijaitsee 16 lintuasemaa.
