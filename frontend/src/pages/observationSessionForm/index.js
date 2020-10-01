@@ -2,9 +2,17 @@ import React from "react";
 import { useState } from "react";
 import { postDay } from "../../services";
 import Inputfield from "./Inputfield";
-import Snackbar from '@material-ui/core/Snackbar';
+import {Paper, Snackbar, Select, TextField, Button} from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from "@material-ui/core/styles";
 
+
+const useStyles = makeStyles({
+  paper: {
+    background: "white",
+    padding: "20px 30px",
+  },
+});
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -16,6 +24,7 @@ export const ObservationSessionForm = () => {
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
 
+  const classes = useStyles();
 
   const addHavainnointi = (event) => {
     event.preventDefault();
@@ -47,6 +56,7 @@ export const ObservationSessionForm = () => {
 
   return (
     <div>
+      <Paper className={classes.paper}>
       <form onSubmit={addHavainnointi}>
         <label>
           Lintuasema<br />
@@ -54,30 +64,34 @@ export const ObservationSessionForm = () => {
             <option value="Hangon Lintuasema">Hangon Lintuasema</option>
             <option value="Jurmon Lintuasema">Jurmon Lintuasema</option>
           </select>
-        </label>
-        <Inputfield
-          labelText="Päivämäärä"
-          changeListener={(event) => setDay(event.target.value)}
+        </label><br /> 
+        <TextField required
+          id="date-required"
+          label="Päivämäärä"
+          onChange={(event) => setDay(event.target.value)}
           value={day}
-        />
-        <Inputfield
-          labelText="Havainnoija(t)"
-          changeListener={(event) => setObservers(event.target.value)}
+        /><br /> 
+        <TextField
+          id="observers"
+          label="Havainnoija(t)"
+          onChange={(event) => setObservers(event.target.value)}
           value={observers}
-        />
-        <Inputfield
-          labelText="Kommentti"
-          changeListener={(event) => setComment(event.target.value)}
+        /><br /> 
+        <TextField
+          id="comment"
+          label="Kommentti"
+          multiline
+          onChange={(event) => setComment(event.target.value)}
           value={comment}
-        />
-        <p><button type="submit" onClick={handleClick}>Tallenna</button></p>
+        /><br /> 
+        <p><Button variant="contained" color="primary" disableElevation type="submit" onClick={handleClick}>Tallenna</Button></p>
         <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success">
             Lomake lähetetty!
         </Alert>
         </Snackbar>
       </form>
-
+      </Paper>
     </div>
   );
 };
