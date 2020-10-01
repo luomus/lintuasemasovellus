@@ -22,6 +22,7 @@ import os
 import requests
 
 from app.api.classes.observationsession import views
+from app.api.classes.observationstation import views
 from app.api.classes.day import views
 from app.api.classes.user import views
 
@@ -69,8 +70,10 @@ def init_app():
            db.drop_all()
            db.create_all()
            print('Taulut luotu')
-           observationStation = ObservationStation(name="Hangon lintuasema")
+           observationStation = ObservationStation(name="Hangon Lintuasema")
+           observationStation2 = ObservationStation(name="Jurmon Lintuasema")
            db.session().add(observationStation)
+           db.session().add(observationStation2)
            db.session().commit()
            print('Lintuasema luotu')
        except Exception as e:
