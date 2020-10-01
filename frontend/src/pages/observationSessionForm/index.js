@@ -2,8 +2,13 @@ import React from "react";
 import { useState } from "react";
 import { postDay } from "../../services";
 import Inputfield from "./Inputfield";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export const ObservationSessionForm = () => {
   const [observatory, setObservatory] = useState("");
@@ -11,11 +16,6 @@ export const ObservationSessionForm = () => {
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
 
-  /*
-  * Muuta minut:
-  * Tällä hetkellä lukee vain day-kentän tiedot ja lähettää ne
-  * backendin routeen /api/addDay
-  */
 
   const addHavainnointi = (event) => {
     event.preventDefault();
@@ -28,6 +28,22 @@ export const ObservationSessionForm = () => {
     setObservers("");
     setComment("");
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
 
   return (
     <div>
@@ -54,8 +70,12 @@ export const ObservationSessionForm = () => {
           changeListener={(event) => setComment(event.target.value)}
           value={comment}
         />
-        <p><button type="submit">Tallenna</button></p>
-
+        <p><button type="submit" onClick={handleClick}>Tallenna</button></p>
+        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            Lomake lähetetty!
+        </Alert>
+        </Snackbar>
       </form>
 
     </div>
