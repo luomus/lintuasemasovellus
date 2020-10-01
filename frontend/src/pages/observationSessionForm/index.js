@@ -5,6 +5,7 @@ import Inputfield from "./Inputfield";
 import {Paper, Snackbar, Select, TextField, Button, Typography, MenuItem, FormControl, InputLabel, FormGroup} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
+import { getStation } from "../../mappings/observationMap";
 
 
 const useStyles = makeStyles({
@@ -75,8 +76,8 @@ export const ObservationSessionForm = () => {
               value={observatory}
               onChange={(event) => setObservatory(event.target.value)}
             >
-              <MenuItem value ="1">Hangon Lintuasema</MenuItem>
-              <MenuItem value ="2">Jurmon Lintuasema</MenuItem>
+              <MenuItem value ="1">{getStation(1)}</MenuItem>
+              <MenuItem value ="2">{getStation(2)}</MenuItem>
             </Select>
           </FormControl>
           <br />

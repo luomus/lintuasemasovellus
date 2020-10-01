@@ -1,4 +1,6 @@
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { getStation } from "../../mappings/observationMap";
 import { getDays } from "../../services";
 
 
@@ -22,18 +24,40 @@ export const ObservationSessionList = () => {
   */
   return (
     <div>
-      <h3>Days</h3>
-      <ul>
-        {
-          list.map((entry, i) => {
-            return <li key={i}>
-              {entry.day}
-              {entry.observers}
-              {entry.comment}
-            </li>;
-          })
-        }
-      </ul>
+      <Typography variant="h5" component="h2" >
+        Päivät
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Päivä</TableCell>
+            <TableCell align="right">Havainnoijat</TableCell>
+            <TableCell align="right">Kommentti</TableCell>
+            <TableCell align="right">Havainnointiasema</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {
+            list.map((elemtn, i) =>
+              <TableRow key={i}>
+                <TableCell component="th" scope="row">
+                  {elemtn.day}
+                </TableCell>
+                <TableCell align="right">
+                  {elemtn.observers}
+                </TableCell>
+                <TableCell align="right">
+                  {elemtn.comment}
+                </TableCell>
+                <TableCell align="right">
+                  {getStation(elemtn.observatory)}
+                </TableCell>
+
+              </TableRow>
+            )
+          }
+        </TableBody>
+      </Table>
     </div>
   );
 };
