@@ -1,27 +1,33 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { getStation } from "../../mappings/observationMap";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeStations } from "../../reducers/obsStationReducer";
 import { getDays } from "../../services";
 
 
 export const ObservationSessionList = () => {
   const [list, setList] = useState([]);
 
+  const stations = useSelector(state => state.stations);
+
+  const dispatch = useDispatch();
+
+  const stationsAreSet = Boolean(stations.length);//check for length 0
 
   useEffect(() => {
     getDays()
       .then(daysJson => setList(daysJson));
   }, []);
 
+  useEffect(() => {
+    if(stationsAreSet) return;
+    dispatch(initializeStations());
+  }, [stationsAreSet, dispatch]);
+
   console.log(list);
 
-  if (!list) return null;
+  if (!list || !stationsAreSet) return null;
 
-  /*
-  * Muuta minut:
-  * tällä hetkellä käyttää päiväroutea
-  * ja tulostaa vain päivät.
-  */
   return (
     <div>
       <Typography variant="h5" component="h2" >
@@ -50,7 +56,10 @@ export const ObservationSessionList = () => {
                   {elemtn.comment}
                 </TableCell>
                 <TableCell align="right">
-                  {getStation(elemtn.observatory)}
+                  {stations
+                    .find(station => station.id === elemtn.observatory)
+                    .name
+                  }
                 </TableCell>
 
               </TableRow>

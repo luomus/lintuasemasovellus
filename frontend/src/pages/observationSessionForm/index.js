@@ -1,10 +1,14 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { postDay } from "../../services";
-import { Paper, Snackbar, Select, TextField, Button, Typography, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {
+  Paper, Snackbar,
+  Select, TextField, Button,
+  Typography, MenuItem,
+  FormControl, InputLabel } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
-import { getStation } from "../../mappings/observationMap";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeStations } from "../../reducers/obsStationReducer";
 
 
 const useStyles = makeStyles({
@@ -44,7 +48,18 @@ export const ObservationSessionForm = () => {
     setComment("");
   };
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  const stations = useSelector(state => state.stations);
+
+  const stationsIsSet = Boolean(stations.length);//check for length is 0
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (stationsIsSet) return;
+    dispatch(initializeStations());
+  }, [stationsIsSet, dispatch]);
 
   const handleClick = () => {
     setOpen(true);
@@ -58,7 +73,7 @@ export const ObservationSessionForm = () => {
     setOpen(false);
   };
 
-
+  if (!stationsIsSet) return null;
 
   return (
     <div>
@@ -75,8 +90,12 @@ export const ObservationSessionForm = () => {
               value={observatory}
               onChange={(event) => setObservatory(event.target.value)}
             >
-              <MenuItem value ="1">{getStation(1)}</MenuItem>
-              <MenuItem value ="2">{getStation(2)}</MenuItem>
+              <MenuItem value ="1">
+                {stations.find(s => s.id === 1).name}
+              </MenuItem>
+              <MenuItem value ="2">
+                {stations.find(s => s.id === 2).name}
+              </MenuItem>
             </Select>
           </FormControl>
           <br />
@@ -85,7 +104,7 @@ export const ObservationSessionForm = () => {
             label="Päivämäärä"
             onChange={(event) => setDay(event.target.value)}
             value={day}
-          /><br /> 
+          /><br />
           <TextField
             id="observers"
             label="Havainnoija(t)"
@@ -100,7 +119,14 @@ export const ObservationSessionForm = () => {
             onChange={(event) => setComment(event.target.value)}
             value={comment}
           /><br />
-          <p><Button variant="contained" color="primary" disableElevation type="submit" onClick={handleClick}>Tallenna</Button></p>
+          <p>
+            <Button
+              variant="contained"
+              color="primary"
+              disableElevation type="submit" onClick={handleClick}>
+            Tallenna
+            </Button>
+          </p>
           <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
             Lomake lähetetty!
