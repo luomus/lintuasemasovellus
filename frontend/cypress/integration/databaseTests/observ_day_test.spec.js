@@ -3,35 +3,35 @@ const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää";
 
-describe("AddObservationSession", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
+describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
     cy.get("#navigationbar").click();
   });
-  it("Front page has button for adding an observation session", function() {
-    cy.contains("Lisää havainnointikerta");
+  it("Front page has button for adding an observation day", function() {
+    cy.contains("Lisää päivä");
   });
-  it("There are fields for adding observation station name, date, observers, comment and a button Save for the session", function() {
-    cy.contains("Lisää havainnointikerta").click();
+  it("There are fields for adding observation station name, date, observers, comment and a button Save for the day", function() {
+    cy.contains("Lisää päivä").click();
     cy.contains("Lintuasema");
     cy.contains("Päivämäärä");
     cy.contains("Havainnoija(t)");
     cy.contains("Kommentti");
     cy.contains("Tallenna");
   });
-  it("An observation session can be saved", function() {
-    cy.contains("Lisää havainnointikerta").click();
+  it("An observation day can be saved", function() {
+    cy.contains("Lisää päivä").click();
     cy.get("#select").click().get("#testStation").click();
     cy.get("#date-required").type(date);
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
     cy.contains("Tallenna").click();
   });
-  it("There is a button for listing all observation sessions", function() {
-    cy.contains("Näytä havainnointikerrat");
+  it("There is a button for listing all observation day", function() {
+    cy.contains("Näytä päivä");
   });
-  it("The observation session saved can be found on page Näytä havainnointikerrat", function(){
-    cy.contains("Näytä havainnointikerrat").click();
+  it("The observation day saved can be found on page Näytä päivät", function(){
+    cy.contains("Näytä päivät").click();
     cy.contains(date);
     cy.contains(observer);
     cy.contains(comment);
