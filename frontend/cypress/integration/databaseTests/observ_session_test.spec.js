@@ -43,3 +43,7 @@ describe('AddObservationSession', function() {//tämä sisältää nyt testejä,
       cy.contains('Näytä havainnot') 
     })//lisättävä testi, jossa katsotaan, että havainnot tallentuvat
   })
+
+  //Muokkasin nyt tuota lomake lähetetty -ilmoitusta ja sen pitäisi nyt toimia järkevämmin, ainakin toivottavasti.
+  // Muutin myös validointia niin, että lintuasemaa, päivämäärää ja havainnoijakenttää ei voi jättää tyhjäksi. 
+  //Kommentti taisi olla vapaaehtoinen kenttä(?) niin tuon pitäisi hyväksyä uudet päivät myös ilman sitä.
