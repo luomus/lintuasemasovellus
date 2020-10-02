@@ -9,6 +9,10 @@ class ObservationStation(Base):
     
     def __init__ (self, name):
         self.name=name
+
+    # def getAll(self):
+    #     stations = self.query.all()
+    #     return stations
         
         
         

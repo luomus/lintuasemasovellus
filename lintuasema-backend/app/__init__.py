@@ -22,7 +22,7 @@ import os
 import requests
 
 from app.api.classes.observationsession import views
-from app.api.classes.observationstation import views
+from app.api.classes.observationstation import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views
 
@@ -55,6 +55,49 @@ def init_app():
     
     try:
         app.config["SQLALCHEMY_DATABASE_URI"] = "oracle://"+oracleConfig.username+":"+oracleConfig.password+"@"+dnsStr
+        app.config["SQLALCHEMY_ECHO"] = True
+        print('Tietokantayhteys luotu.')
+    except Exception as e:
+        print(e)
+    
+    
+
+    app.register_blueprint(api_blueprint)
+    
+    db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
+    with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
+       try:
+           db.drop_all()
+           db.create_all()
+           print('Taulut luotu')
+           observationStation = ObservationStation(name="Hangon Lintuasema")
+           observationStation2 = ObservationStation(name="Jurmon Lintuasema")
+           db.session().add(observationStation)
+           db.session().add(observationStation2)
+           db.session().commit()
+           print('Lintuasema luotu')
+       except Exception as e:
+           print(e)
+
+    return app
+
+
+def init_testapp():
+
+    app = Flask(__name__, static_folder='../build', static_url_path='/')
+    cors = CORS(app)
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    app.config["SECRET_KEY"] = urandom(32)
+    app.config['LOGIN_DISABLED'] = True
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
+
+    try:
+        app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
         app.config["SQLALCHEMY_ECHO"] = True
         print('Tietokantayhteys luotu.')
     except Exception as e:
