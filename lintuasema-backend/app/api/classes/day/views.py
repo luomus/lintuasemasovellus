@@ -13,7 +13,7 @@ from app.db import db
 def add_day():
 
     req = request.get_json()
-    o = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observationStation_id=req['observatory_id']) #testiversio, pitää muuttaa
+    o = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=req['observatory_id']) #testiversio, pitää muuttaa
 
     db.session().add(o)
     db.session().commit()
@@ -28,6 +28,6 @@ def list_day():
     dayObjects = Day.query.all()
     ret = []
     for each in dayObjects:
-        ret.append({ 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': each.observationStation_id })
+        ret.append({ 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': each.observatory_id })
 
     return jsonify(ret)

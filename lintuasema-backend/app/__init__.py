@@ -12,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy.engine import create_engine
 from app.api import bp as api_blueprint
-from app.api.classes.observationstation import models
+from app.api.classes.observatory import models
 from app.api.classes.day import models
 from app.api.classes.location import models
 from app.api.classes.observationsession import models
@@ -22,7 +22,7 @@ import os
 import requests
 
 from app.api.classes.observationsession import views
-from app.api.classes.observationstation import views, services
+from app.api.classes.observatory import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views
 
@@ -30,7 +30,7 @@ import cx_Oracle
 import app.oracleConfig
 
 from app.api.classes.user.models import User
-from app.api.classes.observationstation.models import ObservationStation
+from app.api.classes.observatory.models import Observatory
 from os import urandom
 
 from flask_login import LoginManager
@@ -70,8 +70,8 @@ def init_app():
            db.drop_all()
            db.create_all()
            print('Taulut luotu')
-           observationStation = ObservationStation(name="Hangon Lintuasema")
-           observationStation2 = ObservationStation(name="Jurmon Lintuasema")
+           observationStation = Observatory(name="Hangon Lintuasema")
+           observationStation2 = Observatory(name="Jurmon Lintuasema")
            db.session().add(observationStation)
            db.session().add(observationStation2)
            db.session().commit()
@@ -113,8 +113,8 @@ def init_testapp():
            db.drop_all()
            db.create_all()
            print('Taulut luotu')
-           observationStation = ObservationStation(name="Hangon Lintuasema")
-           observationStation2 = ObservationStation(name="Jurmon Lintuasema")
+           observationStation = Observatory(name="Hangon Lintuasema")
+           observationStation2 = Observatory(name="Jurmon Lintuasema")
            db.session().add(observationStation)
            db.session().add(observationStation2)
            db.session().commit()

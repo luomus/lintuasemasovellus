@@ -4,7 +4,7 @@ from flask_login import login_required
 
 from app.api.classes.observationsession.models import ObservationSession
 from app.api.classes.day.models import Day
-from app.api.classes.observationstation.models import ObservationStation
+from app.api.classes.observatory.models import Observatory
 
 from app.api import bp
 from app.db import db

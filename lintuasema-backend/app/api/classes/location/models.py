@@ -4,4 +4,4 @@ from app.api.models import Base
 class Location(Base):
 
     name = db.Column(db.String(144), nullable = False)
-    observation_station_id = db.Column(db.Integer, db.ForeignKey('observation_station.id'), nullable=False)
+    observatory_id = db.Column(db.Integer, db.ForeignKey('observatory.id'), nullable=False)

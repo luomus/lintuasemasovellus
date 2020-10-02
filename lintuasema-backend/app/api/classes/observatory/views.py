@@ -3,12 +3,12 @@ from flask import render_template, request, redirect, url_for,\
 
 from flask_login import login_required
 
-from app.api.classes.observationstation.models import ObservationStation
+from app.api.classes.observatory.models import Observatory
 
 from app.api import bp
 from app.db import db
 
-from app.api.classes.observationstation.services import getAll
+from app.api.classes.observatory.services import getAll
 
 
 @bp.route('/api/getStations', methods=['GET'])
