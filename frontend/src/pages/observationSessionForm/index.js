@@ -94,7 +94,7 @@ export const ObservationSessionForm = () => {
               value={observatory}
               onChange={(event) => setObservatory(event.target.value)}
             >
-              <MenuItem value ="1">
+              <MenuItem id="testStation" value ="1">
                 {stations.find(s => s.id === 1).name}
               </MenuItem>
               <MenuItem value ="2">

@@ -11,7 +11,7 @@ describe('AddObservationSession', function() {//tämä sisältää nyt testejä,
     it('Front page has button for adding an observation session', function() {
       cy.contains('Lisää havainnointikerta')
     })
-    it('There are fields for adding observation station name and date of the session', function() {
+    it('There are fields for adding observation station name, date, observers, comment and a button Save for the session', function() {
       cy.contains('Lisää havainnointikerta').click()
       cy.contains('Lintuasema')
       cy.contains('Päivämäärä')
@@ -21,7 +21,7 @@ describe('AddObservationSession', function() {//tämä sisältää nyt testejä,
     })
     it('An observation session can be saved', function() {
       cy.contains('Lisää havainnointikerta').click()
-      //cy.get('#Lintuasema').type(observStation) //Tämäkohta lakannut toimimasta dropdown filun kanssa. type() kirjoittaa. Miten saisi valittua dropdownista.lisättävä jotain sisältöä havainnoija(t) ja kommentti testejä varten
+      cy.get('#select').click().get('#testStation').click()
       cy.get('#date-required').type(date)
       cy.get ('#observers').type(observer)
       cy.get('#comment').type(comment)
@@ -30,7 +30,12 @@ describe('AddObservationSession', function() {//tämä sisältää nyt testejä,
     it('There is a button for listing all observation sessions', function() {
       cy.contains('Näytä havainnointikerrat') 
     }) 
-
+    it('The observation session saved can be found on page Näytä havainnointikerrat', function(){
+      cy.contains('Näytä havainnointikerrat').click()
+      cy.contains(date)
+      cy.contains(observer)
+      cy.contains(comment)
+    })
     it('There is a button for adding observation', function() {
       cy.contains('Lisää havaintoja')
     })//lisättävä testi jossa annetaan kentille tiedot ja tallennetaan
