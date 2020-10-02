@@ -28,7 +28,7 @@ const Alert = (props) => {
 };
 
 
-export const ObservationSessionForm = () => {
+export const DayForm = () => {
   const [observatory, setObservatory] = useState("");
   const [day, setDay] = useState("");
   const [observers, setObservers] = useState("");
@@ -37,7 +37,7 @@ export const ObservationSessionForm = () => {
   const classes = useStyles();
   const [formSent, setFormSent] = useState(false);
 
-  const addHavainnointi = (event) => {
+  const addDay = (event) => {
     event.preventDefault();
     // do things with form
     setFormSent(true);
@@ -63,7 +63,7 @@ export const ObservationSessionForm = () => {
         <Typography variant="h5" component="h2">
         Uusi Päivä
         </Typography>
-        <form className={classes.root} onSubmit={addHavainnointi}>
+        <form className={classes.root} onSubmit={addDay}>
           <FormControl>
             <InputLabel id="Lintuasema">Lintuasema *</InputLabel>
             <Select required

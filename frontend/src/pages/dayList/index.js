@@ -4,7 +4,7 @@ import ObsStation from "../../globalComponents/ObsStation";
 import { getDays } from "../../services";
 
 
-export const ObservationSessionList = () => {
+export const DayList = () => {
   const [list, setList] = useState([]);
 
 

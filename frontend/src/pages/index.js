@@ -1,5 +1,5 @@
 export * from "./homePage";
 export * from "./form";
-export * from "./observationSessionForm";
-export * from "./observationSessionList";
+export * from "./dayForm";
+export * from "./dayList";
 export * from "./list";
