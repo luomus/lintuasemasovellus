@@ -28,6 +28,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+
 export const ObservationSessionForm = () => {
   const [observatory, setObservatory] = useState("");
   const [day, setDay] = useState("");
@@ -35,10 +36,12 @@ export const ObservationSessionForm = () => {
   const [comment, setComment] = useState("");
 
   const classes = useStyles();
+  const [formSent, setFormSent] = useState(false);
 
   const addHavainnointi = (event) => {
     event.preventDefault();
     // do things with form
+    setFormSent(true)
     postDay({ day: day, observers: observers, comment: comment, observatory_id: observatory })
       .then(() => console.log("success"))
       .catch(() => console.error("Error in post request for havainnointiform"));
@@ -49,6 +52,7 @@ export const ObservationSessionForm = () => {
   };
 
   const [open, setOpen] = useState(false);
+
 
   const stations = useSelector(state => state.stations);
 
@@ -69,7 +73,7 @@ export const ObservationSessionForm = () => {
     if (reason === "clickaway") {
       return;
     }
-
+    setFormSent(false);
     setOpen(false);
   };
 
@@ -83,8 +87,8 @@ export const ObservationSessionForm = () => {
         </Typography>
         <form className={classes.root} onSubmit={addHavainnointi}>
           <FormControl>
-            <InputLabel id="Lintuasema">Lintuasema</InputLabel>
-            <Select
+            <InputLabel id="Lintuasema">Lintuasema *</InputLabel>
+            <Select required
               labelId="observatory"
               id ="select"
               value={observatory}
@@ -105,7 +109,7 @@ export const ObservationSessionForm = () => {
             onChange={(event) => setDay(event.target.value)}
             value={day}
           /><br />
-          <TextField
+          <TextField required
             id="observers"
             label="Havainnoija(t)"
             onChange={(event) => setObservers(event.target.value)}
@@ -127,7 +131,7 @@ export const ObservationSessionForm = () => {
             Tallenna
             </Button>
           </p>
-          <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+          <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
             Lomake lähetetty!
             </Alert>
