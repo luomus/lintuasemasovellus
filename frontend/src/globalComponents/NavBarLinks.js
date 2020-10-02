@@ -13,11 +13,11 @@ const NavBarLinks = () => {
       </Button>
       <br />
       <Button component={Link} to="/havainnointiform">
-        Lisää havainnointikerta
+        Lisää päivä
       </Button>
       <br />
       <Button component={Link} to="/havainnointilist">
-        Näytä havainnointikerrat
+        Näytä päivät
       </Button>
       <br />
       <Button component={Link} to="/form">
