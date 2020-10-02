@@ -112,7 +112,7 @@ def init_testapp():
     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
        try:
-           db.drop_all()
+           #db.drop_all()
            db.create_all()
            print('Taulut luotu')
            observationStation = Observatory(name="Hangon Lintuasema")
