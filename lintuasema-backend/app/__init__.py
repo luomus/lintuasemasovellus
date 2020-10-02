@@ -38,9 +38,6 @@ from app.db import db
 
 from os import urandom
 
-
-
-
 def init_app():
 
     app = Flask(__name__, static_folder='../build', static_url_path='/')

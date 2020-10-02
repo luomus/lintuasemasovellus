@@ -36,12 +36,6 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains(observer);
     cy.contains(comment);
   });
-  it("There is a button for adding observation", function() {
-    cy.contains("Lisää havaintoja");
-  });//lisättävä testi jossa annetaan kentille tiedot ja tallennetaan
-  it("There is a button for listing all observations", function() {
-    cy.contains("Näytä havainnot");
-  });//lisättävä testi, jossa katsotaan, että havainnot tallentuvat
 });
 
 //Muokkasin nyt tuota lomake lähetetty -ilmoitusta ja sen pitäisi nyt toimia järkevämmin, ainakin toivottavasti.
