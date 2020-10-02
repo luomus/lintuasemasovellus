@@ -6,5 +6,5 @@ export const getObservationlist = async () => {
 };
 
 export const postObservationform = async (form) => {
-  await axios.post("/api/havainnointiform", form);
+  return await axios.post("/api/havainnointiform", form);
 };

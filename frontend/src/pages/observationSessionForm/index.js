@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { postDay } from "../../services";
 import {
   Paper, Snackbar,
@@ -7,8 +7,7 @@ import {
   FormControl, InputLabel } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch, useSelector } from "react-redux";
-import { initializeStations } from "../../reducers/obsStationReducer";
+import ObsStation from "../../globalComponents/ObsStation";
 
 
 const useStyles = makeStyles({
@@ -24,9 +23,9 @@ const useStyles = makeStyles({
   },
 });
 
-function Alert(props) {
+const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+};
 
 
 export const ObservationSessionForm = () => {
@@ -41,7 +40,7 @@ export const ObservationSessionForm = () => {
   const addHavainnointi = (event) => {
     event.preventDefault();
     // do things with form
-    setFormSent(true)
+    setFormSent(true);
     postDay({ day: day, observers: observers, comment: comment, observatory_id: observatory })
       .then(() => console.log("success"))
       .catch(() => console.error("Error in post request for havainnointiform"));
@@ -51,33 +50,12 @@ export const ObservationSessionForm = () => {
     setComment("");
   };
 
-  const [open, setOpen] = useState(false);
-
-
-  const stations = useSelector(state => state.stations);
-
-  const stationsIsSet = Boolean(stations.length);//check for length is 0
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (stationsIsSet) return;
-    dispatch(initializeStations());
-  }, [stationsIsSet, dispatch]);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setFormSent(false);
-    setOpen(false);
   };
-
-  if (!stationsIsSet) return null;
 
   return (
     <div>
@@ -95,10 +73,10 @@ export const ObservationSessionForm = () => {
               onChange={(event) => setObservatory(event.target.value)}
             >
               <MenuItem id="testStation" value ="1">
-                {stations.find(s => s.id === 1).name}
+                <ObsStation id={1} />
               </MenuItem>
               <MenuItem value ="2">
-                {stations.find(s => s.id === 2).name}
+                <ObsStation id={2} />
               </MenuItem>
             </Select>
           </FormControl>
@@ -127,7 +105,7 @@ export const ObservationSessionForm = () => {
             <Button
               variant="contained"
               color="primary"
-              disableElevation type="submit" onClick={handleClick}>
+              disableElevation type="submit" >
             Tallenna
             </Button>
           </p>

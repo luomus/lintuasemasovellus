@@ -4,9 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Typography, Box, Button } from "@material-ui/core";
 import { Dehaze, AccountCircle } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
-import { loginUrl } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { getLogout } from "../services";
+import { getLogout, loginUrl } from "../services";
 import { setUser } from "../reducers/userReducer";
 
 
@@ -64,7 +63,7 @@ const NavBar = () => {
     :
     <Button className={classes.userButton}
       id="login-link"
-      href={`${loginUrl}`}
+      href={loginUrl}
       startIcon={<AccountCircle />}
     >
       Kirjaudu sisään

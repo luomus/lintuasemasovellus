@@ -6,5 +6,5 @@ export const getDays = async () => {
 };
 
 export const postDay = async (day) => {
-  await axios.post("/api/addDay", day);
+  return await axios.post("/api/addDay", day);
 };

@@ -1,13 +1,16 @@
 import axios from "axios";
-import { authUrl, logoutUrl } from "../constants";
+
+export const loginUrl = process.env.NODE_ENV === "development"
+  ? "http://localhost:5000/loginRedirect"
+  : "/loginRedirect";
 
 export const getToken = async () => {
-  const tokens = await axios.get(authUrl);
+  const tokens = await axios.get("/get/token");
   return tokens;
 };
 
 export const getLogout = async () => {
-  await axios.get(logoutUrl);
+  return await axios.get("/logout");
 };
 
 export const getAuth = async (token, auth_token) => {

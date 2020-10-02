@@ -5,7 +5,8 @@ module.exports = {
     'env': {
         'node': true,
         'browser': true,
-        'es6': true
+        'es6': true,
+        'cypress/globals': true
     },
     'extends': [
         'eslint:recommended',
@@ -25,7 +26,8 @@ module.exports = {
     },
     'plugins': [
         'react',
-        'security'
+        'security',
+        'cypress'
     ],
     'rules': {
         'indent': [

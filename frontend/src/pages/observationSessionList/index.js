@@ -1,32 +1,22 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { initializeStations } from "../../reducers/obsStationReducer";
+import ObsStation from "../../globalComponents/ObsStation";
 import { getDays } from "../../services";
 
 
 export const ObservationSessionList = () => {
   const [list, setList] = useState([]);
 
-  const stations = useSelector(state => state.stations);
-
-  const dispatch = useDispatch();
-
-  const stationsAreSet = Boolean(stations.length);//check for length 0
 
   useEffect(() => {
     getDays()
       .then(daysJson => setList(daysJson));
   }, []);
 
-  useEffect(() => {
-    if(stationsAreSet) return;
-    dispatch(initializeStations());
-  }, [stationsAreSet, dispatch]);
 
   console.log(list);
 
-  if (!list || !stationsAreSet) return null;
+  if (!list) return null;
 
   return (
     <div>
@@ -44,22 +34,19 @@ export const ObservationSessionList = () => {
         </TableHead>
         <TableBody>
           {
-            list.map((elemtn, i) =>
+            list.map((s, i) =>
               <TableRow key={i}>
                 <TableCell component="th" scope="row">
-                  {elemtn.day}
+                  {s.day}
                 </TableCell>
                 <TableCell align="right">
-                  {elemtn.observers}
+                  {s.observers}
                 </TableCell>
                 <TableCell align="right">
-                  {elemtn.comment}
+                  {s.comment}
                 </TableCell>
                 <TableCell align="right">
-                  {stations
-                    .find(station => station.id === elemtn.observatory)
-                    .name
-                  }
+                  <ObsStation id={s.observatory} />
                 </TableCell>
 
               </TableRow>

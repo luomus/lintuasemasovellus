@@ -28,9 +28,10 @@
     "eject": "react-scripts eject",
     "start-api": "cd ../lintuasema-backend && bash install.sh && venv/bin/flask run --no-debugger",
     "build-copy": "npm run build && cp build ../lintuasema-backend/ -r",
-    "lint": "eslint './src/**/*.{js,jsx}'",
-    "lint:fix": "eslint './src/**/*.{js,jsx}' --fix",
-    "cypress:open": "cypress open"
+    "lint": "eslint './{src,cypress}/**/*.{js,jsx}'",
+    "lint:fix": "eslint './{src,cypress}/**/*.{js,jsx}' --fix",
+    "cypress:open": "cypress open",
+    "cypress:cmd": "cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,9 +50,10 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "cypress": "^5.2.0",
+    "cypress": "^5.3.0",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-react": "^7.21.2",
     "eslint-plugin-security": "^1.4.0"
   }
 }

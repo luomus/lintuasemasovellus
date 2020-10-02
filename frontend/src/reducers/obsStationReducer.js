@@ -4,12 +4,7 @@ export const initializeStations = () => {
   return async dispatch => {
     const stations = await getObservationStations();
     console.log(stations);
-    dispatch({
-      type: "SET_STATIONS",
-      data: {
-        stations
-      }
-    });
+    dispatch(setStations(stations));
   };
 };
 
