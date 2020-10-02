@@ -4,7 +4,7 @@ import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage } from "./pages";
 import Footer from "./globalComponents/Footer";
-import { Form, ObservationSessionForm, ObservationSessionList, HavaintoList } from "./pages";
+import { DayForm, DayList } from "./pages";
 import { getAuth, getToken } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
@@ -35,17 +35,11 @@ const App = () => {
       <div>
         <NavBar />
         <Switch>
-          <Route path="/form">
-            <Form />
-          </Route>
           <Route path="/havainnointiform">
-            <ObservationSessionForm />
+            <DayForm />
           </Route>
           <Route path="/havainnointilist">
-            <ObservationSessionList />
-          </Route>
-          <Route path="/list">
-            <HavaintoList />
+            <DayList />
           </Route>
           <Route path="/">
             <HomePage />

@@ -19,14 +19,6 @@ const NavBarLinks = () => {
       <Button component={Link} to="/havainnointilist">
         Näytä päivät
       </Button>
-      <br />
-      <Button component={Link} to="/form">
-        Lisää havaintoja
-      </Button>
-      <br />
-      <Button component={Link} to="/list">
-        Näytä havainnot
-      </Button>
     </Box>
   );
 };
