@@ -1,3 +1,8 @@
+import os
+import requests
+import cx_Oracle
+import app.oracleConfig
+
 from flask import (Flask, render_template, 
     request, redirect, session, url_for,
     make_response, jsonify)
@@ -10,30 +15,30 @@ from flask_login import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
 from sqlalchemy.engine import create_engine
+
 from app.api import bp as api_blueprint
+
 from app.api.classes.observatory import models
 from app.api.classes.day import models
 from app.api.classes.location import models
 from app.api.classes.observationsession import models
 from app.api.classes.user import models
-from app.db import db
-import os
-import requests
 
 from app.api.classes.observationsession import views
 from app.api.classes.observatory import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views
 
-import cx_Oracle
-import app.oracleConfig
-
 from app.api.classes.user.models import User
 from app.api.classes.observatory.models import Observatory
+
+from app.db import db
+
 from os import urandom
 
-from flask_login import LoginManager
+
 
 
 def init_app():
