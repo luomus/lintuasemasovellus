@@ -7,7 +7,7 @@ import NavBarLinks from "./NavBarLinks";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout, loginUrl } from "../services";
 import { setUser } from "../reducers/userReducer";
-
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles({
   drawerContainer: {
@@ -27,6 +27,8 @@ const useStyles = makeStyles({
 });
 
 const NavBar = () => {
+  const { t, i18n } = useTranslation();
+  i18n.changeLanguage('fi');
   const classes = useStyles();
 
   const [state, setState] = useState({
@@ -58,7 +60,7 @@ const NavBar = () => {
       id="logout-link"
       startIcon={<AccountCircle />}
     >
-      Kirjaudu ulos
+      {t('logout')}
     </Button>
     :
     <Button className={classes.userButton}
@@ -66,7 +68,7 @@ const NavBar = () => {
       href={loginUrl}
       startIcon={<AccountCircle />}
     >
-      Kirjaudu sisään
+      {t('login')}
     </Button>;
 
   const welcomeText = user.id

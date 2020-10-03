@@ -26,14 +26,7 @@ export const HomePage = () => {
       <Grid container spacing={10}>
         <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>
-            Tämä on täytetekstiä. Suomessa sijaitsee 16 lintuasemaa.
-            Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä
-            lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii
-            sisäänkirjautumisen.
-
-            {t('key')}
-            
-            
+            {t('intro')}
           </Paper>
         </Grid>
       </Grid>
