@@ -113,7 +113,7 @@ export const DayForm = () => {
               format="dd.MM.yyyy"
               margin="normal"
               id="date-picker-inline"
-              label="Päivämäärä"
+              label={t("date")}
               value={day}
               onChange={(date) => setDay(date)}
               KeyboardButtonProps={{
@@ -125,14 +125,14 @@ export const DayForm = () => {
 
           <TextField required
             id="observers"
-            label="Havainnoija(t)"
+            label={t("observers")}
             onChange={(event) => setObservers(event.target.value)}
             value={observers}
           /><br />
           <TextField
             rows={5}
             id="comment"
-            label="Kommentti"
+            label={t("comment")}
             multiline
             onChange={(event) => setComment(event.target.value)}
             value={comment}
