@@ -8,12 +8,15 @@ import {
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import ObsStation from "../../globalComponents/ObsStation";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 
 const useStyles = makeStyles({
   paper: {
     background: "white",
     padding: "20px 30px",
+    margin: "0px 0px 50px 0px",
   },
   root: {
     "& .MuiFormControl-root": {
@@ -30,24 +33,38 @@ const Alert = (props) => {
 
 export const DayForm = () => {
   const [observatory, setObservatory] = useState("");
-  const [day, setDay] = useState("");
+  const [day, setDay] = useState(Date.now());
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
 
   const classes = useStyles();
   const [formSent, setFormSent] = useState(false);
+  const [errorHappened, setErrorHappened] = useState(false);
+
+
+  const formatDate = (date) => {
+    const dd = date.getDate();
+    const mm = date.getMonth();
+    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  };
 
   const addDay = (event) => {
     event.preventDefault();
     // do things with form
-    setFormSent(true);
-    postDay({ day: day, observers: observers, comment: comment, observatory_id: observatory })
-      .then(() => console.log("success"))
-      .catch(() => console.error("Error in post request for havainnointiform"));
-    setObservatory("");
-    setDay("");
-    setObservers("");
-    setComment("");
+    postDay({ day: formatDate(day),
+      observers: observers, comment: comment, observatory_id: observatory })
+      .then((res) => {
+        if (res.status !== 200) {
+          setErrorHappened(true);
+        } else {
+          setFormSent(true);
+          setObservatory("");
+          setDay(Date.now());
+          setObservers("");
+          setComment("");
+        }
+      })
+      .catch(() => setErrorHappened(true));
   };
 
   const handleClose = (event, reason) => {
@@ -55,6 +72,7 @@ export const DayForm = () => {
       return;
     }
     setFormSent(false);
+    setErrorHappened(false);
   };
 
   return (
@@ -81,12 +99,24 @@ export const DayForm = () => {
             </Select>
           </FormControl>
           <br />
-          <TextField required
-            id="date-required"
-            label="Päivämäärä"
-            onChange={(event) => setDay(event.target.value)}
-            value={day}
-          /><br />
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              required
+              disableToolbar
+              variant="inline"
+              format="dd.MM.yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="Päivämäärä"
+              value={day}
+              onChange={(date) => setDay(date)}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
+          </MuiPickersUtilsProvider>
+          <br />
+
           <TextField required
             id="observers"
             label="Havainnoija(t)"
@@ -112,6 +142,11 @@ export const DayForm = () => {
           <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
             Lomake lähetetty!
+            </Alert>
+          </Snackbar>
+          <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+            Lomakkeen lähetyksessä ongelmia. Tarkista internetyhteys   :(
             </Alert>
           </Snackbar>
         </form>
