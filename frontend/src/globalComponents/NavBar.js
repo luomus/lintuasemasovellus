@@ -77,7 +77,7 @@ const NavBar = () => {
   const welcomeText = user.id
     ?
     <Typography>
-      Tervetuloa sovellukseen {user.fullName}!
+      {t("welcome")} {user.fullName}!
     </Typography>
     :
     null;
@@ -92,7 +92,7 @@ const NavBar = () => {
             <Dehaze style={{ color: "white" }} />
           </IconButton>
           <Typography variant="h5">
-            Lintuasemasovellus
+          {t("title")}
           </Typography>
           <Drawer
             open={state.right}

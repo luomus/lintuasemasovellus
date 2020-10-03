@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ObsStation from "../../globalComponents/ObsStation";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { useTranslation } from "react-i18next";
 
 
 const useStyles = makeStyles({
@@ -32,6 +33,8 @@ const Alert = (props) => {
 
 
 export const DayForm = () => {
+
+  const { t } = useTranslation();
 
   const dateNow = new Date();
 
@@ -82,11 +85,11 @@ export const DayForm = () => {
     <div>
       <Paper className={classes.paper}>
         <Typography variant="h5" component="h2">
-        Uusi Päivä
+        {t("newDay")}
         </Typography>
         <form className={classes.root} onSubmit={addDay}>
           <FormControl>
-            <InputLabel id="Lintuasema">Lintuasema *</InputLabel>
+            <InputLabel id="Lintuasema">{t("observatory")} *</InputLabel>
             <Select required
               labelId="observatory"
               id ="select"
@@ -139,17 +142,17 @@ export const DayForm = () => {
               variant="contained"
               color="primary"
               disableElevation type="submit" >
-            Tallenna
+            {t("save")}
             </Button>
           </p>
           <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
-            Lomake lähetetty!
+            {t("formSent")}
             </Alert>
           </Snackbar>
           <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
-            Lomakkeen lähetyksessä ongelmia. Tarkista internetyhteys   :(
+            {t("formNotSent")}
             </Alert>
           </Snackbar>
         </form>

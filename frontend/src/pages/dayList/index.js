@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import ObsStation from "../../globalComponents/ObsStation";
 import { getDays } from "../../services";
 import DayPagination from "./DayPagination";
+import { useTranslation } from "react-i18next";
+
 
 const useStyles = makeStyles({
   paper: {
@@ -28,6 +30,9 @@ const StyledTableCell = withStyles(() => ({
 
 
 export const DayList = () => {
+
+  const { t } = useTranslation();
+
   const [list, setList] = useState([]);
   const classes = useStyles();
 
@@ -46,16 +51,16 @@ export const DayList = () => {
       <Paper className={classes.paper}>
 
         <Typography variant="h5" component="h2" >
-          Päivät
+        {t("days")}
         </Typography>
         <br />
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Päivämäärä</StyledTableCell>
-              <StyledTableCell align="right">Havainnoijat</StyledTableCell>
-              <StyledTableCell align="right">Kommentit</StyledTableCell>
-              <StyledTableCell align="right">Havainnointiasema</StyledTableCell>
+              <StyledTableCell>{t("date")}</StyledTableCell>
+              <StyledTableCell align="right">{t("observers")}</StyledTableCell>
+              <StyledTableCell align="right">{t("comment")}</StyledTableCell>
+              <StyledTableCell align="right">{t("observationStation")}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

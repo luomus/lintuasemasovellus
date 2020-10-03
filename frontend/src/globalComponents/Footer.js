@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 
 const useStyles = makeStyles({
@@ -15,12 +16,14 @@ const useStyles = makeStyles({
 });
 
 const Footer = () => {
+
+  const { t } = useTranslation();
   const classes = useStyles();
 
   return (
     <Box className={classes.footer} boxShadow={3}>
       <p>
-        Lintuasemasovellus | Ohjelmistotuotantoprojekti 2020
+      {t("footer")}
       </p>
     </Box>
   );
