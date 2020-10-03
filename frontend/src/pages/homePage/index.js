@@ -18,7 +18,7 @@ export const HomePage = () => {
   const classes = useStyles();
 
   const { t, i18n } = useTranslation();
-  i18n.changeLanguage('fi');
+  
 
   return (
     <div>
