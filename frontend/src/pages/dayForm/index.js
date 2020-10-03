@@ -32,8 +32,11 @@ const Alert = (props) => {
 
 
 export const DayForm = () => {
+
+  const dateNow = new Date();
+
   const [observatory, setObservatory] = useState("");
-  const [day, setDay] = useState(Date.now());
+  const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
 
@@ -59,7 +62,7 @@ export const DayForm = () => {
         } else {
           setFormSent(true);
           setObservatory("");
-          setDay(Date.now());
+          setDay(dateNow);
           setObservers("");
           setComment("");
         }
