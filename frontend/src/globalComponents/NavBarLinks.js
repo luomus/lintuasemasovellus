@@ -5,22 +5,20 @@ import { useTranslation } from "react-i18next";
 
 
 
-
 const NavBarLinks = () => {
   const { t, i18n } = useTranslation();
-  i18n.changeLanguage('fi');
   return (
     <Box>
       <Button component={Link} to="/">
-       {t('frontpage')}
+        {t('frontpage')}
       </Button>
       <br />
       <Button component={Link} to="/havainnointiform">
-       {t('addDayPage')}
+        {t('addDayPage')}
       </Button>
       <br />
       <Button component={Link} to="/havainnointilist">
-       {t('showDaysPage')}
+        {t('showDaysPage')}
       </Button>
     </Box>
   );

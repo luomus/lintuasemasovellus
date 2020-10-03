@@ -26,9 +26,11 @@ const useStyles = makeStyles({
   },
 });
 
+
+
 const NavBar = () => {
   const { t, i18n } = useTranslation();
-  i18n.changeLanguage('fi');
+  
   const classes = useStyles();
 
   const [state, setState] = useState({
@@ -50,7 +52,8 @@ const NavBar = () => {
         dispatch(setUser({}));
       });
   };
-
+  
+  
   const logoutLogin = user.id
     ?
     <Button className={classes.userButton}
@@ -85,11 +88,11 @@ const NavBar = () => {
 
       <AppBar position="static" style={{ background: "darkolivegreen" }} >
         <Toolbar>
-          <IconButton id="navigationbar" onClick={toggleMenu("right", true)}> {/*navigationbar nimi lisätty testejä varten, että löytyy helpommin*/ }
+          <IconButton id="navigationbar" onClick={toggleMenu("right", true)}> {/*navigationbar nimi lisätty testejä varten, että löytyy helpommin*/}
             <Dehaze style={{ color: "white" }} />
           </IconButton>
           <Typography variant="h5">
-              Lintuasemasovellus
+            Lintuasemasovellus
           </Typography>
           <Drawer
             open={state.right}
