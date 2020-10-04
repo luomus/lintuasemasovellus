@@ -43,9 +43,8 @@ def init_app():
 
     app = Flask(__name__, static_folder='../build', static_url_path='/')
     Talisman(app,
-    content_security_policy={
-        'default-src': "\'*\'"
-    })
+    content_security_policy_report_only=True,
+    content_security_policy_report_uri="")
     cors = CORS(app)
 
     login_manager = LoginManager()
