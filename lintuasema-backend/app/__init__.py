@@ -42,7 +42,10 @@ from os import urandom
 def init_app():
 
     app = Flask(__name__, static_folder='../build', static_url_path='/')
-    Talisman(app)
+    Talisman(app,
+    content_security_policy={
+        'default-src': "\'*\'"
+    })
     cors = CORS(app)
 
     login_manager = LoginManager()
