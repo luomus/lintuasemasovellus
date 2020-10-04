@@ -22,7 +22,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   it("An observation day can be saved", function() {
     cy.contains("Lisää päivä").click();
     cy.get("#select").click().get("#testStation").click();
-    cy.get("#date-required").type(date);
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
     cy.contains("Tallenna").click();
