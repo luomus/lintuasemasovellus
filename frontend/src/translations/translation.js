@@ -20,6 +20,8 @@ const resources = {
       "observationStation": "Havainnointiasema",
       "formSent": "Lomake lähetetty!",
       "formNotSent": "Lomakkeen lähetyksessä ongelmia. Tarkista internetyhteys   :(",
+      "titleExample": "Esimerkkiotsikko",
+      "readMore": "Lue lisää",
 
     },
   },
