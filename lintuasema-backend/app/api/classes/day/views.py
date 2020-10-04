@@ -18,7 +18,7 @@ def add_day():
     db.session().add(o)
     db.session().commit()
 
-    return redirect('/')
+    return req
 
 
 @bp.route('/api/listDays', methods=['GET'])
