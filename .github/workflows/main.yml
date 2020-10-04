@@ -13,8 +13,8 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile -t test
         
-      - name: npm install
-        run: npm install
+      - name: npm ci
+        run: npm ci
         
       - name: Run cypress tests
         run: npm run cypress:cmd
