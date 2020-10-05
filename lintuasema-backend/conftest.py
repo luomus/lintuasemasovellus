@@ -2,6 +2,7 @@
 import pytest
 from app import init_testapp, db
 
+
 @pytest.fixture
 
 def app():
@@ -15,3 +16,4 @@ def app():
     #return app
 
 
+#fixture nimeltään app. Fixture tarkoittaa asiaa joka valmistelee testiä varten pohjatilanteen

@@ -1,7 +1,6 @@
 import os
 import requests
-import cx_Oracle
-import app.oracleConfig
+
 
 from flask import (Flask, render_template, 
     request, redirect, session, url_for,
@@ -14,7 +13,7 @@ from flask_login import (
     logout_user,
 )
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+
 
 from sqlalchemy.engine import create_engine
 
@@ -38,7 +37,11 @@ from app.db import db
 
 from os import urandom
 
+from flask_cors import CORS #siirretty vikaksi tietokantatestijärjestelmän debuggausta varten
+
 def init_app():
+    import cx_Oracle #siirretty oracle importit tänne, koska pytest ei tykkää niistä tuolla ylhäällä
+    import app.oracleConfig
 
     app = Flask(__name__, static_folder='../build', static_url_path='/')
     cors = CORS(app)
@@ -101,7 +104,7 @@ def init_testapp():
     try:
         app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
         app.config["SQLALCHEMY_ECHO"] = True
-        print('Tietokantayhteys luotu.')
+        print('Testitietokantayhteys luotu.')
     except Exception as e:
         print(e)
     
@@ -120,7 +123,7 @@ def init_testapp():
            db.session().add(observationStation)
            db.session().add(observationStation2)
            db.session().commit()
-           print('Lintuasema luotu')
+           print('Testilintuasema luotu')
        except Exception as e:
            print(e)
 
