@@ -3,7 +3,7 @@ name: Cypress tests
 on: [push]
 
 jobs:
-  build:
+  cypress-test:
 
     runs-on: ubuntu-latest
       

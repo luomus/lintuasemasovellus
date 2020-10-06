@@ -12,4 +12,15 @@ jobs:
         
       - name: Build the Docker image
         run: docker build . --file Dockerfile -t test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [cypress-test, pytest, build]
+
+    steps:
+    - name: Webhook
+      uses: distributhor/workflow-webhook
+      with:
+        url: "https://rahti.csc.fi:8443/apis/build.openshift.io/v1/namespaces/lintuasema-staging/buildconfigs/lintuasema-build/webhooks/b033e6aae4979ed3/github"
+        json: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.push.created_at}}", "updated_at": "${{github.event.push.updated_at}}" }'
         
