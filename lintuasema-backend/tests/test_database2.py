@@ -3,12 +3,6 @@ from app.api.classes.observatory.services import getAll, getFirst #testi aina im
 
 
 
-def func(x):
-    return x + 1
-
-def test_answer():
-    assert func(4) == 6
-
 def test_observatories(app): #App annettava
     list = getAll()
     assert list is not None
