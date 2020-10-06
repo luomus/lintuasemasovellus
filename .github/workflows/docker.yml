@@ -1,4 +1,4 @@
-name: CI
+name: Build Docker image
 
 on:
   push:
@@ -13,8 +13,3 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile -t test
         
-      #- name: npm ci
-      #  run: npm ci
-        
-      #- name: Run cypress tests
-      #  run: npm run cypress:cmd
