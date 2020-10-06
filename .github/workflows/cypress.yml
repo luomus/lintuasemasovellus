@@ -23,7 +23,7 @@ jobs:
       working-directory: ./lintuasema-backend
       
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: npm install
