@@ -81,5 +81,5 @@ jobs:
       uses: distributhor/workflow-webhook
       with:
         url: "https://rahti.csc.fi:8443/apis/build.openshift.io/v1/namespaces/lintuasema-staging/buildconfigs/lintuasema-build/webhooks/b033e6aae4979ed3/github"
-        json: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.push.created_at}}", "updated_at": "${{github.event.push.updated_at}}" }'
+        #json: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.push.created_at}}", "updated_at": "${{github.event.push.updated_at}}" }'
         
