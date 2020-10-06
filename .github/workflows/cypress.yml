@@ -35,6 +35,10 @@ jobs:
     - name: run frontend
       run: npm start &
       working-directory: ./frontend
+    - name: setup cypress test
+      uses: actions/setup-node@v1
+      with:
+        wait-on: http://localhost:3000
     - name: run cypress test
       run: npm run cypress:cmd
       working-directory: ./frontend
