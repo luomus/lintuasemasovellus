@@ -4,6 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from app.api.classes.day.models import Day
+from app.api.classes.day.services import addDay, getDays
 
 from app.api import bp
 from app.db import db
@@ -13,10 +14,11 @@ from app.db import db
 def add_day():
 
     req = request.get_json()
-    o = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=req['observatory_id']) #testiversio, pitää muuttaa
+    day = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=req['observatory_id']) #testiversio, pitää muuttaa
 
-    db.session().add(o)
-    db.session().commit()
+    addDay(day)
+    #db.session().add(day)
+    #db.session().commit()
 
     return req
 
@@ -25,7 +27,8 @@ def add_day():
 @login_required
 def list_day():
 
-    dayObjects = Day.query.all()
+    dayObjects = getDays()
+    #dayObjects = Day.query.all()
     ret = []
     for each in dayObjects:
         ret.append({ 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': each.observatory_id })
