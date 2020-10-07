@@ -18,15 +18,12 @@ TARGET = os.getenv('TARGET')
 @bp.route('/login', methods=['POST', 'GET'])
 def loginconfirm():
     personToken = request.args.get('token')
-    print(personToken)
 
-    req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN)
+    req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN).json()
 
-    #print(req.text)
-    values=req.text.split(',')
-    userId = values[0].split(':')[1]
-    name = values[1].split(':')[1]
-    email = values[2].split(':')[1]
+    userId = req['id']
+    name = req['fullName']
+    email = req['emailAddress']
 
     user = User.query.filter_by(userId=userId).first()
     if not user:
@@ -36,9 +33,10 @@ def loginconfirm():
 
     login_user(user)
 
-    session['token'] = request.args.get('token')
+    session['token'] = personToken
     
     return redirect('/')
+
 
 @bp.route('/logout', methods=['POST', 'GET'])
 def logoutCleanup():
@@ -54,4 +52,25 @@ def getSessionToken():
 def login():
     return redirect('https://fmnh-ws-test.it.helsinki.fi/laji-auth/login?target=%s&redirectMethod=GET&next=' % (TARGET))
     # return redirect('https://login.laji.fi/login?target=%s&redirectMethod=POST&next=/index' % (TARGET))
+
+
+@bp.route('/testlogin', methods=['POST', 'GET'])
+def testloginconfirm():
+    personToken = request.args.get('token')
+
+    userId = 'MA.3417'
+    name = 'Lintu Asema'
+    email = 'lintuasema@hotmail.com'
+
+    user = User.query.filter_by(userId=userId).first()
+    if not user:
+        user = User(userId=userId, fullName=name, email=email)
+        db.session().add(user)
+        db.session().commit()
+
+    login_user(user)
+
+    session['token'] = personToken
+    
+    return redirect('/')
 
