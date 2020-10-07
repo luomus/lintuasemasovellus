@@ -49,7 +49,7 @@ def init_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     app.config["SECRET_KEY"] = urandom(32)
-    app.config['LOGIN_DISABLED'] = True
+    app.config['LOGIN_DISABLED'] = False
 
     @login_manager.user_loader
     def load_user(user_id):

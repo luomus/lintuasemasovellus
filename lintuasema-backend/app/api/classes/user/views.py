@@ -18,6 +18,7 @@ TARGET = os.getenv('TARGET')
 @bp.route('/login', methods=['POST', 'GET'])
 def loginconfirm():
     personToken = request.args.get('token')
+    print(personToken)
 
     req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN)
 
