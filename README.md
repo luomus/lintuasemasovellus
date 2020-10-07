@@ -6,6 +6,8 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 [Sovellus Rahdissa](https://lintuasema-lintuasema-staging.rahtiapp.fi/)
 
+[Lisenssi](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/LICENSE)
+
 ### Dokumentaatio
 
 [Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
