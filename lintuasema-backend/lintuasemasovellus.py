@@ -1,4 +1,4 @@
-from app import init_app, redirect
+from app import init_app, init_testapp, redirect
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -9,7 +9,10 @@ from flask import (Flask, render_template,
     make_response, jsonify)
 
 
+# jos ei halua käyttää oraclea lokaalisti, voi säätää app=init_testapp()
+
 app = init_app()
+#app = init_testapp()
 port = int(os.environ.get("PORT", 3000))
 
 

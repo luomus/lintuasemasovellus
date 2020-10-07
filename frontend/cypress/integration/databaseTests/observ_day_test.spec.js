@@ -6,7 +6,7 @@ const comment = "Olipa kiva sää";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
-    cy.request("http://localhost:3000/login?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw")
+    //cy.request("http://localhost:3000/login?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw")
     cy.get("#navigationbar").click();
   });
   it("Front page has button for adding an observation day", function() {
