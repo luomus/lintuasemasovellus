@@ -9,6 +9,8 @@ class Day(Base):
     observers=db.Column(db.String(200), nullable=False) #ainakin yksi tarkkaillut, joten ei voi laittaa nollaksi
     
     observatory_id = db.Column(db.Integer, db.ForeignKey('observatory.id'), nullable=False)
+
+    Observationperiod=db.relationship("Observationperiod", backref="day", lazy=True)
     
 
     def __init__ (self, day, comment, observers, observatory_id):

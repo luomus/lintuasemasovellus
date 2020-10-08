@@ -20,12 +20,13 @@ from sqlalchemy.engine import create_engine
 from app.api import bp as api_blueprint
 
 from app.api.classes.observatory import models
+from app.api.classes.user import models
 from app.api.classes.day import models
 from app.api.classes.location import models
-from app.api.classes.observationsession import models
-from app.api.classes.user import models
+from app.api.classes.observationperiod import models
+from app.api.classes.observation import models
 
-from app.api.classes.observationsession import views
+#from app.api.classes.observationperiod import views
 from app.api.classes.observatory import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views
@@ -49,7 +50,7 @@ def init_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     app.config["SECRET_KEY"] = urandom(32)
-    app.config['LOGIN_DISABLED'] = False
+    app.config['LOGIN_DISABLED'] = True
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -115,7 +116,7 @@ def init_testapp():
     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
        try:
-           db.drop_all()
+           #db.drop_all()
            db.create_all()
            print('Taulut luotu')
            observationStation = Observatory(name="Hangon Lintuasema")
