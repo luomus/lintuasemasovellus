@@ -22,6 +22,9 @@ const resources = {
       "formNotSent": "Lomakkeen lähetyksessä ongelmia. Tarkista internetyhteys   :(",
       "titleExample": "Esimerkkiotsikko",
       "readMore": "Lue lisää",
+      "location": "Sijainti",
+      "observationperiod": "Havaintoperiodi",
+      "observation": "Havainto",
 
     },
   },
