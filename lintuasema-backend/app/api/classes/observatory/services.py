@@ -13,6 +13,7 @@ def getFirst(): #tyhmä testi tehty, jotta näkisin toimiiko mikään
 
 
 def createObservatory(name):
+    db.drop_all()
     obs = Observatory.query.filter_by(name=name).first()
     if not obs:
         obs = Observatory(name=name)

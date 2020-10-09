@@ -26,7 +26,7 @@ from app.api.classes.location import models
 from app.api.classes.observationperiod import models
 from app.api.classes.observation import models
 
-#from app.api.classes.observationperiod import views
+from app.api.classes.observationperiod import views
 from app.api.classes.observatory import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views

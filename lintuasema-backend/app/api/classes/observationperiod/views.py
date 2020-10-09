@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 
 from flask_login import login_required
 
-from app.api.classes.observationsession.models import ObservationSession
+from app.api.classes.observationperiod.models import Observationperiod
 from app.api.classes.day.models import Day
 from app.api.classes.observatory.models import Observatory
 
