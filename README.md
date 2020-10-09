@@ -10,6 +10,8 @@ Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
 ### Dokumentaatio
 
+[Tietokantakaavio](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/tietokantakaavio.png)
+
 [Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
 
 ### Projektin edistyminen
