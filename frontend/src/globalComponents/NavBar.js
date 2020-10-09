@@ -92,7 +92,7 @@ const NavBar = () => {
             <Dehaze style={{ color: "white" }} />
           </IconButton>
           <Typography variant="h5">
-          {t("title")}
+            {t("title")}
           </Typography>
           <Drawer
             open={state.right}

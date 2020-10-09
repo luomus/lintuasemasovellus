@@ -23,7 +23,7 @@ const Footer = () => {
   return (
     <Box className={classes.footer} boxShadow={3}>
       <p>
-      {t("footer")}
+        {t("footer")}
       </p>
     </Box>
   );

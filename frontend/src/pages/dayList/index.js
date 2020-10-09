@@ -51,7 +51,7 @@ export const DayList = () => {
       <Paper className={classes.paper}>
 
         <Typography variant="h5" component="h2" >
-        {t("days")}
+          {t("days")}
         </Typography>
         <br />
         <Table className={classes.table}>

@@ -2,10 +2,10 @@ import React from "react";
 import { Paper, Grid, Typography, Button } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 //import CardMedia from '@material-ui/core/CardMedia';  laitettiin kommenttiin koska github actions ei toiminut. valitti unused-variable erroria.
 
 
@@ -46,7 +46,7 @@ export const HomePage = () => {
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h2" >
               {t("titleExample")} 2
-        </Typography>
+            </Typography>
             <br />
             {t("intro")} {t("intro")}</Paper>
         </Grid>
