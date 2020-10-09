@@ -15,7 +15,6 @@ from app.api.classes.observatory.services import getAll
 @login_required
 def list_stations():
 
-    #stations = ObservationStation.query.all()
     stations = getAll()
     ret = []
     for each in stations:
