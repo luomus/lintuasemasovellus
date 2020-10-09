@@ -26,7 +26,8 @@ from app.api.classes.location import models
 from app.api.classes.observationperiod import models
 from app.api.classes.observation import models
 
-#from app.api.classes.observationperiod import views
+from app.api.classes.observationperiod import views
+from app.api.classes.location import views, services
 from app.api.classes.observatory import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views
@@ -35,6 +36,8 @@ from app.api.classes.user.models import User
 from app.api.classes.observatory.models import Observatory
 
 from app.api.classes.observatory.services import createObservatory
+
+from app.api.classes.location.services import createLocation
 
 from app.db import db
 
@@ -80,6 +83,13 @@ def init_app():
            print('Taulut luotu')
            createObservatory("Hangon Lintuasema")
            createObservatory("Jurmon Lintuasema")
+           createLocation("Bunkkeri", 1)
+           createLocation("Piha", 1)
+           createLocation("Etelakarki", 1)
+           createLocation("Metsa", 1)
+           createLocation("Luoto Gou", 1)
+           createLocation("Korkein kohta", 2)
+           createLocation("Lansireitti", 2)
            print('Lintuasema luotu')
        except Exception as e:
            print(e)
@@ -120,6 +130,13 @@ def init_testapp():
            print('Taulut luotu')
            createObservatory("Hangon Lintuasema")
            createObservatory("Jurmon Lintuasema")
+           createLocation("Bunkkeri", 1)
+           createLocation("Piha", 1)
+           createLocation("Etelakarki", 1)
+           createLocation("Metsa", 1)
+           createLocation("Luoto Gou", 1)
+           createLocation("Korkein kohta", 2)
+           createLocation("Lansireitti", 2)
            print('Testilintuasema luotu')
        except Exception as e:
            print(e)
