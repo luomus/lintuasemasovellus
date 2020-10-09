@@ -80,7 +80,11 @@ const DayDetails = () => {
         </Typography>
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>
-          <LocationSelector stationId={stationId} locationId={locationId} setLocationId={setLocationId} />
+          <LocationSelector
+            stationId={stationId}
+            locationId={locationId}
+            setLocationId={setLocationId}
+          />
           <br />
           <TextField
             id="startTime"
