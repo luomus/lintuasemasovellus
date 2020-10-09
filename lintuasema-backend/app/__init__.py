@@ -34,6 +34,8 @@ from app.api.classes.user import views
 from app.api.classes.user.models import User
 from app.api.classes.observatory.models import Observatory
 
+from app.api.classes.observatory.services import createObservatory
+
 from app.db import db
 
 from os import urandom
@@ -76,11 +78,8 @@ def init_app():
            #db.drop_all()
            db.create_all()
            print('Taulut luotu')
-           observationStation = Observatory(name="Hangon Lintuasema")
-           observationStation2 = Observatory(name="Jurmon Lintuasema")
-           db.session().add(observationStation)
-           db.session().add(observationStation2)
-           db.session().commit()
+           createObservatory("Hangon Lintuasema")
+           createObservatory("Jurmon Lintuasema")
            print('Lintuasema luotu')
        except Exception as e:
            print(e)
@@ -116,14 +115,11 @@ def init_testapp():
     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
        try:
-           #db.drop_all()
+           db.drop_all()
            db.create_all()
            print('Taulut luotu')
-           observationStation = Observatory(name="Hangon Lintuasema")
-           observationStation2 = Observatory(name="Jurmon Lintuasema")
-           db.session().add(observationStation)
-           db.session().add(observationStation2)
-           db.session().commit()
+           createObservatory("Hangon Lintuasema")
+           createObservatory("Jurmon Lintuasema")
            print('Testilintuasema luotu')
        except Exception as e:
            print(e)
