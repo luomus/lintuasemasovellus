@@ -16,11 +16,12 @@ def add_day():
     req = request.get_json()
     day = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=req['observatory_id']) #testiversio, pitää muuttaa
 
-    addDay(day)
+    added = addDay(day)
     #db.session().add(day)
     #db.session().commit()
 
     return req
+    #return added
 
 
 @bp.route('/api/listDays', methods=['GET'])
