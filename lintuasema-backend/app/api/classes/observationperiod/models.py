@@ -10,10 +10,12 @@ class Observationperiod(Base):
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'), nullable=False)
     day_id = db.Column(db.Integer, db.ForeignKey('day.id'), nullable=False) #yhden päivän aikana monta observatonsessiota
 
-    def __init__ (self, startTime, endTime, observationType):
+    def __init__ (self, startTime, endTime, observationType, location_id, day_id):
         self.startTime = startTime
         self.endTime = endTime
         self.observationType = observationType
+        self.location_id = location_id
+        self.day_id = day_id
 
     
 
