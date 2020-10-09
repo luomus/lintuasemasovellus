@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  makeStyles, Paper, Snackbar,
-  Select, TextField, Button,
-  Typography, MenuItem,
-  FormControl, InputLabel
+  makeStyles, Paper,
+  TextField, Button,
+  Typography,
+  Snackbar,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { postObservationPeriod } from "../../services";
+import ObsStation from "../../globalComponents/ObsStation";
+import LocationSelector from "./LocationSelector";
+import Alert from "../../globalComponents/Alert";
 
 
 
@@ -22,32 +25,33 @@ const DayDetails = () => {
 
   const { t } = useTranslation();
 
-  const [location, setLocation] = useState("");
+  const [locationId, setLocationId] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [type, setType] = useState("");
 
-  const { day } = useParams();
+  const { day, stationId } = useParams();
 
   const classes = useStyles();
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
   const addObservationPeriod = (event) => {
-
     event.preventDefault();
+    // Add day_id
     postObservationPeriod({
-      location: location,
+      location_id: locationId,
       startTime: startTime,
       endTime: endTime,
-      type: type
+      observationType: type,
+      day_id: 1
     })
       .then((res) => {
         if (res.status !== 200) {
           setErrorHappened(true);
         } else {
           setFormSent(true);
-          setLocation("");
+          setLocationId("");
           setStartTime("");
           setEndTime("");
           setType("");
@@ -55,30 +59,33 @@ const DayDetails = () => {
 
       })
       .catch(() => setErrorHappened(true));
+  };
 
-  }
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setFormSent(false);
+    setErrorHappened(false);
+  };
+
 
 
   return (
     <div>
       <Paper className={classes.paper}>
-        <Typography variant="h5" component="h2" >
-          {day}
+        <Typography variant="h5" component="h2" > {" "}
+          {day} {" "}
+          <ObsStation id={Number(stationId)} />
         </Typography>
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>
-          <TextField required
-            id="location"
-            label={t("location")}
-            onChange={(event) => setLocation(event.target.value)}
-            value={location}
-          />
+          <LocationSelector stationId={stationId} locationId={locationId} setLocationId={setLocationId} />
           <br />
           <TextField
             id="startTime"
             label="startTime"
             type="time"
-            defaultValue="07:30"
             value={startTime}
             onChange={(event) => setStartTime(event.target.value)}
             className={classes.textField}
@@ -94,7 +101,6 @@ const DayDetails = () => {
             id="endTime"
             label="endTime"
             type="time"
-            defaultValue="07:30"
             value={endTime}
             onChange={(event) => setEndTime(event.target.value)}
             className={classes.textField}
@@ -120,7 +126,16 @@ const DayDetails = () => {
             type="submit">
             {t("save")}
           </Button>
-
+          <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success">
+              {t("formSent")}
+            </Alert>
+          </Snackbar>
+          <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+              {t("formNotSent")}
+            </Alert>
+          </Snackbar>
         </form>
       </Paper>
     </div>

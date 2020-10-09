@@ -70,7 +70,7 @@ export const DayList = () => {
                 .map((s, i) =>
                   <TableRow hover key={i}>
                     <StyledTableCell component="th" scope="row">
-                      <Link to={`/paivatiedot/${s.day}`}>
+                      <Link to={`/paivatiedot/${s.day}/${s.observatory}`}>
                         {s.day}
                       </Link>
                     </StyledTableCell>

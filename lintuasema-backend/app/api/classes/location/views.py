@@ -27,6 +27,6 @@ def list_locations(observatory_id):
     objects = Location.query.filter_by(observatory_id = observatory_id)
     ret = []
     for each in objects:
-        ret.append({ 'name': each.name })
+        ret.append({ 'name': each.name, 'id': each.id })
 
     return jsonify(ret)

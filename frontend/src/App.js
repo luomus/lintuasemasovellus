@@ -46,7 +46,7 @@ const App = () => {
           <Route path="/havainnointilist">
             <DayList />
           </Route>
-          <Route path="/paivatiedot/:day">
+          <Route path="/paivatiedot/:day/:stationId">
             <DayDetails />
           </Route>
           <Route path="/">

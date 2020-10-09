@@ -6,12 +6,12 @@ import {
   Typography, MenuItem,
   FormControl, InputLabel
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import ObsStation from "../../globalComponents/ObsStation";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
+import Alert from "../../globalComponents/Alert";
 
 
 const useStyles = makeStyles({
@@ -28,9 +28,6 @@ const useStyles = makeStyles({
   },
 });
 
-const Alert = (props) => {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-};
 
 
 export const DayForm = () => {
@@ -43,11 +40,9 @@ export const DayForm = () => {
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
-  const [location, setLocation] = useState("");
-  const [observationperiod, setObservationperiod] = useState("");
-  const [observation, setObservation] = useState("");
 
   const classes = useStyles();
+
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
@@ -66,9 +61,6 @@ export const DayForm = () => {
       observers: observers,
       comment: comment,
       observatory_id: observatory,
-      location: location,
-      observationperiod: observationperiod,
-      observation: observation
     })
       .then((res) => {
         if (res.status !== 200) {
@@ -79,9 +71,6 @@ export const DayForm = () => {
           setDay(dateNow);
           setObservers("");
           setComment("");
-          setLocation("");
-          setObservationperiod("");
-          setObservation("");
         }
       })
       .catch(() => setErrorHappened(true));
@@ -142,24 +131,6 @@ export const DayForm = () => {
             label={t("observers")}
             onChange={(event) => setObservers(event.target.value)}
             value={observers}
-          /><br />
-          <TextField
-            id="location"
-            label={t("location")}
-            onChange={(event) => setLocation(event.target.value)}
-            value={location}
-          /><br />
-          <TextField
-            id="observationperiod"
-            label={t("observationperiod")}
-            onChange={(event) => setObservationperiod(event.target.value)}
-            value={observationperiod}
-          /><br />
-          <TextField
-            id="observation"
-            label={t("observation")}
-            onChange={(event) => setObservation(event.target.value)}
-            value={observation}
           /><br />
           <TextField
             rows={5}

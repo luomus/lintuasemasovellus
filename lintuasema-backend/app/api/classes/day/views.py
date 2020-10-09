@@ -32,6 +32,6 @@ def list_day():
     #dayObjects = Day.query.all()
     ret = []
     for each in dayObjects:
-        ret.append({ 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': each.observatory_id })
+        ret.append({ 'id': each.id, 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': each.observatory_id })
 
     return jsonify(ret)
