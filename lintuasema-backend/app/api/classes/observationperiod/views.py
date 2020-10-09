@@ -9,18 +9,23 @@ from app.api.classes.observatory.models import Observatory
 from app.api import bp
 from app.db import db
 
-@bp.route('/api/havainnointiform', methods=['POST'])
+@bp.route('/api/addObservationPeriod', methods=['POST'])
 @login_required
-def add_observation():
-    content = request.get_json()
-    # TODO: do something with json...
-    #day = Day(content['date'])
-    #db.session().add(day)
-    #db.session().commit()
+def addObservationPeriod():
+    req = request.get_json()
+    obsp = Observationperiod(startTime=req['startTime'], endTime=req['endTime'], observationType=req['observationType'], location_id=req['location_id'], day_id=req['day_id'])
+    db.session().add(obsp)
+    db.session().commit()
 
     return redirect('/')
 
-@bp.route('/api/havainnointilist', methods=["GET"])
+@bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required
-def observations_index():
-    return redirect('/')
+def getObservationPeriods():
+    objects = Observationperiod.query.all()
+    ret = []
+    for each in objects:
+        ret.append({ 'startTime': each.startTime, 'endTime': each.endTime, 'observationType': each.observationType, 'location_id': each.location_id, 'day_id': each.day_id })
+
+    return jsonify(ret)
+
