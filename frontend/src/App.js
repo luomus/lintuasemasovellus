@@ -9,7 +9,7 @@ import { getAuth, getToken } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
-import DayDetails from "./pages/dayList/DayDetails";
+import DayDetails from "./pages/dayDetails";
 
 
 const App = () => {
