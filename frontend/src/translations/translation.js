@@ -27,6 +27,11 @@ const resources = {
       "observation": "Havainto",
       "type": "Tyyppi",
 
+      "manualTitle": "Käyttöohjeet",
+      "manualTextShort": "Tähän kirjoitetaan lyhyt versio sovelluksen käyttöohjeista.",
+      "manualText": "Tähän kirjoitetaan sovelluksen käyttöohjeet kokonaisuudessaan.",
+
+
     },
   },
 };

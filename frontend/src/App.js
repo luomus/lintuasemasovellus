@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
-import { HomePage } from "./pages";
+import { HomePage, UserManual } from "./pages";
 import Footer from "./globalComponents/Footer";
 import { DayForm, DayList } from "./pages";
 import { getAuth, getToken } from "./services";
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import DayDetails from "./pages/dayDetails";
+
 
 
 const App = () => {
@@ -48,6 +49,9 @@ const App = () => {
           </Route>
           <Route path="/paivatiedot/:day/:stationId">
             <DayDetails />
+          </Route>
+          <Route path="/kayttoohjeet">
+            <UserManual />
           </Route>
           <Route path="/">
             <HomePage />

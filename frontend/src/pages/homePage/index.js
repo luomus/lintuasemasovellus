@@ -1,5 +1,6 @@
 import React from "react";
 import { Paper, Grid, Typography, Button } from "@material-ui/core/";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import Card from "@material-ui/core/Card";
@@ -55,72 +56,15 @@ export const HomePage = () => {
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                  {t("titleExample")} 3
+                  {t("manualTitle")}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  {t("intro")}
+                  {t("manualTextShort")}
                 </Typography>
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary">
-                {t("readMore")}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {t("titleExample")} 4
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {t("intro")}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                {t("readMore")}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {t("titleExample")} 5
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {t("intro")}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                {t("readMore")}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {t("titleExample")} 6
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {t("intro")}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
+              <Button component={Link} to="/kayttoohjeet" size="small" color="primary">
                 {t("readMore")}
               </Button>
             </CardActions>
