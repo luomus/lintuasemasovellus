@@ -33,7 +33,11 @@ export const HomePage = () => {
   return (
     <div>
 
-      <Grid container>
+      <Grid container
+        alignItems="stretch"
+       // alignItems="center"
+       justify="flex-end"
+       >
 
         <Grid item xs={8}>
           <Paper className={classes.paper}>
@@ -47,7 +51,7 @@ export const HomePage = () => {
           <Paper className={classes.paper}>
             <CurrentDayForm />
             <br />
-            </Paper>
+          </Paper>
         </Grid>
         <Grid>
           <Card className={classes.card}>
