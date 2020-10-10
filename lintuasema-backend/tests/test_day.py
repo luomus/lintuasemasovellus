@@ -26,6 +26,20 @@ def test_addedDayDoesNotGoToDatabaseIfObservatoryIsNone(app):
     found = addAndFind(dayProperties)
     assert found == False
 
+def test_existingDayIsNotAdded(app):
+    dayProperties = {'date': '01.01.2020', 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
+    dayToAdd = Day(day='01.01.2020', comment='testi', observers='Tom', observatory_id=1)
+    addDay(dayToAdd)
+    found = addAndFind(dayProperties)
+    assert found == False
+
+def test_sameDayIsAddedIfDifferentObservatory(app):
+    dayProperties = {'date': '01.01.2020', 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 2}
+    dayToAdd = Day(day='01.01.2020', comment='testi', observers='Tom', observatory_id=1)
+    addDay(dayToAdd)
+    found = addAndFind(dayProperties)
+    assert found == True
+
 def addAndFind(fields):
     dayToAdd = Day(day=fields['date'], comment=fields['comment'], observers=fields['observers'], observatory_id=fields['observatory_id'])
     addDay(dayToAdd)
