@@ -25,7 +25,6 @@ const resources = {
       "location": "Sijainti",
       "observationperiod": "Havaintoperiodi",
       "observation": "Havainto",
-      "location": "Sijainti",
       "type": "Tyyppi",
 
     },

@@ -14,7 +14,7 @@ const LocationSelector = ({ stationId, locationId, setLocationId }) => {
         setLocations(data);
       })
       .catch(() => console.error("Problem in station location list"));
-  }, []);
+  }, [stationId]);
 
   const { t } = useTranslation();
 
@@ -28,7 +28,7 @@ const LocationSelector = ({ stationId, locationId, setLocationId }) => {
         labelId="location-select"
         id="location"
         value={locationId}
-        onChange={(event) => setLocationId(event.target.value)}
+        onChange={(event) => setLocationId(String(event.target.value))}
       >
         {
           locations.map((location, i) =>
