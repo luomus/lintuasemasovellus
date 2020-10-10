@@ -8,7 +8,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 //import CardMedia from '@material-ui/core/CardMedia';  laitettiin kommenttiin koska github actions ei toiminut. valitti unused-variable erroria.
-
+import CurrentDayForm from "./CurrentDayForm";
 
 const useStyles = makeStyles({
   paper: {
@@ -35,7 +35,7 @@ export const HomePage = () => {
 
       <Grid container>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={8}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h2" >
               {t("titleExample")}
@@ -43,15 +43,13 @@ export const HomePage = () => {
             <br />
             {t("intro")} {t("intro")}</Paper>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={4}>
           <Paper className={classes.paper}>
-            <Typography variant="h5" component="h2" >
-              {t("titleExample")} 2
-            </Typography>
+            <CurrentDayForm />
             <br />
-            {t("intro")} {t("intro")}</Paper>
+            </Paper>
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid>
           <Card className={classes.card}>
             <CardActionArea>
               <CardContent>
