@@ -53,7 +53,7 @@ jobs:
     - name: Cypress run
       uses: cypress-io/github-action@v1
       with:
-        start: flask run --port=3000 --prefix ./lintuasema-backend
+        start: cd ../lintuasema-backend/ && flask run --port=3000
         wait-on: http://localhost:3000
         working-directory: ./frontend
 
