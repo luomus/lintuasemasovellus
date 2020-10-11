@@ -50,7 +50,7 @@ jobs:
         pip install -r requirements.txt
       working-directory: ./lintuasema-backend
     - name: run backend
-      run: flask run --port=3000
+      run: flask run --port=3000 &
       working-directory: ./lintuasema-backend
 
     - name: Cypress run
