@@ -1,18 +1,24 @@
 import { Button, Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import InputHeader from "./InputHeader";
 import PropTypes from "prop-types";
 import InputLine from "./inputLine";
 
 
-const InputGrid = ({ stationId }) => {
+const InputGrid = (props) => {
 
-  const [inputlines, setInputlines] = useState([]);
-  const [selectedLinetype, setSelectedLinetype] = useState("");
+  const { stationId, ...state } = props;
 
+  console.log("inputgrid:", state);
 
   const addInputLine = (type) => {
-    setInputlines(inputlines.concat(type));
+    state.setInputLines(state.inputLines.concat({
+      type,
+      state: {
+        species: "",
+        shorthand: "",
+      },
+    }));
   };
 
   return (
@@ -20,12 +26,19 @@ const InputGrid = ({ stationId }) => {
       <InputHeader
         xs={12}
         stationId={stationId}
-        selectedLinetype={selectedLinetype}
-        setSelectedLinetype={setSelectedLinetype} />
+        selectedLinetype={state.selectedLinetype}
+        setSelectedLinetype={state.setSelectedLinetype}
+        {...state}
+      />
       {
         // show input lines here:
-        inputlines.map((strLinetype, index) =>
-          <InputLine type={strLinetype} key={index} />
+        state.inputLines.map(({ type }, index) =>
+          <InputLine
+            type={type}
+            index={index}
+            key={index}
+            {...state}
+          />
         )
       }
       <Grid item xs={12}>
@@ -34,7 +47,7 @@ const InputGrid = ({ stationId }) => {
           color="primary"
           disableElevation
           type="button"
-          onClick={() => addInputLine(selectedLinetype)}>
+          onClick={() => addInputLine(state.selectedLinetype)}>
             +
         </Button>
       </Grid>
@@ -43,7 +56,7 @@ const InputGrid = ({ stationId }) => {
 };
 
 InputGrid.propTypes = {
-  stationId: PropTypes.string.isRequired
+  stationId: PropTypes.string.isRequired,
 };
 
 export default InputGrid;

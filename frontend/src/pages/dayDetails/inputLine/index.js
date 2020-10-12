@@ -1,31 +1,76 @@
-import { Grid, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import { Grid, TextField, Typography } from "@material-ui/core";
+import React from "react";
+import PropTypes from "prop-types";
 
-const InputLine = () => {
+const InputLine = (props) => {
 
-  const [species, setSpecies] = useState("");
-  const [shorthand, setShortHand] = useState("");
+  const { index, ...state } = props;
+
+  const setSpecies = (newVal) => {
+    state.setInputLines(
+      state.inputLines.map((inputLine, i) =>
+        i === Number(index)
+          ? {
+            ...inputLine,
+            state: {
+              ...inputLine.state,
+              species: newVal,
+            }
+          }
+          : inputLine
+      )
+    );
+  };
+
+  const setShortHand = (newVal) => {
+    state.setInputLines(
+      state.inputLines.map((inputLine, i) =>
+        i === Number(index)
+          ? {
+            ...inputLine,
+            state: {
+              ...inputLine.state,
+              shorthand: newVal,
+            }
+          }
+          : inputLine
+      )
+    );
+
+  };
 
   return (
     <>
-      <Grid item xs={6}>
+      <Grid item xs={2}>
+        <Typography>
+          Tyyppi:
+          {
+            state.inputLines[Number(index)].type
+          }
+        </Typography>
+      </Grid>
+      <Grid item xs={3}>
         <TextField
           id="laji"
           label="laji"
-          value={species}
+          value={state.inputLines[Number(index)].state.species}
           onChange={(event) => setSpecies(event.target.value)}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={7}>
         <TextField
           id="shorthand"
           label="pikakirjoitus"
-          value={shorthand}
+          value={state.inputLines[Number(index)].state.shorthand}
           onChange={(event) => setShortHand(event.target.value)}
         />
       </Grid>
     </>
   );
+};
+
+InputLine.propTypes = {
+  index: PropTypes.number.isRequired
 };
 
 export default InputLine;

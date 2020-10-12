@@ -1,12 +1,13 @@
 import { Grid, makeStyles, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import LocationSelector from "./LocationSelector";
 import PropTypes from "prop-types";
 
 
-const InputHeader = (
-  { stationId, selectedLinetype, setSelectedLinetype }) => {
+const InputHeader = (props) => {
+
+  const { stationId, ...state } = props;
 
   const useStyles = makeStyles({
     paper: {
@@ -17,9 +18,6 @@ const InputHeader = (
   });
 
   const classes = useStyles();
-  const [locationId, setLocationId] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
 
   const { t } = useTranslation();
 
@@ -28,8 +26,9 @@ const InputHeader = (
       <Grid item xs={3}>
         <LocationSelector
           stationId={stationId}
-          locationId={locationId}
-          setLocationId={setLocationId}
+          locationId={state.locationId}
+          setLocationId={state.setLocationId}
+          {...state}
         />
       </Grid>
       <Grid item xs={3}>
@@ -37,8 +36,8 @@ const InputHeader = (
           id="startTime"
           label="startTime"
           type="time"
-          value={startTime}
-          onChange={(event) => setStartTime(event.target.value)}
+          value={state.startTime}
+          onChange={(event) => state.setStartTime(event.target.value)}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -53,8 +52,8 @@ const InputHeader = (
           id="endTime"
           label="endTime"
           type="time"
-          value={endTime}
-          onChange={(event) => setEndTime(event.target.value)}
+          value={state.endTime}
+          onChange={(event) => state.setEndTime(event.target.value)}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -68,8 +67,8 @@ const InputHeader = (
         <TextField required
           id="type"
           label={t("type")}
-          onChange={(event) => setSelectedLinetype(event.target.value)}
-          value={selectedLinetype}
+          onChange={(event) => state.setSelectedLinetype(event.target.value)}
+          value={state.selectedLinetype}
         />
       </Grid>
     </>

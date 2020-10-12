@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Button,
@@ -12,8 +12,6 @@ import { useTranslation } from "react-i18next";
 
 
 const DayDetails = () => {
-
-
 
   const { day, stationId } = useParams();
 
@@ -39,6 +37,24 @@ const DayDetails = () => {
     // add logic...
   };
 
+  const [locationId, setLocationId] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [inputLines, setInputLines] = useState([]);
+  const [selectedLinetype, setSelectedLinetype] = useState("");
+
+  const state = {
+    locationId, setLocationId,
+    startTime, setStartTime,
+    endTime, setEndTime,
+    locations, setLocations,
+    inputLines, setInputLines,
+    selectedLinetype, setSelectedLinetype,
+  };
+
+  console.log("index:", state);
+
   return (
     <div>
       <Paper className={classes.paper}>
@@ -48,7 +64,10 @@ const DayDetails = () => {
         </Typography>
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>
-          <InputGrid stationId={stationId} />
+          <InputGrid
+            stationId={stationId}
+            {...state}
+          />
           <br />
           <Button
             variant="contained"

@@ -1,37 +1,39 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { getObservationLocations } from "../../services";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
-const LocationSelector = ({ stationId, locationId, setLocationId }) => {
+const LocationSelector = (props) => {
 
-  const [locations, setLocations] = useState([]);
+  const { stationId, ...state } = props;
+
+  const locationSet = state.setLocations;
 
   useEffect(() => {
     getObservationLocations(stationId)
       .then((data) => {
-        setLocations(data);
+        locationSet(data);
       })
       .catch(() => console.error("Problem in station location list"));
-  }, [stationId]);
+  }, [stationId, locationSet]);
 
   const { t } = useTranslation();
 
-  console.log(locations);
+  console.log(state.locations);
 
-  if (!locations.length) return null;
+  if (!state.locations.length) return null;
   return (
     <FormControl>
       <InputLabel id="Sijainti">{t("location")} *</InputLabel>
       <Select required
         labelId="location-select"
         id="location"
-        value={locationId}
-        onChange={(event) => setLocationId(String(event.target.value))}
+        value={state.locationId}
+        onChange={(event) => state.setLocationId(String(event.target.value))}
       >
         {
-          locations.map((location, i) =>
+          state.locations.map((location, i) =>
             <MenuItem value={location.id} key={i}>
               {location.name}
             </MenuItem>
