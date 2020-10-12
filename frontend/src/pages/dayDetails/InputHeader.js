@@ -25,14 +25,14 @@ const InputHeader = (
 
   return (
     <>
-      <Grid item >
+      <Grid item xs={3}>
         <LocationSelector
           stationId={stationId}
           locationId={locationId}
           setLocationId={setLocationId}
         />
       </Grid>
-      <Grid item >
+      <Grid item xs={3}>
         <TextField
           id="startTime"
           label="startTime"
@@ -48,7 +48,7 @@ const InputHeader = (
           }}
         />
       </Grid>
-      <Grid item>
+      <Grid item xs={3}>
         <TextField
           id="endTime"
           label="endTime"
@@ -64,7 +64,7 @@ const InputHeader = (
           }}
         />
       </Grid>
-      <Grid item>
+      <Grid item xs={3}>
         <TextField required
           id="type"
           label={t("type")}

@@ -8,7 +8,7 @@ const InputLine = () => {
 
   return (
     <>
-      <Grid item>
+      <Grid item xs={6}>
         <TextField
           id="laji"
           label="laji"
@@ -16,7 +16,7 @@ const InputLine = () => {
           onChange={(event) => setSpecies(event.target.value)}
         />
       </Grid>
-      <Grid item>
+      <Grid item xs={6}>
         <TextField
           id="shorthand"
           label="pikakirjoitus"

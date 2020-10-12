@@ -18,6 +18,7 @@ const InputGrid = ({ stationId }) => {
   return (
     <Grid container spacing={3} >
       <InputHeader
+        xs={12}
         stationId={stationId}
         selectedLinetype={selectedLinetype}
         setSelectedLinetype={setSelectedLinetype} />
@@ -27,7 +28,7 @@ const InputGrid = ({ stationId }) => {
           <InputLine type={strLinetype} key={index} />
         )
       }
-      <Grid item>
+      <Grid item xs={12}>
         <Button
           variant="contained"
           color="primary"

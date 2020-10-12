@@ -23,6 +23,12 @@ const DayDetails = () => {
       padding: "20px 30px",
       margin: "0px 0px 50px 0px",
     },
+    root: {
+      "& .MuiFormControl-root": {
+        width: "70%",
+        margin: "1em"
+      }
+    },
   });
 
   const classes = useStyles();
