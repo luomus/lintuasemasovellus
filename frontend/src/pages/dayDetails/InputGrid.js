@@ -7,17 +7,16 @@ import InputLine from "./inputLine";
 
 const InputGrid = (props) => {
 
-  const { stationId, ...state } = props;
+  const { stationName, ...state } = props;
 
   console.log("inputgrid:", state);
-
   return (
     <Grid container spacing={3} >
       <InputHeader
         xs={12}
-        stationId={stationId}
-        selectedLinetype={state.selectedLinetype}
-        setSelectedLinetype={state.setSelectedLinetype}
+        stationName={stationName}
+        selectedLinetype={state.observationType}
+        setSelectedLinetype={state.setObservationType}
         {...state}
       />
       <InputLine {...state} />
@@ -26,7 +25,7 @@ const InputGrid = (props) => {
 };
 
 InputGrid.propTypes = {
-  stationId: PropTypes.string.isRequired,
+  stationName: PropTypes.string.isRequired,
 };
 
 export default InputGrid;

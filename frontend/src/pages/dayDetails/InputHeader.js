@@ -3,11 +3,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import LocationSelector from "./LocationSelector";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 
 const InputHeader = (props) => {
 
-  const { stationId, ...state } = props;
+  const { stationName, ...state } = props;
 
   const useStyles = makeStyles({
     paper: {
@@ -21,13 +22,15 @@ const InputHeader = (props) => {
 
   const { t } = useTranslation();
 
+  const stations = useSelector(state => state.stations);
+
+  if (stations.length === 0) return null;
+
   return (
     <>
       <Grid item xs={3}>
         <LocationSelector
-          stationId={stationId}
-          locationId={state.locationId}
-          setLocationId={state.setLocationId}
+          stationName={stationName}
           {...state}
         />
       </Grid>
@@ -67,8 +70,8 @@ const InputHeader = (props) => {
         <TextField required
           id="type"
           label={t("type")}
-          onChange={(event) => state.setSelectedLinetype(event.target.value)}
-          value={state.selectedLinetype}
+          onChange={(event) => state.setObservationType(event.target.value)}
+          value={state.observationType}
         />
       </Grid>
     </>
@@ -76,7 +79,7 @@ const InputHeader = (props) => {
 };
 
 InputHeader.propTypes = {
-  stationId: PropTypes.string.isRequired,
+  stationName: PropTypes.string.isRequired,
   selectedLinetype: PropTypes.string.isRequired,
   setSelectedLinetype: PropTypes.func.isRequired
 };

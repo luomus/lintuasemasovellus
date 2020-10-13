@@ -1,6 +1,5 @@
 import { Grid, TextField } from "@material-ui/core";
 import React from "react";
-import PropTypes from "prop-types";
 
 const InputLine = (props) => {
 
@@ -28,10 +27,6 @@ const InputLine = (props) => {
       </Grid>
     </>
   );
-};
-
-InputLine.propTypes = {
-  index: PropTypes.number.isRequired
 };
 
 export default InputLine;

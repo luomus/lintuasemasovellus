@@ -35,7 +35,7 @@ def addObservationPeriod():
     db.session().add(obsp)
     db.session().commit()
 
-    return redirect('/')
+    return req
 
 @bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required

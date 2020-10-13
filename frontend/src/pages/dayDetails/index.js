@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   Button,
   makeStyles, Paper,
+  Snackbar,
   Typography
 } from "@material-ui/core";
 import InputGrid from "./InputGrid";
@@ -10,12 +11,13 @@ import { useTranslation } from "react-i18next";
 import ObsPeriodTable from "./ObsPeriodTable";
 import { postObservationPeriod } from "../../services";
 import { getObservationPeriods } from "../../services";
+import Alert from "@material-ui/lab/Alert";
 
 
 
 const DayDetails = () => {
 
-
+  // stationId is actually name!
   const { day, stationId } = useParams();
 
   const useStyles = makeStyles({
@@ -39,11 +41,33 @@ const DayDetails = () => {
 
 
 
+
+  const [locationName, setLocationName] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [observationType, setObservationType] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [obsPeriods, setObsperiods] = useState([]);
+  const [species, setSpecies] = useState("");
+  const [shorthand, setShorthand] = useState("");
+
+  const state = {
+    locationName, setLocationName,
+    startTime, setStartTime,
+    endTime, setEndTime,
+    locations, setLocations,
+    species, setSpecies,
+    shorthand, setShorthand,
+    obsPeriods, setObsperiods,
+    observationType, setObservationType,
+  };
+
+
   const addObservationPeriod = (event) => {
     event.preventDefault();
     // Add day_id
     postObservationPeriod({
-      location_id: locationId,
+      location: locationName,
       startTime: startTime,
       endTime: endTime,
       observationType: observationType,
@@ -54,7 +78,7 @@ const DayDetails = () => {
           setErrorHappened(true);
         } else {
           setFormSent(true);
-          setLocationId("");
+          setLocationName("");
           setStartTime("");
           setEndTime("");
           setObservationType("");
@@ -64,35 +88,20 @@ const DayDetails = () => {
       .catch(() => setErrorHappened(true));
   };
 
-  const [locationId, setLocationId] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [observationType, setObservationType] = useState("");
-  const [locations, setLocations] = useState([]);
-  const [selectedLinetype, setSelectedLinetype] = useState("");
-  const [obsPeriods, setObsperiods] = useState([]);
-
-
-  const [species, setSpecies] = useState("");
-  const [shorthand, setShorthand] = useState("");
-
-  const state = {
-    locationId, setLocationId,
-    startTime, setStartTime,
-    endTime, setEndTime,
-    locations, setLocations,
-    species, setSpecies,
-    shorthand, setShorthand,
-    selectedLinetype, setSelectedLinetype,
-    obsPeriods, setObsperiods,
-  };
 
   useEffect(() => {
     getObservationPeriods()
       .then(periodsJson => setObsperiods(periodsJson));
-  }, []);
+  }, [formSent]);
 
-  console.log("index:", state);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setFormSent(false);
+    setErrorHappened(false);
+  };
+
 
   return (
     <div>
@@ -104,7 +113,7 @@ const DayDetails = () => {
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>
           <InputGrid
-            stationId={stationId}
+            stationName={stationId}
             {...state}
           />
           <br />
@@ -120,6 +129,16 @@ const DayDetails = () => {
         <ObsPeriodTable
           obsPeriods={obsPeriods}
         />
+        <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            {t("formSent")}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error">
+            {t("formNotSent")}
+          </Alert>
+        </Snackbar>
       </Paper>
     </div>
   );
