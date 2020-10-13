@@ -11,8 +11,8 @@ from flask import (Flask, render_template,
 
 # jos ei halua käyttää oraclea lokaalisti, voi säätää app=init_testapp()
 
-#app = init_app()
-app = init_testapp()
+app = init_app()
+#app = init_testapp()
 port = int(os.environ.get("PORT", 3000))
 
 

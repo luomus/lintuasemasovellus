@@ -3,7 +3,7 @@ from app.api.models import Base
 
 class User(Base):
 
-     __tablename__ = "account" #user yleisesti ei suositeltava nimi, joten tällä vaihdetaan sopiva nimi taululle
+     __tablename__ = 'account'
 
      userId=db.Column(db.String(144), nullable=False)
      fullName=db.Column(db.String(144), nullable=False)

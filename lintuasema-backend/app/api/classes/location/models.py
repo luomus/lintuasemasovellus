@@ -1,4 +1,4 @@
-from app.db import db #TODO tsekkaa oikea tiedosto
+from app.db import db
 from app.api.models import Base
 
 class Location(Base):
