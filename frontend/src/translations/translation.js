@@ -26,6 +26,8 @@ const resources = {
       "observationperiod": "Havaintoperiodi",
       "observation": "Havainto",
       "type": "Tyyppi",
+      "startTime": "Alkuaika",
+      "endTime": "Loppuaika",
 
       "manualTitle": "Käyttöohjeet",
       "manualTextShort": "Tähän kirjoitetaan lyhyt versio sovelluksen käyttöohjeista.",
