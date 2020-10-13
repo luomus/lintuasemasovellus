@@ -14,3 +14,6 @@ def addDay(day):
 def getDays():
     dayObjects = Day.query.all()
     return dayObjects
+
+def getDay(dayId):
+    return Day.query.get(dayId)
