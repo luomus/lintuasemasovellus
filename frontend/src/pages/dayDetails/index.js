@@ -41,15 +41,18 @@ const DayDetails = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [locations, setLocations] = useState([]);
-  const [inputLines, setInputLines] = useState([]);
   const [selectedLinetype, setSelectedLinetype] = useState("");
+
+  const [species, setSpecies] = useState("");
+  const [shorthand, setShorthand] = useState("");
 
   const state = {
     locationId, setLocationId,
     startTime, setStartTime,
     endTime, setEndTime,
     locations, setLocations,
-    inputLines, setInputLines,
+    species, setSpecies,
+    shorthand, setShorthand,
     selectedLinetype, setSelectedLinetype,
   };
 
