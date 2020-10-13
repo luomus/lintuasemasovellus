@@ -14,9 +14,9 @@ def getObservatoryName(obsId):
     obs = Observatory.query.filter_by(id = obsId).first()
     return obs.name
 
-def getFirst(): #tyhmä testi tehty, jotta näkisin toimiiko mikään
-    stations=Observatory.query.filter_by(id='1')    #palauttaa listan jossa on yksi kpl observatoryjä
-    return stations.first() #otetaan tältä yhden listalta se yksi ja ainoa
+def getFirst():
+    stations=Observatory.query.filter_by(id='1') 
+    return stations.first() 
 
 
 def createObservatory(name):

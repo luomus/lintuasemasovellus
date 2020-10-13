@@ -5,12 +5,11 @@ from flask_login import login_required
 from app.api.classes.observationperiod.models import Observationperiod
 from app.api.classes.day.models import Day
 from app.api.classes.observatory.models import Observatory
+from app.api.classes.location.services import getLocationId, getLocationName
+from app.api.classes.day.services import getDay
 
 from app.api import bp
 from app.db import db
-
-from app.api.classes.location.services import getLocationId, getLocationName
-from app.api.classes.day.services import getDay
 
 from datetime import datetime
 

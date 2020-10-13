@@ -1,12 +1,11 @@
-from app.db import db #mihin tiedostoon viittaa
-from app.api.models import Base #models tiedosto pitää tehdä, jonne Base
-#from app.api.models import ObservationStation
+from app.db import db
+from app.api.models import Base 
   
 class Day(Base):
 
     day=db.Column(db.String(144), nullable=False)
     comment=db.Column(db.String(1000), nullable=True)
-    observers=db.Column(db.String(200), nullable=False) #ainakin yksi tarkkaillut, joten ei voi laittaa nollaksi
+    observers=db.Column(db.String(200), nullable=False)
     
     observatory_id = db.Column(db.Integer, db.ForeignKey('observatory.id'), nullable=False)
 
