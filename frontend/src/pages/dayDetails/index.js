@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Button,
@@ -8,10 +8,14 @@ import {
 import ObsStation from "../../globalComponents/ObsStation";
 import InputGrid from "./InputGrid";
 import { useTranslation } from "react-i18next";
+import ObsPeriodTable from "./ObsPeriodTable";
+import { postObservationPeriod } from "../../services";
+import { getObservationPeriods } from "../../services";
 
 
 
 const DayDetails = () => {
+
 
   const { day, stationId } = useParams();
 
@@ -31,17 +35,44 @@ const DayDetails = () => {
 
   const classes = useStyles();
   const { t } = useTranslation();
+  const [formSent, setFormSent] = useState(false);
+  const [errorHappened, setErrorHappened] = useState(false);
 
 
-  const addObservationPeriod = () => {
-    // add logic...
+
+  const addObservationPeriod = (event) => {
+    event.preventDefault();
+    // Add day_id
+    postObservationPeriod({
+      location_id: locationId,
+      startTime: startTime,
+      endTime: endTime,
+      observationType: observationType,
+      day_id: 1
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          setErrorHappened(true);
+        } else {
+          setFormSent(true);
+          setLocationId("");
+          setStartTime("");
+          setEndTime("");
+          setObservationType("");
+        }
+
+      })
+      .catch(() => setErrorHappened(true));
   };
 
   const [locationId, setLocationId] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [observationType, setObservationType] = useState("");
   const [locations, setLocations] = useState([]);
   const [selectedLinetype, setSelectedLinetype] = useState("");
+  const [obsPeriods, setObsperiods] = useState([]);
+
 
   const [species, setSpecies] = useState("");
   const [shorthand, setShorthand] = useState("");
@@ -54,7 +85,13 @@ const DayDetails = () => {
     species, setSpecies,
     shorthand, setShorthand,
     selectedLinetype, setSelectedLinetype,
+    obsPeriods, setObsperiods,
   };
+
+  useEffect(() => {
+    getObservationPeriods()
+      .then(periodsJson => setObsperiods(periodsJson));
+  }, []);
 
   console.log("index:", state);
 
@@ -80,6 +117,10 @@ const DayDetails = () => {
             {t("save")}
           </Button>
         </form>
+        <br />
+        <ObsPeriodTable
+          obsPeriods={obsPeriods}
+        />
       </Paper>
     </div>
   );
