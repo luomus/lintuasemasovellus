@@ -62,7 +62,7 @@ const DayDetails = () => {
       <Paper className={classes.paper}>
         <Typography variant="h5" component="h2" >
           {day} {" "}
-          {"id num"}
+          { stationId }
         </Typography>
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>

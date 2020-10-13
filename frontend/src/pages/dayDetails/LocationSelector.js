@@ -1,22 +1,11 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { getObservationLocations } from "../../services";
+import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
 const LocationSelector = (props) => {
 
-  const { stationId, ...state } = props;
-
-  const locationSet = state.setLocations;
-
-  useEffect(() => {
-    getObservationLocations(stationId)
-      .then((data) => {
-        locationSet(data);
-      })
-      .catch(() => console.error("Problem in station location list"));
-  }, [stationId, locationSet]);
+  const { locations, ...state } = props;
 
   const { t } = useTranslation();
 
@@ -33,7 +22,7 @@ const LocationSelector = (props) => {
         onChange={(event) => state.setLocationId(String(event.target.value))}
       >
         {
-          state.locations.map((location, i) =>
+          locations.map((location, i) =>
             <MenuItem value={location.id} key={i}>
               {location.name}
             </MenuItem>
@@ -48,8 +37,7 @@ const LocationSelector = (props) => {
 
 LocationSelector.propTypes = {
   stationId: PropTypes.string.isRequired,
-  locationId: PropTypes.string.isRequired,
-  setLocationId: PropTypes.func.isRequired
+  locations: PropTypes.array.isRequired
 };
 
 export default LocationSelector;
