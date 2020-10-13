@@ -6,6 +6,13 @@ def getAll():
     stations = Observatory.query.all()
     return stations
 
+def getObservatoryId(name):
+    obs = Observatory.query.filter_by(name = name).first()
+    return obs.id
+
+def getObservatoryName(obsId):
+    obs = Observatory.query.filter_by(id = obsId).first()
+    return obs.name
 
 def getFirst(): #tyhmä testi tehty, jotta näkisin toimiiko mikään
     stations=Observatory.query.filter_by(id='1')    #palauttaa listan jossa on yksi kpl observatoryjä

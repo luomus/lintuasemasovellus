@@ -9,6 +9,9 @@ from app.api.classes.observatory.models import Observatory
 from app.api import bp
 from app.db import db
 
+from app.api.classes.location.services import getLocationId, getLocationName
+from app.api.classes.day.services import getDay
+
 from datetime import datetime
 
 @bp.route('/api/addObservationPeriod', methods=['POST'])
@@ -19,11 +22,16 @@ def addObservationPeriod():
     Ainakin sqlite-moottorissa tietokanta hyväksyy vain
     Pythonin omia datetime-olioita...
     '''
+
+    day = getDay(req['day_id'])
+    obsId = day.observatory_id
+    locId = getLocationId(req['location'], obsId)
+
     obsp = Observationperiod(
         startTime=datetime.strptime(req['startTime'], '%H:%M'),
         endTime=datetime.strptime(req['endTime'], '%H:%M'),
         observationType=req['observationType'],
-        location_id=req['location_id'], day_id=req['day_id'])
+        location_id=locId, day_id=req['day_id'])
     db.session().add(obsp)
     db.session().commit()
 
@@ -32,11 +40,11 @@ def addObservationPeriod():
 @bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required
 def getObservationPeriods():
-    objects = Observationperiod.query.all()
+    observationPeriods = Observationperiod.query.all()
     ret = []
-    for each in objects:
-        ret.append({ 'startTime': each.startTime, 'endTime': each.endTime,
-        'observationType': each.observationType, 'location_id': each.location_id, 'day_id': each.day_id })
+    for obsPeriod in observationPeriods:
+        ret.append({ 'startTime': obsPeriod.startTime, 'endTime': obsPeriod.endTime,
+        'observationType': obsPeriod.observationType, 'location': getLocationName(obsPeriod.location_id), 'day_id': obsPeriod.day_id })
 
     return jsonify(ret)
 

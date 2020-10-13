@@ -26,12 +26,12 @@ export const UserManual = () => {
   return (
     <div>
 
-          <Paper className={classes.paper}>
-            <Typography variant="h5" component="h2" >
-              {t("manualTitle")}
-            </Typography>
-            <br />
-            {t("manualText")}</Paper>
+      <Paper className={classes.paper}>
+        <Typography variant="h5" component="h2" >
+          {t("manualTitle")}
+        </Typography>
+        <br />
+        {t("manualText")}</Paper>
     </div>
   );
 };

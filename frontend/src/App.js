@@ -21,6 +21,8 @@ const App = () => {
 
   const userIsSet = Boolean(user.id);
 
+  const stations = useSelector(state => state.stations);
+
   useEffect(() => {
     dispatch(initializeStations());
     if (userIsSet) return;
@@ -35,6 +37,7 @@ const App = () => {
 
   console.log("user:", user);
 
+  console.log("stations:", stations);
 
   return (
     <CssBaseline>

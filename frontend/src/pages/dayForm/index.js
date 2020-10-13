@@ -7,11 +7,11 @@ import {
   FormControl, InputLabel
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import ObsStation from "../../globalComponents/ObsStation";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import Alert from "../../globalComponents/Alert";
+import { useSelector } from "react-redux";
 
 
 const useStyles = makeStyles({
@@ -60,7 +60,7 @@ export const DayForm = () => {
       day: formatDate(day),
       observers: observers,
       comment: comment,
-      observatory_id: observatory,
+      observatory: observatory,
     })
       .then((res) => {
         if (res.status !== 200) {
@@ -84,6 +84,8 @@ export const DayForm = () => {
     setErrorHappened(false);
   };
 
+  const stations = useSelector(state => state.stations);
+
   return (
     <div>
       <Paper className={classes.paper}>
@@ -99,12 +101,13 @@ export const DayForm = () => {
               value={observatory}
               onChange={(event) => setObservatory(event.target.value)}
             >
-              <MenuItem id="testStation" value="1">
-                <ObsStation id={1} />
-              </MenuItem>
-              <MenuItem value="2">
-                <ObsStation id={2} />
-              </MenuItem>
+              {
+                stations.map((station, i) =>
+                  <MenuItem value={station.observatory} key={i}>
+                    {station.observatory}
+                  </MenuItem>
+                )
+              }
             </Select>
           </FormControl>
           <br />

@@ -5,7 +5,6 @@ import {
   makeStyles, Paper,
   Typography
 } from "@material-ui/core";
-import ObsStation from "../../globalComponents/ObsStation";
 import InputGrid from "./InputGrid";
 import { useTranslation } from "react-i18next";
 import ObsPeriodTable from "./ObsPeriodTable";
@@ -100,7 +99,7 @@ const DayDetails = () => {
       <Paper className={classes.paper}>
         <Typography variant="h5" component="h2" >
           {day} {" "}
-          <ObsStation id={Number(stationId)} />
+          {"id num"}
         </Typography>
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>

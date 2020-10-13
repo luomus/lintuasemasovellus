@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required
 
 from app.api.classes.location.models import Location
+from app.api.classes.observatory.services import getAll, getObservatoryId
 
 from app.api import bp
 from app.db import db
@@ -28,5 +29,21 @@ def list_locations(observatory_id):
     ret = []
     for each in objects:
         ret.append({ 'name': each.name, 'id': each.id })
+
+    return jsonify(ret)
+
+
+@bp.route('/api/getLocations/', methods=['GET'])
+@login_required
+def get_all_locations():
+
+    observatories = getAll()
+    ret = []
+    for observatory in observatories:
+        locations = Location.query.filter_by(observatory_id = observatory.id)
+        locationList = []
+        for location in locations:
+            locationList.append(location.name)
+        ret.append({ 'observatory': observatory.name, 'locations': locationList })
 
     return jsonify(ret)
