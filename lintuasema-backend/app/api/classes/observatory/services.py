@@ -7,11 +7,11 @@ def getAll():
     return stations
 
 def getObservatoryId(name):
-    obs = Observatory.query.filter(name = name).first()
+    obs = Observatory.query.filter_by(name = name).first()
     return obs.id
 
 def getObservatoryName(obsId):
-    obs = Observatory.query.filter(id = obsId).first()
+    obs = Observatory.query.filter_by(id = obsId).first()
     return obs.name
 
 def getFirst(): #tyhmä testi tehty, jotta näkisin toimiiko mikään

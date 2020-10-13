@@ -4,7 +4,6 @@ import {
   Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ObsStation from "../../globalComponents/ObsStation";
 import { getDays } from "../../services";
 import DayPagination from "./DayPagination";
 import { useTranslation } from "react-i18next";
@@ -81,7 +80,7 @@ export const DayList = () => {
                       {s.comment}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      <ObsStation id={s.observatory} />
+                      {s.observatory}
                     </StyledTableCell>
                   </TableRow>
                 )
