@@ -7,9 +7,9 @@ def addDay(day):
     if not d and day.observatory_id is not None and day.day is not None and day.observers is not None:
         db.session().add(day)
         db.session().commit()
-        return True
+        return day.id
     else:
-        return False
+        return d.id
 
 def getDays():
     dayObjects = Day.query.all()

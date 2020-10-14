@@ -18,11 +18,10 @@ def add_day():
     observatory_id = getObservatoryId(req['observatory'])
     day = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) #testiversio, pitää muuttaa
 
-    added = addDay(day)
+    addedId = addDay(day)
     #db.session().add(day)
     #db.session().commit()
-
-    return req
+    return jsonify({ 'id': addedId });
     #return added
 
 
