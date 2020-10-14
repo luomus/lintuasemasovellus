@@ -128,7 +128,7 @@ const CurrentDayForm = () => {
             variant="contained"
             color="primary"
             disableElevation type="submit" >
-                        Lisää päivä
+                        Lisää tämä päivä
           </Button>
         </p>
         <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>

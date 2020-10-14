@@ -103,7 +103,7 @@ export const DayForm = () => {
             >
               {
                 stations.map((station, i) =>
-                  <MenuItem value={station.observatory} key={i}>
+                  <MenuItem id={station.observatory.replace(/ /g,'')} value={station.observatory} key={i}>
                     {station.observatory}
                   </MenuItem>
                 )

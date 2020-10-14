@@ -1,4 +1,6 @@
-// const observStation = "Hangon Lintuasema";
+const { default: TouchRipple } = require("@material-ui/core/ButtonBase/TouchRipple");
+
+const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää";
@@ -25,7 +27,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   });
   it("An observation day can be saved", function() {
     cy.contains("Lisää päivä").click();
-    cy.get("#select").click().get("#testStation").click();
+    cy.get("#select").click().get('#HangonLintuasema').click({force:true});//.get('#Hangon Lintuasema').contains().click();
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get ("#observers").type(observer);
