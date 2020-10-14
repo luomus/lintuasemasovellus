@@ -14,11 +14,6 @@ def getObservatoryName(obsId):
     obs = Observatory.query.filter_by(id = obsId).first()
     return obs.name
 
-def getFirst():
-    stations=Observatory.query.filter_by(id='1') 
-    return stations.first() 
-
-
 def createObservatory(name):
     obs = Observatory.query.filter_by(name=name).first()
     if not obs:

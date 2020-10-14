@@ -1,5 +1,5 @@
 from app.api.classes.observatory.models import Observatory
-from app.api.classes.observatory.services import getAll, getFirst #testi aina importattava
+from app.api.classes.observatory.services import getAll #testi aina importattava
 
 
 def test_observatories(app): #App annettava
@@ -7,5 +7,5 @@ def test_observatories(app): #App annettava
     assert list is not None
 
 def test_getfirstobservatory(app): #App annettava
-    assert getFirst().name=='Hangon Lintuasema'  
+    assert getAll()[0].name=='Hangon Lintuasema'  
 
