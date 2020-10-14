@@ -8,7 +8,7 @@ const comment = "Olipa kiva sää";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
-    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw")
+    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
     cy.get("#navigationbar").click();
   });
   it("Front page has button for adding an observation day", function() {
@@ -24,7 +24,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   });
   it("An observation day can be saved", function() {
     cy.contains("Lisää päivä").click();
-    cy.get("#select").click().get('#HangonLintuasema').click({force:true});//.get('#Hangon Lintuasema').contains().click();
+    cy.get("#select").click().get("#HangonLintuasema").click({ force:true });//.get('#Hangon Lintuasema').contains().click();
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get ("#observers").type(observer);

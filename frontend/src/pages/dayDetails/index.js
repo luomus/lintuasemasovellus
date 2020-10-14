@@ -12,13 +12,13 @@ import ObsPeriodTable from "./ObsPeriodTable";
 import { postObservationPeriod } from "../../services";
 import { getObservationPeriods } from "../../services";
 import Alert from "@material-ui/lab/Alert";
+import { useSelector } from "react-redux";
 
 
 
 const DayDetails = () => {
 
-  // stationId is actually name!
-  const { day, stationId } = useParams();
+  const { day, stationName } = useParams();
 
   const useStyles = makeStyles({
     paper: {
@@ -39,9 +39,7 @@ const DayDetails = () => {
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-
-
-
+  // State of this form page:
   const [locationName, setLocationName] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -62,16 +60,23 @@ const DayDetails = () => {
     observationType, setObservationType,
   };
 
+  const dayList = useSelector(state => state.days);
+
+  console.log("daydetailspage daylist:", dayList);
 
   const addObservationPeriod = (event) => {
     event.preventDefault();
-    // Add day_id
+    // Get day_id
+    const dayId = dayList
+      .find(d => d.day === day && d.observatory === stationName)
+      .id;
+    console.log("found dayId inside daydetailspage:", dayId);
     postObservationPeriod({
       location: locationName,
       startTime: startTime,
       endTime: endTime,
       observationType: observationType,
-      day_id: 1
+      day_id: dayId
     })
       .then((res) => {
         if (res.status !== 200) {
@@ -108,12 +113,12 @@ const DayDetails = () => {
       <Paper className={classes.paper}>
         <Typography variant="h5" component="h2" >
           {day} {" "}
-          { stationId }
+          { stationName }
         </Typography>
         <br />
         <form className={classes.root} onSubmit={addObservationPeriod}>
           <InputGrid
-            stationName={stationId}
+            stationName={stationName}
             {...state}
           />
           <br />

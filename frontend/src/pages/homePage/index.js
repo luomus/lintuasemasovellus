@@ -35,9 +35,9 @@ export const HomePage = () => {
 
       <Grid container
         alignItems="stretch"
-       // alignItems="center"
-       justify="flex-end"
-       >
+        // alignItems="center"
+        justify="flex-end"
+      >
 
         <Grid item xs={8}>
           <Paper className={classes.paper}>

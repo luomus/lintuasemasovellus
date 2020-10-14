@@ -2,11 +2,12 @@ import {
   Paper, withStyles, makeStyles, Table, TableBody,
   TableCell, TableHead, TableRow,
   Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getDays } from "../../services";
 import DayPagination from "./DayPagination";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { retrieveDays } from "../../reducers/daysReducer";
 
 
 const useStyles = makeStyles({
@@ -32,13 +33,15 @@ export const DayList = () => {
 
   const { t } = useTranslation();
 
-  const [list, setList] = useState([]);
   const classes = useStyles();
 
+  const list = useSelector(state => state.days);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    getDays()
-      .then(daysJson => setList(daysJson));
-  }, []);
+    dispatch(retrieveDays());
+  }, [dispatch]);
 
 
   console.log(list);

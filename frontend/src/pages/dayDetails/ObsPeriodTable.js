@@ -38,7 +38,7 @@ const ObsPeriodTable = (props) => {
     return `${ret[0]}:${ret[1]}`;
   };
 
-  console.log(obsPeriods);
+  console.log("obsperiodtable obsperiods", obsPeriods);
 
   return (
     <Table className={classes.table}>
