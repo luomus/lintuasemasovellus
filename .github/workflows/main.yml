@@ -67,6 +67,18 @@ jobs:
         
       - name: Build the Docker image
         run: docker build . --file Dockerfile -t test
+        
+  deploy:
+    needs: [pytest, cypress-test, docker-build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Invoke deployment hook
+        uses: distributhor/workflow-webhook@v1
+        env:
+          webhook_url: ${{ secrets.webhook_url }}
 
 
         
