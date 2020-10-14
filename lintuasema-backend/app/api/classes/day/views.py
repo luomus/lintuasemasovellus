@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from app.api.classes.day.models import Day
-from app.api.classes.day.services import addDay, getDays
+from app.api.classes.day.services import addDay, getDays, getDayId
 from app.api.classes.observatory.services import getObservatoryId, getObservatoryName
 
 from app.api import bp
@@ -18,11 +18,10 @@ def add_day():
     observatory_id = getObservatoryId(req['observatory'])
     day = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) #testiversio, pitää muuttaa
 
-    addedId = addDay(day)
-    #db.session().add(day)
-    #db.session().commit()
+    addDay(day)
+    addedId = getDayId(day.day, day.observatory_id)
+    
     return jsonify({ 'id': addedId })
-    #return added
 
 
 @bp.route('/api/listDays', methods=['GET'])
@@ -30,7 +29,7 @@ def add_day():
 def list_day():
 
     dayObjects = getDays()
-    #dayObjects = Day.query.all()
+
     ret = []
     for each in dayObjects:
         ret.append({ 'id': each.id, 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': getObservatoryName(each.observatory_id) })
