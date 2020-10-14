@@ -22,7 +22,7 @@ def add_location():
 
 
 @bp.route('/api/getLocations/<observatory_id>', methods=['GET'])
-@login_required
+#@login_required
 def list_locations(observatory_id):
 
     objects = Location.query.filter_by(observatory_id = observatory_id)
@@ -34,7 +34,7 @@ def list_locations(observatory_id):
 
 
 @bp.route('/api/getLocations/', methods=['GET'])
-@login_required
+#@login_required
 def get_all_locations():
 
     observatories = getAll()
