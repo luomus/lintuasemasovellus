@@ -69,7 +69,7 @@ jobs:
         run: docker build . --file Dockerfile -t test
         
   deploy:
-    needs: [pytest]
+    needs: [pytest, cypress-test, docker-build]
     runs-on: ubuntu-latest
 
     steps:
