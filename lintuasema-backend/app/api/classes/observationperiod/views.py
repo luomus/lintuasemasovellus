@@ -6,6 +6,7 @@ from app.api.classes.observationperiod.models import Observationperiod
 from app.api.classes.day.models import Day
 from app.api.classes.observatory.models import Observatory
 from app.api.classes.location.services import getLocationId, getLocationName
+from app.api.classes.observationperiod.services import getObsPerId
 from app.api.classes.day.services import getDay
 
 from app.api import bp
@@ -34,7 +35,9 @@ def addObservationPeriod():
     db.session().add(obsp)
     db.session().commit()
 
-    return req
+    obspId = getObsPerId(obsp.startTime, obsp.endTime, obsp.location_id, obsp.day_id)
+    print(obspId)
+    return jsonify({ 'id': obspId })
 
 @bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required
