@@ -21,7 +21,7 @@ def add_day():
     addedId = addDay(day)
     #db.session().add(day)
     #db.session().commit()
-    return jsonify({ 'id': addedId });
+    return jsonify({ 'id': addedId })
     #return added
 
 
