@@ -66,7 +66,7 @@ export const HomePage = () => {
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button component={Link} to="/kayttoohjeet" size="small" color="primary">
+              <Button component={Link} to="/manual" size="small" color="primary">
                 {t("readMore")}
               </Button>
             </CardActions>
