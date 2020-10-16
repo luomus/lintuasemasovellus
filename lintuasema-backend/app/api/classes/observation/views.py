@@ -12,19 +12,35 @@ from app.db import db
 @login_required
 def addObservation():
     req = request.get_json()
-    observation = Observation(species=req['species'], adultUnkownCount=req['adultUnknownCount'], adultFemaleCount=req['adultFemaleCount'], adultMaleCount=req['adultMaleCount'],
-        juvenileUnkownCount=req['juvenileUnknownCount'], juvenileFemaleCount=req['juvenileFemaleCount'], juvenileMaleCount=req['juvenileMaleCount'],
-        subadultUnkownCount=req['subadultUnknownCount'], subadultFemaleCount=req['subadultFemaleCount'], subadultMaleCount=req['subadultMaleCount'],
-        unknownUnkownCount=req['unknownUnknownCount'], direction=req['direction'], bypassSide=req['bypassSide'], notes=req['notes'], observationperiod_id=req['observationperiod_id'])
+    observation = Observation(species=req['species'], adultUnknownCount=req['adultUnknownCount'], adultFemaleCount=req['adultFemaleCount'], adultMaleCount=req['adultMaleCount'],
+        juvenileUnknownCount=req['juvenileUnknownCount'], juvenileFemaleCount=req['juvenileFemaleCount'], juvenileMaleCount=req['juvenileMaleCount'],
+        subadultUnknownCount=req['subadultUnknownCount'], subadultFemaleCount=req['subadultFemaleCount'], subadultMaleCount=req['subadultMaleCount'],
+        unknownUnknownCount=req['unknownUnknownCount'], direction=req['direction'], bypassSide=req['bypassSide'], notes=req['notes'], observationperiod_id=req['observationperiod_id'])
     db.session().add(observation)
+    #db.session().flush()
+    #db.session().refresh(observation)
     db.session().commit()
 
-    return redirect('/')
+    #return jsonify({ 'id': observation.id })
+    return jsonify(req)
 
 @bp.route('/api/getObservations', methods=["GET"])
 @login_required
 def getObservations():
     objects = Observation.query.all()
+    ret = []
+    for each in objects:
+        ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
+            'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
+            'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
+            'unknownUnknownCount': each.unknownUnknownCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id})
+
+    return jsonify(ret)
+
+@bp.route('/api/getObservations/<observationperiod_id>', methods=["GET"]) 
+@login_required
+def getObservationsByObservationPeriod(observationperiod_id):
+    observations = Observation.query.filter_by(observationperiod_id = observationperiod_id)
     ret = []
     for each in objects:
         ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,

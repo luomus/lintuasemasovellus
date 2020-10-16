@@ -18,8 +18,10 @@ def add_day():
     observatory_id = getObservatoryId(req['observatory'])
     day = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) #testiversio, pitää muuttaa
 
+    #addedId = addDay(day)
     addDay(day)
     addedId = getDayId(day.day, day.observatory_id)
+    #print("lisätyn päivän id on ", addedId)
     
     return jsonify({ 'id': addedId })
 

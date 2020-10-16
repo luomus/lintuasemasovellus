@@ -33,10 +33,13 @@ def addObservationPeriod():
         observationType=req['observationType'],
         location_id=locId, day_id=req['day_id'])
     db.session().add(obsp)
+    #db.session().flush()
+    #db.session().refresh(obsp)
     db.session().commit()
 
+    #obspId = obsp.id
     obspId = getObsPerId(obsp.startTime, obsp.endTime, obsp.location_id, obsp.day_id)
-    print(obspId)
+    #print("havaintojakson id on", obspId)
     return jsonify({ 'id': obspId })
 
 @bp.route('/api/getObservationPeriods', methods=["GET"])

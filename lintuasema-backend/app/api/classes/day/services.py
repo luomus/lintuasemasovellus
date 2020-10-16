@@ -6,7 +6,11 @@ def addDay(day):
     d = Day.query.filter_by(day = day.day, observatory_id = day.observatory_id).first()
     if not d and day.observatory_id is not None and day.day is not None and day.observers is not None:
         db.session().add(day)
+        #db.session().flush()
+        #db.session().refresh(day)
+        #dayId = day.id
         db.session().commit()
+        #return dayId
 
 
 def getDays():
