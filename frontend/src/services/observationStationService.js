@@ -14,6 +14,11 @@ export const getObservationPeriods = async () => {
   return res.data;
 };
 
+export const getDaysObservationPeriods = async (dayId) => {
+  const res = await axios.get(`/api/getDaysObservationPeriods/${dayId}`);
+  return res.data;
+};
+
 export const getObservationLocations = async (stationId) => {
   const res = await axios.get(`/api/getLocations/${stationId}`);
   return res.data;

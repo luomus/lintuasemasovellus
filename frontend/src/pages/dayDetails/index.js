@@ -9,8 +9,7 @@ import {
 import InputGrid from "./InputGrid";
 import { useTranslation } from "react-i18next";
 import ObsPeriodTable from "./ObsPeriodTable";
-import { postObservationPeriod } from "../../services";
-import { getObservationPeriods } from "../../services";
+import { getDaysObservationPeriods, postObservationPeriod } from "../../services";
 import Alert from "@material-ui/lab/Alert";
 import { useSelector } from "react-redux";
 
@@ -61,16 +60,16 @@ const DayDetails = () => {
   };
 
   const dayList = useSelector(state => state.days);
+  const dayId = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .id;
+  console.log("found dayId inside daydetailspage:", dayId);
+
 
   console.log("daydetailspage daylist:", dayList);
 
   const addObservationPeriod = (event) => {
     event.preventDefault();
-    // Get day_id
-    const dayId = dayList
-      .find(d => d.day === day && d.observatory === stationName)
-      .id;
-    console.log("found dayId inside daydetailspage:", dayId);
     postObservationPeriod({
       location: locationName,
       startTime: startTime,
@@ -95,7 +94,7 @@ const DayDetails = () => {
 
 
   useEffect(() => {
-    getObservationPeriods()
+    getDaysObservationPeriods(dayId)
       .then(periodsJson => setObsperiods(periodsJson));
   }, [formSent]);
 

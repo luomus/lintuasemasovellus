@@ -2,7 +2,6 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import InputHeader from "./InputHeader";
 import PropTypes from "prop-types";
-import InputLine from "./inputLine";
 
 
 const InputGrid = (props) => {
@@ -19,7 +18,6 @@ const InputGrid = (props) => {
         setSelectedLinetype={state.setObservationType}
         {...state}
       />
-      <InputLine {...state} />
     </Grid>
   );
 };
