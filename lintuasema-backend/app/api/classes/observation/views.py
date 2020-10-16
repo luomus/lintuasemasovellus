@@ -12,8 +12,6 @@ from app.db import db
 @login_required
 def addObservation():
     req = request.get_json()
-<<<<<<< HEAD
-=======
     observation = Observation(species=req['species'],
         adultUnknownCount=req['adultUnknownCount'],
         adultFemaleCount=req['adultFemaleCount'],
@@ -29,7 +27,6 @@ def addObservation():
         bypassSide=req['bypassSide'],
         notes=req['notes'],
         observationperiod_id=req['observationperiod_id'])
->>>>>>> 6c85f924399f29bfe335b10b4f22ca0cb815cce0
     db.session().add(observation)
     #db.session().flush()
     #db.session().refresh(observation)
