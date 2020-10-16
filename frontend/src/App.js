@@ -44,16 +44,16 @@ const App = () => {
       <div>
         <NavBar />
         <Switch>
-          <Route path="/havainnointiform">
+          <Route path="/newday">
             <DayForm />
           </Route>
-          <Route path="/havainnointilist">
+          <Route path="/listdays">
             <DayList />
           </Route>
-          <Route path="/paivatiedot/:day/:stationName">
+          <Route path="/daydetails/:day/:stationName">
             <DayDetails />
           </Route>
-          <Route path="/kayttoohjeet">
+          <Route path="/manual">
             <UserManual />
           </Route>
           <Route path="/">
