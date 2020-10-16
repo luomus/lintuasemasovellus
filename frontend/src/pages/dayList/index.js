@@ -70,11 +70,10 @@ export const DayList = () => {
               list
                 .sort((a, b) => a.day - b.day)
                 .map((s, i) =>
-                  <TableRow hover key={i}>
+                  <TableRow hover key={i} component={Link}
+                    to={`/daydetails/${s.day}/${s.observatory}`} >
                     <StyledTableCell component="th" scope="row">
-                      <Link to={`/daydetails/${s.day}/${s.observatory}`}>
-                        {s.day}
-                      </Link>
+                      {s.day}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {s.observers}

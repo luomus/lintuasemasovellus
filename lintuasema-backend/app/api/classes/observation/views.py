@@ -12,10 +12,24 @@ from app.db import db
 @login_required
 def addObservation():
     req = request.get_json()
-    observation = Observation(species=req['species'], adultUnknownCount=req['adultUnknownCount'], adultFemaleCount=req['adultFemaleCount'], adultMaleCount=req['adultMaleCount'],
-        juvenileUnknownCount=req['juvenileUnknownCount'], juvenileFemaleCount=req['juvenileFemaleCount'], juvenileMaleCount=req['juvenileMaleCount'],
-        subadultUnknownCount=req['subadultUnknownCount'], subadultFemaleCount=req['subadultFemaleCount'], subadultMaleCount=req['subadultMaleCount'],
-        unknownUnknownCount=req['unknownUnknownCount'], direction=req['direction'], bypassSide=req['bypassSide'], notes=req['notes'], observationperiod_id=req['observationperiod_id'])
+<<<<<<< HEAD
+=======
+    observation = Observation(species=req['species'],
+        adultUnknownCount=req['adultUnknownCount'],
+        adultFemaleCount=req['adultFemaleCount'],
+        adultMaleCount=req['adultMaleCount'],
+        juvenileUnknownCount=req['juvenileUnknownCount'],
+        juvenileFemaleCount=req['juvenileFemaleCount'],
+        juvenileMaleCount=req['juvenileMaleCount'],
+        subadultUnknownCount=req['subadultUnknownCount'],
+        subadultFemaleCount=req['subadultFemaleCount'],
+        subadultMaleCount=req['subadultMaleCount'],
+        unknownUnknownCount=req['unknownUnknownCount'],
+        direction=req['direction'],
+        bypassSide=req['bypassSide'],
+        notes=req['notes'],
+        observationperiod_id=req['observationperiod_id'])
+>>>>>>> 6c85f924399f29bfe335b10b4f22ca0cb815cce0
     db.session().add(observation)
     #db.session().flush()
     #db.session().refresh(observation)
