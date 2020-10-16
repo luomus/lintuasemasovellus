@@ -45,8 +45,15 @@ def getObservationPeriods():
     observationPeriods = Observationperiod.query.all()
     ret = []
     for obsPeriod in observationPeriods:
-        ret.append({ 'startTime': obsPeriod.startTime, 'endTime': obsPeriod.endTime,
-        'observationType': obsPeriod.observationType, 'location': getLocationName(obsPeriod.location_id), 'day_id': obsPeriod.day_id })
+        ret.append(
+        {
+            'id': obsPeriod.id,
+            'startTime': obsPeriod.startTime,
+            'endTime': obsPeriod.endTime,
+            'observationType': obsPeriod.observationType,
+            'location': getLocationName(obsPeriod.location_id),
+            'day_id': obsPeriod.day_id
+        })
 
     return jsonify(ret)
 
@@ -57,7 +64,13 @@ def getDaysObservationPeriods(day_id):
     daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
     ret = []
     for obsPeriod in daysObservationPeriods:
-        ret.append({ 'startTime': obsPeriod.startTime, 'endTime': obsPeriod.endTime,
-        'observationType': obsPeriod.observationType, 'location': getLocationName(obsPeriod.location_id), 'day_id': obsPeriod.day_id })
+        ret.append({
+            'id': obsPeriod.id,
+            'startTime': obsPeriod.startTime,
+            'endTime': obsPeriod.endTime,
+            'observationType': obsPeriod.observationType,
+            'location': getLocationName(obsPeriod.location_id),
+            'day_id': obsPeriod.day_id
+        })
 
     return jsonify(ret)

@@ -20,19 +20,22 @@ class Observation(Base):
 
     observationperiod_id = db.Column(db.Integer, db.ForeignKey('observationperiod.id'), nullable=False)
 
-    def __init__ (self, species, auc, afc, amc, juc, jfc, jmc, suc, sfc, smc, uuc, direction, bypass, notes, observationperiod_id):
+    def __init__ (self, species, adultUnknownCount,
+        adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
+        juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
+        unknownUnknownCount, direction, bypassSide, notes, observationperiod_id):
         self.species = species
-        self.adultUnknownCount = auc
-        self.adultFemaleCount = afc
-        self.adultMaleCount = amc
-        self.juvenileUnknownCount = juc
-        self.juvenileFemaleCount = jfc
-        self.juvenileMaleCount = jmc
-        self.subadultUnknownCount = suc
-        self.subadultFemaleCount = sfc
-        self.subadultMaleCount = smc
-        self.unknownUnknownCount = uuc
+        self.adultUnknownCount = adultUnknownCount
+        self.adultFemaleCount = adultFemaleCount
+        self.adultMaleCount = adultMaleCount
+        self.juvenileUnknownCount = juvenileUnknownCount
+        self.juvenileFemaleCount = juvenileFemaleCount
+        self.juvenileMaleCount = juvenileMaleCount
+        self.subadultUnknownCount = subadultUnknownCount
+        self.subadultFemaleCount = subadultFemaleCount
+        self.subadultMaleCount = subadultMaleCount
+        self.unknownUnknownCount = unknownUnknownCount
         self.direction = direction
-        self.bypassSide = bypass
+        self.bypassSide = bypassSide
         self.notes = notes
         self.observationperiod_id = observationperiod_id

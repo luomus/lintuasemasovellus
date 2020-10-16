@@ -28,6 +28,8 @@ const resources = {
       "type": "Tyyppi",
       "startTime": "Alkuaika",
       "endTime": "Loppuaika",
+      "periodSaved": "Lomake tallennettu tietokantaan",
+      "periodNotSaved": "Lomakkeen tallennuksessa ongelmia :(",
 
       "manualTitle": "Käyttöohjeet",
       "manualTextShort": "Tähän kirjoitetaan lyhyt versio sovelluksen käyttöohjeista.",

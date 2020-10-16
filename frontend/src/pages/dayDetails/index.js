@@ -96,7 +96,7 @@ const DayDetails = () => {
   useEffect(() => {
     getDaysObservationPeriods(dayId)
       .then(periodsJson => setObsperiods(periodsJson));
-  }, [formSent]);
+  }, [formSent, dayId]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

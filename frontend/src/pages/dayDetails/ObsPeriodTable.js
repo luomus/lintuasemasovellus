@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table, TableHead, TableRow,
-  TableBody, TableCell, withStyles, makeStyles
+  TableBody, TableCell, withStyles, makeStyles, Snackbar
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import ObservationPeriod from "../obsPeriod";
+import Alert from "@material-ui/lab/Alert";
 
 
 const ObsPeriodTable = (props) => {
@@ -40,6 +43,37 @@ const ObsPeriodTable = (props) => {
 
   console.log("obsperiodtable obsperiods", obsPeriods);
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [obsPeriodId, setObsPeriodId] = useState("");
+
+  const handleOpen = (id) => {
+    console.log("handleOpen id:", id);
+    setObsPeriodId(id);
+    setModalOpen(true);
+  };
+
+  const [formSent, setFormSent] = useState(false);
+  const [errorHappen, setErrorHappen] = useState(false);
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setFormSent(true);
+  };
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setFormSent(false);
+    setErrorHappen(false);
+  };
+
+  const handleErrorSnackOpen = () => {
+    setErrorHappen(true);
+  };
+
+
   return (
     <Table className={classes.table}>
       <TableHead>
@@ -54,12 +88,12 @@ const ObsPeriodTable = (props) => {
         {
           obsPeriods
             .map((s, i) =>
-              <TableRow hover key={i}>
+              <TableRow hover component={Link} onClick={() => handleOpen(s.id)} key={i} >
                 <StyledTableCell component="th" scope="row">
                   {s.location}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {formatTime (s.startTime)}
+                  {formatTime(s.startTime)}
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   {formatTime(s.endTime)}
@@ -71,6 +105,23 @@ const ObsPeriodTable = (props) => {
             )
         }
       </TableBody>
+      <ObservationPeriod
+        obsPeriodId={obsPeriodId}
+        open={modalOpen}
+        handleClose={handleClose}
+        handleErrorSnackOpen={handleErrorSnackOpen}
+      />
+
+      <Snackbar open={formSent} autoHideDuration={5000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity="success">
+          {t("periodSaved")}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={errorHappen} autoHideDuration={5000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity="error">
+          {t("periodNotSaved")}
+        </Alert>
+      </Snackbar>
     </Table>
   );
 };
