@@ -50,3 +50,14 @@ def getObservationPeriods():
 
     return jsonify(ret)
 
+
+@bp.route('/api/getDaysObservationPeriods/<day_id>', methods=["GET"]) #tietyn aseman tietyn päivän havaintojaksot
+@login_required
+def getDaysObservationPeriods(day_id):
+    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
+    ret = []
+    for obsPeriod in daysObservationPeriods:
+        ret.append({ 'startTime': obsPeriod.startTime, 'endTime': obsPeriod.endTime,
+        'observationType': obsPeriod.observationType, 'location': getLocationName(obsPeriod.location_id), 'day_id': obsPeriod.day_id })
+
+    return jsonify(ret)
