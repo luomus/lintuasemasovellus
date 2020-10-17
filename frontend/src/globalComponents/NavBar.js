@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Typography, Box, Button } from "@material-ui/core";
-import { Dehaze, AccountCircle } from "@material-ui/icons";
+import { Dehaze, AccountCircle, PlayCircleFilledWhite } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout, loginUrl } from "../services";
 import { setUser } from "../reducers/userReducer";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+
 
 const useStyles = makeStyles({
   drawerContainer: {
@@ -20,6 +22,10 @@ const useStyles = makeStyles({
     color: "white",
     backgroundColor: "olivegreen",
 
+  },
+  title: {
+    color: "white",
+    textDecoration: "none",
   },
   rightMenu: {
     marginLeft: "auto",
@@ -91,7 +97,7 @@ const NavBar = () => {
           <IconButton id="navigationbar" onClick={toggleMenu("right", true)}> {/*navigationbar nimi lisätty testejä varten, että löytyy helpommin*/}
             <Dehaze style={{ color: "white" }} />
           </IconButton>
-          <Typography variant="h5">
+          <Typography component={Link} to="/" variant="h5" className={classes.title}>
             {t("title")}
           </Typography>
           <Drawer
