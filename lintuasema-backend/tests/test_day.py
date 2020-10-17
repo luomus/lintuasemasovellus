@@ -40,6 +40,13 @@ def test_sameDayIsAddedIfDifferentObservatory(app):
     found = addAndFind(dayProperties)
     assert found == True
 
+def test_sameObservatoryDifferentDay(app):
+    dayToAdd = Day(day='02.01.2020', comment='testi', observers='Tom', observatory_id=1)
+    dayProperties = {'date': '01.01.2020', 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
+    addDay(dayToAdd)
+    found = addAndFind(dayProperties)
+    assert found == True
+
 def addAndFind(fields):
     dayToAdd = Day(day=fields['date'], comment=fields['comment'], observers=fields['observers'], observatory_id=fields['observatory_id'])
     addDay(dayToAdd)
