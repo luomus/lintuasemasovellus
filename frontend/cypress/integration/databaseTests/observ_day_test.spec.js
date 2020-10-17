@@ -3,8 +3,10 @@ const { default: TouchRipple } = require("@material-ui/core/ButtonBase/TouchRipp
 const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
-const comment = "Olipa kiva sää";
-
+const comment = "Olipa kiva sää.";
+const date2 = "02.02.2020";
+const observer2 = "Talle Testaaja";
+const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
@@ -39,6 +41,39 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains(date);
     cy.contains(observer);
     cy.contains(comment);
+  });
+  it("Multiple observation days can be saved", function() {
+    cy.contains("Lisää päivä").click();
+    cy.get("#select").click().get("#HangonLintuasema").click({ force:true });//.get('#Hangon Lintuasema').contains().click();
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date2);
+    cy.get ("#observers").type(observer2);
+    cy.get("#comment").type(comment2);
+    cy.contains("Tallenna").click();
+  });
+  it("All added days can be found on page Näytä päivät", function() {
+    cy.contains("Näytä päivät").click();
+    cy.contains(date);
+    cy.contains(observer);
+    cy.contains(comment);
+    cy.contains(date2);
+    cy.contains(observer2);
+    cy.contains(comment2);
+  });
+  it("Observation day with same observatory and date can only be added once", function() {
+    cy.contains("Lisää päivä").click();
+    cy.get("#select").click().get("#HangonLintuasema").click({ force:true });//.get('#Hangon Lintuasema').contains().click();
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").type(observer);
+    cy.get("#comment").type("Tämä on duplikaatti");
+    cy.contains("Tallenna").click();
+    cy.visit("http://localhost:3000");
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains(date);
+    cy.contains(observer);
+    cy.get("Tämä on duplikaatti").should("not.exist");
   });
 });
 
