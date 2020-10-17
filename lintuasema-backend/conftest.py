@@ -1,12 +1,14 @@
 
 import pytest
-from app import init_testapp, db
+#from app import init_testapp, db
+from app import init_app, db
 
 
 @pytest.fixture
 
 def app():
-    app = init_testapp()
+    #app = init_testapp()
+    app = init_app("sqlite")
     with app.app_context():   
         db.create_all()
         yield app   # Note that we changed return for yield, see below for why
