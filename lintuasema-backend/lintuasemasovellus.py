@@ -12,8 +12,8 @@ from flask import (Flask, render_template,
 
 # jos ei halua käyttää oraclea lokaalisti, voi säätää app=init_app("sqlite")
 
-#app = init_app("oracle")
-app = init_app("sqlite")
+app = init_app("oracle")
+#app = init_app("sqlite")
 
 #app = init_app()
 #app = init_testapp()
