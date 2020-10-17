@@ -47,3 +47,16 @@ def get_all_locations():
         ret.append({ 'observatory': observatory.name, 'locations': locationList })
 
     return jsonify(ret)
+
+
+#alustava route lokaation nimen muokkaamiseen
+@bp.route("/api/edit/<observatoryname>/<locationname>", methods=["POST"])
+@login_required
+def edit_location(observatoryname, locationname):
+    req = request.get_json()
+    newLocName = req['editedname']
+    obs = db.session.query(Observatory).filter(name = observatoryname).first()
+    location = db.session.query(Location).filter(observatory_id = obs.id, name = locationname).first()
+    location.name = newLocName    
+    db.session.commit()
+    return req    
