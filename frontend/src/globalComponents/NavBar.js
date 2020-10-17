@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Typography, Box, Button } from "@material-ui/core";
-import { Dehaze, AccountCircle, PlayCircleFilledWhite } from "@material-ui/icons";
+import { Dehaze, AccountCircle } from "@material-ui/icons";
 import NavBarLinks from "./NavBarLinks";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout, loginUrl } from "../services";
