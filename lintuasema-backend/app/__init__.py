@@ -67,6 +67,24 @@ def init_app(database):
     def load_user(user_id):
         return User.query.get(user_id)
 
+    #Kayttajaroolit (alustava, kopioitu vanhasta projektista)
+    # from functools import wraps
+    # def login_required(_func=None, *, role="ANY"):
+    #     def wrapper(func):
+    #         @wraps(func)
+    #         def decorated_view(*args, **kwargs):
+    #             if not (current_user and current_user.is_authenticated):
+    #                 return login_manager.unauthorized()
+
+    #             acceptable_roles = set(("ANY", current_user.getRole()))
+
+    #             if role not in acceptable_roles:
+    #                 return login_manager.unauthorized()
+
+    #             return func(*args, **kwargs)
+    #         return decorated_view
+    #     return wrapper if _func is None else wrapper(_func)
+
     #määrittele tietokantayhteys
     if database == "oracle":
         dnsStr = cx_Oracle.makedsn('oracle.luomus.fi', 1521, service_name='oracle.luomus.fi')
@@ -86,7 +104,6 @@ def init_app(database):
             print(e)
     
     #Tietokannan luonti
-    
     app.register_blueprint(api_blueprint)
     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
   
