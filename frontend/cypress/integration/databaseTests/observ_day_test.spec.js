@@ -7,6 +7,9 @@ const comment = "Olipa kiva sää.";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
 const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
+const date3 = "03.03.2020";
+const observer3 = "Ano Nyymi";
+const comment3 = "Tuntematon tunkeutuja lintuasemalla.";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
@@ -75,6 +78,19 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains(observer);
     cy.get("Tämä on duplikaatti").should("not.exist");
   });
+  it("Observation day can not be added if user is not logged in", function() {
+    cy.visit("http://localhost:3000/logout");
+    cy.visit("http://localhost:3000");
+    cy.get("#navigationbar").click();
+    cy.contains("Lisää päivä").click();
+    cy.get("#select").click().get("#HangonLintuasema").click({ force:true });//.get('#Hangon Lintuasema').contains().click();
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date3);
+    cy.get ("#observers").type(observer3);
+    cy.get("#comment").type(comment3);
+    cy.contains("Tallenna").click();
+    cy.contains("Lomakkeen lähetyksessä ongelmia");
+  })
 });
 
 //Muokkasin nyt tuota lomake lähetetty -ilmoitusta ja sen pitäisi nyt toimia järkevämmin, ainakin toivottavasti.
