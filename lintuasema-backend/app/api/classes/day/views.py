@@ -22,7 +22,6 @@ def add_day():
     addDay(day)
     addedId = getDayId(day.day, day.observatory_id)
     #print("lisätyn päivän id on ", addedId)
-    
     return jsonify({ 'id': addedId })
 
 

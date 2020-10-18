@@ -58,10 +58,16 @@ def init_app(database):
     cors = CORS(app)
 
     #kirjautuminen
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    app.config["SECRET_KEY"] = urandom(32)
-    app.config['LOGIN_DISABLED'] = False
+    if database == "oracle":
+        login_manager = LoginManager()
+        login_manager.init_app(app)
+        app.config["SECRET_KEY"] = urandom(32)
+        app.config['LOGIN_DISABLED'] = False
+    else:
+        login_manager = LoginManager()
+        login_manager.init_app(app)
+        app.config["SECRET_KEY"] = urandom(32)
+        app.config['LOGIN_DISABLED'] = True
 
     @login_manager.user_loader
     def load_user(user_id):

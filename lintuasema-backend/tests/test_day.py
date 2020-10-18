@@ -1,5 +1,25 @@
 from app.api.classes.day.models import Day
 from app.api.classes.day.services import addDay, getDays
+from app.api.classes.day.views import add_day
+from flask import json
+import tempfile
+import pytest
+
+
+#@pytest.fixture
+# def client():
+#     db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+#     app.config['TESTING'] = True
+#     app.config['LOGIN_DISABLED'] = True
+
+#     with app.test_client() as client:
+#         with app.app_context():
+#             init_db()
+#         yield client
+
+#     os.close(db_fd)
+#     os.unlink(app.config['DATABASE'])
+
 
 def test_addedDayGoesToDatabase(app):
     dayProperties = {'date': '01.01.2020', 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': 1}
@@ -46,6 +66,20 @@ def test_sameObservatoryDifferentDay(app):
     addDay(dayToAdd)
     found = addAndFind(dayProperties)
     assert found == True
+
+def test_addDayRoute(app):
+    response = app.test_client().post(
+        '/api/addDay',
+        data=json.dumps({'day': '01.03.2020', 'observers': 'Teppo Testaaja', 'comment': 'Kaunis ilma.', 'observatory': 'Hangon Lintuasema'}),
+        content_type='application/json',)
+    
+    print("response", response)
+    #data = json.loads(response.get_data())
+    data = response.get_json()
+    print('status code ',  response.status_code)
+    assert response.status_code == 200
+    assert data['id'] == 1
+
 
 def addAndFind(fields):
     dayToAdd = Day(day=fields['date'], comment=fields['comment'], observers=fields['observers'], observatory_id=fields['observatory_id'])
