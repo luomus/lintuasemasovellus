@@ -53,7 +53,7 @@ def getObservations():
 def getObservationsByObservationPeriod(observationperiod_id):
     observations = Observation.query.filter_by(observationperiod_id = observationperiod_id)
     ret = []
-    for each in objects:
+    for each in observations:
         ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
             'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
             'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
