@@ -119,7 +119,7 @@ def init_app(database):
             #Määrittellään tyhjennetäänkö tietokanta sovelluksen alussa
             if database == "oracle":
                 #db.reflect()
-                db.drop_all()
+                #db.drop_all()
                 db.create_all()
             else:
                 db.reflect()
