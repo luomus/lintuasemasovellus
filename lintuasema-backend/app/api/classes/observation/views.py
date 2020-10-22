@@ -26,6 +26,7 @@ def addObservation():
         direction=req['direction'],
         bypassSide=req['bypassSide'],
         notes=req['notes'],
+        #shorthand=req['shorthand'],
         observationperiod_id=req['observationperiod_id'])
     db.session().add(observation)
     #db.session().flush()
@@ -44,7 +45,7 @@ def getObservations():
         ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
             'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
             'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
-            'unknownUnknownCount': each.unknownUnknownCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id})
+            'unknownUnknownCount': each.unknownUnknownCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id}) #notes ja observation_id väliin tämä, kun pikakirjoitus valmis s'shorthand':each.shorthand,
 
     return jsonify(ret)
 

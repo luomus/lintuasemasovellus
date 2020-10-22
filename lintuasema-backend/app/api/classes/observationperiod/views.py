@@ -31,7 +31,7 @@ def addObservationPeriod():
         startTime=datetime.strptime(req['startTime'], '%H:%M'),
         endTime=datetime.strptime(req['endTime'], '%H:%M'),
         observationType=req['observationType'],
-        location_id=locId, day_id=req['day_id'])
+        location_id=locId, day_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
     #db.session().flush()
     #db.session().refresh(obsp)

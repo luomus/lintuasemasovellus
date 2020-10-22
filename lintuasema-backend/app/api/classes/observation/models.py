@@ -17,6 +17,7 @@ class Observation(Base):
     direction = db.Column(db.String(144), nullable = True)
     bypassSide = db.Column(db.String(144), nullable = True)
     notes = db.Column(db.String(1000), nullable = True)
+    shorthand =db.Column(db.String(144), nullable=True)
 
     observationperiod_id = db.Column(db.Integer, db.ForeignKey('observationperiod.id'), nullable=False)
 
@@ -38,4 +39,5 @@ class Observation(Base):
         self.direction = direction
         self.bypassSide = bypassSide
         self.notes = notes
+        #self.shorthand=shorthand
         self.observationperiod_id = observationperiod_id

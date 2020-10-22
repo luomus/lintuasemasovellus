@@ -36,3 +36,15 @@ def list_day():
         ret.append({ 'id': each.id, 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': getObservatoryName(each.observatory_id) })
 
     return jsonify(ret)
+
+
+@bp.route('/api/listDays/<day_id>', methods=['POST'])
+@login_required
+def edit_day(day_id, comment, observers):
+    day=Day.query.get(day_id)
+    day.comment=comment
+    day.observers=observers
+
+    db.commit(day)
+
+   
