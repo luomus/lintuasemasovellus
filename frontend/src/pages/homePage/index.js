@@ -1,14 +1,14 @@
-import React from "react";
-import { Paper, Grid, Typography, Button } from "@material-ui/core/";
+import React, { useState } from "react";
+import { postDay } from "../../services";
+import { Paper, Grid, Typography, Button, TextField, IconButton } from "@material-ui/core/";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-//import CardMedia from '@material-ui/core/CardMedia';  laitettiin kommenttiin koska github actions ei toiminut. valitti unused-variable erroria.
-import CurrentDayForm from "./CurrentDayForm";
+import AddIcon from "@material-ui/icons/Add";
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   paper: {
@@ -29,10 +29,48 @@ export const HomePage = () => {
 
   const { t } = useTranslation();
 
+  const dateNow = new Date();
+
+  const [observatory, setObservatory] = useState("");
+  const [day, setDay] = useState(dateNow);
+  const [observers, setObservers] = useState("");
+  const [comment, setComment] = useState("");
+
+  const [formSent, setFormSent] = useState(false);
+  const [errorHappened, setErrorHappened] = useState(false);
+
+
+  const formatDate = (date) => {
+    const dd = date.getDate();
+    const mm = date.getMonth() + 1;
+    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  };
+
+  const addDay = (event) => {
+    event.preventDefault();
+    // do things with form
+    postDay({
+      day: formatDate(day),
+      observers: observers,
+      comment: comment,
+      observatory: observatory,
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          setErrorHappened(true);
+        } else {
+          setFormSent(true);
+          setObservatory("");
+          setDay(dateNow);
+          setObservers("");
+          setComment("");
+        }
+      })
+      .catch(() => setErrorHappened(true));
+  };
 
   return (
     <div>
-
       <Grid container
         alignItems="stretch"
         // alignItems="center"
@@ -42,35 +80,113 @@ export const HomePage = () => {
         <Grid item xs={8}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h2" >
-              {t("titleExample")}
+              Lisää havaintoja
             </Typography>
+
+
+
+            <Grid container
+              alignItems="stretch"
+              spacing={1}>
+
+              <Grid item xs={4} sm={5}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    required
+                    disableToolbar
+                    variant="inline"
+                    format="dd.MM.yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label={t("date")}
+                    value={day}
+                    onChange={(date) => setDay(date)}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+
+                </MuiPickersUtilsProvider>
+              </Grid>
+
+              <Grid item xs={4} sm={5}>
+                <TextField required
+                  id="observers"
+                  label={t("observers")}
+                  onChange={(event) => setObservers(event.target.value)}
+                  value={observers}
+                /><br />
+              </Grid>
+
+              <Grid item xs={6} sm={5}>
+                Tyyppi
+              </Grid>
+
+              <Grid item xs={6} sm={5}>
+                Lokaatio
+              </Grid>
+
+            
+
+
+
             <br />
-            {t("intro")} {t("intro")}</Paper>
-        </Grid>
+            <br />
+            <Grid item xs={12}>
+              <Grid container xs={6} spacing={2}>
+                <Grid item xs={6}>
+                  <TextField
+                    id="startTime"
+                    variant="outlined"
+                    label="Alkuaika"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="endTime"
+                    variant="outlined"
+                    label="Loppuaika"
+                  />
+                </Grid>
+              </Grid>
+              <br />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField required
+                id="shorthand"
+                variant="outlined"
+                label="Pikakirjoitus"
+                fullWidth={true}
+                multiline={true}
+              />
+            </Grid>
+            <Grid item>
+              <Tooltip title="Lisää pikakirjoitusrivi" >
+                <IconButton>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Lisää aikajakso">
+                <IconButton>
+                  <AccessTimeIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+              
+            
+          </Grid>
+          </Paper>
+            </Grid>
         <Grid item xs={4}>
           <Paper className={classes.paper}>
-            <CurrentDayForm />
+          <Typography variant="h5" component="h2" >
+              Käyttöohjeet
+            </Typography>
+
             <br />
+            lorem ipsum jne
           </Paper>
-        </Grid>
-        <Grid>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {t("manualTitle")}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {t("manualTextShort")}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button component={Link} to="/manual" size="small" color="primary">
-                {t("readMore")}
-              </Button>
-            </CardActions>
-          </Card>
         </Grid>
       </Grid>
     </div>
