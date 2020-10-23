@@ -23,7 +23,7 @@ jobs:
         python3 -m pytest
       working-directory: ./lintuasema-backend
 
-  cypress-test:
+  frontend-test:
     runs-on: ubuntu-latest
       
     steps:
@@ -35,6 +35,9 @@ jobs:
         node-version: '12.x'
     - name: npm install
       run: npm install
+      working-directory: ./frontend
+    - name: npm test
+      run: npm test
       working-directory: ./frontend
     - name: npm build & copy to backend
       run: npm run build-copy
@@ -69,7 +72,7 @@ jobs:
         run: docker build . --file Dockerfile -t test
         
   deploy:
-    needs: [pytest, cypress-test, docker-build]
+    needs: [pytest, frontend-test, docker-build]
     runs-on: ubuntu-latest
 
     steps:
