@@ -2,11 +2,19 @@
 
 Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
 
+Suomessa sijaitsee kuusitoista lintuasemaa, joilla tehdään vuosittain satoja tuhansia lintuhavaintoja. Nämä vakioiduilla menetelmillä kerättävät havainnot ovat erittäin arvokkaita, koska niiden tuloksena syntyy vertailukelpoisia pitkiä aikasarjoja, joita voidaan käyttää mm. ilmastomuutoksen etenemisen vaikutuksien seuraamiseen.
+
+Lintuasemilta on toistaiseksi puuttunut yksi yhteinen sovellus tietojen kirjaamiseen, eikä tietoja ole vielä runsaasti julkaistu avoimena datana.
+
+Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaamiseen.
+
 ## Projektiin liittyviä linkkejä
 
 [Sovellus Rahdissa](https://lintuasema-lintuasema-staging.rahtiapp.fi/)
 
 [Lisenssi](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/LICENSE)
+
+[Käyttöohjeet](tulossa)
 
 ### Dokumentaatio
 
