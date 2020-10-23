@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { postDay } from "../../services";
-import { Paper, Grid, Typography, Button, TextField, IconButton } from "@material-ui/core/";
-import { Link } from "react-router-dom";
+ import { Paper, Grid, Typography, TextField, IconButton } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -23,7 +21,6 @@ const useStyles = makeStyles({
 });
 
 
-
 export const HomePage = () => {
   const classes = useStyles();
 
@@ -31,43 +28,8 @@ export const HomePage = () => {
 
   const dateNow = new Date();
 
-  const [observatory, setObservatory] = useState("");
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
-  const [comment, setComment] = useState("");
-
-  const [formSent, setFormSent] = useState(false);
-  const [errorHappened, setErrorHappened] = useState(false);
-
-
-  const formatDate = (date) => {
-    const dd = date.getDate();
-    const mm = date.getMonth() + 1;
-    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
-  };
-
-  const addDay = (event) => {
-    event.preventDefault();
-    // do things with form
-    postDay({
-      day: formatDate(day),
-      observers: observers,
-      comment: comment,
-      observatory: observatory,
-    })
-      .then((res) => {
-        if (res.status !== 200) {
-          setErrorHappened(true);
-        } else {
-          setFormSent(true);
-          setObservatory("");
-          setDay(dateNow);
-          setObservers("");
-          setComment("");
-        }
-      })
-      .catch(() => setErrorHappened(true));
-  };
 
   return (
     <div>
