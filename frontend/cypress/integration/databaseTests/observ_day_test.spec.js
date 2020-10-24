@@ -14,7 +14,10 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
     cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    cy.get("#observatory-dialog").click(); // placeholder
+    cy.get("#submit").click(); // placeholder
     cy.get("#navigationbar").click();
+    
   });
   it("Front page has button for adding an observation day", function() {
     cy.contains("Lisää päivä");
@@ -72,6 +75,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#comment").type("Tämä on duplikaatti");
     cy.contains("Tallenna").click();
     cy.visit("http://localhost:3000");
+    cy.get("#observatory-dialog").click(); // placeholder
+    cy.get("#submit").click(); // placeholder
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(date);
@@ -81,6 +86,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   it("Observation day can not be added if user is not logged in", function() {
     cy.visit("http://localhost:3000/logout");
     cy.visit("http://localhost:3000");
+    cy.get("#observatory-dialog").click(); // placeholder
+    cy.get("#submit").click(); // placeholder
     cy.get("#navigationbar").click();
     cy.contains("Lisää päivä").click();
     cy.get("#select").click().get("#HangonLintuasema").click({ force:true });//.get('#Hangon Lintuasema').contains().click();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
- import { Paper, Grid, Typography, TextField, IconButton } from "@material-ui/core/";
+import { Paper, Grid, Typography, TextField, IconButton } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -7,6 +7,9 @@ import { useTranslation } from "react-i18next";
 import AddIcon from "@material-ui/icons/Add";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Tooltip from '@material-ui/core/Tooltip';
+import ObservatorySelector from "./observatorySelector";
+import { useSelector } from "react-redux";
+
 
 const useStyles = makeStyles({
   paper: {
@@ -30,6 +33,7 @@ export const HomePage = () => {
 
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
+  const userObservatory = useSelector(state => state.userObservatory);
 
   return (
     <div>
@@ -44,9 +48,10 @@ export const HomePage = () => {
             <Typography variant="h5" component="h2" >
               Lisää havaintoja
             </Typography>
-
-
-
+            <br />
+            <ObservatorySelector />
+            <br />
+            {console.log("valittu asema on " + userObservatory)}
             <Grid container
               alignItems="stretch"
               spacing={1}>
@@ -88,61 +93,61 @@ export const HomePage = () => {
                 Lokaatio
               </Grid>
 
-            
 
 
 
-            <br />
-            <br />
-            <Grid item xs={12}>
-              <Grid container xs={6} spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    id="startTime"
-                    variant="outlined"
-                    label="Alkuaika"
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="endTime"
-                    variant="outlined"
-                    label="Loppuaika"
-                  />
-                </Grid>
-              </Grid>
+
               <br />
-            </Grid>
+              <br />
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      id="startTime"
+                      variant="outlined"
+                      label="Alkuaika"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      id="endTime"
+                      variant="outlined"
+                      label="Loppuaika"
+                    />
+                  </Grid>
+                </Grid>
+                <br />
+              </Grid>
 
-            <Grid item xs={12}>
-              <TextField required
-                id="shorthand"
-                variant="outlined"
-                label="Pikakirjoitus"
-                fullWidth={true}
-                multiline={true}
-              />
+              <Grid item xs={12}>
+                <TextField required
+                  id="shorthand"
+                  variant="outlined"
+                  label="Pikakirjoitus"
+                  fullWidth={true}
+                  multiline={true}
+                />
+              </Grid>
+              <Grid item>
+                <Tooltip title="Lisää pikakirjoitusrivi" >
+                  <IconButton>
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Lisää aikajakso">
+                  <IconButton>
+                    <AccessTimeIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+
+
             </Grid>
-            <Grid item>
-              <Tooltip title="Lisää pikakirjoitusrivi" >
-                <IconButton>
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Lisää aikajakso">
-                <IconButton>
-                  <AccessTimeIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-              
-            
-          </Grid>
           </Paper>
-            </Grid>
+        </Grid>
         <Grid item xs={4}>
           <Paper className={classes.paper}>
-          <Typography variant="h5" component="h2" >
+            <Typography variant="h5" component="h2" >
               Käyttöohjeet
             </Typography>
 
@@ -154,4 +159,3 @@ export const HomePage = () => {
     </div>
   );
 };
-
