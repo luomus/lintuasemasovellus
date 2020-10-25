@@ -7,6 +7,7 @@ class Observatory(Base):
 
     Day = db.relationship("Day", backref="observatory", lazy=True)
     Location = db.relationship("Location", backref="observatory", lazy=True)
+    Type = db.relationship("Type", backref="observatory", lazy=True)
     
     def __init__ (self, name):
         self.name=name

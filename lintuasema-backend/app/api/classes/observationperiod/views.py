@@ -8,6 +8,7 @@ from app.api.classes.observatory.models import Observatory
 from app.api.classes.location.services import getLocationId, getLocationName
 from app.api.classes.observationperiod.services import getObsPerId
 from app.api.classes.day.services import getDay
+from app.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
 
 from app.api import bp
 from app.db import db
@@ -27,10 +28,12 @@ def addObservationPeriod():
     obsId = day.observatory_id
     locId = getLocationId(req['location'], obsId)
 
+    createType(req['observationType'], obsId)
+
     obsp = Observationperiod(
         startTime=datetime.strptime(req['startTime'], '%H:%M'),
         endTime=datetime.strptime(req['endTime'], '%H:%M'),
-        observationType=req['observationType'],
+        type_id=getTypeIdByName(req['observationType']),
         location_id=locId, day_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
     #db.session().flush()
@@ -53,7 +56,7 @@ def getObservationPeriods():
             'id': obsPeriod.id,
             'startTime': obsPeriod.startTime,
             'endTime': obsPeriod.endTime,
-            'observationType': obsPeriod.observationType,
+            'type_id': getTypeNameById(obsPeriod.type_id),
             'location': getLocationName(obsPeriod.location_id),
             'day_id': obsPeriod.day_id
         })
@@ -71,7 +74,7 @@ def getDaysObservationPeriods(day_id):
             'id': obsPeriod.id,
             'startTime': obsPeriod.startTime,
             'endTime': obsPeriod.endTime,
-            'observationType': obsPeriod.observationType,
+            'type_id': getTypeNameById(obsPeriod.type_id),
             'location': getLocationName(obsPeriod.location_id),
             'day_id': obsPeriod.day_id
         })
