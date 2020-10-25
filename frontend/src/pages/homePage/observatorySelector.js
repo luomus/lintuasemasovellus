@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-    Dialog, DialogTitle, DialogContent, DialogActions, Button, FlatButton, FormControl, InputLabel,
+    Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel,
     Typography, Select, MenuItem, makeStyles
 } from "@material-ui/core/";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,10 @@ const ObservatorySelector = () => {
         },
         formControl: {
             margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        submit: {
+            
             minWidth: 120,
         },
     }));
@@ -84,7 +88,7 @@ const ObservatorySelector = () => {
 
     return (<div>
         <Typography>Valittu asema: {userObservatory}</Typography>
-        <Button onClick={handleOpen}>Muokkaa</Button>
+        <Button className={classes.submit} onClick={handleOpen}>Muokkaa</Button>
     </div>
     )
 
