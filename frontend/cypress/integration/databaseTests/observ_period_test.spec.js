@@ -12,11 +12,13 @@ const type = "Vakio";
 describe("AddObservationPeriod", function() {
   beforeEach(function() {
     cy.visit("http://localhost:3000");
-    cy.get("#observatory-dialog").click(); // placeholder
-    cy.get("#submit").click({force: true}); // placeholder
+    
+    cy.get("#submit").click(); // placeholder
+    cy.get("#submit").click(); // placeholder
     cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-    cy.get("#observatory-dialog").click(); // placeholder
-    cy.get("#submit").click({force: true}); // placeholder
+    
+    cy.get("#submit").click(); // placeholder
+    cy.get("#submit").click(); // placeholder
     cy.get("#navigationbar").click();
 
     //saving a day and clicking it:
