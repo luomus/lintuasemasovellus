@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required
 
 from app.api.classes.location.models import Location
+from app.api.classes.observatory.models import Observatory
 from app.api.classes.type.models import Type
 from app.api.classes.observatory.services import getAll, getObservatoryId
 

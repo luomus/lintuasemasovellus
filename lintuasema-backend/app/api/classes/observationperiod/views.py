@@ -74,7 +74,7 @@ def getDaysObservationPeriods(day_id):
             'id': obsPeriod.id,
             'startTime': obsPeriod.startTime,
             'endTime': obsPeriod.endTime,
-            'type_id': getTypeNameById(obsPeriod.type_id),
+            'observationType': getTypeNameById(obsPeriod.type_id),
             'location': getLocationName(obsPeriod.location_id),
             'day_id': obsPeriod.day_id
         })
