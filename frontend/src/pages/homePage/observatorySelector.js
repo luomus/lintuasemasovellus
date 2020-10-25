@@ -46,7 +46,7 @@ const ObservatorySelector = () => {
     };
     if (Object.keys(userObservatory).length === 0) {
         return (
-            <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
+            <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
                 <DialogTitle>Valitse lintuasema</DialogTitle>
                 <DialogContent>
 
@@ -74,7 +74,7 @@ const ObservatorySelector = () => {
                     </form>
                 </DialogContent>
                 <DialogActions>
-          <Button form="observatorySelect" onClick={handleClose} color="primary" type="submit">
+          <Button id="submit" form="observatorySelect" onClick={handleClose} color="primary" type="submit">
             Tallenna
           </Button>
         </DialogActions>
