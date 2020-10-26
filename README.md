@@ -24,7 +24,9 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 ### Projektin edistyminen
 
-[Backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
+[Product backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
+
+[Sprint backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/2)
 
 [Tuntikirjanpito](https://docs.google.com/spreadsheets/d/1V68aoQnG-gI77wLIuzaikG_-l8oi5lEpZsDesqOSz5o/edit?usp=sharing)
 
