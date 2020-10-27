@@ -100,6 +100,3 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   })
 });
 
-//Muokkasin nyt tuota lomake lähetetty -ilmoitusta ja sen pitäisi nyt toimia järkevämmin, ainakin toivottavasti.
-// Muutin myös validointia niin, että lintuasemaa, päivämäärää ja havainnoijakenttää ei voi jättää tyhjäksi.
-//Kommentti taisi olla vapaaehtoinen kenttä(?) niin tuon pitäisi hyväksyä uudet päivät myös ilman sitä.

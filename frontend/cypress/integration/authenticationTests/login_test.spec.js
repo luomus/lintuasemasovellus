@@ -8,7 +8,7 @@ describe("Login", function() {
   });
 });
 
-describe("Title is shown on frontpage", function() { //Testi tehty Annun toimesta
+describe("Title is shown on frontpage", function() { 
   it("Front page has text Lintuasemasovellus", function() {
     cy.visit("http://localhost:3000");
     
@@ -18,7 +18,7 @@ describe("Title is shown on frontpage", function() { //Testi tehty Annun toimest
 });
 
 
-describe("Navigation bar", function() { //Testi tehty Annun toimesta
+describe("Navigation bar", function() { 
   it("Front page has navigation bar", function() {
     cy.visit("http://localhost:3000");
     
