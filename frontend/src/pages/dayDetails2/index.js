@@ -95,7 +95,7 @@ const DayDetails = () => {
 
 
   useEffect(() => {
-    getDaysObservationPeriods(dayId)
+    getDaysObservationPeriods(dayId, 'Vakio')
       .then(periodsJson => setObsperiods(periodsJson));
   }, [formSent, dayId]);
 

@@ -65,15 +65,15 @@ def getObservationPeriods():
     return jsonify(ret)
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@bp.route('/api/getDaysObservationPeriods/<day_id>/<observationType>', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
 @login_required
-def getDaysObservationPeriods(day_id):
+def getDaysObservationPeriods(day_id, observationType):
 
-    #type_id = Type.getTypeIdByName("vakio")
+    type_id = getTypeIdByName(observationType)
 
     #console.log('Tyypin id: ', type_id)
 
-    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
+    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id, type_id=type_id)
     ret = []
     for obsPeriod in daysObservationPeriods:
         ret.append({

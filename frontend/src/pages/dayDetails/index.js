@@ -48,11 +48,11 @@ const DayDetails = () => {
     .find(d => d.day === day && d.observatory === stationName)
     .observers;
 
-  const observationType = "vakio";
+  const observationType = "Vakio";
 
 
   useEffect(() => {
-    getDaysObservationPeriods(dayId)
+    getDaysObservationPeriods(dayId, observationType)
       .then(periodsJson => setObsperiods(periodsJson));
   }, [formSent, dayId]);
 
