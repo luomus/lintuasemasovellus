@@ -19,6 +19,7 @@ const DayDetails = () => {
 
   const { day, stationName } = useParams();
 
+  
   const useStyles = makeStyles({
     paper: {
       background: "white",

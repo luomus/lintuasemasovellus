@@ -4,6 +4,7 @@ from flask_login import login_required
 
 from app.api.classes.observationperiod.models import Observationperiod
 from app.api.classes.day.models import Day
+from app.api.classes.type.models import Type
 from app.api.classes.observatory.models import Observatory
 from app.api.classes.location.services import getLocationId, getLocationName
 from app.api.classes.observationperiod.services import getObsPerId
@@ -64,9 +65,14 @@ def getObservationPeriods():
     return jsonify(ret)
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>', methods=["GET"]) #tietyn aseman tietyn päivän havaintojaksot
+@bp.route('/api/getDaysObservationPeriods/<day_id>', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
 @login_required
 def getDaysObservationPeriods(day_id):
+
+    #type_id = Type.getTypeIdByName("vakio")
+
+    #console.log('Tyypin id: ', type_id)
+
     daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
     ret = []
     for obsPeriod in daysObservationPeriods:
