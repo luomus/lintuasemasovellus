@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, makeStyles, Paper, Grid, Snackbar, Typography } from "@material-ui/core";
+import { Button, makeStyles, Paper, Grid, Snackbar, Typography, TextField } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
@@ -33,10 +33,30 @@ const DayDetails = () => {
   
   const [obsPeriods2, setObsperiods2] = useState([]);
 
+  const [observersForm, setObserversForm] = useState(false);
+
+  const [commentForm, setCommentForm] = useState(false);
+
   const state = {
     obsPeriods, setObsperiods,
     obsPeriods2, setObsperiods2,
+    commentForm, setCommentForm,
+    observersForm, setObserversForm
   };
+
+
+  const observersOnSubmit = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
+    setObserversForm(false)
+  }
+  
+
+  const commentOnSubmit = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
+    setCommentForm(false)
+  }
 
  
 
@@ -67,7 +87,8 @@ const DayDetails = () => {
       .then(periodsJson2 => setObsperiods2(periodsJson2));
   }, [formSent, dayId]);
 
-console.log("jaksot:" + obsPeriods);
+  console.log("jaksot:" + obsPeriods);
+
 
   return (
 
@@ -81,20 +102,48 @@ console.log("jaksot:" + obsPeriods);
               {stationName}
             </Typography>
             <Typography variant="h6" component="h2" >
-              {t("observers")}{": "}{observers}
-            </Typography>
+              {t("observers")}{": "}{observers}{" "}
+              </Typography>
+              {observersForm === false ? (
+                <Button onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
+                Muokkaa havainnoitsijoita
+                </Button>
+              ) : (
+                
+                <form onSubmit={observersOnSubmit}>
+                <TextField id="outlined-basic" variant="outlined" />
+                <Button type="submit" variant="contained" color="primary">
+                  Tallenna
+                </Button>
+                </form>
+              )}
+              
+               
+              
 
+            
             <Typography variant="subtitle1" component="h2" >
-              {t("comment")}{": "}{comment}
+              {t("comment")}{": "}{comment}{" "}
             </Typography>
+            {commentForm === false ? (
+                <Button onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
+                Muokkaa kommenttia
+                </Button>
+              ) : (                
+                <form onSubmit={commentOnSubmit}>
+                <TextField id="outlined-basic" variant="outlined" />
+                <Button type="submit" variant="contained" color="primary">
+                  Tallenna
+                </Button>
+                </form>
+              )}
+
+            
 
           </Grid>
 
           <Grid item xs={12}>
 
-            <Button variant="contained" color="primary">
-              Muokkaa päivää
-            </Button>{" "}
             <Button variant="contained" color="primary">
               Lisää jakso
             </Button>{" "}
