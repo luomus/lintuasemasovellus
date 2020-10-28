@@ -9,8 +9,6 @@ import { getDaysObservationPeriods, postObservationPeriod } from "../../services
 import { Link } from "react-router-dom";
 
 
-
-
 const DayDetails = () => {
 
   const { day, stationName } = useParams();

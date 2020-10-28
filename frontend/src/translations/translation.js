@@ -14,6 +14,7 @@ const resources = {
       "observatory": "Lintuasema",
       "date": "Päivämäärä",
       "observers": "Havainnoija(t)",
+      "observations": "Havainnot",
       "comment": "Kommentti",
       "save": "Tallenna",
       "days": "Päivät",

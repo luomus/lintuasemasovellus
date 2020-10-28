@@ -47,10 +47,12 @@ const ObsPeriodTable = (props) => {
 
   const [obsPeriodId, setObsPeriodId] = useState("");
 
+
   const handleOpen = (id) => {
     console.log("handleOpen id:", id);
     setObsPeriodId(id);
     setModalOpen(true);
+    
   };
 
   const [formSent, setFormSent] = useState(false);
@@ -60,6 +62,8 @@ const ObsPeriodTable = (props) => {
     setModalOpen(false);
     setFormSent(true);
   };
+
+
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {

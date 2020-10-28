@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import DayDetails from "./pages/dayDetails";
-import DayDetails2 from "./pages/dayDetails2";
+import DayDetails2 from "./pages/dayDetailsOld";
 
 
 
