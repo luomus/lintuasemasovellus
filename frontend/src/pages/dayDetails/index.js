@@ -4,6 +4,7 @@ import { Button, makeStyles, Paper, Grid, Snackbar, Typography } from "@material
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
+import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import { getDaysObservationPeriods, postObservationPeriod } from "../../services";
 import { Link } from "react-router-dom";
 
@@ -29,10 +30,15 @@ const DayDetails = () => {
 
   const [obsPeriods, setObsperiods] = useState([]);
 
+  
+  const [obsPeriods2, setObsperiods2] = useState([]);
+
   const state = {
     obsPeriods, setObsperiods,
+    obsPeriods2, setObsperiods2,
   };
 
+ 
 
   const dayList = useSelector(state => state.days);
 
@@ -49,13 +55,17 @@ const DayDetails = () => {
     .observers;
 
   const observationType = "Vakio";
-
+  const observationType2 = "Paikallishavainto";
 
   useEffect(() => {
     getDaysObservationPeriods(dayId, observationType)
       .then(periodsJson => setObsperiods(periodsJson));
   }, [formSent, dayId]);
 
+  useEffect(() => {
+    getDaysObservationPeriods(dayId, observationType2)
+      .then(periodsJson2 => setObsperiods2(periodsJson2));
+  }, [formSent, dayId]);
 
 console.log("jaksot:" + obsPeriods);
 
@@ -95,7 +105,7 @@ console.log("jaksot:" + obsPeriods);
 
           <Grid item xs={6}>
             <Typography variant="h6" >
-              Muutonseuranta
+              Vakiomuutonseuranta
           </Typography>
 
             <ObsPeriodTable
@@ -108,6 +118,11 @@ console.log("jaksot:" + obsPeriods);
             <Typography variant="h6" >
               Muu havainnointi
           </Typography>
+
+            <ObsPeriodTableOther
+              obsPeriods={obsPeriods2}
+            />
+
           </Grid>
         </Grid>
       </Paper>

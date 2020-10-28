@@ -9,7 +9,7 @@ import ObservationPeriod from "../obsPeriod";
 import Alert from "@material-ui/lab/Alert";
 
 
-const ObsPeriodTable = (props) => {
+const ObsPeriodTableOther = (props) => {
 
   const { obsPeriods } = props;
 
@@ -57,7 +57,6 @@ const ObsPeriodTable = (props) => {
   const [errorHappen, setErrorHappen] = useState(false);
 
   const handleClose = () => {
-    setModalOpen(false);
     setFormSent(true);
   };
 
@@ -79,8 +78,7 @@ const ObsPeriodTable = (props) => {
       <TableHead>
         <TableRow>
           <StyledTableCell>{t("location")}</StyledTableCell>
-          <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
-          <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
+          <StyledTableCell align="right">{t("type")}</StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -91,11 +89,9 @@ const ObsPeriodTable = (props) => {
                 <StyledTableCell component="th" scope="row">
                   {s.location}
                 </StyledTableCell>
+                
                 <StyledTableCell align="right">
-                  {formatTime(s.startTime)}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {formatTime(s.endTime)}
+                  {s.observationType}
                 </StyledTableCell>
               </TableRow>
             )
@@ -105,7 +101,7 @@ const ObsPeriodTable = (props) => {
         obsPeriodId={obsPeriodId}
         open={modalOpen}
         handleClose={handleClose}
-        handleErrorSnackOpen={handleErrorSnackOpen}
+        handleErrorSnackOpe_n={handleErrorSnackOpen}
       />
 
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleSnackClose}>
@@ -122,8 +118,8 @@ const ObsPeriodTable = (props) => {
   );
 };
 
-ObsPeriodTable.propTypes = {
+ObsPeriodTableOther.propTypes = {
   obsPeriods: PropTypes.array.isRequired
 };
 
-export default ObsPeriodTable;
+export default ObsPeriodTableOther;
