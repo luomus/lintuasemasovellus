@@ -88,7 +88,15 @@ const NavBar = () => {
     :
     null;
 
+    const userIsSet = Boolean(user.id);
 
+if (!userIsSet) {
+  return (
+    <div>
+
+    </div>
+  )
+}
   return (
     <div>
 

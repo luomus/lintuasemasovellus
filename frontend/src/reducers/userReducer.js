@@ -1,13 +1,3 @@
-import { getCurrentUser } from "../services";
-
-export const initializeCurrentUser = () => {
-  return async dispatch => {
-    const currentUser = await getCurrentUser();
-    console.log("current user:" + currentUser);
-    dispatch(setUser(currentUser));
-  };
-};
-
 
 // Presume "user" is going to be JSON
 export const setUser = (user) => {

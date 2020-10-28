@@ -7,9 +7,10 @@ import { useTranslation } from "react-i18next";
 import AddIcon from "@material-ui/icons/Add";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Tooltip from '@material-ui/core/Tooltip';
-import ObservatorySelector from "./observatorySelector"; 
+import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../services";
+import LandingPage from "./landingPage";
 
 
 const useStyles = makeStyles({
@@ -36,8 +37,18 @@ export const HomePage = () => {
   const [observers, setObservers] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
-  const currentUser = getCurrentUser();
-  console.log(currentUser);
+
+  const user = useSelector(state => state.user);
+
+  const userIsSet = Boolean(user.id);
+
+
+
+    if (!userIsSet) {
+    return (
+      <LandingPage />
+    )
+  }
 
   return (
     <div>
