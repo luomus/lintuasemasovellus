@@ -9,6 +9,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Tooltip from '@material-ui/core/Tooltip';
 import ObservatorySelector from "./observatorySelector"; 
 import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../services";
 
 
 const useStyles = makeStyles({
@@ -35,6 +36,9 @@ export const HomePage = () => {
   const [observers, setObservers] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
+  const currentUser = getCurrentUser();
+  console.log(currentUser);
+
   return (
     <div>
       <Grid container
@@ -45,6 +49,7 @@ export const HomePage = () => {
 
         <Grid item xs={8}>
           <Paper className={classes.paper}>
+            <getCurrentUser />
             <Typography variant="h5" component="h2" >
               Lisää havaintoja
             </Typography>

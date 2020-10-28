@@ -56,6 +56,8 @@ def login():
 @bp.route('/api/getUser', methods=['GET'])
 def getcurrentUser():
     u = current_user.get_id()
+    if not u:
+        return jsonify('no user')
     user = User.query.filter_by(id=u).first()
     ret = []
     ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email})

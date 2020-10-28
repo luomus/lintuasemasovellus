@@ -27,11 +27,11 @@
     "styled-components": "^5.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-api": "cd ../lintuasema-backend && bash install.sh && venv/bin/flask run --no-debugger",
+    "start-api": "cd ../lintuasema-backend && . venv/bin/activate && pip3 install -r requirements.txt && flask run --port=3000",
     "build-copy": "npm run build && cp build ../lintuasema-backend/ -r",
     "lint": "eslint './{src,cypress}/**/*.{js,jsx}'",
     "lint:fix": "eslint './{src,cypress}/**/*.{js,jsx}' --fix",
@@ -53,7 +53,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:3000",
   "devDependencies": {
     "cypress": "^5.3.0",
     "eslint-loader": "^4.0.2",
