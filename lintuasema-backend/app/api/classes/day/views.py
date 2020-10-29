@@ -38,13 +38,24 @@ def list_day():
     return jsonify(ret)
 
 
-@bp.route('/api/listDays/<day_id>', methods=['POST'])
+@bp.route('/api/editComment/<day_id>/<comment>', methods=['POST'])
 @login_required
-def edit_day(day_id, comment, observers):
+def edit_comment(day_id, comment):
     day=Day.query.get(day_id)
     day.comment=comment
+
+    db.session().commit()
+
+    return jsonify("")
+
+@bp.route('/api/editObservers/<day_id>/<observers>', methods=['POST'])
+@login_required
+def edit_observers(day_id, observers):
+    day=Day.query.get(day_id)
     day.observers=observers
 
-    db.commit(day)
+    db.session().commit()
+
+    return jsonify("")
 
    

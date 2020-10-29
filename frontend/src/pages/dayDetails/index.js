@@ -7,7 +7,8 @@ import ObsPeriodTable from "./ObsPeriodTable";
 import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods, postObservationPeriod,
-  getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther
+  getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther,
+  editComment, editObservers
 } from "../../services";
 import { Link } from "react-router-dom";
 
@@ -26,7 +27,6 @@ const DayDetails = () => {
 
   const classes = useStyles();
   const { t } = useTranslation();
-  const [formSent, setFormSent] = useState(false);
 
 
   const [obsPeriodsStandard, setObsperiodsStandard] = useState([]);
@@ -37,44 +37,43 @@ const DayDetails = () => {
 
   const [commentForm, setCommentForm] = useState(false);
 
-  const state = {
-    //obsPeriods, setObsperiods,
-    obsPeriodsStandard, setObsperiodsStandard,
-    obsPeriodsOther, setObsperiodsOther,
-    commentForm, setCommentForm,
-    observersForm, setObserversForm
-  };
+  const [editedComment, setEditedComment] = useState("");
 
+  const [editedObservers, setEditedObservers] = useState("");
 
-  const observersOnSubmit = (event) => {
-    event.preventDefault()
-    console.log('button clicked', event.target)
-    setObserversForm(false)
-  }
-
-
-  const commentOnSubmit = (event) => {
-    event.preventDefault()
-    console.log('button clicked', event.target)
-    setCommentForm(false)
-  }
-
+  const [errorHappened, setErrorHappened] = useState(false);
 
 
   const dayList = useSelector(state => state.days);
 
-  const dayId = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .id;
 
-  const comment = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .comment;
-
-  const observers = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .observers;
-
+  const observersOnSubmit = (event) => {
+    event.preventDefault()
+    console.log(editedObservers)
+    console.log(dayId)
+    editObservers({
+      dayId: dayId, 
+      observers: editedObservers})
+      .then((res) => {
+        if (res.status !== 200) {
+          setErrorHappened(true);
+        } else {
+          setEditedObservers("");
+        }
+      })
+      .catch(() => setErrorHappened(true));
+    setObserversForm(false)
+  }
+  
+  
+  const commentOnSubmit = (event) => {
+    event.preventDefault()
+    console.log(editedComment)
+    editObservers({
+      dayId: dayId, 
+      comment: editedComment})
+    setCommentForm(false)
+  }
 
 
   // useEffect(() => {
@@ -90,12 +89,26 @@ const DayDetails = () => {
   useEffect(() => {
     getDaysObservationPeriodsStandard(dayId)
       .then(periodsJson => setObsperiodsStandard(periodsJson));
-  }, [formSent, dayId]);
+  }, [dayId]);
 
   useEffect(() => {
     getDaysObservationPeriodsOther(dayId)
       .then(periodsJson => setObsperiodsOther(periodsJson));
-  }, [formSent, dayId]);
+  }, [dayId]);
+
+  if (!dayList) return null;
+
+  const dayId = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .id;
+
+  const comment = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .comment;
+
+  const observers = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .observers;
 
 
 
@@ -120,7 +133,11 @@ const DayDetails = () => {
             ) : (
 
                 <form onSubmit={observersOnSubmit}>
-                  <TextField id="outlined-basic" variant="outlined" />
+                  <TextField 
+                    id="outlined-basic" 
+                    variant="outlined"
+                    onChange={(event) => setEditedObservers(event.target.value)}
+                     />
                   <Button type="submit" variant="contained" color="primary">
                     Tallenna
                 </Button>
@@ -140,7 +157,11 @@ const DayDetails = () => {
               </Button>
             ) : (
                 <form onSubmit={commentOnSubmit}>
-                  <TextField id="outlined-basic" variant="outlined" />
+                  <TextField 
+                    id="outlined-basic" 
+                    variant="outlined" 
+                    onChange={(event) => setEditedComment(event.target.value)}
+                    />
                   <Button type="submit" variant="contained" color="primary">
                     Tallenna
                 </Button>
