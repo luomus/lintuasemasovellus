@@ -23,4 +23,4 @@ export const getAuth = async (token, auth_token) => {
 export const getCurrentUser = async () => {
   const currentUser = await axios.get("/api/getUser/");
   return currentUser;
-}
+};

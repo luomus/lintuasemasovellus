@@ -84,7 +84,7 @@ const ObsPeriodTableOther = (props) => {
                 <StyledTableCell component="th" scope="row">
                   {s.location}
                 </StyledTableCell>
-                
+
                 <StyledTableCell align="right">
                   {s.observationType}
                 </StyledTableCell>
@@ -99,8 +99,8 @@ const ObsPeriodTableOther = (props) => {
         handleErrorSnackOpe_n={handleErrorSnackOpen}
       />
 
-      
-      
+
+
     </Table>
   );
 };

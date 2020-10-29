@@ -88,15 +88,15 @@ const NavBar = () => {
     :
     null;
 
-    const userIsSet = Boolean(user.id);
+  const userIsSet = Boolean(user.id);
 
-if (!userIsSet) {
-  return (
-    <div>
+  if (!userIsSet) {
+    return (
+      <div>
 
-    </div>
-  )
-}
+      </div>
+    );
+  }
   return (
     <div>
 

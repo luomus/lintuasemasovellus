@@ -3,8 +3,8 @@ export const setUserObservatory = (observatory) => {
   return {
     type: "SET_OBSERVATORY",
     data: {
-        observatory
-      }
+      observatory
+    }
   };
 };
 

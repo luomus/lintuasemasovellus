@@ -52,7 +52,7 @@ const ObsPeriodTable = (props) => {
     console.log("handleOpen obsPeriod:", obsPeriod);
     setObsPeriod(obsPeriod);
     setModalOpen(true);
-    
+
   };
 
   const [formSent, setFormSent] = useState(false);
@@ -112,7 +112,7 @@ const ObsPeriodTable = (props) => {
         handleErrorSnackOpen={handleErrorSnackOpen}
       />
 
-      
+
     </Table>
   );
 };

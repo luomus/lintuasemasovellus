@@ -48,9 +48,9 @@ const DayDetails = () => {
 
 
   const observersOnSubmit = (event) => {
-    event.preventDefault()
-    console.log(editedObservers)
-    console.log(dayId)
+    event.preventDefault();
+    console.log(editedObservers);
+    console.log(dayId);
     editObservers(dayId,editedObservers)
       .then((res) => {
         if (res.status !== 200) {
@@ -60,16 +60,16 @@ const DayDetails = () => {
         }
       })
       .catch(() => setErrorHappened(true));
-    setObserversForm(false)
-  }
-  
-  
+    setObserversForm(false);
+  };
+
+
   const commentOnSubmit = (event) => {
-    event.preventDefault()
-    console.log(editedComment)
-    editObservers(dayId,editedComment)
-    setCommentForm(false)
-  }
+    event.preventDefault();
+    console.log(editedComment);
+    editObservers(dayId,editedComment);
+    setCommentForm(false);
+  };
 
 
   // useEffect(() => {
@@ -128,17 +128,17 @@ const DayDetails = () => {
               </Button>
             ) : (
 
-                <form onSubmit={observersOnSubmit}>
-                  <TextField 
-                    id="outlined-basic" 
-                    variant="outlined"
-                    onChange={(event) => setEditedObservers(event.target.value)}
-                     />
-                  <Button type="submit" variant="contained" color="primary">
+              <form onSubmit={observersOnSubmit}>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  onChange={(event) => setEditedObservers(event.target.value)}
+                />
+                <Button type="submit" variant="contained" color="primary">
                     Tallenna
                 </Button>
-                </form>
-              )}
+              </form>
+            )}
 
 
 
@@ -152,17 +152,17 @@ const DayDetails = () => {
                 Muokkaa kommenttia
               </Button>
             ) : (
-                <form onSubmit={commentOnSubmit}>
-                  <TextField 
-                    id="outlined-basic" 
-                    variant="outlined" 
-                    onChange={(event) => setEditedComment(event.target.value)}
-                    />
-                  <Button type="submit" variant="contained" color="primary">
+              <form onSubmit={commentOnSubmit}>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  onChange={(event) => setEditedComment(event.target.value)}
+                />
+                <Button type="submit" variant="contained" color="primary">
                     Tallenna
                 </Button>
-                </form>
-              )}
+              </form>
+            )}
 
 
 
@@ -181,7 +181,7 @@ const DayDetails = () => {
           <Grid item xs={6}>
             <Typography variant="h6" >
               Vakiomuutonseuranta
-          </Typography>
+            </Typography>
 
             <ObsPeriodTable
               obsPeriods={obsPeriodsStandard}
@@ -191,7 +191,7 @@ const DayDetails = () => {
           <Grid item xs={6}>
             <Typography variant="h6" >
               Muu havainnointi
-          </Typography>
+            </Typography>
 
             <ObsPeriodTableOther
               obsPeriods={obsPeriodsOther}

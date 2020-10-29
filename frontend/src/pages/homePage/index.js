@@ -5,8 +5,8 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import AddIcon from "@material-ui/icons/Add";
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import Tooltip from '@material-ui/core/Tooltip';
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import Tooltip from "@material-ui/core/Tooltip";
 import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../services";
@@ -70,10 +70,10 @@ export const HomePage = () => {
   };
 
 
-    if (!userIsSet) {
+  if (!userIsSet) {
     return (
       <LandingPage />
-    )
+    );
   }
 
   return (
@@ -159,9 +159,9 @@ export const HomePage = () => {
                   onChange={(event) => setShorthand(event.target.value)}
                 />
               </Grid>
-                  <Button onClick={sendData}>
-                    {t("save")}
-                  </Button>
+              <Button onClick={sendData}>
+                {t("save")}
+              </Button>
             </Grid>
           </Paper>
         </Grid>

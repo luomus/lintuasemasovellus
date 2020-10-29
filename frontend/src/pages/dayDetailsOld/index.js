@@ -19,7 +19,7 @@ const DayDetails = () => {
 
   const { day, stationName } = useParams();
 
-  
+
   const useStyles = makeStyles({
     paper: {
       background: "white",
@@ -95,7 +95,7 @@ const DayDetails = () => {
 
 
   useEffect(() => {
-    getDaysObservationPeriods(dayId, 'Vakio')
+    getDaysObservationPeriods(dayId, "Vakio")
       .then(periodsJson => setObsperiods(periodsJson));
   }, [formSent, dayId]);
 
