@@ -35,21 +35,15 @@ const ObsPeriodTableOther = (props) => {
     },
   }))(TableCell);
 
-  const formatTime = (time) => {
-    const ret = time.split(" ")[4].split(":");
-    // hours 0 and minutes 1
-    return `${ret[0]}:${ret[1]}`;
-  };
-
   console.log("obsperiodtable obsperiods", obsPeriods);
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [obsPeriodId, setObsPeriodId] = useState("");
+  const [obsPeriod, setObsPeriod] = useState("");
 
-  const handleOpen = (id) => {
-    console.log("handleOpen id:", id);
-    setObsPeriodId(id);
+  const handleOpen = (obsPeriod) => {
+    console.log("handleOpen obsPeriod:", obsPeriod);
+    setObsPeriod(obsPeriod);
     setModalOpen(true);
   };
 
@@ -57,6 +51,7 @@ const ObsPeriodTableOther = (props) => {
   const [errorHappen, setErrorHappen] = useState(false);
 
   const handleClose = () => {
+    setModalOpen(false);
     setFormSent(true);
   };
 
@@ -85,7 +80,7 @@ const ObsPeriodTableOther = (props) => {
         {
           obsPeriods
             .map((s, i) =>
-              <TableRow hover component={Link} onClick={() => handleOpen(s.id)} key={i} >
+              <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
                 <StyledTableCell component="th" scope="row">
                   {s.location}
                 </StyledTableCell>
@@ -98,22 +93,14 @@ const ObsPeriodTableOther = (props) => {
         }
       </TableBody>
       <ObservationPeriod
-        obsPeriodId={obsPeriodId}
+        obsPeriod={obsPeriod}
         open={modalOpen}
         handleClose={handleClose}
         handleErrorSnackOpe_n={handleErrorSnackOpen}
       />
 
-      <Snackbar open={formSent} autoHideDuration={5000} onClose={handleSnackClose}>
-        <Alert onClose={handleSnackClose} severity="success">
-          {t("periodSaved")}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={errorHappen} autoHideDuration={5000} onClose={handleSnackClose}>
-        <Alert onClose={handleSnackClose} severity="error">
-          {t("periodNotSaved")}
-        </Alert>
-      </Snackbar>
+      
+      
     </Table>
   );
 };

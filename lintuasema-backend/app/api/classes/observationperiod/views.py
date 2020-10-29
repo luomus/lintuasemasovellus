@@ -65,15 +65,15 @@ def getObservationPeriods():
     return jsonify(ret)
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>/<observationType>', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
 @login_required
-def getDaysObservationPeriods(day_id, observationType):
+def getDaysObservationPeriods(day_id):
 
-    type_id = getTypeIdByName(observationType)
+    #type_id = getTypeIdByName(observationType)
 
     #console.log('Tyypin id: ', type_id)
 
-    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id, type_id=type_id)
+    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
     ret = []
     for obsPeriod in daysObservationPeriods:
         ret.append({
@@ -84,5 +84,48 @@ def getDaysObservationPeriods(day_id, observationType):
             'location': getLocationName(obsPeriod.location_id),
             'day_id': obsPeriod.day_id
         })
+
+    return jsonify(ret)
+
+
+@bp.route('/api/getDaysObservationPeriods/<day_id>/standard', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@login_required
+def getDaysObservationPeriodsStandard(day_id):
+
+
+    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
+    ret = []
+    for obsPeriod in daysObservationPeriods:
+        obspType = getTypeNameById(obsPeriod.type_id)
+        if obspType == "Vakio":
+            ret.append({
+                'id': obsPeriod.id,
+                'startTime': obsPeriod.startTime,
+                'endTime': obsPeriod.endTime,
+                'observationType': obspType,
+                'location': getLocationName(obsPeriod.location_id),
+                'day_id': obsPeriod.day_id
+            })
+
+    return jsonify(ret)
+
+@bp.route('/api/getDaysObservationPeriods/<day_id>/other', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@login_required
+def getDaysObservationPeriodsOther(day_id):
+
+
+    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
+    ret = []
+    for obsPeriod in daysObservationPeriods:
+        obspType = getTypeNameById(obsPeriod.type_id)
+        if obspType != "Vakio":
+            ret.append({
+                'id': obsPeriod.id,
+                'startTime': obsPeriod.startTime,
+                'endTime': obsPeriod.endTime,
+                'observationType': obspType,
+                'location': getLocationName(obsPeriod.location_id),
+                'day_id': obsPeriod.day_id
+            })
 
     return jsonify(ret)

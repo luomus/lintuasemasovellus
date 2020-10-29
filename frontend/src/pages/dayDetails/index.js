@@ -5,7 +5,10 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import ObsPeriodTableOther from "./ObsPeriodTableOther";
-import { getDaysObservationPeriods, postObservationPeriod } from "../../services";
+import {
+  getDaysObservationPeriods, postObservationPeriod,
+  getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther
+} from "../../services";
 import { Link } from "react-router-dom";
 
 
@@ -26,18 +29,18 @@ const DayDetails = () => {
   const [formSent, setFormSent] = useState(false);
 
 
-  const [obsPeriods, setObsperiods] = useState([]);
+  const [obsPeriodsStandard, setObsperiodsStandard] = useState([]);
 
-  
-  const [obsPeriods2, setObsperiods2] = useState([]);
+  const [obsPeriodsOther, setObsperiodsOther] = useState([]);
 
   const [observersForm, setObserversForm] = useState(false);
 
   const [commentForm, setCommentForm] = useState(false);
 
   const state = {
-    obsPeriods, setObsperiods,
-    obsPeriods2, setObsperiods2,
+    //obsPeriods, setObsperiods,
+    obsPeriodsStandard, setObsperiodsStandard,
+    obsPeriodsOther, setObsperiodsOther,
     commentForm, setCommentForm,
     observersForm, setObserversForm
   };
@@ -48,7 +51,7 @@ const DayDetails = () => {
     console.log('button clicked', event.target)
     setObserversForm(false)
   }
-  
+
 
   const commentOnSubmit = (event) => {
     event.preventDefault()
@@ -56,7 +59,7 @@ const DayDetails = () => {
     setCommentForm(false)
   }
 
- 
+
 
   const dayList = useSelector(state => state.days);
 
@@ -72,20 +75,28 @@ const DayDetails = () => {
     .find(d => d.day === day && d.observatory === stationName)
     .observers;
 
-  const observationType = "Vakio";
-  const observationType2 = "Paikallishavainto";
+
+
+  // useEffect(() => {
+  //   getDaysObservationPeriods(dayId, observationType)
+  //     .then(periodsJson => setObsperiods(periodsJson));
+  // }, [formSent, dayId]);
+
+  // useEffect(() => {
+  //   getDaysObservationPeriods(dayId, observationType2)
+  //     .then(periodsJson2 => setObsperiods2(periodsJson2));
+  // }, [formSent, dayId]);
 
   useEffect(() => {
-    getDaysObservationPeriods(dayId, observationType)
-      .then(periodsJson => setObsperiods(periodsJson));
+    getDaysObservationPeriodsStandard(dayId)
+      .then(periodsJson => setObsperiodsStandard(periodsJson));
   }, [formSent, dayId]);
 
   useEffect(() => {
-    getDaysObservationPeriods(dayId, observationType2)
-      .then(periodsJson2 => setObsperiods2(periodsJson2));
+    getDaysObservationPeriodsOther(dayId)
+      .then(periodsJson => setObsperiodsOther(periodsJson));
   }, [formSent, dayId]);
 
-  console.log("jaksot:" + obsPeriods);
 
 
   return (
@@ -101,42 +112,42 @@ const DayDetails = () => {
             </Typography>
             <Typography variant="h6" component="h2" >
               {t("observers")}{": "}{observers}{" "}
-              </Typography>
-              {observersForm === false ? (
-                <Button onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
+            </Typography>
+            {observersForm === false ? (
+              <Button onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
                 Muokkaa havainnoitsijoita
-                </Button>
-              ) : (
-                
+              </Button>
+            ) : (
+
                 <form onSubmit={observersOnSubmit}>
-                <TextField id="outlined-basic" variant="outlined" />
-                <Button type="submit" variant="contained" color="primary">
-                  Tallenna
+                  <TextField id="outlined-basic" variant="outlined" />
+                  <Button type="submit" variant="contained" color="primary">
+                    Tallenna
                 </Button>
                 </form>
               )}
-              
-               
-              
 
-            
+
+
+
+
             <Typography variant="subtitle1" component="h2" >
               {t("comment")}{": "}{comment}{" "}
             </Typography>
             {commentForm === false ? (
-                <Button onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
+              <Button onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
                 Muokkaa kommenttia
-                </Button>
-              ) : (                
+              </Button>
+            ) : (
                 <form onSubmit={commentOnSubmit}>
-                <TextField id="outlined-basic" variant="outlined" />
-                <Button type="submit" variant="contained" color="primary">
-                  Tallenna
+                  <TextField id="outlined-basic" variant="outlined" />
+                  <Button type="submit" variant="contained" color="primary">
+                    Tallenna
                 </Button>
                 </form>
               )}
 
-            
+
 
           </Grid>
 
@@ -156,18 +167,17 @@ const DayDetails = () => {
           </Typography>
 
             <ObsPeriodTable
-              obsPeriods={obsPeriods}
+              obsPeriods={obsPeriodsStandard}
             />
 
           </Grid>
-
           <Grid item xs={6}>
             <Typography variant="h6" >
               Muu havainnointi
           </Typography>
 
             <ObsPeriodTableOther
-              obsPeriods={obsPeriods2}
+              obsPeriods={obsPeriodsOther}
             />
 
           </Grid>

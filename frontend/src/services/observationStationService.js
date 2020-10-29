@@ -14,8 +14,18 @@ export const getObservationPeriods = async () => {
   return res.data;
 };
 
-export const getDaysObservationPeriods = async (dayId, observationType) => {
-  const res = await axios.get(`/api/getDaysObservationPeriods/${dayId}/${observationType}`);
+export const getDaysObservationPeriods = async (dayId) => {
+  const res = await axios.get(`/api/getDaysObservationPeriods/${dayId}/`);
+  return res.data;
+};
+
+export const getDaysObservationPeriodsOther = async (dayId) => {
+  const res = await axios.get(`/api/getDaysObservationPeriods/${dayId}/other`);
+  return res.data;
+};
+
+export const getDaysObservationPeriodsStandard = async (dayId) => {
+  const res = await axios.get(`/api/getDaysObservationPeriods/${dayId}/standard`);
   return res.data;
 };
 

@@ -7,9 +7,7 @@ import { useTranslation } from "react-i18next";
 
 
 
-const ObservationPeriod = ({ periodId, open, handleClose, handleErrorSnackOpen }) => {
-
- 
+const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen }) => {
 
   const useStyles = makeStyles(() => ({
     modal: {
@@ -40,6 +38,14 @@ const ObservationPeriod = ({ periodId, open, handleClose, handleErrorSnackOpen }
 
   const [species, setSpecies] = useState("");
 
+  const formatTime = (time) => {
+    if (typeof time != 'undefined') {
+      const ret = time.split(" ")[4].split(":");
+      // hours 0 and minutes 1
+      return `${ret[0]}:${ret[1]}`;
+    }
+  };
+
   const observations = [
     {
       species: 'Hanhi',
@@ -61,8 +67,6 @@ const ObservationPeriod = ({ periodId, open, handleClose, handleErrorSnackOpen }
     }
   ]
   
-
-
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -79,6 +83,8 @@ const ObservationPeriod = ({ periodId, open, handleClose, handleErrorSnackOpen }
       <Fade in={open}>
         <div className={classes.paper}>
           <h2 id="transition-modal-title">{t("observations")}</h2>
+          <h3>{obsPeriod?.location}, klo {formatTime(obsPeriod?.startTime)} - {formatTime(obsPeriod?.endTime)}</h3>
+          
 
             <Table>
               <TableHead>
