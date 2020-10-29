@@ -50,7 +50,7 @@ def get_all_locations():
         typeList = []
         for t in types:
             typeList.append(t.name)
-        ret.append({ 'observatory': observatory.name, 'locations': locationList, 'types': typeList })
+        ret.append({ 'id': observatory.id, 'observatory': observatory.name, 'locations': locationList, 'types': typeList })
 
     return jsonify(ret)
 

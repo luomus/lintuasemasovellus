@@ -41,16 +41,32 @@ export const HomePage = () => {
   const [shorthand, setShorthand] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
+  const obsStation = useSelector(state => state.stations);
+
+  console.log("obsstations", obsStation);
 
   const user = useSelector(state => state.user);
 
   const userIsSet = Boolean(user.id);
 
+  const formatDate = (date) => {
+    const dd = date.getDate();
+    const mm = date.getMonth() + 1;
+    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  };
+
   const sendData = async () => {
     const shorthandRows = shorthand.split("\n");
-    sendDay();
+    const id = obsStation.find(station => station.observatory === userObservatory).id;
+    if (!id) throw new Error("Observatory id not found");
+    await sendDay({
+      day: formatDate(day),
+      comment: "",
+      observers,
+      observatory_id: id
+    });
     await loopThroughObservationPeriods(shorthandRows);
-    loopThroughObservations(shorthandRows);
+    await loopThroughObservations(shorthandRows);
   };
 
 

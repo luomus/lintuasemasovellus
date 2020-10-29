@@ -3,7 +3,7 @@ import { postObservationPeriod } from "../../services/observationStationService"
 import { postAddObservation } from "../../services/observationlistService";
 import { parse } from "../../shorthand/shorthand";
 
-const timeRegex = new RegExp(/^(([01][0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
+const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
 let day = {
     day: "",
@@ -37,7 +37,7 @@ let observation = {
     direction: "",
     bypassSide: "",
     notes: "",
-    observationperiod_id: "",
+    observationperiod_id: ""
 };
 
 const isTime = (row) => {
@@ -45,19 +45,28 @@ const isTime = (row) => {
 };
 
 const parseTime = (timeString) => {
-    //new Date()
-    return timeString;
+    let ret = "";
+    for (let i = 0; i < timeString.length; i++) {
+      if (timeString[i] == ".") {
+          ret += ":";
+      } else {
+        ret += timeString[i];
+      }
+    }
+    return ret;
 };
 
 const sendObservation = async (observation, observationPeriodId) => {
     observation["observation_id"] = observationPeriodId;
     const res = await postAddObservation(observation);
+    console.log("obs res", res);
 };
 
-export const sendDay = async (pday) => {
-    day = pday;
+export const sendDay = async (paramDay) => {
+    day = { ...paramDay };
     const res = await postDay(day);
-    day["id"] = res.id;
+    console.log("day res", res);
+    day["id"] = res.data.id;
 };
 
 export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc, dayId) => {
@@ -70,7 +79,7 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc,
         } else if (isTime(row)) {
             startTimeEncountered = false;
             observationPeriod["endTime"] = parseTime(row);
-            observationPeriods.append({ ...observationPeriod });
+            observationPeriods.push({ ...observationPeriod });
         }
     }
     for (const observationPeriod of observationPeriods) {
@@ -78,7 +87,8 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc,
         observationPeriod["location"] = loc;
         observationPeriod["day_id"] = dayId;
         const res = await postObservationPeriod(observationPeriod);
-        observationPeriod["id"] = res.id;
+        console.log("obsperiod res", res);
+        observationPeriod["id"] = res.data.id;
     }
 };
 
