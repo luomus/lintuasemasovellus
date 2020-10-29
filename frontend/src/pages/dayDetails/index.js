@@ -51,9 +51,7 @@ const DayDetails = () => {
     event.preventDefault()
     console.log(editedObservers)
     console.log(dayId)
-    editObservers({
-      dayId: dayId, 
-      observers: editedObservers})
+    editObservers(dayId,editedObservers)
       .then((res) => {
         if (res.status !== 200) {
           setErrorHappened(true);
@@ -69,9 +67,7 @@ const DayDetails = () => {
   const commentOnSubmit = (event) => {
     event.preventDefault()
     console.log(editedComment)
-    editObservers({
-      dayId: dayId, 
-      comment: editedComment})
+    editObservers(dayId,editedComment)
     setCommentForm(false)
   }
 
