@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, Grid, Typography, TextField, IconButton } from "@material-ui/core/";
+import { Paper, Grid, Typography, TextField, Button } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -11,6 +11,9 @@ import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../services";
 import LandingPage from "./landingPage";
+import {
+  sendDay, loopThroughObservationPeriods, loopThroughObservations
+} from "./parseShorthandField";
 
 
 const useStyles = makeStyles({
@@ -35,6 +38,7 @@ export const HomePage = () => {
 
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
+  const [shorthand, setShorthand] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
 
@@ -42,6 +46,12 @@ export const HomePage = () => {
 
   const userIsSet = Boolean(user.id);
 
+  const sendData = async () => {
+    const shorthandRows = shorthand.split("\n");
+    sendDay();
+    await loopThroughObservationPeriods(shorthandRows);
+    loopThroughObservations(shorthandRows);
+  };
 
 
     if (!userIsSet) {
@@ -117,20 +127,6 @@ export const HomePage = () => {
               <br />
               <Grid item xs={12}>
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      id="startTime"
-                      variant="outlined"
-                      label="Alkuaika"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      id="endTime"
-                      variant="outlined"
-                      label="Loppuaika"
-                    />
-                  </Grid>
                 </Grid>
                 <br />
               </Grid>
@@ -142,22 +138,14 @@ export const HomePage = () => {
                   label="Pikakirjoitus"
                   fullWidth={true}
                   multiline={true}
+                  rows={5}
+                  value={shorthand}
+                  onChange={(event) => setShorthand(event.target.value)}
                 />
               </Grid>
-              <Grid item>
-                <Tooltip title="Lisää pikakirjoitusrivi" >
-                  <IconButton>
-                    <AddIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Lisää aikajakso">
-                  <IconButton>
-                    <AccessTimeIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-
-
+                  <Button onClick={sendData}>
+                    {t("save")}
+                  </Button>
             </Grid>
           </Paper>
         </Grid>
