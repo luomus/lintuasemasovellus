@@ -51,15 +51,7 @@ const DayDetails = () => {
     event.preventDefault();
     console.log(editedObservers);
     console.log(dayId);
-    editObservers(dayId,editedObservers)
-      .then((res) => {
-        if (res.status !== 200) {
-          setErrorHappened(true);
-        } else {
-          setEditedObservers("");
-        }
-      })
-      .catch(() => setErrorHappened(true));
+    editObservers(dayId, editedObservers);
     setObserversForm(false);
   };
 
@@ -67,7 +59,7 @@ const DayDetails = () => {
   const commentOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedComment);
-    editObservers(dayId,editedComment);
+    editComment(dayId, editedComment);
     setCommentForm(false);
   };
 
@@ -132,6 +124,7 @@ const DayDetails = () => {
                 <TextField
                   id="outlined-basic"
                   variant="outlined"
+                  defaultValue={observers}
                   onChange={(event) => setEditedObservers(event.target.value)}
                 />
                 <Button type="submit" variant="contained" color="primary">
@@ -156,6 +149,7 @@ const DayDetails = () => {
                 <TextField
                   id="outlined-basic"
                   variant="outlined"
+                  defaultValue={comment}
                   onChange={(event) => setEditedComment(event.target.value)}
                 />
                 <Button type="submit" variant="contained" color="primary">

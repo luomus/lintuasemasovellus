@@ -95,7 +95,10 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc)
 };
 
 const toNum = (field) => {
-  observation[field] = observation[field] ? Number(observation[field]) : 0;
+  observation[String(field)]
+    = observation[String(field)]
+      ? Number(observation[String(field)])
+      : 0;
 };
 
 export const loopThroughObservations = async (shorthandRows) => {

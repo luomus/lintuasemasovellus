@@ -80,6 +80,14 @@ def test_addDayRoute(app):
     assert response.status_code == 200
     assert data['id'] == 1
 
+# def test_listDaysRoute(app):
+#     dayToAdd = Day(day='01.01.2020', comment='testi', observers='Tom', observatory_id=1)
+#     addDay(dayToAdd)
+#     response = app.test_client.get('/api/listDays')
+#     data = response.get_json
+#     assert response.status_code == 200
+#     assert data['id'] == 1
+
 
 def addAndFind(fields):
     dayToAdd = Day(day=fields['date'], comment=fields['comment'], observers=fields['observers'], observatory_id=fields['observatory_id'])
