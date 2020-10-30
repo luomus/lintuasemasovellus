@@ -41,10 +41,6 @@ export const HomePage = () => {
   const [shorthand, setShorthand] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
-  const obsStation = useSelector(state => state.stations);
-
-  console.log("obsstations", obsStation);
-
   const user = useSelector(state => state.user);
 
   const userIsSet = Boolean(user.id);
@@ -57,15 +53,13 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const shorthandRows = shorthand.split("\n");
-    const id = obsStation.find(station => station.observatory === userObservatory).id;
-    if (!id) throw new Error("Observatory id not found");
     await sendDay({
       day: formatDate(day),
       comment: "",
       observers,
-      observatory_id: id
+      observatory: userObservatory
     });
-    await loopThroughObservationPeriods(shorthandRows);
+    await loopThroughObservationPeriods(shorthandRows, "Vakio", "Bunkkeri");
     await loopThroughObservations(shorthandRows);
   };
 

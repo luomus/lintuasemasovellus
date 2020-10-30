@@ -23,6 +23,8 @@ def addObservation():
         subadultFemaleCount=req['subadultFemaleCount'],
         subadultMaleCount=req['subadultMaleCount'],
         unknownUnknownCount=req['unknownUnknownCount'],
+        unknownFemaleCount=req['unknownFemaleCount'],
+        unknownMaleCount=req['unknownMaleCount'],
         direction=req['direction'],
         bypassSide=req['bypassSide'],
         notes=req['notes'],
@@ -45,7 +47,7 @@ def getObservations():
         ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
             'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
             'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
-            'unknownUnknownCount': each.unknownUnknownCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id}) #notes ja observation_id väliin tämä, kun pikakirjoitus valmis s'shorthand':each.shorthand,
+            'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id}) #notes ja observation_id väliin tämä, kun pikakirjoitus valmis s'shorthand':each.shorthand,
 
     return jsonify(ret)
 
@@ -58,6 +60,6 @@ def getObservationsByObservationPeriod(observationperiod_id):
         ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
             'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
             'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
-            'unknownUnknownCount': each.unknownUnknownCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id})
+            'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id})
 
     return jsonify(ret)

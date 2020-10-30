@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const loginUrl = process.env.NODE_ENV === "development"
-  ? "http://localhost:3000/loginRedirect"
+  ? "http://localhost:5000/loginRedirect"
   : "/loginRedirect";
 
 export const getToken = async () => {

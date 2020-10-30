@@ -1,7 +1,7 @@
 import { postDay } from "../../services/dayService";
 import { postObservationPeriod } from "../../services/observationStationService";
 import { postAddObservation } from "../../services/observationlistService";
-import { parse } from "../../shorthand/shorthand";
+import { parse, resetAll } from "../../shorthand/shorthand";
 
 const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
@@ -24,16 +24,18 @@ let observationPeriod = {
 
 let observation = {
   species: "",
-  adultUnknownCount: "",
-  adultFemaleCount: "",
-  adultMaleCount: "",
-  juvenileUnknownCount: "",
-  juvenileFemaleCount: "",
-  juvenileMaleCount: "",
-  subadultUnknownCount: "",
-  subadultFemaleCount: "",
-  subadultMaleCount: "",
-  unknownUnknownCount: "",
+  adultUnknownCount: 0,
+  adultFemaleCount: 0,
+  adultMaleCount: 0,
+  juvenileUnknownCount: 0,
+  juvenileFemaleCount: 0,
+  juvenileMaleCount: 0,
+  subadultUnknownCount: 0,
+  subadultFemaleCount: 0,
+  subadultMaleCount: 0,
+  unknownUnknownCount: 0,
+  unknownFemaleCount: 0,
+  unknownMaleCount: 0,
   direction: "",
   bypassSide: "",
   notes: "",
@@ -41,7 +43,7 @@ let observation = {
 };
 
 const isTime = (row) => {
-  return row.match(timeRegex);
+  return String(row).match(timeRegex);
 };
 
 const parseTime = (timeString) => {
@@ -57,7 +59,7 @@ const parseTime = (timeString) => {
 };
 
 const sendObservation = async (observation, observationPeriodId) => {
-  observation["observation_id"] = observationPeriodId;
+  observation["observationperiod_id"] = observationPeriodId;
   const res = await postAddObservation(observation);
   console.log("obs res", res);
 };
@@ -69,14 +71,14 @@ export const sendDay = async (paramDay) => {
   day["id"] = res.data.id;
 };
 
-export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc, dayId) => {
+export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc) => {
   observationPeriods = [];
   let startTimeEncountered = false;
   for (const row of shorthandRows) {
-    if (isTime(row) && !startTimeEncountered) {
+    if (row && isTime(row) && !startTimeEncountered) {
       startTimeEncountered = true;
       observationPeriod["startTime"] = parseTime(row);
-    } else if (isTime(row)) {
+    } else if (row && isTime(row)) {
       startTimeEncountered = false;
       observationPeriod["endTime"] = parseTime(row);
       observationPeriods.push({ ...observationPeriod });
@@ -85,24 +87,47 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc,
   for (const observationPeriod of observationPeriods) {
     observationPeriod["observationType"] = obsType;
     observationPeriod["location"] = loc;
-    observationPeriod["day_id"] = dayId;
+    observationPeriod["day_id"] = day["id"];
     const res = await postObservationPeriod(observationPeriod);
     console.log("obsperiod res", res);
     observationPeriod["id"] = res.data.id;
   }
 };
 
+const toNum = (field) => {
+  observation[field] = observation[field] ? Number(observation[field]) : 0;
+};
+
 export const loopThroughObservations = async (shorthandRows) => {
   let startTimeEncountered = false;
   let i = 0;
   for (const row of shorthandRows) {
-    if (isTime() && !startTimeEncountered) {
+    if (!row) continue;
+    if (isTime(row) && !startTimeEncountered) {
       startTimeEncountered = true;
-      observation = parse(row);
-    } else {
+    } else if (isTime(row)) {
       startTimeEncountered = false;
-      await sendObservation(observation, observationPeriod[Number(i)]["id"]);
+      i++;
+    } else {
+      const parsed = parse(row);
+      for (const sub of parsed.osahavainnot) {
+        observation = sub;
+        observation.species = parsed.species;
+        toNum("adultUnknownCount");
+        toNum("adultFemaleCount");
+        toNum("adultMaleCount");
+        toNum("juvenileUnknownCount");
+        toNum("juvenileFemaleCount");
+        toNum("juvenileMaleCount");
+        toNum("subadultUnknownCount");
+        toNum("subadultFemaleCount");
+        toNum("subadultMaleCount");
+        toNum("unknownUnknownCount");
+        toNum("unknownFemaleCount");
+        toNum("unknownMaleCount");
+        await sendObservation(observation, observationPeriods[Number(i)]["id"]);
+      }
+      resetAll();
     }
-    i++;
   }
 };
