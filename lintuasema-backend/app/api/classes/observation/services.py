@@ -6,29 +6,29 @@ def parseCountString(obs):
     #         'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount,
     countString = ""
     if obs.adultUnknownCount != 0:
-        countString = countString + obs.adultUnknownCount + " tunt. sukupuoli (aikuinen)\n"
+        countString = countString + str(obs.adultUnknownCount) + " tunt. sukupuolta (aikuinen), "
     if obs.adultFemaleCount != 0:
-        countString = countString + obs.adultFemaleCount + " naaras (aikuinen)\n"
+        countString = countString + str(obs.adultFemaleCount) + " naarasta (aikuinen), "
     if obs.adultMaleCount != 0:
-        countString = countString + obs.adultMaleCount + " koiras (aikuinen)\n"
+        countString = countString + str(obs.adultMaleCount) + " koirasta (aikuinen), "
     if obs.juvenileUnknownCount != 0:
-        countString = countString + obs.juvenileUnknownCount + " tunt. sukupuoli (poikanen)\n"
+        countString = countString + str(obs.juvenileUnknownCount) + " tunt. sukupuolta (poikanen), "
     if obs.juvenileFemaleCount != 0:
-        countString = countString + obs.juvenileFemaleCount + " naaras (poikanen)\n"
+        countString = countString + str(obs.juvenileFemaleCount) + " naarasta (poikanen), "
     if obs.juvenileMaleCount != 0:
-        countString = countString + obs.juvenileMaleCount + " koiras (poikanen)\n"
+        countString = countString + str(obs.juvenileMaleCount) + " koirasta (poikanen), "
     if obs.subadultUnknownCount != 0:
-        countString = countString + obs.subadultUnknownCount + "tunt. sukupuoli (esiaikuinen)\n"
-    if obs.subAdultFemaleCount != 0:
-        countString = countString + obs.subadultFemaleCount + " naaras (esiaikuinen)\n"
+        countString = countString + str(obs.subadultUnknownCount) + "tunt. sukupuolta (esiaikuinen), "
+    if obs.subadultFemaleCount != 0:
+        countString = countString + str(obs.subadultFemaleCount) + " naarasta (esiaikuinen), "
     if obs.subadultMaleCount != 0:
-        countString = countString + obs.subadultMaleCount + " koiras (esiaikuinen)\n"
+        countString = countString + str(obs.subadultMaleCount) + " koirasta (esiaikuinen), "
     if obs.unknownUnknownCount != 0:
-        countString = countString + obs.unknownUnknownCount + " tuntematon ikä ja sukupuoli\n"
+        countString = countString + str(obs.unknownUnknownCount) + " tunt. sukupuolta (tunt. ikä), "
     if obs.unknownFemaleCount != 0:
-        countString = countString + obs.unknownFemaleCount + " naaras (tunt. ikä)\n"
+        countString = countString + str(obs.unknownFemaleCount) + " naarasta (tunt. ikä), "
     if obs.unknownMaleCount != 0:
-        countString = countString + obs.unknownMaleCount + " koiras (tunt. ikä)\n"
-
+        countString = countString + str(obs.unknownMaleCount) + " koirasta (tunt. ikä), "
+    countString = countString[0:(len(countString) - 2)]
     return countString
 

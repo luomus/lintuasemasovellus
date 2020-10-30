@@ -1,8 +1,8 @@
 import { Backdrop, Button, Fade, Grid, makeStyles, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Selector from "./Selector";
-import { postAddObservation } from "../../services";
+import { getObservationsByObsPeriod, postAddObservation } from "../../services";
 import { useTranslation } from "react-i18next";
 
 
@@ -46,26 +46,12 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen 
     }
   };
 
-  const observations = [
-    {
-      species: 'Hanhi',
-      count: '3 naarasta, 4 koirasta',
-      direction: 'Länsi',
-      bypassSide: 'Vasen, 20 metriä'
-    },
-    {
-      species: 'Kuukkeli',
-      count: '500 naarasta',
-      direction: 'Pohjoinen',
-      bypassSide: 'Vasen, 20 metriä'
-    },
-    {
-      species: 'Joutsen',
-      count: '3 naarasta, 4 koirasta',
-      direction: 'Länsi',
-      bypassSide: 'Vasen, 20 metriä'
-    }
-  ]
+  const [observations, setObservations]=useState([]);
+
+  useEffect(() => {
+    getObservationsByObsPeriod(obsPeriod.id)
+      .then(observationsJson => setObservations(observationsJson));
+  }, [obsPeriod.id]);
   
   return (
     <Modal
