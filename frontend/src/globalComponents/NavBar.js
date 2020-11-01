@@ -56,21 +56,24 @@ const NavBar = () => {
     getLogout()
       .then(() => {
         dispatch(setUser({}));
+        window.location.reload(false);
       });
   };
 
 
   const logoutLogin = user.id
     ?
+    <Link to='/'>
     <Button className={classes.userButton}
 
       onClick={logoutHandler}
-      href="#"
+      
       id="logout-link"
       startIcon={<AccountCircle />}
     >
       {t("logout")}
     </Button>
+    </Link>
     :
     <Button className={classes.userButton}
       id="login-link"

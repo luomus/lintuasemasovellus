@@ -4,6 +4,7 @@ from flask_login import login_required
 
 from app.api.classes.observation.models import Observation
 from app.api.classes.observationperiod.models import Observationperiod
+from app.api.classes.observation.services import parseCountString
 
 from app.api import bp
 from app.db import db
@@ -54,12 +55,19 @@ def getObservations():
 @bp.route('/api/getObservations/<observationperiod_id>', methods=["GET"]) 
 @login_required
 def getObservationsByObservationPeriod(observationperiod_id):
+    # observations = Observation.query.filter_by(observationperiod_id = observationperiod_id)
+    # ret = []
+    # for each in observations:
+    #     ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
+    #         'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
+    #         'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
+    #         'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id})
+
+    # return jsonify(ret)
+
     observations = Observation.query.filter_by(observationperiod_id = observationperiod_id)
     ret = []
-    for each in observations:
-        ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
-            'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
-            'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
-            'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 'observationperiod_id': each.observationperiod_id})
-
+    for observation in observations:
+        countString = parseCountString(observation)
+        ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide})
     return jsonify(ret)

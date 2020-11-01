@@ -4,12 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
-import AddIcon from "@material-ui/icons/Add";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import Tooltip from "@material-ui/core/Tooltip";
 import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
-import { getCurrentUser } from "../../services";
 import LandingPage from "./landingPage";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
@@ -80,7 +76,6 @@ export const HomePage = () => {
 
         <Grid item xs={8}>
           <Paper className={classes.paper}>
-            <getCurrentUser />
             <Typography variant="h5" component="h2" >
               Lisää havaintoja
             </Typography>

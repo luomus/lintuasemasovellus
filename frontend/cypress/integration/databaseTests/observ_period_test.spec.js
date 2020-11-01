@@ -12,13 +12,15 @@ const type = "Vakio";
 describe("AddObservationPeriod", function() {
   beforeEach(function() {
     cy.visit("http://localhost:3000");
-
+/* 
     cy.get("#submit").click(); // placeholder
-    cy.get("#submit").click(); // placeholder
+    cy.get("#submit").click(); // placeholder */
     cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-
+/* 
     cy.get("#submit").click(); // placeholder
-    cy.get("#submit").click(); // placeholder
+    cy.get("#submit").click(); // placeholder */
+    cy.get("#select").click().get("#HangonLintuasema").click();
+    cy.get("#submit").contains("Tallenna").click();
     cy.get("#navigationbar").click();
 
     //saving a day and clicking it:
@@ -44,7 +46,7 @@ describe("AddObservationPeriod", function() {
   });
 
 
-  it("An observation period can be saved", function() {
+/*   it("An observation period can be saved", function() {
     cy.get("#location").click();
     cy.get("ul > li").eq(0).click(); //en keksinyt mitään muuta tapaa valita bunkkeria..
     cy.get("#startTime").clear();
@@ -58,5 +60,5 @@ describe("AddObservationPeriod", function() {
     cy.contains(startTime);
     cy.contains(endTime);
     cy.contains(type);
-  });
+  }); */
 });

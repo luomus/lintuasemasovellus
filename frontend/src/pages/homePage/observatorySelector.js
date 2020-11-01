@@ -34,7 +34,8 @@ const ObservatorySelector = () => {
   const classes = useStyles();
 
   const userObservatory = useSelector(state => state.userObservatory);
-
+ 
+  const observatoryIsSelected = Boolean(observatory);
 
   const handleClose = () => {
     setOpen(false);
@@ -49,15 +50,16 @@ const ObservatorySelector = () => {
     store.dispatch(setUserObservatory(observatory));
   };
   if (Object.keys(userObservatory).length === 0) {
+
     return (
       <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Valitse lintuasema</DialogTitle>
         <DialogContent>
 
           <form id="observatorySelect" onSubmit={selectUserObservatory} className={classes.container}>
-            <FormControl className={classes.formControl}>
-              <InputLabel id="Lintuasema">{t("observatory")} *</InputLabel>
-              <Select required
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="Lintuasema">{t("observatory")}</InputLabel>
+              <Select
                 autoWidth={true}
                 labelId="observatory"
                 id="select"
@@ -78,7 +80,7 @@ const ObservatorySelector = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button id="submit" form="observatorySelect" onClick={handleClose} color="primary" type="submit">
+          <Button id="submit" disabled={!observatoryIsSelected} form="observatorySelect" onClick={handleClose} color="primary" type="submit">
             Tallenna
           </Button>
         </DialogActions>
