@@ -1,13 +1,14 @@
-import { Backdrop, Button, Fade, Grid, makeStyles, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
+import {
+  Backdrop, Fade, makeStyles, Modal, Table, TableBody, TableCell, TableHead, TableRow
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Selector from "./Selector";
-import { getObservationsByObsPeriod, postAddObservation } from "../../services";
+import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
 
 
 
-const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen }) => {
+const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
   const useStyles = makeStyles(() => ({
     modal: {
@@ -36,10 +37,8 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen 
 
   const classes = useStyles();
 
-  const [species, setSpecies] = useState("");
-
   const formatTime = (time) => {
-    if (typeof time != 'undefined') {
+    if (typeof time !== "undefined") {
       const ret = time.split(" ")[4].split(":");
       // hours 0 and minutes 1
       return `${ret[0]}:${ret[1]}`;
@@ -52,7 +51,9 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen 
     getObservationsByObsPeriod(obsPeriod.id)
       .then(observationsJson => setObservations(observationsJson));
   }, [obsPeriod.id]);
-  
+
+  if (!obsPeriod.id) return null;
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -69,44 +70,43 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen 
       <Fade in={open}>
         <div className={classes.paper}>
           <h2 id="transition-modal-title">{t("observations")}</h2>
-          <h3>{obsPeriod?.location}, klo {formatTime(obsPeriod?.startTime)} - {formatTime(obsPeriod?.endTime)}</h3>
-          
+          <h3>{obsPeriod.location}, klo {formatTime(obsPeriod.startTime)} - {formatTime(obsPeriod.endTime)}</h3>
 
-            <Table>
-              <TableHead>
-                <TableRow>
-                  
-                  <TableCell >Laji</TableCell>
-                  <TableCell >Lukumäärä</TableCell>
-                  <TableCell >Suunta</TableCell>
-                  <TableCell >Ohitussuunta</TableCell>
-                </TableRow>
-              </TableHead>
 
-              
-              <TableBody>
-                {
-                  observations
-                    .map((s, i) =>
-                      <TableRow >
-                        <TableCell>
-                          {s.species}
-                        </TableCell>
-                        <TableCell>
-                          {(s.count)}
-                        </TableCell>
-                        <TableCell>
-                          {(s.direction)}
-                        </TableCell>
-                        <TableCell>
-                          {(s.bypassSide)}
-                        </TableCell>
-                      </TableRow>
-                    )
-                }
-              </TableBody>
-            </Table>
+          <Table>
+            <TableHead>
+              <TableRow>
 
+                <TableCell >Laji</TableCell>
+                <TableCell >Lukumäärä</TableCell>
+                <TableCell >Suunta</TableCell>
+                <TableCell >Ohitussuunta</TableCell>
+              </TableRow>
+            </TableHead>
+
+
+            <TableBody>
+              {
+                observations
+                  .map((s, i) =>
+                    <TableRow key={i} >
+                      <TableCell>
+                        {s.species}
+                      </TableCell>
+                      <TableCell>
+                        {(s.count)}
+                      </TableCell>
+                      <TableCell>
+                        {(s.direction)}
+                      </TableCell>
+                      <TableCell>
+                        {(s.bypassSide)}
+                      </TableCell>
+                    </TableRow>
+                  )
+              }
+            </TableBody>
+          </Table>
         </div>
       </Fade>
     </Modal>
@@ -115,6 +115,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose, handleErrorSnackOpen 
 };
 
 ObservationPeriod.propTypes = {
+  obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   periodId: PropTypes.string.isRequired,

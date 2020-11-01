@@ -64,15 +64,15 @@ const NavBar = () => {
   const logoutLogin = user.id
     ?
     <Link to='/'>
-    <Button className={classes.userButton}
+      <Button className={classes.userButton}
 
-      onClick={logoutHandler}
-      
-      id="logout-link"
-      startIcon={<AccountCircle />}
-    >
-      {t("logout")}
-    </Button>
+        onClick={logoutHandler}
+
+        id="logout-link"
+        startIcon={<AccountCircle />}
+      >
+        {t("logout")}
+      </Button>
     </Link>
     :
     <Button className={classes.userButton}

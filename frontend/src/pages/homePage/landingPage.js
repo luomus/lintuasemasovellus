@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Paper, makeStyles, Button, Grid
 } from "@material-ui/core/";
@@ -8,7 +8,6 @@ import { AccountCircle } from "@material-ui/icons";
 
 
 const LandingPage = () => {
-
 
   const useStyles = makeStyles({
     root: {

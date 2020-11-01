@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Table, TableHead, TableRow,
-  TableBody, TableCell, withStyles, makeStyles, Snackbar
+  TableBody, TableCell, withStyles, makeStyles
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import ObservationPeriod from "../obsPeriod";
-import Alert from "@material-ui/lab/Alert";
 
 
 const ObsPeriodTable = (props) => {
@@ -55,26 +54,12 @@ const ObsPeriodTable = (props) => {
 
   };
 
-  const [formSent, setFormSent] = useState(false);
-  const [errorHappen, setErrorHappen] = useState(false);
 
   const handleClose = () => {
     setModalOpen(false);
-    setFormSent(true);
-  };
-
-
-
-  const handleSnackClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setFormSent(false);
-    setErrorHappen(false);
   };
 
   const handleErrorSnackOpen = () => {
-    setErrorHappen(true);
   };
 
 

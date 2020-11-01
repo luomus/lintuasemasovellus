@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, makeStyles, Paper, Grid, Snackbar, Typography, TextField } from "@material-ui/core";
+import {
+  Button, makeStyles, Paper, Grid, Typography, TextField
+} from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
-  getDaysObservationPeriods, postObservationPeriod,
   getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther,
   editComment, editObservers
 } from "../../services";
@@ -41,9 +42,6 @@ const DayDetails = () => {
 
   const [editedObservers, setEditedObservers] = useState("");
 
-  const [errorHappened, setErrorHappened] = useState(false);
-
-
   const dayList = useSelector(state => state.days);
 
 
@@ -62,17 +60,6 @@ const DayDetails = () => {
     editComment(dayId, editedComment);
     setCommentForm(false);
   };
-
-
-  // useEffect(() => {
-  //   getDaysObservationPeriods(dayId, observationType)
-  //     .then(periodsJson => setObsperiods(periodsJson));
-  // }, [formSent, dayId]);
-
-  // useEffect(() => {
-  //   getDaysObservationPeriods(dayId, observationType2)
-  //     .then(periodsJson2 => setObsperiods2(periodsJson2));
-  // }, [formSent, dayId]);
 
   useEffect(() => {
     getDaysObservationPeriodsStandard(dayId)

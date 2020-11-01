@@ -34,7 +34,7 @@ const ObservatorySelector = () => {
   const classes = useStyles();
 
   const userObservatory = useSelector(state => state.userObservatory);
- 
+
   const observatoryIsSelected = Boolean(observatory);
 
   const handleClose = () => {
