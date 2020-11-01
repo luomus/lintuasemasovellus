@@ -34,7 +34,9 @@ const ObservatorySelector = () => {
   const classes = useStyles();
 
   const userObservatory = useSelector(state => state.userObservatory);
+  const userObservatoryIsSet = Boolean(userObservatory.id);
 
+  const observatoryIsSelected = Boolean(observatory);
 
   const handleClose = () => {
     setOpen(false);
@@ -48,22 +50,23 @@ const ObservatorySelector = () => {
     event.preventDefault();
     store.dispatch(setUserObservatory(observatory));
   };
-  if (Object.keys(userObservatory).length === 0) {
+  if (!userObservatoryIsSet) {
     return (
       <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Valitse lintuasema</DialogTitle>
         <DialogContent>
 
           <form id="observatorySelect" onSubmit={selectUserObservatory} className={classes.container}>
-            <FormControl className={classes.formControl}>
-              <InputLabel id="Lintuasema">{t("observatory")} *</InputLabel>
-              <Select required
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="Lintuasema">{t("observatory")}</InputLabel>
+              <Select
                 autoWidth={true}
                 labelId="observatory"
                 id="select"
                 value={observatory}
                 onChange={(event) => setObservatory(event.target.value)}
               >
+                {console.log(observatoryIsSelected)}
                 {
                   stations.map((station, i) =>
                     <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
@@ -78,7 +81,7 @@ const ObservatorySelector = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button id="submit" form="observatorySelect" onClick={handleClose} color="primary" type="submit">
+          <Button id="submit" disabled={!observatoryIsSelected} form="observatorySelect" onClick={handleClose} color="primary" type="submit">
             Tallenna
           </Button>
         </DialogActions>
