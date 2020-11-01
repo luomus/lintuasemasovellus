@@ -53,6 +53,19 @@ const DayDetails = () => {
     setObserversForm(false);
   };
 
+  const dayId = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .id;
+
+  const comment = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .comment;
+
+  const observers = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .observers;
+
+
 
   const commentOnSubmit = (event) => {
     event.preventDefault();
@@ -72,19 +85,6 @@ const DayDetails = () => {
   }, [dayId]);
 
   if (!dayList) return null;
-
-  const dayId = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .id;
-
-  const comment = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .comment;
-
-  const observers = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .observers;
-
 
 
   return (
@@ -120,10 +120,6 @@ const DayDetails = () => {
               </form>
             )}
 
-
-
-
-
             <Typography variant="subtitle1" component="h2" >
               {t("comment")}{": "}{comment}{" "}
             </Typography>
@@ -145,12 +141,9 @@ const DayDetails = () => {
               </form>
             )}
 
-
-
           </Grid>
 
           <Grid item xs={12}>
-
             <Button variant="contained" color="primary">
               Lisää jakso
             </Button>{" "}

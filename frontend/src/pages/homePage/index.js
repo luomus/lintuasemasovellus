@@ -22,6 +22,8 @@ const useStyles = makeStyles({
     background: "white",
     margin: "10px 10px 10px 10px"
   },
+  datePicker: {
+  }
 });
 
 
@@ -37,6 +39,9 @@ export const HomePage = () => {
   const [shorthand, setShorthand] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
+  const [type, setType] = useState("");
+  const [location, setLocation] = useState("");
+
   const user = useSelector(state => state.user);
 
   const userIsSet = Boolean(user.id);
@@ -49,14 +54,18 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const shorthandRows = shorthand.split("\n");
-    await sendDay({
-      day: formatDate(day),
-      comment: "",
-      observers,
-      observatory: userObservatory
-    });
-    await loopThroughObservationPeriods(shorthandRows, "Vakio", "Bunkkeri");
-    await loopThroughObservations(shorthandRows);
+    try {
+      await sendDay({
+        day: formatDate(day),
+        comment: "",
+        observers,
+        observatory: userObservatory
+      });
+      await loopThroughObservationPeriods(shorthandRows, type, location);
+      await loopThroughObservations(shorthandRows);
+    } catch (error) {
+      console.error("Error in shorthand textfield parsing:", error);
+    }
   };
 
 
@@ -90,6 +99,7 @@ export const HomePage = () => {
               <Grid item xs={4} sm={5}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
+                    className={classes.datePicker}
                     required
                     disableToolbar
                     variant="inline"
@@ -113,21 +123,26 @@ export const HomePage = () => {
                   label={t("observers")}
                   onChange={(event) => setObservers(event.target.value)}
                   value={observers}
-                /><br />
+                />
               </Grid>
 
               <Grid item xs={6} sm={5}>
-                Tyyppi
+                <TextField required
+                  id="type"
+                  label={t("type")}
+                  onChange={(event) => setType(event.target.value)}
+                  value={type}
+                />
               </Grid>
 
               <Grid item xs={6} sm={5}>
-                Lokaatio
+                <TextField required
+                  id="location"
+                  label={t("location")}
+                  onChange={(event) => setLocation(event.target.value)}
+                  value={location}
+                />
               </Grid>
-
-
-
-
-
               <br />
               <br />
               <Grid item xs={12}>

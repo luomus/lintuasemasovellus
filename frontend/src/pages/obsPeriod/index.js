@@ -45,14 +45,18 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
     }
   };
 
-  const [observations, setObservations]=useState([]);
+  const [observations, setObservations] = useState([]);
 
   useEffect(() => {
+    if (obsPeriod === undefined) {
+      console.error("obsPeriod is undefined");
+      return;
+    }
     getObservationsByObsPeriod(obsPeriod.id)
       .then(observationsJson => setObservations(observationsJson));
-  }, [obsPeriod.id]);
+  }, []);
 
-  if (!obsPeriod.id) return null;
+  if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
 
   return (
     <Modal

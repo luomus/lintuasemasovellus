@@ -75,10 +75,11 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc)
   observationPeriods = [];
   let startTimeEncountered = false;
   for (const row of shorthandRows) {
-    if (row && isTime(row) && !startTimeEncountered) {
+    if (!row) continue;
+    if (isTime(row) && !startTimeEncountered) {
       startTimeEncountered = true;
       observationPeriod["startTime"] = parseTime(row);
-    } else if (row && isTime(row)) {
+    } else if (isTime(row)) {
       startTimeEncountered = false;
       observationPeriod["endTime"] = parseTime(row);
       observationPeriods.push({ ...observationPeriod });

@@ -44,7 +44,7 @@ const ObsPeriodTable = (props) => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [obsPeriod, setObsPeriod] = useState("");
+  const [obsPeriod, setObsPeriod] = useState({});
 
 
   const handleOpen = (obsPeriod) => {
