@@ -34,8 +34,7 @@ const ObservatorySelector = () => {
   const classes = useStyles();
 
   const userObservatory = useSelector(state => state.userObservatory);
-  const userObservatoryIsSet = Boolean(userObservatory.id);
-
+ 
   const observatoryIsSelected = Boolean(observatory);
 
   const handleClose = () => {
@@ -50,7 +49,8 @@ const ObservatorySelector = () => {
     event.preventDefault();
     store.dispatch(setUserObservatory(observatory));
   };
-  if (!userObservatoryIsSet) {
+  if (Object.keys(userObservatory).length === 0) {
+
     return (
       <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Valitse lintuasema</DialogTitle>
@@ -66,7 +66,6 @@ const ObservatorySelector = () => {
                 value={observatory}
                 onChange={(event) => setObservatory(event.target.value)}
               >
-                {console.log(observatoryIsSelected)}
                 {
                   stations.map((station, i) =>
                     <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
