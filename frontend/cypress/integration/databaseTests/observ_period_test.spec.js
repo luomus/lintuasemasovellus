@@ -1,13 +1,13 @@
-const { default: TouchRipple } = require("@material-ui/core/ButtonBase/TouchRipple");
+// import { TouchRipple } from "@material-ui/core/ButtonBase/TouchRipple";
 
 
 const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää";
-const startTime = "07:00";
-const endTime = "07:30";
-const type = "Vakio";
+//const startTime = "07:00";
+//const endTime = "07:30";
+//const type = "Vakio";
 
 describe("AddObservationPeriod", function() {
   beforeEach(function() {

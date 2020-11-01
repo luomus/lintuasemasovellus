@@ -1,15 +1,14 @@
-const { default: TouchRipple } = require("@material-ui/core/ButtonBase/TouchRipple");
-
-const observStation = "Hangon Lintuasema";
+// import { TouchRipple } from "@material-ui/core/ButtonBase/TouchRipple";
+// const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää.";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
 const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
-const date3 = "03.03.2020";
-const observer3 = "Ano Nyymi";
-const comment3 = "Tuntematon tunkeutuja lintuasemalla.";
+//const date3 = "03.03.2020";
+//const observer3 = "Ano Nyymi";
+//const comment3 = "Tuntematon tunkeutuja lintuasemalla.";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
