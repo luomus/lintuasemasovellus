@@ -40,7 +40,7 @@ const LandingPage = () => {
       <Paper className={classes.paper} square={false}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-                    Tähän banneri
+            Tähän banneri
           </Grid>
           <Grid item xs={12}>
             <Button
@@ -59,7 +59,7 @@ const LandingPage = () => {
           </Grid>
 
           <Grid item xs={12}>
-                    Tähän laji.fi logo ja Luomus logo
+            Tähän laji.fi logo ja Luomus logo
           </Grid>
         </ Grid>
       </Paper>

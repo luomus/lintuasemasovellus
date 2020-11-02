@@ -132,8 +132,8 @@ def init_app(database):
             print('Taulut luotu')
 
             #Lisätään kovakoodatut tiedot
-            createObservatory("Hangon Lintuasema")
-            createObservatory("Jurmon Lintuasema")
+            createObservatory("Hangon_Lintuasema")
+            createObservatory("Jurmon_Lintuasema")
             createLocation("Bunkkeri", 1)
             createLocation("Piha", 1)
             createLocation("Etelakarki", 1)
@@ -152,105 +152,3 @@ def init_app(database):
 
     return app
 
-
-#vanha init-toiminnallisuus
-
-# def init_app():
-#     import cx_Oracle #siirretty oracle importit tänne, koska pytest ei tykkää niistä tuolla ylhäällä
-#     import app.oracleConfig
-
-#     app = Flask(__name__, static_folder='../build', static_url_path='/')
-#     cors = CORS(app)
-
-#     login_manager = LoginManager()
-#     login_manager.init_app(app)
-#     app.config["SECRET_KEY"] = urandom(32)
-#     app.config['LOGIN_DISABLED'] = False
-
-#     @login_manager.user_loader
-#     def load_user(user_id):
-#         return User.query.get(user_id)
-
-#     dnsStr = cx_Oracle.makedsn('oracle.luomus.fi', 1521, service_name='oracle.luomus.fi')
-#     dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')
-    
-#     try:
-#         app.config["SQLALCHEMY_DATABASE_URI"] = "oracle://"+oracleConfig.username+":"+oracleConfig.password+"@"+dnsStr
-#         app.config["SQLALCHEMY_ECHO"] = True
-#         print('Tietokantayhteys luotu.')
-#     except Exception as e:
-#         print(e)
-    
-    
-
-#     app.register_blueprint(api_blueprint)
-    
-#     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
-#     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
-#        try:
-#            db.reflect()
-#            db.drop_all()
-#            db.create_all()
-#            print('Taulut luotu')
-#            createObservatory("Hangon Lintuasema")
-#            createObservatory("Jurmon Lintuasema")
-#            createLocation("Bunkkeri", 1)
-#            createLocation("Piha", 1)
-#            createLocation("Etelakarki", 1)
-#            createLocation("Metsa", 1)
-#            createLocation("Luoto Gou", 1)
-#            createLocation("Korkein kohta", 2)
-#            createLocation("Lansireitti", 2)
-#            print('Lintuasema luotu')
-#        except Exception as e:
-#            print(e)
-
-#     return app
-
-
-# def init_testapp():
-
-#     app = Flask(__name__, static_folder='../build', static_url_path='/')
-#     cors = CORS(app)
-
-#     login_manager = LoginManager()
-#     login_manager.init_app(app)
-#     app.config["SECRET_KEY"] = urandom(32)
-#     app.config['LOGIN_DISABLED'] = True
-
-#     @login_manager.user_loader
-#     def load_user(user_id):
-#         return User.query.get(user_id)
-
-#     try:
-#         app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
-#         app.config["SQLALCHEMY_ECHO"] = True
-#         print('Testitietokantayhteys luotu.')
-#     except Exception as e:
-#         print(e)
-    
-    
-
-#     app.register_blueprint(api_blueprint)
-    
-#     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from app.db import db
-#     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
-#        try:
-#            #db.reflect()
-#            #db.drop_all()
-#            db.create_all()
-#            print('Taulut luotu')
-#            createObservatory("Hangon Lintuasema")
-#            createObservatory("Jurmon Lintuasema")
-#            createLocation("Bunkkeri", 1)
-#            createLocation("Piha", 1)
-#            createLocation("Etelakarki", 1)
-#            createLocation("Metsa", 1)
-#            createLocation("Luoto Gou", 1)
-#            createLocation("Korkein kohta", 2)
-#            createLocation("Lansireitti", 2)
-#            print('Testilintuasema luotu')
-#        except Exception as e:
-#            print(e)
-
-#     return app

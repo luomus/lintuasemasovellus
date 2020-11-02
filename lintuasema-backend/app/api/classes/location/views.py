@@ -23,14 +23,25 @@ def add_location():
     return req
 
 
-@bp.route('/api/getLocations/<observatory_id>', methods=['GET'])
-#@login_required
-def list_locations(observatory_id):
+@bp.route('/api/getLocationsAndTypes/<observatory_name>', methods=['GET'])
+@login_required
+def list_locations(observatory_name):
 
-    objects = Location.query.filter_by(observatory_id = observatory_id)
+    if observatory_name is None:
+        return jsonify("")
+
+    observatory_id = getObservatoryId(observatory_name)
     ret = []
-    for each in objects:
-        ret.append({ 'name': each.name, 'id': each.id })
+
+    locations = Location.query.filter_by(observatory_id = observatory_id)
+    locationList = []
+    for location in locations:
+        locationList.append(location.name)
+    types = Type.query.filter_by(observatory_id = observatory_id)
+    typeList = []
+    for t in types:
+        typeList.append(t.name)
+    ret.append({ 'locations': locationList, 'types': typeList })
 
     return jsonify(ret)
 
