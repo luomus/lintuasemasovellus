@@ -43,18 +43,20 @@ const DayDetails = () => {
 
   const dayList = useSelector(state => state.days);
 
+  const [observers, setObservers] = useState(
+    dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .observers
+  )
+
+  const [comment, setComment] = useState(dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .comment
+  )
 
   const dayId = dayList
     .find(d => d.day === day && d.observatory === stationName)
-    .id;
-
-  const comment = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .comment;
-
-  const observers = dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .observers;
+    .id;  
 
 
   const observersOnSubmit = (event) => {
@@ -63,14 +65,15 @@ const DayDetails = () => {
     console.log(dayId);
     editObservers(dayId, editedObservers);
     setObserversForm(false);
+    setObservers(editedObservers)
   };
-
 
   const commentOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedComment);
     editComment(dayId, editedComment);
     setCommentForm(false);
+    setComment(editedComment);
   };
 
   useEffect(() => {
