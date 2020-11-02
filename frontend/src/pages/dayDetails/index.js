@@ -66,9 +66,9 @@ const DayDetails = () => {
     if (editedObservers.length != 0) {
     console.log(dayId);
     editObservers(dayId, editedObservers);
-    setObserversForm(false);
     setObservers(editedObservers)
     }
+    setObserversForm(false);
   };
 
   const commentOnSubmit = (event) => {
@@ -76,9 +76,9 @@ const DayDetails = () => {
     console.log(editedComment);
     if (editedComment.length != 0) {
     editComment(dayId, editedComment);
-    setCommentForm(false);
     setComment(editedComment);
     }
+    setCommentForm(false);
   };
 
   useEffect(() => {
