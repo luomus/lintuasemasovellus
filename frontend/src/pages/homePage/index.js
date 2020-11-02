@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, {
+  //useEffect,
+  useState } from "react";
 import {
   Paper,
   Grid,
   Typography, TextField, Button,
-//  FormControl, InputLabel, Select, MenuItem
+// FormControl, InputLabel, Select, MenuItem
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -15,6 +17,7 @@ import LandingPage from "./landingPage";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
+//import { getLocationsAndTypes } from "../../services";
 
 
 const useStyles = makeStyles({
@@ -45,7 +48,12 @@ export const HomePage = () => {
   const userObservatory = useSelector(state => state.userObservatory);
 
   const [type, setType] = useState("");
+
   const [location, setLocation] = useState("");
+
+  //const [types, setTypes] = useState(["moi"]);
+
+  //const [locations, setLocations] = useState(["moi"]);
 
   const user = useSelector(state => state.user);
 
@@ -72,6 +80,16 @@ export const HomePage = () => {
       console.error("Error in shorthand textfield parsing:", error);
     }
   };
+
+  // useEffect(() => {
+  //   getLocationsAndTypes(userObservatory)
+  //     .then(json => {
+  //       setTypes(json.types);
+  //       setLocations(json.locations);
+  //     });
+  // }, [userObservatory]);
+
+  // console.log(locations);
 
 
   if (!userIsSet) {
@@ -148,8 +166,26 @@ export const HomePage = () => {
                   value={location}
                 />
               </Grid>
-              <Grid item >
-              </Grid>
+
+              {/* <Grid item >
+                <FormControl>
+                  <InputLabel id="Tyyppi">{t("type")}</InputLabel>
+                  <Select required
+                    labelId="type"
+                    id="select"
+                    value={"type"}
+                    onChange={(event) => setType(event.target.value)}
+                  >
+                    {
+                      types.map((type, i) =>
+                        <MenuItem id={type} value={type} key={i}>
+                          {type}
+                        </MenuItem>
+                      )
+                    }
+                  </Select>
+                </FormControl>
+              </Grid> */}
 
 
               <br />

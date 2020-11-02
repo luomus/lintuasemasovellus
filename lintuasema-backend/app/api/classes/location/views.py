@@ -24,11 +24,13 @@ def add_location():
 
 
 @bp.route('/api/getLocationsAndTypes/<observatory_name>', methods=['GET'])
-@login_required
+#@login_required
 def list_locations(observatory_name):
 
     if observatory_name is None:
-        return jsonify("")
+        ret = []
+        ret.append({'locations': [], 'types': []})
+        return jsonify(ret)
 
     observatory_id = getObservatoryId(observatory_name)
     ret = []

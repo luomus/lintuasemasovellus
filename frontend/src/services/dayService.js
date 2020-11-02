@@ -16,3 +16,7 @@ export const editComment = async (dayId, comment) => {
 export const editObservers = async (dayId, observers) => {
   return await axios.post(`/api/editObservers/${dayId}/${observers}`);
 };
+
+export const getLocationsAndTypes = async (observatory) => {
+  return await axios.get(`/api/getLocationsAndTypes/${observatory}`);
+};
