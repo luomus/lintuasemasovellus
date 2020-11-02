@@ -1,11 +1,12 @@
 import React, {
   //useEffect,
-  useState } from "react";
+  useState
+} from "react";
 import {
   Paper,
   Grid,
   Typography, TextField, Button,
-// FormControl, InputLabel, Select, MenuItem
+  // FormControl, InputLabel, Select, MenuItem
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -44,6 +45,7 @@ export const HomePage = () => {
 
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
+  const [comment, setComment] = useState("");
   const [shorthand, setShorthand] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
 
@@ -55,7 +57,7 @@ export const HomePage = () => {
 
   //const [locations, setLocations] = useState(["moi"]);
 
-  
+
 
   const formatDate = (date) => {
     const dd = date.getDate();
@@ -68,7 +70,7 @@ export const HomePage = () => {
     try {
       await sendDay({
         day: formatDate(day),
-        comment: "",
+        comment: comment,
         observers,
         observatory: userObservatory
       });
@@ -150,6 +152,16 @@ export const HomePage = () => {
                 />
               </Grid>
 
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  rows={2}
+                  multiline={true}
+                  id="comment"
+                  label={t("comment")}
+                  onChange={(event) => setComment(event.target.value)}
+                  value={comment}
+                />
+              </Grid>
               <Grid item xs={6} sm={5}>
                 <TextField required
                   id="type"
@@ -167,6 +179,7 @@ export const HomePage = () => {
                   value={location}
                 />
               </Grid>
+
 
               {/* <Grid item >
                 <FormControl>
