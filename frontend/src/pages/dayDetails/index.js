@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
-  Button, makeStyles, Paper, Grid, Typography, TextField
+  Button, IconButton, makeStyles, Paper, Grid, Typography, TextField
 } from "@material-ui/core";
+import EditIcon from '@material-ui/icons/Edit';
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
@@ -45,8 +46,8 @@ const DayDetails = () => {
 
   const [observers, setObservers] = useState(
     dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .observers
+      .find(d => d.day === day && d.observatory === stationName)
+      .observers
   )
 
   const [comment, setComment] = useState(dayList
@@ -56,24 +57,28 @@ const DayDetails = () => {
 
   const dayId = dayList
     .find(d => d.day === day && d.observatory === stationName)
-    .id;  
+    .id;
 
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedObservers);
+    if (editedObservers.length != 0) {
     console.log(dayId);
     editObservers(dayId, editedObservers);
     setObserversForm(false);
     setObservers(editedObservers)
+    }
   };
 
   const commentOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedComment);
+    if (editedComment.length != 0) {
     editComment(dayId, editedComment);
     setCommentForm(false);
     setComment(editedComment);
+    }
   };
 
   useEffect(() => {
@@ -110,44 +115,44 @@ const DayDetails = () => {
               {t("observers")}{": "}{observers}{" "}
             </Typography>
             {observersForm === false ? (
-              <Button onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
-                Muokkaa havainnoitsijoita
-              </Button>
+              <IconButton onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
+                <EditIcon />
+              </IconButton>
             ) : (
 
-              <form onSubmit={observersOnSubmit}>
-                <TextField
-                  id="outlined-basic"
-                  variant="outlined"
-                  defaultValue={observers}
-                  onChange={(event) => setEditedObservers(event.target.value)}
-                />
-                <Button type="submit" variant="contained" color="primary">
+                <form onSubmit={observersOnSubmit}>
+                  <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    defaultValue={observers}
+                    onChange={(event) => setEditedObservers(event.target.value)}
+                  />
+                  <Button type="submit" variant="contained" color="primary">
                     Tallenna
                 </Button>
-              </form>
-            )}
+                </form>
+              )}
 
             <Typography variant="subtitle1" component="h2" >
               {t("comment")}{": "}{comment}{" "}
             </Typography>
             {commentForm === false ? (
-              <Button onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
-                Muokkaa kommenttia
-              </Button>
+              <IconButton onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
+                <EditIcon />
+              </IconButton>
             ) : (
-              <form onSubmit={commentOnSubmit}>
-                <TextField
-                  id="outlined-basic"
-                  variant="outlined"
-                  defaultValue={comment}
-                  onChange={(event) => setEditedComment(event.target.value)}
-                />
-                <Button type="submit" variant="contained" color="primary">
+                <form onSubmit={commentOnSubmit}>
+                  <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    defaultValue={comment}
+                    onChange={(event) => setEditedComment(event.target.value)}
+                  />
+                  <Button type="submit" variant="contained" color="primary">
                     Tallenna
                 </Button>
-              </form>
-            )}
+                </form>
+              )}
 
           </Grid>
 
