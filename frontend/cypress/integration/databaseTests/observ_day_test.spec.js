@@ -78,9 +78,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get ("#observers").type(observer);
     cy.get("#comment").type("Tämä on duplikaatti");
     cy.contains("Tallenna").click();
-    cy.visit("http://localhost:3000");
 
-    cy.get("#submit").click(); // placeholder
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(date);
