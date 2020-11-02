@@ -54,7 +54,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
     }
     getObservationsByObsPeriod(obsPeriod.id)
       .then(observationsJson => setObservations(observationsJson));
-  }, []);
+  }, [obsPeriod.id]);
 
   if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
 

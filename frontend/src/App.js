@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import DayDetails from "./pages/dayDetails";
-import DayDetails2 from "./pages/dayDetailsOld";
 
 
 
@@ -53,9 +52,6 @@ const App = () => {
           </Route>
           <Route path="/daydetails/:day/:stationName">
             <DayDetails />
-          </Route>
-          <Route path="/daydetails2/:day/:stationName">
-            <DayDetails2 />
           </Route>
           <Route path="/manual">
             <UserManual />

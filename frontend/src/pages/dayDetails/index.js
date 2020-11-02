@@ -11,7 +11,6 @@ import {
   getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther,
   editComment, editObservers
 } from "../../services";
-import { Link } from "react-router-dom";
 
 
 const DayDetails = () => {
@@ -45,14 +44,6 @@ const DayDetails = () => {
   const dayList = useSelector(state => state.days);
 
 
-  const observersOnSubmit = (event) => {
-    event.preventDefault();
-    console.log(editedObservers);
-    console.log(dayId);
-    editObservers(dayId, editedObservers);
-    setObserversForm(false);
-  };
-
   const dayId = dayList
     .find(d => d.day === day && d.observatory === stationName)
     .id;
@@ -65,6 +56,14 @@ const DayDetails = () => {
     .find(d => d.day === day && d.observatory === stationName)
     .observers;
 
+
+  const observersOnSubmit = (event) => {
+    event.preventDefault();
+    console.log(editedObservers);
+    console.log(dayId);
+    editObservers(dayId, editedObservers);
+    setObserversForm(false);
+  };
 
 
   const commentOnSubmit = (event) => {
@@ -84,7 +83,6 @@ const DayDetails = () => {
       .then(periodsJson => setObsperiodsOther(periodsJson));
   }, [dayId]);
 
-  if (!dayList) return null;
 
 
   return (
@@ -147,9 +145,6 @@ const DayDetails = () => {
             <Button variant="contained" color="primary">
               Lisää jakso
             </Button>{" "}
-            <Button variant="contained" color="primary" component={Link} to={`/daydetails2/${day}/${stationName}`}>
-              Yllätysnappi
-            </Button>
           </Grid>
 
           <Grid item xs={6}>
