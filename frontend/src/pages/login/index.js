@@ -5,9 +5,11 @@ import {
 import { useTranslation } from "react-i18next";
 import { loginUrl } from "../../services";
 import { AccountCircle } from "@material-ui/icons";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
-const LandingPage = () => {
+export const Login = () => {
 
   const useStyles = makeStyles({
     root: {
@@ -33,6 +35,15 @@ const LandingPage = () => {
 
   const classes = useStyles();
   const { t } = useTranslation();
+  
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
+
+  if (userIsSet) {
+    return (
+      <Redirect to="/" />
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -68,4 +79,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default Login;

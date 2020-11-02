@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import {
   Button, makeStyles, Paper, Grid, Typography, TextField
 } from "@material-ui/core";
@@ -83,7 +83,14 @@ const DayDetails = () => {
       .then(periodsJson => setObsperiodsOther(periodsJson));
   }, [dayId]);
 
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
 
+  if (!userIsSet) {
+    return (
+      <Redirect to="/login" />
+    );
+  }
 
   return (
 

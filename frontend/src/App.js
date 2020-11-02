@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import DayDetails from "./pages/dayDetails";
+import Login from "./pages/login";
 
 
 
@@ -42,7 +43,7 @@ const App = () => {
   return (
     <CssBaseline>
       <div>
-        <NavBar />
+        <NavBar isLoggedIn={userIsSet} />
         <Switch>
           <Route path="/newday">
             <DayForm />
@@ -55,6 +56,9 @@ const App = () => {
           </Route>
           <Route path="/manual">
             <UserManual />
+          </Route>
+          <Route path="/login">
+            <Login />
           </Route>
           <Route path="/">
             <HomePage />

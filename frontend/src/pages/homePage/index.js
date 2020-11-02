@@ -13,10 +13,10 @@ import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
-import LandingPage from "./landingPage";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
+import { Redirect } from "react-router-dom";
 //import { getLocationsAndTypes } from "../../services";
 
 
@@ -55,9 +55,7 @@ export const HomePage = () => {
 
   //const [locations, setLocations] = useState(["moi"]);
 
-  const user = useSelector(state => state.user);
-
-  const userIsSet = Boolean(user.id);
+  
 
   const formatDate = (date) => {
     const dd = date.getDate();
@@ -91,10 +89,13 @@ export const HomePage = () => {
 
   // console.log(locations);
 
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
+  console.log("user is set: " + userIsSet)
 
   if (!userIsSet) {
     return (
-      <LandingPage />
+      <Redirect to="/login" />
     );
   }
 

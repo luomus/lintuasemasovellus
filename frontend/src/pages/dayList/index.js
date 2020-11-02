@@ -3,7 +3,7 @@ import {
   TableCell, TableHead, TableRow,
   Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import DayPagination from "./DayPagination";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +31,9 @@ const StyledTableCell = withStyles(() => ({
 
 export const DayList = () => {
 
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
+
   const { t } = useTranslation();
 
   const classes = useStyles();
@@ -47,6 +50,14 @@ export const DayList = () => {
   console.log(list);
 
   if (!list) return null;
+
+
+
+  if (!userIsSet) {
+    return (
+      <Redirect to="/login" />
+    );
+  }
 
   return (
     <div>

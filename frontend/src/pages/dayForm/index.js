@@ -12,6 +12,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import Alert from "../../globalComponents/Alert";
 import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 
 const useStyles = makeStyles({
@@ -85,6 +86,15 @@ export const DayForm = () => {
   };
 
   const stations = useSelector(state => state.stations);
+
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
+
+  if (!userIsSet) {
+    return (
+      <Redirect to="/login" />
+    );
+  }
 
   return (
     <div>

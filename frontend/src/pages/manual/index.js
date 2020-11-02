@@ -2,6 +2,8 @@ import React from "react";
 import { Paper, Typography } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 const useStyles = makeStyles({
@@ -22,6 +24,14 @@ export const UserManual = () => {
 
   const { t } = useTranslation();
 
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
+
+  if (!userIsSet) {
+    return (
+      <Redirect to="/login" />
+    );
+  }
 
   return (
     <div>

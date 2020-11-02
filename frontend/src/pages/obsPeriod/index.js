@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 
@@ -55,6 +57,15 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
     getObservationsByObsPeriod(obsPeriod.id)
       .then(observationsJson => setObservations(observationsJson));
   }, [obsPeriod.id]);
+
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
+
+  if (!userIsSet) {
+    return (
+      <Redirect to="/login" />
+    );
+  }
 
   if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
 
