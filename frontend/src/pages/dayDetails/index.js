@@ -3,7 +3,7 @@ import { Redirect, useParams } from "react-router-dom";
 import {
   Button, IconButton, makeStyles, Paper, Grid, Typography, TextField
 } from "@material-ui/core";
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
@@ -48,12 +48,12 @@ const DayDetails = () => {
     dayList
       .find(d => d.day === day && d.observatory === stationName)
       .observers
-  )
+  );
 
   const [comment, setComment] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .comment
-  )
+  );
 
   const dayId = dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -63,10 +63,10 @@ const DayDetails = () => {
   const observersOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedObservers);
-    if (editedObservers.length != 0) {
-    console.log(dayId);
-    editObservers(dayId, editedObservers);
-    setObservers(editedObservers)
+    if (editedObservers.length !== 0) {
+      console.log(dayId);
+      editObservers(dayId, editedObservers);
+      setObservers(editedObservers);
     }
     setObserversForm(false);
   };
@@ -74,9 +74,9 @@ const DayDetails = () => {
   const commentOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedComment);
-    if (editedComment.length != 0) {
-    editComment(dayId, editedComment);
-    setComment(editedComment);
+    if (editedComment.length !== 0) {
+      editComment(dayId, editedComment);
+      setComment(editedComment);
     }
     setCommentForm(false);
   };
@@ -120,18 +120,18 @@ const DayDetails = () => {
               </IconButton>
             ) : (
 
-                <form onSubmit={observersOnSubmit}>
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    defaultValue={observers}
-                    onChange={(event) => setEditedObservers(event.target.value)}
-                  />
-                  <Button type="submit" variant="contained" color="primary">
-                    Tallenna
+              <form onSubmit={observersOnSubmit}>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  defaultValue={observers}
+                  onChange={(event) => setEditedObservers(event.target.value)}
+                />
+                <Button type="submit" variant="contained" color="primary">
+                  Tallenna
                 </Button>
-                </form>
-              )}
+              </form>
+            )}
 
             <Typography variant="subtitle1" component="h2" >
               {t("comment")}{": "}{comment}{" "}
@@ -141,18 +141,18 @@ const DayDetails = () => {
                 <EditIcon />
               </IconButton>
             ) : (
-                <form onSubmit={commentOnSubmit}>
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    defaultValue={comment}
-                    onChange={(event) => setEditedComment(event.target.value)}
-                  />
-                  <Button type="submit" variant="contained" color="primary">
-                    Tallenna
+              <form onSubmit={commentOnSubmit}>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  defaultValue={comment}
+                  onChange={(event) => setEditedComment(event.target.value)}
+                />
+                <Button type="submit" variant="contained" color="primary">
+                  Tallenna
                 </Button>
-                </form>
-              )}
+              </form>
+            )}
 
           </Grid>
 
@@ -188,14 +188,5 @@ const DayDetails = () => {
 
   );
 };
-
-
-
-
-
-
-
-
-
 
 export default DayDetails;

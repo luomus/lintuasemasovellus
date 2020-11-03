@@ -1,12 +1,12 @@
 import React, {
-  //useEffect,
+  useEffect,
   useState
 } from "react";
 import {
   Paper,
   Grid,
   Typography, TextField, Button,
-  // FormControl, InputLabel, Select, MenuItem
+  FormControl, InputLabel, Select, MenuItem
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -18,10 +18,9 @@ import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
 import { Redirect } from "react-router-dom";
-//import { getLocationsAndTypes } from "../../services";
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   paper: {
     background: "white",
     padding: "20px 30px",
@@ -31,9 +30,13 @@ const useStyles = makeStyles({
     background: "white",
     margin: "10px 10px 10px 10px"
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
   datePicker: {
   }
-});
+}));
 
 
 export const HomePage = () => {
@@ -48,16 +51,51 @@ export const HomePage = () => {
   const [comment, setComment] = useState("");
   const [shorthand, setShorthand] = useState("");
   const userObservatory = useSelector(state => state.userObservatory);
+  const stations = useSelector(state => state.stations);
 
   const [type, setType] = useState("");
 
   const [location, setLocation] = useState("");
 
-  //const [types, setTypes] = useState(["moi"]);
+  const [types, setTypes] = useState(["test"]);
 
-  //const [locations, setLocations] = useState(["moi"]);
+  const [locations, setLocations] = useState(["test"]);
+
+  console.log("stations");
+  console.log(stations);
+
+  console.log("user observatory");
+  console.log(userObservatory);
 
 
+
+
+
+
+  useEffect(() => {
+    if (Object.keys(userObservatory).length !== 0) {
+      setTypes(
+        stations
+          .find(s => s.observatory === userObservatory)
+          .types
+      );
+    }
+  });
+
+  useEffect(() => {
+    if (Object.keys(userObservatory).length !== 0) {
+      setLocations(
+        stations
+          .find(s => s.observatory === userObservatory)
+          .locations
+      );
+    }
+  });
+
+
+  console.log("types and locations");
+  console.log(type);
+  console.log(location);
 
   const formatDate = (date) => {
     const dd = date.getDate();
@@ -81,19 +119,10 @@ export const HomePage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getLocationsAndTypes(userObservatory)
-  //     .then(json => {
-  //       setTypes(json.types);
-  //       setLocations(json.locations);
-  //     });
-  // }, [userObservatory]);
-
-  // console.log(locations);
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
-  console.log("user is set: " + userIsSet)
+  console.log("user is set: " + userIsSet);
 
   if (!userIsSet) {
     return (
@@ -162,32 +191,14 @@ export const HomePage = () => {
                   value={comment}
                 />
               </Grid>
-              <Grid item xs={6} sm={5}>
-                <TextField required
-                  id="type"
-                  label={t("type")}
-                  onChange={(event) => setType(event.target.value)}
-                  value={type}
-                />
-              </Grid>
 
-              <Grid item xs={6} sm={5}>
-                <TextField required
-                  id="location"
-                  label={t("location")}
-                  onChange={(event) => setLocation(event.target.value)}
-                  value={location}
-                />
-              </Grid>
-
-
-              {/* <Grid item >
-                <FormControl>
+              <Grid item >
+                <FormControl className={classes.formControl}>
                   <InputLabel id="Tyyppi">{t("type")}</InputLabel>
                   <Select required
                     labelId="type"
                     id="select"
-                    value={"type"}
+                    value={type}
                     onChange={(event) => setType(event.target.value)}
                   >
                     {
@@ -199,7 +210,26 @@ export const HomePage = () => {
                     }
                   </Select>
                 </FormControl>
-              </Grid> */}
+              </Grid>{" "}
+              <Grid item >
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="Location">{t("location")}</InputLabel>
+                  <Select required
+                    labelId="location"
+                    id="select"
+                    value={location}
+                    onChange={(event) => setLocation(event.target.value)}
+                  >
+                    {
+                      locations.map((location, i) =>
+                        <MenuItem id={location} value={location} key={i}>
+                          {location}
+                        </MenuItem>
+                      )
+                    }
+                  </Select>
+                </FormControl>
+              </Grid>
 
 
               <br />

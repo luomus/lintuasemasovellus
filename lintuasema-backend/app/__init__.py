@@ -142,10 +142,14 @@ def init_app(database):
             createLocation("Korkein kohta", 2)
             createLocation("Lansireitti", 2)
             createType("Vakio", 1)
-            createType("Paikallishavainto", 1)
+            createType("Päivämuutto", 1)
+            createType("Yömuutto", 1)
+            createType("Hajahavainnot", 1)
             createType("Vakio", 2)
-            createType("Paikallishavainto", 2)
-            print('Lintuasema luotu')
+            createType("Esimerkki 1", 2)
+            createType("Esimerkki 2", 2) 
+            createType("Esimerkki 3", 2)
+            print('Lintuasema luotu')        
 
         except Exception as e:
             print(e)

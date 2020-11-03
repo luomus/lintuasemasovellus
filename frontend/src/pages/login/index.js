@@ -35,7 +35,7 @@ export const Login = () => {
 
   const classes = useStyles();
   const { t } = useTranslation();
-  
+
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
 

@@ -18,5 +18,6 @@ export const editObservers = async (dayId, observers) => {
 };
 
 export const getLocationsAndTypes = async (observatory) => {
-  return await axios.get(`/api/getLocationsAndTypes/${observatory}`);
+  const locationsTypes = await axios.get(`/api/getLocationsAndTypes/${observatory}`);
+  return locationsTypes.data;
 };

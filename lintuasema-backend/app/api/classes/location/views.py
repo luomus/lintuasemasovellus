@@ -29,7 +29,7 @@ def list_locations(observatory_name):
 
     if observatory_name is None:
         ret = []
-        ret.append({'locations': [], 'types': []})
+        ret.append({'locations': ['test'], 'types': ['test']})
         return jsonify(ret)
 
     observatory_id = getObservatoryId(observatory_name)
