@@ -31,7 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-api": "cd ../lintuasema-backend && . venv/bin/activate && pip3 install -r requirements.txt && flask run --port=3000",
+    "start-api": "cd ../lintuasema-backend && . venv/bin/activate && pip3 install -r requirements.txt && flask run",
     "build-copy": "npm run build && cp build ../lintuasema-backend/ -r",
     "lint": "eslint './{src,cypress}/**/*.{js,jsx}'",
     "lint:fix": "eslint './{src,cypress}/**/*.{js,jsx}' --fix",

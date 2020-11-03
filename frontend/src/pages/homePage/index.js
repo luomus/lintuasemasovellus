@@ -6,7 +6,7 @@ import {
   Paper,
   Grid,
   Typography, TextField, Button,
-  FormControl, InputLabel, Select, MenuItem
+  FormControl, InputLabel, Select, MenuItem, Snackbar
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -18,6 +18,7 @@ import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
 import { Redirect } from "react-router-dom";
+import Alert from "../../globalComponents/Alert";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,15 +62,19 @@ export const HomePage = () => {
 
   const [locations, setLocations] = useState(["test"]);
 
-  console.log("stations");
-  console.log(stations);
-
-  console.log("user observatory");
-  console.log(userObservatory);
+  const [formSent, setFormSent] = useState(false);
+  const [errorHappened, setErrorHappened] = useState(false);
 
 
 
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setFormSent(false);
+    setErrorHappened(false);
+  };
 
 
   useEffect(() => {
@@ -93,9 +98,7 @@ export const HomePage = () => {
   });
 
 
-  console.log("types and locations");
-  console.log(type);
-  console.log(location);
+
 
   const formatDate = (date) => {
     const dd = date.getDate();
@@ -105,20 +108,26 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const shorthandRows = shorthand.split("\n");
-    try {
-      await sendDay({
-        day: formatDate(day),
-        comment: comment,
-        observers,
-        observatory: userObservatory
-      });
-      await loopThroughObservationPeriods(shorthandRows, type, location);
-      await loopThroughObservations(shorthandRows);
-    } catch (error) {
-      console.error("Error in shorthand textfield parsing:", error);
+    if (shorthandRows.length >= 3) {
+      try {
+        await sendDay({
+          day: formatDate(day),
+          comment: comment,
+          observers,
+          observatory: userObservatory
+        });
+        await loopThroughObservationPeriods(shorthandRows, type, location);
+        await loopThroughObservations(shorthandRows);
+        setFormSent(true);
+        setShorthand("");
+      } catch (error) {
+        console.error("Error in shorthand textfield parsing:", error);
+        setErrorHappened(true);
+      }
+    } else {
+      setErrorHappened(true);
     }
   };
-
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -263,12 +272,28 @@ export const HomePage = () => {
             <Typography variant="h5" component="h2" >
               Käyttöohjeet
             </Typography>
-
             <br />
-            lorem ipsum jne
+            Syötä havainto pikakirjoitusmuodossa:
+            <br />
+            <br />
+            10:00
+            <br />
+            sommol 1/2 W
+            <br />
+            12:00
           </Paper>
         </Grid>
       </Grid>
+      <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          {t("formSent")}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {t("formNotSent")}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
