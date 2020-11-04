@@ -19,6 +19,7 @@ import {
 } from "./parseShorthandField";
 import { Redirect } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
+import { resetAll } from "../../shorthand/shorthand";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -122,6 +123,7 @@ export const HomePage = () => {
         setShorthand("");
       } catch (error) {
         console.error("Error in shorthand textfield parsing:", error);
+        resetAll();
         setErrorHappened(true);
       }
     } else {
