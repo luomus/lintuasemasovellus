@@ -253,9 +253,17 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "grugru 100SW+-, 200 S +++ , 300 \"W---";
     console.log("line:", lineOfText);
     const result = parse(lineOfText);
-    console.log(result);
+    expect(result.species).toBe("grugru");
+    expect(result.osahavainnot[0].unknownUnknownCount).toBe("100");
+    expect(result.osahavainnot[1].unknownUnknownCount).toBe("200");
+    expect(result.osahavainnot[2].adultUnknownCount).toBe("300");
+    expect(result.osahavainnot[0].bypassSide).toBe("+-");
+    expect(result.osahavainnot[1].bypassSide).toBe("+++");
+    expect(result.osahavainnot[2].bypassSide).toBe("---");
+    expect(result.osahavainnot[0].direction).toBe("sw");
+    expect(result.osahavainnot[1].direction).toBe("s");
+    expect(result.osahavainnot[2].direction).toBe("w");
   });
-
 
 });
 
