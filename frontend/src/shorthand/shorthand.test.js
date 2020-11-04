@@ -249,6 +249,12 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     }).toThrow("sulut väärin");
   });
 
+  test.only("three bypass sides in a row", () => {
+    const lineOfText = "grugru 100SW+-, 200 S +++ , 300 \"W---";
+    console.log("line:", lineOfText);
+    const result = parse(lineOfText);
+    console.log(result);
+  });
 
 
 });

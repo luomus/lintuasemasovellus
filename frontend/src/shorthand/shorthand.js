@@ -262,6 +262,7 @@ export const giveMeABucket = (char, line, index) => {
         throw new Error("tuntematon ohituspuoli");
       }
       if (index < line.length - 1
+          && line[index + 1] !== " "
           && line[index + 1] !== ","
           && line[index + 1] !== "\n"
           && line[index + 1] !== "+"
