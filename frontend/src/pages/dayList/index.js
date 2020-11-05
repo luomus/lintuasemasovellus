@@ -93,7 +93,7 @@ export const DayList = () => {
                       {s.comment}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.observatory}
+                      {s.observatory.replace("_", " ")}
                     </StyledTableCell>
                   </TableRow>
                 )

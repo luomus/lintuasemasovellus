@@ -90,7 +90,7 @@ const ObservatorySelector = () => {
 
   return (<div>
     <Typography>Valittu asema: {userObservatory.replace("_", " ")}</Typography>
-    <Button className={classes.submit} onClick={handleOpen}>Muokkaa</Button>
+    <Button id="observatorySelector" className={classes.submit} onClick={handleOpen}>Muokkaa</Button>
   </div>
   );
 

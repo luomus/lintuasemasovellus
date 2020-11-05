@@ -67,7 +67,7 @@ const FeedbackModal = (props) => {
 
   const SendButton = () => {
     if (errors.length > 0) return null;
-    return <Button onClick={sendData}>send</Button>;
+    return <Button id="sendCorrectObservation" onClick={sendData}>send</Button>;
   };
 
   return (

@@ -132,7 +132,7 @@ export const HomePage = () => {
               Lisää havaintoja
             </Typography>
             <br />
-            <ObservatorySelector />
+            <ObservatorySelector  />
             <br />
             {console.log("valittu asema on " + userObservatory)}
             <Grid container

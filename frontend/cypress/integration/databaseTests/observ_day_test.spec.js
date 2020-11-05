@@ -1,12 +1,13 @@
+
 // import { TouchRipple } from "@material-ui/core/ButtonBase/TouchRipple";
-// const observStation = "Hangon Lintuasema";
+const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää.";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
 const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
-const shorthand = "10:00 \nsommol 1/2 W \n12:00";
+const shorthand = "10:00\nsommol 1/2 W\n12:00";
 
 //const date3 = "03.03.2020";
 //const observer3 = "Ano Nyymi";
@@ -61,8 +62,17 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("Pikakirjoitus");
   });
 
+  it("Observations station can be modified" , function() {
+    cy.get("#observatorySelector").click();
+    //cy.contains("MUOKKAA");.click({ force: true });
+    cy.get("#select-observatory").click().get("ul > li").eq(1).click();
+    cy.get("#submit").contains("Tallenna").click();
+    //cy.contains("Jurmo");
+
+  });
 
 
+//ALLA KAKSI TESTIÄ, JOTKA TOIMIVAT AIKAISEMMIN. NYT EIVÄT,KUN ON TEHTY VALIDOINTIA
   it("An observation and observation day can be saved on firstpage", function() {
 
     cy.get("#date-picker-inline").clear();
@@ -70,9 +80,21 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
-    cy.get("#selectLocation").click().get("#Bunkkeri").click({});
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#shorthand").type(shorthand);
     cy.contains("Tallenna").click({ force: true });
+    cy.get("#sendCorrectObservation").click();
+    
+
+  });
+
+  it("Day and period has been added", function() {
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains(observer);
+    cy.contains(comment);
+    cy.contains(observStation);
+    cy.contains(date);
 
   });
 
