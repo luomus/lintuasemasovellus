@@ -9,7 +9,8 @@ class Observationperiod(Base):
     type_id = db.Column(db.Integer, db.ForeignKey('type.id'), nullable=False)
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'), nullable=False)
     day_id = db.Column(db.Integer, db.ForeignKey('day.id'), nullable=False)
-    shorthand_id=db.Column(db.Integer, db.ForeignKey('shorthand.id'), nullable=True)
+
+    Shorthand = db.relationship("Shorthand", backref="observationperiod", lazy=True)
 
     def __init__ (self, startTime, endTime, type_id, location_id, day_id):
         self.startTime = startTime

@@ -58,8 +58,9 @@ const parseTime = (timeString) => {
   return ret;
 };
 
-const sendObservation = async (observation, observationPeriodId) => {
+const sendObservation = async (observation, observationPeriodId, shorthandId) => {
   observation["observationperiod_id"] = observationPeriodId;
+  observation["shorthand_id"] = shorthandId;
   const res = await postAddObservation(observation);
   console.log("obs res", res);
 };
@@ -129,7 +130,7 @@ export const loopThroughObservations = async (shorthandRows) => {
         toNum("unknownUnknownCount");
         toNum("unknownFemaleCount");
         toNum("unknownMaleCount");
-        await sendObservation(observation, observationPeriods[Number(i)]["id"]);
+        await sendObservation(observation, observationPeriods[Number(i)]["id"], 1);
       }
       resetAll();
     }

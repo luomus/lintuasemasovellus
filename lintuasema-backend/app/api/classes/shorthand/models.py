@@ -3,10 +3,13 @@ from app.api.models import Base
 
 class Shorthand(Base):
 
-    name = db.Column(db.String(144), nullable=False)
+    row = db.Column(db.String(144), nullable=False)
 
-    Observationperiod = db.relationship("Observationperiod", backref="shorthand", lazy=True)
+    observationperiod_id=db.Column(db.Integer, db.ForeignKey('observationperiod.id'), nullable=False)
+
+    Observation = db.relationship("Observation", backref="shorthand", lazy=True)
     
     
-    def __init__ (self, name):
-        self.name=name
+    def __init__ (self, row, observationperiod_id):
+        self.row=row
+        self.observationperiod_id=observationperiod_id
