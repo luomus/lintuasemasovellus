@@ -6,7 +6,7 @@ const comment = "Olipa kiva sää.";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
 const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
-const shorthand = "10:00 \nsommol 1/2 W \n12:00"
+const shorthand = "10:00 \nsommol 1/2 W \n12:00";
 
 //const date3 = "03.03.2020";
 //const observer3 = "Ano Nyymi";
@@ -18,27 +18,27 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     //cy.contains("Kirjaudu");
     //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
 
-    
+
     const user = {
-      id: 'asdfsommol',
-      fullName: 'Asdf Sommol',
-      emailAddress: 'asdf@sommol.net'
-    }
+      id: "asdfsommol",
+      fullName: "Asdf Sommol",
+      emailAddress: "asdf@sommol.net"
+    };
 
     cy.window()
-      .its('store')
-      .invoke('dispatch', {
-        type: 'SET_USER',
+      .its("store")
+      .invoke("dispatch", {
+        type: "SET_USER",
         data: {
           user
         },
-      })
+      });
 
 
-   
+
     cy.get("#select-observatory").click().get("ul > li").eq(0).click(); //valitsee listan ensimmäisen
     cy.get("#submit").contains("Tallenna").click();
-    cy.contains('Valittu asema');
+    cy.contains("Valittu asema");
 
   });
 
@@ -50,7 +50,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
 
   it("There are fields for adding observation station name, date, observers, comment and a button Save for the observation and day", function() {
-    
+
     cy.contains("Lisää havaintoja");
     cy.contains("Päivämäärä");
     cy.contains("Havainnoija(t)");
@@ -62,7 +62,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
   });
 
 
-  
+
   it("An observation and observation day can be saved on firstpage", function() {
 
     cy.get("#date-picker-inline").clear();
@@ -73,7 +73,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#selectLocation").click().get("#Bunkkeri").click({});
     cy.get("#shorthand").type(shorthand);
     cy.contains("Tallenna").click({ force: true });
-  
+
   });
 
 

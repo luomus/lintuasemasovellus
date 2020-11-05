@@ -1,4 +1,4 @@
- /*describe("ObservatoryChosen", function() {
+/*describe("ObservatoryChosen", function() {
  beforeEach(function() {
     cy.visit("http://localhost:3000");
     cy.get("#login-link");
@@ -20,9 +20,9 @@
         },
       })
 
-    cy.get("#select-observatory").click().get("ul > li").eq(0).click(); 
+    cy.get("#select-observatory").click().get("ul > li").eq(0).click();
     cy.get("#submit").contains("Tallenna").click();
-    cy.get("#logout-link").click(); 
+    cy.get("#logout-link").click();
     cy.contains("Kirjaudu sisään")
 
  });
@@ -31,10 +31,10 @@
 describe("Title is shown on frontpage", function() {
       cy.contains("Lintuasemasovellus");
     });
-  
-  
+
+
 describe("Navigation bar", function() {
-      cy.get("#navigationbar").click();; 
-    });                              
-  }); 
+      cy.get("#navigationbar").click();;
+    });
+  });
   */

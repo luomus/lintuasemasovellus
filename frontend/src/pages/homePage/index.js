@@ -14,12 +14,9 @@ import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
-import {
-  sendDay, loopThroughObservationPeriods, loopThroughObservations
-} from "./parseShorthandField";
 import { Redirect } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
-import { resetAll } from "../../shorthand/shorthand";
+import FeedbackModal from "./FeedbackModal";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +32,6 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-  },
-  datePicker: {
   }
 }));
 
@@ -66,7 +61,7 @@ export const HomePage = () => {
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-
+  const [showModal, setShowModal] = useState(false);
 
 
   const handleClose = (event, reason) => {
@@ -77,6 +72,11 @@ export const HomePage = () => {
     setErrorHappened(false);
   };
 
+  const formatDate = (date) => {
+    const dd = date.getDate();
+    const mm = date.getMonth() + 1;
+    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  };
 
   useEffect(() => {
     if (Object.keys(userObservatory).length !== 0) {
@@ -98,37 +98,13 @@ export const HomePage = () => {
     }
   });
 
-
-
-
-  const formatDate = (date) => {
-    const dd = date.getDate();
-    const mm = date.getMonth() + 1;
-    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  const handleModalClose = () => {
+    setShowModal(false);
   };
 
-  const sendData = async () => {
-    const shorthandRows = shorthand.split("\n");
-    if (shorthandRows.length >= 3) {
-      try {
-        await sendDay({
-          day: formatDate(day),
-          comment: comment,
-          observers,
-          observatory: userObservatory
-        });
-        await loopThroughObservationPeriods(shorthandRows, type, location);
-        await loopThroughObservations(shorthandRows);
-        setFormSent(true);
-        setShorthand("");
-      } catch (error) {
-        console.error("Error in shorthand textfield parsing:", error);
-        resetAll();
-        setErrorHappened(true);
-      }
-    } else {
-      setErrorHappened(true);
-    }
+
+  const showFeedback = () => {
+    setShowModal(true);
   };
 
   const user = useSelector(state => state.user);
@@ -263,7 +239,7 @@ export const HomePage = () => {
                   onChange={(event) => setShorthand(event.target.value)}
                 />
               </Grid>
-              <Button onClick={sendData}>
+              <Button onClick={showFeedback}>
                 {t("save")}
               </Button>
             </Grid>
@@ -286,6 +262,11 @@ export const HomePage = () => {
           </Paper>
         </Grid>
       </Grid>
+      <FeedbackModal
+        open={showModal} handleClose={handleModalClose} shorthand={shorthand}
+        date={formatDate(day)} observers={observers} comment={comment}
+        type={type} location={location} observatory={userObservatory}
+      />
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           {t("formSent")}

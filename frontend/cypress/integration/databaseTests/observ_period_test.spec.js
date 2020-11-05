@@ -15,11 +15,11 @@ const comment = "Olipa kiva sää";
     /*
     cy.get("#submit").click(); // placeholder
     cy.get("#submit").click(); // placeholder */
-    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-    /*
+//cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+/*
     cy.get("#submit").click(); // placeholder
     cy.get("#submit").click(); // placeholder */
-   /* cy.get("#select").click().get("#HangonLintuasema").click();
+/* cy.get("#select").click().get("#HangonLintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
     cy.get("#navigationbar").click();
 
