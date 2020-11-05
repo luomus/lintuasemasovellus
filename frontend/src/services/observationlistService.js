@@ -17,3 +17,8 @@ export const postObservationform = async (form) => {
 export const postAddObservation = async (form) => {
   return await axios.post("/api/addObservation", form);
 };
+
+export const postAddShorthand = async (form) => {
+  return await axios.post("/api/addShorthand", form);
+};
+

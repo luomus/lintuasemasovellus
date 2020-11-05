@@ -21,5 +21,15 @@ def addShorthand():
 
     shorthand_id = Shorthand.query.filter_by(row = req['row'], observationperiod_id = req['observationperiod_id']).first().id
 
-    return shorthand_id
+    return jsonify({ 'id': shorthand_id })
+
+@bp.route('/api/getShorthands', methods=["GET"])
+@login_required
+def getShorthands():
+    shorthands = Shorthand.query.all()
+    ret = []
+    for shorthand in shorthands:
+        ret.append({ 'id': shorthand.id, 'row': shorthand.row, 'observationperiod_id': shorthand.observationperiod_id})
+
+    return jsonify(ret)
 

@@ -1,6 +1,6 @@
 import { postDay } from "../../services/dayService";
 import { postObservationPeriod } from "../../services/observationStationService";
-import { postAddObservation } from "../../services/observationlistService";
+import { postAddObservation, postAddShorthand } from "../../services/observationlistService";
 import { parse, resetAll } from "../../shorthand/shorthand";
 
 const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
@@ -40,6 +40,11 @@ let observation = {
   bypassSide: "",
   notes: "",
   observationperiod_id: ""
+};
+
+let shorthand = {
+  row: "",
+  observationperiod_id: 0
 };
 
 const isTime = (row) => {
@@ -115,6 +120,10 @@ export const loopThroughObservations = async (shorthandRows) => {
       i++;
     } else {
       const parsed = parse(row);
+      shorthand["row"] = row;
+      shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
+      const res = await postAddShorthand(shorthand);
+      console.log("shorthand " + res.data.id);
       for (const sub of parsed.osahavainnot) {
         observation = sub;
         observation.species = parsed.species;
@@ -130,7 +139,7 @@ export const loopThroughObservations = async (shorthandRows) => {
         toNum("unknownUnknownCount");
         toNum("unknownFemaleCount");
         toNum("unknownMaleCount");
-        await sendObservation(observation, observationPeriods[Number(i)]["id"], 1);
+        await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id);
       }
       resetAll();
     }
