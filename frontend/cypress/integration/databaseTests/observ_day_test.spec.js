@@ -6,43 +6,78 @@ const comment = "Olipa kiva sää.";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
 const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
+const shorthand = "10:00 \nsommol 1/2 W \n12:00"
+
 //const date3 = "03.03.2020";
 //const observer3 = "Ano Nyymi";
 //const comment3 = "Tuntematon tunkeutuja lintuasemalla.";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
-    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    //cy.get("#login-link");
+    //cy.contains("Kirjaudu");
+    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
 
-    //cy.get("#submit").click(); // placeholder
-    //cy.get("#navigationbar").click();
+    
+    const user = {
+      id: 'asdfsommol',
+      fullName: 'Asdf Sommol',
+      emailAddress: 'asdf@sommol.net'
+    }
 
-    cy.get("#select").click().get("#HangonLintuasema").click();
+    cy.window()
+      .its('store')
+      .invoke('dispatch', {
+        type: 'SET_USER',
+        data: {
+          user
+        },
+      })
+
+
+   
+    cy.get("#select-observatory").click().get("ul > li").eq(0).click(); //valitsee listan ensimmäisen
     cy.get("#submit").contains("Tallenna").click();
-    cy.get("#navigationbar").click();
+    cy.contains('Valittu asema');
 
   });
+
+
   /* it("Front page has button for adding an observation day", function() {
     cy.get("#navigationbar").click();
     cy.contains("Lisää päivä").click({ force:true });
   }); */
-  it("There are fields for adding observation station name, date, observers, comment and a button Save for the day", function() {
-    cy.contains("Lisää päivä").click();
-    cy.contains("Lintuasema");
+
+
+  it("There are fields for adding observation station name, date, observers, comment and a button Save for the observation and day", function() {
+    
+    cy.contains("Lisää havaintoja");
     cy.contains("Päivämäärä");
     cy.contains("Havainnoija(t)");
     cy.contains("Kommentti");
+    cy.contains("Tyyppi");
+    cy.contains("Sijainti");
     cy.contains("Tallenna");
+    cy.contains("Pikakirjoitus");
   });
-  it("An observation day can be saved", function() {
-    cy.contains("Lisää päivä").click();
-    cy.get("#select").click().get("#HangonLintuasema").click({ force:true });//.get('#Hangon Lintuasema').contains().click();
+
+
+  
+  it("An observation and observation day can be saved on firstpage", function() {
+
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
-    cy.contains("Tallenna").click();
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click({});
+    cy.get("#shorthand").type(shorthand);
+    cy.contains("Tallenna").click({ force: true });
+  
   });
+
+
+  /*
   it("There is a button for listing all observation day", function() {
     cy.contains("Näytä päivä");
   });

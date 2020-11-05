@@ -9,17 +9,17 @@ const comment = "Olipa kiva sää";
 //const endTime = "07:30";
 //const type = "Vakio";
 
-describe("AddObservationPeriod", function() {
+/*describe("AddObservationPeriod", function() {
   beforeEach(function() {
     cy.visit("http://localhost:3000");
     /*
     cy.get("#submit").click(); // placeholder
     cy.get("#submit").click(); // placeholder */
-    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
     /*
     cy.get("#submit").click(); // placeholder
     cy.get("#submit").click(); // placeholder */
-    cy.get("#select").click().get("#HangonLintuasema").click();
+   /* cy.get("#select").click().get("#HangonLintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
     cy.get("#navigationbar").click();
 
@@ -61,4 +61,4 @@ describe("AddObservationPeriod", function() {
     cy.contains(endTime);
     cy.contains(type);
   }); */
-});
+//});

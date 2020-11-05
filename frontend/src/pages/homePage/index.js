@@ -208,7 +208,7 @@ export const HomePage = () => {
                   <InputLabel id="Tyyppi">{t("type")}</InputLabel>
                   <Select required
                     labelId="type"
-                    id="select"
+                    id="selectType"
                     value={type}
                     onChange={(event) => setType(event.target.value)}
                   >
@@ -227,7 +227,7 @@ export const HomePage = () => {
                   <InputLabel id="Location">{t("location")}</InputLabel>
                   <Select required
                     labelId="location"
-                    id="select"
+                    id="selectLocation"
                     value={location}
                     onChange={(event) => setLocation(event.target.value)}
                   >

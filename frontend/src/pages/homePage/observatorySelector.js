@@ -62,14 +62,14 @@ const ObservatorySelector = () => {
               <Select
                 autoWidth={true}
                 labelId="observatory"
-                id="select"
+                id="select-observatory"
                 value={observatory}
                 onChange={(event) => setObservatory(event.target.value)}
               >
                 {
                   stations.map((station, i) =>
                     <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
-                      {station.observatory}
+                      {station.observatory.replace("_", " ")}
                     </MenuItem>
                   )
                 }
@@ -89,7 +89,7 @@ const ObservatorySelector = () => {
   }
 
   return (<div>
-    <Typography>Valittu asema: {userObservatory}</Typography>
+    <Typography>Valittu asema: {userObservatory.replace("_", " ")}</Typography>
     <Button className={classes.submit} onClick={handleOpen}>Muokkaa</Button>
   </div>
   );
