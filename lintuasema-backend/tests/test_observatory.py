@@ -7,5 +7,5 @@ def test_observatories(app): #App annettava
     assert list is not None
 
 def test_getfirstobservatory(app): #App annettava
-    assert getAll()[0].name=='Hangon Lintuasema'  
+    assert getAll()[0].name=='Hangon_Lintuasema'  
 
