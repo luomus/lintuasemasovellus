@@ -1,1540 +1,1288 @@
-[
-    {
-        "abbreviation6": "GAVSTE",
+{
+    "GAVSTE" : {
         "latinum": "Gavia stellata",
         "finnishname": "Kaakkuri",
         "swedishname": "Smålom"
     },
-    {
-        "abbreviation6": "GAVARC",
+    "GAVARC" : {
         "latinum": "Gavia arctica",
         "finnishname": "Kuikka",
         "swedishname": "Storlom"
     },
-    {
-        "abbreviation6": "TACRUF",
+    "TACRUF" : {
         "latinum": "Tachybaptus ruficollis",
         "finnishname": "Pikku-uikku",
         "swedishname": "Smådopping"
     },
-    {
-        "abbreviation6": "PODCRI",
+    "PODCRI" : {
         "latinum": "Podiceps cristatus",
         "finnishname": "Silkkiuikku",
         "swedishname": "Skäggdopping"
     },
-    {
-        "abbreviation6": "PODGRI",
+    "PODGRI" : {
         "latinum": "Podiceps grisegena",
         "finnishname": "Härkälintu",
         "swedishname": "Gråhakedopping"
     },
-    {
-        "abbreviation6": "PODAUR",
+    "PODAUR" : {
         "latinum": "Podiceps auritus",
         "finnishname": "Mustakurkku-uikku",
         "swedishname": "Svarthakedopping"
     },
-    {
-        "abbreviation6": "PHACAR",
+    "PHACAR" : {
         "latinum": "Phalacrocorax carbo",
         "finnishname": "Merimetso",
         "swedishname": "Storskarv"
     },
-    {
-        "abbreviation6": "BOTSTE",
+    "BOTSTE" : {
         "latinum": "Botaurus stellaris",
         "finnishname": "Kaulushaikara",
         "swedishname": "Rördrom"
     },
-    {
-        "abbreviation6": "ARDCIN",
+    "ARDCIN" : {
         "latinum": "Ardea cinerea",
         "finnishname": "Harmaahaikara",
         "swedishname": "Häger"
     },
-    {
-        "abbreviation6": "CYGOLO",
+    "CYGOLO" : {
         "latinum": "Cygnus olor",
         "finnishname": "Kyhmyjoutsen",
         "swedishname": "Knölsvan"
     },
-    {
-        "abbreviation6": "CYGCYG",
+    "CYGCYG" : {
         "latinum": "Cygnus cygnus",
         "finnishname": "Laulujoutsen",
         "swedishname": "Sångsvan"
     },
-    {
-        "abbreviation6": "ANSFAB",
+    "ANSFAB" : {
         "latinum": "Anser fabalis",
         "finnishname": "Metsähanhi",
         "swedishname": "Sädgås"
     },
-    {
-        "abbreviation6": "ANSERY",
+    "ANSERY" : {
         "latinum": "Anser erythropus",
         "finnishname": "Kiljuhanhi",
         "swedishname": "Fjällgås"
     },
-    {
-        "abbreviation6": "ANSANS",
+    "ANSANS" : {
         "latinum": "Anser anser",
         "finnishname": "Merihanhi",
         "swedishname": "Grågås"
     },
-    {
-        "abbreviation6": "ANSCAE",
+    "ANSCAE" : {
         "latinum": "Anser caerulescens",
         "finnishname": "Lumihanhi",
         "swedishname": "Snögås"
     },
-    {
-        "abbreviation6": "BRACAN",
+    "BRACAN" : {
         "latinum": "Branta canadensis",
         "finnishname": "Kanadanhanhi",
         "swedishname": "Kanadagås"
     },
-    {
-        "abbreviation6": "BRALEU",
+    "BRALEU" : {
         "latinum": "Branta leucopsis",
         "finnishname": "Valkoposkihanhi",
         "swedishname": "Vitkindad gås"
     },
-    {
-        "abbreviation6": "TADTAD",
+    "TADTAD" : {
         "latinum": "Tadorna tadorna",
         "finnishname": "Ristisorsa",
         "swedishname": "Gravand"
     },
-    {
-        "abbreviation6": "ANAPEN",
+    "ANAPEN" : {
         "latinum": "Anas penelope",
         "finnishname": "Haapana",
         "swedishname": "Bläsand"
     },
-    {
-        "abbreviation6": "ANASTR",
+    "ANASTR" : {
         "latinum": "Anas strepera",
         "finnishname": "Harmaasorsa",
         "swedishname": "Snatterand"
     },
-    {
-        "abbreviation6": "ANACRE",
+    "ANACRE" : {
         "latinum": "Anas crecca",
         "finnishname": "Tavi",
         "swedishname": "Kricka"
     },
-    {
-        "abbreviation6": "ANAPLA",
+    "ANAPLA" : {
         "latinum": "Anas platyrhynchos",
         "finnishname": "Sinisorsa",
         "swedishname": "Gräsand"
     },
-    {
-        "abbreviation6": "ANAACU",
+    "ANAACU" : {
         "latinum": "Anas acuta",
         "finnishname": "Jouhisorsa",
         "swedishname": "Stjärtand"
     },
-    {
-        "abbreviation6": "ANAQUE",
+    "ANAQUE" : {
         "latinum": "Anas querquedula",
         "finnishname": "Heinätavi",
         "swedishname": "Årta"
     },
-    {
-        "abbreviation6": "ANACLY",
+    "ANACLY" : {
         "latinum": "Anas clypeata",
         "finnishname": "Lapasorsa",
         "swedishname": "Skedand"
     },
-    {
-        "abbreviation6": "AYTFER",
+    "AYTFER" : {
         "latinum": "Aythya ferina",
         "finnishname": "Punasotka",
         "swedishname": "Brunand"
     },
-    {
-        "abbreviation6": "AYTFUL",
+    "AYTFUL" : {
         "latinum": "Aythya fuligula",
         "finnishname": "Tukkasotka",
         "swedishname": "Vigg"
     },
-    {
-        "abbreviation6": "AYTMAR",
+    "AYTMAR" : {
         "latinum": "Aythya marila",
         "finnishname": "Lapasotka",
         "swedishname": "Bergand"
     },
-    {
-        "abbreviation6": "SOMMOL",
+    "SOMMOL" : {
         "latinum": "Somateria mollissima",
         "finnishname": "Haahka",
         "swedishname": "Ejder"
     },
-    {
-        "abbreviation6": "CLAHYE",
+    "CLAHYE" : {
         "latinum": "Clangula hyemalis",
         "finnishname": "Alli",
         "swedishname": "Alfågel"
     },
-    {
-        "abbreviation6": "MELNIG",
+    "MELNIG" : {
         "latinum": "Melanitta nigra",
         "finnishname": "Mustalintu",
         "swedishname": "Sjöorre"
     },
-    {
-        "abbreviation6": "MELFUS",
+    "MELFUS" : {
         "latinum": "Melanitta fusca",
         "finnishname": "Pilkkasiipi",
         "swedishname": "Svärta"
     },
-    {
-        "abbreviation6": "BUCCLA",
+    "BUCCLA" : {
         "latinum": "Bucephala clangula",
         "finnishname": "Telkkä",
         "swedishname": "Knipa"
     },
-    {
-        "abbreviation6": "MERALB",
+    "MERALB" : {
         "latinum": "Mergellus albellus",
         "finnishname": "Uivelo",
         "swedishname": "Salskrake"
     },
-    {
-        "abbreviation6": "MERSER",
+    "MERSER" : {
         "latinum": "Mergus serrator",
         "finnishname": "Tukkakoskelo",
         "swedishname": "Småskrake"
     },
-    {
-        "abbreviation6": "MERMER",
+    "MERMER" : {
         "latinum": "Mergus merganser",
         "finnishname": "Isokoskelo",
         "swedishname": "Storskrake"
     },
-    {
-        "abbreviation6": "PERAPI",
+    "PERAPI" : {
         "latinum": "Pernis apivorus",
         "finnishname": "Mehiläishaukka",
         "swedishname": "Bivråk"
     },
-    {
-        "abbreviation6": "MILMIG",
+    "MILMIG" : {
         "latinum": "Milvus migrans",
         "finnishname": "Haarahaukka",
         "swedishname": "Brunglada"
     },
-    {
-        "abbreviation6": "HALALB",
+    "HALALB" : {
         "latinum": "Haliaeetus albicilla",
         "finnishname": "Merikotka",
         "swedishname": "Havsörn"
     },
-    {
-        "abbreviation6": "CIRAER",
+    "CIRAER" : {
         "latinum": "Circus aeruginosus",
         "finnishname": "Ruskosuohaukka",
         "swedishname": "Brun kärrhök"
     },
-    {
-        "abbreviation6": "CIRCYA",
+    "CIRCYA" : {
         "latinum": "Circus cyaneus",
         "finnishname": "Sinisuohaukka",
         "swedishname": "Blå kärrhök"
     },
-    {
-        "abbreviation6": "CIRPYG",
+    "CIRPYG" : {
         "latinum": "Circus pygargus",
         "finnishname": "Niittysuohaukka",
         "swedishname": "Ängshök"
     },
-    {
-        "abbreviation6": "CIRMAC",
+    "CIRMAC" : {
         "latinum": "Circus macrourus",
         "finnishname": "Arosuohaukka",
         "swedishname": "Stäpphök"
     },
-    {
-        "abbreviation6": "ACCGEN",
+    "ACCGEN" : {
         "latinum": "Accipiter gentilis",
         "finnishname": "Kanahaukka",
         "swedishname": "Duvhök"
     },
-    {
-        "abbreviation6": "ACCNIS",
+    "ACCNIS" : {
         "latinum": "Accipiter nisus",
         "finnishname": "Varpushaukka",
         "swedishname": "Sparvhök"
     },
-    {
-        "abbreviation6": "BUTBUT",
+    "BUTBUT" : {
         "latinum": "Buteo buteo",
         "finnishname": "Hiirihaukka",
         "swedishname": "Ormvråk"
     },
-    {
-        "abbreviation6": "BUTLAG",
+    "BUTLAG" : {
         "latinum": "Buteo lagopus",
         "finnishname": "Piekana",
         "swedishname": "Fjällvråk"
     },
-    {
-        "abbreviation6": "AQUCLA",
+    "AQUCLA" : {
         "latinum": "Aquila clanga",
         "finnishname": "Kiljukotka",
         "swedishname": "Större skrikörn"
     },
-    {
-        "abbreviation6": "AQUCHR",
+    "AQUCHR" : {
         "latinum": "Aquila chrysaetos",
         "finnishname": "Maakotka",
         "swedishname": "Kungsörn"
     },
-    {
-        "abbreviation6": "PANHAL",
+    "PANHAL" : {
         "latinum": "Pandion haliaetus",
         "finnishname": "Sääksi (kalasääski)",
         "swedishname": "Fiskgjuse"
     },
-    {
-        "abbreviation6": "FALTIN",
+    "FALTIN" : {
         "latinum": "Falco tinnunculus",
         "finnishname": "Tuulihaukka",
         "swedishname": "Tornfalk"
     },
-    {
-        "abbreviation6": "FALVES",
+    "FALVES" : {
         "latinum": "Falco vespertinus",
         "finnishname": "Punajalkahaukka",
         "swedishname": "Aftonfalk"
     },
-    {
-        "abbreviation6": "FALCOL",
+    "FALCOL" : {
         "latinum": "Falco columbarius",
         "finnishname": "Ampuhaukka",
         "swedishname": "Stenfalk"
     },
-    {
-        "abbreviation6": "FALSUB",
+    "FALSUB" : {
         "latinum": "Falco subbuteo",
         "finnishname": "Nuolihaukka",
         "swedishname": "Lärkfalk"
     },
-    {
-        "abbreviation6": "FALRUS",
+    "FALRUS" : {
         "latinum": "Falco rusticolus",
         "finnishname": "Tunturihaukka",
         "swedishname": "Jaktfalk"
     },
-    {
-        "abbreviation6": "FALPER",
+    "FALPER" : {
         "latinum": "Falco peregrinus",
         "finnishname": "Muuttohaukka",
         "swedishname": "Pilgrimsfalk"
     },
-    {
-        "abbreviation6": "TETBON",
+    "TETBON" : {
         "latinum": "Tetrastes bonasia",
         "finnishname": "Pyy",
         "swedishname": "Järpe"
     },
-    {
-        "abbreviation6": "LAGLAG",
+    "LAGLAG" : {
         "latinum": "Lagopus lagopus",
         "finnishname": "Riekko",
         "swedishname": "Dalripa"
     },
-    {
-        "abbreviation6": "LAGMUT",
+    "LAGMUT" : {
         "latinum": "Lagopus muta",
         "finnishname": "Kiiruna",
         "swedishname": "Fjällripa"
     },
-    {
-        "abbreviation6": "LYRTET",
+    "LYRTET" : {
         "latinum": "Lyrurus tetrix",
         "finnishname": "Teeri",
         "swedishname": "Orre"
     },
-    {
-        "abbreviation6": "TETURO",
+    "TETURO" : {
         "latinum": "Tetrao urogallus",
         "finnishname": "Metso",
         "swedishname": "Tjäder"
     },
-    {
-        "abbreviation6": "PERPER",
+    "PERPER" : {
         "latinum": "Perdix perdix",
         "finnishname": "Peltopyy",
         "swedishname": "Rapphöna"
     },
-    {
-        "abbreviation6": "COTCOT",
+    "COTCOT" : {
         "latinum": "Coturnix coturnix",
         "finnishname": "Viiriäinen",
         "swedishname": "Vaktel"
     },
-    {
-        "abbreviation6": "PHACOL",
+    "PHACOL" : {
         "latinum": "Phasianus colchicus",
         "finnishname": "Fasaani",
         "swedishname": "Fasan"
     },
-    {
-        "abbreviation6": "RALAQU",
+    "RALAQU" : {
         "latinum": "Rallus aquaticus",
         "finnishname": "Luhtakana",
         "swedishname": "Vattenrall"
     },
-    {
-        "abbreviation6": "PORPOR",
+    "PORPOR" : {
         "latinum": "Porzana porzana",
         "finnishname": "Luhtahuitti",
         "swedishname": "Småfläckig sumphöna"
     },
-    {
-        "abbreviation6": "PORPAR",
+    "PORPAR" : {
         "latinum": "Porzana parva",
         "finnishname": "Pikkuhuitti",
         "swedishname": "Mindre sumphöna"
     },
-    {
-        "abbreviation6": "CRECRE",
+    "CRECRE" : {
         "latinum": "Crex crex",
         "finnishname": "Ruisrääkkä",
         "swedishname": "Kornknarr"
     },
-    {
-        "abbreviation6": "GALCHL",
+    "GALCHL" : {
         "latinum": "Gallinula chloropus",
         "finnishname": "Liejukana",
         "swedishname": "Rörhöna"
     },
-    {
-        "abbreviation6": "FULATR",
+    "FULATR" : {
         "latinum": "Fulica atra",
         "finnishname": "Nokikana",
         "swedishname": "Sothöna"
     },
-    {
-        "abbreviation6": "GRUGRU",
+    "GRUGRU" : {
         "latinum": "Grus grus",
         "finnishname": "Kurki",
         "swedishname": "Trana"
     },
-    {
-        "abbreviation6": "HAEOST",
+    "HAEOST" : {
         "latinum": "Haematopus ostralegus",
         "finnishname": "Meriharakka",
         "swedishname": "Strandskata"
     },
-    {
-        "abbreviation6": "CHADUB",
+    "CHADUB" : {
         "latinum": "Charadrius dubius",
         "finnishname": "Pikkutylli",
         "swedishname": "Mindre strandpipare"
     },
-    {
-        "abbreviation6": "CHAHIA",
+    "CHAHIA" : {
         "latinum": "Charadrius hiaticula",
         "finnishname": "Tylli",
         "swedishname": "Större strandpipare"
     },
-    {
-        "abbreviation6": "CHAMOR",
+    "CHAMOR" : {
         "latinum": "Charadrius morinellus",
         "finnishname": "Keräkurmitsa",
         "swedishname": "Fjällpipare"
     },
-    {
-        "abbreviation6": "PLUAPR",
+    "PLUAPR" : {
         "latinum": "Pluvialis apricaria",
         "finnishname": "Kapustarinta",
         "swedishname": "Ljungpipare"
     },
-    {
-        "abbreviation6": "VANVAN",
+    "VANVAN" : {
         "abbreviation2": "VV",
         "latinum": "Vanellus vanellus",
         "finnishname": "Töyhtöhyyppä",
         "swedishname": "Tofsvipa"
     },
-    {
-        "abbreviation6": "CALUTA",
+    "CALUTA" : {
         "latinum": "Calidris minuta",
         "finnishname": "Pikkusirri",
         "swedishname": "Småsnäppa"
     },
-    {
-        "abbreviation6": "CALTEM",
+    "CALTEM" : {
         "latinum": "Calidris temminckii",
         "finnishname": "Lapinsirri",
         "swedishname": "Mosnäppa"
     },
-    {
-        "abbreviation6": "CALMAR",
+    "CALMAR" : {
         "latinum": "Calidris maritima",
         "finnishname": "Merisirri",
         "swedishname": "Skärsnäppa"
     },
-    {
-        "abbreviation6": "CALALP",
+    "CALALP" : {
         "latinum": "Calidris alpina",
         "finnishname": "Suosirri",
         "swedishname": "Kärrsnäppa"
     },
-    {
-        "abbreviation6": "LIMFAL",
+    "LIMFAL" : {
         "latinum": "Limicola falcinellus",
         "finnishname": "Jänkäsirriäinen",
         "swedishname": "Myrsnäppa"
     },
-    {
-        "abbreviation6": "PHIPUG",
+    "PHIPUG" : {
         "latinum": "Philomachus pugnax",
         "finnishname": "Suokukko",
         "swedishname": "Brushane"
     },
-    {
-        "abbreviation6": "LYMMIN",
+    "LYMMIN" : {
         "latinum": "Lymnocryptes minimus",
         "finnishname": "Jänkäkurppa",
         "swedishname": "Dvärgbeckasin"
     },
-    {
-        "abbreviation6": "GALGAL",
+    "GALGAL" : {
         "latinum": "Gallinago gallinago",
         "finnishname": "Taivaanvuohi",
         "swedishname": "Enkelbeckasin"
     },
-    {
-        "abbreviation6": "GALMED",
+    "GALMED" : {
         "latinum": "Gallinago media",
         "finnishname": "Heinäkurppa",
         "swedishname": "Dubbelbeckasin"
     },
-    {
-        "abbreviation6": "SCORUS",
+    "SCORUS" : {
         "latinum": "Scolopax rusticola",
         "finnishname": "Lehtokurppa",
         "swedishname": "Morkulla"
     },
-    {
-        "abbreviation6": "LIMLIM",
+    "LIMLIM" : {
         "latinum": "Limosa limosa",
         "finnishname": "Mustapyrstökuiri",
         "swedishname": "Rödspov"
     },
-    {
-        "abbreviation6": "LIMLAP",
+    "LIMLAP" : {
         "latinum": "Limosa lapponica",
         "finnishname": "Punakuiri",
         "swedishname": "Myrspov"
     },
-    {
-        "abbreviation6": "NUMPHA",
+    "NUMPHA" : {
         "latinum": "Numenius phaeopus",
         "finnishname": "Pikkukuovi",
         "swedishname": "Småspov"
     },
-    {
-        "abbreviation6": "NUMARQ",
+    "NUMARQ" : {
         "abbreviation2": "NA",
         "latinum": "Numenius arquata",
         "finnishname": "Kuovi",
         "swedishname": "Storspov"
     },
-    {
-        "abbreviation6": "TRIERY",
+    "TRIERY" : {
         "latinum": "Tringa erythropus",
         "finnishname": "Mustaviklo",
         "swedishname": "Svartsnäppa"
     },
-    {
-        "abbreviation6": "TRITOT",
+    "TRITOT" : {
         "latinum": "Tringa totanus",
         "finnishname": "Punajalkaviklo",
         "swedishname": "Rödbena"
     },
-    {
-        "abbreviation6": "TRISTA",
+    "TRISTA" : {
         "latinum": "Tringa stagnatilis",
         "finnishname": "Lampiviklo",
         "swedishname": "Dammsnäppa"
     },
-    {
-        "abbreviation6": "TRINEB",
+    "TRINEB" : {
         "latinum": "Tringa nebularia",
         "finnishname": "Valkoviklo",
         "swedishname": "Gluttsnäppa"
     },
-    {
-        "abbreviation6": "TRIOCH",
+    "TRIOCH" : {
         "abbreviation2": "TO",
         "latinum": "Tringa ochropus",
         "finnishname": "Metsäviklo",
         "swedishname": "Skogssnäppa"
     },
-    {
-        "abbreviation6": "TRIGLA",
+    "TRIGLA" : {
         "abbreviation2": "TG",
         "latinum": "Tringa glareola",
         "finnishname": "Liro",
         "swedishname": "Grönbena"
     },
-    {
-        "abbreviation6": "XENCIN",
+    "XENCIN" : {
         "latinum": "Xenus cinereus",
         "finnishname": "Rantakurvi",
         "swedishname": "Tereksnäppa"
     },
-    {
-        "abbreviation6": "ACTHYP",
+    "ACTHYP" : {
         "latinum": "Actitis hypoleucos",
         "finnishname": "Rantasipi",
         "swedishname": "Drillsnäppa"
     },
-    {
-        "abbreviation6": "AREINT",
+    "AREINT" : {
         "latinum": "Arenaria interpres",
         "finnishname": "Karikukko",
         "swedishname": "Roskarl"
     },
-    {
-        "abbreviation6": "PHALOB",
+    "PHALOB" : {
         "latinum": "Phalaropus lobatus",
         "finnishname": "Vesipääsky",
         "swedishname": "Smalnäbbad simsnäppa"
     },
-    {
-        "abbreviation6": "STECUS",
+    "STECUS" : {
         "latinum": "Stercorarius parasiticus",
         "finnishname": "Merikihu",
         "swedishname": "Labb"
     },
-    {
-        "abbreviation6": "STELON",
+    "STELON" : {
         "latinum": "Stercorarius longicaudus",
         "finnishname": "Tunturikihu",
         "swedishname": "Fjällabb"
     },
-    {
-        "abbreviation6": "LARMIN",
+    "LARMIN" : {
         "latinum": "Larus minutus",
         "finnishname": "Pikkulokki",
         "swedishname": "Dvärgmås"
     },
-    {
-        "abbreviation6": "LARRID",
+    "LARRID" : {
         "latinum": "Larus ridibundus",
         "finnishname": "Naurulokki",
         "swedishname": "Skrattmås"
     },
-    {
-        "abbreviation6": "LARCAN",
+    "LARCAN" : {
         "latinum": "Larus canus",
         "finnishname": "Kalalokki",
         "swedishname": "Fiskmås"
     },
-    {
-        "abbreviation6": "LARFUS",
+    "LARFUS" : {
         "latinum": "Larus fuscus",
         "finnishname": "Selkälokki",
         "swedishname": "Silltrut"
     },
-    {
-        "abbreviation6": "LARARG",
+    "LARARG" : {
         "latinum": "Larus argentatus",
         "finnishname": "Harmaalokki",
         "swedishname": "Gråtrut"
     },
-    {
-        "abbreviation6": "LARMAR",
+    "LARMAR" : {
         "latinum": "Larus marinus",
         "finnishname": "Merilokki",
         "swedishname": "Havstrut"
     },
-    {
-        "abbreviation6": "STECAS",
+    "STECAS" : {
         "latinum": "Sterna caspia",
         "finnishname": "Räyskä",
         "swedishname": "Skräntärna"
     },
-    {
-        "abbreviation6": "STEHIR",
+    "STEHIR" : {
         "latinum": "Sterna hirundo",
         "finnishname": "Kalatiira",
         "swedishname": "Fisktärna"
     },
-    {
-        "abbreviation6": "STEAEA",
+    "STEAEA" : {
         "latinum": "Sterna paradisaea",
         "finnishname": "Lapintiira",
         "swedishname": "Silvertärna"
     },
-    {
-        "abbreviation6": "STEALB",
+    "STEALB" : {
         "latinum": "Sterna albifrons",
         "finnishname": "Pikkutiira",
         "swedishname": "Småtärna"
     },
-    {
-        "abbreviation6": "CHLNIG",
+    "CHLNIG" : {
         "latinum": "Chlidonias niger",
         "finnishname": "Mustatiira",
         "swedishname": "Svarttärna"
     },
-    {
-        "abbreviation6": "URIAAL",
+    "URIAAL" : {
         "latinum": "Uria aalge",
         "finnishname": "Etelänkiisla",
         "swedishname": "Sillgrissla"
     },
-    {
-        "abbreviation6": "ALCTOR",
+    "ALCTOR" : {
         "latinum": "Alca torda",
         "finnishname": "Ruokki",
         "swedishname": "Tordmule"
     },
-    {
-        "abbreviation6": "CEPGRY",
+    "CEPGRY" : {
         "latinum": "Cepphus grylle",
         "finnishname": "Riskilä",
         "swedishname": "Tobisgrissla"
     },
-    {
-        "abbreviation6": "COLLIV",
+    "COLLIV" : {
         "latinum": "Columba livia",
         "finnishname": "Kesykyyhky",
         "swedishname": "Tamduva"
     },
-    {
-        "abbreviation6": "COLOEN",
+    "COLOEN" : {
         "latinum": "Columba oenas",
         "finnishname": "Uuttukyyhky",
         "swedishname": "Skogsduva"
     },
-    {
-        "abbreviation6": "COLPAL",
+    "COLPAL" : {
         "abbreviation2": "CP",
         "latinum": "Columba palumbus",
         "finnishname": "Sepelkyyhky",
         "swedishname": "Ringduva"
     },
-    {
-        "abbreviation6": "STRDEC",
+    "STRDEC" : {
         "latinum": "Streptopelia decaocto",
         "finnishname": "Turkinkyyhky",
         "swedishname": "Turkduva"
     },
-    {
-        "abbreviation6": "STRTUR",
+    "STRTUR" : {
         "latinum": "Streptopelia turtur",
         "finnishname": "Turturikyyhky",
         "swedishname": "Turturduva"
     },
-    {
-        "abbreviation6": "CUCCAN",
+    "CUCCAN" : {
         "latinum": "Cuculus canorus",
         "finnishname": "Käki",
         "swedishname": "Gök"
     },
-    {
-        "abbreviation6": "BUBBUB",
+    "BUBBUB" : {
         "latinum": "Bubo bubo",
         "finnishname": "Huuhkaja",
         "swedishname": "Berguv"
     },
-    {
-        "abbreviation6": "NYCSCA",
+    "NYCSCA" : {
         "latinum": "Nyctea scandiaca",
         "finnishname": "Tunturipöllö",
         "swedishname": "Fjälluggla"
     },
-    {
-        "abbreviation6": "SURULU",
+    "SURULU" : {
         "latinum": "Surnia ulula",
         "finnishname": "Hiiripöllö",
         "swedishname": "Hökuggla"
     },
-    {
-        "abbreviation6": "GLAPAS",
+    "GLAPAS" : {
         "latinum": "Glaucidium passerinum",
         "finnishname": "Varpuspöllö",
         "swedishname": "Sparvuggla"
     },
-    {
-        "abbreviation6": "STRALU",
+    "STRALU" : {
         "latinum": "Strix aluco",
         "finnishname": "Lehtopöllö",
         "swedishname": "Kattuggla"
     },
-    {
-        "abbreviation6": "STRURA",
+    "STRURA" : {
         "latinum": "Strix uralensis",
         "finnishname": "Viirupöllö",
         "swedishname": "Slaguggla"
     },
-    {
-        "abbreviation6": "STRNEB",
+    "STRNEB" : {
         "latinum": "Strix nebulosa",
         "finnishname": "Lapinpöllö",
         "swedishname": "Lappuggla"
     },
-    {
-        "abbreviation6": "ASIOTU",
+    "ASIOTU" : {
         "latinum": "Asio otus",
         "finnishname": "Sarvipöllö",
         "swedishname": "Hornuggla"
     },
-    {
-        "abbreviation6": "ASIFLA",
+    "ASIFLA" : {
         "latinum": "Asio flammeus",
         "finnishname": "Suopöllö",
         "swedishname": "Jorduggla"
     },
-    {
-        "abbreviation6": "AEGFUN",
+    "AEGFUN" : {
         "latinum": "Aegolius funereus",
         "finnishname": "Helmipöllö",
         "swedishname": "Pärluggla"
     },
-    {
-        "abbreviation6": "CAPEUR",
+    "CAPEUR" : {
         "latinum": "Caprimulgus europaeus",
         "finnishname": "Kehrääjä",
         "swedishname": "Nattskärra"
     },
-    {
-        "abbreviation6": "APUAPU",
+    "APUAPU" : {
         "latinum": "Apus apus",
         "finnishname": "Tervapääsky",
         "swedishname": "Tornseglare"
     },
-    {
-        "abbreviation6": "ALCATT",
+    "ALCATT" : {
         "latinum": "Alcedo atthis",
         "finnishname": "Kuningaskalastaja",
         "swedishname": "Kungsfiskare"
     },
-    {
-        "abbreviation6": "JYNTOR",
+    "JYNTOR" : {
         "latinum": "Jynx torquilla",
         "finnishname": "Käenpiika",
         "swedishname": "Göktyta"
     },
-    {
-        "abbreviation6": "PICCAN",
+    "PICCAN" : {
         "latinum": "Picus canus",
         "finnishname": "Harmaapäätikka",
         "swedishname": "Gråspett"
     },
-    {
-        "abbreviation6": "DRYMAR",
+    "DRYMAR" : {
         "latinum": "Dryocopus martius",
         "finnishname": "Palokärki",
         "swedishname": "Spillkråka"
     },
-    {
-        "abbreviation6": "DENMAJ",
+    "DENMAJ" : {
         "latinum": "Dendrocopos major",
         "finnishname": "Käpytikka",
         "swedishname": "Större hackspett"
     },
-    {
-        "abbreviation6": "DENLEU",
+    "DENLEU" : {
         "latinum": "Dendrocopos leucotos",
         "finnishname": "Valkoselkätikka",
         "swedishname": "Vitryggig hackspett"
     },
-    {
-        "abbreviation6": "DENMIN",
+    "DENMIN" : {
         "latinum": "Dendrocopos minor",
         "finnishname": "Pikkutikka",
         "swedishname": "Mindre hackspett"
     },
-    {
-        "abbreviation6": "PICTRI",
+    "PICTRI" : {
         "latinum": "Picoides tridactylus",
         "finnishname": "Pohjantikka",
         "swedishname": "Tretåig hackspett"
     },
-    {
-        "abbreviation6": "LULARB",
+    "LULARB" : {
         "latinum": "Lullula arborea",
         "finnishname": "Kangaskiuru",
         "swedishname": "Trädlärka"
     },
-    {
-        "abbreviation6": "ALAARV",
+    "ALAARV" : {
         "abbreviation2": "AA",
         "latinum": "Alauda arvensis",
         "finnishname": "Kiuru",
         "swedishname": "Sånglärka"
     },
-    {
-        "abbreviation6": "EREALP",
+    "EREALP" : {
         "latinum": "Eremophila alpestris",
         "finnishname": "Tunturikiuru",
         "swedishname": "Berglärka"
     },
-    {
-        "abbreviation6": "RIPRIP",
+    "RIPRIP" : {
         "latinum": "Riparia riparia",
         "finnishname": "Törmäpääsky",
         "swedishname": "Backsvala"
     },
-    {
-        "abbreviation6": "HIRRUS",
+    "HIRRUS" : {
         "latinum": "Hirundo rustica",
         "finnishname": "Haarapääsky",
         "swedishname": "Ladusvala"
     },
-    {
-        "abbreviation6": "DELURB",
+    "DELURB" : {
         "latinum": "Delichon urbicum",
         "finnishname": "Räystäspääsky",
         "swedishname": "Hussvala"
     },
-    {
-        "abbreviation6": "ANTCAM",
+    "ANTCAM" : {
         "latinum": "Anthus campestris",
         "finnishname": "Nummikirvinen",
         "swedishname": "Fältpiplärka"
     },
-    {
-        "abbreviation6": "ANTTRI",
+    "ANTTRI" : {
         "abbreviation2": "AT",
         "latinum": "Anthus trivialis",
         "finnishname": "Metsäkirvinen",
         "swedishname": "Trädpiplärka"
     },
-    {
-        "abbreviation6": "ANTPRA",
+    "ANTPRA" : {
         "abbreviation2": "AP",
         "latinum": "Anthus pratensis",
         "finnishname": "Niittykirvinen",
         "swedishname": "Ängspiplärka"
     },
-    {
-        "abbreviation6": "ANTCER",
+    "ANTCER" : {
         "latinum": "Anthus cervinus",
         "finnishname": "Lapinkirvinen",
         "swedishname": "Rödstrupig piplärka"
     },
-    {
-        "abbreviation6": "ANTPET",
+    "ANTPET" : {
         "latinum": "Anthus petrosus",
         "finnishname": "Luotokirvinen",
         "swedishname": "Skärpiplärka"
     },
-    {
-        "abbreviation6": "MOTFLA",
+    "MOTFLA" : {
         "latinum": "Motacilla flava",
         "finnishname": "Keltavästäräkki",
         "swedishname": "Gulärla"
     },
-    {
-        "abbreviation6": "MOTCIT",
+    "MOTCIT" : {
         "latinum": "Motacilla citreola",
         "finnishname": "Sitruunavästäräkki",
         "swedishname": "Citronärla"
     },
-    {
-        "abbreviation6": "MOTCIN",
+    "MOTCIN" : {
         "latinum": "Motacilla cinerea",
         "finnishname": "Virtavästäräkki",
         "swedishname": "Forsärla"
     },
-    {
-        "abbreviation6": "MOTALB",
+    "MOTALB" : {
         "abbreviation2": "MA",
         "latinum": "Motacilla alba",
         "finnishname": "Västäräkki",
         "swedishname": "Sädesärla"
     },
-    {
-        "abbreviation6": "BOMGAR",
+    "BOMGAR" : {
         "latinum": "Bombycilla garrulus",
         "finnishname": "Tilhi",
         "swedishname": "Sidensvans"
     },
-    {
-        "abbreviation6": "CINCIN",
+    "CINCIN" : {
         "latinum": "Cinclus cinclus",
         "finnishname": "Koskikara",
         "swedishname": "Strömstare"
     },
-    {
-        "abbreviation6": "TROTRO",
+    "TROTRO" : {
         "abbreviation2": "TT",
         "latinum": "Troglodytes troglodytes",
         "finnishname": "Peukaloinen",
         "swedishname": "Gärdsmyg"
     },
-    {
-        "abbreviation6": "PRUMOD",
+    "PRUMOD" : {
         "latinum": "Prunella modularis",
         "finnishname": "Rautiainen",
         "swedishname": "Järnsparv"
     },
-    {
-        "abbreviation6": "ERIRUB",
+    "ERIRUB" : {
         "abbreviation2": "ER",
         "latinum": "Erithacus rubecula",
         "finnishname": "Punarinta",
         "swedishname": "Rödhake"
     },
-    {
-        "abbreviation6": "LUSLUS",
+    "LUSLUS" : {
         "abbreviation2": "LL",
         "latinum": "Luscinia luscinia",
         "finnishname": "Satakieli",
         "swedishname": "Näktergal"
     },
-    {
-        "abbreviation6": "LUSSVE",
+    "LUSSVE" : {
         "latinum": "Luscinia svecica",
         "finnishname": "Sinirinta",
         "swedishname": "Blåhake"
     },
-    {
-        "abbreviation6": "LUSCYA",
+    "LUSCYA" : {
         "latinum": "Luscinia cyanura",
         "finnishname": "Sinipyrstö",
         "swedishname": "Blåstjärt"
     },
-    {
-        "abbreviation6": "PHOOCH",
+    "PHOOCH" : {
         "latinum": "Phoenicurus ochruros",
         "finnishname": "Mustaleppälintu",
         "swedishname": "Svart rödstjärt"
     },
-    {
-        "abbreviation6": "PHOPHO",
+    "PHOPHO" : {
         "latinum": "Phoenicurus phoenicurus",
         "finnishname": "Leppälintu",
         "swedishname": "Rödstjärt"
     },
-    {
-        "abbreviation6": "SAXRUB",
+    "SAXRUB" : {
         "latinum": "Saxicola rubetra",
         "finnishname": "Pensastasku",
         "swedishname": "Buskskvätta"
     },
-    {
-        "abbreviation6": "SAXTOR",
+    "SAXTOR" : {
         "latinum": "Saxicola torquatus",
         "finnishname": "Mustapäätasku",
         "swedishname": "Svarthakad buskskvätta"
     },
-    {
-        "abbreviation6": "OENOEN",
+    "OENOEN" : {
         "latinum": "Oenanthe oenanthe",
         "finnishname": "Kivitasku",
         "swedishname": "Stenskvätta"
     },
-    {
-        "abbreviation6": "TURTOR",
+    "TURTOR" : {
         "latinum": "Turdus torquatus",
         "finnishname": "Sepelrastas",
         "swedishname": "Ringtrast"
     },
-    {
-        "abbreviation6": "TURMER",
+    "TURMER" : {
         "abbreviation2": "TM",
         "latinum": "Turdus merula",
         "finnishname": "Mustarastas",
         "swedishname": "Koltrast"
     },
-    {
-        "abbreviation6": "TURPIL",
+    "TURPIL" : {
         "latinum": "Turdus pilaris",
         "finnishname": "Räkättirastas",
         "swedishname": "Björktrast"
     },
-    {
-        "abbreviation6": "TURPHI",
+    "TURPHI" : {
         "latinum": "Turdus philomelos",
         "finnishname": "Laulurastas",
         "swedishname": "Taltrast"
     },
-    {
-        "abbreviation6": "TURILI",
+    "TURILI" : {
         "abbreviation2": "TI",
         "latinum": "Turdus iliacus",
         "finnishname": "Punakylkirastas",
         "swedishname": "Rödvingetrast"
     },
-    {
-        "abbreviation6": "TURVIS",
+    "TURVIS" : {
         "latinum": "Turdus viscivorus",
         "finnishname": "Kulorastas",
         "swedishname": "Dubbeltrast"
     },
-    {
-        "abbreviation6": "LOCNAE",
+    "LOCNAE" : {
         "latinum": "Locustella naevia",
         "finnishname": "Pensassirkkalintu",
         "swedishname": "Gräshoppsångare"
     },
-    {
-        "abbreviation6": "LOCFLU",
+    "LOCFLU" : {
         "latinum": "Locustella fluviatilis",
         "finnishname": "Viitasirkkalintu",
         "swedishname": "Flodsångare"
     },
-    {
-        "abbreviation6": "LOCLUS",
+    "LOCLUS" : {
         "latinum": "Locustella luscinioides",
         "finnishname": "Ruokosirkkalintu",
         "swedishname": "Vassångare"
     },
-    {
-        "abbreviation6": "ACRSCH",
+    "ACRSCH" : {
         "latinum": "Acrocephalus schoenobaenus",
         "finnishname": "Ruokokerttunen",
         "swedishname": "Sävsångare"
     },
-    {
-        "abbreviation6": "ACRDUM",
+    "ACRDUM" : {
         "latinum": "Acrocephalus dumetorum",
         "finnishname": "Viitakerttunen",
         "swedishname": "Busksångare"
     },
-    {
-        "abbreviation6": "ACRRIS",
+    "ACRRIS" : {
         "latinum": "Acrocephalus palustris",
         "finnishname": "Luhtakerttunen",
         "swedishname": "Kärrsångare"
     },
-    {
-        "abbreviation6": "ACRSCI",
+    "ACRSCI" : {
         "latinum": "Acrocephalus scirpaceus",
         "finnishname": "Rytikerttunen",
         "swedishname": "Rörsångare"
     },
-    {
-        "abbreviation6": "ACRARU",
+    "ACRARU" : {
         "latinum": "Acrocephalus arundinaceus",
         "finnishname": "Rastaskerttunen",
         "swedishname": "Trastsångare"
     },
-    {
-        "abbreviation6": "IDUCAL",
+    "IDUCAL" : {
         "latinum": "Iduna caligata",
         "finnishname": "Pikkukultarinta",
         "swedishname": "Liten gulsångare"
     },
-    {
-        "abbreviation6": "HIPICT",
+    "HIPICT" : {
         "latinum": "Hippolais icterina",
         "finnishname": "Kultarinta",
         "swedishname": "Härmsångare"
     },
-    {
-        "abbreviation6": "SYLNIS",
+    "SYLNIS" : {
         "latinum": "Sylvia nisoria",
         "finnishname": "Kirjokerttu",
         "swedishname": "Höksångare"
     },
-    {
-        "abbreviation6": "SYLCUR",
+    "SYLCUR" : {
         "latinum": "Sylvia curruca",
         "finnishname": "Hernekerttu",
         "swedishname": "Ärtsångare"
     },
-    {
-        "abbreviation6": "SYLCOM",
+    "SYLCOM" : {
         "latinum": "Sylvia communis",
         "finnishname": "Pensaskerttu",
         "swedishname": "Törnsångare"
     },
-    {
-        "abbreviation6": "SYLBOR",
+    "SYLBOR" : {
         "abbreviation2": "SB",
         "latinum": "Sylvia borin",
         "finnishname": "Lehtokerttu",
         "swedishname": "Trädgårdssångare"
     },
-    {
-        "abbreviation6": "SYLATR",
+    "SYLATR" : {
         "latinum": "Sylvia atricapilla",
         "finnishname": "Mustapääkerttu",
         "swedishname": "Svarthätta"
     },
-    {
-        "abbreviation6": "PHYDES",
+    "PHYDES" : {
         "latinum": "Phylloscopus trochiloides",
         "finnishname": "Idänuunilintu",
         "swedishname": "Lundsångare"
     },
-    {
-        "abbreviation6": "PHYBOR",
+    "PHYBOR" : {
         "latinum": "Phylloscopus borealis",
         "finnishname": "Lapinuunilintu",
         "swedishname": "Nordsångare"
     },
-    {
-        "abbreviation6": "PHYSIB",
+    "PHYSIB" : {
         "abbreviation2": "PS",
         "latinum": "Phylloscopus sibilatrix",
         "finnishname": "Sirittäjä",
         "swedishname": "Grönsångare"
     },
-    {
-        "abbreviation6": "PHYCOL",
+    "PHYCOL" : {
         "latinum": "Phylloscopus collybita",
         "finnishname": "Tiltaltti",
         "swedishname": "Gransångare"
     },
-    {
-        "abbreviation6": "PHYLUS",
+    "PHYLUS" : {
         "abbreviation2": "PT",
         "latinum": "Phylloscopus trochilus",
         "finnishname": "Pajulintu",
         "swedishname": "Lövsångare"
     },
-    {
-        "abbreviation6": "REGREG",
+    "REGREG" : {
         "abbreviation2": "RR",
         "latinum": "Regulus regulus",
         "finnishname": "Hippiäinen",
         "swedishname": "Kungsfågel"
     },
-    {
-        "abbreviation6": "MUSSTR",
+    "MUSSTR" : {
         "abbreviation2": "MS",
         "latinum": "Muscicapa striata",
         "finnishname": "Harmaasieppo",
         "swedishname": "Grå flugsnappare"
     },
-    {
-        "abbreviation6": "FICPAR",
+    "FICPAR" : {
         "latinum": "Ficedula parva",
         "finnishname": "Pikkusieppo",
         "swedishname": "Mindre flugsnappare"
     },
-    {
-        "abbreviation6": "FICHYP",
+    "FICHYP" : {
         "abbreviation2": "FH",
         "latinum": "Ficedula hypoleuca",
         "finnishname": "Kirjosieppo",
         "swedishname": "Svartvit flugsnappare"
     },
-    {
-        "abbreviation6": "PANBIA",
+    "PANBIA" : {
         "latinum": "Panurus biarmicus",
         "finnishname": "Viiksitimali",
         "swedishname": "Skäggmes"
     },
-    {
-        "abbreviation6": "AEGCAU",
+    "AEGCAU" : {
         "latinum": "Aegithalos caudatus",
         "finnishname": "Pyrstötiainen",
         "swedishname": "Stjärtmes"
     },
-    {
-        "abbreviation6": "PARMON",
+    "PARMON" : {
         "latinum": "Parus montanus",
         "finnishname": "Hömötiainen",
         "swedishname": "Talltita"
     },
-    {
-        "abbreviation6": "PARCIN",
+    "PARCIN" : {
         "latinum": "Parus cinctus",
         "finnishname": "Lapintiainen",
         "swedishname": "Lappmes"
     },
-    {
-        "abbreviation6": "PARCRI",
+    "PARCRI" : {
         "latinum": "Parus cristatus",
         "finnishname": "Töyhtötiainen",
         "swedishname": "Tofsmes"
     },
-    {
-        "abbreviation6": "PARATE",
+    "PARATE" : {
         "latinum": "Parus ater",
         "finnishname": "Kuusitiainen",
         "swedishname": "Svartmes"
     },
-    {
-        "abbreviation6": "PARCAE",
+    "PARCAE" : {
         "latinum": "Parus caeruleus",
         "finnishname": "Sinitiainen",
         "swedishname": "Blåmes"
     },
-    {
-        "abbreviation6": "PARCYA",
+    "PARCYA" : {
         "latinum": "Parus cyanus",
         "finnishname": "Valkopäätiainen",
         "swedishname": "Azurmes"
     },
-    {
-        "abbreviation6": "PARMAJ",
+    "PARMAJ" : {
         "latinum": "Parus major",
         "finnishname": "Talitiainen",
         "swedishname": "Talgoxe"
     },
-    {
-        "abbreviation6": "SITEUR",
+    "SITEUR" : {
         "latinum": "Sitta europaea",
         "finnishname": "Pähkinänakkeli",
         "swedishname": "Nötväcka"
     },
-    {
-        "abbreviation6": "CERFAM",
+    "CERFAM" : {
         "latinum": "Certhia familiaris",
         "finnishname": "Puukiipijä",
         "swedishname": "Trädkrypare"
     },
-    {
-        "abbreviation6": "REMPEN",
+    "REMPEN" : {
         "latinum": "Remiz pendulinus",
         "finnishname": "Pussitiainen",
         "swedishname": "Pungmes"
     },
-    {
-        "abbreviation6": "ORIORI",
+    "ORIORI" : {
         "latinum": "Oriolus oriolus",
         "finnishname": "Kuhankeittäjä",
         "swedishname": "Sommargylling"
     },
-    {
-        "abbreviation6": "LANCOL",
+    "LANCOL" : {
         "latinum": "Lanius collurio",
         "finnishname": "Pikkulepinkäinen",
         "swedishname": "Törnskata"
     },
-    {
-        "abbreviation6": "LANEXC",
+    "LANEXC" : {
         "latinum": "Lanius excubitor",
         "finnishname": "Isolepinkäinen",
         "swedishname": "Varfågel"
     },
-    {
-        "abbreviation6": "GARGLA",
+    "GARGLA" : {
         "latinum": "Garrulus glandarius",
         "finnishname": "Närhi",
         "swedishname": "Nötskrika"
     },
-    {
-        "abbreviation6": "PERINF",
+    "PERINF" : {
         "latinum": "Perisoreus infaustus",
         "finnishname": "Kuukkeli",
         "swedishname": "Lavskrika"
     },
-    {
-        "abbreviation6": "PICPIC",
+    "PICPIC" : {
         "latinum": "Pica pica",
         "finnishname": "Harakka",
         "swedishname": "Skata"
     },
-    {
-        "abbreviation6": "NUCCAR",
+    "NUCCAR" : {
         "latinum": "Nucifraga caryocatactes",
         "finnishname": "Pähkinähakki",
         "swedishname": "Nötkråka"
     },
-    {
-        "abbreviation6": "CORMON",
+    "CORMON" : {
         "latinum": "Corvus monedula",
         "finnishname": "Naakka",
         "swedishname": "Kaja"
     },
-    {
-        "abbreviation6": "CORFRU",
+    "CORFRU" : {
         "latinum": "Corvus frugilegus",
         "finnishname": "Mustavaris",
         "swedishname": "Råka"
     },
-    {
-        "abbreviation6": "CORNIX",
+    "CORNIX" : {
         "latinum": "Corvus corone",
         "finnishname": "Varis",
         "swedishname": "Kråka"
     },
-    {
-        "abbreviation6": "CORRAX",
+    "CORRAX" : {
         "latinum": "Corvus corax",
         "finnishname": "Korppi",
         "swedishname": "Korp"
     },
-    {
-        "abbreviation6": "STUVUL",
+    "STUVUL" : {
         "latinum": "Sturnus vulgaris",
         "finnishname": "Kottarainen",
         "swedishname": "Stare"
     },
-    {
-        "abbreviation6": "PASDOM",
+    "PASDOM" : {
         "abbreviation2": "PD",
         "latinum": "Passer domesticus",
         "finnishname": "Varpunen",
         "swedishname": "Gråsparv"
     },
-    {
-        "abbreviation6": "PASMON",
+    "PASMON" : {
         "latinum": "Passer montanus",
         "finnishname": "Pikkuvarpunen",
         "swedishname": "Pilfink"
     },
-    {
-        "abbreviation6": "FRICOE",
+    "FRICOE" : {
         "abbreviation2": "FC",
         "latinum": "Fringilla coelebs",
         "finnishname": "Peippo",
         "swedishname": "Bofink"
     },
-    {
-        "abbreviation6": "FRIMON",
+    "FRIMON" : {
         "abbreviation2": "FM",
         "latinum": "Fringilla montifringilla",
         "finnishname": "Järripeippo",
         "swedishname": "Bergfink"
     },
-    {
-        "abbreviation6": "SERSER",
+    "SERSER" : {
         "latinum": "Serinus serinus",
         "finnishname": "Keltahemppo",
         "swedishname": "Gulhämpling"
     },
-    {
-        "abbreviation6": "CARCHL",
+    "CARCHL" : {
         "latinum": "Carduelis chloris",
         "finnishname": "Viherpeippo",
         "swedishname": "Grönfink"
     },
-    {
-        "abbreviation6": "CARCAR",
+    "CARCAR" : {
         "latinum": "Carduelis carduelis",
         "finnishname": "Tikli",
         "swedishname": "Steglits"
     },
-    {
-        "abbreviation6": "CARSPI",
+    "CARSPI" : {
         "abbreviation2": "CS",
         "latinum": "Carduelis spinus",
         "finnishname": "Vihervarpunen",
         "swedishname": "Grönsiska"
     },
-    {
-        "abbreviation6": "CARCAN",
+    "CARCAN" : {
         "latinum": "Carduelis cannabina",
         "finnishname": "Hemppo",
         "swedishname": "Hämpling"
     },
-    {
-        "abbreviation6": "CARRIS",
+    "CARRIS" : {
         "latinum": "Carduelis flavirostris",
         "finnishname": "Vuorihemppo",
         "swedishname": "Vinterhämpling"
     },
-    {
-        "abbreviation6": "CARMEA",
+    "CARMEA" : {
         "latinum": "Carduelis flammea",
         "finnishname": "Urpiainen",
         "swedishname": "Gråsiska"
     },
-    {
-        "abbreviation6": "CARHOR",
+    "CARHOR" : {
         "latinum": "Carduelis hornemanni",
         "finnishname": "Tundraurpiainen",
         "swedishname": "Snösiska"
     },
-    {
-        "abbreviation6": "LOXLEU",
+    "LOXLEU" : {
         "latinum": "Loxia leucoptera",
         "finnishname": "Kirjosiipikäpylintu",
         "swedishname": "Bändelkorsnäbb"
     },
-    {
-        "abbreviation6": "LOXCUR",
+    "LOXCUR" : {
         "latinum": "Loxia curvirostra",
         "finnishname": "Pikkukäpylintu",
         "swedishname": "Mindre korsnäbb"
     },
-    {
-        "abbreviation6": "LOXPYT",
+    "LOXPYT" : {
         "latinum": "Loxia pytyopsittacus",
         "finnishname": "Isokäpylintu",
         "swedishname": "Större korsnäbb"
     },
-    {
-        "abbreviation6": "CARERY",
+    "CARERY" : {
         "abbreviation2": "CE",
         "latinum": "Carpodacus erythrinus",
         "finnishname": "Punavarpunen",
         "swedishname": "Rosenfink"
     },
-    {
-        "abbreviation6": "PINENU",
+    "PINENU" : {
         "latinum": "Pinicola enucleator",
         "finnishname": "Taviokuurna",
         "swedishname": "Tallbit"
     },
-    {
-        "abbreviation6": "PYRPYR",
+    "PYRPYR" : {
         "latinum": "Pyrrhula pyrrhula",
         "finnishname": "Punatulkku",
         "swedishname": "Domherre"
     },
-    {
-        "abbreviation6": "COCCOC",
+    "COCCOC" : {
         "latinum": "Coccothraustes coccothraustes",
         "finnishname": "Nokkavarpunen",
         "swedishname": "Stenknäck"
     },
-    {
-        "abbreviation6": "CALLAP",
+    "CALLAP" : {
         "latinum": "Calcarius lapponicus",
         "finnishname": "Lapinsirkku",
         "swedishname": "Lappsparv"
     },
-    {
-        "abbreviation6": "PLENIV",
+    "PLENIV" : {
         "latinum": "Plectrophenax nivalis",
         "finnishname": "Pulmunen",
         "swedishname": "Snösparv"
     },
-    {
-        "abbreviation6": "EMBCIT",
+    "EMBCIT" : {
         "abbreviation2": "EC",
         "latinum": "Emberiza citrinella",
         "finnishname": "Keltasirkku",
         "swedishname": "Gulsparv"
     },
-    {
-        "abbreviation6": "EMBHOR",
+    "EMBHOR" : {
         "latinum": "Emberiza hortulana",
         "finnishname": "Peltosirkku",
         "swedishname": "Ortolansparv"
     },
-    {
-        "abbreviation6": "EMBRUS",
+    "EMBRUS" : {
         "latinum": "Emberiza rustica",
         "finnishname": "Pohjansirkku",
         "swedishname": "Videsparv"
     },
-    {
-        "abbreviation6": "EMBPUS",
+    "EMBPUS" : {
         "latinum": "Emberiza pusilla",
         "finnishname": "Pikkusirkku",
         "swedishname": "Dvärgsparv"
     },
-    {
-        "abbreviation6": "EMBAUR",
+    "EMBAUR" : {
         "latinum": "Emberiza aureola",
         "finnishname": "Kultasirkku",
         "swedishname": "Gyllensparv"
     },
-    {
-        "abbreviation6": "EMBSCH",
+    "EMBSCH" : {
         "latinum": "Emberiza schoeniclus",
         "finnishname": "Pajusirkku",
         "swedishname": "Sävsparv"
     }
-]
+}
