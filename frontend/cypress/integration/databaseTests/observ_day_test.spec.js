@@ -64,15 +64,14 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
   it("Observations station can be modified" , function() {
     cy.get("#observatorySelector").click();
-    //cy.contains("MUOKKAA");.click({ force: true });
     cy.get("#select-observatory").click().get("ul > li").eq(1).click();
     cy.get("#submit").contains("Tallenna").click();
-    //cy.contains("Jurmo");
+    cy.contains("Jurmo");
 
   });
 
 
-//ALLA KAKSI TESTIÄ, JOTKA TOIMIVAT AIKAISEMMIN. NYT EIVÄT,KUN ON TEHTY VALIDOINTIA
+
   it("An observation and observation day can be saved on firstpage", function() {
 
     cy.get("#date-picker-inline").clear();
