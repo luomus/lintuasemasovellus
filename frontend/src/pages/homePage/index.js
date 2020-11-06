@@ -147,7 +147,7 @@ export const HomePage = () => {
   const errorChecking = (editor, data, value) => {
     setShorthand(value);
     const lines = editor.doc.children[0].lines;
-    console.log(lines);
+    console.log("lines:", lines);
     console.log("data:", data);
     if (lines.length > 1 && data.to.line < lines.length - 1) {
       const text = lines[data.to.line].text;
@@ -159,7 +159,7 @@ export const HomePage = () => {
         checkWholeInputLine(data.to.line, lines[data.to.line].text);
       }
       const errors = getErrors();
-      console.log(errors);
+      console.log("errors:", errors);
       resetErrors();
     } else {
       return;
