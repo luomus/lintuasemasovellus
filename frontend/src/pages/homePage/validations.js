@@ -12,13 +12,10 @@ export const isTime = (row) => {
   return String(row).trim().match(timeRegex);
 };
 
+const birdSet = new Set(Object.entries(birds));
+
 const isInBirds = (speciesName) => {
-  for (const bird of birds) {
-    if (speciesName.toUpperCase() === bird.abbreviation6) {
-      return true;
-    }
-  }
-  return false;
+  return birdSet.has(speciesName.toUpperCase());
 };
 
 export const checkWholeInputLine = (rowNumber, row) => {
