@@ -6,8 +6,10 @@ const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
 let errors = [];
 
-const isTime = (row) => {
-  return String(row).match(timeRegex);
+export let timelines = new Set();
+
+export const isTime = (row) => {
+  return String(row).trim().match(timeRegex);
 };
 
 const isInBirds = (speciesName) => {
@@ -19,7 +21,7 @@ const isInBirds = (speciesName) => {
   return false;
 };
 
-const checkWholeInputLine = (rowNumber, row) => {
+export const checkWholeInputLine = (rowNumber, row) => {
   if (!row) return;
   try {
     const parsed = parse(row);

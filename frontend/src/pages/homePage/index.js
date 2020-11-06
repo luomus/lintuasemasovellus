@@ -16,7 +16,15 @@ import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
-import FeedbackModal from "./FeedbackModal";
+
+import { Controlled as CodeMirror } from "react-codemirror2";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
+import "codemirror/theme/monokai.css";
+import "codemirror/theme/idea.css";
+import {
+  checkWholeInputLine, getErrors, resetErrors, isTime, timelines
+} from "./validations";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +54,7 @@ export const HomePage = () => {
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
-  const [shorthand, setShorthand] = useState("");
+
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
@@ -61,7 +69,7 @@ export const HomePage = () => {
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-  const [showModal, setShowModal] = useState(false);
+  const [shorthand, setShorthand] = useState("");
 
 
   const handleClose = (event, reason) => {
@@ -70,13 +78,6 @@ export const HomePage = () => {
     }
     setFormSent(false);
     setErrorHappened(false);
-  };
-
-  const formatDate = (date) => {
-    if (!date) return "";
-    const dd = date.getDate();
-    const mm = date.getMonth() + 1;
-    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
   };
 
   useEffect(() => {
@@ -98,7 +99,7 @@ export const HomePage = () => {
       );
     }
   });
-
+  /*
   const handleModalClose = () => {
     setShowModal(false);
   };
@@ -107,16 +108,40 @@ export const HomePage = () => {
   const showFeedback = () => {
     setShowModal(true);
   };
-
+  */
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
   console.log("user is set: " + userIsSet);
+
+  console.log("shorthand val:", shorthand);
 
   if (!userIsSet) {
     return (
       <Redirect to="/login" />
     );
   }
+
+  const errorChecking = (editor, data, value) => {
+    setShorthand(value);
+    const lines = editor.doc.children[0].lines;
+    console.log(lines);
+    console.log("data:", data);
+    if (lines.length > 1 && data.to.line < lines.length - 1) {
+      const text = lines[data.to.line].text;
+      if (!text) return;
+      else if (isTime(text)) {
+        timelines.add(data.to.line);
+        console.log(timelines);
+      } else {
+        checkWholeInputLine(data.to.line, lines[data.to.line].text);
+      }
+      const errors = getErrors();
+      console.log(errors);
+      resetErrors();
+    } else {
+      return;
+    }
+  };
 
   return (
     <div>
@@ -229,18 +254,23 @@ export const HomePage = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField required
-                  id="shorthand"
-                  variant="outlined"
-                  label="Pikakirjoitus"
-                  fullWidth={true}
-                  multiline={true}
-                  rows={5}
+                <CodeMirror
                   value={shorthand}
-                  onChange={(event) => setShorthand(event.target.value)}
+                  options={{
+                    theme: "idea",
+                    lineNumbers: true,
+                    autoRefresh: true,
+                  }}
+                  editorDidMount={editor => {
+                    editor.refresh();
+                  }}
+                  onBeforeChange={(editor, data, value) => {
+                    setShorthand(value);
+                  }}
+                  onChange={errorChecking}
                 />
               </Grid>
-              <Button onClick={showFeedback}>
+              <Button>
                 {t("save")}
               </Button>
             </Grid>
@@ -263,11 +293,12 @@ export const HomePage = () => {
           </Paper>
         </Grid>
       </Grid>
-      <FeedbackModal
-        open={showModal} handleClose={handleModalClose} shorthand={shorthand}
+      {/*<FeedbackModal
+        open={showModal} handleClose={handleModalClose}
+        // shorthand={shorthand}
         date={formatDate(day)} observers={observers} comment={comment}
         type={type} location={location} observatory={userObservatory}
-      />
+      />*/}
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           {t("formSent")}
