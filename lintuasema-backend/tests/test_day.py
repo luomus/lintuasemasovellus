@@ -70,7 +70,7 @@ def test_sameObservatoryDifferentDay(app):
 def test_addDayRoute(app):
     response = app.test_client().post(
         '/api/addDay',
-        data=json.dumps({'day': '01.03.2020', 'observers': 'Teppo Testaaja', 'comment': 'Kaunis ilma.', 'observatory': 'Hangon Lintuasema'}),
+        data=json.dumps({'day': '01.03.2020', 'observers': 'Teppo Testaaja', 'comment': 'Kaunis ilma.', 'observatory': 'Hangon_Lintuasema'}),
         content_type='application/json',)
     
     print("response", response)

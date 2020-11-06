@@ -67,7 +67,7 @@ export const DayList = () => {
           {t("days")}
         </Typography>
         <br />
-        <Table className={classes.table}>
+        <Table  className={classes.table}>
           <TableHead>
             <TableRow>
               <StyledTableCell>{t("date")}</StyledTableCell>
@@ -81,7 +81,7 @@ export const DayList = () => {
               list
                 .sort((a, b) => a.day - b.day)
                 .map((s, i) =>
-                  <TableRow hover key={i} component={Link}
+                  <TableRow id="dayTableRow" hover key={i} component={Link}
                     to={`/daydetails/${s.day}/${s.observatory}`} >
                     <StyledTableCell component="th" scope="row">
                       {s.day}
@@ -93,7 +93,7 @@ export const DayList = () => {
                       {s.comment}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.observatory}
+                      {s.observatory.replace("_", " ")}
                     </StyledTableCell>
                   </TableRow>
                 )

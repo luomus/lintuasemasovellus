@@ -1,12 +1,15 @@
+
 // import { TouchRipple } from "@material-ui/core/ButtonBase/TouchRipple";
-// const observStation = "Hangon Lintuasema";
+const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
+const changedObserver= "Aarni Apulaishavainnoitsija";
 const comment = "Olipa kiva sää.";
+const changedComment= "hihihi asdfsommol";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
 const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
-const shorthand = "10:00 \nsommol 1/2 W \n12:00";
+const shorthand = "10:00\nsommol 1/2 W\n12:00";
 
 //const date3 = "03.03.2020";
 //const observer3 = "Ano Nyymi";
@@ -16,7 +19,13 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.visit("http://localhost:3000");
     //cy.get("#login-link");
     //cy.contains("Kirjaudu");
-    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+
+    // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
+
+    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+
+    cy.visit("http://localhost:3000");
 
 
     const user = {
@@ -35,6 +44,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
       });
 
 
+      
 
     cy.get("#select-observatory").click().get("ul > li").eq(0).click(); //valitsee listan ensimmäisen
     cy.get("#submit").contains("Tallenna").click();
@@ -61,6 +71,14 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("Pikakirjoitus");
   });
 
+  it("Observations station can be modified" , function() {
+    cy.get("#observatorySelector").click();
+    cy.get("#select-observatory").click().get("ul > li").eq(1).click();
+    cy.get("#submit").contains("Tallenna").click();
+    cy.contains("Jurmo");
+
+  });
+
 
 
   it("An observation and observation day can be saved on firstpage", function() {
@@ -70,12 +88,66 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
-    cy.get("#selectLocation").click().get("#Bunkkeri").click({});
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#shorthand").type(shorthand);
     cy.contains("Tallenna").click({ force: true });
+    cy.get("#sendCorrectObservation").click();
+    
 
   });
 
+  it("Day and period has been added", function() {
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains(observer);
+    cy.contains(comment);
+    cy.contains(observStation);
+    cy.contains(date);
+
+  });
+
+  it("Observation can be opened to a new page", function() {
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Hilla Havainnoitsija").click();
+    cy.contains("Bunkkeri");
+    cy.contains("10:00");    
+  });
+
+  it("Comment can be edited", function() {
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Hilla Havainnoitsija").click();
+    cy.get("#commentButton").click();
+    cy.get("#commentField").clear();
+    cy.get("#commentField").type(changedComment);
+    cy.get("#commentSubmit").click();
+    cy.contains(changedComment);
+    cy.contains(comment).should('not.exist');  
+    
+    cy.get("#commentButton").click();
+    cy.get("#commentField").clear();
+    cy.get("#commentField").type(comment);
+    cy.get("#commentSubmit").click();
+  });
+
+  it("Observer can be edited", function() {
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Hilla Havainnoitsija").click();
+    cy.get("#observerButton").click();
+    cy.get("#observerField").clear();
+    cy.get("#observerField").type(changedObserver);
+    cy.get("#observerSubmit").click(); 
+    cy.contains(changedObserver);
+    cy.contains(observer).should('not.exist');   
+    
+    
+    cy.get("#observerButton").click();
+    cy.get("#observerField").clear();
+    cy.get("#observerField").type(observer);
+    cy.get("#observerSubmit").click();
+  });
 
   /*
   it("There is a button for listing all observation day", function() {
