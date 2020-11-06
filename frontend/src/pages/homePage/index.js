@@ -19,12 +19,13 @@ import Alert from "../../globalComponents/Alert";
 
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
-import "codemirror/theme/material.css";
-import "codemirror/theme/monokai.css";
 import "codemirror/theme/idea.css";
 import {
   checkWholeInputLine, getErrors, resetErrors, isTime, timelines
 } from "./validations";
+import {
+  sendDay, loopThroughObservationPeriods, loopThroughObservations
+} from "./parseShorthandField";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,6 +72,11 @@ export const HomePage = () => {
 
   const [shorthand, setShorthand] = useState("");
 
+  const formatDate = (date) => {
+    const dd = date.getDate();
+    const mm = date.getMonth() + 1;
+    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -109,6 +115,23 @@ export const HomePage = () => {
     setShowModal(true);
   };
   */
+
+  const sendData = async () => {
+    const rows = shorthand.split("\n");
+    try {
+      await sendDay({
+        day: formatDate(day),
+        comment,
+        observers,
+        observatory: userObservatory
+      });
+      await loopThroughObservationPeriods(rows, type, location);
+      await loopThroughObservations(rows);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
   console.log("user is set: " + userIsSet);
@@ -270,7 +293,7 @@ export const HomePage = () => {
                   onChange={errorChecking}
                 />
               </Grid>
-              <Button>
+              <Button onClick={sendData}>
                 {t("save")}
               </Button>
             </Grid>
@@ -293,12 +316,6 @@ export const HomePage = () => {
           </Paper>
         </Grid>
       </Grid>
-      {/*<FeedbackModal
-        open={showModal} handleClose={handleModalClose}
-        // shorthand={shorthand}
-        date={formatDate(day)} observers={observers} comment={comment}
-        type={type} location={location} observatory={userObservatory}
-      />*/}
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           {t("formSent")}
