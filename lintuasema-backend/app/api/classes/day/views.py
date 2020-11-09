@@ -42,7 +42,9 @@ def list_day():
 @login_required
 def edit_comment(day_id, comment):
     day=Day.query.get(day_id)
-    day.comment=comment
+    day_new = Day(day = day.day, comment = comment, observers = day.observers, observatory_id= day.observatory_id)
+    day.is_deleted = 1
+    addDay(day_new)
 
     db.session().commit()
 

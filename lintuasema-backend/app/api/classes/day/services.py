@@ -3,8 +3,8 @@ from app.api.classes.day.models import Day
 from app.db import db
 
 def addDay(day):
-    d = Day.query.filter_by(day = day.day, observatory_id = day.observatory_id).first()
-    if not d and day.observatory_id is not None and day.day is not None and day.observers is not None:
+    d = Day.query.filter_by(day = day.day, observatory_id = day.observatory_id, is_deleted = 0).first()
+    if  not d and day.observatory_id is not None and day.day is not None and day.observers is not None:
         db.session().add(day)
         #db.session().flush()
         #db.session().refresh(day)
@@ -14,7 +14,7 @@ def addDay(day):
 
 
 def getDays():
-    dayObjects = Day.query.all()
+    dayObjects = Day.query.filter_by(is_deleted=0).all()
     return dayObjects
 
 def getDay(dayId):
