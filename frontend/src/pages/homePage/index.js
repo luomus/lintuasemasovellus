@@ -20,12 +20,22 @@ import Alert from "../../globalComponents/Alert";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
+import "codemirror/addon/lint/lint";
+import "codemirror/addon/lint/lint.css";
+
+import "./index.css";
+
 import {
-  checkWholeInputLine, getErrors, resetErrors, isTime, timelines
+//  checkWholeInputLine, getErrors, resetErrors, isTime, timelines
+  loopThroughCheckForErrors, getErrors, resetErrors
 } from "./validations";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
+
+import { JSHINT } from "jshint";
+
+window.JSHINT = JSHINT;
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+let timeout = null;
+
+let widgets = new Set();
 
 export const HomePage = () => {
   const classes = useStyles();
@@ -144,26 +157,38 @@ export const HomePage = () => {
     );
   }
 
-  const errorChecking = (editor, data, value) => {
-    setShorthand(value);
-    const lines = editor.doc.children[0].lines;
-    console.log("lines:", lines);
-    console.log("data:", data);
-    if (lines.length > 1 && data.to.line < lines.length - 1) {
-      const text = lines[data.to.line].text;
-      if (!text) return;
-      else if (isTime(text)) {
-        timelines.add(data.to.line);
-        console.log(timelines);
-      } else {
-        checkWholeInputLine(data.to.line, lines[data.to.line].text);
-      }
-      const errors = getErrors();
-      console.log("errors:", errors);
-      resetErrors();
-    } else {
-      return;
+  const errorCheckingLogic = (editor, data, value) => {
+    loopThroughCheckForErrors(value);
+    console.log("widgets:--------------------", widgets);
+    for (const widget of widgets) {
+      editor.removeLineWidget(widget);
     }
+    widgets.clear();
+    const errors = getErrors();
+    for (let i = 0; i < errors.length; i++) {
+      const msg = document.createElement("div");
+      const icon = msg.appendChild(document.createElement("span"));
+      msg.className = "lint-error";
+      icon.innerHTML = "!!";
+      icon.className = "lint-error-icon";
+      msg.appendChild(document.createTextNode(errors[i]));
+      widgets.add(editor.addLineWidget(data.to.line, msg,
+        {
+          coverGutter: false, noHScroll: true
+        }
+      ));
+    }
+    resetErrors();
+  };
+
+  const codemirrorOnchange = (editor, data, value) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      errorCheckingLogic(editor, data, value);
+      timeout = null;
+    }, 500);
   };
 
   return (
@@ -283,14 +308,18 @@ export const HomePage = () => {
                     theme: "idea",
                     lineNumbers: true,
                     autoRefresh: true,
+                    readOnly: false,
+                    lint: true,
+                    gutters: ["CodeMirror-lint-markers"]
                   }}
                   editorDidMount={editor => {
                     editor.refresh();
                   }}
                   onBeforeChange={(editor, data, value) => {
                     setShorthand(value);
-                  }}
-                  onChange={errorChecking}
+                  }
+                  }
+                  onChange={codemirrorOnchange}
                 />
               </Grid>
               <Button onClick={sendData}>

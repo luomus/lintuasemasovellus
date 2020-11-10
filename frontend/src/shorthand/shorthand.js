@@ -236,27 +236,45 @@ export const giveMeABucket = (char, line, index) => {
     case "3":case "4":case "5":
     case "6":case "7":case "8":
     case "9":
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       yksilomaara += char;
       break;
-    case ".":
+    case ".":case ":":
       // ignore (although time should not be on the line)
       break;
     case "(":
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       openLisatietoBucket();
       break;
     case ")":
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       closeLisatietoBucket();
       break;
     case ",":
       //osahavainto
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       if (isTooManyCommasHeuristic(index, line))
         throw new Error("ylimääräisiä pilkkuja");
       constructOsahavainto();
       break;
     case "'":case "\"":
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       ika += char;
       break;
     case "+":case "-":
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       if (index < line.length - 1
           && char === "-" && line[index + 1] === "+") {
         throw new Error("tuntematon ohituspuoli");
@@ -272,6 +290,9 @@ export const giveMeABucket = (char, line, index) => {
       ohituspuoli += char;
       break;
     case "/":
+      if (lajinimiNotSet()) {
+        throw new Error("lajinimen jälkeen puuttuu välilyönti");
+      }
       fillSukupuoliBucketsSlash();
       break;
   }
