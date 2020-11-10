@@ -44,7 +44,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
       });
 
 
-      
+
 
     cy.get("#select-observatory").click().get("ul > li").eq(0).click(); //valitsee listan ensimmäisen
     cy.get("#submit").contains("Tallenna").click();
@@ -92,7 +92,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#shorthand").type(shorthand);
     cy.contains("Tallenna").click({ force: true });
     cy.get("#sendCorrectObservation").click();
-    
+
 
   });
 
@@ -111,7 +111,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
     cy.contains("Bunkkeri");
-    cy.contains("10:00");    
+    cy.contains("10:00");
   });
 
   it("Comment can be edited", function() {
@@ -123,8 +123,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#commentField").type(changedComment);
     cy.get("#commentSubmit").click();
     cy.contains(changedComment);
-    cy.contains(comment).should('not.exist');  
-    
+    cy.contains(comment).should("not.exist");
+
     cy.get("#commentButton").click();
     cy.get("#commentField").clear();
     cy.get("#commentField").type(comment);
@@ -138,11 +138,11 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(changedObserver);
-    cy.get("#observerSubmit").click(); 
+    cy.get("#observerSubmit").click();
     cy.contains(changedObserver);
-    cy.contains(observer).should('not.exist');   
-    
-    
+    cy.contains(observer).should("not.exist");
+
+
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(observer);

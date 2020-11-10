@@ -16,28 +16,17 @@ import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
-
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import "codemirror/addon/lint/lint";
-import "codemirror/addon/lint/lint.css";
-
 import errorImg from "./error.png";
-
 import "./index.css";
-
 import {
-//  checkWholeInputLine, getErrors, resetErrors, isTime, timelines
   loopThroughCheckForErrors, getErrors, resetErrors
 } from "./validations";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
-
-import { JSHINT } from "jshint";
-
-window.JSHINT = JSHINT;
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+  },
+  sendButton: {
+    marginBottom: "40px"
+  },
+  codemirrorBox: {
+    position: "relative",
+    opacity: "99%"
   }
 }));
 
@@ -120,16 +116,6 @@ export const HomePage = () => {
       );
     }
   });
-  /*
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
-
-  const showFeedback = () => {
-    setShowModal(true);
-  };
-  */
 
   const sendData = async () => {
     const rows = shorthand.split("\n");
@@ -144,7 +130,9 @@ export const HomePage = () => {
       await loopThroughObservations(rows);
     } catch (error) {
       console.error(error.message);
+      setErrorHappened(true);
     }
+    setFormSent(true);
   };
 
   const user = useSelector(state => state.user);
@@ -159,7 +147,7 @@ export const HomePage = () => {
     );
   }
 
-  const errorCheckingLogic = (editor, data, value) => {
+  const errorCheckingLogic = async (editor, data, value) => {
     loopThroughCheckForErrors(value);
     console.log("widgets:--------------------", widgets);
     for (const widget of widgets) {
@@ -305,26 +293,25 @@ export const HomePage = () => {
 
               <Grid item xs={12}>
                 <CodeMirror
+                  className={classes.codemirrorBox}
                   value={shorthand}
                   options={{
                     theme: "idea",
                     lineNumbers: true,
                     autoRefresh: true,
                     readOnly: false,
-                    lint: true,
-                    gutters: ["CodeMirror-lint-markers"]
+                    lint: false
                   }}
                   editorDidMount={editor => {
                     editor.refresh();
                   }}
                   onBeforeChange={(editor, data, value) => {
                     setShorthand(value);
-                  }
-                  }
+                  }}
                   onChange={codemirrorOnchange}
                 />
               </Grid>
-              <Button onClick={sendData}>
+              <Button className={classes.sendButton} onClick={sendData}>
                 {t("save")}
               </Button>
             </Grid>
