@@ -23,6 +23,8 @@ import "codemirror/theme/idea.css";
 import "codemirror/addon/lint/lint";
 import "codemirror/addon/lint/lint.css";
 
+import errorImg from "./error.png";
+
 import "./index.css";
 
 import {
@@ -167,11 +169,11 @@ export const HomePage = () => {
     const errors = getErrors();
     for (let i = 0; i < errors.length; i++) {
       const msg = document.createElement("div");
-      const icon = msg.appendChild(document.createElement("span"));
+      const icon = msg.appendChild(document.createElement("img"));
       msg.className = "lint-error";
-      icon.innerHTML = "!!";
+      icon.setAttribute("src", errorImg);
       icon.className = "lint-error-icon";
-      msg.appendChild(document.createTextNode(errors[i]));
+      msg.appendChild(document.createTextNode(errors[Number(i)]));
       widgets.add(editor.addLineWidget(data.to.line, msg,
         {
           coverGutter: false, noHScroll: true
