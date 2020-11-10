@@ -1,10 +1,11 @@
 import os
 import requests
+import json
 
 
 from flask import (Flask, render_template, 
     request, redirect, session, url_for,
-    make_response, jsonify)
+    make_response, jsonify, json)
 from flask_login import (
     LoginManager,
     current_user,
@@ -44,6 +45,7 @@ from app.api.classes.observatory.services import createObservatory
 
 from app.api.classes.location.services import createLocation
 from app.api.classes.type.services import createType
+
 
 from app.db import db
 
@@ -121,7 +123,7 @@ def init_app(database):
     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
         try:
 
-            #Määrittellään tyhjennetäänkö tietokanta sovelluksen alussa
+            #Määritellään tyhjennetäänkö tietokanta sovelluksen alussa
             if database == "oracle":
                 #db.reflect()
                 #db.drop_all()
@@ -133,24 +135,38 @@ def init_app(database):
             print('Taulut luotu')
 
             #Lisätään kovakoodatut tiedot
-            createObservatory("Hangon_Lintuasema")
-            createObservatory("Jurmon_Lintuasema")
-            createLocation("Bunkkeri", 1)
-            createLocation("Piha", 1)
-            createLocation("Eteläkärki", 1)
-            createLocation("Metsä", 1)
-            createLocation("Luoto Gåu", 1)
-            createLocation("Korkein kohta", 2)
-            createLocation("Länsireitti", 2)
-            createType("Vakio", 1)
-            createType("Päivämuutto", 1)
-            createType("Yömuutto", 1)
-            createType("Hajahavainnot", 1)
-            createType("Vakio", 2)
-            createType("Esimerkki 1", 2)
-            createType("Esimerkki 2", 2) 
-            createType("Esimerkki 3", 2)
-            print('Lintuasema luotu')        
+            SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+            filename = os.path.join(SITE_ROOT, '', 'locations.json')
+            with open(filename) as json_file:
+                obsId = 1
+                data = json.load(json_file)
+                for o in data["observatories"]:
+                    createObservatory(o['observatory'])
+                    for l in o["locations"]:
+                        createLocation(l, obsId)
+                    for t in o["types"]:
+                        createType(t, obsId)
+                    obsId += 1
+
+
+            #createObservatory("Hangon_Lintuasema")
+            #createObservatory("Jurmon_Lintuasema")
+            #createLocation("Bunkkeri", 1)
+            #createLocation("Piha", 1)
+            #createLocation("Eteläkärki", 1)
+            #createLocation("Metsä", 1)
+            #createLocation("Luoto Gåu", 1)
+            #createLocation("Korkein kohta", 2)
+            #createLocation("Länsireitti", 2)
+            #createType("Vakio", 1)
+            #createType("Päivämuutto", 1)
+            #createType("Yömuutto", 1)
+            #createType("Hajahavainnot", 1)
+            #createType("Vakio", 2)
+            #createType("Esimerkki 1", 2)
+            #createType("Esimerkki 2", 2) 
+            #createType("Esimerkki 3", 2)
+            #print('Lintuasema luotu')        
 
         except Exception as e:
             print(e)
