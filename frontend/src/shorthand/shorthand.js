@@ -56,6 +56,24 @@ const softReset = () => {
   ilmansuunta = "";
   ohituspuoli = "";
   lisatieto = "";
+  male = {
+    "subad": "",
+    "ad": "",
+    "juv": "",
+    "unk": ""
+  };
+  female = {
+    "subad": "",
+    "ad": "",
+    "juv": "",
+    "unk": ""
+  };
+  unknown = {
+    "subad": "",
+    "ad": "",
+    "juv": "",
+    "unk": ""
+  };
 };
 
 const constructOsahavainto = () => {
