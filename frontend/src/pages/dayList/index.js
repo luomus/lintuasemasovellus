@@ -1,10 +1,11 @@
 import {
   Paper, withStyles, makeStyles, Table, TableBody,
   TableCell, TableHead, TableRow,
-  Typography } from "@material-ui/core";
-import React, { useEffect } from "react";
+  TablePagination, TableContainer, TableFooter,
+  Typography
+} from "@material-ui/core";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
-import DayPagination from "./DayPagination";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { retrieveDays } from "../../reducers/daysReducer";
@@ -28,7 +29,6 @@ const StyledTableCell = withStyles(() => ({
   },
 }))(TableCell);
 
-
 export const DayList = () => {
 
   const user = useSelector(state => state.user);
@@ -46,18 +46,38 @@ export const DayList = () => {
     dispatch(retrieveDays());
   }, [dispatch]);
 
-
   console.log(list);
 
   if (!list) return null;
-
-
 
   if (!userIsSet) {
     return (
       <Redirect to="/login" />
     );
   }
+
+  const comparator = (a, b) => {
+    const day1 = a.day.split(".");
+    const day2 = b.day.split(".");
+    const num1 = day1[2] + day1[1] + day1[0];
+    const num2 = day2[2] + day2[1] + day2[0];
+    return Number(num1) < Number(num2)
+      ? 1
+      : Number(num1) > Number(num2)
+        ? -1 : 0;
+  };
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(Number(event.target.value));
+    setPage(0);
+  };
 
   return (
     <div>
@@ -67,40 +87,59 @@ export const DayList = () => {
           {t("days")}
         </Typography>
         <br />
-        <Table  className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>{t("date")}</StyledTableCell>
-              <StyledTableCell align="right">{t("observers")}</StyledTableCell>
-              <StyledTableCell align="right">{t("comment")}</StyledTableCell>
-              <StyledTableCell align="right">{t("observationStation")}</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {
-              list
-                .sort((a, b) => a.day - b.day)
-                .map((s, i) =>
-                  <TableRow id="dayTableRow" hover key={i} component={Link}
-                    to={`/daydetails/${s.day}/${s.observatory}`} >
-                    <StyledTableCell component="th" scope="row">
-                      {s.day}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.observers}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.comment}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.observatory.replace("_", " ")}
-                    </StyledTableCell>
-                  </TableRow>
-                )
-            }
-          </TableBody>
-          <DayPagination listSize={list.length} />
-        </Table>
+        <TableContainer>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>{t("date")}</StyledTableCell>
+                <StyledTableCell align="right">{t("observers")}</StyledTableCell>
+                <StyledTableCell align="right">{t("comment")}</StyledTableCell>
+                <StyledTableCell align="right">{t("observationStation")}</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                list
+                  .sort(comparator)
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((s, i) =>
+                    <TableRow id="dayTableRow" hover key={i} component={Link}
+                      to={`/daydetails/${s.day}/${s.observatory}`} >
+                      <StyledTableCell component="th" scope="row">
+                        {s.day}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.observers}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.comment}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.observatory.replace("_", " ")}
+                      </StyledTableCell>
+                    </TableRow>
+                  )
+              }
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                  colSpan={3}
+                  count={list.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { "aria-label": "rows per page" },
+                    native: true,
+                  }}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
       </Paper>
     </div>
   );
