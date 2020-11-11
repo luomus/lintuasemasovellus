@@ -83,6 +83,8 @@ export const HomePage = () => {
 
   const [shorthand, setShorthand] = useState("");
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+
   const formatDate = (date) => {
     const dd = date.getDate();
     const mm = date.getMonth() + 1;
@@ -128,11 +130,11 @@ export const HomePage = () => {
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
+      setFormSent(true);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
     }
-    setFormSent(true);
   };
 
   const user = useSelector(state => state.user);
@@ -149,7 +151,6 @@ export const HomePage = () => {
 
   const errorCheckingLogic = async (editor, data, value) => {
     loopThroughCheckForErrors(value);
-    console.log("widgets:--------------------", widgets);
     for (const widget of widgets) {
       editor.removeLineWidget(widget);
     }
@@ -162,12 +163,12 @@ export const HomePage = () => {
       icon.setAttribute("src", errorImg);
       icon.className = "lint-error-icon";
       msg.appendChild(document.createTextNode(errors[Number(i)]));
-      widgets.add(editor.addLineWidget(data.to.line, msg,
-        {
-          coverGutter: false, noHScroll: true
-        }
-      ));
+      widgets.add(editor.addLineWidget(data.to.line, msg, {
+        coverGutter: false, noHScroll: true
+      }));
     }
+    if (errors.length === 0) setSaveButtonDisabled(false);
+    else setSaveButtonDisabled(true);
     resetErrors();
   };
 
@@ -314,6 +315,9 @@ export const HomePage = () => {
               <Button
                 className={classes.sendButton}
                 onClick={sendData}
+                disabled={saveButtonDisabled}
+                color="primary"
+                variant="contained"
               >
                 {t("save")}
               </Button>
