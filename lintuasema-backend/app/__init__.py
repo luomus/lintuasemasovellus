@@ -166,7 +166,7 @@ def init_app(database):
             #createType("Esimerkki 1", 2)
             #createType("Esimerkki 2", 2) 
             #createType("Esimerkki 3", 2)
-            #print('Lintuasema luotu')        
+            print('Lintuasema luotu')        
 
         except Exception as e:
             print(e)

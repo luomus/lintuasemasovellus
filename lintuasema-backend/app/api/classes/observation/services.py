@@ -18,7 +18,7 @@ def parseCountString(obs):
     if obs.juvenileMaleCount != 0:
         countString = countString + str(obs.juvenileMaleCount) + " koirasta (poikanen), "
     if obs.subadultUnknownCount != 0:
-        countString = countString + str(obs.subadultUnknownCount) + "tunt. sukupuolta (esiaikuinen), "
+        countString = countString + str(obs.subadultUnknownCount) + " tunt. sukupuolta (esiaikuinen), "
     if obs.subadultFemaleCount != 0:
         countString = countString + str(obs.subadultFemaleCount) + " naarasta (esiaikuinen), "
     if obs.subadultMaleCount != 0:
