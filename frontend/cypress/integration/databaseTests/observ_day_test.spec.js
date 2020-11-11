@@ -22,8 +22,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
     // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
 
-    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-    //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
 
     cy.visit("http://localhost:3000");
 
@@ -43,10 +43,9 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
         },
       });
 
-
-
-
-    cy.get("#select-observatory").click().get("ul > li").eq(0).click(); //valitsee listan ensimmäisen
+    //cy.get("#select-observatory").click().get("ul > li").eq(0).click();
+    cy.get("#select-observatory").click();
+    cy.contains("Hangon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
     cy.contains("Valittu asema");
 
