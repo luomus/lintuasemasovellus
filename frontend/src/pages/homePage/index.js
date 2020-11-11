@@ -311,7 +311,10 @@ export const HomePage = () => {
                   onChange={codemirrorOnchange}
                 />
               </Grid>
-              <Button className={classes.sendButton} onClick={sendData}>
+              <Button
+                className={classes.sendButton}
+                onClick={sendData}
+              >
                 {t("save")}
               </Button>
             </Grid>

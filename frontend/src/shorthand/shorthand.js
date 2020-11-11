@@ -226,7 +226,7 @@ export const giveMeABucket = (char, line, index) => {
       } else if (acceptableIkaChar.has(char)) {
         ika += char;
       } else {
-        throw new Error("probably illegal char:", char);
+        throw new Error(`tuntematon merkki: ${char}`);
       }
       break;
     case " ":case "\t":case "\n":
