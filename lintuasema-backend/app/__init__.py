@@ -134,7 +134,7 @@ def init_app(database):
                 db.create_all()
             print('Taulut luotu')
 
-            #Lisätään kovakoodatut tiedot
+            #Lisätään tiedot tiedostosta
             SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
             filename = os.path.join(SITE_ROOT, '', 'locations.json')
             with open(filename) as json_file:
@@ -148,24 +148,6 @@ def init_app(database):
                         createType(t, obsId)
                     obsId += 1
 
-
-            #createObservatory("Hangon_Lintuasema")
-            #createObservatory("Jurmon_Lintuasema")
-            #createLocation("Bunkkeri", 1)
-            #createLocation("Piha", 1)
-            #createLocation("Eteläkärki", 1)
-            #createLocation("Metsä", 1)
-            #createLocation("Luoto Gåu", 1)
-            #createLocation("Korkein kohta", 2)
-            #createLocation("Länsireitti", 2)
-            #createType("Vakio", 1)
-            #createType("Päivämuutto", 1)
-            #createType("Yömuutto", 1)
-            #createType("Hajahavainnot", 1)
-            #createType("Vakio", 2)
-            #createType("Esimerkki 1", 2)
-            #createType("Esimerkki 2", 2) 
-            #createType("Esimerkki 3", 2)
             print('Lintuasema luotu')        
 
         except Exception as e:
