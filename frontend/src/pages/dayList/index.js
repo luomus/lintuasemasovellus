@@ -1,7 +1,7 @@
 import {
   Paper, withStyles, makeStyles, Table, TableBody,
   TableCell, TableHead, TableRow,
-  TablePagination, TableContainer, TableFooter,
+  TableContainer,
   Typography
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
@@ -9,7 +9,7 @@ import { Link, Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { retrieveDays } from "../../reducers/daysReducer";
-
+import DayPagination from "./DayPagination";
 
 const useStyles = makeStyles({
   paper: {
@@ -38,7 +38,9 @@ export const DayList = () => {
 
   const classes = useStyles();
 
-  const list = useSelector(state => state.days);
+  const userObservatory = useSelector(state => state.userObservatory);
+
+  const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
 
   const dispatch = useDispatch();
 
@@ -68,7 +70,7 @@ export const DayList = () => {
   };
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -121,23 +123,11 @@ export const DayList = () => {
                   )
               }
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={3}
-                  count={list.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: { "aria-label": "rows per page" },
-                    native: true,
-                  }}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
+            <DayPagination list={list} rowsPerPage={rowsPerPage}
+              handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage}
+              page={page}
+            />
           </Table>
         </TableContainer>
       </Paper>
