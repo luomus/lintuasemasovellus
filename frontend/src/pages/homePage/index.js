@@ -294,6 +294,7 @@ export const HomePage = () => {
 
               <Grid item xs={12}>
                 <CodeMirror
+                  id="shorthand"
                   className={classes.codemirrorBox}
                   value={shorthand}
                   options={{

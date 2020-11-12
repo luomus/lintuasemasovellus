@@ -67,7 +67,6 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("Tyyppi");
     cy.contains("Sijainti");
     cy.contains("Tallenna");
-    cy.contains("Pikakirjoitus");
   });
 
   it("Observations station can be modified" , function() {
@@ -88,9 +87,9 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
-    cy.get("#shorthand").type(shorthand);
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
-    cy.get("#sendCorrectObservation").click();
 
 
   });
