@@ -42,15 +42,15 @@ def addObservation():
 @bp.route('/api/getObservations', methods=["GET"])
 @login_required
 def getObservations():
-    objects = Observation.query.all()
+    observations = Observation.query.all()
     ret = []
-    for each in objects:
-        ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
-            'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
-            'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
-            'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 
-            'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 
-            'observationperiod_id': each.observationperiod_id, 'shorthand_id': each.shorthand_id})
+    for obs in observations:
+        ret.append({ 'species': obs.species, 'adultUnknownCount': obs.adultUnknownCount, 'adultFemaleCount': obs.adultFemaleCount, 'adultMaleCount': obs.adultMaleCount,
+            'juvenileUnknownCount': obs.juvenileUnknownCount, 'juvenileFemaleCount': obs.juvenileFemaleCount, 'juvenileMaleCount': obs.juvenileMaleCount,
+            'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
+            'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 
+            'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes, 
+            'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id})
 
     return jsonify(ret)
 

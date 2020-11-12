@@ -10,13 +10,13 @@ from app.api import bp
 from app.db import db
 
 
-@bp.route('/api/getStations', methods=['GET'])
+@bp.route('/api/getObservatories', methods=['GET'])
 @login_required
-def list_stations():
+def get_observatories():
 
-    stations = getAll()
+    observatories = getAll()
     ret = []
-    for each in stations:
-        ret.append({'id': each.id, 'name': each.name})
+    for obs in observatories:
+        ret.append({'id': obs.id, 'name': obs.name})
 
     return jsonify(ret)
