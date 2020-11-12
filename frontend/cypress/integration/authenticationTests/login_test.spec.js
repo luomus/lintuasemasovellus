@@ -15,7 +15,7 @@ describe("Login", function() {
   it("User can login and logout", function () {
     cy.contains("Tähän banneri");
     //cy.contains("Kirjaudu");
-    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
 
     const user = {
       id: "asdfsommol",
