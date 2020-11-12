@@ -79,7 +79,7 @@ def getObservationsByObservationPeriod(observationperiod_id):
 @login_required
 def observations_delete():
     req = request.get_json()
-    print('moiiii' + req['shorthand_id'])
+    print(req)
     shorthand_id = req['shorthand_id']
     Observation.query.filter_by(shorthand_id=shorthand_id).delete()
     #db.session.query(Observation).filter(Observation.shorthand_id == shorthand_id).delete()

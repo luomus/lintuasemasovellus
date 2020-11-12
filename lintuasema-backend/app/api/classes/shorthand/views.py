@@ -46,7 +46,7 @@ def getShorthandById(shorthand_id):
 def shorthand_delete():
     req = request.get_json()
     shorthand_id = req['shorthand_id']
-    Shorthand.query.get(shorthand_id).delete()
+    Shorthand.query.filter_by(id=shorthand_id).delete()
     #db.session.query(Shorthand).filter(Shorthand.id == shorthand_id).delete()
     db.session.commit()
     return jsonify(req)
