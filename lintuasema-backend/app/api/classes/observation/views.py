@@ -50,7 +50,7 @@ def getObservations():
             'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
             'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 
             'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 
-            'observationperiod_id': each.observationperiod_id, 'shothand_id': each.shorthand_id}) #notes ja observation_id väliin tämä, kun pikakirjoitus valmis s'shorthand':each.shorthand,
+            'observationperiod_id': each.observationperiod_id, 'shorthand_id': each.shorthand_id})
 
     return jsonify(ret)
 
@@ -73,3 +73,15 @@ def getObservationsByObservationPeriod(observationperiod_id):
         countString = parseCountString(observation)
         ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide})
     return jsonify(ret)
+
+
+@bp.route("/api/deleteObservations", methods=["DELETE"])
+@login_required
+def observations_delete():
+    req = request.get_json()
+    print('moiiii' + req['shorthand_id'])
+    shorthand_id = req['shorthand_id']
+    Observation.query.filter_by(shorthand_id=shorthand_id).delete()
+    #db.session.query(Observation).filter(Observation.shorthand_id == shorthand_id).delete()
+    db.session.commit()
+    return jsonify(req)

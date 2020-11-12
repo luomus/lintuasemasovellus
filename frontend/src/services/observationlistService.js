@@ -22,3 +22,13 @@ export const postAddShorthand = async (form) => {
   return await axios.post("/api/addShorthand", form);
 };
 
+export const deleteShorthand = async (shorthand_id) => {
+  console.log(shorthand_id);
+  return await axios.delete("/api/deleteShorthand", shorthand_id );
+};
+
+export const deleteObservations = async (shorthand_id) => {
+  console.log(shorthand_id);
+  return await axios.delete("/api/deleteObservations", shorthand_id);
+};
+

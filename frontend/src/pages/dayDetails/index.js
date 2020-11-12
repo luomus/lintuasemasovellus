@@ -10,7 +10,7 @@ import ObsPeriodTable from "./ObsPeriodTable";
 import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther,
-  editComment, editObservers
+  editComment, editObservers, deleteShorthand, deleteObservations
 } from "../../services";
 
 
@@ -160,7 +160,16 @@ const DayDetails = () => {
             <Button variant="contained" color="primary">
               Lisää jakso
             </Button>{" "}
+
+            <Button variant="contained" color="primary" onClick={() => deleteObservations({ shorthand_id: 1 } )} >
+              Yllätysnappi 1
+            </Button>{" "}
+
+            <Button variant="contained" color="primary" onClick={() => deleteShorthand({ shorthand_id: 1 })} >
+              Yllätysnappi 2
+            </Button>{" "}
           </Grid>
+
 
           <Grid item xs={6}>
             <Typography variant="h6" >

@@ -33,3 +33,20 @@ def getShorthands():
 
     return jsonify(ret)
 
+@bp.route('/api/getShorthand/<shorthand_id>', methods=["GET"])
+@login_required
+def getShorthandById(shorthand_id):
+    shorthand = Shorthand.query.get(shorthand_id)
+    ret = []
+    ret.append({ 'id': shorthand.id, 'row': shorthand.row, 'observationperiod_id': shorthand.observationperiod_id})
+    return jsonify(ret)
+
+@bp.route("/api/deleteShorthand", methods=["DELETE"])
+@login_required
+def shorthand_delete():
+    req = request.get_json()
+    shorthand_id = req['shorthand_id']
+    Shorthand.query.get(shorthand_id).delete()
+    #db.session.query(Shorthand).filter(Shorthand.id == shorthand_id).delete()
+    db.session.commit()
+    return jsonify(req)

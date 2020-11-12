@@ -9,8 +9,8 @@ const comment = "Olipa kiva sää.";
 const comment1="Satoi aivan kaatamalla";
 const changedComment= "hihihi asdfsommol";
 const date2 = "02.02.2020";
-const observer2 = "Talle Testaaja";
-const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
+//const observer2 = "Talle Testaaja";
+//const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 
 //const date3 = "03.03.2020";
@@ -171,14 +171,14 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#observatorySelector").click();
     cy.get("#select-observatory").click().get("ul > li").eq(1).click();
     cy.get("#submit").contains("Tallenna").click();
-    
+
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(observer).should("not.exist");
     cy.contains(observer1).click();
     cy.contains("Länsireitti");
     cy.contains("Esimerkki1");
-    
+
 
   });
   /*
