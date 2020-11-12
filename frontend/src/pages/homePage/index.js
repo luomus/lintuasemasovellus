@@ -209,6 +209,7 @@ export const HomePage = () => {
                     className={classes.datePicker}
                     required
                     disableToolbar
+                    invalidDateMessage
                     variant="inline"
                     format="dd.MM.yyyy"
                     margin="normal"

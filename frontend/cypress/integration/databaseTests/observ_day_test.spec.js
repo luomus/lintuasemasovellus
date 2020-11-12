@@ -3,8 +3,10 @@
 const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
+const observer1 = "ONan Observoija";
 const changedObserver= "Aarni Apulaishavainnoitsija";
 const comment = "Olipa kiva sää.";
+const comment1="Satoi aivan kaatamalla";
 const changedComment= "hihihi asdfsommol";
 const date2 = "02.02.2020";
 const observer2 = "Talle Testaaja";
@@ -79,7 +81,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
 
 
-  it("An observation and observation day can be saved on firstpage", function() {
+  it("An observation and observation day can be saved on firstpage for Vakio", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
@@ -94,7 +96,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
   });
 
-  it("Day and period has been added", function() {
+  it("Day and period has been added for Vakio", function() {
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(observer);
@@ -112,7 +114,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("10:00");
   });
 
-  it("Comment can be edited", function() {
+  it("Comment and observer can be edited", function() {
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
@@ -127,12 +129,9 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#commentField").clear();
     cy.get("#commentField").type(comment);
     cy.get("#commentSubmit").click();
-  });
+    cy.contains(comment);
+    cy.contains(changedComment).should("not.exist");
 
-  it("Observer can be edited", function() {
-    cy.get("#navigationbar").click();
-    cy.contains("Näytä päivät").click();
-    cy.contains("Hilla Havainnoitsija").click();
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(changedObserver);
@@ -145,8 +144,43 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#observerField").clear();
     cy.get("#observerField").type(observer);
     cy.get("#observerSubmit").click();
+    cy.contains(observer);
+    cy.contains(changedObserver).should("not.exist");
   });
 
+
+  it("An observation and observation day can be saved on firstpage for something else than vakio", function() {
+    cy.get("#observatorySelector").click();
+    cy.get("#select-observatory").click().get("ul > li").eq(1).click();
+    cy.get("#submit").contains("Tallenna").click();
+
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date2);
+    cy.get ("#observers").type(observer1);
+    cy.get("#comment").type(comment1);
+    cy.get("#selectType").click().get("#Esimerkki1").click();
+    cy.get("#selectLocation").click().get("#Länsireitti").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
+    cy.contains("Tallenna").click({ force: true });
+
+
+  });
+
+  it("Day and period for non-Vakio has been added for observationlist", function() {
+    cy.get("#observatorySelector").click();
+    cy.get("#select-observatory").click().get("ul > li").eq(1).click();
+    cy.get("#submit").contains("Tallenna").click();
+    
+    cy.get("#navigationbar").click();
+    cy.contains("Näytä päivät").click();
+    cy.contains(observer).should("not.exist");
+    cy.contains(observer1).click();
+    cy.contains("Länsireitti");
+    cy.contains("Esimerkki1");
+    
+
+  });
   /*
   it("There is a button for listing all observation day", function() {
     cy.contains("Näytä päivä");
