@@ -44,9 +44,10 @@ def list_days():
 def edit_comment(day_id, comment):
     day=Day.query.get(day_id)
     day_new = Day(day = day.day, comment = comment, observers = day.observers, observatory_id= day.observatory_id)
-    setObsPerDayId(day.id, day_new.id)
     day.is_deleted = 1
     addDay(day_new)
+    setObsPerDayId(day.id, day_new.id)
+
     db.session().commit()
 
     return jsonify("")
@@ -56,10 +57,10 @@ def edit_comment(day_id, comment):
 def edit_observers(day_id, observers):
     day=Day.query.get(day_id)
     day_new = Day(day = day.day, comment = day.comment, observers = observers, observatory_id = day.observatory_id)
-    setObsPerDayId(day.id, day_new.id)
     day.is_deleted = 1
     addDay(day_new)
-
+    setObsPerDayId(day.id, day_new.id)
+    
     db.session().commit()
 
     return jsonify("")

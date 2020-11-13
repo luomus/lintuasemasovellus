@@ -31,4 +31,4 @@ def parseCountString(obs):
         countString = countString + str(obs.unknownMaleCount) + " koirasta (tunt. ikä), "
     countString = countString[0:(len(countString) - 2)]
     return countString
-
+    
