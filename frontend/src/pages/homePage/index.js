@@ -317,6 +317,7 @@ export const HomePage = () => {
                 />
               </Grid>
               <Button
+                id="saveButton"
                 className={classes.sendButton}
                 onClick={sendData}
                 disabled={saveButtonDisabled}

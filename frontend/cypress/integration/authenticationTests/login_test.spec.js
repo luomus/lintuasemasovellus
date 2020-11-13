@@ -5,13 +5,14 @@ describe("Login", function() {
     cy.contains("Tähän banneri");
     cy.contains("Lisää havaintoja").should("not.exist");
   });
-  /*
+  
   it("User can login and logout", function () {
     cy.contains("Tähän banneri");
 
 
-    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-    //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+    cy.visit("http://localhost:3000");
 
     const user = {
       id: "asdfsommol",
@@ -38,6 +39,6 @@ describe("Login", function() {
     //cy.contains("Tähän banneri");
 
   });
-  */
+  
 });
 

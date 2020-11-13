@@ -6,6 +6,7 @@ from flask_login import login_required
 from app.api.classes.day.models import Day
 from app.api.classes.day.services import addDay, getDays, getDayId
 from app.api.classes.observatory.services import getObservatoryId, getObservatoryName
+from app.api.classes.observationperiod.services import setObsPerDayId
 
 from app.api import bp
 from app.db import db
@@ -43,9 +44,9 @@ def list_days():
 def edit_comment(day_id, comment):
     day=Day.query.get(day_id)
     day_new = Day(day = day.day, comment = comment, observers = day.observers, observatory_id= day.observatory_id)
+    setObsPerDayId(day.id, day_new.id)
     day.is_deleted = 1
     addDay(day_new)
-
     db.session().commit()
 
     return jsonify("")
@@ -54,7 +55,10 @@ def edit_comment(day_id, comment):
 @login_required
 def edit_observers(day_id, observers):
     day=Day.query.get(day_id)
-    day.observers=observers
+    day_new = Day(day = day.day, comment = day.comment, observers = observers, observatory_id = day.observatory_id)
+    setObsPerDayId(day.id, day_new.id)
+    day.is_deleted = 1
+    addDay(day_new)
 
     db.session().commit()
 
