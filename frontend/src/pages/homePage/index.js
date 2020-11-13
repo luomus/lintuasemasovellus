@@ -16,12 +16,13 @@ import ObservatorySelector from "./observatorySelector";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
-
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
+import errorImg from "./error.png";
+import "./index.css";
 import {
-  checkWholeInputLine, getErrors, resetErrors, isTime, timelines
+  loopThroughCheckForErrors, getErrors, resetErrors
 } from "./validations";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
@@ -41,9 +42,19 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+  },
+  sendButton: {
+    marginBottom: "40px"
+  },
+  codemirrorBox: {
+    position: "relative",
+    opacity: "99%"
   }
 }));
 
+let timeout = null;
+
+let widgets = new Set();
 
 export const HomePage = () => {
   const classes = useStyles();
@@ -52,25 +63,32 @@ export const HomePage = () => {
 
   const dateNow = new Date();
 
-  const [day, setDay] = useState(dateNow);
-  const [observers, setObservers] = useState("");
-  const [comment, setComment] = useState("");
-
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
+  const [types, setTypes] = useState([]);
+  const [locations, setLocations] = useState([]);
+
+  const [day, setDay] = useState(dateNow);
+  const [observers, setObservers] = useState("");
+  const [comment, setComment] = useState("");
   const [type, setType] = useState("");
-
   const [location, setLocation] = useState("");
-
-  const [types, setTypes] = useState(["test"]);
-
-  const [locations, setLocations] = useState(["test"]);
+  const [shorthand, setShorthand] = useState("");
 
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-  const [shorthand, setShorthand] = useState("");
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+
+  const emptyAllFields = () => {
+    setDay(dateNow);
+    setObservers("");
+    setComment("");
+    setType("");
+    setLocation("");
+    setShorthand("");
+  };
 
   const formatDate = (date) => {
     const dd = date.getDate();
@@ -105,16 +123,6 @@ export const HomePage = () => {
       );
     }
   });
-  /*
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
-
-  const showFeedback = () => {
-    setShowModal(true);
-  };
-  */
 
   const sendData = async () => {
     const rows = shorthand.split("\n");
@@ -127,8 +135,11 @@ export const HomePage = () => {
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
+      setFormSent(true);
+      emptyAllFields();
     } catch (error) {
       console.error(error.message);
+      setErrorHappened(true);
     }
   };
 
@@ -144,26 +155,37 @@ export const HomePage = () => {
     );
   }
 
-  const errorChecking = (editor, data, value) => {
-    setShorthand(value);
-    const lines = editor.doc.children[0].lines;
-    console.log("lines:", lines);
-    console.log("data:", data);
-    if (lines.length > 1 && data.to.line < lines.length - 1) {
-      const text = lines[data.to.line].text;
-      if (!text) return;
-      else if (isTime(text)) {
-        timelines.add(data.to.line);
-        console.log(timelines);
-      } else {
-        checkWholeInputLine(data.to.line, lines[data.to.line].text);
-      }
-      const errors = getErrors();
-      console.log("errors:", errors);
-      resetErrors();
-    } else {
-      return;
+  const errorCheckingLogic = async (editor, data, value) => {
+    loopThroughCheckForErrors(value);
+    for (const widget of widgets) {
+      editor.removeLineWidget(widget);
     }
+    widgets.clear();
+    const errors = getErrors();
+    for (let i = 0; i < errors.length; i++) {
+      const msg = document.createElement("div");
+      const icon = msg.appendChild(document.createElement("img"));
+      msg.className = "lint-error";
+      icon.setAttribute("src", errorImg);
+      icon.className = "lint-error-icon";
+      msg.appendChild(document.createTextNode(errors[Number(i)]));
+      widgets.add(editor.addLineWidget(data.to.line, msg, {
+        coverGutter: false, noHScroll: true
+      }));
+    }
+    if (errors.length === 0) setSaveButtonDisabled(false);
+    else setSaveButtonDisabled(true);
+    resetErrors();
+  };
+
+  const codemirrorOnchange = (editor, data, value) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      errorCheckingLogic(editor, data, value);
+      timeout = null;
+    }, 500);
   };
 
   return (
@@ -193,6 +215,7 @@ export const HomePage = () => {
                     className={classes.datePicker}
                     required
                     disableToolbar
+                    invalidDateMessage
                     variant="inline"
                     format="dd.MM.yyyy"
                     margin="normal"
@@ -278,11 +301,15 @@ export const HomePage = () => {
 
               <Grid item xs={12}>
                 <CodeMirror
+                  id="shorthand"
+                  className={classes.codemirrorBox}
                   value={shorthand}
                   options={{
                     theme: "idea",
                     lineNumbers: true,
                     autoRefresh: true,
+                    readOnly: false,
+                    lint: false
                   }}
                   editorDidMount={editor => {
                     editor.refresh();
@@ -290,10 +317,17 @@ export const HomePage = () => {
                   onBeforeChange={(editor, data, value) => {
                     setShorthand(value);
                   }}
-                  onChange={errorChecking}
+                  onChange={codemirrorOnchange}
                 />
               </Grid>
-              <Button onClick={sendData}>
+              <Button
+                id="saveButton"
+                className={classes.sendButton}
+                onClick={sendData}
+                disabled={saveButtonDisabled}
+                color="primary"
+                variant="contained"
+              >
                 {t("save")}
               </Button>
             </Grid>

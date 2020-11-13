@@ -47,6 +47,38 @@ let shorthand = {
   observationperiod_id: 0
 };
 
+let directions = new Map();
+directions.set("N", "0");
+directions.set("NNE", "22,5");
+directions.set("NE", "45");
+directions.set("ENE", "67,5");
+directions.set("E", "90");
+directions.set("ESE", "112,5");
+directions.set("SE", "135");
+directions.set("SSE", "157,5");
+directions.set("S", "180");
+directions.set("SSW", "202,5");
+directions.set("SW", "225");
+directions.set("WSW", "247,5");
+directions.set("W", "270");
+directions.set("WNW", "292,5");
+directions.set("NW", "315");
+directions.set("NNW", "337,5");
+directions.set("", "");
+
+let bypass = new Map();
+bypass.set("----", "-4");
+bypass.set("---", "-3");
+bypass.set("--", "-2");
+bypass.set("-", "-1");
+bypass.set("+-", "0");
+bypass.set("+", "1");
+bypass.set("++", "2");
+bypass.set("+++", "3");
+bypass.set("++++", "4");
+bypass.set("", "");
+
+
 const isTime = (row) => {
   return String(row).match(timeRegex);
 };
@@ -64,6 +96,8 @@ const parseTime = (timeString) => {
 };
 
 const sendObservation = async (observation, observationPeriodId, shorthandId) => {
+  observation["direction"] = directions.get(observation["direction"].toUpperCase());
+  observation["bypassSide"] = bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
   const res = await postAddObservation(observation);

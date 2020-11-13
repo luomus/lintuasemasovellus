@@ -5,14 +5,12 @@ import { Switch, Route } from "react-router-dom";
 import { HomePage, UserManual } from "./pages";
 import Footer from "./globalComponents/Footer";
 import { DayForm, DayList } from "./pages";
-import { getAuth, getToken } from "./services";
+import { getCurrentUser } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import DayDetails from "./pages/dayDetails";
 import Login from "./pages/login";
-
-
 
 const App = () => {
 
@@ -26,14 +24,12 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeStations());
-    if (userIsSet) return;
-    getToken()
+    getCurrentUser()
       .then(resp => resp.data)
-      .then(tokenJson => getAuth(tokenJson.token, tokenJson.auth_token)
-        .then(resp => resp.data)
-        .then(res => dispatch(setUser(res)))
-        .catch(() => console.error("user not set"))
-      ).catch(() => console.error("token not set"));
+      .then(res => {
+        dispatch(setUser(res[0]));
+      })
+      .catch(error => console.error("user problem", error.message));
   }, [dispatch, userIsSet]);
 
   console.log("user:", user);

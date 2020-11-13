@@ -19,6 +19,9 @@ TARGET = os.getenv('TARGET')
 def loginconfirm():
     personToken = request.args.get('token')
 
+    if personToken is None:
+        return redirect('/')
+
     req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN).json()
 
     userId = req['id']

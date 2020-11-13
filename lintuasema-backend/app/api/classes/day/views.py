@@ -28,13 +28,13 @@ def add_day():
 
 @bp.route('/api/listDays', methods=['GET'])
 @login_required
-def list_day():
+def list_days():
 
     dayObjects = getDays()
 
     ret = []
-    for each in dayObjects:
-        ret.append({ 'id': each.id, 'day': each.day, 'observers': each.observers, 'comment': each.comment, 'observatory': getObservatoryName(each.observatory_id) })
+    for day in dayObjects:
+        ret.append({ 'id': day.id, 'day': day.day, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
 
     return jsonify(ret)
 
@@ -63,5 +63,19 @@ def edit_observers(day_id, observers):
     db.session().commit()
 
     return jsonify("")
+
+@bp.route('/api/searchDayInfo', methods=['POST'])
+@login_required
+def search_dayinfo():
+    req = request.get_json()
+    daysDate = req['date']
+    observatory_id = getObservatoryId(req['observatory'])
+    day = Day.query.filter_by(day = daysDate, observatory_id = observatory_id).first()
+    res = []
+    if not day:
+        res.append({ 'comment': "", 'observers': ""})
+    else:
+        res.append({ 'comment': day.comment, 'observers': day.observers})
+    return jsonify(res)
 
    

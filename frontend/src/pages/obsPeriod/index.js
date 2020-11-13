@@ -69,6 +69,37 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
   if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
 
+  let directions = new Map();
+  directions.set("0", "Pohjoinen");
+  directions.set("22,5", "Pohjois-koillinen");
+  directions.set("45", "Koillinen");
+  directions.set("67,5", "Itä-koillinen");
+  directions.set("90", "Itä");
+  directions.set("112,5", "Itä-kaakko");
+  directions.set("135", "Kaakko");
+  directions.set("157,5", "Etelä-kaakko");
+  directions.set("180", "Etelä");
+  directions.set("202,5", "Etelä-lounas");
+  directions.set("225", "Lounas");
+  directions.set("247,5", "Länsi-lounas");
+  directions.set("270", "Länsi");
+  directions.set("292,5", "Länsi-luode");
+  directions.set("315", "Luode");
+  directions.set("337,5", "Pohjois-luode");
+  directions.set("", "");
+
+  let bypass = new Map();
+  bypass.set("-4", "----");
+  bypass.set("-3", "---");
+  bypass.set("-2", "--");
+  bypass.set("-1", "-");
+  bypass.set("0", "+-");
+  bypass.set("1", "+");
+  bypass.set("2", "++");
+  bypass.set("3", "+++");
+  bypass.set("4", "++++");
+  bypass.set("", "");
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -112,10 +143,10 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                         {(s.count)}
                       </TableCell>
                       <TableCell>
-                        {(s.direction)}
+                        {(s.direction)}&#176;, {(directions.get(s.direction))}
                       </TableCell>
                       <TableCell>
-                        {(s.bypassSide)}
+                        {(bypass.get(s.bypassSide))}
                       </TableCell>
                     </TableRow>
                   )

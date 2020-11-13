@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, json
 
 from flask_login import login_required
 
@@ -9,6 +9,9 @@ from app.api.classes.observatory.services import getAll, getObservatoryId
 
 from app.api import bp
 from app.db import db
+
+import os
+import json
 
 @bp.route('/api/addLocation', methods=['POST'])
 @login_required
@@ -27,45 +30,30 @@ def add_location():
 #@login_required
 def list_locations(observatory_name):
 
-    if observatory_name is None:
-        ret = []
-        ret.append({'locations': ['test'], 'types': ['test']})
-        return jsonify(ret)
-
-    observatory_id = getObservatoryId(observatory_name)
-    ret = []
-
-    locations = Location.query.filter_by(observatory_id = observatory_id)
-    locationList = []
-    for location in locations:
-        locationList.append(location.name)
-    types = Type.query.filter_by(observatory_id = observatory_id)
-    typeList = []
-    for t in types:
-        typeList.append(t.name)
-    ret.append({ 'locations': locationList, 'types': typeList })
-
-    return jsonify(ret)
+    obs = "not found"
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    filename = os.path.join(SITE_ROOT, '../../..', 'locations.json')
+    with open(filename) as json_file:
+        data = json.load(json_file)
+        for o in data["observatories"]:
+            if o["observatory"] == observatory_name:
+                obs = o
+    
+    return jsonify(obs)
 
 
 @bp.route('/api/getLocations/', methods=['GET'])
 #@login_required
 def get_all_locations():
 
-    observatories = getAll()
-    ret = []
-    for observatory in observatories:
-        locations = Location.query.filter_by(observatory_id = observatory.id)
-        locationList = []
-        for location in locations:
-            locationList.append(location.name)
-        types = Type.query.filter_by(observatory_id = observatory.id)
-        typeList = []
-        for t in types:
-            typeList.append(t.name)
-        ret.append({ 'id': observatory.id, 'observatory': observatory.name, 'locations': locationList, 'types': typeList })
-
-    return jsonify(ret)
+    obs = "not found"
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    filename = os.path.join(SITE_ROOT, '../../..', 'locations.json')
+    with open(filename) as json_file:
+        data = json.load(json_file)
+        obs = data["observatories"]
+    
+    return jsonify(obs)
 
 
 #alustava route lokaation nimen muokkaamiseen

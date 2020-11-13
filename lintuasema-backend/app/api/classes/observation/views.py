@@ -42,15 +42,15 @@ def addObservation():
 @bp.route('/api/getObservations', methods=["GET"])
 @login_required
 def getObservations():
-    objects = Observation.query.all()
+    observations = Observation.query.all()
     ret = []
-    for each in objects:
-        ret.append({ 'species': each.species, 'adultUnknownCount': each.adultUnknownCount, 'adultFemaleCount': each.adultFemaleCount, 'adultMaleCount': each.adultMaleCount,
-            'juvenileUnknownCount': each.juvenileUnknownCount, 'juvenileFemaleCount': each.juvenileFemaleCount, 'juvenileMaleCount': each.juvenileMaleCount,
-            'subadultUnknownCount': each.subadultUnknownCount, 'subadultFemaleCount': each.subadultFemaleCount, 'subadultMaleCount': each.subadultMaleCount,
-            'unknownUnknownCount': each.unknownUnknownCount, 'unknownFemaleCount': each.unknownFemaleCount, 'unknownMaleCount': each.unknownMaleCount, 
-            'direction': each.direction, 'bypassSide': each.bypassSide, 'notes': each.notes, 
-            'observationperiod_id': each.observationperiod_id, 'shothand_id': each.shorthand_id}) #notes ja observation_id väliin tämä, kun pikakirjoitus valmis s'shorthand':each.shorthand,
+    for obs in observations:
+        ret.append({ 'species': obs.species, 'adultUnknownCount': obs.adultUnknownCount, 'adultFemaleCount': obs.adultFemaleCount, 'adultMaleCount': obs.adultMaleCount,
+            'juvenileUnknownCount': obs.juvenileUnknownCount, 'juvenileFemaleCount': obs.juvenileFemaleCount, 'juvenileMaleCount': obs.juvenileMaleCount,
+            'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
+            'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 
+            'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes, 
+            'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id})
 
     return jsonify(ret)
 
@@ -73,3 +73,15 @@ def getObservationsByObservationPeriod(observationperiod_id):
         countString = parseCountString(observation)
         ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide})
     return jsonify(ret)
+
+
+@bp.route("/api/deleteObservations", methods=["DELETE"])
+@login_required
+def observations_delete():
+    req = request.get_json()
+    print(req)
+    shorthand_id = req['shorthand_id']
+    Observation.query.filter_by(shorthand_id=shorthand_id).delete()
+    #db.session.query(Observation).filter(Observation.shorthand_id == shorthand_id).delete()
+    db.session.commit()
+    return jsonify(req)

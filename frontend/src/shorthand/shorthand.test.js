@@ -265,5 +265,31 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     expect(result.osahavainnot[2].direction).toBe("w");
   });
 
+  test("quite long input", () => {
+    const lineOfText = "sommol 1ad2juv3subad4/1ad2juv3subad4/1ad2juv3subad4E--, 1/2 W";
+    console.log("line:", lineOfText);
+    const result = parse(lineOfText);
+    console.log(result);
+    expect(result.species).toBe("sommol");
+    expect(result.osahavainnot[0].adultMaleCount).toBe("1");
+    expect(result.osahavainnot[0].juvenileMaleCount).toBe("2");
+    expect(result.osahavainnot[0].subadultMaleCount).toBe("3");
+    expect(result.osahavainnot[0].adultFemaleCount).toBe("1");
+    expect(result.osahavainnot[0].juvenileFemaleCount).toBe("2");
+    expect(result.osahavainnot[0].subadultFemaleCount).toBe("3");
+    expect(result.osahavainnot[0].adultUnknownCount).toBe("1");
+    expect(result.osahavainnot[0].juvenileUnknownCount).toBe("2");
+    expect(result.osahavainnot[0].subadultUnknownCount).toBe("3");
+    expect(result.osahavainnot[0].bypassSide).toBe("--");
+    expect(result.osahavainnot[0].direction).toBe("e");
+    const { direction: direction1, unknownMaleCount: unknownMaleCount1,
+      unknownFemaleCount: unknownFemaleCount1, ...rest1 } = result.osahavainnot[1];
+    expect(unknownMaleCount1).toBe("1");
+    expect(unknownFemaleCount1).toBe("2");
+    expect(direction1).toBe("w");
+    for (const each of Object.values(rest1)) {
+      expect(each).toBe("");
+    }
+  });
 });
 

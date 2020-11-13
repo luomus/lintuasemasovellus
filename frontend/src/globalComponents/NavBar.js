@@ -86,7 +86,7 @@ const NavBar = () => {
   const welcomeText = user.id
     ?
     <Typography>
-      {t("welcome")} {user.fullName}!
+      {t("welcome")} {user.name}!
     </Typography>
     :
     null;
