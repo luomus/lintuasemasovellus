@@ -19,17 +19,15 @@ const shorthand = "10:00\nsommol 1/2 W\n12:00";
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
   beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
     cy.visit("http://localhost:3000");
-    //cy.get("#login-link");
-    //cy.contains("Kirjaudu");
 
     // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
 
     cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
     //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
 
-    cy.visit("http://localhost:3000");
 
 
+    /*
     const user = {
       id: "asdfsommol",
       fullName: "Asdf Sommol",
@@ -44,6 +42,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
           user
         },
       });
+      */
 
     //cy.get("#select-observatory").click().get("ul > li").eq(0).click();
     cy.get("#select-observatory").click();
