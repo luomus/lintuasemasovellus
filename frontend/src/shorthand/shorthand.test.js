@@ -11,7 +11,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Extremely basic test", () => {
     const lineOfText = "sommol 2/W";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
     expect(observation.species).toBe("sommol");
     const { direction, unknownMaleCount, ...rest } = observation.osahavainnot[0];
@@ -24,7 +24,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Harder test", () => {
     const lineOfText = "Smol /4 E";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("smol");
@@ -38,7 +38,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Third tier, still going", () => {
     const lineOfText = "Smol /4 E (jp)";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("smol");
@@ -53,7 +53,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Fourth, god tier", () => {
     const lineOfText = "Sommol 1\"2juv3subad/W";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
@@ -70,7 +70,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Fifth, legacy mode", () => {
     const lineOfText = "sm /1W, 2/E, 3/4w";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("sm");
@@ -102,7 +102,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Sixth, no more tears", () => {
     const lineOfText = " sm /1W, 2/E ,3/4w,";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("sm");
@@ -117,7 +117,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Seventh son", () => {
     const lineOfText = "sm /1W 2E";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("suunnan jälkeen tulee numero");
@@ -125,7 +125,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Eightball", () => {
     const lineOfText = "sm /1/2W";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("sm");
@@ -136,7 +136,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Nine", () => {
     const lineOfText = "sommol 1\"/2'sw";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
@@ -147,7 +147,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Ten", () => {
     const lineOfText = "grugru 100SW+-";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("grugru");
@@ -158,7 +158,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Eleven", () => {
     const lineOfText = "grugru 100SW-+";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("tuntematon ohituspuoli");
@@ -166,7 +166,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Twelve", () => {
     const lineOfText = "grugru\n100-200SW+-";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("ohituspuolen pitää olla viimeisenä");
@@ -174,7 +174,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Thirteen", () => {
     const lineOfText = "grugru\n100SW+-,200 S +++\n, 300 \"W---";
-    console.log("line:", lineOfText);
+
     const observation = parse(lineOfText);
 
     expect(observation.species).toBe("grugru");
@@ -211,7 +211,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Fourteen", () => {
     const lineOfText = "grugru 100SW ,,,\n,200S";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("ylimääräisiä pilkkuja");
@@ -219,7 +219,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Fifteen", () => {
     const lineOfText = "Smol /4 E (jp";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("sulut väärin");
@@ -227,7 +227,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Sixteen", () => {
     const lineOfText = "Smol /4 E jp)";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("sulut väärin");
@@ -235,7 +235,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("Seventeen", () => {
     const lineOfText = "Smol /4 E ((jp))";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("sulut väärin");
@@ -243,7 +243,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("End of the world", () => {
     const lineOfText = "Smol /4 E ((jp)";
-    console.log("line:", lineOfText);
+
     expect(() => {
       parse(lineOfText);
     }).toThrow("sulut väärin");
@@ -251,7 +251,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("three bypass sides in a row", () => {
     const lineOfText = "grugru 100SW+-, 200 S +++ , 300 \"W---";
-    console.log("line:", lineOfText);
+
     const result = parse(lineOfText);
     expect(result.species).toBe("grugru");
     expect(result.osahavainnot[0].unknownUnknownCount).toBe("100");
@@ -267,9 +267,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("quite long input", () => {
     const lineOfText = "sommol 1ad2juv3subad4/1ad2juv3subad4/1ad2juv3subad4E--, 1/2 W";
-    console.log("line:", lineOfText);
     const result = parse(lineOfText);
-    console.log(result);
     expect(result.species).toBe("sommol");
     expect(result.osahavainnot[0].adultMaleCount).toBe("1");
     expect(result.osahavainnot[0].juvenileMaleCount).toBe("2");
@@ -291,5 +289,109 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
       expect(each).toBe("");
     }
   });
+
+  test("wrong age 1", () => {
+    const lineOfText = "sommol 2suba ssw";
+
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("tuntematon ikä");
+
+  });
+
+  test("wrong age 2", () => {
+    const lineOfText = "sommol 2sub ssw";
+
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("tuntematon ikä");
+  });
+
+  test("wrong age 3", () => {
+    const lineOfText = "sommol 2aaa ssw";
+
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("tuntematon ikä");
+  });
+
+  test("some wrong ages", () => {
+    const lineOfText = "sommol 2juv s, 2subad3\"e, 2/3/1a, 1'";
+
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("tuntematon ikä");
+  });
+
+  test("wrong direction 1", () => {
+    const lineOfText = "sommol 2juv ss";
+
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("Epäkelpo ilmansuunta");
+  });
+
+  test("wrong direction 2", () => {
+    const lineOfText = "sommol 2juv sws";
+
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("Epäkelpo ilmansuunta");
+  });
+
+  test("not wrong direction", () => {
+    const lineOfText = "sommol 2juv ssw";
+
+    expect(() => {
+      parse(lineOfText);
+    }).not.toThrow("Epäkelpo ilmansuunta");
+  });
+
+  test("age is separated from direction", () => {
+    const lineOfText = "sommol 1subad2juv S";
+    const result = parse(lineOfText);
+    const { direction, subadultUnknownCount, juvenileUnknownCount,
+      ...rest } = result.osahavainnot[0];
+    expect(direction).toBe("s");
+    expect(subadultUnknownCount).toBe("1");
+    expect(juvenileUnknownCount).toBe("2");
+    for (const each of Object.values(rest)) {
+      expect(each).toBe("");
+    }
+  });
+
+  test("age is separated from direction tricky version", () => {
+    const lineOfText = "sommol 1subad2juvS";
+    const result = parse(lineOfText);
+    const { direction, subadultUnknownCount, juvenileUnknownCount,
+      ...rest } = result.osahavainnot[0];
+    expect(direction).toBe("s");
+    expect(subadultUnknownCount).toBe("1");
+    expect(juvenileUnknownCount).toBe("2");
+    for (const each of Object.values(rest)) {
+      expect(each).toBe("");
+    }
+  });
+
+  test("age is separated from direction extra tricky version", () => {
+    const lineOfText = "sommol 1s";
+    const result = parse(lineOfText);
+    const { direction, unknownUnknownCount,
+      ...rest } = result.osahavainnot[0];
+    expect(direction).toBe("s");
+    expect(unknownUnknownCount).toBe("1");
+    for (const each of Object.values(rest)) {
+      expect(each).toBe("");
+    }
+  });
+
+  test("age is separated from direction extra special tricky version", () => {
+    const lineOfText = "sommol 1su";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("tuntematon ikä");
+
+  });
+
 });
 

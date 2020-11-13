@@ -76,7 +76,13 @@ const softReset = () => {
   };
 };
 
+const possibleDirections = new Set(["W", "S", "E", "N", "NW", "NE", "SW", "SE",
+  "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW", ""]);
+
 const constructOsahavainto = () => {
+  if (ika) throw new Error("tuntematon ikä");
+  if (!possibleDirections.has(ilmansuunta.toUpperCase()))
+    throw new Error("Epäkelpo ilmansuunta");
   switch(sukupuoliRound) {
     case 0:
       male[String(ageBucket)] = yksilomaara;
@@ -226,11 +232,7 @@ const isTooManyCommasHeuristic = (index, line) => {
  * @param {string} line
  * @param {integer} index
  */
-export const giveMeABucket = (char, line, index) => {
-  if (ikaConstructed()) {
-    setAgeBucket();
-    fillSukupuoliBucketsNotSlash();
-  }
+const giveMeABucket = (char, line, index) => {
   switch(char) {
     default:
       if (lajinimiNotSet()) {
@@ -314,12 +316,19 @@ export const giveMeABucket = (char, line, index) => {
       fillSukupuoliBucketsSlash();
       break;
   }
+  if (ikaConstructed()) {
+    setAgeBucket();
+    fillSukupuoliBucketsNotSlash();
+  }
 };
 
-export const getObservation = () => {
+const getObservation = () => {
   return taysiHavainto;
 };
 
+/*
+* In case of errors, you actually have to call resetAll separately
+*/
 export const resetAll = () => {
   firstSpaceOfLineBreakOrSomeSuchEncountered = false;
   lisatietobucketIsOpen = false;
@@ -353,11 +362,11 @@ export const resetAll = () => {
   taysiHavainto = {};
 };
 
-export const specialTrimmer = (line) => {
+const specialTrimmer = (line) => {
   return line.trim().toLowerCase();
 };
 
-export const checkBracketsFirstPass = (line) => {
+const checkBracketsFirstPass = (line) => {
   const bracketsErr = new Error("sulut väärin");
   let leftGuy = false;
   for (let i = 0; i < line.length; i++) {
@@ -381,3 +390,5 @@ export const parse = (line) => {
   constructTaysiHavainto();
   return getObservation();
 };
+
+export default parse;

@@ -23,7 +23,7 @@ import errorImg from "./error.png";
 import "./index.css";
 import {
   loopThroughCheckForErrors, getErrors, resetErrors
-} from "./validations";
+} from "../../shorthand/validations";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
@@ -145,9 +145,6 @@ export const HomePage = () => {
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
-  console.log("user is set: " + userIsSet);
-
-  console.log("shorthand val:", shorthand);
 
   if (!userIsSet) {
     return (
@@ -204,7 +201,6 @@ export const HomePage = () => {
             <br />
             <ObservatorySelector  />
             <br />
-            {console.log("valittu asema on " + userObservatory)}
             <Grid container
               alignItems="stretch"
               spacing={1}>
