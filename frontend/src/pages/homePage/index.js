@@ -63,27 +63,32 @@ export const HomePage = () => {
 
   const dateNow = new Date();
 
-  const [day, setDay] = useState(dateNow);
-  const [observers, setObservers] = useState("");
-  const [comment, setComment] = useState("");
-
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
+  const [types, setTypes] = useState([]);
+  const [locations, setLocations] = useState([]);
+
+  const [day, setDay] = useState(dateNow);
+  const [observers, setObservers] = useState("");
+  const [comment, setComment] = useState("");
   const [type, setType] = useState("");
-
   const [location, setLocation] = useState("");
-
-  const [types, setTypes] = useState(["test"]);
-
-  const [locations, setLocations] = useState(["test"]);
+  const [shorthand, setShorthand] = useState("");
 
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-  const [shorthand, setShorthand] = useState("");
-
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+
+  const emptyAllFields = () => {
+    setDay(dateNow);
+    setObservers("");
+    setComment("");
+    setType("");
+    setLocation("");
+    setShorthand("");
+  };
 
   const formatDate = (date) => {
     const dd = date.getDate();
@@ -131,6 +136,7 @@ export const HomePage = () => {
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
       setFormSent(true);
+      emptyAllFields();
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
