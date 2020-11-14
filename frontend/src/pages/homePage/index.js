@@ -79,7 +79,7 @@ export const HomePage = () => {
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
 
   const emptyAllFields = () => {
     setDay(dateNow);
@@ -170,9 +170,17 @@ export const HomePage = () => {
         coverGutter: false, noHScroll: true
       }));
     }
-    if (errors.length === 0) setSaveButtonDisabled(false);
-    else setSaveButtonDisabled(true);
+
+    if (errors.length === 0) setCodeMirrorHasErrors(false);
+    else setCodeMirrorHasErrors(true);
     resetErrors();
+  };
+
+  const saveButtonDisabled = () => {
+    if (codeMirrorHasErrors || observers === "" || type === "" || location === "")
+      return true;
+    else
+      return false;
   };
 
   const codemirrorOnchange = (editor, data, value) => {
@@ -184,6 +192,7 @@ export const HomePage = () => {
       timeout = null;
     }, 500);
   };
+
 
   return (
     <div>
@@ -320,7 +329,7 @@ export const HomePage = () => {
                 id="saveButton"
                 className={classes.sendButton}
                 onClick={sendData}
-                disabled={saveButtonDisabled}
+                disabled={saveButtonDisabled()}
                 color="primary"
                 variant="contained"
               >
