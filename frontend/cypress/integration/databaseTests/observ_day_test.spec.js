@@ -102,7 +102,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("Tallenna");
   });
 
-  it("Observations station can be modified" , function() {
+  it("Observatory can be modified" , function() {
+    cy.get("#observatorySelector").click();
     cy.get("#select-observatory").click();
     cy.contains("Jurmon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
@@ -230,6 +231,11 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
       cy.get("#navigationbar").click();
       cy.contains("Etusivu").click();
       
+      cy.get ("#observers").type(observer);
+      cy.get("#comment").type(comment);
+      cy.get("#selectType").click().get("#Vakio").click();
+      cy.get("#selectLocation").click().get("#Bunkkeri").click();
+
       cy.get(".CodeMirror textarea").type(shorthands[i], { force: true });
       cy.wait(1000);
       cy.get("#saveButton").should('be.disabled');
@@ -238,7 +244,45 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     }
   });
   
+  it("Tallenna button is not active if observers is left empty", function () {
 
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get("#comment").type(comment);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
+
+    cy.get("#saveButton").should('be.disabled');
+  });
+
+
+  it("Tallenna button is not active if type is not selected", function () {
+
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").type(observer);
+    cy.get("#comment").type(comment);
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
+
+    cy.get("#saveButton").should('be.disabled');
+  });  
+
+  it("Tallenna button is not active if location is not selected", function () {
+
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").type(observer);
+    cy.get("#comment").type(comment);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
+
+    cy.get("#saveButton").should('be.disabled');
+  }); 
 
   it("Observation list only shows observations from chosen observatory", function () {
 
