@@ -5,11 +5,16 @@ import PropTypes from "prop-types";
 import {
   TablePagination, TableFooter, TableRow
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+
 
 const DayPagination = ({
   list, rowsPerPage, handleChangePage, handleChangeRowsPerPage,
   page
 }) => {
+
+  const { t } = useTranslation();
+
 
 
   if (list.length < 10) {
@@ -19,8 +24,14 @@ const DayPagination = ({
     <TableFooter>
       <TableRow>
         <TablePagination
-          rowsPerPageOptions={[10, 25, { label: "All", value: -1 }]}
+          rowsPerPageOptions={[10, 25, { label: t("all"), value: -1 }]}
           colSpan={3}
+          labelRowsPerPage={t("rowsPerPage")}
+          labelDisplayedRows={
+            ({ from, to, count }) => {
+              return "" + from + " - " + to + t("to") + count;
+            }
+          }
           count={list.length}
           rowsPerPage={rowsPerPage}
           page={page}

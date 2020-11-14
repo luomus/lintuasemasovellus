@@ -123,10 +123,10 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
             <TableHead>
               <TableRow>
 
-                <TableCell >Laji</TableCell>
-                <TableCell >Lukumäärä</TableCell>
-                <TableCell >Suunta</TableCell>
-                <TableCell >Ohitussuunta</TableCell>
+                <TableCell >{t("species")}</TableCell>
+                <TableCell >{t("count")}</TableCell>
+                <TableCell >{t("direction")}</TableCell>
+                <TableCell >{t("bypassSide")}</TableCell>
               </TableRow>
             </TableHead>
 

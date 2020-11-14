@@ -196,10 +196,10 @@ export const HomePage = () => {
         <Grid item xs={8}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h2" >
-              Lisää havaintoja
+              {t("addObservations")}
             </Typography>
             <br />
-            <ObservatorySelector  />
+            <ObservatorySelector />
             <br />
             <Grid container
               alignItems="stretch"
@@ -332,7 +332,7 @@ export const HomePage = () => {
         <Grid item xs={4}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h2" >
-              Käyttöohjeet
+              {t("observers")}
             </Typography>
             <br />
             Syötä havainto pikakirjoitusmuodossa:

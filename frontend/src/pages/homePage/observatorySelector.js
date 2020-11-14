@@ -53,7 +53,7 @@ const ObservatorySelector = () => {
 
     return (
       <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
-        <DialogTitle>Valitse lintuasema</DialogTitle>
+        <DialogTitle>{t("chooseObservatory")}</DialogTitle>
         <DialogContent>
 
           <form id="observatorySelect" onSubmit={selectUserObservatory} className={classes.container}>
@@ -81,7 +81,7 @@ const ObservatorySelector = () => {
         </DialogContent>
         <DialogActions>
           <Button id="submit" disabled={!observatoryIsSelected} form="observatorySelect" onClick={handleClose} color="primary" type="submit">
-            Tallenna
+            {t("save")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -89,8 +89,8 @@ const ObservatorySelector = () => {
   }
 
   return (<div>
-    <Typography>Valittu asema: {userObservatory.replace("_", " ")}</Typography>
-    <Button id="observatorySelector" className={classes.submit} onClick={handleOpen}>Muokkaa</Button>
+    <Typography>{t("currentObservatory")}{userObservatory.replace("_", " ")}</Typography>
+    <Button id="observatorySelector" className={classes.submit} onClick={handleOpen}>{t("edit")}</Button>
   </div>
   );
 

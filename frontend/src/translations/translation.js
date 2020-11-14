@@ -17,6 +17,7 @@ const resources = {
       "observations": "Havainnot",
       "comment": "Kommentti",
       "save": "Tallenna",
+      "edit": "Muokkaa",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
       "formSent": "Lomake lähetetty!",
@@ -35,6 +36,26 @@ const resources = {
       "manualTitle": "Käyttöohjeet",
       "manualTextShort": "Tähän kirjoitetaan lyhyt versio sovelluksen käyttöohjeista.",
       "manualText": "Tähän kirjoitetaan sovelluksen käyttöohjeet kokonaisuudessaan.",
+
+      "vakioTitle": "Vakiomuutoseuranta",
+      "otherTitle": "Muu havainnointi",
+      "newPeriod": "Uusi jakso",
+
+      "addObservations": "Lisää havaintoja",
+
+      "chooseObservatory": "Valitse lintuasema",
+      "currentObservatory": "Valittu asema: ",
+
+      "species": "Laji",
+      "count": "Lukumäärä",
+      "direction": "Ohitussuunta",
+      "bypassSide": "Ohitussuunta",
+
+      "lineError": "Virhe rivillä ",
+
+      "rowsPerPage": "Rivejä sivulla: ",
+      "all": "Kaikki",
+      "to": ", Yhteensä: "
 
 
     },

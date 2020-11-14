@@ -119,7 +119,6 @@ const DayDetails = () => {
                 <EditIcon />
               </IconButton>
             ) : (
-
               <form onSubmit={observersOnSubmit}>
                 <TextField
                   id="observerField"
@@ -128,7 +127,7 @@ const DayDetails = () => {
                   onChange={(event) => setEditedObservers(event.target.value)}
                 />
                 <Button id="observerSubmit" type="submit" variant="contained" color="primary">
-                  Tallenna
+                  {t("save")}
                 </Button>
               </form>
             )}
@@ -149,7 +148,7 @@ const DayDetails = () => {
                   onChange={(event) => setEditedComment(event.target.value)}
                 />
                 <Button id="commentSubmit" type="submit" variant="contained" color="primary">
-                  Tallenna
+                  {t("save")}
                 </Button>
               </form>
             )}
@@ -158,10 +157,10 @@ const DayDetails = () => {
 
           <Grid item xs={12}>
             <Button variant="contained" color="primary">
-              Lisää jakso
+              {t("newPeriod")}
             </Button>{" "}
 
-            <Button variant="contained" color="primary" onClick={() => deleteObservations({ shorthand_id: 1 } )} >
+            <Button variant="contained" color="primary" onClick={() => deleteObservations({ shorthand_id: 1 })} >
               Yllätysnappi 1
             </Button>{" "}
 
@@ -173,7 +172,7 @@ const DayDetails = () => {
 
           <Grid item xs={6}>
             <Typography variant="h6" >
-              Vakiomuutonseuranta
+              {t("vakioTitle")}
             </Typography>
 
             <ObsPeriodTable
@@ -183,7 +182,7 @@ const DayDetails = () => {
           </Grid>
           <Grid item xs={6}>
             <Typography variant="h6" >
-              Muu havainnointi
+              {t("otherTitle")}
             </Typography>
 
             <ObsPeriodTableOther
