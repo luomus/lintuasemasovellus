@@ -1,16 +1,16 @@
-FROM node:latest AS builder
+FROM node:12.19.0 AS builder
 
 COPY /frontend /front
 
 WORKDIR /front
 
-RUN npm install -g npm@latest
+RUN npm install
 
 COPY . .
 
 RUN npm run build
 
-FROM python:latest
+FROM python:3.6.9
 
 RUN mkdir -p /opt/oracle
 
