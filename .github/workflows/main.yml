@@ -52,15 +52,14 @@ jobs:
     - name: npm test
       run: npm test
       working-directory: ./frontend
-    - name: run frontend
-      run: npm start &
-      working-directory: ./frontend
 
     - name: Cypress run
-      run: |
-        sleep 10
-        npm run cypress:cmd	
-      working-directory: ./frontend
+      uses: cypress-io/github-action@v1
+      with:
+        record: true
+        start: npm start
+        wait-on: http://localhost:3000
+        working-directory: ./frontend
 
   docker-build:
     runs-on: ubuntu-latest
