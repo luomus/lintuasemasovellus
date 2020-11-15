@@ -44,8 +44,6 @@ const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand10, invalidShorthand12, invalidShorthand13,
   invalidShorthand14];
 
- 
-
 
 
 describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
@@ -216,22 +214,28 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
 
   it("Tallenna button is not active if shorthand is invalid", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
-    cy.get("#observers").type(observer);
-    cy.get("#comment").type(comment);
+    
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
 
     for (var i = 0; i < shorthands.length; i++) {
 
-      cy.get("#navigationbar").click();
-      cy.contains("Näytä päivät").click();
 
-      cy.get("#navigationbar").click();
-      cy.contains("Etusivu").click();
-      
+      //pikakirjoituskentän tyhjentäminen:
+
+      cy.get('.CodeMirror')
+      .first()
+      .then((editor) => {
+        editor[0].CodeMirror.setValue('');
+      });
+
+      cy.get("#date-picker-inline").clear();
+      cy.get("#date-picker-inline").type(date);
+
+      cy.get ("#observers").clear();
       cy.get ("#observers").type(observer);
+
+      cy.get("#comment").clear();
       cy.get("#comment").type(comment);
       cy.get("#selectType").click().get("#Vakio").click();
       cy.get("#selectLocation").click().get("#Bunkkeri").click();
