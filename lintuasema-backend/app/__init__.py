@@ -24,24 +24,24 @@ from app.api.classes.observatory import models
 from app.api.classes.user import models
 from app.api.classes.day import models
 from app.api.classes.location import models
-from app.api.classes.observationperiod import models
-from app.api.classes.observation import models
-from app.api.classes.shorthand import models
 from app.api.classes.type import models
+from app.api.classes.observationperiod import models
+from app.api.classes.shorthand import models
+from app.api.classes.observation import models
 
 from app.api.classes.observationperiod import views
 from app.api.classes.location import views, services
 from app.api.classes.observatory import views, services
 from app.api.classes.day import views
 from app.api.classes.user import views
-from app.api.classes.observation import views
 from app.api.classes.shorthand import views
+from app.api.classes.observation import views
 from app.api.classes.type import services
 
 from app.api.classes.user.models import User
 from app.api.classes.observatory.models import Observatory
 
-from app.api.classes.observatory.services import createObservatory
+from app.api.classes.observatory.services import createObservatory, getObservatoryId
 
 from app.api.classes.location.services import createLocation
 from app.api.classes.type.services import createType
@@ -138,15 +138,14 @@ def init_app(database):
             SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
             filename = os.path.join(SITE_ROOT, '', 'locations.json')
             with open(filename) as json_file:
-                obsId = 1
                 data = json.load(json_file)
                 for o in data["observatories"]:
                     createObservatory(o['observatory'])
+                    obsId = getObservatoryId(o['observatory'])
                     for l in o["locations"]:
                         createLocation(l, obsId)
                     for t in o["types"]:
                         createType(t, obsId)
-                    obsId += 1
 
             print('Lintuasema luotu')        
 

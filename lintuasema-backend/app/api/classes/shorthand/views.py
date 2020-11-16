@@ -14,12 +14,12 @@ from app.db import db
 @login_required
 def addShorthand():
     req = request.get_json()
-    shorthand = Shorthand(row=req['row'],
+    shorthand = Shorthand(shorthandRow=req['row'],
         observationperiod_id=req['observationperiod_id'])
     db.session().add(shorthand)
     db.session().commit()
 
-    shorthand_id = Shorthand.query.filter_by(row = req['row'], observationperiod_id = req['observationperiod_id']).first().id
+    shorthand_id = Shorthand.query.filter_by(shorthandRow = req['row'], observationperiod_id = req['observationperiod_id']).first().id
 
     return jsonify({ 'id': shorthand_id })
 
@@ -29,7 +29,7 @@ def getShorthands():
     shorthands = Shorthand.query.all()
     ret = []
     for shorthand in shorthands:
-        ret.append({ 'id': shorthand.id, 'row': shorthand.row, 'observationperiod_id': shorthand.observationperiod_id})
+        ret.append({ 'id': shorthand.id, 'row': shorthand.shorthandRow, 'observationperiod_id': shorthand.observationperiod_id})
 
     return jsonify(ret)
 
@@ -38,7 +38,7 @@ def getShorthands():
 def getShorthandById(shorthand_id):
     shorthand = Shorthand.query.get(shorthand_id)
     ret = []
-    ret.append({ 'id': shorthand.id, 'row': shorthand.row, 'observationperiod_id': shorthand.observationperiod_id})
+    ret.append({ 'id': shorthand.id, 'row': shorthand.shorthandRow, 'observationperiod_id': shorthand.observationperiod_id})
     return jsonify(ret)
 
 @bp.route("/api/deleteShorthand", methods=["DELETE"])
