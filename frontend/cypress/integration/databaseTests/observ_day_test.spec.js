@@ -220,9 +220,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
     for (var i = 0; i < shorthands.length; i++) {
 
-
       //pikakirjoituskentän tyhjentäminen:
-
       cy.get('.CodeMirror')
       .first()
       .then((editor) => {
@@ -237,14 +235,13 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
       cy.get("#comment").clear();
       cy.get("#comment").type(comment);
+
       cy.get("#selectType").click().get("#Vakio").click();
       cy.get("#selectLocation").click().get("#Bunkkeri").click();
 
       cy.get(".CodeMirror textarea").type(shorthands[i], { force: true });
       cy.wait(1000);
-      cy.get("#saveButton").should('be.disabled');
-      cy.get('.CodeMirror textarea').focused().clear();
-      
+      cy.get("#saveButton").should('be.disabled');      
     }
   });
   
