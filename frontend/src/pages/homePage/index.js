@@ -78,10 +78,8 @@ export const HomePage = () => {
   const [locations, setLocations] = useState([]);
 
   const [day, setDay] = useState(dateNow);
-  const [defaultObservers, setDefaultObservers] = useState("");
-  const [defaultComment, setDefaultComment] = useState("");
-  const [observers, setObservers] = useState(defaultObservers);
-  const [comment, setComment] = useState(defaultComment);
+  const [observers, setObservers] = useState("");
+  const [comment, setComment] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [shorthand, setShorthand] = useState("");
@@ -102,16 +100,6 @@ export const HomePage = () => {
     setShorthand("");
   };
 
-
-
-
-
-  useEffect(() => {
-    console.log("comment " + comment);
-    console.log("defaultcomment " + defaultComment);
-    searchDayInfo(formatDate(day), userObservatory).then(dayJson => setDefaultObservers(dayJson[0]["observers"]));
-    searchDayInfo(formatDate(day), userObservatory).then(dayJson => setDefaultComment(dayJson[0]["comment"]));
-  });
 
 
 
@@ -246,7 +234,11 @@ export const HomePage = () => {
                     id="date-picker-inline"
                     label={t("date")}
                     value={day}
-                    onChange={(date) => setDay(date)}
+                    onChange={(date) => {
+                      setDay(date);
+                      searchDayInfo(formatDate(date), userObservatory).then(dayJson => setObservers(dayJson[0]["observers"]));
+                      searchDayInfo(formatDate(date), userObservatory).then(dayJson => setComment(dayJson[0]["comment"]));
+                    }}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
                     }}
