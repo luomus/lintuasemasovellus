@@ -48,8 +48,8 @@ const resources = {
 
       "species": "Laji",
       "count": "Lukumäärä",
-      "direction": "Ohitussuunta",
-      "bypassSide": "Ohitussuunta",
+      "direction": "Suunta",
+      "bypassSide": "Ohituspuoli",
 
       "lineError": "Virhe rivillä ",
 

@@ -21,3 +21,8 @@ export const getLocationsAndTypes = async (observatory) => {
   const locationsTypes = await axios.get(`/api/getLocationsAndTypes/${observatory}`);
   return locationsTypes.data;
 };
+
+export const searchDayInfo = async (date, observatory) => {
+  const day = await axios.get(`/api/searchDayInfo/${date}/${observatory}`);
+  return day.data;
+};

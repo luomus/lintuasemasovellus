@@ -27,6 +27,7 @@ import {
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
+import { searchDayInfo } from "../../services";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,10 +57,17 @@ let timeout = null;
 
 let widgets = new Set();
 
+
 export const HomePage = () => {
   const classes = useStyles();
 
   const { t } = useTranslation();
+
+  const formatDate = (date) => {
+    const dd = date.getDate();
+    const mm = date.getMonth() + 1;
+    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
+  };
 
   const dateNow = new Date();
 
@@ -70,8 +78,10 @@ export const HomePage = () => {
   const [locations, setLocations] = useState([]);
 
   const [day, setDay] = useState(dateNow);
-  const [observers, setObservers] = useState("");
-  const [comment, setComment] = useState("");
+  const [defaultObservers, setDefaultObservers] = useState("");
+  const [defaultComment, setDefaultComment] = useState("");
+  const [observers, setObservers] = useState(defaultObservers);
+  const [comment, setComment] = useState(defaultComment);
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [shorthand, setShorthand] = useState("");
@@ -80,6 +90,8 @@ export const HomePage = () => {
   const [errorHappened, setErrorHappened] = useState(false);
 
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
+
+
 
   const emptyAllFields = () => {
     setDay(dateNow);
@@ -90,11 +102,18 @@ export const HomePage = () => {
     setShorthand("");
   };
 
-  const formatDate = (date) => {
-    const dd = date.getDate();
-    const mm = date.getMonth() + 1;
-    return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
-  };
+
+
+
+
+  useEffect(() => {
+    console.log("comment " + comment);
+    console.log("defaultcomment " + defaultComment);
+    searchDayInfo(formatDate(day), userObservatory).then(dayJson => setDefaultObservers(dayJson[0]["observers"]));
+    searchDayInfo(formatDate(day), userObservatory).then(dayJson => setDefaultComment(dayJson[0]["comment"]));
+  });
+
+
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

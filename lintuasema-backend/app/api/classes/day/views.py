@@ -65,13 +65,11 @@ def edit_observers(day_id, observers):
 
     return jsonify("")
 
-@bp.route('/api/searchDayInfo', methods=['POST'])
+@bp.route('/api/searchDayInfo/<date>/<observatory>', methods=['GET'])
 @login_required
-def search_dayinfo():
-    req = request.get_json()
-    daysDate = req['date']
-    observatory_id = getObservatoryId(req['observatory'])
-    day = Day.query.filter_by(day = daysDate, observatory_id = observatory_id).first()
+def search_dayinfo(date, observatory):
+
+    day = Day.query.filter_by(day = date, observatory_id = getObservatoryId(observatory)).first()
     res = []
     if not day:
         res.append({ 'comment': "", 'observers': ""})

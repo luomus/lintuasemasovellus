@@ -7,8 +7,11 @@ import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
+import birds from "../../shorthand/birds.json";
 
+const birdMap = new Map(Object.entries(birds));
 
+console.log(birdMap);
 
 const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
@@ -137,7 +140,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                   .map((s, i) =>
                     <TableRow key={i} >
                       <TableCell>
-                        {s.species}
+                        {Object.values(birdMap.get(s.species.toUpperCase()))[1]}, {s.species}
                       </TableCell>
                       <TableCell>
                         {(s.count)}
