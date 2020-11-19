@@ -352,7 +352,7 @@ export const HomePage = () => {
         <Grid item xs={4}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h2" >
-              {t("observers")}
+              {t("manualTitle")}
             </Typography>
             <br />
             Syötä havainto pikakirjoitusmuodossa:
