@@ -8,11 +8,15 @@ from app.api.classes.observation.services import parseCountString
 
 from app.api import bp
 from app.db import db
+from sqlalchemy.sql import text
 
 @bp.route('/api/addObservation', methods=['POST'])
 @login_required
 def addObservation():
     req = request.get_json()
+
+    birdCount = req['adultUnknownCount'] + req['adultFemaleCount'] + req['adultMaleCount'] + req['juvenileUnknownCount'] + req['juvenileFemaleCount'] + req['juvenileMaleCount'] + req['subadultUnknownCount'] + req['subadultFemaleCount'] + req['subadultMaleCount'] + req['unknownUnknownCount'] + req['unknownFemaleCount'] + req['unknownMaleCount']
+
     observation = Observation(species=req['species'],
         adultUnknownCount=req['adultUnknownCount'],
         adultFemaleCount=req['adultFemaleCount'],
@@ -26,6 +30,7 @@ def addObservation():
         unknownUnknownCount=req['unknownUnknownCount'],
         unknownFemaleCount=req['unknownFemaleCount'],
         unknownMaleCount=req['unknownMaleCount'],
+        total_count = birdCount,
         direction=req['direction'],
         bypassSide=req['bypassSide'],
         notes=req['notes'],
@@ -48,7 +53,7 @@ def getObservations():
         ret.append({ 'species': obs.species, 'adultUnknownCount': obs.adultUnknownCount, 'adultFemaleCount': obs.adultFemaleCount, 'adultMaleCount': obs.adultMaleCount,
             'juvenileUnknownCount': obs.juvenileUnknownCount, 'juvenileFemaleCount': obs.juvenileFemaleCount, 'juvenileMaleCount': obs.juvenileMaleCount,
             'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
-            'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 
+            'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 'total_count' :obs.total_count,
             'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes, 
             'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id})
 
@@ -85,3 +90,98 @@ def observations_delete():
     #db.session.query(Observation).filter(Observation.shorthand_id == shorthand_id).delete()
     db.session.commit()
     return jsonify(req)
+
+
+@bp.route('/api/getObservationSummary/<day_id>', methods=["GET"])
+@login_required
+def getSummary(day_id):
+    stmt = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " WHERE Observationperiod.day_id = :day_id"
+                " GROUP BY Observation.species").params(day_id = day_id)
+
+    res = db.engine.execute(stmt)
+
+    stmtVakio = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
+                " WHERE Type.name = :type"
+                " AND Observationperiod.day_id = :day_id"
+                " GROUP BY Observation.species").params(day_id = day_id, type = "Vakio")
+
+    resVakio = db.engine.execute(stmtVakio)
+
+    stmtMuu = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
+                " WHERE Type.name = :type"
+                " AND Observationperiod.day_id = :day_id"
+                " GROUP BY Observation.species").params(day_id = day_id, type = "Muu muutto")
+
+    resMuu = db.engine.execute(stmtMuu)
+
+    stmtYo = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
+                " WHERE Type.name = :type"
+                " AND Observationperiod.day_id = :day_id"
+                " GROUP BY Observation.species").params(day_id = day_id, type = "Yömuutto")
+
+    resYo = db.engine.execute(stmtYo)
+
+    stmtHaja = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
+                " WHERE Type.name = :type"
+                " AND Observationperiod.day_id = :day_id"
+                " GROUP BY Observation.species").params(day_id = day_id, type = "Hajahavainto")
+
+    resHaja = db.engine.execute(stmtHaja)
+
+    stmtPaikallinen = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
+                " WHERE Type.name = :type"
+                " AND Observationperiod.day_id = :day_id"
+                " GROUP BY Observation.species").params(day_id = day_id, type = "Paikallinen")
+
+    resPaikallinen = db.engine.execute(stmtPaikallinen)
+
+    #for i in range(len(res)):
+    #    print("f: ", foo[i], "; b: ", bar[i])
+
+    for row in resVakio:
+        print("vakio")
+        print(row[0])
+        print(row[1])
+
+    for row in resMuu:
+        print("muu")
+        print(row[0])
+        print(row[1])
+
+    for row in resYo:
+        print("yö")
+        print(row[0])
+        print(row[1])
+
+    for row in resHaja:
+        print("haja")
+        print(row[0])
+        print(row[1])
+
+    for row in resPaikallinen:
+        print("paikallinen")
+        print(row[0])
+        print(row[1])
+
+    response = []
+
+    for row in res:
+        response.append({"species" :row[0], "count":row[1]})
+
+    #for (total, constant, other, night, random, local) in zip(res, resVakio, resMuu, resYo, resHaja, resPaikallinen):
+    #    response.append({"species": total[0], "count": total[1], "constant": constant[1], "other": other[1], "night": night[1], "random": random[1], "local": local[1]})
+  
+    return jsonify(response)
+  

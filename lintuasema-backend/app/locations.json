@@ -12,9 +12,10 @@
         ],
         "types": [
         "Vakio",
-        "Päivämuutto",
+        "Muu muutto",
         "Yömuutto",
-        "Hajahavainnot"
+        "Hajahavainto",
+        "Paikallinen"
         ]
         },
         {

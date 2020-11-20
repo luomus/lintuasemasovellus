@@ -1,6 +1,8 @@
 from app.db import db
 from app.api.models import Base
 
+from sqlalchemy.sql import text
+
 class Observation(Base):
 
     species = db.Column(db.String(144), nullable = False)
@@ -16,6 +18,7 @@ class Observation(Base):
     unknownUnknownCount = db.Column(db.Integer, nullable = False)
     unknownFemaleCount = db.Column(db.Integer, nullable = False)
     unknownMaleCount = db.Column(db.Integer, nullable = False)
+    total_count = db.Column(db.Integer, nullable = False)
     direction = db.Column(db.String(144), nullable = True)
     bypassSide = db.Column(db.String(144), nullable = True)
     notes = db.Column(db.String(1000), nullable = True)
@@ -27,7 +30,7 @@ class Observation(Base):
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
-        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, direction, bypassSide, notes, observationperiod_id, shorthand_id):
+        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, bypassSide, notes, observationperiod_id, shorthand_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
         self.adultFemaleCount = adultFemaleCount
@@ -41,8 +44,21 @@ class Observation(Base):
         self.unknownUnknownCount = unknownUnknownCount
         self.unknownFemaleCount = unknownFemaleCount
         self.unknownMaleCount = unknownMaleCount
+        self.total_count = total_count
         self.direction = direction
         self.bypassSide = bypassSide
         self.notes = notes
         self.observationperiod_id = observationperiod_id
         self.shorthand_id = shorthand_id
+
+        @staticmethod
+        def summaryOfBirdsPerDay():
+            stmt = text("SELECT Observation.species FROM Observation")
+            res = db.engine.execute(stmt)
+            response = []
+            for row in res:
+                response.append({"species": row[0]})
+  
+            return response
+
+        
