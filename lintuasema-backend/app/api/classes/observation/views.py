@@ -95,93 +95,38 @@ def observations_delete():
 @bp.route('/api/getObservationSummary/<day_id>', methods=["GET"])
 @login_required
 def getSummary(day_id):
-    stmt = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
+    stmt = text("SELECT Observation.species,"
+                " SUM(CASE WHEN (Type.name = :type1 OR Type.name = :type2 OR Type.name = :type3) THEN total_count ELSE 0 END) AS allMigration,"
+                " SUM(CASE WHEN Type.name = :type1 THEN total_count ELSE 0 END) AS constMigration,"
+                " SUM(CASE WHEN Type.name = :type2 THEN total_count ELSE 0 END) AS otherMigration,"
+                " SUM(CASE WHEN Type.name = :type3 THEN total_count ELSE 0 END) AS nightMigration,"
+                " SUM(CASE WHEN Type.name = :type4 THEN total_count ELSE 0 END) AS scatterObs,"
+                " SUM(CASE WHEN Type.name = :type5 THEN total_count ELSE 0 END) AS totalLocal,"
+                " SUM(CASE WHEN (Type.name = :type5 AND Location.name <> :location) THEN total_count ELSE 0 END) AS LocalOther,"
+                " SUM(CASE WHEN (Type.name = :type5 AND Location.name = :location) THEN total_count ELSE 0 END) AS LocalGou"
+                " FROM Observation"
                 " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
+                " LEFT JOIN Location ON Location.id = Observationperiod.location_id"
                 " WHERE Observationperiod.day_id = :day_id"
-                " GROUP BY Observation.species").params(day_id = day_id)
+                " GROUP BY Observation.species").params(day_id = day_id, 
+                    type1 = "Vakio", type2 = "Muu muutto", type3 = "Yömuutto", type4 = "Hajahavainto",
+                    type5 = "Paikallinen", location = "Luoto Gåu")
 
     res = db.engine.execute(stmt)
-
-    stmtVakio = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
-                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
-                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
-                " WHERE Type.name = :type"
-                " AND Observationperiod.day_id = :day_id"
-                " GROUP BY Observation.species").params(day_id = day_id, type = "Vakio")
-
-    resVakio = db.engine.execute(stmtVakio)
-
-    stmtMuu = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
-                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
-                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
-                " WHERE Type.name = :type"
-                " AND Observationperiod.day_id = :day_id"
-                " GROUP BY Observation.species").params(day_id = day_id, type = "Muu muutto")
-
-    resMuu = db.engine.execute(stmtMuu)
-
-    stmtYo = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
-                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
-                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
-                " WHERE Type.name = :type"
-                " AND Observationperiod.day_id = :day_id"
-                " GROUP BY Observation.species").params(day_id = day_id, type = "Yömuutto")
-
-    resYo = db.engine.execute(stmtYo)
-
-    stmtHaja = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
-                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
-                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
-                " WHERE Type.name = :type"
-                " AND Observationperiod.day_id = :day_id"
-                " GROUP BY Observation.species").params(day_id = day_id, type = "Hajahavainto")
-
-    resHaja = db.engine.execute(stmtHaja)
-
-    stmtPaikallinen = text("SELECT Observation.species, SUM(total_count) AS birdSum FROM Observation"
-                " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
-                " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
-                " WHERE Type.name = :type"
-                " AND Observationperiod.day_id = :day_id"
-                " GROUP BY Observation.species").params(day_id = day_id, type = "Paikallinen")
-
-    resPaikallinen = db.engine.execute(stmtPaikallinen)
-
-    #for i in range(len(res)):
-    #    print("f: ", foo[i], "; b: ", bar[i])
-
-    for row in resVakio:
-        print("vakio")
-        print(row[0])
-        print(row[1])
-
-    for row in resMuu:
-        print("muu")
-        print(row[0])
-        print(row[1])
-
-    for row in resYo:
-        print("yö")
-        print(row[0])
-        print(row[1])
-
-    for row in resHaja:
-        print("haja")
-        print(row[0])
-        print(row[1])
-
-    for row in resPaikallinen:
-        print("paikallinen")
-        print(row[0])
-        print(row[1])
 
     response = []
 
     for row in res:
-        response.append({"species" :row[0], "count":row[1]})
-
-    #for (total, constant, other, night, random, local) in zip(res, resVakio, resMuu, resYo, resHaja, resPaikallinen):
-    #    response.append({"species": total[0], "count": total[1], "constant": constant[1], "other": other[1], "night": night[1], "random": random[1], "local": local[1]})
+        response.append({"species" :row[0], 
+            "allMigration":row[1],
+            "constMigration":row[2], 
+            "otherMigration":row[3],
+            "nightMigration":row[4],
+            "scatterObs":row[5],
+            "totalLocal":row[6],
+            "localOther":row[7],
+            "localGåu":row[8]})
   
     return jsonify(response)
   
