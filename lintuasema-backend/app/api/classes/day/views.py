@@ -50,7 +50,7 @@ def edit_comment(day_id, comment):
 
     db.session().commit()
 
-    return jsonify("")
+    return jsonify({"id" : day_new.id})
 
 @bp.route('/api/editObservers/<day_id>/<observers>', methods=['POST'])
 @login_required
@@ -60,10 +60,10 @@ def edit_observers(day_id, observers):
     day.is_deleted = 1
     addDay(day_new)
     setObsPerDayId(day.id, day_new.id)
-    
+
     db.session().commit()
 
-    return jsonify("")
+    return jsonify({"id" : day_new.id})
 
 @bp.route('/api/searchDayInfo/<date>/<observatory>', methods=['GET'])
 @login_required
