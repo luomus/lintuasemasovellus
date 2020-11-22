@@ -69,7 +69,7 @@ def edit_observers(day_id, observers):
 @login_required
 def search_dayinfo(date, observatory):
 
-    day = Day.query.filter_by(day = date, observatory_id = getObservatoryId(observatory)).first()
+    day = Day.query.filter_by(day = date, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
     if not day:
         res.append({ 'comment': "", 'observers': ""})
