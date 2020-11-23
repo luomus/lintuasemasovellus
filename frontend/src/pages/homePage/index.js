@@ -350,21 +350,41 @@ export const HomePage = () => {
           </Paper>
         </Grid>
         <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Typography variant="h5" component="h2" >
-              {t("manualTitle")}
-            </Typography>
-            <br />
-            Syötä havainto pikakirjoitusmuodossa:
-            <br />
-            <br />
-            10:00
-            <br />
-            sommol 1/2 W
-            <br />
-            12:00
-          </Paper>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Typography variant="h5" component="h2" >
+                {t("manualTitle")}
+              </Typography>
+              <br />
+              Syötä havainto pikakirjoitusmuodossa:
+              <br />
+              <br />
+              10:00
+              <br />
+              sommol 1/2 W
+              <br />
+              12:00
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Typography variant="h5" component="h2" >
+                {t("latestDays")}
+              </Typography>
+              <br />
+              Viimeisimmät viisi päivää
+              <br />
+              <br />
+              10:00
+              <br />
+              sommol 1/2 W
+              <br />
+              12:00
+            </Paper>
+          </Grid>
         </Grid>
+
       </Grid>
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">

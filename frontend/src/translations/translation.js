@@ -37,6 +37,8 @@ const resources = {
       "manualTextShort": "Tähän kirjoitetaan lyhyt versio sovelluksen käyttöohjeista.",
       "manualText": "Tähän kirjoitetaan sovelluksen käyttöohjeet kokonaisuudessaan.",
 
+      "latestDays": "Viimeisimmät päivät",
+
       "vakioTitle": "Vakiomuutoseuranta",
       "otherTitle": "Muu havainnointi",
       "newPeriod": "Uusi jakso",

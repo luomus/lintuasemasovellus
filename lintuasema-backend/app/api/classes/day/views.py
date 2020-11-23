@@ -10,6 +10,7 @@ from app.api.classes.observationperiod.services import setObsPerDayId
 
 from app.api import bp
 from app.db import db
+from sqlalchemy.sql import text
 
 @bp.route('/api/addDay', methods=['POST'])
 @login_required
@@ -82,12 +83,36 @@ def search_dayinfo(date, observatory):
 @login_required
 def get_latest_days(observatory):
 
-    dayObjects = Day.query.filter_by(observatory_id = getObservatoryId(observatory), is_deleted = 0).order_by(Day.day.desc()).limit(5).all()
-    ret = []
-    for day in dayObjects:
-        ret.append({ 'id': day.id, 'day': day.day, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
+    observatory_id = getObservatoryId(observatory)
+    stmt = text(" SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
+                " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
+                " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
+                " WHERE Day.observatory_id = :observatory_id"
+                " GROUP BY Day.day"
+                " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
 
-    return jsonify(ret)
+    # stmt = text("SELECT * FROM("
+    #             " SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
+    #             " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
+    #             " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
+    #             " WHERE Day.observatory_id = :observatory_id"
+    #             " GROUP BY Day.day"
+    #             " ORDER BY Day.day DESC)"
+    #             " WHERE ROWNUM <= 5").params(observatory_id = observatory_id)
+
+    res = db.engine.execute(stmt)
+
+    response = []
+    i = 0
+    for row in res:
+        if i == 5:
+            break
+        i = i + 1
+        response.append({"day" :row[0], 
+            "speciesCount":row[1]})
+        
+
+    return jsonify(response)
 
 
    
