@@ -26,3 +26,8 @@ export const searchDayInfo = async (date, observatory) => {
   const day = await axios.get(`/api/searchDayInfo/${date}/${observatory}`);
   return day.data;
 };
+
+export const getLatestDays = async (observatory) => {
+  const days = await axios.get(`/api/getLatestDays/${observatory}`);
+  return days.data;
+};

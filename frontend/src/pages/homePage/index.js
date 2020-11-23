@@ -6,7 +6,8 @@ import {
   Paper,
   Grid,
   Typography, TextField, Button,
-  FormControl, InputLabel, Select, MenuItem, Snackbar
+  FormControl, InputLabel, Select, MenuItem, Snackbar,
+  Table, TableRow, TableBody, TableCell, withStyles, Link
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -27,7 +28,7 @@ import {
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
-import { searchDayInfo } from "../../services";
+import { searchDayInfo, getLatestDays } from "../../services";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -57,6 +58,15 @@ let timeout = null;
 
 let widgets = new Set();
 
+const StyledTableCell = withStyles(() => ({
+  head: {
+    backgroundColor: "grey",
+    color: "white",
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
 export const HomePage = () => {
   const classes = useStyles();
@@ -75,6 +85,7 @@ export const HomePage = () => {
   const dateNow = new Date();
 
   const userObservatory = useSelector(state => state.userObservatory);
+  //const initialLatestDays = getLatestDays(userObservatory);
   const stations = useSelector(state => state.stations);
 
   const [types, setTypes] = useState([]);
@@ -92,6 +103,13 @@ export const HomePage = () => {
 
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
 
+  const [latestDays, setLatestDays] = useState([]);
+
+
+  useEffect(() => {
+    getLatestDays(userObservatory)
+      .then(daysJson => setLatestDays(daysJson));
+  }, [userObservatory]);
 
 
   const emptyAllFields = () => {
@@ -102,8 +120,6 @@ export const HomePage = () => {
     setLocation("");
     setShorthand("");
   };
-
-
 
 
   const handleClose = (event, reason) => {
@@ -375,15 +391,24 @@ export const HomePage = () => {
               <Typography variant="h5" component="h2" >
                 {t("latestDays")}
               </Typography>
-              <br />
-              Viimeisimmät viisi päivää
-              <br />
-              <br />
-              10:00
-              <br />
-              sommol 1/2 W
-              <br />
-              12:00
+
+              <Table>
+                <TableBody>
+                  {
+                    latestDays
+                      .map((s, i) =>
+                        <TableRow hover component={Link} key={i} >
+                          <StyledTableCell component="th" scope="row">
+                            {s.day}
+                          </StyledTableCell>
+                          <StyledTableCell component="th" scope="row">
+                            {s.speciesCount} lajia
+                          </StyledTableCell>
+                        </TableRow>
+                      )
+                  }
+                </TableBody>
+              </Table>
             </Paper>
           </Grid>
         </Grid>
