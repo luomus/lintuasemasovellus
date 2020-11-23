@@ -163,6 +163,8 @@ export const HomePage = () => {
       await loopThroughObservations(rows);
       setFormSent(true);
       emptyAllFields();
+      getLatestDays(userObservatory)
+        .then(daysJson => setLatestDays(daysJson));
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
@@ -371,48 +373,49 @@ export const HomePage = () => {
         <Grid item xs={4}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <Typography variant="h5" component="h2" >
-                {t("manualTitle")}
-              </Typography>
-              <br />
+              <Grid item xs={12}>
+                <Typography variant="h5" component="h2" >
+                  {t("latestDays")}
+                </Typography>
+
+                <Table>
+                  <TableBody>
+                    {
+                      latestDays
+                        .map((s, i) =>
+                          <TableRow id="latestDaysRow" key={i}
+                            hover component={Link} to="/"  >
+                            <StyledTableCell component="th" scope="row">
+                              {s.day}
+                            </StyledTableCell>
+                            <StyledTableCell component="th" scope="row">
+                              {s.speciesCount} lajia
+                            </StyledTableCell>
+                          </TableRow>
+                        )
+                    }
+                  </TableBody>
+                </Table>
+              </Grid>
+              <br/>
+              <br/>
+              <Grid item xs={12}>
+                <Typography variant="h5" component="h2" >
+                  {t("manualTitle")}
+                </Typography>
+                <br />
               Syötä havainto pikakirjoitusmuodossa:
-              <br />
-              <br />
+                <br />
+                <br />
               10:00
-              <br />
+                <br />
               sommol 1/2 W
-              <br />
+                <br />
               12:00
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Typography variant="h5" component="h2" >
-                {t("latestDays")}
-              </Typography>
-
-              <Table>
-                <TableBody>
-                  {
-                    latestDays
-                      .map((s, i) =>
-                        <TableRow hover component={Link} key={i} >
-                          <StyledTableCell component="th" scope="row">
-                            {s.day}
-                          </StyledTableCell>
-                          <StyledTableCell component="th" scope="row">
-                            {s.speciesCount} lajia
-                          </StyledTableCell>
-                        </TableRow>
-                      )
-                  }
-                </TableBody>
-              </Table>
+              </Grid>
             </Paper>
           </Grid>
         </Grid>
-
       </Grid>
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
