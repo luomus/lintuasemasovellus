@@ -7,15 +7,15 @@ import {
   Grid,
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
-  Table, TableRow, TableBody, TableCell, withStyles, Link
+  Table, TableRow, TableBody, TableCell, withStyles
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import ObservatorySelector from "./observatorySelector";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Redirect, Link } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
@@ -29,6 +29,8 @@ import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
+import { retrieveDays } from "../../reducers/daysReducer";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,6 +70,7 @@ const StyledTableCell = withStyles(() => ({
   },
 }))(TableCell);
 
+
 export const HomePage = () => {
   const classes = useStyles();
 
@@ -85,7 +88,17 @@ export const HomePage = () => {
   const dateNow = new Date();
 
   const userObservatory = useSelector(state => state.userObservatory);
-  //const initialLatestDays = getLatestDays(userObservatory);
+
+  const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(retrieveDays());
+  }, [dispatch]);
+
+  console.log(list);
+
   const stations = useSelector(state => state.stations);
 
   const [types, setTypes] = useState([]);
@@ -384,7 +397,7 @@ export const HomePage = () => {
                       latestDays
                         .map((s, i) =>
                           <TableRow id="latestDaysRow" key={i}
-                            hover component={Link} to="/"  >
+                            hover component={Link} to={`/daydetails/${s.day}/${userObservatory}`}  >
                             <StyledTableCell component="th" scope="row">
                               {s.day}
                             </StyledTableCell>
@@ -397,8 +410,8 @@ export const HomePage = () => {
                   </TableBody>
                 </Table>
               </Grid>
-              <br/>
-              <br/>
+              <br />
+              <br />
               <Grid item xs={12}>
                 <Typography variant="h5" component="h2" >
                   {t("manualTitle")}
