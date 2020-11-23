@@ -73,22 +73,22 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
   if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
 
   let directions = new Map();
-  directions.set("0", "Pohjoinen");
-  directions.set("22,5", "Pohjois-koillinen");
-  directions.set("45", "Koillinen");
-  directions.set("67,5", "Itä-koillinen");
-  directions.set("90", "Itä");
-  directions.set("112,5", "Itä-kaakko");
-  directions.set("135", "Kaakko");
-  directions.set("157,5", "Etelä-kaakko");
-  directions.set("180", "Etelä");
-  directions.set("202,5", "Etelä-lounas");
-  directions.set("225", "Lounas");
-  directions.set("247,5", "Länsi-lounas");
-  directions.set("270", "Länsi");
-  directions.set("292,5", "Länsi-luode");
-  directions.set("315", "Luode");
-  directions.set("337,5", "Pohjois-luode");
+  directions.set("0", "N");
+  directions.set("22,5", "NNE");
+  directions.set("45", "NE");
+  directions.set("67,5", "ENE");
+  directions.set("90", "E");
+  directions.set("112,5", "ESE");
+  directions.set("135", "SE");
+  directions.set("157,5", "SSE");
+  directions.set("180", "S");
+  directions.set("202,5", "SSW");
+  directions.set("225", "SW");
+  directions.set("247,5", "WSW");
+  directions.set("270", "W");
+  directions.set("292,5", "WNW");
+  directions.set("315", "NW");
+  directions.set("337,5", "NNW");
   directions.set("", "");
 
   let bypass = new Map();
@@ -140,13 +140,13 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                   .map((s, i) =>
                     <TableRow key={i} >
                       <TableCell>
-                        {Object.values(birdMap.get(s.species.toUpperCase()))[1]}, {s.species}
+                        {s.species}
                       </TableCell>
                       <TableCell>
                         {(s.count)}
                       </TableCell>
                       <TableCell>
-                        {(s.direction)}&#176;, {(directions.get(s.direction))}
+                        {(directions.get(s.direction))}, {(s.direction)}&#176;
                       </TableCell>
                       <TableCell>
                         {(bypass.get(s.bypassSide))}

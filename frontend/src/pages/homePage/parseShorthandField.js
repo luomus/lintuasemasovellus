@@ -96,6 +96,7 @@ const parseTime = (timeString) => {
 };
 
 const sendObservation = async (observation, observationPeriodId, shorthandId) => {
+  observation["species"] = observation["species"].toUpperCase();
   observation["direction"] = directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
