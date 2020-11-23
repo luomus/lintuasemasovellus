@@ -64,6 +64,9 @@ export const HomePage = () => {
   const { t } = useTranslation();
 
   const formatDate = (date) => {
+    if (date === null) {
+      return;
+    }
     const dd = date.getDate();
     const mm = date.getMonth() + 1;
     return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;

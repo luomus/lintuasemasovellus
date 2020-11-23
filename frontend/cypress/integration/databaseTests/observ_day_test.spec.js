@@ -29,20 +29,24 @@ const invalidShorthand6 = "10:00\nosommol 1/2 W\n12:00"; //liikaa merkkejä laji
 
 const invalidShorthand7 = "10:00\nsommo 1/2 W\n12:00"; //invalid lajinimi
 const invalidShorthand8 = "10:00\nsommol 1/2 W\n12:00\nsommol 3/4 W \n13:00"; //pariton määrä kellonaikoja
-const invalidShorthand9 = "10:00\nsommol 1/2 W\n\n\n12:00"; //liikaa rivinvaihtoja
+//const invalidShorthand9 = "10:00\nsommol 1/2 W\n\n\n12:00"; //liikaa rivinvaihtoja ei ongelma eli ei lisätä shorthands listaan
 const invalidShorthand10 = "10:00\nsommol 1/2 W\n12:0\n0";//rivinvaihto väärässä paikassa
 const invalidShorthand11 = "10:00\nsommol 1/2 WW\n12:00"; //virheellinen ilmansuunta
 const invalidShorthand12 = "10:00\nsommol 1/2/ W\n12:00"; //ylimääräinen kauttaviiva
 const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\nSommol /4 E\nAnacre 1\"2juv3subad/W\nMeralb /1W, 2/E, 3/4w\n13.00\n07.00\ngrugru 100SW+-, 200 S +++ ,  300 \"W---\nsommol 1/2 W\n08.00";//välikellonaika poistettu
 const invalidShorthand14 = "12:00\nsommolo 1/2 W\n10:00"; //kellonajat väärinpäin
-//const invalidShorthand16 = "10:00\nsommol 1/2/ W\n12:00"; 
+ 
 //talteen toimiva: const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\n11.00\nSommol /4 E\nAnacre 1\"2juv3subad/W\nMeralb /1W, 2/E, 3/4w\n13.00\n07.00\ngrugru 100SW+-, 200 S +++ ,  300 \"W---\nsommol 1/2 W\n08.00";//megapitkä pikakirjoitus
+
+
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
-  invalidShorthand6, invalidShorthand7, invalidShorthand8, invalidShorthand9,
-  invalidShorthand10, invalidShorthand12, invalidShorthand13,
+  invalidShorthand6, invalidShorthand7, invalidShorthand8, 
+  invalidShorthand10, invalidShorthand11, invalidShorthand12, invalidShorthand13,
   invalidShorthand14];
+
+  
 
 
 
@@ -249,6 +253,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").clear();
+    cy.get("#comment").clear();
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
