@@ -78,3 +78,16 @@ def search_dayinfo(date, observatory):
     return jsonify(res)
 
    
+@bp.route('/api/getLatestDays/<observatory>', methods=['GET'])
+@login_required
+def get_latest_days(observatory):
+
+    dayObjects = Day.query.filter_by(observatory_id = getObservatoryId(observatory), is_deleted = 0).order_by(Day.day.desc()).limit(5).all()
+    ret = []
+    for day in dayObjects:
+        ret.append({ 'id': day.id, 'day': day.day, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
+
+    return jsonify(ret)
+
+
+   
