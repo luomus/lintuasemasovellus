@@ -49,6 +49,19 @@ const ObsPeriodTable = (props) => {
 
   const [obsPeriod, setObsPeriod] = useState({});
 
+  const timeDifference = (time1, time2) => {
+    const ret = Date.parse(time1) - Date.parse(time2);
+    return ret;
+  };
+
+  const msToTime = (ms) => {
+    var s = ms / 1000;
+    var mins = s / 60;
+    var hrs = Math.floor(mins / 60);
+    var mins2 = mins % 60;
+    return hrs + "h " + mins2 + "min";
+  };
+
 
   const handleOpen = (obsPeriod) => {
     console.log("handleOpen obsPeriod:", obsPeriod);
@@ -148,7 +161,9 @@ const ObsPeriodTable = (props) => {
             <StyledTableCell>{t("location")}</StyledTableCell>
             <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
             <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
+            <StyledTableCell align="right">{t("duration")}</StyledTableCell>
             <StyledTableCell align="right">{t("type")}</StyledTableCell>
+            <StyledTableCell align="right">{t("speciesTotal")}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -166,7 +181,13 @@ const ObsPeriodTable = (props) => {
                     {formatTime(s.endTime)}
                   </StyledTableCell>
                   <StyledTableCell align="right">
+                    {msToTime(timeDifference(s.endTime, s.startTime))}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
                     {s.observationType}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    Lajien lkm
                   </StyledTableCell>
                 </TableRow>
               )
