@@ -69,6 +69,33 @@ def getObservationPeriods():
 @login_required
 def getDaysObservationPeriods(day_id):
 
+    # stmt = text(" SELECT Observationperiod.id, Observationperiod.startTime,"
+    #             " Observationperiod.endTime, Type.name, Location.name,"
+    #             " Day.id, COUNT(DISTINCT Observation.species) AS speciesCount"
+    #             " FROM Observation"
+    #             " RIGHT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
+    #             " JOIN Day ON Day.id = Observationperiod.day_id"
+    #             " WHERE Day.id = :day_id"
+    #             " GROUP BY Observationperiod.id"
+    #             " ORDER BY Observationperiod.startTime").params(day_id = day_id)
+    
+    # res = db.engine.execute(stmt)
+
+    # response = []
+
+    # for row in res:
+    #     response.append({"id" :row[0], 
+    #         "startTime":row[1],
+    #         "endTime":row[2], 
+    #         "observationType":row[3],
+    #         "location":row[4],
+    #         "day_id":row[5],
+    #         "speciesCount":row[6]})
+  
+    # return jsonify(response)
+
+
+
     #type_id = getTypeIdByName(observationType)
 
     #console.log('Tyypin id: ', type_id)
