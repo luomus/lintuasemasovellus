@@ -31,3 +31,9 @@ export const getLatestDays = async (observatory) => {
   const days = await axios.get(`/api/getLatestDays/${observatory}`);
   return days.data;
 };
+
+export const getSummary = async (dayId) => {
+  const summary = await axios.get(`/api/getObservationSummary/${dayId}`);
+  return summary.data;
+};
+

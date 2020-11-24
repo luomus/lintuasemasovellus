@@ -96,7 +96,7 @@ def observations_delete():
 @login_required
 def getSummary(day_id):
     stmt = text("SELECT Observation.species,"
-                " SUM(CASE WHEN (Type.name = :const OR Type.name = :other OR Type.name = :night) THEN total_count ELSE 0 END) AS allMigration,"
+                " SUM(CASE WHEN (Type.name = :const OR Type.name = :other OR Type.name = :night OR Type.name = :scatter) THEN total_count ELSE 0 END) AS allMigration,"
                 " SUM(CASE WHEN Type.name = :const THEN total_count ELSE 0 END) AS constMigration,"
                 " SUM(CASE WHEN Type.name = :other THEN total_count ELSE 0 END) AS otherMigration,"
                 " SUM(CASE WHEN Type.name = :night THEN total_count ELSE 0 END) AS nightMigration,"

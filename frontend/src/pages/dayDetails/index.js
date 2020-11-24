@@ -11,7 +11,7 @@ import ObsPeriodTable from "./ObsPeriodTable";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers
+  editComment, editObservers, getSummary
 } from "../../services";
 
 
@@ -32,6 +32,8 @@ const DayDetails = () => {
 
 
   const [obsPeriods, setObsperiods] = useState([]);
+
+  const [summary, setSummary] = useState([]);
 
   // const [obsPeriodsOther, setObsperiodsOther] = useState([]);
 
@@ -90,6 +92,13 @@ const DayDetails = () => {
     getDaysObservationPeriods(dayId)
       .then(periodsJson => setObsperiods(periodsJson));
   }, [dayId]);
+
+  useEffect(() => {
+    getSummary(dayId)
+      .then(periodsJson => setSummary(periodsJson));
+  }, [dayId]);
+
+  console.log(summary);
 
 
 
@@ -171,6 +180,7 @@ const DayDetails = () => {
           <Grid item xs={12}>
             <ObsPeriodTable
               obsPeriods={obsPeriods}
+              summary={summary}
               mode={mode}
             />
 

@@ -50,6 +50,14 @@ const resources = {
 
       "species": "Laji",
       "count": "Lukumäärä",
+      "totalCount": "Muutto Yht",
+      "constantMigration": "Vakio",
+      "otherMigration": "Muu muutto",
+      "nightMigration": "Yömuutto",
+      "scatteredMigration": "Hajahavainnot",
+      "localTotal": "Paikalliset Yht",
+      "localCount": "Paikalliset",
+      "localGau": "Paikalliset Gåu",
       "direction": "Suunta",
       "bypassSide": "Ohituspuoli",
 

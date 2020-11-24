@@ -11,7 +11,7 @@ import ObservationPeriod from "../obsPeriod";
 
 const ObsPeriodTable = (props) => {
 
-  const { obsPeriods, mode } = props;
+  const { obsPeriods, summary, mode } = props;
 
   const { t } = useTranslation();
 
@@ -42,6 +42,7 @@ const ObsPeriodTable = (props) => {
   };
 
   console.log("obsperiodtable obsperiods", obsPeriods);
+  console.log("summary", summary);
   console.log("mode: " + mode);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -71,7 +72,65 @@ const ObsPeriodTable = (props) => {
           Lajit
         </Typography>
 
-        Tähän lajikohtainen taulukko
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell >{t("species")}</StyledTableCell>
+              <StyledTableCell align="right">{t("totalCount")}</StyledTableCell>
+              <StyledTableCell align="right">{t("constantMigration")}</StyledTableCell>
+              <StyledTableCell align="right">{t("otherMigration")}</StyledTableCell>
+              <StyledTableCell align="right">{t("nightMigration")}</StyledTableCell>
+              <StyledTableCell align="right">{t("scatteredMigration")}</StyledTableCell>
+              <StyledTableCell align="right">{t("localTotal")}</StyledTableCell>
+              <StyledTableCell align="right">{t("localCount")}</StyledTableCell>
+              <StyledTableCell align="right">{t("localGau")}</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              summary
+                .map((s, i) =>
+                  <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
+                    <StyledTableCell component="th" scope="row">
+                      {s.species}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.allMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.constMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.otherMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.nightMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.scatterObs}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.totalLocal}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localOther}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localGåu}
+                    </StyledTableCell>
+                  </TableRow>
+                )
+            }
+          </TableBody>
+          <ObservationPeriod
+            obsPeriod={obsPeriod}
+            open={modalOpen}
+            handleClose={handleClose}
+            handleErrorSnackOpen={handleErrorSnackOpen}
+          />
+
+
+        </Table>
       </div>
     );
   }
@@ -128,6 +187,7 @@ const ObsPeriodTable = (props) => {
 
 ObsPeriodTable.propTypes = {
   obsPeriods: PropTypes.array.isRequired,
+  summary: PropTypes.array.isRequired,
   mode: PropTypes.string.isRequired
 };
 
