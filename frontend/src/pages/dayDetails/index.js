@@ -7,9 +7,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
-import ObsPeriodTableOther from "./ObsPeriodTableOther";
+// import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
-  getDaysObservationPeriodsStandard, getDaysObservationPeriodsOther,
+  getDaysObservationPeriods,
+  // getDaysObservationPeriodsOther,
   editComment, editObservers
 } from "../../services";
 
@@ -30,9 +31,9 @@ const DayDetails = () => {
   const { t } = useTranslation();
 
 
-  const [obsPeriodsStandard, setObsperiodsStandard] = useState([]);
+  const [obsPeriods, setObsperiods] = useState([]);
 
-  const [obsPeriodsOther, setObsperiodsOther] = useState([]);
+  // const [obsPeriodsOther, setObsperiodsOther] = useState([]);
 
   const [observersForm, setObserversForm] = useState(false);
 
@@ -42,6 +43,8 @@ const DayDetails = () => {
 
   const [editedObservers, setEditedObservers] = useState("");
 
+  const [mode, setMode] = useState("table1");
+
   const dayList = useSelector(state => state.days);
 
   const [observers, setObservers] = useState(
@@ -49,6 +52,8 @@ const DayDetails = () => {
       .find(d => d.day === day && d.observatory === stationName)
       .observers
   );
+
+  console.log(observers);
 
   const [comment, setComment] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -82,23 +87,22 @@ const DayDetails = () => {
   };
 
   useEffect(() => {
-    getDaysObservationPeriodsStandard(dayId)
-      .then(periodsJson => setObsperiodsStandard(periodsJson));
+    getDaysObservationPeriods(dayId)
+      .then(periodsJson => setObsperiods(periodsJson));
   }, [dayId]);
 
-  useEffect(() => {
-    getDaysObservationPeriodsOther(dayId)
-      .then(periodsJson => setObsperiodsOther(periodsJson));
-  }, [dayId]);
+
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
+
 
   if (!userIsSet) {
     return (
       <Redirect to="/login" />
     );
   }
+
 
   return (
 
@@ -131,7 +135,6 @@ const DayDetails = () => {
                 </Button>
               </form>
             )}
-
             <Typography variant="subtitle1" component="h2" >
               {t("comment")}{": "}{comment}{" "}
             </Typography>
@@ -156,29 +159,19 @@ const DayDetails = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant="contained" color="primary">
-              {t("newPeriod")}
+            <Button variant="contained" color="primary" onClick={() => setMode("table1")}>
+              Lajit
+            </Button>{" "}
+            <Button variant="contained" color="primary" onClick={() => setMode("table2")}>
+              Jaksot
             </Button>{" "}
           </Grid>
 
 
-          <Grid item xs={6}>
-            <Typography variant="h6" >
-              {t("vakioTitle")}
-            </Typography>
-
+          <Grid item xs={12}>
             <ObsPeriodTable
-              obsPeriods={obsPeriodsStandard}
-            />
-
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="h6" >
-              {t("otherTitle")}
-            </Typography>
-
-            <ObsPeriodTableOther
-              obsPeriods={obsPeriodsOther}
+              obsPeriods={obsPeriods}
+              mode={mode}
             />
 
           </Grid>

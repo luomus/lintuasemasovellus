@@ -176,6 +176,7 @@ export const HomePage = () => {
       await loopThroughObservations(rows);
       setFormSent(true);
       emptyAllFields();
+      dispatch(retrieveDays());
       getLatestDays(userObservatory)
         .then(daysJson => setLatestDays(daysJson));
     } catch (error) {

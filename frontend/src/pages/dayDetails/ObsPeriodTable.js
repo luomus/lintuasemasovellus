@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Table, TableHead, TableRow,
-  TableBody, TableCell, withStyles, makeStyles
+import {
+  Table, TableHead, TableRow,
+  TableBody, TableCell, withStyles, makeStyles, Typography
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
@@ -10,7 +11,7 @@ import ObservationPeriod from "../obsPeriod";
 
 const ObsPeriodTable = (props) => {
 
-  const { obsPeriods } = props;
+  const { obsPeriods, mode } = props;
 
   const { t } = useTranslation();
 
@@ -41,6 +42,7 @@ const ObsPeriodTable = (props) => {
   };
 
   console.log("obsperiodtable obsperiods", obsPeriods);
+  console.log("mode: " + mode);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -62,48 +64,71 @@ const ObsPeriodTable = (props) => {
   const handleErrorSnackOpen = () => {
   };
 
+  if (mode === "table1") {
+    return (
+      <div>
+        <Typography variant="h6" >
+          Lajit
+        </Typography>
+
+        Tähän lajikohtainen taulukko
+      </div>
+    );
+  }
 
   return (
-    <Table className={classes.table}>
-      <TableHead>
-        <TableRow>
-          <StyledTableCell>{t("location")}</StyledTableCell>
-          <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
-          <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {
-          obsPeriods
-            .map((s, i) =>
-              <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
-                <StyledTableCell component="th" scope="row">
-                  {s.location}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {formatTime(s.startTime)}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {formatTime(s.endTime)}
-                </StyledTableCell>
-              </TableRow>
-            )
-        }
-      </TableBody>
-      <ObservationPeriod
-        obsPeriod={obsPeriod}
-        open={modalOpen}
-        handleClose={handleClose}
-        handleErrorSnackOpen={handleErrorSnackOpen}
-      />
+
+    <div>
+      <Typography variant="h6" >
+        Jaksot
+      </Typography>
+
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>{t("location")}</StyledTableCell>
+            <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
+            <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
+            <StyledTableCell align="right">{t("type")}</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {
+            obsPeriods
+              .map((s, i) =>
+                <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
+                  <StyledTableCell component="th" scope="row">
+                    {s.location}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {formatTime(s.startTime)}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {formatTime(s.endTime)}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {s.observationType}
+                  </StyledTableCell>
+                </TableRow>
+              )
+          }
+        </TableBody>
+        <ObservationPeriod
+          obsPeriod={obsPeriod}
+          open={modalOpen}
+          handleClose={handleClose}
+          handleErrorSnackOpen={handleErrorSnackOpen}
+        />
 
 
-    </Table>
+      </Table>
+    </div>
   );
 };
 
 ObsPeriodTable.propTypes = {
-  obsPeriods: PropTypes.array.isRequired
+  obsPeriods: PropTypes.array.isRequired,
+  mode: PropTypes.string.isRequired
 };
 
 export default ObsPeriodTable;
