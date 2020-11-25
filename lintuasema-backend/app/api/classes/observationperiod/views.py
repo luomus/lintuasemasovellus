@@ -13,6 +13,8 @@ from app.api.classes.type.services import getTypeIdByName, getTypeNameById, crea
 
 from app.api import bp
 from app.db import db
+from sqlalchemy.sql import text
+
 
 from datetime import datetime
 
@@ -69,36 +71,38 @@ def getObservationPeriods():
 @login_required
 def getDaysObservationPeriods(day_id):
 
-    # stmt = text(" SELECT Observationperiod.id, Observationperiod.startTime,"
-    #             " Observationperiod.endTime, Type.name, Location.name,"
-    #             " Day.id, COUNT(DISTINCT Observation.species) AS speciesCount"
-    #             " FROM Observation"
-    #             " RIGHT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
-    #             " JOIN Day ON Day.id = Observationperiod.day_id"
-    #             " WHERE Day.id = :day_id"
-    #             " GROUP BY Observationperiod.id"
-    #             " ORDER BY Observationperiod.startTime").params(day_id = day_id)
+    stmt = text(" SELECT Observationperiod.id, Observationperiod.startTime,"
+                 " Observationperiod.endTime, Type.name, Location.name,"
+                 " Day.id, COUNT(DISTINCT Observation.species) AS speciesCount"
+                 " FROM Observationperiod"
+                 " LEFT JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
+                 " JOIN Day ON Day.id = Observationperiod.day_id"
+                 " JOIN Type ON Type.id=Observationperiod.type_id"
+                 " JOIN Location ON Location.id=Observationperiod.location_id"
+                 " WHERE Day.id = :day_id"
+                 " GROUP BY Observationperiod.id"
+                 " ORDER BY Observationperiod.startTime").params(day_id = day_id)
     
-    # res = db.engine.execute(stmt)
+    res = db.engine.execute(stmt)
 
-    # response = []
+    response = []
 
-    # for row in res:
-    #     response.append({"id" :row[0], 
-    #         "startTime":row[1],
-    #         "endTime":row[2], 
-    #         "observationType":row[3],
-    #         "location":row[4],
-    #         "day_id":row[5],
-    #         "speciesCount":row[6]})
+    for row in res:
+        response.append({"id" :row[0], 
+            "startTime":row[1],
+            "endTime":row[2], 
+            "observationType":row[3],
+            "location":row[4],
+            "day_id":row[5],
+            "speciesCount":row[6]})
   
-    # return jsonify(response)
+    return jsonify(response)
 
 
 
-    #type_id = getTypeIdByName(observationType)
+    type_id = getTypeIdByName(observationType)
 
-    #console.log('Tyypin id: ', type_id)
+    console.log('Tyypin id: ', type_id)
 
     daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
     ret = []

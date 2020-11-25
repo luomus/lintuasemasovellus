@@ -35,11 +35,7 @@ const ObsPeriodTable = (props) => {
     },
   }))(TableCell);
 
-  const formatTime = (time) => {
-    const ret = time.split(" ")[4].split(":");
-    // hours 0 and minutes 1
-    return `${ret[0]}:${ret[1]}`;
-  };
+
 
   console.log("obsperiodtable obsperiods", obsPeriods);
   console.log("summary", summary);
@@ -62,6 +58,10 @@ const ObsPeriodTable = (props) => {
     return hrs + "h " + mins2 + "min";
   };
 
+  const formatTime = (time) => {
+    const ret = time.split(" ")[1].split(":");
+    return `${ret[0]}:${ret[1]}`;
+  };
 
   const handleOpen = (obsPeriod) => {
     console.log("handleOpen obsPeriod:", obsPeriod);
@@ -187,7 +187,7 @@ const ObsPeriodTable = (props) => {
                     {s.observationType}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    Lajien lkm
+                    {s.speciesCount}
                   </StyledTableCell>
                 </TableRow>
               )

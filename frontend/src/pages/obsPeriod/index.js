@@ -44,7 +44,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
   const formatTime = (time) => {
     if (typeof time !== "undefined") {
-      const ret = time.split(" ")[4].split(":");
+      const ret = time.split(" ")[1].split(":");
       // hours 0 and minutes 1
       return `${ret[0]}:${ret[1]}`;
     }
