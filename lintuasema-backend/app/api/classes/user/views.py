@@ -17,7 +17,7 @@ TARGET = os.getenv('TARGET')
 
 @bp.route('/login', methods=['POST', 'GET'])
 def loginconfirm():
-    session.permanent = False
+
     personToken = request.args.get('token')
 
     if personToken is None:
@@ -36,6 +36,8 @@ def loginconfirm():
         db.session().commit()
 
     login_user(user)
+
+    session.permanent = True
 
     session['token'] = personToken
     
@@ -84,6 +86,8 @@ def testloginconfirm():
         db.session().commit()
 
     login_user(user)
+
+    session.permanent = True
 
     session['token'] = personToken
     
