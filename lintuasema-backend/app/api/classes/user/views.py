@@ -17,6 +17,7 @@ TARGET = os.getenv('TARGET')
 
 @bp.route('/login', methods=['POST', 'GET'])
 def loginconfirm():
+    session.permanent = False
     personToken = request.args.get('token')
 
     if personToken is None:
@@ -69,6 +70,7 @@ def getcurrentUser():
 
 @bp.route('/testlogin', methods=['POST', 'GET'])
 def testloginconfirm():
+    session.permanent = False
     personToken = request.args.get('token')
 
     userId = 'MA.3417'
