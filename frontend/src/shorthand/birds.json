@@ -1,1288 +1,1850 @@
 {
-    "GAVSTE" : {
-        "latinum": "Gavia stellata",
-        "finnishname": "Kaakkuri",
-        "swedishname": "Smålom"
-    },
-    "GAVARC" : {
-        "latinum": "Gavia arctica",
-        "finnishname": "Kuikka",
-        "swedishname": "Storlom"
-    },
-    "TACRUF" : {
-        "latinum": "Tachybaptus ruficollis",
-        "finnishname": "Pikku-uikku",
-        "swedishname": "Smådopping"
-    },
-    "PODCRI" : {
-        "latinum": "Podiceps cristatus",
-        "finnishname": "Silkkiuikku",
-        "swedishname": "Skäggdopping"
-    },
-    "PODGRI" : {
-        "latinum": "Podiceps grisegena",
-        "finnishname": "Härkälintu",
-        "swedishname": "Gråhakedopping"
-    },
-    "PODAUR" : {
-        "latinum": "Podiceps auritus",
-        "finnishname": "Mustakurkku-uikku",
-        "swedishname": "Svarthakedopping"
-    },
-    "PHACAR" : {
-        "latinum": "Phalacrocorax carbo",
-        "finnishname": "Merimetso",
-        "swedishname": "Storskarv"
-    },
-    "BOTSTE" : {
-        "latinum": "Botaurus stellaris",
-        "finnishname": "Kaulushaikara",
-        "swedishname": "Rördrom"
-    },
-    "ARDCIN" : {
-        "latinum": "Ardea cinerea",
-        "finnishname": "Harmaahaikara",
-        "swedishname": "Häger"
-    },
-    "CYGOLO" : {
-        "latinum": "Cygnus olor",
-        "finnishname": "Kyhmyjoutsen",
-        "swedishname": "Knölsvan"
-    },
-    "CYGCYG" : {
-        "latinum": "Cygnus cygnus",
-        "finnishname": "Laulujoutsen",
-        "swedishname": "Sångsvan"
-    },
-    "ANSFAB" : {
-        "latinum": "Anser fabalis",
-        "finnishname": "Metsähanhi",
-        "swedishname": "Sädgås"
-    },
-    "ANSERY" : {
-        "latinum": "Anser erythropus",
-        "finnishname": "Kiljuhanhi",
-        "swedishname": "Fjällgås"
-    },
-    "ANSANS" : {
-        "latinum": "Anser anser",
-        "finnishname": "Merihanhi",
-        "swedishname": "Grågås"
-    },
-    "ANSCAE" : {
-        "latinum": "Anser caerulescens",
-        "finnishname": "Lumihanhi",
-        "swedishname": "Snögås"
-    },
-    "BRACAN" : {
-        "latinum": "Branta canadensis",
-        "finnishname": "Kanadanhanhi",
-        "swedishname": "Kanadagås"
-    },
-    "BRALEU" : {
-        "latinum": "Branta leucopsis",
-        "finnishname": "Valkoposkihanhi",
-        "swedishname": "Vitkindad gås"
-    },
-    "TADTAD" : {
-        "latinum": "Tadorna tadorna",
-        "finnishname": "Ristisorsa",
-        "swedishname": "Gravand"
-    },
-    "ANAPEN" : {
-        "latinum": "Anas penelope",
-        "finnishname": "Haapana",
-        "swedishname": "Bläsand"
-    },
-    "ANASTR" : {
-        "latinum": "Anas strepera",
-        "finnishname": "Harmaasorsa",
-        "swedishname": "Snatterand"
-    },
-    "ANACRE" : {
-        "latinum": "Anas crecca",
-        "finnishname": "Tavi",
-        "swedishname": "Kricka"
-    },
-    "ANAPLA" : {
-        "latinum": "Anas platyrhynchos",
-        "finnishname": "Sinisorsa",
-        "swedishname": "Gräsand"
-    },
-    "ANAACU" : {
-        "latinum": "Anas acuta",
-        "finnishname": "Jouhisorsa",
-        "swedishname": "Stjärtand"
-    },
-    "ANAQUE" : {
-        "latinum": "Anas querquedula",
-        "finnishname": "Heinätavi",
-        "swedishname": "Årta"
-    },
-    "ANACLY" : {
-        "latinum": "Anas clypeata",
-        "finnishname": "Lapasorsa",
-        "swedishname": "Skedand"
-    },
-    "AYTFER" : {
-        "latinum": "Aythya ferina",
-        "finnishname": "Punasotka",
-        "swedishname": "Brunand"
-    },
-    "AYTFUL" : {
-        "latinum": "Aythya fuligula",
-        "finnishname": "Tukkasotka",
-        "swedishname": "Vigg"
-    },
-    "AYTMAR" : {
-        "latinum": "Aythya marila",
-        "finnishname": "Lapasotka",
-        "swedishname": "Bergand"
-    },
-    "SOMMOL" : {
-        "latinum": "Somateria mollissima",
-        "finnishname": "Haahka",
-        "swedishname": "Ejder"
-    },
-    "CLAHYE" : {
-        "latinum": "Clangula hyemalis",
-        "finnishname": "Alli",
-        "swedishname": "Alfågel"
-    },
-    "MELNIG" : {
-        "latinum": "Melanitta nigra",
-        "finnishname": "Mustalintu",
-        "swedishname": "Sjöorre"
-    },
-    "MELFUS" : {
-        "latinum": "Melanitta fusca",
-        "finnishname": "Pilkkasiipi",
-        "swedishname": "Svärta"
-    },
-    "BUCCLA" : {
-        "latinum": "Bucephala clangula",
-        "finnishname": "Telkkä",
-        "swedishname": "Knipa"
-    },
-    "MERALB" : {
-        "latinum": "Mergellus albellus",
-        "finnishname": "Uivelo",
-        "swedishname": "Salskrake"
-    },
-    "MERSER" : {
-        "latinum": "Mergus serrator",
-        "finnishname": "Tukkakoskelo",
-        "swedishname": "Småskrake"
-    },
-    "MERMER" : {
-        "latinum": "Mergus merganser",
-        "finnishname": "Isokoskelo",
-        "swedishname": "Storskrake"
-    },
-    "PERAPI" : {
-        "latinum": "Pernis apivorus",
-        "finnishname": "Mehiläishaukka",
-        "swedishname": "Bivråk"
-    },
-    "MILMIG" : {
-        "latinum": "Milvus migrans",
-        "finnishname": "Haarahaukka",
-        "swedishname": "Brunglada"
-    },
-    "HALALB" : {
-        "latinum": "Haliaeetus albicilla",
-        "finnishname": "Merikotka",
-        "swedishname": "Havsörn"
-    },
-    "CIRAER" : {
-        "latinum": "Circus aeruginosus",
-        "finnishname": "Ruskosuohaukka",
-        "swedishname": "Brun kärrhök"
-    },
-    "CIRCYA" : {
-        "latinum": "Circus cyaneus",
-        "finnishname": "Sinisuohaukka",
-        "swedishname": "Blå kärrhök"
-    },
-    "CIRPYG" : {
-        "latinum": "Circus pygargus",
-        "finnishname": "Niittysuohaukka",
-        "swedishname": "Ängshök"
-    },
-    "CIRMAC" : {
-        "latinum": "Circus macrourus",
-        "finnishname": "Arosuohaukka",
-        "swedishname": "Stäpphök"
-    },
-    "ACCGEN" : {
-        "latinum": "Accipiter gentilis",
-        "finnishname": "Kanahaukka",
-        "swedishname": "Duvhök"
-    },
-    "ACCNIS" : {
-        "latinum": "Accipiter nisus",
-        "finnishname": "Varpushaukka",
-        "swedishname": "Sparvhök"
-    },
-    "BUTBUT" : {
-        "latinum": "Buteo buteo",
-        "finnishname": "Hiirihaukka",
-        "swedishname": "Ormvråk"
-    },
-    "BUTLAG" : {
-        "latinum": "Buteo lagopus",
-        "finnishname": "Piekana",
-        "swedishname": "Fjällvråk"
-    },
-    "AQUCLA" : {
-        "latinum": "Aquila clanga",
-        "finnishname": "Kiljukotka",
-        "swedishname": "Större skrikörn"
-    },
-    "AQUCHR" : {
-        "latinum": "Aquila chrysaetos",
-        "finnishname": "Maakotka",
-        "swedishname": "Kungsörn"
-    },
-    "PANHAL" : {
-        "latinum": "Pandion haliaetus",
-        "finnishname": "Sääksi (kalasääski)",
-        "swedishname": "Fiskgjuse"
-    },
-    "FALTIN" : {
-        "latinum": "Falco tinnunculus",
-        "finnishname": "Tuulihaukka",
-        "swedishname": "Tornfalk"
-    },
-    "FALVES" : {
-        "latinum": "Falco vespertinus",
-        "finnishname": "Punajalkahaukka",
-        "swedishname": "Aftonfalk"
-    },
-    "FALCOL" : {
-        "latinum": "Falco columbarius",
-        "finnishname": "Ampuhaukka",
-        "swedishname": "Stenfalk"
-    },
-    "FALSUB" : {
-        "latinum": "Falco subbuteo",
-        "finnishname": "Nuolihaukka",
-        "swedishname": "Lärkfalk"
-    },
-    "FALRUS" : {
-        "latinum": "Falco rusticolus",
-        "finnishname": "Tunturihaukka",
-        "swedishname": "Jaktfalk"
-    },
-    "FALPER" : {
-        "latinum": "Falco peregrinus",
-        "finnishname": "Muuttohaukka",
-        "swedishname": "Pilgrimsfalk"
-    },
-    "TETBON" : {
-        "latinum": "Tetrastes bonasia",
-        "finnishname": "Pyy",
-        "swedishname": "Järpe"
-    },
-    "LAGLAG" : {
-        "latinum": "Lagopus lagopus",
-        "finnishname": "Riekko",
-        "swedishname": "Dalripa"
-    },
-    "LAGMUT" : {
-        "latinum": "Lagopus muta",
-        "finnishname": "Kiiruna",
-        "swedishname": "Fjällripa"
-    },
-    "LYRTET" : {
-        "latinum": "Lyrurus tetrix",
-        "finnishname": "Teeri",
-        "swedishname": "Orre"
-    },
-    "TETURO" : {
-        "latinum": "Tetrao urogallus",
-        "finnishname": "Metso",
-        "swedishname": "Tjäder"
-    },
-    "PERPER" : {
-        "latinum": "Perdix perdix",
-        "finnishname": "Peltopyy",
-        "swedishname": "Rapphöna"
-    },
-    "COTCOT" : {
-        "latinum": "Coturnix coturnix",
-        "finnishname": "Viiriäinen",
-        "swedishname": "Vaktel"
-    },
-    "PHACOL" : {
-        "latinum": "Phasianus colchicus",
-        "finnishname": "Fasaani",
-        "swedishname": "Fasan"
-    },
-    "RALAQU" : {
-        "latinum": "Rallus aquaticus",
-        "finnishname": "Luhtakana",
-        "swedishname": "Vattenrall"
-    },
-    "PORPOR" : {
-        "latinum": "Porzana porzana",
-        "finnishname": "Luhtahuitti",
-        "swedishname": "Småfläckig sumphöna"
-    },
-    "PORPAR" : {
-        "latinum": "Porzana parva",
-        "finnishname": "Pikkuhuitti",
-        "swedishname": "Mindre sumphöna"
-    },
-    "CRECRE" : {
-        "latinum": "Crex crex",
-        "finnishname": "Ruisrääkkä",
-        "swedishname": "Kornknarr"
-    },
-    "GALCHL" : {
-        "latinum": "Gallinula chloropus",
-        "finnishname": "Liejukana",
-        "swedishname": "Rörhöna"
-    },
-    "FULATR" : {
-        "latinum": "Fulica atra",
-        "finnishname": "Nokikana",
-        "swedishname": "Sothöna"
-    },
-    "GRUGRU" : {
-        "latinum": "Grus grus",
-        "finnishname": "Kurki",
-        "swedishname": "Trana"
-    },
-    "HAEOST" : {
-        "latinum": "Haematopus ostralegus",
-        "finnishname": "Meriharakka",
-        "swedishname": "Strandskata"
-    },
-    "CHADUB" : {
-        "latinum": "Charadrius dubius",
-        "finnishname": "Pikkutylli",
-        "swedishname": "Mindre strandpipare"
-    },
-    "CHAHIA" : {
-        "latinum": "Charadrius hiaticula",
-        "finnishname": "Tylli",
-        "swedishname": "Större strandpipare"
-    },
-    "CHAMOR" : {
-        "latinum": "Charadrius morinellus",
-        "finnishname": "Keräkurmitsa",
-        "swedishname": "Fjällpipare"
-    },
-    "PLUAPR" : {
-        "latinum": "Pluvialis apricaria",
-        "finnishname": "Kapustarinta",
-        "swedishname": "Ljungpipare"
-    },
-    "VANVAN" : {
-        "abbreviation2": "VV",
-        "latinum": "Vanellus vanellus",
-        "finnishname": "Töyhtöhyyppä",
-        "swedishname": "Tofsvipa"
-    },
-    "CALUTA" : {
-        "latinum": "Calidris minuta",
-        "finnishname": "Pikkusirri",
-        "swedishname": "Småsnäppa"
-    },
-    "CALTEM" : {
-        "latinum": "Calidris temminckii",
-        "finnishname": "Lapinsirri",
-        "swedishname": "Mosnäppa"
-    },
-    "CALMAR" : {
-        "latinum": "Calidris maritima",
-        "finnishname": "Merisirri",
-        "swedishname": "Skärsnäppa"
-    },
-    "CALALP" : {
-        "latinum": "Calidris alpina",
-        "finnishname": "Suosirri",
-        "swedishname": "Kärrsnäppa"
-    },
-    "LIMFAL" : {
-        "latinum": "Limicola falcinellus",
-        "finnishname": "Jänkäsirriäinen",
-        "swedishname": "Myrsnäppa"
-    },
-    "PHIPUG" : {
-        "latinum": "Philomachus pugnax",
-        "finnishname": "Suokukko",
-        "swedishname": "Brushane"
-    },
-    "LYMMIN" : {
-        "latinum": "Lymnocryptes minimus",
-        "finnishname": "Jänkäkurppa",
-        "swedishname": "Dvärgbeckasin"
-    },
-    "GALGAL" : {
-        "latinum": "Gallinago gallinago",
-        "finnishname": "Taivaanvuohi",
-        "swedishname": "Enkelbeckasin"
-    },
-    "GALMED" : {
-        "latinum": "Gallinago media",
-        "finnishname": "Heinäkurppa",
-        "swedishname": "Dubbelbeckasin"
-    },
-    "SCORUS" : {
-        "latinum": "Scolopax rusticola",
-        "finnishname": "Lehtokurppa",
-        "swedishname": "Morkulla"
-    },
-    "LIMLIM" : {
-        "latinum": "Limosa limosa",
-        "finnishname": "Mustapyrstökuiri",
-        "swedishname": "Rödspov"
-    },
-    "LIMLAP" : {
-        "latinum": "Limosa lapponica",
-        "finnishname": "Punakuiri",
-        "swedishname": "Myrspov"
-    },
-    "NUMPHA" : {
-        "latinum": "Numenius phaeopus",
-        "finnishname": "Pikkukuovi",
-        "swedishname": "Småspov"
-    },
-    "NUMARQ" : {
-        "abbreviation2": "NA",
-        "latinum": "Numenius arquata",
-        "finnishname": "Kuovi",
-        "swedishname": "Storspov"
-    },
-    "TRIERY" : {
-        "latinum": "Tringa erythropus",
-        "finnishname": "Mustaviklo",
-        "swedishname": "Svartsnäppa"
-    },
-    "TRITOT" : {
-        "latinum": "Tringa totanus",
-        "finnishname": "Punajalkaviklo",
-        "swedishname": "Rödbena"
-    },
-    "TRISTA" : {
-        "latinum": "Tringa stagnatilis",
-        "finnishname": "Lampiviklo",
-        "swedishname": "Dammsnäppa"
-    },
-    "TRINEB" : {
-        "latinum": "Tringa nebularia",
-        "finnishname": "Valkoviklo",
-        "swedishname": "Gluttsnäppa"
-    },
-    "TRIOCH" : {
-        "abbreviation2": "TO",
-        "latinum": "Tringa ochropus",
-        "finnishname": "Metsäviklo",
-        "swedishname": "Skogssnäppa"
-    },
-    "TRIGLA" : {
-        "abbreviation2": "TG",
-        "latinum": "Tringa glareola",
-        "finnishname": "Liro",
-        "swedishname": "Grönbena"
-    },
-    "XENCIN" : {
-        "latinum": "Xenus cinereus",
-        "finnishname": "Rantakurvi",
-        "swedishname": "Tereksnäppa"
-    },
-    "ACTHYP" : {
-        "latinum": "Actitis hypoleucos",
-        "finnishname": "Rantasipi",
-        "swedishname": "Drillsnäppa"
-    },
-    "AREINT" : {
-        "latinum": "Arenaria interpres",
-        "finnishname": "Karikukko",
-        "swedishname": "Roskarl"
-    },
-    "PHALOB" : {
-        "latinum": "Phalaropus lobatus",
-        "finnishname": "Vesipääsky",
-        "swedishname": "Smalnäbbad simsnäppa"
-    },
-    "STECUS" : {
-        "latinum": "Stercorarius parasiticus",
-        "finnishname": "Merikihu",
-        "swedishname": "Labb"
-    },
-    "STELON" : {
-        "latinum": "Stercorarius longicaudus",
-        "finnishname": "Tunturikihu",
-        "swedishname": "Fjällabb"
-    },
-    "LARMIN" : {
-        "latinum": "Larus minutus",
-        "finnishname": "Pikkulokki",
-        "swedishname": "Dvärgmås"
-    },
-    "LARRID" : {
-        "latinum": "Larus ridibundus",
-        "finnishname": "Naurulokki",
-        "swedishname": "Skrattmås"
-    },
-    "LARCAN" : {
-        "latinum": "Larus canus",
-        "finnishname": "Kalalokki",
-        "swedishname": "Fiskmås"
-    },
-    "LARFUS" : {
-        "latinum": "Larus fuscus",
-        "finnishname": "Selkälokki",
-        "swedishname": "Silltrut"
-    },
-    "LARARG" : {
-        "latinum": "Larus argentatus",
-        "finnishname": "Harmaalokki",
-        "swedishname": "Gråtrut"
-    },
-    "LARMAR" : {
-        "latinum": "Larus marinus",
-        "finnishname": "Merilokki",
-        "swedishname": "Havstrut"
-    },
-    "STECAS" : {
-        "latinum": "Sterna caspia",
-        "finnishname": "Räyskä",
-        "swedishname": "Skräntärna"
-    },
-    "STEHIR" : {
-        "latinum": "Sterna hirundo",
-        "finnishname": "Kalatiira",
-        "swedishname": "Fisktärna"
-    },
-    "STEAEA" : {
-        "latinum": "Sterna paradisaea",
-        "finnishname": "Lapintiira",
-        "swedishname": "Silvertärna"
-    },
-    "STEALB" : {
-        "latinum": "Sterna albifrons",
-        "finnishname": "Pikkutiira",
-        "swedishname": "Småtärna"
-    },
-    "CHLNIG" : {
-        "latinum": "Chlidonias niger",
-        "finnishname": "Mustatiira",
-        "swedishname": "Svarttärna"
-    },
-    "URIAAL" : {
-        "latinum": "Uria aalge",
-        "finnishname": "Etelänkiisla",
-        "swedishname": "Sillgrissla"
-    },
-    "ALCTOR" : {
-        "latinum": "Alca torda",
-        "finnishname": "Ruokki",
-        "swedishname": "Tordmule"
-    },
-    "CEPGRY" : {
-        "latinum": "Cepphus grylle",
-        "finnishname": "Riskilä",
-        "swedishname": "Tobisgrissla"
-    },
-    "COLLIV" : {
-        "latinum": "Columba livia",
-        "finnishname": "Kesykyyhky",
-        "swedishname": "Tamduva"
-    },
-    "COLOEN" : {
-        "latinum": "Columba oenas",
-        "finnishname": "Uuttukyyhky",
-        "swedishname": "Skogsduva"
-    },
-    "COLPAL" : {
-        "abbreviation2": "CP",
-        "latinum": "Columba palumbus",
-        "finnishname": "Sepelkyyhky",
-        "swedishname": "Ringduva"
-    },
-    "STRDEC" : {
-        "latinum": "Streptopelia decaocto",
-        "finnishname": "Turkinkyyhky",
-        "swedishname": "Turkduva"
-    },
-    "STRTUR" : {
-        "latinum": "Streptopelia turtur",
-        "finnishname": "Turturikyyhky",
-        "swedishname": "Turturduva"
-    },
-    "CUCCAN" : {
-        "latinum": "Cuculus canorus",
-        "finnishname": "Käki",
-        "swedishname": "Gök"
-    },
-    "BUBBUB" : {
-        "latinum": "Bubo bubo",
-        "finnishname": "Huuhkaja",
-        "swedishname": "Berguv"
-    },
-    "NYCSCA" : {
-        "latinum": "Nyctea scandiaca",
-        "finnishname": "Tunturipöllö",
-        "swedishname": "Fjälluggla"
-    },
-    "SURULU" : {
-        "latinum": "Surnia ulula",
-        "finnishname": "Hiiripöllö",
-        "swedishname": "Hökuggla"
-    },
-    "GLAPAS" : {
-        "latinum": "Glaucidium passerinum",
-        "finnishname": "Varpuspöllö",
-        "swedishname": "Sparvuggla"
-    },
-    "STRALU" : {
-        "latinum": "Strix aluco",
-        "finnishname": "Lehtopöllö",
-        "swedishname": "Kattuggla"
-    },
-    "STRURA" : {
-        "latinum": "Strix uralensis",
-        "finnishname": "Viirupöllö",
-        "swedishname": "Slaguggla"
-    },
-    "STRNEB" : {
-        "latinum": "Strix nebulosa",
-        "finnishname": "Lapinpöllö",
-        "swedishname": "Lappuggla"
-    },
-    "ASIOTU" : {
-        "latinum": "Asio otus",
-        "finnishname": "Sarvipöllö",
-        "swedishname": "Hornuggla"
-    },
-    "ASIFLA" : {
-        "latinum": "Asio flammeus",
-        "finnishname": "Suopöllö",
-        "swedishname": "Jorduggla"
-    },
-    "AEGFUN" : {
-        "latinum": "Aegolius funereus",
-        "finnishname": "Helmipöllö",
-        "swedishname": "Pärluggla"
-    },
-    "CAPEUR" : {
-        "latinum": "Caprimulgus europaeus",
-        "finnishname": "Kehrääjä",
-        "swedishname": "Nattskärra"
-    },
-    "APUAPU" : {
-        "latinum": "Apus apus",
-        "finnishname": "Tervapääsky",
-        "swedishname": "Tornseglare"
-    },
-    "ALCATT" : {
-        "latinum": "Alcedo atthis",
-        "finnishname": "Kuningaskalastaja",
-        "swedishname": "Kungsfiskare"
-    },
-    "JYNTOR" : {
-        "latinum": "Jynx torquilla",
-        "finnishname": "Käenpiika",
-        "swedishname": "Göktyta"
-    },
-    "PICCAN" : {
-        "latinum": "Picus canus",
-        "finnishname": "Harmaapäätikka",
-        "swedishname": "Gråspett"
-    },
-    "DRYMAR" : {
-        "latinum": "Dryocopus martius",
-        "finnishname": "Palokärki",
-        "swedishname": "Spillkråka"
-    },
-    "DENMAJ" : {
-        "latinum": "Dendrocopos major",
-        "finnishname": "Käpytikka",
-        "swedishname": "Större hackspett"
-    },
-    "DENLEU" : {
-        "latinum": "Dendrocopos leucotos",
-        "finnishname": "Valkoselkätikka",
-        "swedishname": "Vitryggig hackspett"
-    },
-    "DENMIN" : {
-        "latinum": "Dendrocopos minor",
-        "finnishname": "Pikkutikka",
-        "swedishname": "Mindre hackspett"
-    },
-    "PICTRI" : {
-        "latinum": "Picoides tridactylus",
-        "finnishname": "Pohjantikka",
-        "swedishname": "Tretåig hackspett"
-    },
-    "LULARB" : {
-        "latinum": "Lullula arborea",
-        "finnishname": "Kangaskiuru",
-        "swedishname": "Trädlärka"
-    },
     "ALAARV" : {
-        "abbreviation2": "AA",
-        "latinum": "Alauda arvensis",
-        "finnishname": "Kiuru",
-        "swedishname": "Sånglärka"
-    },
-    "EREALP" : {
-        "latinum": "Eremophila alpestris",
-        "finnishname": "Tunturikiuru",
-        "swedishname": "Berglärka"
-    },
-    "RIPRIP" : {
-        "latinum": "Riparia riparia",
-        "finnishname": "Törmäpääsky",
-        "swedishname": "Backsvala"
-    },
-    "HIRRUS" : {
-        "latinum": "Hirundo rustica",
-        "finnishname": "Haarapääsky",
-        "swedishname": "Ladusvala"
-    },
-    "DELURB" : {
-        "latinum": "Delichon urbicum",
-        "finnishname": "Räystäspääsky",
-        "swedishname": "Hussvala"
-    },
-    "ANTCAM" : {
-        "latinum": "Anthus campestris",
-        "finnishname": "Nummikirvinen",
-        "swedishname": "Fältpiplärka"
-    },
-    "ANTTRI" : {
-        "abbreviation2": "AT",
-        "latinum": "Anthus trivialis",
-        "finnishname": "Metsäkirvinen",
-        "swedishname": "Trädpiplärka"
+        "value": "ALAARV"
     },
     "ANTPRA" : {
-        "abbreviation2": "AP",
-        "latinum": "Anthus pratensis",
-        "finnishname": "Niittykirvinen",
-        "swedishname": "Ängspiplärka"
+        "value": "ANTPRA"
     },
-    "ANTCER" : {
-        "latinum": "Anthus cervinus",
-        "finnishname": "Lapinkirvinen",
-        "swedishname": "Rödstrupig piplärka"
-    },
-    "ANTPET" : {
-        "latinum": "Anthus petrosus",
-        "finnishname": "Luotokirvinen",
-        "swedishname": "Skärpiplärka"
-    },
-    "MOTFLA" : {
-        "latinum": "Motacilla flava",
-        "finnishname": "Keltavästäräkki",
-        "swedishname": "Gulärla"
-    },
-    "MOTCIT" : {
-        "latinum": "Motacilla citreola",
-        "finnishname": "Sitruunavästäräkki",
-        "swedishname": "Citronärla"
-    },
-    "MOTCIN" : {
-        "latinum": "Motacilla cinerea",
-        "finnishname": "Virtavästäräkki",
-        "swedishname": "Forsärla"
-    },
-    "MOTALB" : {
-        "abbreviation2": "MA",
-        "latinum": "Motacilla alba",
-        "finnishname": "Västäräkki",
-        "swedishname": "Sädesärla"
-    },
-    "BOMGAR" : {
-        "latinum": "Bombycilla garrulus",
-        "finnishname": "Tilhi",
-        "swedishname": "Sidensvans"
-    },
-    "CINCIN" : {
-        "latinum": "Cinclus cinclus",
-        "finnishname": "Koskikara",
-        "swedishname": "Strömstare"
-    },
-    "TROTRO" : {
-        "abbreviation2": "TT",
-        "latinum": "Troglodytes troglodytes",
-        "finnishname": "Peukaloinen",
-        "swedishname": "Gärdsmyg"
-    },
-    "PRUMOD" : {
-        "latinum": "Prunella modularis",
-        "finnishname": "Rautiainen",
-        "swedishname": "Järnsparv"
-    },
-    "ERIRUB" : {
-        "abbreviation2": "ER",
-        "latinum": "Erithacus rubecula",
-        "finnishname": "Punarinta",
-        "swedishname": "Rödhake"
-    },
-    "LUSLUS" : {
-        "abbreviation2": "LL",
-        "latinum": "Luscinia luscinia",
-        "finnishname": "Satakieli",
-        "swedishname": "Näktergal"
-    },
-    "LUSSVE" : {
-        "latinum": "Luscinia svecica",
-        "finnishname": "Sinirinta",
-        "swedishname": "Blåhake"
-    },
-    "LUSCYA" : {
-        "latinum": "Luscinia cyanura",
-        "finnishname": "Sinipyrstö",
-        "swedishname": "Blåstjärt"
-    },
-    "PHOOCH" : {
-        "latinum": "Phoenicurus ochruros",
-        "finnishname": "Mustaleppälintu",
-        "swedishname": "Svart rödstjärt"
-    },
-    "PHOPHO" : {
-        "latinum": "Phoenicurus phoenicurus",
-        "finnishname": "Leppälintu",
-        "swedishname": "Rödstjärt"
-    },
-    "SAXRUB" : {
-        "latinum": "Saxicola rubetra",
-        "finnishname": "Pensastasku",
-        "swedishname": "Buskskvätta"
-    },
-    "SAXTOR" : {
-        "latinum": "Saxicola torquatus",
-        "finnishname": "Mustapäätasku",
-        "swedishname": "Svarthakad buskskvätta"
-    },
-    "OENOEN" : {
-        "latinum": "Oenanthe oenanthe",
-        "finnishname": "Kivitasku",
-        "swedishname": "Stenskvätta"
-    },
-    "TURTOR" : {
-        "latinum": "Turdus torquatus",
-        "finnishname": "Sepelrastas",
-        "swedishname": "Ringtrast"
-    },
-    "TURMER" : {
-        "abbreviation2": "TM",
-        "latinum": "Turdus merula",
-        "finnishname": "Mustarastas",
-        "swedishname": "Koltrast"
-    },
-    "TURPIL" : {
-        "latinum": "Turdus pilaris",
-        "finnishname": "Räkättirastas",
-        "swedishname": "Björktrast"
-    },
-    "TURPHI" : {
-        "latinum": "Turdus philomelos",
-        "finnishname": "Laulurastas",
-        "swedishname": "Taltrast"
-    },
-    "TURILI" : {
-        "abbreviation2": "TI",
-        "latinum": "Turdus iliacus",
-        "finnishname": "Punakylkirastas",
-        "swedishname": "Rödvingetrast"
-    },
-    "TURVIS" : {
-        "latinum": "Turdus viscivorus",
-        "finnishname": "Kulorastas",
-        "swedishname": "Dubbeltrast"
-    },
-    "LOCNAE" : {
-        "latinum": "Locustella naevia",
-        "finnishname": "Pensassirkkalintu",
-        "swedishname": "Gräshoppsångare"
-    },
-    "LOCFLU" : {
-        "latinum": "Locustella fluviatilis",
-        "finnishname": "Viitasirkkalintu",
-        "swedishname": "Flodsångare"
-    },
-    "LOCLUS" : {
-        "latinum": "Locustella luscinioides",
-        "finnishname": "Ruokosirkkalintu",
-        "swedishname": "Vassångare"
-    },
-    "ACRSCH" : {
-        "latinum": "Acrocephalus schoenobaenus",
-        "finnishname": "Ruokokerttunen",
-        "swedishname": "Sävsångare"
-    },
-    "ACRDUM" : {
-        "latinum": "Acrocephalus dumetorum",
-        "finnishname": "Viitakerttunen",
-        "swedishname": "Busksångare"
-    },
-    "ACRRIS" : {
-        "latinum": "Acrocephalus palustris",
-        "finnishname": "Luhtakerttunen",
-        "swedishname": "Kärrsångare"
-    },
-    "ACRSCI" : {
-        "latinum": "Acrocephalus scirpaceus",
-        "finnishname": "Rytikerttunen",
-        "swedishname": "Rörsångare"
-    },
-    "ACRARU" : {
-        "latinum": "Acrocephalus arundinaceus",
-        "finnishname": "Rastaskerttunen",
-        "swedishname": "Trastsångare"
-    },
-    "IDUCAL" : {
-        "latinum": "Iduna caligata",
-        "finnishname": "Pikkukultarinta",
-        "swedishname": "Liten gulsångare"
-    },
-    "HIPICT" : {
-        "latinum": "Hippolais icterina",
-        "finnishname": "Kultarinta",
-        "swedishname": "Härmsångare"
-    },
-    "SYLNIS" : {
-        "latinum": "Sylvia nisoria",
-        "finnishname": "Kirjokerttu",
-        "swedishname": "Höksångare"
-    },
-    "SYLCUR" : {
-        "latinum": "Sylvia curruca",
-        "finnishname": "Hernekerttu",
-        "swedishname": "Ärtsångare"
-    },
-    "SYLCOM" : {
-        "latinum": "Sylvia communis",
-        "finnishname": "Pensaskerttu",
-        "swedishname": "Törnsångare"
-    },
-    "SYLBOR" : {
-        "abbreviation2": "SB",
-        "latinum": "Sylvia borin",
-        "finnishname": "Lehtokerttu",
-        "swedishname": "Trädgårdssångare"
-    },
-    "SYLATR" : {
-        "latinum": "Sylvia atricapilla",
-        "finnishname": "Mustapääkerttu",
-        "swedishname": "Svarthätta"
-    },
-    "PHYDES" : {
-        "latinum": "Phylloscopus trochiloides",
-        "finnishname": "Idänuunilintu",
-        "swedishname": "Lundsångare"
-    },
-    "PHYBOR" : {
-        "latinum": "Phylloscopus borealis",
-        "finnishname": "Lapinuunilintu",
-        "swedishname": "Nordsångare"
-    },
-    "PHYSIB" : {
-        "abbreviation2": "PS",
-        "latinum": "Phylloscopus sibilatrix",
-        "finnishname": "Sirittäjä",
-        "swedishname": "Grönsångare"
-    },
-    "PHYCOL" : {
-        "latinum": "Phylloscopus collybita",
-        "finnishname": "Tiltaltti",
-        "swedishname": "Gransångare"
-    },
-    "PHYLUS" : {
-        "abbreviation2": "PT",
-        "latinum": "Phylloscopus trochilus",
-        "finnishname": "Pajulintu",
-        "swedishname": "Lövsångare"
-    },
-    "REGREG" : {
-        "abbreviation2": "RR",
-        "latinum": "Regulus regulus",
-        "finnishname": "Hippiäinen",
-        "swedishname": "Kungsfågel"
-    },
-    "MUSSTR" : {
-        "abbreviation2": "MS",
-        "latinum": "Muscicapa striata",
-        "finnishname": "Harmaasieppo",
-        "swedishname": "Grå flugsnappare"
-    },
-    "FICPAR" : {
-        "latinum": "Ficedula parva",
-        "finnishname": "Pikkusieppo",
-        "swedishname": "Mindre flugsnappare"
-    },
-    "FICHYP" : {
-        "abbreviation2": "FH",
-        "latinum": "Ficedula hypoleuca",
-        "finnishname": "Kirjosieppo",
-        "swedishname": "Svartvit flugsnappare"
-    },
-    "PANBIA" : {
-        "latinum": "Panurus biarmicus",
-        "finnishname": "Viiksitimali",
-        "swedishname": "Skäggmes"
-    },
-    "AEGCAU" : {
-        "latinum": "Aegithalos caudatus",
-        "finnishname": "Pyrstötiainen",
-        "swedishname": "Stjärtmes"
-    },
-    "PARMON" : {
-        "latinum": "Parus montanus",
-        "finnishname": "Hömötiainen",
-        "swedishname": "Talltita"
-    },
-    "PARCIN" : {
-        "latinum": "Parus cinctus",
-        "finnishname": "Lapintiainen",
-        "swedishname": "Lappmes"
-    },
-    "PARCRI" : {
-        "latinum": "Parus cristatus",
-        "finnishname": "Töyhtötiainen",
-        "swedishname": "Tofsmes"
-    },
-    "PARATE" : {
-        "latinum": "Parus ater",
-        "finnishname": "Kuusitiainen",
-        "swedishname": "Svartmes"
-    },
-    "PARCAE" : {
-        "latinum": "Parus caeruleus",
-        "finnishname": "Sinitiainen",
-        "swedishname": "Blåmes"
-    },
-    "PARCYA" : {
-        "latinum": "Parus cyanus",
-        "finnishname": "Valkopäätiainen",
-        "swedishname": "Azurmes"
-    },
-    "PARMAJ" : {
-        "latinum": "Parus major",
-        "finnishname": "Talitiainen",
-        "swedishname": "Talgoxe"
-    },
-    "SITEUR" : {
-        "latinum": "Sitta europaea",
-        "finnishname": "Pähkinänakkeli",
-        "swedishname": "Nötväcka"
-    },
-    "CERFAM" : {
-        "latinum": "Certhia familiaris",
-        "finnishname": "Puukiipijä",
-        "swedishname": "Trädkrypare"
-    },
-    "REMPEN" : {
-        "latinum": "Remiz pendulinus",
-        "finnishname": "Pussitiainen",
-        "swedishname": "Pungmes"
-    },
-    "ORIORI" : {
-        "latinum": "Oriolus oriolus",
-        "finnishname": "Kuhankeittäjä",
-        "swedishname": "Sommargylling"
-    },
-    "LANCOL" : {
-        "latinum": "Lanius collurio",
-        "finnishname": "Pikkulepinkäinen",
-        "swedishname": "Törnskata"
-    },
-    "LANEXC" : {
-        "latinum": "Lanius excubitor",
-        "finnishname": "Isolepinkäinen",
-        "swedishname": "Varfågel"
-    },
-    "GARGLA" : {
-        "latinum": "Garrulus glandarius",
-        "finnishname": "Närhi",
-        "swedishname": "Nötskrika"
-    },
-    "PERINF" : {
-        "latinum": "Perisoreus infaustus",
-        "finnishname": "Kuukkeli",
-        "swedishname": "Lavskrika"
-    },
-    "PICPIC" : {
-        "latinum": "Pica pica",
-        "finnishname": "Harakka",
-        "swedishname": "Skata"
-    },
-    "NUCCAR" : {
-        "latinum": "Nucifraga caryocatactes",
-        "finnishname": "Pähkinähakki",
-        "swedishname": "Nötkråka"
-    },
-    "CORMON" : {
-        "latinum": "Corvus monedula",
-        "finnishname": "Naakka",
-        "swedishname": "Kaja"
-    },
-    "CORFRU" : {
-        "latinum": "Corvus frugilegus",
-        "finnishname": "Mustavaris",
-        "swedishname": "Råka"
-    },
-    "CORNIX" : {
-        "latinum": "Corvus corone",
-        "finnishname": "Varis",
-        "swedishname": "Kråka"
-    },
-    "CORRAX" : {
-        "latinum": "Corvus corax",
-        "finnishname": "Korppi",
-        "swedishname": "Korp"
-    },
-    "STUVUL" : {
-        "latinum": "Sturnus vulgaris",
-        "finnishname": "Kottarainen",
-        "swedishname": "Stare"
-    },
-    "PASDOM" : {
-        "abbreviation2": "PD",
-        "latinum": "Passer domesticus",
-        "finnishname": "Varpunen",
-        "swedishname": "Gråsparv"
-    },
-    "PASMON" : {
-        "latinum": "Passer montanus",
-        "finnishname": "Pikkuvarpunen",
-        "swedishname": "Pilfink"
-    },
-    "FRICOE" : {
-        "abbreviation2": "FC",
-        "latinum": "Fringilla coelebs",
-        "finnishname": "Peippo",
-        "swedishname": "Bofink"
-    },
-    "FRIMON" : {
-        "abbreviation2": "FM",
-        "latinum": "Fringilla montifringilla",
-        "finnishname": "Järripeippo",
-        "swedishname": "Bergfink"
-    },
-    "SERSER" : {
-        "latinum": "Serinus serinus",
-        "finnishname": "Keltahemppo",
-        "swedishname": "Gulhämpling"
-    },
-    "CARCHL" : {
-        "latinum": "Carduelis chloris",
-        "finnishname": "Viherpeippo",
-        "swedishname": "Grönfink"
-    },
-    "CARCAR" : {
-        "latinum": "Carduelis carduelis",
-        "finnishname": "Tikli",
-        "swedishname": "Steglits"
-    },
-    "CARSPI" : {
-        "abbreviation2": "CS",
-        "latinum": "Carduelis spinus",
-        "finnishname": "Vihervarpunen",
-        "swedishname": "Grönsiska"
-    },
-    "CARCAN" : {
-        "latinum": "Carduelis cannabina",
-        "finnishname": "Hemppo",
-        "swedishname": "Hämpling"
-    },
-    "CARRIS" : {
-        "latinum": "Carduelis flavirostris",
-        "finnishname": "Vuorihemppo",
-        "swedishname": "Vinterhämpling"
-    },
-    "CARMEA" : {
-        "latinum": "Carduelis flammea",
-        "finnishname": "Urpiainen",
-        "swedishname": "Gråsiska"
-    },
-    "CARHOR" : {
-        "latinum": "Carduelis hornemanni",
-        "finnishname": "Tundraurpiainen",
-        "swedishname": "Snösiska"
-    },
-    "LOXLEU" : {
-        "latinum": "Loxia leucoptera",
-        "finnishname": "Kirjosiipikäpylintu",
-        "swedishname": "Bändelkorsnäbb"
-    },
-    "LOXCUR" : {
-        "latinum": "Loxia curvirostra",
-        "finnishname": "Pikkukäpylintu",
-        "swedishname": "Mindre korsnäbb"
-    },
-    "LOXPYT" : {
-        "latinum": "Loxia pytyopsittacus",
-        "finnishname": "Isokäpylintu",
-        "swedishname": "Större korsnäbb"
+    "ANTTRI" : {
+        "value": "ANTTRI"
     },
     "CARERY" : {
-        "abbreviation2": "CE",
-        "latinum": "Carpodacus erythrinus",
-        "finnishname": "Punavarpunen",
-        "swedishname": "Rosenfink"
+        "value": "CARERY"
     },
-    "PINENU" : {
-        "latinum": "Pinicola enucleator",
-        "finnishname": "Taviokuurna",
-        "swedishname": "Tallbit"
+    "COLPAL" : {
+        "value": "COLPAL"
     },
-    "PYRPYR" : {
-        "latinum": "Pyrrhula pyrrhula",
-        "finnishname": "Punatulkku",
-        "swedishname": "Domherre"
-    },
-    "COCCOC" : {
-        "latinum": "Coccothraustes coccothraustes",
-        "finnishname": "Nokkavarpunen",
-        "swedishname": "Stenknäck"
-    },
-    "CALLAP" : {
-        "latinum": "Calcarius lapponicus",
-        "finnishname": "Lapinsirkku",
-        "swedishname": "Lappsparv"
-    },
-    "PLENIV" : {
-        "latinum": "Plectrophenax nivalis",
-        "finnishname": "Pulmunen",
-        "swedishname": "Snösparv"
+    "CARSPI" : {
+        "value": "CARSPI"
     },
     "EMBCIT" : {
-        "abbreviation2": "EC",
-        "latinum": "Emberiza citrinella",
-        "finnishname": "Keltasirkku",
-        "swedishname": "Gulsparv"
+        "value": "EMBCIT"
+    },
+    "ERIRUB" : {
+        "value": "ERIRUB"
+    },
+    "FRICOE" : {
+        "value": "FRICOE"
+    },
+    "FICHYP" : {
+        "value": "FICHYP"
+    },
+    "FRIMON" : {
+        "value": "FRIMON"
+    },
+    "LUSLUS" : {
+        "value": "LUSLUS"
+    },
+    "MOTALB" : {
+        "value": "MOTALB"
+    },
+    "MUSSTR" : {
+        "value": "MUSSTR"
+    },
+    "NUMARQ" : {
+        "value": "NUMARQ"
+    },
+    "PASDOM" : {
+        "value": "PASDOM"
+    },
+    "PHYSIB" : {
+        "value": "PHYSIB"
+    },
+    "PHYLUS" : {
+        "value": "PHYLUS"
+    },
+    "REGREG" : {
+        "value": "REGREG"
+    },
+    "SYLBOR" : {
+        "value": "SYLBOR"
+    },
+    "TRIGLA" : {
+        "value": "TRIGLA"
+    },
+    "TURILI" : {
+        "value": "TURILI"
+    },
+    "TURMER" : {
+        "value": "TURMER"
+    },
+    "TRIOCH" : {
+        "value": "TRIOCH"
+    },
+    "TROTRO" : {
+        "value": "TROTRO"
+    },
+    "VANVAN" : {
+        "value": "VANVAN"
+    },
+    "GAVSTE" : {
+        "value": "GAVSTE"
+    },
+    "GAVARC" : {
+        "value": "GAVARC"
+    },
+    "TACRUF" : {
+        "value": "TACRUF"
+    },
+    "PODCRI" : {
+        "value": "PODCRI"
+    },
+    "PODGRI" : {
+        "value": "PODGRI"
+    },
+    "PODAUR" : {
+        "value": "PODAUR"
+    },
+    "PHACAR" : {
+        "value": "PHACAR"
+    },
+    "BOTSTE" : {
+        "value": "BOTSTE"
+    },
+    "ARDCIN" : {
+        "value": "ARDCIN"
+    },
+    "CYGOLO" : {
+        "value": "CYGOLO"
+    },
+    "CYGCYG" : {
+        "value": "CYGCYG"
+    },
+    "ANSFAB" : {
+        "value": "ANSFAB"
+    },
+    "ANSERY" : {
+        "value": "ANSERY"
+    },
+    "ANSANS" : {
+        "value": "ANSANS"
+    },
+    "ANSCAE" : {
+        "value": "ANSCAE"
+    },
+    "BRACAN" : {
+        "value": "BRACAN"
+    },
+    "BRALEU" : {
+        "value": "BRALEU"
+    },
+    "TADTAD" : {
+        "value": "TADTAD"
+    },
+    "ANAPEN" : {
+        "value": "ANAPEN"
+    },
+    "ANASTR" : {
+        "value": "ANASTR"
+    },
+    "ANACRE" : {
+        "value": "ANACRE"
+    },
+    "ANAPLA" : {
+        "value": "ANAPLA"
+    },
+    "ANAACU" : {
+        "value": "ANAACU"
+    },
+    "ANAQUE" : {
+        "value": "ANAQUE"
+    },
+    "ANACLY" : {
+        "value": "ANACLY"
+    },
+    "AYTFER" : {
+        "value": "AYTFER"
+    },
+    "AYTFUL" : {
+        "value": "AYTFUL"
+    },
+    "AYTMAR" : {
+        "value": "AYTMAR"
+    },
+    "SOMMOL" : {
+        "value": "SOMMOL"
+    },
+    "CLAHYE" : {
+        "value": "CLAHYE"
+    },
+    "MELNIG" : {
+        "value": "MELNIG"
+    },
+    "MELFUS" : {
+        "value": "MELFUS"
+    },
+    "BUCCLA" : {
+        "value": "BUCCLA"
+    },
+    "MERALB" : {
+        "value": "MERALB"
+    },
+    "MERSER" : {
+        "value": "MERSER"
+    },
+    "MERMER" : {
+        "value": "MERMER"
+    },
+    "PERAPI" : {
+        "value": "PERAPI"
+    },
+    "MILMIG" : {
+        "value": "MILMIG"
+    },
+    "HALALB" : {
+        "value": "HALALB"
+    },
+    "CIRAER" : {
+        "value": "CIRAER"
+    },
+    "CIRCYA" : {
+        "value": "CIRCYA"
+    },
+    "CIRPYG" : {
+        "value": "CIRPYG"
+    },
+    "CIRMAC" : {
+        "value": "CIRMAC"
+    },
+    "ACCGEN" : {
+        "value": "ACCGEN"
+    },
+    "ACCNIS" : {
+        "value": "ACCNIS"
+    },
+    "BUTBUT" : {
+        "value": "BUTBUT"
+    },
+    "BUTLAG" : {
+        "value": "BUTLAG"
+    },
+    "AQUCLA" : {
+        "value": "AQUCLA"
+    },
+    "AQUCHR" : {
+        "value": "AQUCHR"
+    },
+    "PANHAL" : {
+        "value": "PANHAL"
+    },
+    "FALTIN" : {
+        "value": "FALTIN"
+    },
+    "FALVES" : {
+        "value": "FALVES"
+    },
+    "FALCOL" : {
+        "value": "FALCOL"
+    },
+    "FALSUB" : {
+        "value": "FALSUB"
+    },
+    "FALRUS" : {
+        "value": "FALRUS"
+    },
+    "FALPER" : {
+        "value": "FALPER"
+    },
+    "TETBON" : {
+        "value": "TETBON"
+    },
+    "LAGLAG" : {
+        "value": "LAGLAG"
+    },
+    "LAGMUT" : {
+        "value": "LAGMUT"
+    },
+    "LYRTET" : {
+        "value": "LYRTET"
+    },
+    "TETURO" : {
+        "value": "TETURO"
+    },
+    "PERPER" : {
+        "value": "PERPER"
+    },
+    "COTCOT" : {
+        "value": "COTCOT"
+    },
+    "PHACOL" : {
+        "value": "PHACOL"
+    },
+    "RALAQU" : {
+        "value": "RALAQU"
+    },
+    "PORPOR" : {
+        "value": "PORPOR"
+    },
+    "PORPAR" : {
+        "value": "PORPAR"
+    },
+    "CRECRE" : {
+        "value": "CRECRE"
+    },
+    "GALCHL" : {
+        "value": "GALCHL"
+    },
+    "FULATR" : {
+        "value": "FULATR"
+    },
+    "GRUGRU" : {
+        "value": "GRUGRU"
+    },
+    "HAEOST" : {
+        "value": "HAEOST"
+    },
+    "CHADUB" : {
+        "value": "CHADUB"
+    },
+    "CHAHIA" : {
+        "value": "CHAHIA"
+    },
+    "CHAMOR" : {
+        "value": "CHAMOR"
+    },
+    "PLUAPR" : {
+        "value": "PLUAPR"
+    },
+    "CALUTA" : {
+        "value": "CALUTA"
+    },
+    "CALTEM" : {
+        "value": "CALTEM"
+    },
+    "CALMAR" : {
+        "value": "CALMAR"
+    },
+    "CALALP" : {
+        "value": "CALALP"
+    },
+    "LIMFAL" : {
+        "value": "LIMFAL"
+    },
+    "PHIPUG" : {
+        "value": "PHIPUG"
+    },
+    "LYMMIN" : {
+        "value": "LYMMIN"
+    },
+    "GALGAL" : {
+        "value": "GALGAL"
+    },
+    "GALMED" : {
+        "value": "GALMED"
+    },
+    "SCORUS" : {
+        "value": "SCORUS"
+    },
+    "LIMLIM" : {
+        "value": "LIMLIM"
+    },
+    "LIMLAP" : {
+        "value": "LIMLAP"
+    },
+    "NUMPHA" : {
+        "value": "NUMPHA"
+    },
+    "TRIERY" : {
+        "value": "TRIERY"
+    },
+    "TRITOT" : {
+        "value": "TRITOT"
+    },
+    "TRISTA" : {
+        "value": "TRISTA"
+    },
+    "TRINEB" : {
+        "value": "TRINEB"
+    },
+    "XENCIN" : {
+        "value": "XENCIN"
+    },
+    "ACTHYP" : {
+        "value": "ACTHYP"
+    },
+    "AREINT" : {
+        "value": "AREINT"
+    },
+    "PHALOB" : {
+        "value": "PHALOB"
+    },
+    "STECUS" : {
+        "value": "STECUS"
+    },
+    "STELON" : {
+        "value": "STELON"
+    },
+    "LARMIN" : {
+        "value": "LARMIN"
+    },
+    "LARRID" : {
+        "value": "LARRID"
+    },
+    "LARCAN" : {
+        "value": "LARCAN"
+    },
+    "LARFUS" : {
+        "value": "LARFUS"
+    },
+    "LARARG" : {
+        "value": "LARARG"
+    },
+    "LARMAR" : {
+        "value": "LARMAR"
+    },
+    "STECAS" : {
+        "value": "STECAS"
+    },
+    "STEHIR" : {
+        "value": "STEHIR"
+    },
+    "STEAEA" : {
+        "value": "STEAEA"
+    },
+    "STEALB" : {
+        "value": "STEALB"
+    },
+    "CHLNIG" : {
+        "value": "CHLNIG"
+    },
+    "URIAAL" : {
+        "value": "URIAAL"
+    },
+    "ALCTOR" : {
+        "value": "ALCTOR"
+    },
+    "CEPGRY" : {
+        "value": "CEPGRY"
+    },
+    "COLLIV" : {
+        "value": "COLLIV"
+    },
+    "COLOEN" : {
+        "value": "COLOEN"
+    },
+    "STRDEC" : {
+        "value": "STRDEC"
+    },
+    "STRTUR" : {
+        "value": "STRTUR"
+    },
+    "CUCCAN" : {
+        "value": "CUCCAN"
+    },
+    "BUBBUB" : {
+        "value": "BUBBUB"
+    },
+    "NYCSCA" : {
+        "value": "NYCSCA"
+    },
+    "SURULU" : {
+        "value": "SURULU"
+    },
+    "GLAPAS" : {
+        "value": "GLAPAS"
+    },
+    "STRALU" : {
+        "value": "STRALU"
+    },
+    "STRURA" : {
+        "value": "STRURA"
+    },
+    "STRNEB" : {
+        "value": "STRNEB"
+    },
+    "ASIOTU" : {
+        "value": "ASIOTU"
+    },
+    "ASIFLA" : {
+        "value": "ASIFLA"
+    },
+    "AEGFUN" : {
+        "value": "AEGFUN"
+    },
+    "CAPEUR" : {
+        "value": "CAPEUR"
+    },
+    "APUAPU" : {
+        "value": "APUAPU"
+    },
+    "ALCATT" : {
+        "value": "ALCATT"
+    },
+    "JYNTOR" : {
+        "value": "JYNTOR"
+    },
+    "PICCAN" : {
+        "value": "PICCAN"
+    },
+    "DRYMAR" : {
+        "value": "DRYMAR"
+    },
+    "DENMAJ" : {
+        "value": "DENMAJ"
+    },
+    "DENLEU" : {
+        "value": "DENLEU"
+    },
+    "DENMIN" : {
+        "value": "DENMIN"
+    },
+    "PICTRI" : {
+        "value": "PICTRI"
+    },
+    "LULARB" : {
+        "value": "LULARB"
+    },
+    "EREALP" : {
+        "value": "EREALP"
+    },
+    "RIPRIP" : {
+        "value": "RIPRIP"
+    },
+    "HIRRUS" : {
+        "value": "HIRRUS"
+    },
+    "DELURB" : {
+        "value": "DELURB"
+    },
+    "ANTCAM" : {
+        "value": "ANTCAM"
+    },
+    "ANTCER" : {
+        "value": "ANTCER"
+    },
+    "ANTPET" : {
+        "value": "ANTPET"
+    },
+    "MOTFLA" : {
+        "value": "MOTFLA"
+    },
+    "MOTCIT" : {
+        "value": "MOTCIT"
+    },
+    "MOTCIN" : {
+        "value": "MOTCIN"
+    },
+    "BOMGAR" : {
+        "value": "BOMGAR"
+    },
+    "CINCIN" : {
+        "value": "CINCIN"
+    },
+    "PRUMOD" : {
+        "value": "PRUMOD"
+    },
+    "LUSSVE" : {
+        "value": "LUSSVE"
+    },
+    "LUSCYA" : {
+        "value": "LUSCYA"
+    },
+    "PHOOCH" : {
+        "value": "PHOOCH"
+    },
+    "PHOPHO" : {
+        "value": "PHOPHO"
+    },
+    "SAXRUB" : {
+        "value": "SAXRUB"
+    },
+    "SAXTOR" : {
+        "value": "SAXTOR"
+    },
+    "OENOEN" : {
+        "value": "OENOEN"
+    },
+    "TURTOR" : {
+        "value": "TURTOR"
+    },
+    "TURPIL" : {
+        "value": "TURPIL"
+    },
+    "TURPHI" : {
+        "value": "TURPHI"
+    },
+    "TURVIS" : {
+        "value": "TURVIS"
+    },
+    "LOCNAE" : {
+        "value": "LOCNAE"
+    },
+    "LOCFLU" : {
+        "value": "LOCFLU"
+    },
+    "LOCLUS" : {
+        "value": "LOCLUS"
+    },
+    "ACRSCH" : {
+        "value": "ACRSCH"
+    },
+    "ACRDUM" : {
+        "value": "ACRDUM"
+    },
+    "ACRRIS" : {
+        "value": "ACRRIS"
+    },
+    "ACRSCI" : {
+        "value": "ACRSCI"
+    },
+    "ACRARU" : {
+        "value": "ACRARU"
+    },
+    "IDUCAL" : {
+        "value": "IDUCAL"
+    },
+    "HIPICT" : {
+        "value": "HIPICT"
+    },
+    "SYLNIS" : {
+        "value": "SYLNIS"
+    },
+    "SYLCUR" : {
+        "value": "SYLCUR"
+    },
+    "SYLCOM" : {
+        "value": "SYLCOM"
+    },
+    "SYLATR" : {
+        "value": "SYLATR"
+    },
+    "PHYDES" : {
+        "value": "PHYDES"
+    },
+    "PHYBOR" : {
+        "value": "PHYBOR"
+    },
+    "PHYCOL" : {
+        "value": "PHYCOL"
+    },
+    "FICPAR" : {
+        "value": "FICPAR"
+    },
+    "PANBIA" : {
+        "value": "PANBIA"
+    },
+    "AEGCAU" : {
+        "value": "AEGCAU"
+    },
+    "PARMON" : {
+        "value": "PARMON"
+    },
+    "PARCIN" : {
+        "value": "PARCIN"
+    },
+    "PARCRI" : {
+        "value": "PARCRI"
+    },
+    "PARATE" : {
+        "value": "PARATE"
+    },
+    "PARCAE" : {
+        "value": "PARCAE"
+    },
+    "PARCYA" : {
+        "value": "PARCYA"
+    },
+    "PARMAJ" : {
+        "value": "PARMAJ"
+    },
+    "SITEUR" : {
+        "value": "SITEUR"
+    },
+    "CERFAM" : {
+        "value": "CERFAM"
+    },
+    "REMPEN" : {
+        "value": "REMPEN"
+    },
+    "ORIORI" : {
+        "value": "ORIORI"
+    },
+    "LANCOL" : {
+        "value": "LANCOL"
+    },
+    "LANEXC" : {
+        "value": "LANEXC"
+    },
+    "GARGLA" : {
+        "value": "GARGLA"
+    },
+    "PERINF" : {
+        "value": "PERINF"
+    },
+    "PICPIC" : {
+        "value": "PICPIC"
+    },
+    "NUCCAR" : {
+        "value": "NUCCAR"
+    },
+    "CORMON" : {
+        "value": "CORMON"
+    },
+    "CORFRU" : {
+        "value": "CORFRU"
+    },
+    "CORNIX" : {
+        "value": "CORNIX"
+    },
+    "CORRAX" : {
+        "value": "CORRAX"
+    },
+    "STUVUL" : {
+        "value": "STUVUL"
+    },
+    "PASMON" : {
+        "value": "PASMON"
+    },
+    "SERSER" : {
+        "value": "SERSER"
+    },
+    "CARCHL" : {
+        "value": "CARCHL"
+    },
+    "CARCAR" : {
+        "value": "CARCAR"
+    },
+    "CARCAN" : {
+        "value": "CARCAN"
+    },
+    "CARRIS" : {
+        "value": "CARRIS"
+    },
+    "CARMEA" : {
+        "value": "CARMEA"
+    },
+    "CARHOR" : {
+        "value": "CARHOR"
+    },
+    "LOXLEU" : {
+        "value": "LOXLEU"
+    },
+    "LOXCUR" : {
+        "value": "LOXCUR"
+    },
+    "LOXPYT" : {
+        "value": "LOXPYT"
+    },
+    "PINENU" : {
+        "value": "PINENU"
+    },
+    "PYRPYR" : {
+        "value": "PYRPYR"
+    },
+    "COCCOC" : {
+        "value": "COCCOC"
+    },
+    "CALLAP" : {
+        "value": "CALLAP"
+    },
+    "PLENIV" : {
+        "value": "PLENIV"
     },
     "EMBHOR" : {
-        "latinum": "Emberiza hortulana",
-        "finnishname": "Peltosirkku",
-        "swedishname": "Ortolansparv"
+        "value": "EMBHOR"
     },
     "EMBRUS" : {
-        "latinum": "Emberiza rustica",
-        "finnishname": "Pohjansirkku",
-        "swedishname": "Videsparv"
+        "value": "EMBRUS"
     },
     "EMBPUS" : {
-        "latinum": "Emberiza pusilla",
-        "finnishname": "Pikkusirkku",
-        "swedishname": "Dvärgsparv"
+        "value": "EMBPUS"
     },
     "EMBAUR" : {
-        "latinum": "Emberiza aureola",
-        "finnishname": "Kultasirkku",
-        "swedishname": "Gyllensparv"
+        "value": "EMBAUR"
     },
     "EMBSCH" : {
-        "latinum": "Emberiza schoeniclus",
-        "finnishname": "Pajusirkku",
-        "swedishname": "Sävsparv"
+        "value": "EMBSCH"
+    },
+    "AA" : {
+        "value": "ALAARV"
+    },
+    "AP" : {
+        "value": "ANTPRA"
+    },
+    "AT" : {
+        "value": "ANTTRI"
+    },
+    "CE" : {
+        "value": "CARERY"
+    },
+    "CP" : {
+        "value": "COLPAL"
+    },
+    "CS" : {
+        "value": "CARSPI"
+    },
+    "EC" : {
+        "value": "EMBCIT"
+    },
+    "ER" : {
+        "value": "ERIRUB"
+    },
+    "FC" : {
+        "value": "FRICOE"
+    },
+    "FH" : {
+        "value": "FICHYP"
+    },
+    "FM" : {
+        "value": "FRIMON"
+    },
+    "LL" : {
+        "value": "LUSLUS"
+    },
+    "MA" : {
+        "value": "MOTALB"
+    },
+    "MS" : {
+        "value": "MUSSTR"
+    },
+    "NA" : {
+        "value": "NUMARQ"
+    },
+    "PD" : {
+        "value": "PASDOM"
+    },
+    "PS" : {
+        "value": "PHYSIB"
+    },
+    "PT" : {
+        "value": "PHYLUS"
+    },
+    "RR" : {
+        "value": "REGREG"
+    },
+    "SB" : {
+        "value": "SYLBOR"
+    },
+    "TG" : {
+        "value": "TRIGLA"
+    },
+    "TI" : {
+        "value": "TURILI"
+    },
+    "TM" : {
+        "value": "TURMER"
+    },
+    "TO" : {
+        "value": "TRIOCH"
+    },
+    "TT" : {
+        "value": "TROTRO"
+    },
+    "VV" : {
+        "value": "VANVAN"
+    },
+    "GSTE" : {
+        "value": "GAVSTE"
+    },
+    "GARC" : {
+        "value": "GAVARC"
+    },
+    "TRUF" : {
+        "value": "TACRUF"
+    },
+    "POCRI" : {
+        "value": "PODCRI"
+    },
+    "PGRI" : {
+        "value": "PODGRI"
+    },
+    "PAUR" : {
+        "value": "PODAUR"
+    },
+    "PCAR" : {
+        "value": "PHACAR"
+    },
+    "BSTE" : {
+        "value": "BOTSTE"
+    },
+    "ACIN" : {
+        "value": "ARDCIN"
+    },
+    "COLO" : {
+        "value": "CYGOLO"
+    },
+    "CCYG" : {
+        "value": "CYGCYG"
+    },
+    "AFAB" : {
+        "value": "ANSFAB"
+    },
+    "AERY" : {
+        "value": "ANSERY"
+    },
+    "AANS" : {
+        "value": "ANSANS"
+    },
+    "ACAE" : {
+        "value": "ANSCAE"
+    },
+    "BCAN" : {
+        "value": "BRACAN"
+    },
+    "BLEU" : {
+        "value": "BRALEU"
+    },
+    "TTAD" : {
+        "value": "TADTAD"
+    },
+    "APEN" : {
+        "value": "ANAPEN"
+    },
+    "ASTR" : {
+        "value": "ANASTR"
+    },
+    "ACRE" : {
+        "value": "ANACRE"
+    },
+    "APLA" : {
+        "value": "ANAPLA"
+    },
+    "AACU" : {
+        "value": "ANAACU"
+    },
+    "AQUE" : {
+        "value": "ANAQUE"
+    },
+    "ACLY" : {
+        "value": "ANACLY"
+    },
+    "AFER" : {
+        "value": "AYTFER"
+    },
+    "AFUL" : {
+        "value": "AYTFUL"
+    },
+    "AMAR" : {
+        "value": "AYTMAR"
+    },
+    "SMOL" : {
+        "value": "SOMMOL"
+    },
+    "CHYE" : {
+        "value": "CLAHYE"
+    },
+    "MNIG" : {
+        "value": "MELNIG"
+    },
+    "MFUS" : {
+        "value": "MELFUS"
+    },
+    "BCLA" : {
+        "value": "BUCCLA"
+    },
+    "MALBE" : {
+        "value": "MERALB"
+    },
+    "MSER" : {
+        "value": "MERSER"
+    },
+    "MMER" : {
+        "value": "MERMER"
+    },
+    "PAPI" : {
+        "value": "PERAPI"
+    },
+    "MMIG" : {
+        "value": "MILMIG"
+    },
+    "HALB" : {
+        "value": "HALALB"
+    },
+    "CAER" : {
+        "value": "CIRAER"
+    },
+    "CCYA" : {
+        "value": "CIRCYA"
+    },
+    "CPYG" : {
+        "value": "CIRPYG"
+    },
+    "CMAC" : {
+        "value": "CIRMAC"
+    },
+    "AGEN" : {
+        "value": "ACCGEN"
+    },
+    "ANIS" : {
+        "value": "ACCNIS"
+    },
+    "BBUT" : {
+        "value": "BUTBUT"
+    },
+    "BLAG" : {
+        "value": "BUTLAG"
+    },
+    "ACLA" : {
+        "value": "AQUCLA"
+    },
+    "ACHR" : {
+        "value": "AQUCHR"
+    },
+    "PHAL" : {
+        "value": "PANHAL"
+    },
+    "FTIN" : {
+        "value": "FALTIN"
+    },
+    "FVES" : {
+        "value": "FALVES"
+    },
+    "FCOL" : {
+        "value": "FALCOL"
+    },
+    "FSUB" : {
+        "value": "FALSUB"
+    },
+    "FRUS" : {
+        "value": "FALRUS"
+    },
+    "FPER" : {
+        "value": "FALPER"
+    },
+    "TBON" : {
+        "value": "TETBON"
+    },
+    "LLAG" : {
+        "value": "LAGLAG"
+    },
+    "LMUT" : {
+        "value": "LAGMUT"
+    },
+    "TTET" : {
+        "value": "LYRTET"
+    },
+    "TURO" : {
+        "value": "TETURO"
+    },
+    "PPER" : {
+        "value": "PERPER"
+    },
+    "CCOT" : {
+        "value": "COTCOT"
+    },
+    "PCOLC" : {
+        "value": "PHACOL"
+    },
+    "RAQU" : {
+        "value": "RALAQU"
+    },
+    "PPOR" : {
+        "value": "PORPOR"
+    },
+    "PPAR" : {
+        "value": "PORPAR"
+    },
+    "CCRE" : {
+        "value": "CRECRE"
+    },
+    "GCHL" : {
+        "value": "GALCHL"
+    },
+    "FATR" : {
+        "value": "FULATR"
+    },
+    "GGRU" : {
+        "value": "GRUGRU"
+    },
+    "HOST" : {
+        "value": "HAEOST"
+    },
+    "CDUB" : {
+        "value": "CHADUB"
+    },
+    "CHIA" : {
+        "value": "CHAHIA"
+    },
+    "CMOR" : {
+        "value": "CHAMOR"
+    },
+    "PAPR" : {
+        "value": "PLUAPR"
+    },
+    "VVAN" : {
+        "value": "VANVAN"
+    },
+    "CMIN" : {
+        "value": "CALUTA"
+    },
+    "CTEM" : {
+        "value": "CALTEM"
+    },
+    "CMAR" : {
+        "value": "CALMAR"
+    },
+    "CALP" : {
+        "value": "CALALP"
+    },
+    "LFAL" : {
+        "value": "LIMFAL"
+    },
+    "PPUG" : {
+        "value": "PHIPUG"
+    },
+    "LMINI" : {
+        "value": "LYMMIN"
+    },
+    "GGAL" : {
+        "value": "GALGAL"
+    },
+    "GMED" : {
+        "value": "GALMED"
+    },
+    "SRUS" : {
+        "value": "SCORUS"
+    },
+    "LLIM" : {
+        "value": "LIMLIM"
+    },
+    "LLAP" : {
+        "value": "LIMLAP"
+    },
+    "NPHA" : {
+        "value": "NUMPHA"
+    },
+    "NARQ" : {
+        "value": "NUMARQ"
+    },
+    "TERY" : {
+        "value": "TRIERY"
+    },
+    "TTOT" : {
+        "value": "TRITOT"
+    },
+    "TSTA" : {
+        "value": "TRISTA"
+    },
+    "TNEB" : {
+        "value": "TRINEB"
+    },
+    "TOCH" : {
+        "value": "TRIOCH"
+    },
+    "TGLA" : {
+        "value": "TRIGLA"
+    },
+    "XCIN" : {
+        "value": "XENCIN"
+    },
+    "AHYP" : {
+        "value": "ACTHYP"
+    },
+    "AINT" : {
+        "value": "AREINT"
+    },
+    "PLOB" : {
+        "value": "PHALOB"
+    },
+    "SCUS" : {
+        "value": "STECUS"
+    },
+    "SLON" : {
+        "value": "STELON"
+    },
+    "LMINU" : {
+        "value": "LARMIN"
+    },
+    "LRID" : {
+        "value": "LARRID"
+    },
+    "LCAN" : {
+        "value": "LARCAN"
+    },
+    "LFUS" : {
+        "value": "LARFUS"
+    },
+    "LARG" : {
+        "value": "LARARG"
+    },
+    "LMAR" : {
+        "value": "LARMAR"
+    },
+    "SCAS" : {
+        "value": "STECAS"
+    },
+    "SHIR" : {
+        "value": "STEHIR"
+    },
+    "SAEA" : {
+        "value": "STEAEA"
+    },
+    "SALB" : {
+        "value": "STEALB"
+    },
+    "CNIG" : {
+        "value": "CHLNIG"
+    },
+    "UAAL" : {
+        "value": "URIAAL"
+    },
+    "ATOR" : {
+        "value": "ALCTOR"
+    },
+    "CGRY" : {
+        "value": "CEPGRY"
+    },
+    "CLIV" : {
+        "value": "COLLIV"
+    },
+    "COEN" : {
+        "value": "COLOEN"
+    },
+    "CPAL" : {
+        "value": "COLPAL"
+    },
+    "SDEC" : {
+        "value": "STRDEC"
+    },
+    "STUR" : {
+        "value": "STRTUR"
+    },
+    "CCANO" : {
+        "value": "CUCCAN"
+    },
+    "BBUB" : {
+        "value": "BUBBUB"
+    },
+    "NSCA" : {
+        "value": "NYCSCA"
+    },
+    "SULU" : {
+        "value": "SURULU"
+    },
+    "GPAS" : {
+        "value": "GLAPAS"
+    },
+    "SALU" : {
+        "value": "STRALU"
+    },
+    "SURA" : {
+        "value": "STRURA"
+    },
+    "SNEB" : {
+        "value": "STRNEB"
+    },
+    "AOTU" : {
+        "value": "ASIOTU"
+    },
+    "AFLA" : {
+        "value": "ASIFLA"
+    },
+    "AFUN" : {
+        "value": "AEGFUN"
+    },
+    "CEUR" : {
+        "value": "CAPEUR"
+    },
+    "AAPU" : {
+        "value": "APUAPU"
+    },
+    "AATT" : {
+        "value": "ALCATT"
+    },
+    "JTOR" : {
+        "value": "JYNTOR"
+    },
+    "PCAN" : {
+        "value": "PICCAN"
+    },
+    "DMAR" : {
+        "value": "DRYMAR"
+    },
+    "DMAJ" : {
+        "value": "DENMAJ"
+    },
+    "DLEU" : {
+        "value": "DENLEU"
+    },
+    "DMIN" : {
+        "value": "DENMIN"
+    },
+    "PTRI" : {
+        "value": "PICTRI"
+    },
+    "LARB" : {
+        "value": "LULARB"
+    },
+    "AARV" : {
+        "value": "ALAARV"
+    },
+    "EALP" : {
+        "value": "EREALP"
+    },
+    "RRIP" : {
+        "value": "RIPRIP"
+    },
+    "HRUS" : {
+        "value": "HIRRUS"
+    },
+    "DURB" : {
+        "value": "DELURB"
+    },
+    "ACAM" : {
+        "value": "ANTCAM"
+    },
+    "ATRI" : {
+        "value": "ANTTRI"
+    },
+    "APRA" : {
+        "value": "ANTPRA"
+    },
+    "ACER" : {
+        "value": "ANTCER"
+    },
+    "APET" : {
+        "value": "ANTPET"
+    },
+    "MFLA" : {
+        "value": "MOTFLA"
+    },
+    "MCIT" : {
+        "value": "MOTCIT"
+    },
+    "MCIN" : {
+        "value": "MOTCIN"
+    },
+    "MALBA" : {
+        "value": "MOTALB"
+    },
+    "BGAR" : {
+        "value": "BOMGAR"
+    },
+    "CCIN" : {
+        "value": "CINCIN"
+    },
+    "TTRO" : {
+        "value": "TROTRO"
+    },
+    "PMOD" : {
+        "value": "PRUMOD"
+    },
+    "ERUB" : {
+        "value": "ERIRUB"
+    },
+    "LULUS" : {
+        "value": "LUSLUS"
+    },
+    "LSVE" : {
+        "value": "LUSSVE"
+    },
+    "LCYA" : {
+        "value": "LUSCYA"
+    },
+    "POCH" : {
+        "value": "PHOOCH"
+    },
+    "PPHO" : {
+        "value": "PHOPHO"
+    },
+    "SRUB" : {
+        "value": "SAXRUB"
+    },
+    "STOR" : {
+        "value": "SAXTOR"
+    },
+    "OOEN" : {
+        "value": "OENOEN"
+    },
+    "TTOR" : {
+        "value": "TURTOR"
+    },
+    "TMER" : {
+        "value": "TURMER"
+    },
+    "TPIL" : {
+        "value": "TURPIL"
+    },
+    "TPHI" : {
+        "value": "TURPHI"
+    },
+    "TILI" : {
+        "value": "TURILI"
+    },
+    "TVIS" : {
+        "value": "TURVIS"
+    },
+    "LNAE" : {
+        "value": "LOCNAE"
+    },
+    "LFLU" : {
+        "value": "LOCFLU"
+    },
+    "LOLUS" : {
+        "value": "LOCLUS"
+    },
+    "ASCH" : {
+        "value": "ACRSCH"
+    },
+    "ADUM" : {
+        "value": "ACRDUM"
+    },
+    "APAL" : {
+        "value": "ACRRIS"
+    },
+    "ASCI" : {
+        "value": "ACRSCI"
+    },
+    "AARU" : {
+        "value": "ACRARU"
+    },
+    "ICAL" : {
+        "value": "IDUCAL"
+    },
+    "HICT" : {
+        "value": "HIPICT"
+    },
+    "SNIS" : {
+        "value": "SYLNIS"
+    },
+    "SCUR" : {
+        "value": "SYLCUR"
+    },
+    "SCOM" : {
+        "value": "SYLCOM"
+    },
+    "SBOR" : {
+        "value": "SYLBOR"
+    },
+    "SATR" : {
+        "value": "SYLATR"
+    },
+    "PDES" : {
+        "value": "PHYDES"
+    },
+    "PBOR" : {
+        "value": "PHYBOR"
+    },
+    "PSIB" : {
+        "value": "PHYSIB"
+    },
+    "PCOLL" : {
+        "value": "PHYCOL"
+    },
+    "PLUS" : {
+        "value": "PHYLUS"
+    },
+    "RREG" : {
+        "value": "REGREG"
+    },
+    "MSTR" : {
+        "value": "MUSSTR"
+    },
+    "FPAR" : {
+        "value": "FICPAR"
+    },
+    "FHYP" : {
+        "value": "FICHYP"
+    },
+    "PBIA" : {
+        "value": "PANBIA"
+    },
+    "ACAU" : {
+        "value": "AEGCAU"
+    },
+    "PRMON" : {
+        "value": "PARMON"
+    },
+    "PCIN" : {
+        "value": "PARCIN"
+    },
+    "PARCRI" : {
+        "value": "PARCRI"
+    },
+    "PATE" : {
+        "value": "PARATE"
+    },
+    "PCAE" : {
+        "value": "PARCAE"
+    },
+    "PCYA" : {
+        "value": "PARCYA"
+    },
+    "PMAJ" : {
+        "value": "PARMAJ"
+    },
+    "SEUR" : {
+        "value": "SITEUR"
+    },
+    "CFAM" : {
+        "value": "CERFAM"
+    },
+    "RPEN" : {
+        "value": "REMPEN"
+    },
+    "OORI" : {
+        "value": "ORIORI"
+    },
+    "LCOL" : {
+        "value": "LANCOL"
+    },
+    "LEXC" : {
+        "value": "LANEXC"
+    },
+    "GGLA" : {
+        "value": "GARGLA"
+    },
+    "PINF" : {
+        "value": "PERINF"
+    },
+    "PPIC" : {
+        "value": "PICPIC"
+    },
+    "NCAR" : {
+        "value": "NUCCAR"
+    },
+    "CMON" : {
+        "value": "CORMON"
+    },
+    "CFRU" : {
+        "value": "CORFRU"
+    },
+    "CONE" : {
+        "value": "CORNIX"
+    },
+    "CNIX" : {
+        "value": "CORRAX"
+    },
+    "SVUL" : {
+        "value": "STUVUL"
+    },
+    "PDOM" : {
+        "value": "PASDOM"
+    },
+    "PSMON" : {
+        "value": "PASMON"
+    },
+    "FCOE" : {
+        "value": "FRICOE"
+    },
+    "FMON" : {
+        "value": "FRIMON"
+    },
+    "SSER" : {
+        "value": "SERSER"
+    },
+    "CCHL" : {
+        "value": "CARCHL"
+    },
+    "CCAR" : {
+        "value": "CARCAR"
+    },
+    "CSPI" : {
+        "value": "CARSPI"
+    },
+    "CCANN" : {
+        "value": "CARCAN"
+    },
+    "CRIS" : {
+        "value": "CARRIS"
+    },
+    "CMEA" : {
+        "value": "CARMEA"
+    },
+    "CHOR" : {
+        "value": "CARHOR"
+    },
+    "LLEU" : {
+        "value": "LOXLEU"
+    },
+    "LCUR" : {
+        "value": "LOXCUR"
+    },
+    "LPYT" : {
+        "value": "LOXPYT"
+    },
+    "CERY" : {
+        "value": "CARERY"
+    },
+    "PENU" : {
+        "value": "PINENU"
+    },
+    "PPYR" : {
+        "value": "PYRPYR"
+    },
+    "CCOC" : {
+        "value": "COCCOC"
+    },
+    "CLAP" : {
+        "value": "CALLAP"
+    },
+    "PNIV" : {
+        "value": "PLENIV"
+    },
+    "ECIT" : {
+        "value": "EMBCIT"
+    },
+    "EHOR" : {
+        "value": "EMBHOR"
+    },
+    "ERUS" : {
+        "value": "EMBRUS"
+    },
+    "EPUS" : {
+        "value": "EMBPUS"
+    },
+    "EAUR" : {
+        "value": "EMBAUR"
+    },
+    "ESCH" : {
+        "value": "EMBSCH"
+    },
+    "CYGSP" : {
+        "value": "CYGSP"
+    },
+    "ANSSP" : {
+        "value": "ANSSP"
+    },
+    "ANS/BRA" : {
+        "value": "ANS/BRA"
+    },
+    "ANASP" : {
+        "value": "ANASP"
+    },
+    "AYTFUL/AYTMAR" : {
+        "value": "AYTFUL/AYTMAR"
+    },
+    "MELSP" : {
+        "value": "MELSP"
+    },
+    "MERSER/MERMER" : {
+        "value": "MERSER/MERMER"
+    },
+    "IV" : {
+        "value": "IV"
+    },
+    "PV" : {
+        "value": "PV"
+    },
+    "V" : {
+        "value": "V"
+    },
+    "GAVIMM/GAVADA" : {
+        "value": "GAVIMM/GAVADA"
+    },
+    "GAVSP" : {
+        "value": "GAVSP"
+    },
+    "PODCRI/PODGRI" : {
+        "value": "PODCRI/PODGRI"
+    },
+    "PODAUR/PODNIG" : {
+        "value": "PODAUR/PODNIG"
+    },
+    "PODSP" : {
+        "value": "PODSP"
+    },
+    "PHAAXSP" : {
+        "value": "PHAAXSP"
+    },
+    "ANS/BRA/PHA" : {
+        "value": "ANS/BRA/PHA"
+    },
+    "CIRMAC/CIRPYG" : {
+        "value": "CIRMAC/CIRPYG"
+    },
+    "CIRCYA/CIRMAC/CIRPYG" : {
+        "value": "CIRCYA/CIRMAC/CIRPYG"
+    },
+    "CIRSP" : {
+        "value": "CIRSP"
+    },
+    "ACCSP" : {
+        "value": "ACCSP"
+    },
+    "BUTSP" : {
+        "value": "BUTSP"
+    },
+    "PER/BUT" : {
+        "value": "PER/BUT"
+    },
+    "AQUCLA/AQUPOM" : {
+        "value": "AQUCLA/AQUPOM"
+    },
+    "AQUCLA/AQUPOM/AQUNIP" : {
+        "value": "AQUCLA/AQUPOM/AQUNIP"
+    },
+    "AQUSP" : {
+        "value": "AQUSP"
+    },
+    "HAL/AQU" : {
+        "value": "HAL/AQU"
+    },
+    "FALSP" : {
+        "value": "FALSP"
+    },
+    "IFAL" : {
+        "value": "IFAL"
+    },
+    "PFAL" : {
+        "value": "PFAL"
+    },
+    "IP" : {
+        "value": "IP"
+    },
+    "PP" : {
+        "value": "PP"
+    },
+    "PLUSP" : {
+        "value": "PLUSP"
+    },
+    "CHASP" : {
+        "value": "CHASP"
+    },
+    "NUMSP" : {
+        "value": "NUMSP"
+    },
+    "CALSP" : {
+        "value": "CALSP"
+    },
+    "GALSP" : {
+        "value": "GALSP"
+    },
+    "IK" : {
+        "value": "IK"
+    },
+    "KK" : {
+        "value": "KK"
+    },
+    "PK" : {
+        "value": "PK"
+    },
+    "K" : {
+        "value": "K"
+    },
+    "V/K" : {
+        "value": "V/K"
+    },
+    "STERCSP" : {
+        "value": "STERCSP"
+    },
+    "ALC/URI" : {
+        "value": "ALC/URI"
+    },
+    "GELNIL/STESAN" : {
+        "value": "GELNIL/STESAN"
+    },
+    "STEHIR/STEAEA" : {
+        "value": "STEHIR/STEAEA"
+    },
+    "STERNSP" : {
+        "value": "STERNSP"
+    },
+    "LARGLA/LARHYP" : {
+        "value": "LARGLA/LARHYP"
+    },
+    "LARSP" : {
+        "value": "LARSP"
+    },
+    "ILAR" : {
+        "value": "ILAR"
+    },
+    "PLAR" : {
+        "value": "PLAR"
+    },
+    "COLSP" : {
+        "value": "COLSP"
+    },
+    "STREPSP" : {
+        "value": "STREPSP"
+    },
+    "ASISP" : {
+        "value": "ASISP"
+    },
+    "KT" : {
+        "value": "KT"
+    },
+    "HIRRUSXDELURB" : {
+        "value": "HIRRUSXDELURB"
+    },
+    "RIP/HIR/DEL" : {
+        "value": "RIP/HIR/DEL"
+    },
+    "ANTRIC/ANTGOD" : {
+        "value": "ANTRIC/ANTGOD"
+    },
+    "ANTRIC/ANTGOD/ANTCAM" : {
+        "value": "ANTRIC/ANTGOD/ANTCAM"
+    },
+    "ANTSP" : {
+        "value": "ANTSP"
+    },
+    "MOTSP" : {
+        "value": "MOTSP"
+    },
+    "OENSP" : {
+        "value": "OENSP"
+    },
+    "TURSP" : {
+        "value": "TURSP"
+    },
+    "ITUR" : {
+        "value": "ITUR"
+    },
+    "PTUR" : {
+        "value": "PTUR"
+    },
+    "ACRDUM/ACRRIS/ACRSCI" : {
+        "value": "ACRDUM/ACRRIS/ACRSCI"
+    },
+    "ACRSP" : {
+        "value": "ACRSP"
+    },
+    "PHYSP" : {
+        "value": "PHYSP"
+    },
+    "FICSP" : {
+        "value": "FICSP"
+    },
+    "PERATEXPOEMON" : {
+        "value": "PERATEXPOEMON"
+    },
+    "POEMONXPOECIN" : {
+        "value": "POEMONXPOECIN"
+    },
+    "CYA/PAR/PER/LOP/POE" : {
+        "value": "CYA/PAR/PER/LOP/POE"
+    },
+    "CORONEONE" : {
+        "value": "CORONEONE"
+    },
+    "CORSP" : {
+        "value": "CORSP"
+    },
+    "ICOR" : {
+        "value": "ICOR"
+    },
+    "BOM/STU" : {
+        "value": "BOM/STU"
+    },
+    "FRISP" : {
+        "value": "FRISP"
+    },
+    "CARSP" : {
+        "value": "CARSP"
+    },
+    "LOXCUR/LOXPYT" : {
+        "value": "LOXCUR/LOXPYT"
+    },
+    "LOXSP" : {
+        "value": "LOXSP"
+    },
+    "EMBRUS/EMBPUS/EMBAUR" : {
+        "value": "EMBRUS/EMBPUS/EMBAUR"
+    },
+    "IPL" : {
+        "value": "IPL"
+    },
+    "KPL" : {
+        "value": "KPL"
+    },
+    "PPL" : {
+        "value": "PPL"
+    },
+    "PL" : {
+        "value": "PL"
+    },
+    "IL" : {
+        "value": "IL"
     }
 }
