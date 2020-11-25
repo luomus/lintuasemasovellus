@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "10px 10px 10px 10px"
   },
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    margin: theme.spacing(0),
+    minWidth: 140,
   },
   sendButton: {
     marginBottom: "40px"
@@ -53,8 +53,9 @@ const useStyles = makeStyles((theme) => ({
   codemirrorBox: {
     position: "relative",
     opacity: "99%"
-  }
-}));
+  },
+}
+));
 
 let timeout = null;
 
@@ -239,24 +240,29 @@ export const HomePage = () => {
   return (
     <div>
       <Grid container
-        alignItems="stretch"
+        alignItems="flex-start"
         // alignItems="center"
-        justify="flex-end"
       >
 
         <Grid item xs={8}>
+
           <Paper className={classes.paper}>
-            <Typography variant="h5" component="h2" >
-              {t("addObservations")}
-            </Typography>
-            <br />
-            <ObservatorySelector />
-            <br />
+
             <Grid container
-              alignItems="stretch"
+              alignItems="flex-start"
               spacing={1}>
 
-              <Grid item xs={4} sm={5}>
+              <Grid item xs={6} >
+                <Typography variant="h6" component="h2" >
+                  {t("addObservations")}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6} align="end"  fullWidth={true}>
+                <ObservatorySelector />
+              </Grid>
+
+              <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     className={classes.datePicker}
@@ -265,7 +271,7 @@ export const HomePage = () => {
                     invalidDateMessage
                     variant="inline"
                     format="dd.MM.yyyy"
-                    margin="normal"
+                    margin="top"
                     id="date-picker-inline"
                     label={t("date")}
                     value={day}
@@ -282,8 +288,9 @@ export const HomePage = () => {
                 </MuiPickersUtilsProvider>
               </Grid>
 
-              <Grid item xs={4} sm={5}>
+              <Grid item xs={9}>
                 <TextField required
+                  fullWidth={true}
                   id="observers"
                   label={t("observers")}
                   onChange={(event) => setObservers(event.target.value)}
@@ -293,20 +300,22 @@ export const HomePage = () => {
 
               <Grid item xs={12} sm={12}>
                 <TextField
-                  rows={2}
+                  rows={5}
                   multiline={true}
                   id="comment"
+                  fullWidth={true}
                   label={t("comment")}
                   onChange={(event) => setComment(event.target.value)}
                   value={comment}
                 />
               </Grid>
 
-              <Grid item >
+              <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
                   <InputLabel id="Tyyppi">{t("type")}</InputLabel>
                   <Select required
                     labelId="type"
+                    fullWidth={true}
                     id="selectType"
                     value={type}
                     onChange={(event) => setType(event.target.value)}
@@ -320,8 +329,8 @@ export const HomePage = () => {
                     }
                   </Select>
                 </FormControl>
-              </Grid>{" "}
-              <Grid item >
+              </Grid>
+              <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
                   <InputLabel id="Location">{t("location")}</InputLabel>
                   <Select required
@@ -413,7 +422,7 @@ export const HomePage = () => {
               </Grid>
               <br />
               <br />
-              <Grid item xs={12}>
+              <Grid item xs={12} mt={0}>
                 <Typography variant="h5" component="h2" >
                   {t("manualTitle")}
                 </Typography>

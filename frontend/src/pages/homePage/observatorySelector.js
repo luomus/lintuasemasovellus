@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import {
   Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel,
-  Typography, Select, MenuItem, makeStyles
+  Select, MenuItem, makeStyles, IconButton, Typography
 } from "@material-ui/core/";
+import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import store from "../../store";
@@ -21,9 +22,11 @@ const ObservatorySelector = () => {
       minWidth: 120,
     },
     submit: {
-
       minWidth: 120,
     },
+    observatorySelector: {
+      width: "auto",
+    }
   }));
 
   const { t } = useTranslation();
@@ -89,8 +92,11 @@ const ObservatorySelector = () => {
   }
 
   return (<div>
-    <Typography>{t("currentObservatory")}{userObservatory.replace("_", " ")}</Typography>
-    <Button id="observatorySelector" className={classes.submit} onClick={handleOpen}>{t("edit")}</Button>
+    <Typography>{userObservatory.replace("_", " ")}{" "}
+      <IconButton id="observatorySelector" size="small" edge="end" onClick={handleOpen}>
+        <EditIcon fontSize="small"/>
+      </IconButton>
+    </Typography>
   </div>
   );
 
