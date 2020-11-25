@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+from datetime import timedelta
 
 
 from flask import (Flask, render_template, 
@@ -65,6 +66,8 @@ def init_app(database):
     cors = CORS(app)
 
     #kirjautuminen
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
+    app.config["SESSION_REFRESH_EACH_REQUEST"] = True
     if database == "oracle":
         login_manager = LoginManager()
         login_manager.init_app(app)
