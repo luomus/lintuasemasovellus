@@ -85,8 +85,8 @@ const NavBar = () => {
 
   const welcomeText = user.id
     ?
-    <Typography>
-      {t("welcome")} {user.name}!
+    <Typography color="secondary">
+      {t("welcome")}, {user.name}!
     </Typography>
     :
     null;
@@ -103,7 +103,7 @@ const NavBar = () => {
   return (
     <div>
 
-      <AppBar position="static" style={{ background: "darkolivegreen" }} >
+      <AppBar position="static" style={{ background: "#514134" }}>
         <Toolbar>
           <IconButton id="navigationbar" onClick={toggleMenu("right", true)}> {/*navigationbar nimi lisätty testejä varten, että löytyy helpommin*/}
             <Dehaze style={{ color: "white" }} />
@@ -120,8 +120,7 @@ const NavBar = () => {
             </Box>
           </Drawer>
           <section className={classes.rightMenu}>
-            {welcomeText}
-            {logoutLogin}
+            {welcomeText}{logoutLogin}
           </section>
         </Toolbar>
       </AppBar>

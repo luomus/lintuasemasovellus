@@ -103,7 +103,7 @@ const ObsPeriodTable = (props) => {
             {
               summary
                 .map((s, i) =>
-                  <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
+                  <TableRow hover key={i}>
                     <StyledTableCell component="th" scope="row">
                       {s.species}
                     </StyledTableCell>

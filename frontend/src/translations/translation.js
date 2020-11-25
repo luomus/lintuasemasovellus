@@ -6,7 +6,7 @@ const resources = {
       "footer": "Lintuasemasovellus | Ohjelmistotuotantoprojekti 2020",
       "login": "Kirjaudu sisään",
       "logout": "Kirjaudu ulos",
-      "welcome": "Tervetuloa sovellukseen",
+      "welcome": "Tervetuloa",
       "frontpage": "Etusivu",
       "addDayPage": "Lisää päivä",
       "showDaysPage": "Näytä päivät",

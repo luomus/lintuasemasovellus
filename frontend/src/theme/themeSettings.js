@@ -1,7 +1,6 @@
 import {
   createMuiTheme, responsiveFontSizes
 } from "@material-ui/core/styles";
-//import green from "@material-ui/core/colors/green";
 
 const theme = createMuiTheme({
   palette: {
@@ -9,7 +8,10 @@ const theme = createMuiTheme({
       main: "#7fa149",
     },
     secondary: {
-      main: "#7fa149",
+      main: "#ffffff",
+    },
+    navbar: {
+      main: "#514134",
     },
   },
 });
