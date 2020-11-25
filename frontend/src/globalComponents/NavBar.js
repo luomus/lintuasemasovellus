@@ -63,7 +63,7 @@ const NavBar = () => {
 
   const logoutLogin = user.id
     ?
-    <Link to='/login'>
+    <Link to='/logout'>
       <Button className={classes.userButton}
 
         onClick={logoutHandler}
