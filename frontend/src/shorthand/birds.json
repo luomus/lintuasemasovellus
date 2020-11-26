@@ -578,6 +578,9 @@
     "ACRSCH" : {
         "value": "ACRSCH"
     },
+    "ACRDUM" : {	
+        "value": "ACRDUM"	
+    },
     "ACRRIS" : {
         "value": "ACRRIS"
     },
