@@ -1,3 +1,4 @@
+import birdJson from "./birds.json";
 
 // Buckets:
 let firstSpaceOfLineBreakOrSomeSuchEncountered = false;
@@ -12,6 +13,7 @@ let ohituspuoli = "";
 let ilmansuunta = "";
 let sukupuoliRound = 2;
 
+let slashes = 0;
 
 let ageBucket = "unk";
 
@@ -39,6 +41,21 @@ let unknown = {
 let osahavainnot = [];
 
 let taysiHavainto = {};
+// End of buckets
+
+
+// remove slashes from keys:
+const birds = new Set(
+  Object.keys(birdJson)
+    .reduce((acc, bird) => {
+      bird.includes("/")
+        ? acc = acc.concat(bird.split("/"))
+        : acc.push(bird);
+      return acc;
+    },
+    [])
+);
+
 
 const openLisatietoBucket = () => {
   lisatietobucketIsOpen = true;
@@ -56,6 +73,7 @@ const softReset = () => {
   ilmansuunta = "";
   ohituspuoli = "";
   lisatieto = "";
+  slashes = 0;
   male = {
     "subad": "",
     "ad": "",
@@ -79,8 +97,25 @@ const softReset = () => {
 const possibleDirections = new Set(["W", "S", "E", "N", "NW", "NE", "SW", "SE",
   "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW", ""]);
 
+const bypassSideHasTooMuchAnything = () => {
+  for (
+    let i = 0, pluses = 0, minuses = 0;
+    i < ohituspuoli.length;
+    i++
+  ) {
+    if (ohituspuoli[Number(i)] === "+") pluses++;
+    else minuses++;
+    if (pluses > 3 || minuses > 3) return true;
+  }
+  return false;
+};
+
+
 const constructOsahavainto = () => {
-  if (ika) throw new Error("tuntematon ikä");
+  if (bypassSideHasTooMuchAnything())
+    throw new Error("liian monta plussaa/miinusta");
+  if (ika)
+    throw new Error("tuntematon ikä");
   if (!possibleDirections.has(ilmansuunta.toUpperCase()))
     throw new Error("Epäkelpo ilmansuunta");
   switch(sukupuoliRound) {
@@ -125,6 +160,8 @@ const ikaConstructed = () => {
 };
 
 export const constructTaysiHavainto = (startKello, endKello) => {
+  if (!birds.has(lajinimi.toUpperCase()))
+    throw new Error("Tuntematon lajin nimi!");
   constructOsahavainto();
   taysiHavainto = {
     species: lajinimi,
@@ -153,8 +190,7 @@ const acceptableIkaChar = new Set(["j","v","b","d","e","u","s","a"]);
 const acceptlableIlmansuuntaChar = new Set(["n","w","e","s"]);
 
 const isNumeric = (string) => {
-  // eslint-disable-next-line eqeqeq
-  if (typeof string != "string") return false;
+  if (typeof string !== "string") return false;
   return !isNaN(string) && !isNaN(parseInt(string));
 };
 
@@ -227,10 +263,10 @@ const isTooManyCommasHeuristic = (index, line) => {
 };
 
 /**
- * Organize chars to buckets.
- * @param {character} char
+ * Organize chars to buckets (i.e. separate strings).
+ * @param {string} char
  * @param {string} line
- * @param {integer} index
+ * @param {number} index
  */
 const giveMeABucket = (char, line, index) => {
   switch(char) {
@@ -310,6 +346,9 @@ const giveMeABucket = (char, line, index) => {
       ohituspuoli += char;
       break;
     case "/":
+      if (++slashes > 2) {
+        throw new Error("ylimääräisiä kauttaviivoja");
+      }
       if (lajinimiNotSet()) {
         throw new Error("lajinimen jälkeen puuttuu välilyönti");
       }
@@ -326,9 +365,10 @@ const getObservation = () => {
   return taysiHavainto;
 };
 
-/*
-* In case of errors, you actually have to call resetAll separately
-*/
+/**
+ * Reset buckets. Note that when error is thrown, the strings/buckets are
+ * not emptied automatically.
+ */
 export const resetAll = () => {
   firstSpaceOfLineBreakOrSomeSuchEncountered = false;
   lisatietobucketIsOpen = false;
@@ -339,6 +379,7 @@ export const resetAll = () => {
   ohituspuoli = "";
   ilmansuunta = "";
   sukupuoliRound = 2;
+  slashes = 0;
   ageBucket = "unk";
   male = {
     "subad": "",
@@ -381,6 +422,11 @@ const checkBracketsFirstPass = (line) => {
   if (leftGuy) throw bracketsErr;
 };
 
+/**
+ * Wraps all of the required functions together
+ * in order to parse one single line.
+ * @param {string} line
+ */
 export const parse = (line) => {
   const lineOfText = specialTrimmer(line);
   checkBracketsFirstPass(lineOfText);

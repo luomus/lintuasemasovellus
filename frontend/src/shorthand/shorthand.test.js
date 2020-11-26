@@ -71,11 +71,11 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   });
 
   test("Fifth, legacy mode", () => {
-    const lineOfText = "sm /1W, 2/E, 3/4w";
+    const lineOfText = "sommol /1W, 2/E, 3/4w";
 
     const observation = parse(lineOfText);
 
-    expect(observation.species).toBe("sm");
+    expect(observation.species).toBe("sommol");
     const { direction: direction0, unknownFemaleCount: unknownFemaleCount0, ...rest0 }
        = observation.osahavainnot[0];
     const { direction: direction1, unknownMaleCount: unknownMaleCount1, ...rest1 }
@@ -103,11 +103,11 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   });
 
   test("Sixth, no more tears", () => {
-    const lineOfText = " sm /1W, 2/E ,3/4w,";
+    const lineOfText = " sommol /1W, 2/E ,3/4w,";
 
     const observation = parse(lineOfText);
 
-    expect(observation.species).toBe("sm");
+    expect(observation.species).toBe("sommol");
     expect(observation.osahavainnot[0].unknownFemaleCount).toBe("1");
     expect(observation.osahavainnot[0].direction).toBe("w");
     expect(observation.osahavainnot[1].unknownMaleCount).toBe("2");
@@ -118,7 +118,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   });
 
   test("Seventh son", () => {
-    const lineOfText = "sm /1W 2E";
+    const lineOfText = "sommol /1W 2E";
 
     expect(() => {
       parse(lineOfText);
@@ -126,11 +126,11 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   });
 
   test("Eightball", () => {
-    const lineOfText = "sm /1/2W";
+    const lineOfText = "sommol /1/2W";
 
     const observation = parse(lineOfText);
 
-    expect(observation.species).toBe("sm");
+    expect(observation.species).toBe("sommol");
     expect(observation.osahavainnot[0].unknownFemaleCount).toBe("1");
     expect(observation.osahavainnot[0].direction).toBe("w");
     expect(observation.osahavainnot[0].unknownUnknownCount).toBe("2");
@@ -407,7 +407,16 @@ describe("Randomized tests (fuzzing)", () => {
   const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
     "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"];
 
-  const birdArr = Object.keys(birds);
+
+  // we don't care about slashes in the objects' keys:
+  const birdArr = Object.keys(birds)
+    .reduce((acc, bird) => {
+      bird.includes("/")
+        ? acc = acc.concat(bird.split("/"))
+        : acc.push(bird);
+      return acc;
+    },
+    []);
 
   const randomIndex = (len) => {
     return Math.floor(Math.random() * len);
@@ -526,7 +535,6 @@ describe("Randomized tests (fuzzing)", () => {
   test("Random battery w/ 1 000 valid strings", () => {
     for (let i = 0; i < 1000; ++i) {
       const lineOfText = makeValidLine();
-      console.log("line:", lineOfText);
       expect(() => {
         parse(lineOfText);
       }).not.toThrow();
@@ -544,6 +552,109 @@ describe("Randomized tests (fuzzing)", () => {
         parse(line);
       }).not.toThrow();
       resetAll();
+    }
+  });
+
+});
+
+describe("Bugfixes", () => {
+
+  beforeEach(() => {
+    resetAll();
+  });
+
+  test("too long bypassSide 1", () => {
+    const lineOfText = "anacre 1ad++++--";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("liian monta plussaa/miinusta");
+  });
+
+  test("too long bypassSide 2", () => {
+    const lineOfText = "anacre 1ad----";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("liian monta plussaa/miinusta");
+  });
+
+  test("too long bypassSide 3", () => {
+    const lineOfText = "anacre 1ad+++----";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("liian monta plussaa/miinusta");
+  });
+
+  test("AYTMAR is found (one with a slash)", () => {
+    const line = "AYTMAR 1++";
+    expect(() => {
+      parse(line);
+    }).not.toThrow();
+  });
+
+  test("too many slashes 1", () => {
+    const line = "v 1juv/3ad/12'/    ++---    ";
+    expect(() => {
+      parse(line);
+    }).toThrow("ylimääräisiä kauttaviivoja");
+  });
+
+  test("too many slashes 2", () => {
+    const line = "v 1juv/3ad/12'////    ++---    ";
+    expect(() => {
+      parse(line);
+    }).toThrow("ylimääräisiä kauttaviivoja");
+  });
+
+  test("too many slashes 3", () => {
+    const line = "v 1juv/3ad/12', 2/3/1/, 2/3/1    ++---    ";
+    expect(() => {
+      parse(line);
+    }).toThrow("ylimääräisiä kauttaviivoja");
+  });
+
+  test("too many slashes 4", () => {
+    const line = "v //1/";
+    expect(() => {
+      parse(line);
+    }).toThrow("ylimääräisiä kauttaviivoja");
+  });
+
+  test("empty in-between slashes 1", () => {
+    const line = "v 1//  +";
+    const result = parse(line);
+    const { unknownMaleCount, bypassSide,
+      ...rest } = result.osahavainnot[0];
+    expect(unknownMaleCount).toBe("1");
+    expect(result.species).toBe("v");
+    expect(bypassSide).toBe("+");
+    for (const each of Object.values(rest)) {
+      expect(each).toBe("");
+    }
+  });
+
+  test("empty in-between slashes 2", () => {
+    const line = "v /1/  +";
+    const result = parse(line);
+    const { unknownFemaleCount, bypassSide,
+      ...rest } = result.osahavainnot[0];
+    expect(unknownFemaleCount).toBe("1");
+    expect(result.species).toBe("v");
+    expect(bypassSide).toBe("+");
+    for (const each of Object.values(rest)) {
+      expect(each).toBe("");
+    }
+  });
+
+  test("empty in-between slashes 3", () => {
+    const line = "v //1  +";
+    const result = parse(line);
+    const { unknownUnknownCount, bypassSide,
+      ...rest } = result.osahavainnot[0];
+    expect(unknownUnknownCount).toBe("1");
+    expect(result.species).toBe("v");
+    expect(bypassSide).toBe("+");
+    for (const each of Object.values(rest)) {
+      expect(each).toBe("");
     }
   });
 
