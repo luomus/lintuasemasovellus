@@ -7,6 +7,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
+import EditShorthand from "../editShorthand";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
@@ -46,6 +47,8 @@ const DayDetails = () => {
   const [editedObservers, setEditedObservers] = useState("");
 
   const [mode, setMode] = useState("table1");
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const dayList = useSelector(state => state.days);
 
@@ -100,7 +103,14 @@ const DayDetails = () => {
 
   console.log(summary);
 
+  const handleOpen = () => {
+    console.log(modalOpen);
+    setModalOpen(true);
+  };
 
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -169,11 +179,18 @@ const DayDetails = () => {
 
           <Grid item xs={12}>
             <Button variant="contained" color="primary" onClick={() => setMode("table1")}>
-              Lajit
+              {t("summary")}
             </Button>{" "}
             <Button variant="contained" color="primary" onClick={() => setMode("table2")}>
-              Jaksot
+              {t("obsPeriods")}
             </Button>{" "}
+            <Button variant="contained" color="primary" onClick={() => handleOpen()}>
+              {t("edit")}
+            </Button>{" "}
+            <EditShorthand
+              open={modalOpen}
+              handleClose={handleClose}
+            />
           </Grid>
 
 

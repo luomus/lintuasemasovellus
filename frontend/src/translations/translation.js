@@ -17,6 +17,9 @@ const resources = {
       "observations": "Havainnot",
       "comment": "Kommentti",
       "save": "Tallenna",
+
+      "summary": "Lajit",
+      "obsPeriods": "Jaksot",
       "edit": "Muokkaa",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
