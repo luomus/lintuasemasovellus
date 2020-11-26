@@ -59,7 +59,7 @@ const ObsPeriodTable = (props) => {
   };
 
   const formatTime = (time) => {
-    const ret = time.split(" ")[1].split(":");
+    const ret = time.split(" ")[4].split(":");
     return `${ret[0]}:${ret[1]}`;
   };
 
@@ -176,6 +176,7 @@ const ObsPeriodTable = (props) => {
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     {formatTime(s.startTime)}
+                    {console.log(s.startTime)}
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     {formatTime(s.endTime)}
