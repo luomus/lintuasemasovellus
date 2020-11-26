@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
-  Button, IconButton, makeStyles, Paper, Grid, Typography, TextField
+  Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,13 @@ const DayDetails = () => {
       padding: "20px 30px",
       margin: "0px 0px 50px 0px",
     },
+    button: {
+      marginLeft: "5px",
+    },
+    obsAndComment: {
+      marginRight: "5px",
+      marginBottom: "5px",
+    }
   });
 
   const classes = useStyles();
@@ -130,71 +137,84 @@ const DayDetails = () => {
     <div>
       <Paper className={classes.paper}>
 
-        <Grid container alignItems="flex-start" spacing={3}>
-          <Grid item xs={12}>
+        <Grid container alignItems="flex-end" spacing={3}>
+          <Grid item xs={6}>
             <Typography variant="h5" component="h2" >
               {day} {" "}
               {stationName.replace("_", " ")}
             </Typography>
-            <Typography variant="h6" component="h2" >
-              {t("observers")}{": "}{observers}{" "}
-            </Typography>
-            {observersForm === false ? (
-              <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
-                <EditIcon fontSize="small"/>
-              </IconButton>
-            ) : (
-              <form onSubmit={observersOnSubmit}>
-                <TextField
-                  id="observerField"
-                  variant="outlined"
-                  defaultValue={observers}
-                  onChange={(event) => setEditedObservers(event.target.value)}
-                />
-                <Button id="observerSubmit" type="submit" variant="contained" color="primary">
-                  {t("save")}
-                </Button>
-              </form>
-            )}
-            <Typography variant="subtitle1" component="h2" >
-              {t("comment")}{": "}{comment}{" "}
-            </Typography>
-            {commentForm === false ? (
-              <IconButton id="commentButton" size="small" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
-                <EditIcon fontSize="small"/>
-              </IconButton>
-            ) : (
-              <form onSubmit={commentOnSubmit}>
-                <TextField
-                  id="commentField"
-                  variant="outlined"
-                  defaultValue={comment}
-                  onChange={(event) => setEditedComment(event.target.value)}
-                />
-                <Button id="commentSubmit" type="submit" variant="contained" color="primary">
-                  {t("save")}
-                </Button>
-              </form>
-            )}
-
+          </Grid>
+          <Grid item xs={6}>
+            <Box display="flex" justifyContent="flex-end">
+              <Button variant="contained" color="primary" onClick={() => handleOpen()}>
+                {t("edit")}
+              </Button>{" "}
+            </Box>
+          </Grid>
+          <Grid item xs={12} fullWidth={true}>
+            <div style={{
+              display: "flex",
+              alignItems: "left"
+            }}>
+              <Typography variant="h6" component="h2" className={classes.obsAndComment}>
+                {t("observers")}{": "}{observers}{" "}
+              </Typography>
+              {observersForm === false ? (
+                <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
+                  <EditIcon fontSize="small"/>
+                </IconButton>
+              ) : (
+                <form onSubmit={observersOnSubmit}>
+                  <TextField
+                    className={classes.obsAndComment}
+                    id="observerField"
+                    variant="outlined"
+                    defaultValue={observers}
+                    onChange={(event) => setEditedObservers(event.target.value)}
+                  />
+                  <Button id="observerSubmit" type="submit" variant="contained" color="primary">
+                    {t("save")}
+                  </Button>
+                </form>
+              )}
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "left"
+            }}>
+              <Typography variant="h6" component="h2" className={classes.obsAndComment}>
+                {t("comment")}{": "}{comment}{" "}
+              </Typography>
+              {commentForm === false ? (
+                <IconButton id="commentButton" size="small" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
+                  <EditIcon fontSize="small"/>
+                </IconButton>
+              ) : (
+                <form onSubmit={commentOnSubmit}>
+                  <TextField
+                    className={classes.obsAndComment}
+                    id="commentField"
+                    variant="outlined"
+                    defaultValue={comment}
+                    onChange={(event) => setEditedComment(event.target.value)}
+                  />
+                  <Button id="commentSubmit" type="submit" variant="contained" color="primary">
+                    {t("save")}
+                  </Button>
+                </form>
+              )}
+            </div>
           </Grid>
 
-          <Grid item xs={12} align="end">
-            <Button variant="contained" color="primary" onClick={() => setMode("table1")}>
-              {t("summary")}
-            </Button>{" "}
-            <Button variant="contained" color="primary" onClick={() => setMode("table2")}>
-              {t("obsPeriods")}
-            </Button>{" "}
-            <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-              {t("edit")}
-            </Button>{" "}
-            <EditShorthand
-              date={day}
-              dayId={dayId}
-              open={modalOpen}
-              handleClose={handleClose}
-            />
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="flex-end">
+              <Button className={classes.button} color="primary" variant="contained" disabled={mode==="table1"} onClick={() => setMode("table1")}>
+                {t("summary")}
+              </Button>
+              <Button className={classes.button} color="primary" variant="contained" disabled={mode==="table2"} onClick={() => setMode("table2")}>
+                {t("obsPeriods")}
+              </Button>
+            </Box>
           </Grid>
 
 
@@ -207,6 +227,12 @@ const DayDetails = () => {
 
           </Grid>
         </Grid>
+        <EditShorthand
+          date={day}
+          dayId={dayId}
+          open={modalOpen}
+          handleClose={handleClose}
+        />
       </Paper>
     </div>
 

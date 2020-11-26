@@ -3,8 +3,7 @@ import React, {
   useState
 } from "react";
 import {
-  Paper,
-  Grid,
+  Paper, Grid, Box,
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles
@@ -258,8 +257,10 @@ export const HomePage = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={6} align="end"  fullWidth={true}>
-                <ObservatorySelector />
+              <Grid item xs={6} fullWidth={true}>
+                <Box display="flex" justifyContent="flex-end">
+                  <ObservatorySelector />
+                </Box>
               </Grid>
 
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>

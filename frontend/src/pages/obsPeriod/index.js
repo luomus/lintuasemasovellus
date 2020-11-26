@@ -15,18 +15,19 @@ console.log(birdMap);
 
 const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
     modal: {
       display: "flex",
+      padding: theme.spacing(1),
       alignItems: "center",
       justifyContent: "center",
+      outline: "none",
     },
     paper: {
       backgroundColor: "white",
-      border: "2px solid #000",
       height: "85%",
       width: "85%",
-      padding: "2px 2px 2px 2px",
+      padding: theme.spacing(2, 4, 3),
       overflowY: "scroll",
       overflowX: "hidden",
     },
@@ -37,6 +38,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
       }
     },
   }));
+
 
   const { t } = useTranslation();
 

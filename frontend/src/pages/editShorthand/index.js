@@ -13,7 +13,7 @@ import "codemirror/theme/idea.css";
 
 const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
-  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA" , dayId);
+  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA", dayId);
 
   const [shorthand, setShorthand] = useState("");
 
@@ -71,48 +71,43 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
       }}
     >
       <Fade in={open}>
-        <Grid container
-          alignItems="flex-start"
-          spacing={1}>
+        <div className={classes.paper}>
+          <h2> Muokkaa pikakirjoitusta </h2>
+          <h2> {date} </h2>
 
-          <div className={classes.paper}>
-            <h2> Muokkaa pikakirjoitusta </h2>
-            <h2> {date} </h2>
-
-            <Grid item xs={12}>
-              <CodeMirror
-                id="editShorthand"
-                className={classes.codemirrorBox}
-                value={shorthand}
-                options={{
-                  theme: "idea",
-                  lineNumbers: true,
-                  autoRefresh: true,
-                  readOnly: false,
-                  lint: false
-                }}
-                editorDidMount={editor => {
-                  editor.refresh();
-                }}
-                onBeforeChange={(editor, data, value) => {
-                  setShorthand(value);
-                }}
-                //onChange={codemirrorOnchange}
-              />
-            </Grid>
-            <Grid item xs={12} align="end">
-              <Button variant="contained" color="primary" onClick={() => console.log("click")}>
-                Tallenna
-              </Button>{" "}
-              <Button variant="contained" color="primary" onClick={() => console.log("click")}>
-                Peruuta
-              </Button>{" "}
-              <Button variant="contained" color="primary" onClick={() => console.log("click")}>
-                Poista
-              </Button>{" "}
-            </Grid>
-          </div>
-        </Grid>
+          <Grid item xs={12}>
+            <CodeMirror
+              id="editShorthand"
+              className={classes.codemirrorBox}
+              value={shorthand}
+              options={{
+                theme: "idea",
+                lineNumbers: true,
+                autoRefresh: true,
+                readOnly: false,
+                lint: false
+              }}
+              editorDidMount={editor => {
+                editor.refresh();
+              }}
+              onBeforeChange={(editor, data, value) => {
+                setShorthand(value);
+              }}
+            //onChange={codemirrorOnchange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+              Tallenna
+            </Button>{" "}
+            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+              Peruuta
+            </Button>{" "}
+            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+              Poista
+            </Button>{" "}
+          </Grid>
+        </div>
       </Fade>
     </Modal>
 
