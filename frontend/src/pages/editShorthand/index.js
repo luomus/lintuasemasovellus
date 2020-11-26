@@ -1,28 +1,35 @@
 import {
-  Backdrop, Fade, makeStyles, Modal
+  Backdrop, Fade, makeStyles, Modal, Grid, Button
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 //import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Controlled as CodeMirror } from "react-codemirror2";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/idea.css";
+//import errorImg from "./error.png";
 
-const EditShorthand = ({ dayId, open, handleClose }) => {
+const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA" , dayId);
 
-  const useStyles = makeStyles(() => ({
+  const [shorthand, setShorthand] = useState("");
+
+  const useStyles = makeStyles((theme) => ({
     modal: {
       display: "flex",
+      padding: theme.spacing(1),
       alignItems: "center",
       justifyContent: "center",
+      outline: "none",
     },
     paper: {
       backgroundColor: "white",
-      border: "2px solid #000",
       height: "85%",
       width: "85%",
-      padding: "2px 2px 2px 2px",
+      padding: theme.spacing(2, 4, 3),
       overflowY: "scroll",
       overflowX: "hidden",
     },
@@ -56,6 +63,7 @@ const EditShorthand = ({ dayId, open, handleClose }) => {
       className={classes.modal}
       open={open}
       onClose={handleClose}
+      disableAutoFocus={true}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -63,9 +71,48 @@ const EditShorthand = ({ dayId, open, handleClose }) => {
       }}
     >
       <Fade in={open}>
-        <div className={classes.paper}>
-          <h2> MOIII </h2>
-        </div>
+        <Grid container
+          alignItems="flex-start"
+          spacing={1}>
+
+          <div className={classes.paper}>
+            <h2> Muokkaa pikakirjoitusta </h2>
+            <h2> {date} </h2>
+
+            <Grid item xs={12}>
+              <CodeMirror
+                id="editShorthand"
+                className={classes.codemirrorBox}
+                value={shorthand}
+                options={{
+                  theme: "idea",
+                  lineNumbers: true,
+                  autoRefresh: true,
+                  readOnly: false,
+                  lint: false
+                }}
+                editorDidMount={editor => {
+                  editor.refresh();
+                }}
+                onBeforeChange={(editor, data, value) => {
+                  setShorthand(value);
+                }}
+                //onChange={codemirrorOnchange}
+              />
+            </Grid>
+            <Grid item xs={12} align="end">
+              <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+                Tallenna
+              </Button>{" "}
+              <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+                Peruuta
+              </Button>{" "}
+              <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+                Poista
+              </Button>{" "}
+            </Grid>
+          </div>
+        </Grid>
       </Fade>
     </Modal>
 
@@ -73,7 +120,8 @@ const EditShorthand = ({ dayId, open, handleClose }) => {
 };
 
 EditShorthand.propTypes = {
-  dayId: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  dayId: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };

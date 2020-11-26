@@ -69,6 +69,8 @@ const DayDetails = () => {
     .find(d => d.day === day && d.observatory === stationName)
     .id;
 
+  console.log("OOOOOOOOOOOOOHHHHHHHHHH", day);
+
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -128,7 +130,7 @@ const DayDetails = () => {
     <div>
       <Paper className={classes.paper}>
 
-        <Grid container spacing={3}>
+        <Grid container alignItems="flex-start" spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h5" component="h2" >
               {day} {" "}
@@ -138,8 +140,8 @@ const DayDetails = () => {
               {t("observers")}{": "}{observers}{" "}
             </Typography>
             {observersForm === false ? (
-              <IconButton id="observerButton" onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
-                <EditIcon />
+              <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
+                <EditIcon fontSize="small"/>
               </IconButton>
             ) : (
               <form onSubmit={observersOnSubmit}>
@@ -158,8 +160,8 @@ const DayDetails = () => {
               {t("comment")}{": "}{comment}{" "}
             </Typography>
             {commentForm === false ? (
-              <IconButton id="commentButton" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
-                <EditIcon />
+              <IconButton id="commentButton" size="small" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
+                <EditIcon fontSize="small"/>
               </IconButton>
             ) : (
               <form onSubmit={commentOnSubmit}>
@@ -177,7 +179,7 @@ const DayDetails = () => {
 
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} align="end">
             <Button variant="contained" color="primary" onClick={() => setMode("table1")}>
               {t("summary")}
             </Button>{" "}
@@ -188,6 +190,8 @@ const DayDetails = () => {
               {t("edit")}
             </Button>{" "}
             <EditShorthand
+              date={day}
+              dayId={dayId}
               open={modalOpen}
               handleClose={handleClose}
             />

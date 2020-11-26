@@ -9,6 +9,7 @@ from app.api.classes.observationperiod.models import Observationperiod
 from app.api import bp
 from app.db import db
 
+from sqlalchemy.sql import text
 
 @bp.route('/api/addShorthand', methods=['POST'])
 @login_required
@@ -32,6 +33,30 @@ def getShorthands():
         ret.append({ 'id': shorthand.id, 'row': shorthand.shorthandRow, 'observationperiod_id': shorthand.observationperiod_id})
 
     return jsonify(ret)
+
+@bp.route('/api/getShorthandText/<day_id>', methods=["GET"])
+@login_required
+def getShorthandsForEditing(day_id):
+    stmt = text(" SELECT Shorthand.id, Shorthand.shortHandRow,"
+                " Shorthand.observationperiod_id, Observation.id, "
+                " Observationperiod.startTime, Observationperiod.endTime" 
+                " FROM Shorthand"
+                " JOIN Observationperiod ON Observationperiod.id = Shorthand.observationperiod_id"
+                " JOIN Observation ON Observation.shorthand_id = Shorthand.id"
+                " JOIN Day ON Day.id = Observationperiod.day_id"
+                " WHERE Day.id = :dayId"
+                " ORDER BY Observationperiod.id").params(dayId = day_id)
+
+    res = db.engine.execute(stmt)
+
+    response = []
+    obsPeriodIndex = 0
+    formerObsPeriodIndex = 0
+    for row in res:
+        response.append({''})   
+
+    return jsonify(response)
+
 
 @bp.route('/api/getShorthand/<shorthand_id>', methods=["GET"])
 @login_required
