@@ -71,18 +71,6 @@ def getObservationPeriods():
 @login_required
 def getDaysObservationPeriods(day_id):
 
-    # stmt = text(" SELECT Observationperiod.id, Observationperiod.start_time,"
-    #              " Observationperiod.end_time, Type.name, Location.name,"
-    #              " Day.id, COUNT(DISTINCT Observation.species) AS speciesCount"
-    #              " FROM Observationperiod"
-    #              " LEFT JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
-    #              " JOIN Day ON Day.id = Observationperiod.day_id"
-    #              " JOIN Type ON Type.id=Observationperiod.type_id"
-    #              " JOIN Location ON Location.id=Observationperiod.location_id"
-    #              " WHERE Day.id = :day_id"
-    #              " GROUP BY Observationperiod.id"
-    #              " ORDER BY Observationperiod.start_time").params(day_id = day_id)
-
     stmt = text(" SELECT Observationperiod.id AS obsperiod_id,"
                 " Observationperiod.start_time, Observationperiod.end_time,"
                 " Type.name AS typename, Location.name AS locationname, Day.id AS day_id,"
@@ -111,15 +99,6 @@ def getDaysObservationPeriods(day_id):
             'day_id': row.day_id,
             'speciesCount': row.speciescount
         })
-
-    # for row in res:
-    #     response.append({"id" :row[0], 
-    #         "startTime":row[1],
-    #         "endTime":row[2], 
-    #         "observationType":row[3],
-    #         "location":row[4],
-    #         "day_id":row[5],
-    #         "speciesCount":row[6]})
   
     return jsonify(response)
 
