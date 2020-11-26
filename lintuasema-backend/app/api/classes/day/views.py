@@ -91,15 +91,6 @@ def get_latest_days(observatory):
                 " GROUP BY Day.day"
                 " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
 
-    # stmt = text("SELECT * FROM("
-    #             " SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
-    #             " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
-    #             " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
-    #             " WHERE Day.observatory_id = :observatory_id"
-    #             " GROUP BY Day.day"
-    #             " ORDER BY Day.day DESC)"
-    #             " WHERE ROWNUM <= 5").params(observatory_id = observatory_id)
-
     res = db.engine.execute(stmt)
 
     response = []

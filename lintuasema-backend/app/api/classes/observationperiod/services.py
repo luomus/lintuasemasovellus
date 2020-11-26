@@ -3,7 +3,7 @@ from app.api.classes.observation.models import Observation
 from app.db import db
 
 def getObsPerId(starttime, endtime, location_id, day_id):
-    obsp = Observationperiod.query.filter_by(startTime = starttime, endTime=endtime, location_id=location_id, day_id=day_id).first()
+    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, location_id=location_id, day_id=day_id).first()
     return obsp.id
 
 def setObsPerDayId(day_id_old, day_id_new):

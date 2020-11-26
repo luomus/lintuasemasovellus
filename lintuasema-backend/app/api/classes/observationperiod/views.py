@@ -34,8 +34,8 @@ def addObservationPeriod():
     createType(req['observationType'], obsId)
 
     obsp = Observationperiod(
-        startTime=datetime.strptime(req['startTime'], '%H:%M'),
-        endTime=datetime.strptime(req['endTime'], '%H:%M'),
+        start_time=datetime.strptime(req['startTime'], '%H:%M'),
+        end_time=datetime.strptime(req['endTime'], '%H:%M'),
         type_id=getTypeIdByName(req['observationType']),
         location_id=locId, day_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
@@ -44,7 +44,7 @@ def addObservationPeriod():
     db.session().commit()
 
     #obspId = obsp.id
-    obspId = getObsPerId(obsp.startTime, obsp.endTime, obsp.location_id, obsp.day_id)
+    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.day_id)
     #print("havaintojakson id on", obspId)
     return jsonify({ 'id': obspId })
 
@@ -57,8 +57,8 @@ def getObservationPeriods():
         ret.append(
         {
             'id': obsPeriod.id,
-            'startTime': obsPeriod.startTime,
-            'endTime': obsPeriod.endTime,
+            'startTime': obsPeriod.start_time,
+            'endTime': obsPeriod.end_time,
             'type_id': getTypeNameById(obsPeriod.type_id),
             'location': getLocationName(obsPeriod.location_id),
             'day_id': obsPeriod.day_id
@@ -71,30 +71,55 @@ def getObservationPeriods():
 @login_required
 def getDaysObservationPeriods(day_id):
 
-    stmt = text(" SELECT Observationperiod.id, Observationperiod.startTime,"
-                 " Observationperiod.endTime, Type.name, Location.name,"
-                 " Day.id, COUNT(DISTINCT Observation.species) AS speciesCount"
-                 " FROM Observationperiod"
-                 " LEFT JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
-                 " JOIN Day ON Day.id = Observationperiod.day_id"
-                 " JOIN Type ON Type.id=Observationperiod.type_id"
-                 " JOIN Location ON Location.id=Observationperiod.location_id"
-                 " WHERE Day.id = :day_id"
-                 " GROUP BY Observationperiod.id"
-                 " ORDER BY Observationperiod.startTime").params(day_id = day_id)
-    
+    # stmt = text(" SELECT Observationperiod.id, Observationperiod.start_time,"
+    #              " Observationperiod.end_time, Type.name, Location.name,"
+    #              " Day.id, COUNT(DISTINCT Observation.species) AS speciesCount"
+    #              " FROM Observationperiod"
+    #              " LEFT JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
+    #              " JOIN Day ON Day.id = Observationperiod.day_id"
+    #              " JOIN Type ON Type.id=Observationperiod.type_id"
+    #              " JOIN Location ON Location.id=Observationperiod.location_id"
+    #              " WHERE Day.id = :day_id"
+    #              " GROUP BY Observationperiod.id"
+    #              " ORDER BY Observationperiod.start_time").params(day_id = day_id)
+
+    stmt = text(" SELECT Observationperiod.id AS obsperiod_id,"
+                " Observationperiod.start_time, Observationperiod.end_time,"
+                " Type.name AS typename, Location.name AS locationname, Day.id AS day_id,"
+                " COUNT(DISTINCT Observation.species) AS speciescount"
+                " FROM Observationperiod"
+                " JOIN Type ON Type.id = Observationperiod.type_id"
+                " JOIN Location ON Location.id = Observationperiod.location_id"
+                " JOIN Day ON Day.id = Observationperiod.day_id"
+                " JOIN Observation ON Observation.observationperiod_id = Observationperiod.id"
+                " WHERE Day.id = :dayId"
+                " GROUP BY Observationperiod.id, Observationperiod.start_time,"
+                " Observationperiod.end_time, Type.name, Location.name, Day.id"
+                " ORDER BY Observationperiod.start_time").params(dayId = day_id)
+
     res = db.engine.execute(stmt)
 
     response = []
 
     for row in res:
-        response.append({"id" :row[0], 
-            "startTime":row[1],
-            "endTime":row[2], 
-            "observationType":row[3],
-            "location":row[4],
-            "day_id":row[5],
-            "speciesCount":row[6]})
+        response.append({
+            'id': row.obsperiod_id,
+            'startTime': row.start_time,
+            'endTime': row.end_time,
+            'observationType': row.typename,
+            'location': row.locationname,
+            'day_id': row.day_id,
+            'speciesCount': row.speciescount
+        })
+
+    # for row in res:
+    #     response.append({"id" :row[0], 
+    #         "startTime":row[1],
+    #         "endTime":row[2], 
+    #         "observationType":row[3],
+    #         "location":row[4],
+    #         "day_id":row[5],
+    #         "speciesCount":row[6]})
   
     return jsonify(response)
 
@@ -109,8 +134,8 @@ def getDaysObservationPeriods(day_id):
     for obsPeriod in daysObservationPeriods:
         ret.append({
             'id': obsPeriod.id,
-            'startTime': obsPeriod.startTime,
-            'endTime': obsPeriod.endTime,
+            'startTime': obsPeriod.start_time,
+            'endTime': obsPeriod.end_time,
             'observationType': getTypeNameById(obsPeriod.type_id),
             'location': getLocationName(obsPeriod.location_id),
             'day_id': obsPeriod.day_id
@@ -131,8 +156,8 @@ def getDaysObservationPeriodsStandard(day_id):
         if obspType == "Vakio":
             ret.append({
                 'id': obsPeriod.id,
-                'startTime': obsPeriod.startTime,
-                'endTime': obsPeriod.endTime,
+                'startTime': obsPeriod.start_time,
+                'endTime': obsPeriod.end_time,
                 'observationType': obspType,
                 'location': getLocationName(obsPeriod.location_id),
                 'day_id': obsPeriod.day_id
@@ -152,8 +177,8 @@ def getDaysObservationPeriodsOther(day_id):
         if obspType != "Vakio":
             ret.append({
                 'id': obsPeriod.id,
-                'startTime': obsPeriod.startTime,
-                'endTime': obsPeriod.endTime,
+                'startTime': obsPeriod.start_time,
+                'endTime': obsPeriod.end_time,
                 'observationType': obspType,
                 'location': getLocationName(obsPeriod.location_id),
                 'day_id': obsPeriod.day_id
