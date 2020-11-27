@@ -478,6 +478,10 @@ describe("Randomized tests (fuzzing)", () => {
     return lineOfText;
   };
 
+  const getRandomBypassSide = () => {
+    return getRandomBypassSideOrNot() || (Math.random() < 0.5 ? "+" : "-");
+  };
+
   const makeValidMeatOfSubobservation = () => {
     let meat = "";
     let nextAge;
@@ -497,7 +501,7 @@ describe("Randomized tests (fuzzing)", () => {
     return meat;
   };
 
-  const makeValidSubObservation = () => {
+  const withValidSubObservation = () => {
     let subObservation = makeValidMeatOfSubobservation();
     subObservation += getRandomLineBreakOrNot();
     subObservation += getRandomDirectionOrNot();
@@ -506,12 +510,46 @@ describe("Randomized tests (fuzzing)", () => {
     return subObservation;
   };
 
-  const makeValidObservation = () => {
+  const withBypassSideWrong = () => {
+    let subObservation = "";
+    if (Math.random() < 0.5) {
+      subObservation += getRandomBypassSide();
+      subObservation += getRandomLineBreakOrNot();
+      subObservation += makeValidMeatOfSubobservation();
+    } else {
+      subObservation += makeValidMeatOfSubobservation();
+      subObservation += getRandomLineBreakOrNot();
+      subObservation += getRandomBypassSide();
+    }
+    subObservation += getRandomLineBreakOrNot();
+    subObservation += getRandomDirection();
+    return subObservation;
+  };
+
+  const withDirectionWrong = () => {
+    let subObservation = "";
+    if (Math.random() < 0.5) {
+      subObservation += getRandomDirection();
+      subObservation += getRandomLineBreakOrNot();
+      subObservation += makeValidMeatOfSubobservation();
+      subObservation += getRandomLineBreakOrNot();
+      subObservation += getRandomBypassSide();
+    } else {
+      subObservation += makeValidMeatOfSubobservation();
+      subObservation += getRandomLineBreakOrNot();
+      subObservation += getRandomBypassSide();
+      subObservation += getRandomLineBreakOrNot();
+      subObservation += getRandomDirection();
+    }
+    return subObservation;
+  };
+
+  const makeValidObservation = (generateSubobservation) => {
     let observation = "";
     let subobservation;
     let nextComma;
     for (let i = 0; ; ++i) {
-      subobservation = makeValidSubObservation();
+      subobservation = generateSubobservation();
       nextComma = getCommaOrNot();
       observation += subobservation;
       if (nextComma && i < 2) observation += nextComma;
@@ -520,11 +558,11 @@ describe("Randomized tests (fuzzing)", () => {
     return observation;
   };
 
-  const makeValidLine = () => {
+  const makeValidLine = (subobservationGenerator) => {
     let lineOfText = "";
     lineOfText += getRandomBird();
     lineOfText += getRandomLineBreaks();
-    lineOfText += makeValidObservation();
+    lineOfText += makeValidObservation(subobservationGenerator);
     return lineOfText;
   };
 
@@ -534,7 +572,7 @@ describe("Randomized tests (fuzzing)", () => {
 
   test("Random battery w/ 1 000 valid strings", () => {
     for (let i = 0; i < 1000; ++i) {
-      const lineOfText = makeValidLine();
+      const lineOfText = makeValidLine(withValidSubObservation);
       expect(() => {
         parse(lineOfText);
       }).not.toThrow();
@@ -547,10 +585,30 @@ describe("Randomized tests (fuzzing)", () => {
   */
   test.skip("Random battery w/ 1 000 000 valid strings", () => {
     for (let i = 0; i < 1000000; ++i) {
-      const line = makeValidLine();
+      const line = makeValidLine(withValidSubObservation);
       expect(() => {
         parse(line);
       }).not.toThrow();
+      resetAll();
+    }
+  });
+
+  test("Random battery w/ 1 000 wrong bypassSides", () => {
+    for (let i = 0; i < 1000; ++i) {
+      const line = makeValidLine(withBypassSideWrong);
+      expect(() => {
+        parse(line);
+      }).toThrow();
+      resetAll();
+    }
+  });
+
+  test("Random battery w/ 1 000 wrong directions", () => {
+    for (let i = 0; i < 1000; ++i) {
+      const line = makeValidLine(withDirectionWrong);
+      expect(() => {
+        parse(line);
+      }).toThrow();
       resetAll();
     }
   });

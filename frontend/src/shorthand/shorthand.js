@@ -198,14 +198,11 @@ const acceptableAroundIlmansuuntaHeuristic = (index, line) => {
   if (index === line.length - 1) return true;
   if (index === 0) return false;
   if (acceptableIkaChar.has(line[index+1])) {
-    return line[index+1] === "s" || line[index+1] === "e";
+    return charIsProbablyDirection(line[index+1]);
   }
-  let i = index+1;
-  while (line[Number(i)] === " " && i < line.length) {
-    ++i;
-  }
-  if (line[Number(i)] === ",") return true;
-  if (isNumeric(line[Number(i)])) throw new Error("suunnan jälkeen tulee numero");
+  const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
+  if (nextNonSpaceyChar === ",") return true;
+  if (isNumeric(nextNonSpaceyChar)) throw new Error("suunnan jälkeen tulee numero");
   return true;
 };
 
@@ -255,11 +252,116 @@ const fillSukupuoliBucketsNotSlash = () => {
 };
 
 const isTooManyCommasHeuristic = (index, line) => {
-  let i = index+1;
-  while (line[Number(i)] === " " && i < line.length) {
-    ++i;
+  const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
+  return nextNonSpaceyChar === ",";
+};
+
+const bypassSideIsLast = (index, line) => {
+  if (index === line.length - 1) return true;
+  const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
+  return nextNonSpaceyChar === "," || nextNonSpaceyChar === "+" || nextNonSpaceyChar === "-";
+};
+
+const afterMinusThereIsPlus = (char, line, index) => {
+  return index < line.length - 1 && char === "-" && line[index + 1] === "+";
+};
+
+const charIsDefinitelyDirection = (char) => {
+  return acceptlableIlmansuuntaChar.has(char) && !acceptableIkaChar.has(char);
+};
+
+const charIsProbablyDirection = (char) => {
+  return char === "s" || char === "e";
+};
+
+const charIsMostLikelyDirection = (char) => {
+  return charIsProbablyDirection(char) || charIsDefinitelyDirection(char);
+};
+
+const isDirection = (char, line, index) => {
+  return charIsMostLikelyDirection(char) && acceptableAroundIlmansuuntaHeuristic(index, line);
+};
+
+const handleDefaultAlpha = (char, line, index) => {
+  if (lajinimiNotSet()) {
+    lajinimi += char;
+  } else if (lisatietobucketIsOpen) {
+    lisatieto += char;
+  } else if (isDirection(char, line, index)) {
+    ilmansuunta += char;
+  } else if (acceptableIkaChar.has(char)) {
+    ika += char;
+  } else {
+    throw new Error(`tuntematon merkki: ${char}`);
   }
-  return line[Number(i)] === ",";
+};
+
+const handleSpaceySymbol = () => {
+  firstSpaceOfLineBreakOrSomeSuchEncountered = true;
+};
+
+const handleNumeric = (char) => {
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  yksilomaara += char;
+};
+
+const handleTimeSymbol = () => {
+  throw new Error("ylimääräinen piste tai kaksoispiste");
+};
+
+const handleBracketOpen = () => {
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  openLisatietoBucket();
+};
+
+const handleBracketClose = () => {
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  closeLisatietoBucket();
+};
+
+const handleComma = (line, index) => {
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  if (isTooManyCommasHeuristic(index, line))
+    throw new Error("ylimääräisiä pilkkuja");
+  constructOsahavainto();
+};
+
+const handleHipsu = (char) => {
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  ika += char;
+};
+
+const handlePlusMinus = (char, line, index) => {
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  if (afterMinusThereIsPlus(char, line, index)) {
+    throw new Error("tuntematon ohituspuoli");
+  }
+  if (!bypassSideIsLast(index, line)) {
+    throw new Error("ohituspuolen pitää olla viimeisenä");
+  }
+  ohituspuoli += char;
+};
+
+const handleSlash = () => {
+  if (++slashes > 2) {
+    throw new Error("ylimääräisiä kauttaviivoja");
+  }
+  if (lajinimiNotSet()) {
+    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+  }
+  fillSukupuoliBucketsSlash();
 };
 
 /**
@@ -271,88 +373,37 @@ const isTooManyCommasHeuristic = (index, line) => {
 const giveMeABucket = (char, line, index) => {
   switch(char) {
     default:
-      if (lajinimiNotSet()) {
-        lajinimi += char;
-      } else if (lisatietobucketIsOpen) {
-        lisatieto += char;
-      } else if (((acceptlableIlmansuuntaChar.has(char) && !acceptableIkaChar.has(char))
-        || (acceptlableIlmansuuntaChar.has(char) && (char === "s" || char === "e")))
-        && acceptableAroundIlmansuuntaHeuristic(index, line)) {
-        ilmansuunta += char;
-      } else if (acceptableIkaChar.has(char)) {
-        ika += char;
-      } else {
-        throw new Error(`tuntematon merkki: ${char}`);
-      }
+      handleDefaultAlpha(char, line, index);
       break;
     case " ":case "\t":case "\n":
-      firstSpaceOfLineBreakOrSomeSuchEncountered = true;
+      handleSpaceySymbol();
       break;
     case "0":case "1":case "2":
     case "3":case "4":case "5":
     case "6":case "7":case "8":
     case "9":
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      yksilomaara += char;
+      handleNumeric(char);
       break;
     case ".":case ":":
-      // ignore (although time should not be on the line)
+      handleTimeSymbol();
       break;
     case "(":
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      openLisatietoBucket();
+      handleBracketOpen();
       break;
     case ")":
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      closeLisatietoBucket();
+      handleBracketClose();
       break;
     case ",":
-      //osahavainto
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      if (isTooManyCommasHeuristic(index, line))
-        throw new Error("ylimääräisiä pilkkuja");
-      constructOsahavainto();
+      handleComma(line, index);
       break;
     case "'":case "\"":
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      ika += char;
+      handleHipsu(char);
       break;
     case "+":case "-":
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      if (index < line.length - 1
-          && char === "-" && line[index + 1] === "+") {
-        throw new Error("tuntematon ohituspuoli");
-      }
-      if (index < line.length - 1
-          && line[index + 1] !== " "
-          && line[index + 1] !== ","
-          && line[index + 1] !== "\n"
-          && line[index + 1] !== "+"
-          && line[index + 1] !== "-") {
-        throw new Error("ohituspuolen pitää olla viimeisenä");
-      }
-      ohituspuoli += char;
+      handlePlusMinus(char, line, index);
       break;
     case "/":
-      if (++slashes > 2) {
-        throw new Error("ylimääräisiä kauttaviivoja");
-      }
-      if (lajinimiNotSet()) {
-        throw new Error("lajinimen jälkeen puuttuu välilyönti");
-      }
-      fillSukupuoliBucketsSlash();
+      handleSlash();
       break;
   }
   if (ikaConstructed()) {
