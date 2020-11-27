@@ -52,59 +52,73 @@ def getShorthandsForEditing(day_id):
     res = db.engine.execute(stmt)
 
     response = []
-    observationperiod = []
-    shorthands = []
-    observationIds = []
+
+    # for row in res:
+    #     response.append({'row': str(row)})
+
+    # return jsonify(response)
+
+
 
     index = 0
-    formerObsPeriodId = 0
-    currentObsPeriodId = 0
-
-    # for row in res:
-    #     print("obsId = " + str(row.observation_id))
-    #     if len(response) == 0 or response[-1].get('obsperiod_id') != row.observationperiod_id:
-    #             #addObservationId(observationIds, row)
-    #             addShorthand(shorthands, observationIds, row)
-    #             response.append({
-    #                 'obsperiod_id': row.observationperiod_id,
-    #                 'obserperiod_startTime': row.start_time,
-    #                 'obsperiod_endTime': row.end_time,
-    #                 'shorthands': shorthands.copy()
-    #             })
-    #             shorthands.clear()
-    #             #observationIds.clear()
-
-    #     else:
-    #         #addObservationId(observationIds, row)
-    #         addShorthand(shorthands, observationIds, row)
-    # for row in res:
-    #     #response.append({'row': str(row)})
-    #     if len(response) == 0 or response[-1].get('obsperiod_id') != row.observationperiod_id:
-    #         response.append({
-    #             'obsperiod_id': row.observationperiod_id,
-    #             'obserperiod_startTime': row.start_time,
-    #             'obsperiod_endTime': row.end_time,
-    #             'shorthands': shorthands.copy()
-    #         })
-    #         shorthands.clear()
-    #         addShorthand(shorthands, observationIds, row)
-    #     else:
-    #         addShorthand(shorthands, observationIds, row)
-
-    return jsonify(response)
+    shorthandId = 0
+    obsPeriodId = 0
+    startTime = ''
+    endTime = ''
+    shorthandText = ''
+    observationList = []
+    shorthandList = []
+    obsPeriodList = []
 
 
-# def addShorthand(shorthands, observationIds, row):
-#    # if len(shorthands) == 0 or shorthands[-1].get('shorthand_id') != row.shorthand_id:
-#     shorthands.append({
-#         'shorthand_id': row.shorthand_id,
-#         'shorthand_text': row.shorthandrow,
-#     })
 
-# def addObservationId(observationIds, row):
-#     observationIds.append({
-#         'observation_id': row.observation_id
-#     }) 
+    for row in res:
+        if index == 0:
+            shorthandId = row.shorthand_id
+            obsPeriodId = row.observationperiod_id
+            startTime = row.start_time
+            endTime = row.end_time
+            shorthandText = row.shorthandrow
+        index = index + 1
+        if row.shorthand_id != shorthandId:
+            shorthandList.append({
+                'shorthand_id': shorthandId,
+                'shorthand_text': shorthandText,
+                'observations': observationList.copy()
+                 })
+            observationList.clear()
+            shorthandId = row.shorthand_id
+        if row.observationperiod_id != obsPeriodId:
+            obsPeriodList.append({
+                'obsPeriodId': obsPeriodId,
+                'startTime': startTime,
+                'endTime': endTime,
+                'shorthands': shorthandList.copy()
+            })
+            shorthandList.clear()
+            obsPeriodId = row.observationperiod_id
+        
+        observationList.append({'id': row.observation_id})
+        startTime = row.start_time
+        endTime = row.end_time
+        shorthandText = row.shorthandrow
+    
+    shorthandList.append({
+        'shorthand_id': shorthandId,
+        'shorthand_text': shorthandText,
+        'observations': observationList.copy()
+        })
+    observationList.clear()
+
+    obsPeriodList.append({
+        'obsPeriodId': obsPeriodId,
+        'startTime': startTime,
+        'endTime': endTime,
+        'shorthands': shorthandList.copy()
+        })
+    shorthandList.clear()
+
+    return jsonify(obsPeriodList)
 
 @bp.route('/api/getShorthand/<shorthand_id>', methods=["GET"])
 @login_required
