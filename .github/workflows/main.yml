@@ -71,18 +71,18 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile -t test
         
-  deploy:
-    needs: [pytest, frontend-test, docker-build]
-    runs-on: ubuntu-latest
+  #deploy:
+    #needs: [pytest, frontend-test, docker-build]
+    #runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+    #steps:
+      #- uses: actions/checkout@v2
         
-      - name: Invoke deployment hook
-        uses: distributhor/workflow-webhook@v1
-        env:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+      #- name: Invoke deployment hook
+        #uses: distributhor/workflow-webhook@v1
+        #env:
+          #webhook_url: ${{ secrets.WEBHOOK_URL }}
+          #webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
 
 
         
