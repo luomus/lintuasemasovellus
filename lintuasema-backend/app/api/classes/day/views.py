@@ -83,27 +83,32 @@ def search_dayinfo(date, observatory):
 @login_required
 def get_latest_days(observatory):
 
-    observatory_id = getObservatoryId(observatory)
-    stmt = text(" SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
-                " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
-                " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
-                " WHERE Day.observatory_id = :observatory_id"
-                " GROUP BY Day.day"
-                " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
+    if observatory == '[object Object]':
+        #Jos lintuasemaa ei ole valittu, frontista tulee merkkijono '[object Object]' ja kysely menee rikki
+        response = []
+        return jsonify(response)
+    else:
+        observatory_id = getObservatoryId(observatory)
+        stmt = text(" SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
+                    " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
+                    " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
+                    " WHERE Day.observatory_id = :observatory_id"
+                    " GROUP BY Day.day"
+                    " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
 
-    res = db.engine.execute(stmt)
+        res = db.engine.execute(stmt)
 
-    response = []
-    i = 0
-    for row in res:
-        if i == 5:
-            break
-        i = i + 1
-        response.append({"day" :row[0], 
-            "speciesCount":row[1]})
-        
+        response = []
+        i = 0
+        for row in res:
+            if i == 5:
+                break
+            i = i + 1
+            response.append({"day" :row[0], 
+                "speciesCount":row[1]})
+            
 
-    return jsonify(response)
+        return jsonify(response)
 
 
    

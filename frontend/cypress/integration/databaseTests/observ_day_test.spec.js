@@ -82,7 +82,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#select-observatory").click();
     cy.contains("Hangon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
-    cy.contains("Valittu asema");
+    cy.contains("Hangon Lintuasema");
 
   });
 
@@ -119,6 +119,7 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
+    cy.wait(1000);
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
@@ -144,6 +145,8 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
+    cy.get("#periodsButton").click();
+    cy.wait(5000);
     cy.contains("Bunkkeri");
     cy.contains("10:00");
   });

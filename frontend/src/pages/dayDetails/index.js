@@ -208,10 +208,10 @@ const DayDetails = () => {
 
           <Grid item xs={12}>
             <Box display="flex" justifyContent="flex-end">
-              <Button className={classes.button} color="primary" variant="contained" disabled={mode==="table1"} onClick={() => setMode("table1")}>
+              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode==="table1"} onClick={() => setMode("table1")}>
                 {t("summary")}
               </Button>
-              <Button className={classes.button} color="primary" variant="contained" disabled={mode==="table2"} onClick={() => setMode("table2")}>
+              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode==="table2"} onClick={() => setMode("table2")}>
                 {t("obsPeriods")}
               </Button>
             </Box>
