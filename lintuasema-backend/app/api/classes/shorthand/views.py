@@ -53,13 +53,6 @@ def getShorthandsForEditing(day_id):
 
     response = []
 
-    # for row in res:
-    #     response.append({'row': str(row)})
-
-    # return jsonify(response)
-
-
-
     index = 0
     shorthandId = 0
     obsPeriodId = 0
@@ -70,8 +63,6 @@ def getShorthandsForEditing(day_id):
     shorthandList = []
     obsPeriodList = []
 
-
-
     for row in res:
         if index == 0:
             shorthandId = row.shorthand_id
@@ -81,20 +72,11 @@ def getShorthandsForEditing(day_id):
             shorthandText = row.shorthandrow
         index = index + 1
         if row.shorthand_id != shorthandId:
-            shorthandList.append({
-                'shorthand_id': shorthandId,
-                'shorthand_text': shorthandText,
-                'observations': observationList.copy()
-                 })
+            addShorthand(shorthandList, shorthandId, shorthandText, observationList)
             observationList.clear()
             shorthandId = row.shorthand_id
         if row.observationperiod_id != obsPeriodId:
-            obsPeriodList.append({
-                'obsPeriodId': obsPeriodId,
-                'startTime': startTime,
-                'endTime': endTime,
-                'shorthands': shorthandList.copy()
-            })
+            addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
             shorthandList.clear()
             obsPeriodId = row.observationperiod_id
         
@@ -103,22 +85,28 @@ def getShorthandsForEditing(day_id):
         endTime = row.end_time
         shorthandText = row.shorthandrow
     
-    shorthandList.append({
-        'shorthand_id': shorthandId,
-        'shorthand_text': shorthandText,
-        'observations': observationList.copy()
-        })
+    addShorthand(shorthandList, shorthandId, shorthandText, observationList)
     observationList.clear()
 
-    obsPeriodList.append({
-        'obsPeriodId': obsPeriodId,
-        'startTime': startTime,
-        'endTime': endTime,
-        'shorthands': shorthandList.copy()
-        })
+    addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
     shorthandList.clear()
 
     return jsonify(obsPeriodList)
+
+def addShorthand(shorthandlist, id, text, observations):
+    shorthandlist.append({
+        'shorthand_id': id,
+        'shorthand_text': text,
+        'observations': observations.copy()
+        })
+
+def addObsPeriod(obsperiodlist, id, start, end, shorthands):
+    obsperiodlist.append({
+        'obsPeriodId': id,
+        'startTime': start,
+        'endTime': end,
+        'shorthands': shorthands.copy()
+        })
 
 @bp.route('/api/getShorthand/<shorthand_id>', methods=["GET"])
 @login_required
