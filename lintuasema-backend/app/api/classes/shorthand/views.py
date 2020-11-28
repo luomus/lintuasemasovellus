@@ -5,6 +5,7 @@ from flask_login import login_required
 from app.api.classes.shorthand.models import Shorthand
 from app.api.classes.observation.models import Observation
 from app.api.classes.observationperiod.models import Observationperiod
+from app.api.classes.shorthand.services import deleteShorthand
 
 from app.api import bp
 from app.db import db
@@ -116,12 +117,10 @@ def getShorthandById(shorthand_id):
     ret.append({ 'id': shorthand.id, 'row': shorthand.shorthandrow, 'observationperiod_id': shorthand.observationperiod_id})
     return jsonify(ret)
 
-@bp.route("/api/deleteShorthand", methods=["DELETE"])
+@bp.route("/api/deleteShorthand", methods=["POST"])
 @login_required
 def shorthand_delete():
     req = request.get_json()
     shorthand_id = req['shorthand_id']
-    Shorthand.query.filter_by(id=shorthand_id).delete()
-    #db.session.query(Shorthand).filter(Shorthand.id == shorthand_id).delete()
-    db.session.commit()
+    deleteShorthand(shorthand_id)
     return jsonify(req)
