@@ -58,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 let timeout = null;
 
+let sanitizedShorthand = null;
+
 let widgets = new Set();
 
 const StyledTableCell = withStyles(() => ({
@@ -164,7 +166,7 @@ export const HomePage = () => {
   });
 
   const sendData = async () => {
-    const rows = shorthand.split("\n");
+    const rows = sanitizedShorthand;
     try {
       await sendDay({
         day: formatDate(day),
@@ -195,7 +197,7 @@ export const HomePage = () => {
   }
 
   const errorCheckingLogic = async (editor, data, value) => {
-    loopThroughCheckForErrors(value);
+    sanitizedShorthand = loopThroughCheckForErrors(value);
     for (const widget of widgets) {
       editor.removeLineWidget(widget);
     }
@@ -212,7 +214,6 @@ export const HomePage = () => {
         coverGutter: false, noHScroll: true
       }));
     }
-
     if (errors.length === 0) setCodeMirrorHasErrors(false);
     else setCodeMirrorHasErrors(true);
     resetErrors();

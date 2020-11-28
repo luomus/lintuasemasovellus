@@ -69,13 +69,14 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
   const lines = sanitize(shorthandRawText);
   if (typeof lines === "string") {
     errors.push(lines);
-    return;
+    return null;
   }
   for (let i = 0; i < lines.length; i++) {
     if (!isTime(lines[Number(i)])) {
       checkWholeInputLine(i, lines[Number(i)]);
     }
   }
+  return lines;
 };
 
 export const getErrors = () => {

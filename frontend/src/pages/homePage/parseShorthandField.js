@@ -47,36 +47,39 @@ let shorthand = {
   observationperiod_id: 0
 };
 
-let directions = new Map();
-directions.set("N", "0");
-directions.set("NNE", "22,5");
-directions.set("NE", "45");
-directions.set("ENE", "67,5");
-directions.set("E", "90");
-directions.set("ESE", "112,5");
-directions.set("SE", "135");
-directions.set("SSE", "157,5");
-directions.set("S", "180");
-directions.set("SSW", "202,5");
-directions.set("SW", "225");
-directions.set("WSW", "247,5");
-directions.set("W", "270");
-directions.set("WNW", "292,5");
-directions.set("NW", "315");
-directions.set("NNW", "337,5");
-directions.set("", "");
+const directions = new Map([
+  ["N", "0"],
+  ["NNE", "22,5"],
+  ["NE", "45"],
+  ["ENE", "67,5"],
+  ["E", "90"],
+  ["ESE", "112,5"],
+  ["SE", "135"],
+  ["SSE", "157,5"],
+  ["S", "180"],
+  ["SSW", "202,5"],
+  ["SW", "225"],
+  ["WSW", "247,5"],
+  ["W", "270"],
+  ["WNW", "292,5"],
+  ["NW", "315"],
+  ["NNW", "337,5"],
+  ["", ""]
+]);
 
-let bypass = new Map();
-bypass.set("----", "-4");
-bypass.set("---", "-3");
-bypass.set("--", "-2");
-bypass.set("-", "-1");
-bypass.set("+-", "0");
-bypass.set("+", "1");
-bypass.set("++", "2");
-bypass.set("+++", "3");
-bypass.set("++++", "4");
-bypass.set("", "");
+const bypass = new Map([
+  ["----", "-4"],
+  ["---", "-3"],
+  ["--", "-2"],
+  ["-", "-1"],
+  ["+-", "0"],
+  ["+", "1"],
+  ["++", "2"],
+  ["+++", "3"],
+  ["++++", "4"],
+  ["", ""]
+]);
+
 
 
 const isTime = (row) => {
@@ -143,6 +146,21 @@ const toNum = (field) => {
       : 0;
 };
 
+const obsCountersToNum = () => {
+  toNum("adultUnknownCount");
+  toNum("adultFemaleCount");
+  toNum("adultMaleCount");
+  toNum("juvenileUnknownCount");
+  toNum("juvenileFemaleCount");
+  toNum("juvenileMaleCount");
+  toNum("subadultUnknownCount");
+  toNum("subadultFemaleCount");
+  toNum("subadultMaleCount");
+  toNum("unknownUnknownCount");
+  toNum("unknownFemaleCount");
+  toNum("unknownMaleCount");
+};
+
 export const loopThroughObservations = async (shorthandRows) => {
   let startTimeEncountered = false;
   let i = 0;
@@ -162,18 +180,7 @@ export const loopThroughObservations = async (shorthandRows) => {
       for (const sub of parsed.osahavainnot) {
         observation = sub;
         observation.species = parsed.species;
-        toNum("adultUnknownCount");
-        toNum("adultFemaleCount");
-        toNum("adultMaleCount");
-        toNum("juvenileUnknownCount");
-        toNum("juvenileFemaleCount");
-        toNum("juvenileMaleCount");
-        toNum("subadultUnknownCount");
-        toNum("subadultFemaleCount");
-        toNum("subadultMaleCount");
-        toNum("unknownUnknownCount");
-        toNum("unknownFemaleCount");
-        toNum("unknownMaleCount");
+        obsCountersToNum();
         await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id);
       }
       resetAll();
