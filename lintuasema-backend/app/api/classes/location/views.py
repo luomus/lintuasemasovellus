@@ -7,8 +7,7 @@ from app.api.classes.observatory.models import Observatory
 from app.api.classes.type.models import Type
 from app.api.classes.observatory.services import getAll, getObservatoryId
 
-
-from app.api.classes.location.services import getLocationsAndTypes
+from app.api.classes.location.services import getLocationsAndTypes, getAllLocations, editLocation
 
 from app.api import bp
 from app.db import db
@@ -32,9 +31,7 @@ def add_location():
 @bp.route('/api/getLocationsAndTypes/<observatory_name>', methods=['GET'])
 #@login_required
 def list_locations(observatory_name):
-
     res = getLocationsAndTypes(observatory_name)
-
     return res
 
 
@@ -42,24 +39,15 @@ def list_locations(observatory_name):
 #@login_required
 def get_all_locations():
 
-    obs = "not found"
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    filename = os.path.join(SITE_ROOT, '../../..', 'locations.json')
-    with open(filename) as json_file:
-        data = json.load(json_file)
-        obs = data["observatories"]
-    
-    return jsonify(obs)
+    res =getAllLocations()
+
+    return res
 
 
 #alustava route lokaation nimen muokkaamiseen
 @bp.route("/api/edit/<observatoryname>/<locationname>", methods=["POST"])
 @login_required
 def edit_location(observatoryname, locationname):
-    req = request.get_json()
-    newLocName = req['editedname']
-    obs = db.session.query(Observatory).filter(name = observatoryname).first()
-    location = db.session.query(Location).filter(observatory_id = obs.id, name = locationname).first()
-    location.name = newLocName    
-    db.session.commit()
-    return req    
+
+    req = editLocation(observatoryname, locationname)
+    return req
