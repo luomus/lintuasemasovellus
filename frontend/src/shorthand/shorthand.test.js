@@ -3,7 +3,14 @@ import {
   resetAll
 } from "./shorthand";
 
-import birds from "./birds.json";
+
+import {
+  makeValidLine,
+  withValidSubObservation,
+  withBypassSideWrong,
+  withDirectionWrong
+} from "./testHelpers";
+
 
 describe("Test algorithm with all the cases mentioned in the customer's docs", () => {
 
@@ -400,133 +407,6 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
 describe("Randomized tests (fuzzing)", () => {
 
-  const spaceySymbols = [" ", "\t", "\n"];
-
-  const ages = ["'", "\"", "juv", "ad", "subad"];
-
-  const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
-    "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"];
-
-
-  // we don't care about slashes in the objects' keys:
-  const birdArr = Object.keys(birds)
-    .reduce((acc, bird) => {
-      bird.includes("/")
-        ? acc = acc.concat(bird.split("/"))
-        : acc.push(bird);
-      return acc;
-    },
-    []);
-
-  const randomIndex = (len) => {
-    return Math.floor(Math.random() * len);
-  };
-
-  const getRandomBird = () => {
-    return birdArr[Number(randomIndex(birdArr.length))];
-  };
-
-  const getRandomLineBreaks = () => {
-    let spaceyStuff = "";
-    do spaceyStuff += spaceySymbols[Number(randomIndex(spaceySymbols.length))];
-    while(Math.random() > 0.8);
-    return spaceyStuff;
-  };
-
-  const getRandomAge = () => {
-    return ages[Number(randomIndex(ages.length))];
-  };
-
-  const getRandomAgeOrNot = () => {
-    return Math.random() < 0.5 ? "" : getRandomAge();
-  };
-
-  const getRandomLineBreakOrNot = () => {
-    return Math.random() < 0.5 ? "" : getRandomLineBreaks();
-  };
-
-  const getNextSlashOrNot = () => {
-    return Math.random() < 0.5 ? "" : "/";
-  };
-
-  const getRandomNumber = () => {
-    return Math.floor(Math.random() * 10000) + 1;
-  };
-
-  const getCommaOrNot = () => {
-    return Math.random() < 0.5 ? "" : ",";
-  };
-
-  const getRandomDirection = () => {
-    return directions[Number(randomIndex(directions.length))];
-  };
-
-  const getRandomDirectionOrNot = () => {
-    return Math.random() < 0.5 ? "" : getRandomDirection();
-  };
-
-  const getRandomBypassSideOrNot = () => {
-    let lineOfText = "";
-    let rounds = Math.floor(Math.random() * 4);//0,1,2,3
-    for (let i = 0; i < rounds; ++i) {
-      lineOfText += "+";
-    }
-    rounds = Math.floor(Math.random() * 4);//0,1,2,3
-    for (let i = 0; i < rounds; ++i) {
-      lineOfText += "-";
-    }
-    return lineOfText;
-  };
-
-  const makeValidMeatOfSubobservation = () => {
-    let meat = "";
-    let nextAge;
-    let nextSlash;
-    let nextNumber;
-    for (let i = 0; ; ++i) {
-      nextNumber = getRandomNumber();
-      nextAge = getRandomAgeOrNot();
-      nextSlash = getNextSlashOrNot();
-      meat += nextNumber;
-      meat += getRandomLineBreakOrNot();
-      meat += nextAge;
-      meat += getRandomLineBreakOrNot();
-      if (nextSlash && i < 2) meat += nextSlash;
-      else break;
-    }
-    return meat;
-  };
-
-  const makeValidSubObservation = () => {
-    let subObservation = makeValidMeatOfSubobservation();
-    subObservation += getRandomLineBreakOrNot();
-    subObservation += getRandomDirectionOrNot();
-    subObservation += getRandomLineBreakOrNot();
-    subObservation += getRandomBypassSideOrNot();
-    return subObservation;
-  };
-
-  const makeValidObservation = () => {
-    let observation = "";
-    let subobservation;
-    let nextComma;
-    for (let i = 0; ; ++i) {
-      subobservation = makeValidSubObservation();
-      nextComma = getCommaOrNot();
-      observation += subobservation;
-      if (nextComma && i < 2) observation += nextComma;
-      else break;
-    }
-    return observation;
-  };
-
-  const makeValidLine = () => {
-    let lineOfText = "";
-    lineOfText += getRandomBird();
-    lineOfText += getRandomLineBreaks();
-    lineOfText += makeValidObservation();
-    return lineOfText;
-  };
 
   beforeEach(() => {
     resetAll();
@@ -534,7 +414,7 @@ describe("Randomized tests (fuzzing)", () => {
 
   test("Random battery w/ 1 000 valid strings", () => {
     for (let i = 0; i < 1000; ++i) {
-      const lineOfText = makeValidLine();
+      const lineOfText = makeValidLine(withValidSubObservation);
       expect(() => {
         parse(lineOfText);
       }).not.toThrow();
@@ -547,10 +427,30 @@ describe("Randomized tests (fuzzing)", () => {
   */
   test.skip("Random battery w/ 1 000 000 valid strings", () => {
     for (let i = 0; i < 1000000; ++i) {
-      const line = makeValidLine();
+      const line = makeValidLine(withValidSubObservation);
       expect(() => {
         parse(line);
       }).not.toThrow();
+      resetAll();
+    }
+  });
+
+  test("Random battery w/ 1 000 wrong bypassSides", () => {
+    for (let i = 0; i < 1000; ++i) {
+      const line = makeValidLine(withBypassSideWrong);
+      expect(() => {
+        parse(line);
+      }).toThrow();
+      resetAll();
+    }
+  });
+
+  test("Random battery w/ 1 000 wrong directions", () => {
+    for (let i = 0; i < 1000; ++i) {
+      const line = makeValidLine(withDirectionWrong);
+      expect(() => {
+        parse(line);
+      }).toThrow();
       resetAll();
     }
   });
