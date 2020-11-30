@@ -4,7 +4,7 @@ from flask_login import login_required
 
 from app.api.classes.observation.models import Observation
 from app.api.classes.observationperiod.models import Observationperiod
-from app.api.classes.observation.services import parseCountString
+from app.api.classes.observation.services import parseCountString, addObservationToDb
 
 from app.api import bp
 from app.db import db
@@ -14,35 +14,12 @@ from sqlalchemy.sql import text
 @login_required
 def addObservation():
     req = request.get_json()
+    
+    addObservationToDb(req)
 
-    birdCount = req['adultUnknownCount'] + req['adultFemaleCount'] + req['adultMaleCount'] + req['juvenileUnknownCount'] + req['juvenileFemaleCount'] + req['juvenileMaleCount'] + req['subadultUnknownCount'] + req['subadultFemaleCount'] + req['subadultMaleCount'] + req['unknownUnknownCount'] + req['unknownFemaleCount'] + req['unknownMaleCount']
-
-    observation = Observation(species=req['species'],
-        adultUnknownCount=req['adultUnknownCount'],
-        adultFemaleCount=req['adultFemaleCount'],
-        adultMaleCount=req['adultMaleCount'],
-        juvenileUnknownCount=req['juvenileUnknownCount'],
-        juvenileFemaleCount=req['juvenileFemaleCount'],
-        juvenileMaleCount=req['juvenileMaleCount'],
-        subadultUnknownCount=req['subadultUnknownCount'],
-        subadultFemaleCount=req['subadultFemaleCount'],
-        subadultMaleCount=req['subadultMaleCount'],
-        unknownUnknownCount=req['unknownUnknownCount'],
-        unknownFemaleCount=req['unknownFemaleCount'],
-        unknownMaleCount=req['unknownMaleCount'],
-        total_count = birdCount,
-        direction=req['direction'],
-        bypassSide=req['bypassSide'],
-        notes=req['notes'],
-        observationperiod_id=req['observationperiod_id'],
-        shorthand_id=req['shorthand_id'])
-    db.session().add(observation)
-    #db.session().flush()
-    #db.session().refresh(observation)
-    db.session().commit()
-
-    #return jsonify({ 'id': observation.id })
     return jsonify(req)
+
+
 
 @bp.route('/api/getObservations', methods=["GET"])
 @login_required
