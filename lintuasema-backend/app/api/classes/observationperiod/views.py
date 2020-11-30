@@ -89,11 +89,34 @@ def getDaysObservationPeriods(day_id):
 
     response = []
 
+
     for row in res:
+
+        starthours = ""
+        startminutes = ""
+        endhours = ""
+        endminutes = ""
+
+        if isinstance(row.start_time, str):
+            startTimeArray = row.start_time.split(':')
+            starthours = startTimeArray[0][-2:]
+            startminutes = startTimeArray[1][0:2]
+            endTimeArray = row.end_time.split(':')
+            endhours = endTimeArray[0][-2:]
+            endminutes = endTimeArray[1][0:2]
+        else:
+            starthours = row.start_time.strftime('%H')
+            startminutes = row.start_time.strftime('%M')
+            endhours = row.end_time.strftime('%H')
+            endminutes = row.end_time.strftime('%M')
+
+        starttime = starthours + ':' + startminutes
+        endtime = endhours + ':' + endminutes
+
         response.append({
             'id': row.obsperiod_id,
-            'startTime': row.start_time,
-            'endTime': row.end_time,
+            'startTime': starttime,
+            'endTime': endtime,
             'observationType': row.typename,
             'location': row.locationname,
             'day_id': row.day_id,
@@ -103,24 +126,6 @@ def getDaysObservationPeriods(day_id):
     return jsonify(response)
 
 
-
-    type_id = getTypeIdByName(observationType)
-
-    console.log('Tyypin id: ', type_id)
-
-    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
-    ret = []
-    for obsPeriod in daysObservationPeriods:
-        ret.append({
-            'id': obsPeriod.id,
-            'startTime': obsPeriod.start_time,
-            'endTime': obsPeriod.end_time,
-            'observationType': getTypeNameById(obsPeriod.type_id),
-            'location': getLocationName(obsPeriod.location_id),
-            'day_id': obsPeriod.day_id
-        })
-
-    return jsonify(ret)
 
 
 @bp.route('/api/getDaysObservationPeriods/<day_id>/standard', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot

@@ -76,9 +76,6 @@ const DayDetails = () => {
     .find(d => d.day === day && d.observatory === stationName)
     .id;
 
-  console.log("OOOOOOOOOOOOOHHHHHHHHHH", day);
-
-
   const observersOnSubmit = (event) => {
     event.preventDefault();
     console.log(editedObservers);

@@ -37,17 +37,19 @@ const ObsPeriodTable = (props) => {
 
 
 
-  console.log("obsperiodtable obsperiods", obsPeriods);
-  console.log("summary", summary);
-  console.log("mode: " + mode);
 
   const [modalOpen, setModalOpen] = useState(false);
 
   const [obsPeriod, setObsPeriod] = useState({});
 
   const timeDifference = (time1, time2) => {
-    const ret = Date.parse(time1) - Date.parse(time2);
-    return ret;
+    const startTime = time1.split(":");
+    const endTime = time2.split(":");
+    const dateST = new Date(0,0,0,startTime[0], startTime[1]);
+    const dateET = new Date(0,0,0,endTime[0], endTime[1]);
+    const diff = dateET.getTime() - dateST.getTime();
+    console.log("diff:", diff);
+    return diff;
   };
 
   const msToTime = (ms) => {
@@ -56,11 +58,6 @@ const ObsPeriodTable = (props) => {
     var hrs = Math.floor(mins / 60);
     var mins2 = mins % 60;
     return hrs + "h " + mins2 + "min";
-  };
-
-  const formatTime = (time) => {
-    const ret = time.split(" ")[4].split(":");
-    return `${ret[0]}:${ret[1]}`;
   };
 
   const handleOpen = (obsPeriod) => {
@@ -175,14 +172,14 @@ const ObsPeriodTable = (props) => {
                     {s.location}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    {formatTime(s.startTime)}
+                    {s.startTime}
                     {console.log(s.startTime)}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    {formatTime(s.endTime)}
+                    {s.endTime}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    {msToTime(timeDifference(s.endTime, s.startTime))}
+                    {msToTime(timeDifference(s.startTime, s.endTime))}
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     {s.observationType}
