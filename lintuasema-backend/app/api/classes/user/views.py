@@ -46,6 +46,7 @@ def loginconfirm():
 
 @bp.route('/logout', methods=['POST', 'GET'])
 def logoutCleanup():
+    session.clear()
     session.pop('token', None)
     logout_user()
     return redirect('/')
@@ -69,15 +70,18 @@ def getcurrentUser():
     ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email})
     return jsonify(ret)
 
-
+# tarvitaan cypress testejä varten
 @bp.route('/testlogin', methods=['POST', 'GET'])
 def testloginconfirm():
-    session.permanent = False
+
     personToken = request.args.get('token')
 
-    userId = 'MA.3417'
+    if personToken != "MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw":
+        return redirect('/')
+
+    userId = 'asdf'
     name = 'Lintu Asema'
-    email = 'lintuasema@hotmail.com'
+    email = 'lintuasema@lintuasema.com'
 
     user = User.query.filter_by(userId=userId).first()
     if not user:
