@@ -1,4 +1,5 @@
 from app.api.classes.shorthand.models import Shorthand
+from app.api.classes.observation.services import deleteObservation
 
 from app.api import bp
 from app.db import db
@@ -7,3 +8,14 @@ def deleteShorthand(id):
     shorthand = Shorthand.query.get(shorthand_id)
     shorthand.is_deleted = 1
     db.session.commit()
+
+
+def editShorthand(shorthand_id):
+    shorthand=Shorthand.query.get(shorthand_id)
+    shorthand_new = Day(shorthandrow = new_row, observationperiod_id = shorthand.observationperiod_id)
+    shorthand.is_deleted = 1
+    deleteObservation(shorthand_id)
+    db.session().add(shorthand_new)
+    db.session().commit()
+    id = str(shorthand_new.id)
+    return id
