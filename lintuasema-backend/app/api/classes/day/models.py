@@ -17,7 +17,3 @@ class Day(Base):
         self.comment=comment
         self.observers=observers
         self.observatory_id=observatory_id
-       
-    
-   
-    

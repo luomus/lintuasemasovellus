@@ -7,6 +7,9 @@ from app.api.classes.observatory.models import Observatory
 from app.api.classes.type.models import Type
 from app.api.classes.observatory.services import getAll, getObservatoryId
 
+
+from app.api.classes.location.services import getLocationsAndTypes
+
 from app.api import bp
 from app.db import db
 
@@ -30,16 +33,9 @@ def add_location():
 #@login_required
 def list_locations(observatory_name):
 
-    obs = "not found"
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    filename = os.path.join(SITE_ROOT, '../../..', 'locations.json')
-    with open(filename) as json_file:
-        data = json.load(json_file)
-        for o in data["observatories"]:
-            if o["observatory"] == observatory_name:
-                obs = o
-    
-    return jsonify(obs)
+    res = getLocationsAndTypes(observatory_name)
+
+    return res
 
 
 @bp.route('/api/getLocations/', methods=['GET'])
