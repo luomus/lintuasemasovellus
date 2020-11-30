@@ -31,4 +31,7 @@ def parseCountString(obs):
         countString = countString + str(obs.unknownMaleCount) + " koirasta (tunt. ikä), "
     countString = countString[0:(len(countString) - 2)]
     return countString
-    
+
+def deleteObservation(shorthand_id):
+    observation = Observation.query.filter_by(shorthand_id).first()
+    observation.is_deleted = 1
