@@ -3,7 +3,7 @@ from app.api.models import Base
   
 class Day(Base):
 
-    day=db.Column(db.String(144), nullable=False)
+    day=db.Column(db.DateTime, nullable=False)
     comment=db.Column(db.String(1000), nullable=True)
     observers=db.Column(db.String(200), nullable=False)
     

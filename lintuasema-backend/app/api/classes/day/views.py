@@ -12,13 +12,18 @@ from app.api import bp
 from app.db import db
 from sqlalchemy.sql import text
 
+from datetime import datetime
+
 @bp.route('/api/addDay', methods=['POST'])
 @login_required
 def add_day():
 
     req = request.get_json()
     observatory_id = getObservatoryId(req['observatory'])
-    day = Day(day=req['day'], comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
+    
+    day=datetime.strptime(req['day'], '%d.%m.%Y')
+
+    day = Day(day=day, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
 
     addDay(day)
     addedId = getDayId(day.day, day.observatory_id)
@@ -33,7 +38,8 @@ def list_days():
 
     ret = []
     for day in dayObjects:
-        ret.append({ 'id': day.id, 'day': day.day, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
+        dayString = day.day.strftime('%d.%m.%Y')
+        ret.append({ 'id': day.id, 'day': dayString, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
 
     return jsonify(ret)
 

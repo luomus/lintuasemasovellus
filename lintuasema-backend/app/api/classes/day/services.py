@@ -5,6 +5,8 @@ from sqlalchemy.sql import text
 
 from flask import jsonify
 
+from datetime import datetime
+
 def addDay(day):
     d = Day.query.filter_by(day = day.day, observatory_id = day.observatory_id, is_deleted = 0).first()
     if  not d and day.observatory_id is not None and day.day is not None and day.observers is not None:
@@ -21,7 +23,10 @@ def getDay(dayId):
 def getDayId(day, observatory_id):
     d = Day.query.filter_by(day = day, observatory_id = observatory_id).first()
     return d.id
-    
+
+def parseDay(dateString):
+    dateString = dateString.split("-")
+    return "{2}.{1}.{0}".format(dateString[0][-4:], dateString[1][:2], dateString[2][:2])
 
 def getLatestDays(observatory_id):
     stmt = text(" SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
@@ -38,8 +43,9 @@ def getLatestDays(observatory_id):
     for row in res:
         if i == 5:
             break
-        i = i + 1
-        response.append({"day" :row[0], 
-            "speciesCount":row[1]})
+        i += 1
+        day=parseDay(row[0])
+        response.append({"day": day,
+            "speciesCount": row[1]})
       
     return jsonify(response)
