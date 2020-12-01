@@ -2,6 +2,9 @@ import { postDay } from "../../services/dayService";
 import { postObservationPeriod } from "../../services/observationStationService";
 import { postAddObservation, postAddShorthand } from "../../services/observationlistService";
 import { parse, resetAll } from "../../shorthand/shorthand";
+import birds from "../../shorthand/birds.json";
+
+const birdMap = new Map(Object.entries(birds));
 
 const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
@@ -99,7 +102,7 @@ const parseTime = (timeString) => {
 };
 
 const sendObservation = async (observation, observationPeriodId, shorthandId) => {
-  observation["species"] = observation["species"].toUpperCase();
+  observation["species"] = Object.values(birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
