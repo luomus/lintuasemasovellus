@@ -44,14 +44,6 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
   const classes = useStyles();
 
-  const formatTime = (time) => {
-    if (typeof time !== "undefined") {
-      const ret = time.split(" ")[4].split(":");
-      // hours 0 and minutes 1
-      return `${ret[0]}:${ret[1]}`;
-    }
-  };
-
   const [observations, setObservations] = useState([]);
 
   useEffect(() => {
@@ -121,7 +113,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
       <Fade in={open}>
         <div className={classes.paper}>
           <h2 id="transition-modal-title">{t("observations")}</h2>
-          <h3>{obsPeriod.location}, klo {formatTime(obsPeriod.startTime)} - {formatTime(obsPeriod.endTime)}</h3>
+          <h3>{obsPeriod.location}, klo {obsPeriod.startTime} - {obsPeriod.endTime}</h3>
 
 
           <Table>
