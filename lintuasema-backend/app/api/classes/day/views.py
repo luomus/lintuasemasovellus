@@ -38,7 +38,10 @@ def list_days():
 
     ret = []
     for day in dayObjects:
-        dayString = day.day.strftime('%d.%m.%Y')
+        dayDatetime = day.day
+        if not isinstance(dayDatetime, datetime): 
+            dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
+        dayString = dayDatetime.strftime('%d.%m.%Y')
         ret.append({ 'id': day.id, 'day': dayString, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
 
     return jsonify(ret)

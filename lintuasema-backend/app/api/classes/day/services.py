@@ -24,10 +24,6 @@ def getDayId(day, observatory_id):
     d = Day.query.filter_by(day = day, observatory_id = observatory_id).first()
     return d.id
 
-def parseDay(dateString):
-    dateString = dateString.split("-")
-    return "{2}.{1}.{0}".format(dateString[0][-4:], dateString[1][:2], dateString[2][:2])
-
 def getLatestDays(observatory_id):
     stmt = text(" SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
                     " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
@@ -44,8 +40,13 @@ def getLatestDays(observatory_id):
         if i == 5:
             break
         i += 1
-        day=parseDay(row[0])
-        response.append({"day": day,
+        dayDatetime = row[0]
+        print(str(type(dayDatetime)))
+        if not isinstance(dayDatetime, datetime):
+            dayDatetime = datetime.strptime(dayDatetime, '%Y-%m-%d %H:%M:%S.%f')
+        dayString = dayDatetime.strftime('%d.%m.%Y')
+        
+        response.append({"day": dayString,
             "speciesCount": row[1]})
       
     return jsonify(response)
