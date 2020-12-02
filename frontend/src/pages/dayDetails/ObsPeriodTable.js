@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import {
-  Table, TableHead, TableRow,
+  Table, TableHead, TableRow, TableContainer,
   TableBody, TableCell, withStyles, makeStyles, Typography
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import ObservationPeriod from "../obsPeriod";
+import PeriodTablePagination from "./PeriodTablePagination";
+
 
 
 const ObsPeriodTable = (props) => {
@@ -45,8 +47,8 @@ const ObsPeriodTable = (props) => {
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
     const endTime = time2.split(":");
-    const dateST = new Date(0,0,0,startTime[0], startTime[1]);
-    const dateET = new Date(0,0,0,endTime[0], endTime[1]);
+    const dateST = new Date(0, 0, 0, startTime[0], startTime[1]);
+    const dateET = new Date(0, 0, 0, endTime[0], endTime[1]);
     const diff = dateET.getTime() - dateST.getTime();
     console.log("diff:", diff);
     return diff;
@@ -67,6 +69,17 @@ const ObsPeriodTable = (props) => {
 
   };
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(Number(event.target.value));
+    setPage(0);
+  };
 
   const handleClose = () => {
     setModalOpen(false);
@@ -81,52 +94,120 @@ const ObsPeriodTable = (props) => {
         <Typography variant="h6" >
           Lajit
         </Typography>
+        <TableContainer>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell >{t("species")}</StyledTableCell>
+                <StyledTableCell align="right">{t("totalCount")}</StyledTableCell>
+                <StyledTableCell align="right">{t("constantMigration")}</StyledTableCell>
+                <StyledTableCell align="right">{t("otherMigration")}</StyledTableCell>
+                <StyledTableCell align="right">{t("nightMigration")}</StyledTableCell>
+                <StyledTableCell align="right">{t("scatteredMigration")}</StyledTableCell>
+                <StyledTableCell align="right">{t("localTotal")}</StyledTableCell>
+                <StyledTableCell align="right">{t("localCount")}</StyledTableCell>
+                <StyledTableCell align="right">{t("localGau")}</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                summary
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((s, i) =>
+                    <TableRow hover key={i}>
+                      <StyledTableCell component="th" scope="row">
+                        {s.species}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.allMigration}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.constMigration}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.otherMigration}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.nightMigration}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.scatterObs}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.totalLocal}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.localOther}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.localGåu}
+                      </StyledTableCell>
+                    </TableRow>
+                  )
+              }
+            </TableBody>
+            <ObservationPeriod
+              obsPeriod={obsPeriod}
+              open={modalOpen}
+              handleClose={handleClose}
+              handleErrorSnackOpen={handleErrorSnackOpen}
+            />
 
+
+          </Table>
+        </TableContainer>
+        <PeriodTablePagination list={summary} rowsPerPage={rowsPerPage}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          page={page}
+        />
+
+      </div>
+    );
+  }
+
+  return (
+
+    <div>
+      <Typography variant="h6" >
+        Jaksot
+      </Typography>
+      <TableContainer>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <StyledTableCell >{t("species")}</StyledTableCell>
-              <StyledTableCell align="right">{t("totalCount")}</StyledTableCell>
-              <StyledTableCell align="right">{t("constantMigration")}</StyledTableCell>
-              <StyledTableCell align="right">{t("otherMigration")}</StyledTableCell>
-              <StyledTableCell align="right">{t("nightMigration")}</StyledTableCell>
-              <StyledTableCell align="right">{t("scatteredMigration")}</StyledTableCell>
-              <StyledTableCell align="right">{t("localTotal")}</StyledTableCell>
-              <StyledTableCell align="right">{t("localCount")}</StyledTableCell>
-              <StyledTableCell align="right">{t("localGau")}</StyledTableCell>
+              <StyledTableCell>{t("location")}</StyledTableCell>
+              <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
+              <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
+              <StyledTableCell align="right">{t("duration")}</StyledTableCell>
+              <StyledTableCell align="right">{t("type")}</StyledTableCell>
+              <StyledTableCell align="right">{t("speciesTotal")}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              summary
+              obsPeriods
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
-                  <TableRow hover key={i}>
+                  <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
                     <StyledTableCell component="th" scope="row">
-                      {s.species}
+                      {s.location}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.allMigration}
+                      {s.startTime}
+                      {console.log(s.startTime)}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.constMigration}
+                      {s.endTime}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.otherMigration}
+                      {msToTime(timeDifference(s.startTime, s.endTime))}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.nightMigration}
+                      {s.observationType}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.scatterObs}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.totalLocal}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.localOther}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.localGåu}
+                      {s.speciesCount}
                     </StyledTableCell>
                   </TableRow>
                 )
@@ -138,68 +219,13 @@ const ObsPeriodTable = (props) => {
             handleClose={handleClose}
             handleErrorSnackOpen={handleErrorSnackOpen}
           />
-
-
         </Table>
-      </div>
-    );
-  }
-
-  return (
-
-    <div>
-      <Typography variant="h6" >
-        Jaksot
-      </Typography>
-
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>{t("location")}</StyledTableCell>
-            <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
-            <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
-            <StyledTableCell align="right">{t("duration")}</StyledTableCell>
-            <StyledTableCell align="right">{t("type")}</StyledTableCell>
-            <StyledTableCell align="right">{t("speciesTotal")}</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {
-            obsPeriods
-              .map((s, i) =>
-                <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
-                  <StyledTableCell component="th" scope="row">
-                    {s.location}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {s.startTime}
-                    {console.log(s.startTime)}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {s.endTime}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {msToTime(timeDifference(s.startTime, s.endTime))}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {s.observationType}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {s.speciesCount}
-                  </StyledTableCell>
-                </TableRow>
-              )
-          }
-        </TableBody>
-        <ObservationPeriod
-          obsPeriod={obsPeriod}
-          open={modalOpen}
-          handleClose={handleClose}
-          handleErrorSnackOpen={handleErrorSnackOpen}
-        />
-
-
-      </Table>
+      </TableContainer>
+      <PeriodTablePagination list={obsPeriods} rowsPerPage={rowsPerPage}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        page={page}
+      />
     </div>
   );
 };
