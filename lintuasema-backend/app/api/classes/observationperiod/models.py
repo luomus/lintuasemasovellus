@@ -18,6 +18,3 @@ class Observationperiod(Base):
         self.type_id = type_id
         self.location_id = location_id
         self.day_id = day_id
-
-    
-

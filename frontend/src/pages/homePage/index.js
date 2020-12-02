@@ -196,6 +196,8 @@ export const HomePage = () => {
     );
   }
 
+
+
   const errorCheckingLogic = async (editor, data, value) => {
     sanitizedShorthand = loopThroughCheckForErrors(value);
     for (const widget of widgets) {
@@ -414,7 +416,7 @@ export const HomePage = () => {
                               {s.day}
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
-                              {s.speciesCount} lajia
+                              {s.speciesCount} {t("multipleSpecies")}
                             </StyledTableCell>
                           </TableRow>
                         )

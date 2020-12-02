@@ -13,10 +13,6 @@ const NavBarLinks = () => {
         {t("frontpage")}
       </Button>
       <br />
-      <Button component={Link} to="/newday">
-        {t("addDayPage")}
-      </Button>
-      <br />
       <Button component={Link} to="/listdays">
         {t("showDaysPage")}
       </Button>

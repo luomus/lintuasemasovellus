@@ -3,7 +3,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-//import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -41,7 +41,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     },
   }));
 
-  //const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -72,7 +72,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     >
       <Fade in={open}>
         <div className={classes.paper}>
-          <h2> Muokkaa pikakirjoitusta </h2>
+          <h2> {t("editShorthand")}</h2>
           <h2> {date} </h2>
 
           <Grid item xs={12}>
@@ -98,13 +98,13 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
           </Grid>
           <Grid item xs={12}>
             <Button variant="contained" color="primary" onClick={() => console.log("click")}>
-              Tallenna
+              {t("save")}
             </Button>{" "}
             <Button variant="contained" color="primary" onClick={() => console.log("click")}>
-              Peruuta
+              {t("cancel")}
             </Button>{" "}
             <Button variant="contained" color="primary" onClick={() => console.log("click")}>
-              Poista
+              {t("remove")}
             </Button>{" "}
           </Grid>
         </div>

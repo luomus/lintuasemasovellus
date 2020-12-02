@@ -1,5 +1,4 @@
 
-// import { TouchRipple } from "@material-ui/core/ButtonBase/TouchRipple";
 const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
@@ -9,14 +8,8 @@ const comment = "Olipa kiva sää.";
 const comment1="Satoi aivan kaatamalla";
 const changedComment= "hihihi asdfsommol";
 const date2 = "02.02.2020";
-//const observer2 = "Talle Testaaja";
-//const comment2 = "Koko päivän satoi räntää eikä nähnyt mitään.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 const invalidShorthand = "10:00\nsommol 1/2 W\n";
-
-//const date3 = "03.03.2020";
-//const observer3 = "Ano Nyymi";
-//const comment3 = "Tuntematon tunkeutuja lintuasemalla.";
 
 
 const invalidShorthand0 = "10:00\nsommol 1/2 W\n"; //puuttuva kellonaika
@@ -29,7 +22,6 @@ const invalidShorthand6 = "10:00\nosommol 1/2 W\n12:00"; //liikaa merkkejä laji
 
 const invalidShorthand7 = "10:00\nsommo 1/2 W\n12:00"; //invalid lajinimi
 const invalidShorthand8 = "10:00\nsommol 1/2 W\n12:00\nsommol 3/4 W \n13:00"; //pariton määrä kellonaikoja
-//const invalidShorthand9 = "10:00\nsommol 1/2 W\n\n\n12:00"; //liikaa rivinvaihtoja ei ongelma eli ei lisätä shorthands listaan
 const invalidShorthand10 = "10:00\nsommol 1/2 W\n12:0\n0";//rivinvaihto väärässä paikassa
 const invalidShorthand11 = "10:00\nsommol 1/2 WW\n12:00"; //virheellinen ilmansuunta
 //const invalidShorthand12 = "10:00\nsommol 1/2/ W\n12:00"; //ylimääräinen kauttaviiva
@@ -37,8 +29,6 @@ const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\nSommol /4 E\nAnacre 1\"2
 const invalidShorthand14 = "12:00\nsommolo 1/2 W\n10:00"; //kellonajat väärinpäin
  
 //talteen toimiva: const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\n11.00\nSommol /4 E\nAnacre 1\"2juv3subad/W\nMeralb /1W, 2/E, 3/4w\n13.00\n07.00\ngrugru 100SW+-, 200 S +++ ,  300 \"W---\nsommol 1/2 W\n08.00";//megapitkä pikakirjoitus
-
-
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
@@ -48,12 +38,9 @@ const shorthands = [invalidShorthand0, invalidShorthand1,
 
   //invalidShorthand12, lisätään ylläolevaan taulukkoon, kun ylimääräinen kauttaviivabugivalidointi korjattu
 
-  
 
-
-
-describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jotka väärässä paikassa eikä vastaa annettua nimeä.
-  beforeEach(function() {    //Poistettu toisteisuutta. Tämä tehdään ennen jokaista allaolevaa testiä.
+describe("AddObservationDay", function() {
+  beforeEach(function() {
     cy.visit("http://localhost:3000");
 
     // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
@@ -80,19 +67,12 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
       });
       
 
-    //cy.get("#select-observatory").click().get("ul > li").eq(0).click();
     cy.get("#select-observatory").click();
     cy.contains("Hangon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
     cy.contains("Hangon Lintuasema");
 
   });
-
-
-  /* it("Front page has button for adding an observation day", function() {
-    cy.get("#navigationbar").click();
-    cy.contains("Lisää päivä").click({ force:true });
-  }); */
 
 
   it("There are fields for adding observation station name, date, observers, comment and a button Save for the observation and day", function() {
@@ -114,7 +94,6 @@ describe("AddObservationDay", function() {//tämä sisältää nyt testejä, jot
     cy.contains("Jurmo");
 
   });
-
 
 
   it("An observation and observation day can be saved on firstpage for Vakio", function() {

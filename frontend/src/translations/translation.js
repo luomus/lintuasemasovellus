@@ -17,10 +17,16 @@ const resources = {
       "observations": "Havainnot",
       "comment": "Kommentti",
       "save": "Tallenna",
+      "cancel": "Peruuta",
+      "remove": "Poista",
+      "oneSpecies": "laji",
+      "multipleSpecies": "lajia",
+
 
       "summary": "Lajit",
       "obsPeriods": "Jaksot",
       "edit": "Muokkaa",
+      "editShorthand": "Muokkaa pikakirjoitusta",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
       "formSent": "Lomake lähetetty!",

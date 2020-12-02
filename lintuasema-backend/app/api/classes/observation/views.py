@@ -20,7 +20,6 @@ def addObservation():
     return jsonify(req)
 
 
-
 @bp.route('/api/getObservations', methods=["GET"])
 @login_required
 def getObservations():

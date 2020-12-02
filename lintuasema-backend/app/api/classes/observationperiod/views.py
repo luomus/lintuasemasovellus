@@ -7,7 +7,7 @@ from app.api.classes.day.models import Day
 from app.api.classes.type.models import Type
 from app.api.classes.observatory.models import Observatory
 from app.api.classes.location.services import getLocationId, getLocationName
-from app.api.classes.observationperiod.services import getObsPerId
+from app.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId
 from app.api.classes.day.services import getDay
 from app.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
 
@@ -67,71 +67,17 @@ def getObservationPeriods():
     return jsonify(ret)
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"]) 
 @login_required
 def getDaysObservationPeriods(day_id):
 
-    stmt = text(" SELECT Observationperiod.id AS obsperiod_id,"
-                " Observationperiod.start_time, Observationperiod.end_time,"
-                " Type.name AS typename, Location.name AS locationname, Day.id AS day_id,"
-                " COUNT(DISTINCT Observation.species) AS speciescount"
-                " FROM Observationperiod"
-                " JOIN Type ON Type.id = Observationperiod.type_id"
-                " JOIN Location ON Location.id = Observationperiod.location_id"
-                " JOIN Day ON Day.id = Observationperiod.day_id"
-                " JOIN Observation ON Observation.observationperiod_id = Observationperiod.id"
-                " WHERE Day.id = :dayId"
-                " GROUP BY Observationperiod.id, Observationperiod.start_time,"
-                " Observationperiod.end_time, Type.name, Location.name, Day.id"
-                " ORDER BY Observationperiod.start_time").params(dayId = day_id)
-
-    res = db.engine.execute(stmt)
-
-    response = []
+    ret = getObservationPeriodsByDayId(day_id)
+    return ret
 
 
-    for row in res:
-
-        starthours = ""
-        startminutes = ""
-        endhours = ""
-        endminutes = ""
-
-        if isinstance(row.start_time, str):
-            startTimeArray = row.start_time.split(':')
-            starthours = startTimeArray[0][-2:]
-            startminutes = startTimeArray[1][0:2]
-            endTimeArray = row.end_time.split(':')
-            endhours = endTimeArray[0][-2:]
-            endminutes = endTimeArray[1][0:2]
-        else:
-            starthours = row.start_time.strftime('%H')
-            startminutes = row.start_time.strftime('%M')
-            endhours = row.end_time.strftime('%H')
-            endminutes = row.end_time.strftime('%M')
-
-        starttime = starthours + ':' + startminutes
-        endtime = endhours + ':' + endminutes
-
-        response.append({
-            'id': row.obsperiod_id,
-            'startTime': starttime,
-            'endTime': endtime,
-            'observationType': row.typename,
-            'location': row.locationname,
-            'day_id': row.day_id,
-            'speciesCount': row.speciescount
-        })
-  
-    return jsonify(response)
-
-
-
-
-@bp.route('/api/getDaysObservationPeriods/<day_id>/standard', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@bp.route('/api/getDaysObservationPeriods/<day_id>/standard', methods=["GET"]) 
 @login_required
 def getDaysObservationPeriodsStandard(day_id):
-
 
     daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
     ret = []
@@ -149,10 +95,9 @@ def getDaysObservationPeriodsStandard(day_id):
 
     return jsonify(ret)
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>/other', methods=["GET"]) #tietyn aseman tietyn päivän, tietyn tyypin havaintojaksot
+@bp.route('/api/getDaysObservationPeriods/<day_id>/other', methods=["GET"]) 
 @login_required
 def getDaysObservationPeriodsOther(day_id):
-
 
     daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
     ret = []
