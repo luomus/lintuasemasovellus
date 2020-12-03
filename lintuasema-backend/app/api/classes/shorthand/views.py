@@ -41,9 +41,9 @@ def getShorthands():
     return jsonify(ret)
 
 
-@bp.route('/api/getShorthandText/<day_id>', methods=["GET"])
+@bp.route('/api/getShorthandText/<day_id>/<type_name>/<location_name>', methods=["GET"])
 @login_required
-def getShorthandsForEditing(day_id):
+def getShorthandsForEditing(day_id, type_name, location_name):
     stmt = text("SELECT Shorthand.id AS shorthand_id,"
                 " Shorthand.shorthandrow,"
                 " Shorthand.observationperiod_id,"
@@ -51,10 +51,14 @@ def getShorthandsForEditing(day_id):
                 " Observationperiod.start_time, Observationperiod.end_time"
                 " FROM Shorthand"
                 " JOIN Observationperiod ON Observationperiod.id = Shorthand.observationperiod_id"
+                " JOIN Type ON Observationperiod.type_id = Type.id"
+                " JOIN Location ON Observationperiod.location_id = Location.id"
                 " JOIN Observation ON Observation.shorthand_id = Shorthand.id"
                 " JOIN Day ON Day.id = Observationperiod.day_id"
                 " WHERE Day.id = :dayId"
-                " ORDER BY Observationperiod.id, Shorthand.id").params(dayId=day_id)
+                " AND Type.name = :type"
+                " AND Location.name = :location"
+                " ORDER BY Observationperiod.id, Shorthand.id").params(dayId=day_id, type=type_name, location=location_name)
 
     res = db.engine.execute(stmt)
 

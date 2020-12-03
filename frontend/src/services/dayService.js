@@ -37,8 +37,8 @@ export const getSummary = async (dayId) => {
   return summary.data;
 };
 
-export const getShorthandText = async (dayId) => {
-  const shorthand = await axios.get(`/api/getShorthandText/${dayId}`);
+export const getShorthandText = async (dayId, type, location) => {
+  const shorthand = await axios.get(`/api/getShorthandText/${dayId}/${type}/${location}`);
   return shorthand.data;
 };
 
