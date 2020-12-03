@@ -58,6 +58,12 @@ def getShorthandsForEditing(day_id, type_name, location_name):
                 " WHERE Day.id = :dayId"
                 " AND Type.name = :type"
                 " AND Location.name = :location"
+                " AND Shorthand.is_deleted = 0"
+                " AND Observationperiod.is_deleted = 0"
+                " AND Type.is_deleted = 0"
+                " AND Location.is_deleted = 0"
+                " AND Observation.is_deleted = 0"
+                " AND Day.is_deleted = 0"
                 " ORDER BY Observationperiod.id, Shorthand.id").params(dayId=day_id, type=type_name, location=location_name)
 
     res = db.engine.execute(stmt)

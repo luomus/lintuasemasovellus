@@ -40,6 +40,11 @@ def getObservationPeriodsByDayId(day_id):
                 " JOIN Day ON Day.id = Observationperiod.day_id"
                 " JOIN Observation ON Observation.observationperiod_id = Observationperiod.id"
                 " WHERE Day.id = :dayId"
+                " AND Observationperiod.is_deleted = 0"
+                " AND Type.is_deleted = 0"
+                " AND Location.is_deleted = 0"
+                " AND Day.is_deleted = 0"
+                " AND Observation.is_deleted = 0"
                 " GROUP BY Observationperiod.id, Observationperiod.start_time,"
                 " Observationperiod.end_time, Type.name, Location.name, Day.id"
                 " ORDER BY Observationperiod.start_time").params(dayId = day_id)

@@ -29,6 +29,9 @@ def getLatestDays(observatory_id):
                     " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
                     " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
                     " WHERE Day.observatory_id = :observatory_id"
+                    " AND Day.is_deleted = 0 "
+                    " AND Observationperiod.is_deleted = 0"
+                    " AND Observation.is_deleted = 0"
                     " GROUP BY Day.day"
                     " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
 

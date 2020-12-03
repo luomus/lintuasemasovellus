@@ -82,6 +82,10 @@ def getDaySummary(day_id):
                 " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
                 " LEFT JOIN Location ON Location.id = Observationperiod.location_id"
                 " WHERE Observationperiod.day_id = :day_id"
+                " AND Observation.is_deleted = 0"
+                " AND Observationperiod.is_deleted = 0"
+                " AND Type.is_deleted = 0"
+                " AND Location.is_deleted = 0"
                 " GROUP BY Observation.species").params(day_id = day_id, 
                     const = "Vakio", other = "Muu muutto", night = "Yömuutto", scatter = "Hajahavainto",
                     local = "Paikallinen", gou = "Luoto Gåu")
