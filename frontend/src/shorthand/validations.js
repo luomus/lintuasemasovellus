@@ -1,7 +1,4 @@
 import { parse, resetAll } from "./shorthand";
-import birdJson from "./birds.json";
-
-const birds = new Set(Object.keys(birdJson));
 
 const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
@@ -22,37 +19,25 @@ const checkWholeInputLine = (rowNumber, row) => {
 };
 
 /**
- * In order to allow for multilines, use the species'
- * name to divide "observation lines" from each other for
- * the parser.
+ * Split the text on newlines, and check that all lines are contained
+ * in-between times of day.
  * @param {string} text
  */
 const sanitize = (text) => {
-  const tidbits = text.trim().split(/\s+/);
+  const lines = text.trim().split(/\n/);
   let times = 0;
   let ret = [];
-  let line = ""; let birdFound = false;
-  for (const tidbit of tidbits) {
-    if (isTime(tidbit)) {
+  for (const line of lines) {
+    if (isTime(line)) {
       ++times;
-      if (line) ret.push(line);
-      line = tidbit;
+      ret.push(line);
     } else if (times & 1) {
-      if (birds.has(tidbit.toUpperCase())) {
-        birdFound = true;
-        ret.push(line);
-        line = tidbit + " ";
-      } else {
-        line += tidbit;
-      }
+      ret.push(line);
     } else {
       return "Havaintorivien täytyy olla aikojen sisällä";
     }
   }
-  ret.push(line);
-  if (!birdFound) {
-    return "Tuntematon lajinnimi! (erotithan linnut välilyönnillä, tabilla tai rivinvaihdolla)";
-  } else if (times & 1) {
+  if (times & 1) {
     return "Pariton määrä aikoja!";
   } else {
     return ret;

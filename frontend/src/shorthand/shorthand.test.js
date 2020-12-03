@@ -584,4 +584,5 @@ describe("Bugfixes", () => {
     }).toThrow("tyhjä havainto");
   });
 
+
 });

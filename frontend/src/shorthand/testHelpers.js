@@ -1,7 +1,7 @@
 import birds from "./birds.json";
 
 
-const spaceySymbols = [" ", "\t", "\n"];
+const spaceySymbols = [" ", "\t"];
 
 const ages = ["'", "\"", "juv", "ad", "subad"];
 
