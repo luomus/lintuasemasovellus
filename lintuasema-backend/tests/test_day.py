@@ -4,7 +4,7 @@ from app.api.classes.day.views import add_day
 from flask import json
 import tempfile
 import pytest
-
+from datetime import datetime
 
 #@pytest.fixture
 # def client():
@@ -20,14 +20,17 @@ import pytest
 #     os.close(db_fd)
 #     os.unlink(app.config['DATABASE'])
 
+testDate = datetime.strptime('01.01.2020', '%d.%m.%Y')
+testDate2 = day=datetime.strptime('02.01.2020', '%d.%m.%Y')
+
 
 def test_addedDayGoesToDatabase(app):
-    dayProperties = {'date': '01.01.2020', 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': 1}
+    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': 1}
     found = addAndFind(dayProperties)
     assert found == True
 
 def test_addedDayGoesToDatabaseWhenCommentIsNone(app):
-    dayProperties = {'date': '01.01.2020', 'comment': None, 'observers': 'Tomppa', 'observatory_id': 1}
+    dayProperties = {'date': testDate, 'comment': None, 'observers': 'Tomppa', 'observatory_id': 1}
     found = addAndFind(dayProperties)
     assert found == True
 
@@ -37,32 +40,32 @@ def test_addedDayDoesNotGoToDatabaseIfDateIsNone(app):
     assert found == False
 
 def test_addedDayDoesNotGoToDatabaseIfObserversIsNone(app):
-    dayProperties = {'date': '01.01.2020', 'comment': 'Testailin havainnoimista', 'observers': None, 'observatory_id': 1}
+    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': None, 'observatory_id': 1}
     found = addAndFind(dayProperties)
     assert found == False
 
 def test_addedDayDoesNotGoToDatabaseIfObservatoryIsNone(app):
-    dayProperties = {'date': '01.01.2020', 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': None}
+    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': None}
     found = addAndFind(dayProperties)
     assert found == False
 
 def test_existingDayIsNotAdded(app):
-    dayProperties = {'date': '01.01.2020', 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
-    dayToAdd = Day(day='01.01.2020', comment='testi', observers='Tom', observatory_id=1)
+    dayProperties = {'date': testDate, 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
+    dayToAdd = Day(day=testDate, comment='testi', observers='Tom', observatory_id=1)
     addDay(dayToAdd)
     found = addAndFind(dayProperties)
     assert found == False
 
 def test_sameDayIsAddedIfDifferentObservatory(app):
-    dayProperties = {'date': '01.01.2020', 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 2}
-    dayToAdd = Day(day='01.01.2020', comment='testi', observers='Tom', observatory_id=1)
+    dayProperties = {'date': testDate, 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 2}
+    dayToAdd = Day(day=testDate, comment='testi', observers='Tom', observatory_id=1)
     addDay(dayToAdd)
     found = addAndFind(dayProperties)
     assert found == True
 
 def test_sameObservatoryDifferentDay(app):
-    dayToAdd = Day(day='02.01.2020', comment='testi', observers='Tom', observatory_id=1)
-    dayProperties = {'date': '01.01.2020', 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
+    dayToAdd = Day(day=testDate2, comment='testi', observers='Tom', observatory_id=1)
+    dayProperties = {'date': testDate, 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
     addDay(dayToAdd)
     found = addAndFind(dayProperties)
     assert found == True
