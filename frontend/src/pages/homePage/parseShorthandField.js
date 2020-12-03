@@ -161,6 +161,10 @@ const obsCountersToNum = () => {
   toNum("unknownMaleCount");
 };
 
+export const setDayId = (id) => {
+  day["id"] = id;
+};
+
 export const loopThroughObservations = async (shorthandRows) => {
   let startTimeEncountered = false;
   let i = 0;

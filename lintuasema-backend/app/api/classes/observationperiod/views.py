@@ -75,42 +75,11 @@ def getDaysObservationPeriods(day_id):
     return ret
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>/standard', methods=["GET"]) 
+@bp.route("/api/deleteObservationperiod", methods=["DELETE"])
 @login_required
-def getDaysObservationPeriodsStandard(day_id):
-
-    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
-    ret = []
-    for obsPeriod in daysObservationPeriods:
-        obspType = getTypeNameById(obsPeriod.type_id)
-        if obspType == "Vakio":
-            ret.append({
-                'id': obsPeriod.id,
-                'startTime': obsPeriod.start_time,
-                'endTime': obsPeriod.end_time,
-                'observationType': obspType,
-                'location': getLocationName(obsPeriod.location_id),
-                'day_id': obsPeriod.day_id
-            })
-
-    return jsonify(ret)
-
-@bp.route('/api/getDaysObservationPeriods/<day_id>/other', methods=["GET"]) 
-@login_required
-def getDaysObservationPeriodsOther(day_id):
-
-    daysObservationPeriods = Observationperiod.query.filter_by(day_id = day_id)
-    ret = []
-    for obsPeriod in daysObservationPeriods:
-        obspType = getTypeNameById(obsPeriod.type_id)
-        if obspType != "Vakio":
-            ret.append({
-                'id': obsPeriod.id,
-                'startTime': obsPeriod.start_time,
-                'endTime': obsPeriod.end_time,
-                'observationType': obspType,
-                'location': getLocationName(obsPeriod.location_id),
-                'day_id': obsPeriod.day_id
-            })
-
-    return jsonify(ret)
+def observationperiod_delete():
+    req = request.get_json()
+    obsperiod_id = req['obsperiod_id']
+    Observationperiod.query.filter_by(id=obsperiod_id).delete()
+    db.session.commit()
+    return jsonify(req)
