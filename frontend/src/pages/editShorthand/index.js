@@ -11,7 +11,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import errorImg from "./error.png";
 import {
-  getShorthandText
+  getShorthandText, deleteShorthand, deleteObservations, deleteObservationperiod
 } from "../../services";
 import {
   loopThroughCheckForErrors, getErrors, resetErrors
@@ -48,6 +48,19 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
       text += "\n";
     }
     setShorthand(text);
+  };
+
+  const handleDelete = async () => {
+    for (const obsperiod of defaultShorthand) {
+      for (const shorthandrow of obsperiod.shorthands) {
+        console.log(shorthandrow.shorthand_id);
+        //await deleteShorthand(Number(shorthandrow.shorthand_id));
+        await deleteObservations({ shorthand_id: Number(shorthandrow.shorthand_id) });
+        await deleteShorthand({ shorthand_id: Number(shorthandrow.shorthand_id) });
+      }
+      console.log(obsperiod.obsPeriodId);
+      await deleteObservationperiod({ obsperiod_id: Number(obsperiod.obsPeriodId) });
+    }
   };
 
 
@@ -197,7 +210,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             <Button
               variant="contained"
               color="error"
-              onClick={() => console.log("click")}>
+              onClick={handleDelete}>
               {t("remove")}
             </Button>{" "}
           </Grid>

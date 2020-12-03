@@ -23,12 +23,14 @@ export const postAddShorthand = async (form) => {
 };
 
 export const deleteShorthand = async (shorthand_id) => {
-  console.log(shorthand_id);
   return await axios.delete("/api/deleteShorthand", { data: shorthand_id });
 };
 
 export const deleteObservations = async (shorthand_id) => {
-  console.log(shorthand_id);
   return await axios.delete("/api/deleteObservations", { data: shorthand_id });
+};
+
+export const deleteObservationperiod = async (obsperiod_id) => {
+  return await axios.delete("/api/deleteObservationperiod", { data: obsperiod_id });
 };
 
