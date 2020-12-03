@@ -13,6 +13,7 @@ from app.db import db
 
 from sqlalchemy.sql import text
 
+
 @bp.route('/api/addShorthand', methods=['POST'])
 @login_required
 def addShorthand():
@@ -22,9 +23,11 @@ def addShorthand():
     db.session().add(shorthand)
     db.session().commit()
 
-    shorthand_id = Shorthand.query.filter_by(shorthandrow = req['row'], observationperiod_id = req['observationperiod_id']).first().id
+    shorthand_id = Shorthand.query.filter_by(
+        shorthandrow=req['row'], observationperiod_id=req['observationperiod_id']).first().id
 
-    return jsonify({ 'id': shorthand_id })
+    return jsonify({'id': shorthand_id})
+
 
 @bp.route('/api/getShorthands', methods=["GET"])
 @login_required
@@ -32,9 +35,11 @@ def getShorthands():
     shorthands = Shorthand.query.all()
     ret = []
     for shorthand in shorthands:
-        ret.append({ 'id': shorthand.id, 'row': shorthand.shorthandrow, 'observationperiod_id': shorthand.observationperiod_id})
+        ret.append({'id': shorthand.id, 'row': shorthand.shorthandrow,
+                   'observationperiod_id': shorthand.observationperiod_id})
 
     return jsonify(ret)
+
 
 @bp.route('/api/getShorthandText/<day_id>', methods=["GET"])
 @login_required
@@ -43,13 +48,13 @@ def getShorthandsForEditing(day_id):
                 " Shorthand.shorthandrow,"
                 " Shorthand.observationperiod_id,"
                 " Observation.id AS observation_id,"
-                " Observationperiod.start_time, Observationperiod.end_time" 
+                " Observationperiod.start_time, Observationperiod.end_time"
                 " FROM Shorthand"
                 " JOIN Observationperiod ON Observationperiod.id = Shorthand.observationperiod_id"
                 " JOIN Observation ON Observation.shorthand_id = Shorthand.id"
                 " JOIN Day ON Day.id = Observationperiod.day_id"
                 " WHERE Day.id = :dayId"
-                " ORDER BY Observationperiod.id, Shorthand.id").params(dayId = day_id)
+                " ORDER BY Observationperiod.id, Shorthand.id").params(dayId=day_id)
 
     res = db.engine.execute(stmt)
 
@@ -69,24 +74,27 @@ def getShorthandsForEditing(day_id):
         if index == 0:
             shorthandId = row.shorthand_id
             obsPeriodId = row.observationperiod_id
-            startTime = row.start_time
-            endTime = row.end_time
+            startTime = formatTime(row.start_time)
+            endTime = formatTime(row.end_time)
             shorthandText = row.shorthandrow
+
         index = index + 1
         if row.shorthand_id != shorthandId:
-            addShorthand(shorthandList, shorthandId, shorthandText, observationList)
+            addShorthand(shorthandList, shorthandId,
+                         shorthandText, observationList)
             observationList.clear()
             shorthandId = row.shorthand_id
         if row.observationperiod_id != obsPeriodId:
-            addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
+            addObsPeriod(obsPeriodList, obsPeriodId,
+                         startTime, endTime, shorthandList)
             shorthandList.clear()
             obsPeriodId = row.observationperiod_id
-        
+
         observationList.append({'id': row.observation_id})
-        startTime = row.start_time
-        endTime = row.end_time
+        startTime = formatTime(row.start_time)
+        endTime = formatTime(row.end_time)
         shorthandText = row.shorthandrow
-    
+
     addShorthand(shorthandList, shorthandId, shorthandText, observationList)
     observationList.clear()
 
@@ -94,6 +102,23 @@ def getShorthandsForEditing(day_id):
     shorthandList.clear()
 
     return jsonify(obsPeriodList)
+
+
+def formatTime(time):
+
+    hours = ""
+    minutes = ""
+
+    if isinstance(time, str):
+        timeArray = time.split(':')
+        hours = timeArray[0][-2:]
+        minutes = timeArray[1][0:2]
+    else:
+        hours = time.strftime('%H')
+        minutes = time.strftime('%M')
+
+    return hours + ':' + minutes
+
 
 def addShorthand(shorthandlist, id, text, observations):
     shorthandlist.append({

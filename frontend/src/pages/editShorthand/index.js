@@ -1,7 +1,7 @@
 import {
   Backdrop, Fade, makeStyles, Modal, Grid, Button
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
@@ -9,13 +9,57 @@ import { useSelector } from "react-redux";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-//import errorImg from "./error.png";
+import errorImg from "./error.png";
+import {
+  getShorthandText
+} from "../../services";
+import {
+  loopThroughCheckForErrors, getErrors, resetErrors
+} from "../../shorthand/validations";
+
+
+let timeout = null;
+
+// let sanitizedShorthand = null;
+
+let widgets = new Set();
+
 
 const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
-  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA", dayId);
+  console.log(dayId);
 
+  const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
+  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
+
+  console.log(codeMirrorHasErrors);
+
+  const initializeDefaultShorthand = (defaultShorthand) => {
+    let text = "";
+    for (const shorthandObject of defaultShorthand) {
+      text += shorthandObject.startTime;
+      text += "\n";
+      for (const shorthandObject2 of shorthandObject.shorthands) {
+        text += shorthandObject2.shorthand_text;
+        text += "\n";
+      }
+      text += shorthandObject.endTime;
+      text += "\n";
+    }
+    setShorthand(text);
+  };
+
+
+  useEffect(() => {
+    getShorthandText(dayId)
+      .then(shorthandsJson => {
+        setDefaultShorthand(shorthandsJson);
+        initializeDefaultShorthand(shorthandsJson);
+      });
+  }, [dayId]);
+
+  console.log("shorthand default: ", defaultShorthand);
 
   const useStyles = makeStyles((theme) => ({
     modal: {
@@ -41,6 +85,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     },
   }));
 
+
   const { t } = useTranslation();
 
   const user = useSelector(state => state.user);
@@ -55,6 +100,45 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     );
   }
 
+  const errorCheckingLogic = async (editor, data, value) => {
+    //sanitizedShorthand =
+    loopThroughCheckForErrors(value);
+    for (const widget of widgets) {
+      editor.removeLineWidget(widget);
+    }
+    widgets.clear();
+    const errors = getErrors();
+    for (let i = 0; i < errors.length; i++) {
+      const msg = document.createElement("div");
+      const icon = msg.appendChild(document.createElement("img"));
+      msg.className = "lint-error";
+      icon.setAttribute("src", errorImg);
+      icon.className = "lint-error-icon";
+      msg.appendChild(document.createTextNode(errors[Number(i)]));
+      widgets.add(editor.addLineWidget(data.to.line, msg, {
+        coverGutter: false, noHScroll: true
+      }));
+    }
+    if (errors.length === 0) setCodeMirrorHasErrors(false);
+    else setCodeMirrorHasErrors(true);
+    resetErrors();
+  };
+
+
+
+
+
+  const codemirrorOnchange = (editor, data, value) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      errorCheckingLogic(editor, data, value);
+      timeout = null;
+    }, 500);
+  };
+
+  console.log("shorthand text: ", shorthand);
 
   return (
     <Modal
@@ -93,17 +177,27 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               onBeforeChange={(editor, data, value) => {
                 setShorthand(value);
               }}
-            //onChange={codemirrorOnchange}
+              onChange={codemirrorOnchange}
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+            <Button
+              disabled={codeMirrorHasErrors}
+              variant="contained"
+              color="primary"
+              onClick={() => console.log("click")}>
               {t("save")}
             </Button>{" "}
-            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClose}>
               {t("cancel")}
             </Button>{" "}
-            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => console.log("click")}>
               {t("remove")}
             </Button>{" "}
           </Grid>
