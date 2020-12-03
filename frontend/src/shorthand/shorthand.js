@@ -3,6 +3,7 @@ import birdJson from "./birds.json";
 // Buckets:
 let firstSpaceOfLineBreakOrSomeSuchEncountered = false;
 let lisatietobucketIsOpen = false;
+let ageCanBeSet = true;
 let lajinimi = "";
 
 let lisatieto = "";
@@ -43,19 +44,21 @@ let osahavainnot = [];
 let taysiHavainto = {};
 // End of buckets
 
+// Sets of acceptable substrings
+const birds = new Set(Object.keys(birdJson));
 
-// remove slashes from keys:
-const birds = new Set(
-  Object.keys(birdJson)
-    .reduce((acc, bird) => {
-      bird.includes("/")
-        ? acc = acc.concat(bird.split("/"))
-        : acc.push(bird);
-      return acc;
-    },
-    [])
-);
+const possibleDirections = new Set(["W", "S", "E", "N", "NW", "NE", "SW", "SE",
+  "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW", ""]);
 
+const acceptableIka = new Set(["subad", "ad", "juv", "'", "\""]);
+
+const acceptableIkaChar = new Set(["j","v","b","d","e","u","s","a"]);
+
+const acceptlableIlmansuuntaChar = new Set(["n","w","e","s"]);
+
+const acceptableBypassSides = new Set(["++++", "+++", "++", "+", "+-", "-",
+  "--", "---", "----", ""]);
+// End sets of acceptable substrings
 
 const openLisatietoBucket = () => {
   lisatietobucketIsOpen = true;
@@ -94,26 +97,7 @@ const softReset = () => {
   };
 };
 
-const possibleDirections = new Set(["W", "S", "E", "N", "NW", "NE", "SW", "SE",
-  "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW", ""]);
-
-const bypassSideHasTooMuchAnything = () => {
-  for (
-    let i = 0, pluses = 0, minuses = 0;
-    i < ohituspuoli.length;
-    i++
-  ) {
-    if (ohituspuoli[Number(i)] === "+") pluses++;
-    else minuses++;
-    if (pluses > 3 || minuses > 3) return true;
-  }
-  return false;
-};
-
-
 const constructOsahavainto = () => {
-  if (bypassSideHasTooMuchAnything())
-    throw new Error("liian monta plussaa/miinusta");
   if (ika)
     throw new Error("tuntematon ikä");
   if (!possibleDirections.has(ilmansuunta.toUpperCase()))
@@ -152,9 +136,6 @@ const constructOsahavainto = () => {
   softReset();
 };
 
-const acceptableIka = new Set(["subad", "ad", "juv", "'", "\""]);
-
-
 const ikaConstructed = () => {
   return acceptableIka.has(ika);
 };
@@ -176,6 +157,10 @@ const lajinimiNotSet = () => {
 };
 
 const setAgeBucket = () => {
+  if (!ageCanBeSet) {
+    throw new Error("yhdellä havainnolla on monta ikää");
+  }
+  ageCanBeSet = false;
   if (ika === "'") {
     ageBucket = "juv";
   } else if (ika === "\"") {
@@ -185,9 +170,6 @@ const setAgeBucket = () => {
   }
   ika = "";
 };
-
-const acceptableIkaChar = new Set(["j","v","b","d","e","u","s","a"]);
-const acceptlableIlmansuuntaChar = new Set(["n","w","e","s"]);
 
 const isNumeric = (string) => {
   if (typeof string !== "string") return false;
@@ -262,10 +244,6 @@ const bypassSideIsLast = (index, line) => {
   return nextNonSpaceyChar === "," || nextNonSpaceyChar === "+" || nextNonSpaceyChar === "-";
 };
 
-const afterMinusThereIsPlus = (char, line, index) => {
-  return index < line.length - 1 && char === "-" && line[index + 1] === "+";
-};
-
 const charIsDefinitelyDirection = (char) => {
   return acceptlableIlmansuuntaChar.has(char) && !acceptableIkaChar.has(char);
 };
@@ -304,6 +282,7 @@ const handleNumeric = (char) => {
   if (lajinimiNotSet()) {
     throw new Error("lajinimen jälkeen puuttuu välilyönti");
   }
+  ageCanBeSet = true;
   yksilomaara += char;
 };
 
@@ -329,8 +308,9 @@ const handleComma = (line, index) => {
   if (lajinimiNotSet()) {
     throw new Error("lajinimen jälkeen puuttuu välilyönti");
   }
-  if (isTooManyCommasHeuristic(index, line))
+  if (isTooManyCommasHeuristic(index, line)) {
     throw new Error("ylimääräisiä pilkkuja");
+  }
   constructOsahavainto();
 };
 
@@ -345,21 +325,21 @@ const handlePlusMinus = (char, line, index) => {
   if (lajinimiNotSet()) {
     throw new Error("lajinimen jälkeen puuttuu välilyönti");
   }
-  if (afterMinusThereIsPlus(char, line, index)) {
+  if (!acceptableBypassSides.has(ohituspuoli += char)) {
     throw new Error("tuntematon ohituspuoli");
   }
   if (!bypassSideIsLast(index, line)) {
     throw new Error("ohituspuolen pitää olla viimeisenä");
   }
-  ohituspuoli += char;
 };
 
 const handleSlash = () => {
+  if (lajinimiNotSet()) {
+    lajinimi += "/";
+    return;
+  }
   if (++slashes > 2) {
     throw new Error("ylimääräisiä kauttaviivoja");
-  }
-  if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
   }
   fillSukupuoliBucketsSlash();
 };
@@ -473,6 +453,15 @@ const checkBracketsFirstPass = (line) => {
   if (leftGuy) throw bracketsErr;
 };
 
+const emptyObservation = (fullObservation) => {
+  for (const subobs of fullObservation.osahavainnot) {
+    for (const field in subobs) {
+      if (subobs[String(field)]) return false;
+    }
+  }
+  return true;
+};
+
 /**
  * Wraps all of the required functions together
  * in order to parse one single line.
@@ -485,7 +474,11 @@ export const parse = (line) => {
     giveMeABucket(lineOfText[Number(i)], lineOfText, i);
   }
   constructTaysiHavainto();
-  return getObservation();
+  const fullObservation = getObservation();
+  if (emptyObservation(fullObservation)) {
+    throw new Error("tyhjä havainto");
+  }
+  return fullObservation;
 };
 
 export default parse;

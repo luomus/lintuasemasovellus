@@ -8,16 +8,9 @@ const ages = ["'", "\"", "juv", "ad", "subad"];
 const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
   "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"];
 
+const bypassSides = ["++++", "+++", "++", "+", "+-", "-", "--", "---", "----"];
 
-// we don't care about slashes in the objects' keys:
-const birdArr = Object.keys(birds)
-  .reduce((acc, bird) => {
-    bird.includes("/")
-      ? acc = acc.concat(bird.split("/"))
-      : acc.push(bird);
-    return acc;
-  },
-  []);
+const birdArr = Object.keys(birds);
 
 const randomIndex = (len) => {
   return Math.floor(Math.random() * len);
@@ -67,20 +60,11 @@ const getRandomDirectionOrNot = () => {
 };
 
 const getRandomBypassSideOrNot = () => {
-  let lineOfText = "";
-  let rounds = Math.floor(Math.random() * 4);//0,1,2,3
-  for (let i = 0; i < rounds; ++i) {
-    lineOfText += "+";
-  }
-  rounds = Math.floor(Math.random() * 4);//0,1,2,3
-  for (let i = 0; i < rounds; ++i) {
-    lineOfText += "-";
-  }
-  return lineOfText;
+  return Math.random() < 0.5 ? "" : getRandomBypassSide();
 };
 
 const getRandomBypassSide = () => {
-  return getRandomBypassSideOrNot() || (Math.random() < 0.5 ? "+" : "-");
+  return bypassSides[Number(randomIndex(bypassSides.length))];
 };
 
 const makeValidMeatOfSubobservation = () => {

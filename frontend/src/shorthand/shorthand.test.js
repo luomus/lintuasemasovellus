@@ -196,7 +196,6 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const { direction: direction2, adultUnknownCount: adultUnknownCount2,
       bypassSide: bypassSide2, ...rest2 }
     = observation.osahavainnot[2];
-
     for (const each of Object.values(rest0)) {
       expect(each).toBe("");
     }
@@ -206,7 +205,6 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     for (const each of Object.values(rest2)) {
       expect(each).toBe("");
     }
-
     expect(unknownUnknownCount0).toBe("100");
     expect(direction0).toBe("sw");
     expect(bypassSide0).toBe("+-");
@@ -464,24 +462,17 @@ describe("Bugfixes", () => {
   });
 
   test("too long bypassSide 1", () => {
-    const lineOfText = "anacre 1ad++++--";
+    const lineOfText = "anacre 1ad+++++";
     expect(() => {
       parse(lineOfText);
-    }).toThrow("liian monta plussaa/miinusta");
+    }).toThrow("tuntematon ohituspuoli");
   });
 
   test("too long bypassSide 2", () => {
-    const lineOfText = "anacre 1ad----";
+    const lineOfText = "anacre 1ad-----";
     expect(() => {
       parse(lineOfText);
-    }).toThrow("liian monta plussaa/miinusta");
-  });
-
-  test("too long bypassSide 3", () => {
-    const lineOfText = "anacre 1ad+++----";
-    expect(() => {
-      parse(lineOfText);
-    }).toThrow("liian monta plussaa/miinusta");
+    }).toThrow("tuntematon ohituspuoli");
   });
 
   test("AYTMAR is found (one with a slash)", () => {
@@ -492,40 +483,40 @@ describe("Bugfixes", () => {
   });
 
   test("too many slashes 1", () => {
-    const line = "v 1juv/3ad/12'/    ++---    ";
+    const line = "sommol 1juv/3ad/12'/    ++---    ";
     expect(() => {
       parse(line);
     }).toThrow("ylimääräisiä kauttaviivoja");
   });
 
   test("too many slashes 2", () => {
-    const line = "v 1juv/3ad/12'////    ++---    ";
+    const line = "sommol 1juv/3ad/12'////    ++---    ";
     expect(() => {
       parse(line);
     }).toThrow("ylimääräisiä kauttaviivoja");
   });
 
   test("too many slashes 3", () => {
-    const line = "v 1juv/3ad/12', 2/3/1/, 2/3/1    ++---    ";
+    const line = "sommol 1juv/3ad/12', 2/3/1/, 2/3/1    ++---    ";
     expect(() => {
       parse(line);
     }).toThrow("ylimääräisiä kauttaviivoja");
   });
 
   test("too many slashes 4", () => {
-    const line = "v //1/";
+    const line = "sommol //1/";
     expect(() => {
       parse(line);
     }).toThrow("ylimääräisiä kauttaviivoja");
   });
 
   test("empty in-between slashes 1", () => {
-    const line = "v 1//  +";
+    const line = "sommol 1//  +";
     const result = parse(line);
     const { unknownMaleCount, bypassSide,
       ...rest } = result.osahavainnot[0];
     expect(unknownMaleCount).toBe("1");
-    expect(result.species).toBe("v");
+    expect(result.species).toBe("sommol");
     expect(bypassSide).toBe("+");
     for (const each of Object.values(rest)) {
       expect(each).toBe("");
@@ -533,12 +524,12 @@ describe("Bugfixes", () => {
   });
 
   test("empty in-between slashes 2", () => {
-    const line = "v /1/  +";
+    const line = "sommol /1/  +";
     const result = parse(line);
     const { unknownFemaleCount, bypassSide,
       ...rest } = result.osahavainnot[0];
     expect(unknownFemaleCount).toBe("1");
-    expect(result.species).toBe("v");
+    expect(result.species).toBe("sommol");
     expect(bypassSide).toBe("+");
     for (const each of Object.values(rest)) {
       expect(each).toBe("");
@@ -546,16 +537,52 @@ describe("Bugfixes", () => {
   });
 
   test("empty in-between slashes 3", () => {
-    const line = "v //1  +";
+    const line = "sommol //1  +";
     const result = parse(line);
     const { unknownUnknownCount, bypassSide,
       ...rest } = result.osahavainnot[0];
     expect(unknownUnknownCount).toBe("1");
-    expect(result.species).toBe("v");
+    expect(result.species).toBe("sommol");
     expect(bypassSide).toBe("+");
     for (const each of Object.values(rest)) {
       expect(each).toBe("");
     }
+  });
+
+  test("illegal bypassSides 1", () => {
+    const line = "sommol 2 ++-";
+    expect(() => {
+      parse(line);
+    }).toThrow("tuntematon ohituspuoli");
+  });
+
+  test("illegal bypassSides 2", () => {
+    const line = "sommol 2 +++---";
+    expect(() => {
+      parse(line);
+    }).toThrow("tuntematon ohituspuoli");
+  });
+
+  test("multiple ages in observation 1", () => {
+    const line = "Grugru 2\"adsubad'juv";
+    expect(() => {
+      const res = parse(line);
+      console.log(res);
+    }).toThrow("yhdellä havainnolla on monta ikää");
+  });
+
+  test("multiple ages in observation 2", () => {
+    const line = "parmaj 1\"''''''";
+    expect(() => {
+      parse(line);
+    }).toThrow("yhdellä havainnolla on monta ikää");
+  });
+
+  test("empty observation", () => {
+    const line = "sommol";
+    expect(() => {
+      parse(line);
+    }).toThrow("tyhjä havainto");
   });
 
 });

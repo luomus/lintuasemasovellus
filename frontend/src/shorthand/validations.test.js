@@ -51,6 +51,19 @@ describe ("basic higher order validations", () => {
     expect(getErrors()).toEqual([]);
   });
 
+  test("illegal species in multiline", () => {
+    const text = "9.00\nsommols 2 W\n10.00";
+    loopThroughCheckForErrors(text);
+    expect(getErrors()).toEqual(
+      ["Tuntematon lajinnimi! (erotithan linnut välilyönnillä, tabilla tai rivinvaihdolla)"]);
+  });
+
+  test("two different species in a confusing manner next to each other", () => {
+    const text = "9.00\nV K 1/2 W\n12.00";
+    loopThroughCheckForErrors(text);
+    expect(getErrors()).toEqual(["Error in line 2, V : tyhjä havainto"]);
+  });
+
 });
 
 describe("timed tests", () => {
@@ -61,6 +74,7 @@ describe("timed tests", () => {
 
   beforeEach(() => {
     startTime = new Date().getTime();
+    resetErrors();
   });
 
   afterEach(() => {
