@@ -11,7 +11,7 @@ def createLocation(name, id):
     location = Location.query.filter_by(name=name, observatory_id=id).first()
     if not location:
         location = Location(name=name, observatory_id=id)
-        db.session().add(loc)
+        db.session().add(location)
         db.session().commit()
 
 def getLocationId(name, observatory_id):
