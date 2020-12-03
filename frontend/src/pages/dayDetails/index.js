@@ -65,8 +65,6 @@ const DayDetails = () => {
       .observers
   );
 
-  console.log(observers);
-
   const [comment, setComment] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .comment
@@ -78,9 +76,7 @@ const DayDetails = () => {
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
-    console.log(editedObservers);
     if (editedObservers.length !== 0) {
-      console.log(dayId);
       editObservers(dayId, editedObservers);
       setObservers(editedObservers);
     }
@@ -89,7 +85,6 @@ const DayDetails = () => {
 
   const commentOnSubmit = (event) => {
     event.preventDefault();
-    console.log(editedComment);
     if (editedComment.length !== 0) {
       editComment(dayId, editedComment);
       setComment(editedComment);
@@ -107,10 +102,7 @@ const DayDetails = () => {
       .then(periodsJson => setSummary(periodsJson));
   }, [dayId]);
 
-  console.log(summary);
-
   const handleOpen = () => {
-    console.log(modalOpen);
     setModalOpen(true);
   };
 

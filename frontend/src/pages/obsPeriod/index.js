@@ -7,11 +7,6 @@ import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import birds from "../../shorthand/birds.json";
-
-const birdMap = new Map(Object.entries(birds));
-
-console.log(birdMap);
 
 const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 

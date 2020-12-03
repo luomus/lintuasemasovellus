@@ -91,15 +91,11 @@ export const HomePage = () => {
 
   const userObservatory = useSelector(state => state.userObservatory);
 
-  const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(retrieveDays());
   }, [dispatch]);
-
-  console.log(list);
 
   const stations = useSelector(state => state.stations);
 

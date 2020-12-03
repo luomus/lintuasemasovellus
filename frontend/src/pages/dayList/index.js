@@ -41,8 +41,6 @@ export const DayList = () => {
 
   const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
 
-  console.log(list);
-
   if (!list) return null;
 
   if (!userIsSet) {

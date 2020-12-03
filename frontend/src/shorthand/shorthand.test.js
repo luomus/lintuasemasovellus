@@ -566,8 +566,7 @@ describe("Bugfixes", () => {
   test("multiple ages in observation 1", () => {
     const line = "Grugru 2\"adsubad'juv";
     expect(() => {
-      const res = parse(line);
-      console.log(res);
+      parse(line);
     }).toThrow("yhdellä havainnolla on monta ikää");
   });
 

@@ -3,7 +3,6 @@ import { getObservationStations } from "../services";
 export const initializeStations = () => {
   return async dispatch => {
     const stations = await getObservationStations();
-    console.log(stations);
     dispatch(setStations(stations));
   };
 };

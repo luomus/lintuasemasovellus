@@ -3,7 +3,6 @@ import { getDays } from "../services";
 export const retrieveDays = () => {
   return async dispatch => {
     const stations = await getDays();
-    console.log("in reducer module:", stations);
     dispatch(setDays(stations));
   };
 };

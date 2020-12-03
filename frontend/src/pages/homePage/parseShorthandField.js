@@ -107,14 +107,12 @@ const sendObservation = async (observation, observationPeriodId, shorthandId) =>
   observation["bypassSide"] = bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
-  const res = await postAddObservation(observation);
-  console.log("obs res", res);
+  await postAddObservation(observation);
 };
 
 export const sendDay = async (paramDay) => {
   day = { ...paramDay };
   const res = await postDay(day);
-  console.log("day res", res);
   day["id"] = res.data.id;
 };
 
@@ -137,7 +135,6 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc)
     observationPeriod["location"] = loc;
     observationPeriod["day_id"] = day["id"];
     const res = await postObservationPeriod(observationPeriod);
-    console.log("obsperiod res", res);
     observationPeriod["id"] = res.data.id;
   }
 };
@@ -179,7 +176,6 @@ export const loopThroughObservations = async (shorthandRows) => {
       shorthand["row"] = row;
       shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
       const res = await postAddShorthand(shorthand);
-      console.log("shorthand " + res.data.id);
       for (const sub of parsed.osahavainnot) {
         observation = sub;
         observation.species = parsed.species;

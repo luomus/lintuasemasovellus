@@ -20,8 +20,6 @@ const App = () => {
 
   const userIsSet = Boolean(user.id);
 
-  const stations = useSelector(state => state.stations);
-
   useEffect(() => {
     dispatch(initializeStations());
     getCurrentUser()
@@ -31,10 +29,6 @@ const App = () => {
       })
       .catch(error => console.error("user problem", error.message));
   }, [dispatch, userIsSet]);
-
-  console.log("user:", user);
-
-  console.log("stations:", stations);
 
   return (
     <CssBaseline>
