@@ -1,7 +1,7 @@
 import {
   Backdrop, Fade, makeStyles, Modal, Grid, Button
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
@@ -10,12 +10,41 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 //import errorImg from "./error.png";
+import {
+  getShorthandText
+} from "../../services";
 
 const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
-  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA", dayId);
+  console.log(dayId);
 
+  const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
+
+  const initializeDefaultShorthand = (defaultShorthand) => {
+    let text = "";
+    for (const shorthandObject of defaultShorthand) {
+      text += shorthandObject.startTime;
+      text += "\n";
+      for (const shorthandObject2 of shorthandObject.shorthands) {
+        text += shorthandObject2.shorthand_text;
+        text += "\n";
+      }
+      text += shorthandObject.endTime;
+      text += "\n";
+    }
+    setShorthand(text);
+  };
+
+  useEffect(() => {
+    getShorthandText(dayId)
+      .then(shorthandsJson => {
+        setDefaultShorthand(shorthandsJson);
+        initializeDefaultShorthand(shorthandsJson);
+      });
+  }, [dayId]);
+
+  console.log("shorthand default: ", defaultShorthand);
 
   const useStyles = makeStyles((theme) => ({
     modal: {
@@ -56,6 +85,8 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   }
 
 
+  console.log("shorthand text: ", shorthand);
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -89,9 +120,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               }}
               editorDidMount={editor => {
                 editor.refresh();
-              }}
-              onBeforeChange={(editor, data, value) => {
-                setShorthand(value);
               }}
             //onChange={codemirrorOnchange}
             />
