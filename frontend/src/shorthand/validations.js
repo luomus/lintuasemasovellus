@@ -1,17 +1,7 @@
 import { parse, resetAll } from "./shorthand";
 import birdJson from "./birds.json";
 
-// remove slashes from keys:
-const birds = new Set(
-  Object.keys(birdJson)
-    .reduce((acc, bird) => {
-      bird.includes("/")
-        ? acc = acc.concat(bird.split("/"))
-        : acc.push(bird);
-      return acc;
-    },
-    [])
-);
+const birds = new Set(Object.keys(birdJson));
 
 const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
@@ -31,11 +21,17 @@ const checkWholeInputLine = (rowNumber, row) => {
   resetAll();
 };
 
+/**
+ * In order to allow for multilines, use the species'
+ * name to divide "observation lines" from each other for
+ * the parser.
+ * @param {string} text
+ */
 const sanitize = (text) => {
   const tidbits = text.trim().split(/\s+/);
   let times = 0;
   let ret = [];
-  let line = "";
+  let line = ""; let birdFound = false;
   for (const tidbit of tidbits) {
     if (isTime(tidbit)) {
       ++times;
@@ -43,6 +39,7 @@ const sanitize = (text) => {
       line = tidbit;
     } else if (times & 1) {
       if (birds.has(tidbit.toUpperCase())) {
+        birdFound = true;
         ret.push(line);
         line = tidbit + " ";
       } else {
@@ -53,7 +50,9 @@ const sanitize = (text) => {
     }
   }
   ret.push(line);
-  if (times & 1) {
+  if (!birdFound) {
+    return "Tuntematon lajinnimi! (erotithan linnut välilyönnillä, tabilla tai rivinvaihdolla)";
+  } else if (times & 1) {
     return "Pariton määrä aikoja!";
   } else {
     return ret;
