@@ -31,7 +31,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
   const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
-  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
+  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
 
   console.log(codeMirrorHasErrors);
 
@@ -49,6 +49,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     }
     setShorthand(text);
   };
+
 
   useEffect(() => {
     getShorthandText(dayId)
@@ -124,6 +125,9 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   };
 
 
+
+
+
   const codemirrorOnchange = (editor, data, value) => {
     if (timeout) {
       clearTimeout(timeout);
@@ -177,13 +181,23 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+            <Button
+              disabled={codeMirrorHasErrors}
+              variant="contained"
+              color="primary"
+              onClick={() => console.log("click")}>
               {t("save")}
             </Button>{" "}
-            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClose}>
               {t("cancel")}
             </Button>{" "}
-            <Button variant="contained" color="primary" onClick={() => console.log("click")}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => console.log("click")}>
               {t("remove")}
             </Button>{" "}
           </Grid>
