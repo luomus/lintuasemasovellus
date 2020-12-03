@@ -62,7 +62,11 @@ def getShorthandsForEditing(day_id, type_name, location_name):
 
     res = db.engine.execute(stmt)
 
-    response = []
+    obsPeriodList = createObsperiodList(res)
+
+    return jsonify(obsPeriodList)
+
+def createObsperiodList(res):
 
     index = 0
     shorthandId = 0
@@ -75,7 +79,9 @@ def getShorthandsForEditing(day_id, type_name, location_name):
     obsPeriodList = []
 
     for row in res:
+
         if index == 0:
+
             shorthandId = row.shorthand_id
             obsPeriodId = row.observationperiod_id
             startTime = formatTime(row.start_time)
@@ -83,12 +89,16 @@ def getShorthandsForEditing(day_id, type_name, location_name):
             shorthandText = row.shorthandrow
 
         index = index + 1
+
         if row.shorthand_id != shorthandId:
+
             addShorthand(shorthandList, shorthandId,
                          shorthandText, observationList)
             observationList.clear()
             shorthandId = row.shorthand_id
+
         if row.observationperiod_id != obsPeriodId:
+
             addObsPeriod(obsPeriodList, obsPeriodId,
                          startTime, endTime, shorthandList)
             shorthandList.clear()
@@ -105,11 +115,10 @@ def getShorthandsForEditing(day_id, type_name, location_name):
     addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
     shorthandList.clear()
 
-    return jsonify(obsPeriodList)
+    return obsPeriodList
 
 
 def formatTime(time):
-
     hours = ""
     minutes = ""
 

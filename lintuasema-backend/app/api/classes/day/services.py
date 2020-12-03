@@ -41,11 +41,9 @@ def getLatestDays(observatory_id):
             break
         i += 1
         dayDatetime = row[0]
-        print(str(type(dayDatetime)))
         if not isinstance(dayDatetime, datetime):
             dayDatetime = datetime.strptime(dayDatetime, '%Y-%m-%d %H:%M:%S.%f')
-        dayString = dayDatetime.strftime('%d.%m.%Y')
-        
+        dayString = dayDatetime.strftime('%d.%m.%Y')   
         response.append({"day": dayString,
             "speciesCount": row[1]})
       

@@ -8,9 +8,9 @@ from flask import jsonify, request
 
 
 def createLocation(name, id):
-    loc = Location.query.filter_by(name=name, observatory_id=id).first()
-    if not loc:
-        loc = Location(name=name, observatory_id=id)
+    location = Location.query.filter_by(name=name, observatory_id=id).first()
+    if not location:
+        location = Location(name=name, observatory_id=id)
         db.session().add(loc)
         db.session().commit()
 

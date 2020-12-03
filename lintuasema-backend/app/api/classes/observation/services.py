@@ -31,6 +31,7 @@ def parseCountString(obs):
     if obs.unknownMaleCount != 0:
         countString = countString + str(obs.unknownMaleCount) + " koirasta (tunt. ikä), "
     countString = countString[0:(len(countString) - 2)]
+
     return countString
     
 def addObservationToDb(req):
@@ -68,14 +69,14 @@ def deleteObservation(shorthand_id):
 
 def getDaySummary(day_id):
     stmt = text("SELECT Observation.species,"
-                " SUM(CASE WHEN (Type.name = :const OR Type.name = :other OR Type.name = :night OR Type.name = :scatter) THEN total_count ELSE 0 END) AS allMigration,"
-                " SUM(CASE WHEN Type.name = :const THEN total_count ELSE 0 END) AS constMigration,"
-                " SUM(CASE WHEN Type.name = :other THEN total_count ELSE 0 END) AS otherMigration,"
-                " SUM(CASE WHEN Type.name = :night THEN total_count ELSE 0 END) AS nightMigration,"
-                " SUM(CASE WHEN Type.name = :scatter THEN total_count ELSE 0 END) AS scatterObs,"
-                " SUM(CASE WHEN Type.name = :local THEN total_count ELSE 0 END) AS totalLocal,"
-                " SUM(CASE WHEN (Type.name = :local AND Location.name <> :gou) THEN total_count ELSE 0 END) AS LocalOther,"
-                " SUM(CASE WHEN (Type.name = :local AND Location.name = :gou) THEN total_count ELSE 0 END) AS LocalGou"
+                " SUM(CASE WHEN (Type.name = :const OR Type.name = :other OR Type.name = :night OR Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
+                " SUM(CASE WHEN Type.name = :const THEN total_count ELSE 0 END) AS const_migration,"
+                " SUM(CASE WHEN Type.name = :other THEN total_count ELSE 0 END) AS other_migration,"
+                " SUM(CASE WHEN Type.name = :night THEN total_count ELSE 0 END) AS night_migration,"
+                " SUM(CASE WHEN Type.name = :scatter THEN total_count ELSE 0 END) AS scatter_obs,"
+                " SUM(CASE WHEN Type.name = :local THEN total_count ELSE 0 END) AS total_local,"
+                " SUM(CASE WHEN (Type.name = :local AND Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
+                " SUM(CASE WHEN (Type.name = :local AND Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou"
                 " FROM Observation"
                 " LEFT JOIN Observationperiod ON Observationperiod.id = Observation.observationperiod_id"
                 " LEFT JOIN Type ON Type.id = Observationperiod.type_id"
@@ -90,14 +91,16 @@ def getDaySummary(day_id):
     response = []
 
     for row in res:
-        response.append({"species" :row[0], 
-            "allMigration":row[1],
-            "constMigration":row[2], 
-            "otherMigration":row[3],
-            "nightMigration":row[4],
-            "scatterObs":row[5],
-            "totalLocal":row[6],
-            "localOther":row[7],
-            "localGåu":row[8]})
+        response.append({
+            "species" :row.species, 
+            "allMigration":row.all_migration,
+            "constMigration":row.const_migration, 
+            "otherMigration":row.other_migration,
+            "nightMigration":row.night_migration,
+            "scatterObs":row.scatter_obs,
+            "totalLocal":row.total_local,
+            "localOther":row.local_other,
+            "localGåu":row.local_gou
+            })
   
     return jsonify(response) 
