@@ -85,7 +85,7 @@ const NavBar = () => {
 
   const welcomeText = user.id
     ?
-    <Typography color="secondary">
+    <Typography className={classes.title}>
       {t("welcome")}, {user.name}!
     </Typography>
     :
