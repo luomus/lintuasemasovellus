@@ -1,6 +1,7 @@
 import {
   Backdrop, Fade, makeStyles, Modal, Grid, Button,
-  FormControl, InputLabel, Select, MenuItem, Box
+  FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -72,6 +73,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const [location, setLocation] = useState("");
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [warning, setWarning] = useState(false);
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
@@ -91,6 +93,28 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
       text += "\n";
     }
     setShorthand(text);
+  };
+
+  const handleDialogOpen = () => {
+    setWarning(true);
+    console.log(warning);
+  };
+
+  const handleDialogClose = () => {
+    setWarning(false);
+  };
+
+  const handleDialogConfirm = () => {
+    setWarning(false);
+    handleDelete();
+  };
+
+  const deleteButtonIsDisabled = () => {
+    if (shorthand === "") {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleDelete = async () => {
@@ -318,17 +342,39 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               </Box>
               <Box pr={2} pt={20}>
                 <Button
+                  disabled={deleteButtonIsDisabled()}
                   variant="contained"
                   color="secondary"
-                  onClick={handleDelete}>
+                  onClick={handleDialogOpen}>
                   {t("remove")}
                 </Button>
               </Box>
             </Grid>
           </Grid>
+          <Dialog
+            open={warning}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"Vahvista poisto"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Poistamista ei voi peruuttaa. Jatketaanko?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogConfirm} color="secondary">
+                Vahvista
+              </Button>
+              <Button onClick={handleDialogClose} color="default" autoFocus>
+                Peruuta
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </Fade>
     </Modal>
+
 
   );
 };
