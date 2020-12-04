@@ -9,10 +9,7 @@ from flask import (Flask, render_template,
     make_response, jsonify)
 
 
-# jos ei halua käyttää oraclea lokaalisti, voi säätää app=init_app("sqlite")
- 
-app = init_app("oracle")
-#app = init_app("sqlite")
+app = init_app("sqlite")
 
 port = int(os.environ.get("PORT", 3000))
 
