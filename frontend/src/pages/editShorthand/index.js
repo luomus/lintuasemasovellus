@@ -110,7 +110,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   };
 
   const deleteButtonIsDisabled = () => {
-    if (shorthand === "") {
+    if (shorthand.replace(/(\r\n|\n|\r)/gm, "").trim() === "" || location === "" || type === "") {
       return true;
     } else {
       return false;
