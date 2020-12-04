@@ -106,8 +106,16 @@ const DayDetails = () => {
     setModalOpen(true);
   };
 
+  const helper = async () => {
+    const res = await getDaysObservationPeriods(dayId);
+    setObsperiods(res);
+    const res2 = await getSummary(dayId);
+    setSummary(res2);
+  };
+
   const handleClose = () => {
     setModalOpen(false);
+    helper();
   };
 
   const user = useSelector(state => state.user);

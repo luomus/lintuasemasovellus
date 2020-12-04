@@ -12,6 +12,10 @@ def addDay(day):
     if  not d and day.observatory_id is not None and day.day is not None and day.observers is not None:
         db.session().add(day)
         db.session().commit()
+    else:
+        d.comment = day.comment
+        d.observers = day.observers
+        db.session.commit()
        
 def getDays():
     dayObjects = Day.query.filter_by(is_deleted=0).all()

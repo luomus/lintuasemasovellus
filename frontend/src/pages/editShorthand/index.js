@@ -71,6 +71,8 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
       console.log(obsperiod.obsPeriodId);
       await deleteObservationperiod({ obsperiod_id: Number(obsperiod.obsPeriodId) });
     }
+    retrieveShorthand(type, location);
+    handleClose();
   };
 
 
@@ -81,7 +83,8 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     const rows = sanitizedShorthand;
     await loopThroughObservationPeriods(rows, type, location);
     await loopThroughObservations(rows);
-
+    retrieveShorthand(type, location);
+    handleClose();
   };
 
   const retrieveShorthand = async (type, location) => {
