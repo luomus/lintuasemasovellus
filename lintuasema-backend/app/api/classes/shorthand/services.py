@@ -19,3 +19,8 @@ def editShorthand(shorthand_id):
     db.session().commit()
     id = str(shorthand_new.id)
     return id
+
+def setShorthandPerDayId(day_id_old, day_id_new):
+    shorthand = Shorthand.query.filter_by(day_id = day_id_old).all()
+    for sh in shorthand:
+        sh.day_id = day_id_new

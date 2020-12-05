@@ -2,6 +2,7 @@
 from app.api.classes.day.models import Day
 from app.db import db
 from sqlalchemy.sql import text
+from app.api.classes.observationperiod.services import setObsPerDayId
 
 from flask import jsonify
 
@@ -13,9 +14,10 @@ def addDay(day):
         db.session().add(day)
         db.session().commit()
     else:
-        d.comment = day.comment
-        d.observers = day.observers
+        d.is_deleted = 1
+        db.session().add(day)
         db.session.commit()
+        setObsPerDayId(d.id, day.id)
        
 def getDays():
     dayObjects = Day.query.filter_by(is_deleted=0).all()
@@ -25,7 +27,7 @@ def getDay(dayId):
     return Day.query.get(dayId)
 
 def getDayId(day, observatory_id):
-    d = Day.query.filter_by(day = day, observatory_id = observatory_id).first()
+    d = Day.query.filter_by(day = day, observatory_id = observatory_id, is_deleted = 0).first()
     return d.id
 
 def getLatestDays(observatory_id):

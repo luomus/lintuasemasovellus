@@ -14,6 +14,7 @@ def setObsPerDayId(day_id_old, day_id_new):
     obsp = Observationperiod.query.filter_by(day_id = day_id_old).all()
     for obs in obsp:
         obs.day_id = day_id_new
+        db.session().commit()
 
 def addObservationperiod(observationperiod):
         db.session().add(observationperiod)
