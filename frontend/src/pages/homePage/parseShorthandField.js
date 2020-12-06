@@ -2,11 +2,7 @@ import { postDay } from "../../services/dayService";
 import { postObservationPeriod } from "../../services/observationStationService";
 import { postAddObservation, postAddShorthand } from "../../services/observationlistService";
 import { parse, resetAll } from "../../shorthand/shorthand";
-import birds from "../../shorthand/birds.json";
-
-const birdMap = new Map(Object.entries(birds));
-
-const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
+import globals from "../../globalConstants";
 
 let day = {
   day: "",
@@ -50,43 +46,8 @@ let shorthand = {
   observationperiod_id: 0
 };
 
-const directions = new Map([
-  ["N", "0"],
-  ["NNE", "22,5"],
-  ["NE", "45"],
-  ["ENE", "67,5"],
-  ["E", "90"],
-  ["ESE", "112,5"],
-  ["SE", "135"],
-  ["SSE", "157,5"],
-  ["S", "180"],
-  ["SSW", "202,5"],
-  ["SW", "225"],
-  ["WSW", "247,5"],
-  ["W", "270"],
-  ["WNW", "292,5"],
-  ["NW", "315"],
-  ["NNW", "337,5"],
-  ["", ""]
-]);
-
-const bypass = new Map([
-  ["----", "-4"],
-  ["---", "-3"],
-  ["--", "-2"],
-  ["-", "-1"],
-  ["+-", "0"],
-  ["+", "1"],
-  ["++", "2"],
-  ["+++", "3"],
-  ["++++", "4"],
-  ["", ""]
-]);
-
-
-
 const isTime = (row) => {
-  return String(row).match(timeRegex);
+  return String(row).match(globals.timeRegex);
 };
 
 const parseTime = (timeString) => {
@@ -102,9 +63,9 @@ const parseTime = (timeString) => {
 };
 
 const sendObservation = async (observation, observationPeriodId, shorthandId) => {
-  observation["species"] = Object.values(birdMap.get(observation["species"].toUpperCase()))[0];
-  observation["direction"] = directions.get(observation["direction"].toUpperCase());
-  observation["bypassSide"] = bypass.get(observation["bypassSide"]);
+  observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
+  observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
+  observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
   await postAddObservation(observation);

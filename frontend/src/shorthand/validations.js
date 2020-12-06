@@ -1,6 +1,7 @@
 import { parse, resetAll } from "./shorthand";
+import globals from "../globalConstants";
 
-const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
+const timeRegex = globals.timeRegex;
 
 let errors = [];
 

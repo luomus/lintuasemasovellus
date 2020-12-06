@@ -1,6 +1,7 @@
-import birdJson from "./birds.json";
+import globals from "../globalConstants";
 
 // Buckets:
+
 let firstSpaceOfLineBreakOrSomeSuchEncountered = false;
 let lisatietobucketIsOpen = false;
 let ageCanBeSet = true;
@@ -42,13 +43,16 @@ let unknown = {
 let osahavainnot = [];
 
 let taysiHavainto = {};
+
 // End of buckets
 
 // Sets of acceptable substrings
-const birds = new Set(Object.keys(birdJson));
 
-const possibleDirections = new Set(["W", "S", "E", "N", "NW", "NE", "SW", "SE",
-  "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW", ""]);
+const birds = globals.birdMap;
+
+const possibleDirections = globals.directions;
+
+const acceptableBypassSides = globals.bypass;
 
 const acceptableIka = new Set(["subad", "ad", "juv", "'", "\""]);
 
@@ -56,8 +60,6 @@ const acceptableIkaChar = new Set(["j","v","b","d","e","u","s","a"]);
 
 const acceptlableIlmansuuntaChar = new Set(["n","w","e","s"]);
 
-const acceptableBypassSides = new Set(["++++", "+++", "++", "+", "+-", "-",
-  "--", "---", "----", ""]);
 // End sets of acceptable substrings
 
 const openLisatietoBucket = () => {

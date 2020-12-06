@@ -9,8 +9,6 @@ import { Link } from "react-router-dom";
 import ObservationPeriod from "../obsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 
-
-
 const ObsPeriodTable = (props) => {
 
   const { obsPeriods, summary, mode } = props;
@@ -36,9 +34,6 @@ const ObsPeriodTable = (props) => {
       fontSize: 14,
     },
   }))(TableCell);
-
-
-
 
   const [modalOpen, setModalOpen] = useState(false);
 

@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import PropTypes from "prop-types";
 import {
@@ -7,15 +5,12 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-
 const DayPagination = ({
   list, rowsPerPage, handleChangePage, handleChangeRowsPerPage,
   page
 }) => {
 
   const { t } = useTranslation();
-
-
 
   if (list.length < 10) {
     return null;

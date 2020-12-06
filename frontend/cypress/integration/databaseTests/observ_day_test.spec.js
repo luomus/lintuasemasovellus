@@ -27,16 +27,16 @@ const invalidShorthand11 = "10:00\nsommol 1/2 WW\n12:00"; //virheellinen ilmansu
 //const invalidShorthand12 = "10:00\nsommol 1/2/ W\n12:00"; //ylimääräinen kauttaviiva
 const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\nSommol /4 E\nAnacre 1\"2juv3subad/W\nMeralb /1W, 2/E, 3/4w\n13.00\n07.00\ngrugru 100SW+-, 200 S +++ ,  300 \"W---\nsommol 1/2 W\n08.00";//välikellonaika poistettu
 const invalidShorthand14 = "12:00\nsommolo 1/2 W\n10:00"; //kellonajat väärinpäin
- 
+
 //talteen toimiva: const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\n11.00\nSommol /4 E\nAnacre 1\"2juv3subad/W\nMeralb /1W, 2/E, 3/4w\n13.00\n07.00\ngrugru 100SW+-, 200 S +++ ,  300 \"W---\nsommol 1/2 W\n08.00";//megapitkä pikakirjoitus
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
-  invalidShorthand6, invalidShorthand7, invalidShorthand8, 
+  invalidShorthand6, invalidShorthand7, invalidShorthand8,
   invalidShorthand10, invalidShorthand11,  invalidShorthand13,
   invalidShorthand14];
 
-  //invalidShorthand12, lisätään ylläolevaan taulukkoon, kun ylimääräinen kauttaviivabugivalidointi korjattu
+//invalidShorthand12, lisätään ylläolevaan taulukkoon, kun ylimääräinen kauttaviivabugivalidointi korjattu
 
 
 describe("AddObservationDay", function() {
@@ -50,7 +50,7 @@ describe("AddObservationDay", function() {
     cy.visit("http://localhost:3000");
 
 
-  
+
     const user = {
       id: "asdfsommol",
       fullName: "Asdf Sommol",
@@ -65,7 +65,7 @@ describe("AddObservationDay", function() {
           user
         },
       });
-      
+
 
     cy.get("#select-observatory").click();
     cy.contains("Hangon Lintuasema").click();
@@ -203,18 +203,18 @@ describe("AddObservationDay", function() {
 
 
   it("Tallenna button is not active if shorthand is invalid", function () {
-    
+
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
 
     for (var i = 0; i < shorthands.length; i++) {
 
       //pikakirjoituskentän tyhjentäminen:
-      cy.get('.CodeMirror')
-      .first()
-      .then((editor) => {
-        editor[0].CodeMirror.setValue('');
-      });
+      cy.get(".CodeMirror")
+        .first()
+        .then((editor) => {
+          editor[0].CodeMirror.setValue("");
+        });
 
       cy.get("#date-picker-inline").clear();
       cy.get("#date-picker-inline").type(date);
@@ -230,10 +230,10 @@ describe("AddObservationDay", function() {
 
       cy.get(".CodeMirror textarea").type(shorthands[i], { force: true });
       cy.wait(1000);
-      cy.get("#saveButton").should('be.disabled');      
+      cy.get("#saveButton").should("be.disabled");
     }
   });
-  
+
   it("Tallenna button is not active if observers is left empty", function () {
 
     cy.get("#date-picker-inline").clear();
@@ -246,7 +246,7 @@ describe("AddObservationDay", function() {
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
 
-    cy.get("#saveButton").should('be.disabled');
+    cy.get("#saveButton").should("be.disabled");
   });
 
 
@@ -260,8 +260,8 @@ describe("AddObservationDay", function() {
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
 
-    cy.get("#saveButton").should('be.disabled');
-  });  
+    cy.get("#saveButton").should("be.disabled");
+  });
 
   it("Tallenna button is not active if location is not selected", function () {
 
@@ -273,8 +273,8 @@ describe("AddObservationDay", function() {
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
 
-    cy.get("#saveButton").should('be.disabled');
-  }); 
+    cy.get("#saveButton").should("be.disabled");
+  });
 
   it("Observation list only shows observations from chosen observatory", function () {
 
@@ -306,7 +306,7 @@ describe("AddObservationDay", function() {
 
     cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
-    cy.contains(date).should('not.exist');
+    cy.contains(date).should("not.exist");
     cy.contains(date2);
   });
 

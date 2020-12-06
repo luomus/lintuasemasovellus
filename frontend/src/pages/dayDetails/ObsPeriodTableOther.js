@@ -50,10 +50,8 @@ const ObsPeriodTableOther = (props) => {
     setModalOpen(false);
   };
 
-
   const handleErrorSnackOpen = () => {
   };
-
 
   return (
     <Table className={classes.table}>
@@ -85,9 +83,6 @@ const ObsPeriodTableOther = (props) => {
         handleClose={handleClose}
         handleErrorSnackOpe_n={handleErrorSnackOpen}
       />
-
-
-
     </Table>
   );
 };

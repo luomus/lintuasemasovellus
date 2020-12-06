@@ -14,7 +14,6 @@ import Alert from "../../globalComponents/Alert";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-
 const useStyles = makeStyles({
   paper: {
     background: "white",
@@ -28,8 +27,6 @@ const useStyles = makeStyles({
     }
   },
 });
-
-
 
 export const DayForm = () => {
 
@@ -56,7 +53,6 @@ export const DayForm = () => {
 
   const addDay = (event) => {
     event.preventDefault();
-    // do things with form
     postDay({
       day: formatDate(day),
       observers: observers,

@@ -5,6 +5,6 @@ describe("Login", function() {
     cy.contains("Tähän banneri");
     cy.contains("Lisää havaintoja").should("not.exist");
   });
-  
+
 });
 

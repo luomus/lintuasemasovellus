@@ -7,6 +7,7 @@ import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
+import globals from "../../globalConstants";
 
 const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
@@ -61,37 +62,6 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
   if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
 
-  let directions = new Map();
-  directions.set("0", "N");
-  directions.set("22,5", "NNE");
-  directions.set("45", "NE");
-  directions.set("67,5", "ENE");
-  directions.set("90", "E");
-  directions.set("112,5", "ESE");
-  directions.set("135", "SE");
-  directions.set("157,5", "SSE");
-  directions.set("180", "S");
-  directions.set("202,5", "SSW");
-  directions.set("225", "SW");
-  directions.set("247,5", "WSW");
-  directions.set("270", "W");
-  directions.set("292,5", "WNW");
-  directions.set("315", "NW");
-  directions.set("337,5", "NNW");
-  directions.set("", "");
-
-  let bypass = new Map();
-  bypass.set("-4", "----");
-  bypass.set("-3", "---");
-  bypass.set("-2", "--");
-  bypass.set("-1", "-");
-  bypass.set("0", "+-");
-  bypass.set("1", "+");
-  bypass.set("2", "++");
-  bypass.set("3", "+++");
-  bypass.set("4", "++++");
-  bypass.set("", "");
-
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -135,10 +105,10 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                         {(s.count)}
                       </TableCell>
                       <TableCell>
-                        {(directions.get(s.direction))}, {(s.direction)}&#176;
+                        {(globals.directions.get(s.direction))}, {(s.direction)}&#176;
                       </TableCell>
                       <TableCell>
-                        {(bypass.get(s.bypassSide))}
+                        {(globals.bypass.get(s.bypassSide))}
                       </TableCell>
                     </TableRow>
                   )

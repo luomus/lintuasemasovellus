@@ -1,4 +1,4 @@
-import birds from "./birds.json";
+import globals from "../globalConstants";
 
 
 const spaceySymbols = [" ", "\t"];
@@ -10,7 +10,7 @@ const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
 
 const bypassSides = ["++++", "+++", "++", "+", "+-", "-", "--", "---", "----"];
 
-const birdArr = Object.keys(birds);
+const birdArr = [ ...globals.birdMap.keys() ];
 
 const randomIndex = (len) => {
   return Math.floor(Math.random() * len);
