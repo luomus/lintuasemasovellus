@@ -8,26 +8,16 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import errorImg from "./error.png";
 import {
   getShorthandText, deleteShorthand, deleteObservations, deleteObservationperiod
 } from "../../services";
 import {
-  loopThroughCheckForErrors, getErrors, resetErrors
-} from "../../shorthand/validations";
-import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../homePage/parseShorthandField";
+import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 
-
-let timeout = null;
-
-let sanitizedShorthand = null;
-
-let widgets = new Set();
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -49,10 +39,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0),
     minWidth: 120,
   },
-  codemirrorBox: {
-    position: "relative",
-    opacity: "99%"
-  },
   root: {
     "& .MuiFormControl-root": {
       width: "70%",
@@ -64,8 +50,6 @@ const useStyles = makeStyles((theme) => ({
 
 const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
-  console.log(dayId);
-
   const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
@@ -74,11 +58,10 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
   const [warning, setWarning] = useState(false);
+  const [sanitizedShorthand, setSanitizedShorthand] = useState("");
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
-
-  console.log(userObservatory);
 
   const initializeDefaultShorthand = (defaultShorthand) => {
     let text = "";
@@ -97,7 +80,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
   const handleDialogOpen = () => {
     setWarning(true);
-    console.log(warning);
   };
 
   const handleDialogClose = () => {
@@ -134,7 +116,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
 
   const handleSave = async () => {
     await handleDelete();
-    console.log(sanitizedShorthand);
     setDayId(dayId);
     const rows = sanitizedShorthand;
     await loopThroughObservationPeriods(rows, type, location);
@@ -175,13 +156,10 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     }
   });
 
-  console.log("shorthand default: ", defaultShorthand);
-
   const { t } = useTranslation();
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
-
 
   const classes = useStyles();
 
@@ -190,47 +168,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
       <Redirect to="/login" />
     );
   }
-
-  console.log(sanitizedShorthand);
-
-  const errorCheckingLogic = async (editor, data, value) => {
-    sanitizedShorthand = loopThroughCheckForErrors(value);
-    for (const widget of widgets) {
-      editor.removeLineWidget(widget);
-    }
-    widgets.clear();
-    const errors = getErrors();
-    for (let i = 0; i < errors.length; i++) {
-      const msg = document.createElement("div");
-      const icon = msg.appendChild(document.createElement("img"));
-      msg.className = "lint-error";
-      icon.setAttribute("src", errorImg);
-      icon.className = "lint-error-icon";
-      msg.appendChild(document.createTextNode(errors[Number(i)]));
-      widgets.add(editor.addLineWidget(data.to.line, msg, {
-        coverGutter: false, noHScroll: true
-      }));
-    }
-    if (errors.length === 0) setCodeMirrorHasErrors(false);
-    else setCodeMirrorHasErrors(true);
-    resetErrors();
-  };
-
-
-
-
-
-  const codemirrorOnchange = (editor, data, value) => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
-      errorCheckingLogic(editor, data, value);
-      timeout = null;
-    }, 500);
-  };
-
-  console.log("shorthand text: ", shorthand);
 
   return (
     <Modal
@@ -301,26 +238,12 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               </FormControl>
             </Grid>
             <Grid item xs={12} height="100%">
-              <CodeMirror
-                id="editShorthand"
-                className={classes.codemirrorBox}
-                value={shorthand}
-                options={{
-                  theme: "idea",
-                  lineNumbers: true,
-                  autoRefresh: true,
-                  readOnly: false,
-                  lint: false
-                }}
-                editorDidMount={editor => {
-                  editor.refresh();
-                }}
-                onBeforeChange={(editor, data, value) => {
-                  setShorthand(value);
-                }}
-                onChange={codemirrorOnchange}
+              <CodeMirrorBlock
+                setCodeMirrorHasErrors={setCodeMirrorHasErrors}
+                setSanitizedShorthand={setSanitizedShorthand}
+                setShorthand={setShorthand}
+                shorthand={shorthand}
               />
-
             </Grid>
             <Grid container item xs={12} alignItems="flex-end">
               <Box pr={2} pt={20}>
@@ -374,8 +297,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
         </div>
       </Fade>
     </Modal>
-
-
   );
 };
 

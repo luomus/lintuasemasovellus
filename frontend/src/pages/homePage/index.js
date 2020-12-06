@@ -16,20 +16,14 @@ import ObservatorySelector from "./observatorySelector";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
-import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import errorImg from "./error.png";
-import "./index.css";
-import {
-  loopThroughCheckForErrors, getErrors, resetErrors
-} from "../../shorthand/validations";
 import {
   sendDay, loopThroughObservationPeriods, loopThroughObservations
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
-
+import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,18 +43,9 @@ const useStyles = makeStyles((theme) => ({
   sendButton: {
     marginBottom: "40px"
   },
-  codemirrorBox: {
-    position: "relative",
-    opacity: "99%"
-  },
 }
 ));
 
-let timeout = null;
-
-let sanitizedShorthand = null;
-
-let widgets = new Set();
 
 const StyledTableCell = withStyles(() => ({
   head: {
@@ -107,14 +92,15 @@ export const HomePage = () => {
   const [comment, setComment] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const [shorthand, setShorthand] = useState("");
 
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
-
   const [latestDays, setLatestDays] = useState([]);
+
+  const [shorthand, setShorthand] = useState("");
+  const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
 
 
   useEffect(() => {
@@ -192,31 +178,6 @@ export const HomePage = () => {
     );
   }
 
-
-
-  const errorCheckingLogic = async (editor, data, value) => {
-    sanitizedShorthand = loopThroughCheckForErrors(value);
-    for (const widget of widgets) {
-      editor.removeLineWidget(widget);
-    }
-    widgets.clear();
-    const errors = getErrors();
-    for (let i = 0; i < errors.length; i++) {
-      const msg = document.createElement("div");
-      const icon = msg.appendChild(document.createElement("img"));
-      msg.className = "lint-error";
-      icon.setAttribute("src", errorImg);
-      icon.className = "lint-error-icon";
-      msg.appendChild(document.createTextNode(errors[Number(i)]));
-      widgets.add(editor.addLineWidget(data.to.line, msg, {
-        coverGutter: false, noHScroll: true
-      }));
-    }
-    if (errors.length === 0) setCodeMirrorHasErrors(false);
-    else setCodeMirrorHasErrors(true);
-    resetErrors();
-  };
-
   const saveButtonDisabled = () => {
     if (codeMirrorHasErrors || observers === "" || type === "" || location === "")
       return true;
@@ -224,44 +185,26 @@ export const HomePage = () => {
       return false;
   };
 
-  const codemirrorOnchange = (editor, data, value) => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
-      errorCheckingLogic(editor, data, value);
-      timeout = null;
-    }, 500);
-  };
-
-
   return (
     <div>
       <Grid container
         alignItems="flex-start"
-        // alignItems="center"
       >
-
         <Grid item xs={8}>
-
           <Paper className={classes.paper}>
-
             <Grid container
               alignItems="flex-start"
               spacing={1}>
-
               <Grid item xs={6} >
                 <Typography variant="h6" component="h2" >
                   {t("addObservations")}
                 </Typography>
               </Grid>
-
               <Grid item xs={6} fullWidth={true}>
                 <Box display="flex" justifyContent="flex-end">
                   <ObservatorySelector />
                 </Box>
               </Grid>
-
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
@@ -350,7 +293,6 @@ export const HomePage = () => {
                 </FormControl>
               </Grid>
 
-
               <br />
               <br />
               <Grid item xs={12}>
@@ -360,24 +302,11 @@ export const HomePage = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <CodeMirror
-                  id="shorthand"
-                  className={classes.codemirrorBox}
-                  value={shorthand}
-                  options={{
-                    theme: "idea",
-                    lineNumbers: true,
-                    autoRefresh: true,
-                    readOnly: false,
-                    lint: false
-                  }}
-                  editorDidMount={editor => {
-                    editor.refresh();
-                  }}
-                  onBeforeChange={(editor, data, value) => {
-                    setShorthand(value);
-                  }}
-                  onChange={codemirrorOnchange}
+                <CodeMirrorBlock
+                  shorthand={shorthand}
+                  setShorthand={setShorthand}
+                  setSanitizedShorthand={setSanitizedShorthand}
+                  setCodeMirrorHasErrors={setCodeMirrorHasErrors}
                 />
               </Grid>
               <Button
