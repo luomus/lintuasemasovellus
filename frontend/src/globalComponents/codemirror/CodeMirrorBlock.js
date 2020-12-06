@@ -14,19 +14,19 @@ import PropTypes from "prop-types";
 let timeout = null;
 let widgets = new Set();
 
+const useStyles = makeStyles({
+  codemirrorBox: {
+    position: "relative",
+    opacity: "99%"
+  },
+});
+
 const CodeMirrorBlock = ({
   shorthand,
   setShorthand,
   setCodeMirrorHasErrors,
   setSanitizedShorthand,
 }) => {
-
-  const useStyles = makeStyles({
-    codemirrorBox: {
-      position: "relative",
-      opacity: "99%"
-    },
-  });
 
   const classes = useStyles();
 
