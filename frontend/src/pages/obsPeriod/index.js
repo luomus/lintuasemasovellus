@@ -105,10 +105,10 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                         {(s.count)}
                       </TableCell>
                       <TableCell>
-                        {(globals.directions.get(s.direction))}, {(s.direction)}&#176;
+                        {(globals.inverseDirections.get(s.direction))}, {(s.direction)}&#176;
                       </TableCell>
                       <TableCell>
-                        {(globals.bypass.get(s.bypassSide))}
+                        {(globals.inverseBypass.get(s.bypassSide))}
                       </TableCell>
                     </TableRow>
                   )
