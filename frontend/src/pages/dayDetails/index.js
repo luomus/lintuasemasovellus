@@ -12,7 +12,7 @@ import EditShorthand from "../editShorthand";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, getSummary
+  editComment, editObservers, getSummary, searchDayInfo
 } from "../../services";
 
 
@@ -70,9 +70,10 @@ const DayDetails = () => {
     .comment
   );
 
-  const dayId = dayList
+  const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
-    .id;
+    .id
+  );
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -100,6 +101,11 @@ const DayDetails = () => {
   useEffect(() => {
     getSummary(dayId)
       .then(periodsJson => setSummary(periodsJson));
+  }, [dayId]);
+
+  useEffect(() => {
+    searchDayInfo(day, stationName)
+      .then(dayJson => setDayId(dayJson[0].id));
   }, [dayId]);
 
   const handleOpen = () => {

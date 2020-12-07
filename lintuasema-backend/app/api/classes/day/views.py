@@ -81,9 +81,9 @@ def search_dayinfo(date, observatory):
     day = Day.query.filter_by(day = date, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
     if not day:
-        res.append({ 'comment': "", 'observers': ""})
+        res.append({ 'id': 0, 'comment': "", 'observers': ""})
     else:
-        res.append({ 'comment': day.comment, 'observers': day.observers})
+        res.append({ 'id': day.id, 'comment': day.comment, 'observers': day.observers})
     return jsonify(res)
 
    
