@@ -1,3 +1,5 @@
+import { myBeforeEach } from "../methods.js";
+
 
 const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
@@ -41,37 +43,7 @@ const shorthands = [invalidShorthand0, invalidShorthand1,
 
 describe("AddObservationDay", function() {
   beforeEach(function() {
-    cy.visit("http://localhost:3000");
-
-    // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
-
-    cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-    //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-    cy.visit("http://localhost:3000");
-
-
-
-    const user = {
-      id: "asdfsommol",
-      fullName: "Asdf Sommol",
-      emailAddress: "asdf@sommol.net"
-    };
-
-    cy.window()
-      .its("store")
-      .invoke("dispatch", {
-        type: "SET_USER",
-        data: {
-          user
-        },
-      });
-
-
-    cy.get("#select-observatory").click();
-    cy.contains("Hangon Lintuasema").click();
-    cy.get("#submit").contains("Tallenna").click();
-    cy.contains("Hangon Lintuasema");
-
+    myBeforeEach();
   });
 
 
@@ -100,6 +72,8 @@ describe("AddObservationDay", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").clear();
+    cy.get ("#comment").clear();
     cy.wait(1000);
     cy.get ("#observers").type(observer);
     cy.get("#comment").type(comment);
@@ -108,6 +82,7 @@ describe("AddObservationDay", function() {
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
+    cy.wait(1000);
 
 
   });
@@ -174,6 +149,7 @@ describe("AddObservationDay", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date2);
+    cy.wait(1000);
     cy.get ("#observers").type(observer1);
     cy.get("#comment").type(comment1);
     cy.get("#selectType").click().get("#Esimerkki1").click();
