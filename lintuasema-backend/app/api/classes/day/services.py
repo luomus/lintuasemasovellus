@@ -31,15 +31,15 @@ def getDayId(day, observatory_id):
     return d.id
 
 def getLatestDays(observatory_id):
-    stmt = text(" SELECT Day.day, COUNT(DISTINCT Observation.species) AS speciesCount FROM Day"
-                    " JOIN Observationperiod ON Day.id = Observationperiod.day_id"
-                    " JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
-                    " WHERE Day.observatory_id = :observatory_id"
-                    " AND Day.is_deleted = 0 "
-                    " AND Observationperiod.is_deleted = 0"
-                    " AND Observation.is_deleted = 0"
-                    " GROUP BY Day.day"
-                    " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
+    stmt = text(" SELECT Day.day,"
+                " COUNT(DISTINCT (CASE WHEN (Observationperiod.is_deleted = 0 AND Observation.is_deleted = 0) THEN  Observation.species ELSE NULL END)) AS species_count"
+                " FROM Day"
+                " LEFT JOIN Observationperiod ON Day.id = Observationperiod.day_id"
+                " LEFT JOIN Observation ON Observationperiod.id = Observation.observationperiod_id"
+                " WHERE Day.observatory_id = :observatory_id"
+                " AND Day.is_deleted = 0 "
+                " GROUP BY Day.day"
+                " ORDER BY Day.day DESC").params(observatory_id = observatory_id)
 
     res = db.engine.execute(stmt)
 
@@ -53,7 +53,9 @@ def getLatestDays(observatory_id):
         if not isinstance(dayDatetime, datetime):
             dayDatetime = datetime.strptime(dayDatetime, '%Y-%m-%d %H:%M:%S.%f')
         dayString = dayDatetime.strftime('%d.%m.%Y')   
-        response.append({"day": dayString,
-            "speciesCount": row[1]})
+        response.append({
+            "day": dayString,
+            "speciesCount": row.species_count
+            })
       
     return jsonify(response)
