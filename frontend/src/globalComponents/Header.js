@@ -10,6 +10,7 @@ const Header = () => {
     <a href="/">
       <img
         src={haukkalogo}
+        height="35"
         alt="haukka"
       >
       </img>
