@@ -1,14 +1,19 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
+//import { useTranslation } from "react-i18next";
+import haukkalogo from "../resources/haukkalogo_white.png";
 
 const Header = () => {
 
-  const { t } = useTranslation();
+  //const { t } = useTranslation();
 
   return (
-    <header>
-      {t("title")}
-    </header>
+    <a href="/">
+      <img
+        src={haukkalogo}
+        alt="haukka"
+      >
+      </img>
+    </a>
   );
 };
 

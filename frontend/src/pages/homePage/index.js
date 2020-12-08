@@ -362,14 +362,23 @@ export const HomePage = () => {
                   {t("manualTitle")}
                 </Typography>
                 <br />
-              Syötä havainto pikakirjoitusmuodossa:
+              Syötä havainto pikakirjoitusmuodossa
+                <br />
+              (parillinen määrä kellonaikoja, yksi laji per rivi):
                 <br />
                 <br />
               10:00
                 <br />
               sommol 1/2 W
                 <br />
+              11:00
+                <br />
+              11:00
+                <br />
+              grugru 3ad/2juv/5subad s +-
+                <br />
               12:00
+                <br />
               </Grid>
             </Paper>
           </Grid>

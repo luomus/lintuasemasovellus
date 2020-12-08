@@ -189,6 +189,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
         <div className={classes.paper}>
           <h2> {t("editShorthand")}</h2>
           <h2> {date} </h2>
+          <h3> (Valise tyyppi ja sijainti) </h3>
           <Grid
             container
             height="100%"

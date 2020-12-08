@@ -1,7 +1,7 @@
 const resources = {
   fi: {
     translation: {
-      "intro": "Tämä on täytetekstiä. Suomessa sijaitsee 16 lintuasemaa. Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii sisäänkirjautumisen.",
+      "intro": "Tervetuloa lintuasemasovellus Haukkaan. Suomessa sijaitsee 16 lintuasemaa. Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii sisäänkirjautumisen.",
       "title": "Lintuasemasovellus",
       "footer": "Lintuasemasovellus | Ohjelmistotuotantoprojekti 2020",
       "login": "Kirjaudu sisään",
