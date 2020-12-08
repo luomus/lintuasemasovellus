@@ -1,6 +1,6 @@
 import React from "react";
 //import { useTranslation } from "react-i18next";
-import haukkalogo from "../resources/haukkalogo_white.png";
+import textlogo from "../resources/haukka-text-logo-white.svg";
 
 const Header = () => {
 
@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <a href="/">
       <img
-        src={haukkalogo}
+        src={textlogo}
         height="35"
         alt="haukka"
       >

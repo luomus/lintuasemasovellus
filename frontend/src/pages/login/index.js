@@ -1,14 +1,16 @@
 import React from "react";
 import {
-  Paper, makeStyles, Button, Grid, Box
+  Paper, makeStyles, Button, Grid, Box, Typography
 } from "@material-ui/core/";
 import { useTranslation } from "react-i18next";
 import { loginUrl } from "../../services";
-import { AccountCircle } from "@material-ui/icons";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import banner from "../../resources/banner.png";
 import luomuslogo from "../../resources/luomuslogo.png";
+import haukkalogo from "../../resources/haukka-logo-circle.svg";
+
+
 
 export const Login = () => {
 
@@ -19,14 +21,12 @@ export const Login = () => {
     },
     paper: {
       background: "white",
-      //padding: "20px 30px",
-      margin: "10px 10px 10px 10px",
-      width: "60%",
+      margin: "20px 10px 10px 10px",
+      width: "50%",
     },
     userButton: {
       color: "black",
-      float: "right",
-      size: "small",
+      align: "center",
     },
     banner: {
       width: "100%"
@@ -35,13 +35,22 @@ export const Login = () => {
       width: "20%",
       align: "center",
     },
-    logoBox: {
+    box: {
       justifyContent: "center",
       margin: "0 auto",
       align: "center",
     },
+    logoBox: {
+      height: "100px",
+      width: "100px",
+      position: "relative",
+      left: "50%",
+      marginLeft: "-50px",
+      top: "30%",
+      marginTop: "-50px",
+    },
     haukkaLogo: {
-      float: "center",
+      align: "center",
       height: "20px",
 
 
@@ -70,16 +79,27 @@ export const Login = () => {
               src={banner}
               alt="banneri"></img>
           </Grid>
-          <Grid item xs={12}>
-            <Button
-              className={classes.userButton}
-              id="login-link"
-              href={loginUrl}
-              startIcon={<AccountCircle />}
-            >
-              {t("login")}
-            </Button>
+          <Box className={classes.logoBox}>
+            <img
+              src={haukkalogo}
+              width="100"
+              alt="haukka"></img>
+          </Box>
+          <Grid container alignItems="center" justify="center" item xs={12}>
+
+            <Box className="box">
+              <br />
+              <Button
+                variant="contained"
+                className={classes.userButton}
+                id="login-link"
+                href={loginUrl}
+              >
+                <Typography>{t("login")}</Typography>
+              </Button>
+            </Box>
           </Grid>
+
 
           <Grid item xs={12}>
 
@@ -90,7 +110,7 @@ export const Login = () => {
           </Grid>
 
           <Grid container alignItems="center" justify="center" item xs={12}>
-            <Box className="logoBox" p={2}>
+            <Box className="box" p={2}>
               <br />
               <br />
               <a href="https://www.luomus.fi/">
