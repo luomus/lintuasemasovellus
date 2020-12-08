@@ -125,6 +125,8 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   };
 
   const retrieveShorthand = async (type, location) => {
+    console.log("location", location);
+    console.log("type", type);
     const res = await getShorthandText(dayId, type, location);
     setDefaultShorthand(res);
     initializeDefaultShorthand(res);
