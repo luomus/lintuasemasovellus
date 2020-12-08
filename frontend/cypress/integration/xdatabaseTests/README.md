@@ -1,1 +1,0 @@
-For cypress the database tests must be last. It makes tests run smoother. Cypress runs tests in alphapetical order. Therefore the name of the databaseTests-file has been changed to xdatabaseTests.

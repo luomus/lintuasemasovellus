@@ -194,33 +194,11 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             spacing={1}>
             <Grid item xs={2}>
               <FormControl className={classes.formControl}>
-                <InputLabel id="Location">{t("location")}</InputLabel>
-                <Select required
-                  labelId="location"
-                  id="selectLocation"
-                  value={location}
-                  onChange={(event) => {
-                    setLocation(event.target.value);
-                    retrieveShorthand(type, event.target.value);
-                  }}
-                >
-                  {
-                    locations.map((location, i) =>
-                      <MenuItem id={location} value={location} key={i}>
-                        {location}
-                      </MenuItem>
-                    )
-                  }
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={2}>
-              <FormControl className={classes.formControl}>
                 <InputLabel id="Tyyppi">{t("type")}</InputLabel>
                 <Select required
                   labelId="type"
                   fullWidth={true}
-                  id="selectType"
+                  id="selectTypeInModification"
                   value={type}
                   onChange={(event) => {
                     setType(event.target.value);
@@ -231,6 +209,28 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
                     types.map((type, i) =>
                       <MenuItem id={type} value={type} key={i}>
                         {type}
+                      </MenuItem>
+                    )
+                  }
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={2}>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="Location">{t("location")}</InputLabel>
+                <Select required
+                  labelId="location"
+                  id="selectLocationInModification"
+                  value={location}
+                  onChange={(event) => {
+                    setLocation(event.target.value);
+                    retrieveShorthand(type, event.target.value);
+                  }}
+                >
+                  {
+                    locations.map((location, i) =>
+                      <MenuItem id={location} value={location} key={i}>
+                        {location}
                       </MenuItem>
                     )
                   }
@@ -248,6 +248,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             <Grid container item xs={12} alignItems="flex-end">
               <Box pr={2} pt={20}>
                 <Button
+                  id="saveButtonInShorthandModification"
                   disabled={codeMirrorHasErrors || !shorthand.trim()}
                   variant="contained"
                   color="primary"
@@ -257,6 +258,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               </Box>
               <Box pr={2} pt={20}>
                 <Button
+                  id="cancelButtonInShorthandModification"
                   variant="contained"
                   color="primary"
                   onClick={handleClose}>
@@ -265,6 +267,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               </Box>
               <Box pr={2} pt={20}>
                 <Button
+                  id="removeButtonInShorthandModification"
                   disabled={deleteButtonIsDisabled()}
                   variant="contained"
                   color="secondary"
