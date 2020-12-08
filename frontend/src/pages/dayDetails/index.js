@@ -12,7 +12,7 @@ import EditShorthand from "../editShorthand";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, getSummary, searchDayInfo
+  editComment, editObservers, getSummary
 } from "../../services";
 
 
@@ -78,8 +78,10 @@ const DayDetails = () => {
   const observersOnSubmit = (event) => {
     event.preventDefault();
     if (editedObservers.length !== 0) {
-      editObservers(dayId, editedObservers);
       setObservers(editedObservers);
+      editObservers(dayId, editedObservers)
+        .then(dayJson => setDayId(dayJson.data.id));
+      console.log("dayId: ", dayId);
     }
     setObserversForm(false);
   };
@@ -87,8 +89,10 @@ const DayDetails = () => {
   const commentOnSubmit = (event) => {
     event.preventDefault();
     if (editedComment.length !== 0) {
-      editComment(dayId, editedComment);
       setComment(editedComment);
+      editComment(dayId, editedComment)
+        .then(dayJson => setDayId(dayJson.data.id));
+      console.log("dayId: ", dayId);
     }
     setCommentForm(false);
   };
@@ -103,10 +107,6 @@ const DayDetails = () => {
       .then(periodsJson => setSummary(periodsJson));
   }, [dayId]);
 
-  useEffect(() => {
-    searchDayInfo(day, stationName)
-      .then(dayJson => setDayId(dayJson[0].id));
-  }, [dayId]);
 
   const handleOpen = () => {
     setModalOpen(true);
