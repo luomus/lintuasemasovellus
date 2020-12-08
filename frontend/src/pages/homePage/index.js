@@ -362,22 +362,22 @@ export const HomePage = () => {
                   {t("manualTitle")}
                 </Typography>
                 <br />
-              Syötä havainto pikakirjoitusmuodossa
+                {t("writeObservationInShorthand")}
                 <br />
-              (parillinen määrä kellonaikoja, yksi laji per rivi):
+                {t("evenAmountOfTimesOneSpeciesPerLine")}
                 <br />
                 <br />
-              10:00
+                {t("timeTen")}
                 <br />
-              sommol 1/2 W
+                {t("shorthandExample1")}
                 <br />
-              11:00
+                {t("timeEleven")}
                 <br />
-              11:00
+                {t("timeEleven")}
                 <br />
-              grugru 3ad/2juv/5subad s +-
+                {t("shorthandExample2")}
                 <br />
-              12:00
+                {t("timeTwelwe")}
                 <br />
               </Grid>
             </Paper>

@@ -189,7 +189,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
         <div className={classes.paper}>
           <h2> {t("editShorthand")}</h2>
           <h2> {date} </h2>
-          <h3> (Valise tyyppi ja sijainti) </h3>
+          <h3> {t("chooseTypeAndLocation")}</h3>
           <Grid
             container
             height="100%"
@@ -288,15 +288,15 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             <DialogTitle id="alert-dialog-title">{"Vahvista poisto"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Poistamista ei voi peruuttaa. Jatketaanko?
+                {t("removingCannotBeCancelled")}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleDialogConfirm} color="secondary">
-                Vahvista
+                {t("confirm")}
               </Button>
               <Button onClick={handleDialogClose} color="default" autoFocus>
-                Peruuta
+                {t("cancel")}
               </Button>
             </DialogActions>
           </Dialog>
