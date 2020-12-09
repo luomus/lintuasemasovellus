@@ -19,11 +19,11 @@ import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  //sendDay,
-  //loopThroughObservationPeriods,
-  //loopThroughObservations,
-  sendShorthand,
-  makeSendDataJson,
+  sendDay,
+  loopThroughObservationPeriods,
+  loopThroughObservations,
+  //sendShorthand,
+  //makeSendDataJson,
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
@@ -154,7 +154,6 @@ export const HomePage = () => {
   const sendData = async () => {
     const rows = sanitizedShorthand;
     try {
-      /*
       await sendDay({
         day: formatDate(day),
         comment,
@@ -163,9 +162,8 @@ export const HomePage = () => {
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
-      */
-      await sendShorthand(makeSendDataJson(
-        formatDate(day), userObservatory, comment, observers, location, type, rows));
+      //await sendShorthand(makeSendDataJson(
+      //  formatDate(day), userObservatory, comment, observers, location, type, rows));
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
