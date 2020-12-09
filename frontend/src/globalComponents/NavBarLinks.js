@@ -16,6 +16,10 @@ const NavBarLinks = () => {
       <Button component={Link} to="/listdays">
         {t("showDaysPage")}
       </Button>
+      <br />
+      <Button component={Link} to="/manual">
+        {t("manualTitle")}
+      </Button>
     </Box>
   );
 };
