@@ -1,8 +1,8 @@
-import { makeSendDataJson } from "./parseShorthandField";
+import { makeSendDataJson } from "../pages/homePage/parseShorthandField";
 
 import fs from "fs";
 import path from "path";
-import { loopThroughCheckForErrors } from "../../shorthand/validations";
+import { loopThroughCheckForErrors } from "../shorthand/validations";
 
 describe("Test parsing", () => {
 
@@ -53,7 +53,7 @@ describe("Test parsing", () => {
   });
 
   test("makeSendData does not have error w/ massive multiline", () => {
-    const file = path.join(__dirname, "../../shorthand/", "longShorthandExample.txt");
+    const file = path.join(__dirname, "./", "longShorthandExample.txt");
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const text = fs.readFileSync(file, "utf8", "r", (err, data) => data);
     const sanitized = loopThroughCheckForErrors(text);

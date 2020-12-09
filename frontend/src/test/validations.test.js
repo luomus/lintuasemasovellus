@@ -2,7 +2,7 @@ import {
   loopThroughCheckForErrors,
   resetErrors,
   getErrors
-} from "./validations";
+} from "../shorthand/validations";
 
 import {
   withValidSubObservation,
