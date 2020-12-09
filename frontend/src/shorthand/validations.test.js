@@ -9,6 +9,9 @@ import {
   makeValidMultiline
 } from "./testHelpers";
 
+import fs from "fs";
+import path from "path";
+
 describe ("basic higher order validations", () => {
 
   beforeEach(() => {
@@ -61,6 +64,20 @@ describe ("basic higher order validations", () => {
     const text = "9.00\nV K 1/2 W\n12.00";
     loopThroughCheckForErrors(text);
     expect(getErrors().length).toBeGreaterThan(0);
+  });
+
+  test("two time blocks", () => {
+    const text = "9.00\nK 1/2 W\n12.00\n13.00\nV 2 E ++\n13.30";
+    loopThroughCheckForErrors(text);
+    expect(getErrors()).toEqual([]);//we'll expect no errors
+  });
+
+  test("long example shorthand from file", () => {
+    const file = path.join(__dirname, "./", "longShorthandExample.txt");
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    const text = fs.readFileSync(file, "utf8", "r", (err, data) => data);
+    loopThroughCheckForErrors(text);
+    expect(getErrors()).toEqual([]);//we'll expect no errors
   });
 
 });

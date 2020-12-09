@@ -92,7 +92,6 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
   let startTimeEnc = false;
   let obsperiods = [];
   let obsperiod = {};
-  console.log("rows:", shorthandRows);
   for (const row of shorthandRows) {
     if (!row) continue;
     else if(fastIsTime(row) && !startTimeEnc) {
@@ -103,6 +102,7 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
       obsperiod["endTime"] = parseTime(row);
     } else {
       const parsedShorthand = parse(row);
+      resetAll();
       let observations = [];
       for (const subobservation of parsedShorthand.osahavainnot) {
         countersToNum(subobservation);
@@ -117,7 +117,6 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
     }
   }
   data["obsperiods"] = obsperiods;
-  resetAll();
   return data;
 };
 
