@@ -1,4 +1,4 @@
-FROM node:12 AS builder
+FROM node:latest AS builder
 
 COPY /frontend /front
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM python:3.6
+FROM python:latest
 
 RUN mkdir -p /opt/oracle
 
