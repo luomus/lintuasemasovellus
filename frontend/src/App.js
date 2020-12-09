@@ -5,7 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import { HomePage, UserManual } from "./pages";
 import Footer from "./globalComponents/Footer";
 import { DayForm, DayList } from "./pages";
-import { getCurrentUser } from "./services";
+import { getAuth, getToken } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
@@ -22,12 +22,14 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeStations());
-    getCurrentUser()
+    if (userIsSet) return;
+    getToken()
       .then(resp => resp.data)
-      .then(res => {
-        dispatch(setUser(res[0]));
-      })
-      .catch(error => console.error("user problem", error.message));
+      .then(tokenJson => getAuth(tokenJson.token, tokenJson.auth_token)
+        .then(resp => resp.data)
+        .then(res => dispatch(setUser(res)))
+        .catch(() => console.error("user not set"))
+      ).catch(() => console.error("token not set"));
   }, [dispatch, userIsSet]);
 
   return (
