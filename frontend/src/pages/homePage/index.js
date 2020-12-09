@@ -202,9 +202,10 @@ export const HomePage = () => {
               alignItems="flex-start"
               spacing={1}>
               <Grid item xs={6} >
-                <Typography variant="h6" component="h2" >
+                <Typography variant="h5" component="h2" >
                   {t("addObservations")}
                 </Typography>
+                <br />
               </Grid>
               <Grid item xs={6} fullWidth={true}>
                 <Box display="flex" justifyContent="flex-end">
@@ -335,7 +336,7 @@ export const HomePage = () => {
                 <Typography variant="h5" component="h2" >
                   {t("latestDays")}
                 </Typography>
-
+                <br />
                 <Table>
                   <TableBody>
                     {
@@ -359,26 +360,15 @@ export const HomePage = () => {
               <br />
               <Grid item xs={12} mt={0}>
                 <Typography variant="h5" component="h2" >
-                  {t("manualTitle")}
+                  {t("Linkit")}
+                  <br />
+                  <br />
+                  <Link style={{ textDecoration: "none", color: "black" }} to="/listdays"><Typography variant="subtitle1">
+                    Näytä päivät</Typography></Link>
                 </Typography>
-                <br />
-                {t("writeObservationInShorthand")}
-                <br />
-                {t("evenAmountOfTimesOneSpeciesPerLine")}
-                <br />
-                <br />
-                {t("timeTen")}
-                <br />
-                {t("shorthandExample1")}
-                <br />
-                {t("timeEleven")}
-                <br />
-                {t("timeEleven")}
-                <br />
-                {t("shorthandExample2")}
-                <br />
-                {t("timeTwelwe")}
-                <br />
+                <Link style={{ textDecoration: "none", color: "black" }} to="/manual"><Typography variant="subtitle1">
+                  Käyttöohjeet</Typography></Link>
+
               </Grid>
             </Paper>
           </Grid>
