@@ -97,6 +97,8 @@ export const HomePage = () => {
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
+  const [disabled, setDisabled] = useState(false);
+
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
@@ -114,11 +116,11 @@ export const HomePage = () => {
 
 
   const emptyAllFields = () => {
-    setDay(dateNow);
-    setObservers("");
-    setComment("");
-    setType("");
-    setLocation("");
+    //setDay(dateNow);
+    //setObservers("");
+    //setComment("");
+    //setType("");
+    //setLocation("");
     setShorthand("");
   };
 
@@ -153,6 +155,7 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
+    setDisabled(true);
     try {
       await sendDay({
         day: formatDate(day),
@@ -173,6 +176,7 @@ export const HomePage = () => {
       console.error(error.message);
       setErrorHappened(true);
     }
+    setDisabled(false);
   };
 
   const user = useSelector(state => state.user);
@@ -320,11 +324,11 @@ export const HomePage = () => {
                 id="saveButton"
                 className={classes.sendButton}
                 onClick={sendData}
-                disabled={saveButtonDisabled()}
+                disabled={saveButtonDisabled() || disabled}
                 color="primary"
                 variant="contained"
               >
-                {t("save")}
+                {disabled ? t("loading"): t("save")}
               </Button>
             </Grid>
           </Paper>

@@ -17,6 +17,7 @@ const resources = {
       "observations": "Havainnot",
       "comment": "Kommentti",
       "save": "Tallenna",
+      "loading": "Ladataan...",
       "cancel": "Peruuta",
       "remove": "Poista",
       "confirm":"Vahvista",
