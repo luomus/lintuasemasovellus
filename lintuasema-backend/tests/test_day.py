@@ -34,27 +34,27 @@ def test_addedDayGoesToDatabaseWhenCommentIsNone(app):
     found = addAndFind(dayProperties)
     assert found == True
 
-def test_addedDayDoesNotGoToDatabaseIfDateIsNone(app):
-    dayProperties = {'date': None, 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': 1}
-    found = addAndFind(dayProperties)
-    assert found == False
+#def test_addedDayDoesNotGoToDatabaseIfDateIsNone(app):
+#    dayProperties = {'date': None, 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': 1}
+#    found = addAndFind(dayProperties)
+#    assert found == False
 
-def test_addedDayDoesNotGoToDatabaseIfObserversIsNone(app):
-    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': None, 'observatory_id': 1}
-    found = addAndFind(dayProperties)
-    assert found == False
+#def test_addedDayDoesNotGoToDatabaseIfObserversIsNone(app):
+#    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': None, 'observatory_id': 1}
+#    found = addAndFind(dayProperties)
+#    assert found == False
 
-def test_addedDayDoesNotGoToDatabaseIfObservatoryIsNone(app):
-    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': None}
-    found = addAndFind(dayProperties)
-    assert found == False
+#def test_addedDayDoesNotGoToDatabaseIfObservatoryIsNone(app):
+#    dayProperties = {'date': testDate, 'comment': 'Testailin havainnoimista', 'observers': 'Tomppa', 'observatory_id': None}
+#    found = addAndFind(dayProperties)
+#    assert found == False
 
-def test_existingDayIsNotAdded(app):
+def test_ifExistingDayIsAddedCommentAndObserverCanBeModified(app):
     dayProperties = {'date': testDate, 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 1}
     dayToAdd = Day(day=testDate, comment='testi', observers='Tom', observatory_id=1)
     addDay(dayToAdd)
     found = addAndFind(dayProperties)
-    assert found == False
+    assert found == True
 
 def test_sameDayIsAddedIfDifferentObservatory(app):
     dayProperties = {'date': testDate, 'comment': 'testataan', 'observers': 'Tomppa', 'observatory_id': 2}
