@@ -25,4 +25,20 @@ it("Observatory can be modified" , function() {
 
 });
 
+it("Navigationbar works", function(){
+  cy.get("#navigationbar").click();
+  cy.get("#showdays").click({force:true});
+  cy.contains("Havainnointiasema");
+  cy.get("#navigationbar").click();
+  cy.get("#manual").click({force:true});
+  cy.contains("Lintuaseman valinta");
+  cy.get("#navigationbar").click();
+  cy.get("#frontpage").click({force:true});
+  cy.contains("Lisää havaintoja");
+
+
+
+  
+});
+
 });

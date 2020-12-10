@@ -9,15 +9,15 @@ const NavBarLinks = () => {
   const { t } = useTranslation();
   return (
     <Box>
-      <Button component={Link} to="/">
+      <Button id="frontpage" component={Link} to="/">
         {t("frontpage")}
       </Button>
       <br />
-      <Button component={Link} to="/listdays">
+      <Button id="showdays" component={Link} to="/listdays">
         {t("showDaysPage")}
       </Button>
       <br />
-      <Button component={Link} to="/manual">
+      <Button id="manual" component={Link} to="/manual">
         {t("manualTitle")}
       </Button>
     </Box>

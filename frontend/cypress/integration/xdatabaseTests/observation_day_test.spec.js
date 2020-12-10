@@ -55,7 +55,6 @@ describe("AddObservationDay", function() {
   
 
   it("Day and period has been added for Vakio", function() {
-    cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(observer);
     cy.contains(comment);
@@ -66,7 +65,6 @@ describe("AddObservationDay", function() {
 
 
   it("Observation can be opened to a new page", function() {
-    cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
     cy.get("#periodsButton").click();
@@ -76,7 +74,6 @@ describe("AddObservationDay", function() {
   });
 
   it("Comment and observer can be edited", function() {
-    cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
     cy.get("#commentButton").click();
@@ -135,11 +132,11 @@ describe("AddObservationDay", function() {
     cy.get("#observatorySelector").click();
     cy.get("#select-observatory").click().get("ul > li").eq(1).click();
     cy.get("#submit").contains("Tallenna").click();
-
-    cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(observer).should("not.exist");
     cy.contains(observer1).click();
+
+    cy.get("#navigationbar").click();
     cy.get("#periodsButton").click();
     cy.contains("Länsireitti");
     cy.contains("Esimerkki1");
@@ -181,8 +178,6 @@ describe("AddObservationDay", function() {
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
 
-
-    cy.get("#navigationbar").click();
     cy.contains("Näytä päivät").click();
     cy.contains(date).should("not.exist");
     cy.contains(date2);
