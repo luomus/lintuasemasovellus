@@ -47,12 +47,14 @@ def getObservationsByObservationPeriod(observationperiod_id):
     return jsonify(ret)
 
 
-@bp.route("/api/deleteObservations", methods=["DELETE"])
+@bp.route("/api/deleteObservations", methods=["POST"])
 @login_required
 def observations_delete():
     req = request.get_json()
     shorthand_id = req['shorthand_id']
-    Observation.query.filter_by(shorthand_id=shorthand_id).delete()
+    obs = Observation.query.filter_by(shorthand_id=shorthand_id).all()
+    for observation in obs:
+        deleteObservation(observatory.id)
     db.session.commit()
     return jsonify(req)
 
