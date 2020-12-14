@@ -9,7 +9,9 @@ Aja sen jälkeen komentoriviltä komennot (esimerkissä tiedosto ollut Desktop-k
 `sudo ldconfig`
 
 ### Huomio
+
 Oraclen asentaminen macOS -käyttöjärjestelmällä saattaa olla hieman hankalaa.
+
 Yliopiston vpn-yhteys täytyy olla päällä, tai muuten tietokantayhteys ei toimi. Lisäksi backend-kansiossa täytyy olla tiedosto `.env`, jossa määritellään erikseen asiakkaalta/edelliseltä ryhmältä/ohjaajalta pyydettävät Oraclen tarvitsemat tunnistetiedot.
 
 [Ohjeita VPN-yhteyden muodostamiseen](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/verkkoyhteydet/yhteydet-yliopiston-ulkopuolelta)
