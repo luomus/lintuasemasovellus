@@ -14,7 +14,7 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 [Lisenssi](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/LICENSE)
 
-[Käyttöohjeet](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/manual.md)
+[Käyttöohjeet](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/manual.md)
 
 ### Dokumentaatio
 
