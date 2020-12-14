@@ -1,0 +1,278 @@
+6:00
+GAVSTE /1 n
+GAVARC /2 e
+FALPER 1ad2subad3juv4 s
+ORIORI 100SW+-, 200 S +++ ,  300 "W---
+URIAAL 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+CALLAP 1"2juv3subad/W
+GARGLA 100SW+-, 200 S +++ ,  300 "W---
+ALCTOR 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+ANSCAE 5/ w
+BRACAN 6/ s
+BRALEU 7/ n
+PHYBOR 45/67/88 n
+MOTALB 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+SYLCUR 45/67/88 n
+PRUMOD 9999999999999999999 w++
+6:30
+6:30
+TADTAD 8/ e
+ANAPEN 9/ w
+ANASTR 10/ s
+AEGCAU 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+PYRPYR 1"2juv3subad/W
+TURTOR         24     e + +
+SYLCOM 45/67/88 n
+PARMON 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+CEPGRY 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+SYLBOR 45/67/88 n
+SYLATR 45/67/88 n
+COCCOC 1"2juv3subad/W
+COLLIV 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+COLOEN 1 n
+COLPAL 1 nne
+7:00
+7:00
+STRDEC 1 ne
+LANCOL  100SW+-, 200 S +++ ,  300 "W---
+LANEXC 100SW+-, 200 S +++ ,  300 "W---
+ANACRE 1/9 n
+ANAPLA 2/8 e
+NUMPHA 1"2subad3'4/1"2subad3'4/1"2subad3'4 e
+CALTEM 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 w
+ANAACU 3/7 w
+ANAQUE 4/6 s
+ANACLY 5/5 n
+TETBON 1ad2subad3juv4 n
+HIPICT 45/67/88 n
+TACRUF /3 w
+TURPIL         24     e + +
+TURPHI         24     e + +
+TURILI         334     e + +
+7:30
+7:30
+AREINT 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+FICPAR 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+MERALB 5/5/5 e
+MERSER 6/6/6 w
+PARCYA 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+STRTUR 1 ene
+CUCCAN 1 e
+BUBBUB 1 ese
+NYCSCA 1 se
+DRYMAR 7 n+-
+PARATE 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+8:00
+8:00
+STEHIR 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+TURVIS         56     e + +
+LOCNAE         214     e + +
+PARCAE 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+CYGCYG 1/ w
+ANSFAB 2/ s
+FULATR 1"2subad3'4 e
+ANSERY 3/ n
+ANSANS 4/ e
+PARMAJ 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+SITEUR 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+CERFAM 100SW+-, 200 S +++ ,  300 "W--- 
+REMPEN 100SW+-, 200 S +++ ,  300 "W---
+MERMER 7/7/7 s
+PERAPI 8/8/8 n
+8:30
+8:30
+MILMIG 9/9/9 e
+HALALB 10/10/10 w
+CIRAER 1//1 s
+CIRCYA 2//2 n
+GALCHL 1"2subad3'4 n
+CIRPYG 3//3 e
+CIRMAC 4//4 w
+FICHYP 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+AYTFER 6/4 e
+AYTFUL 7/3 w
+AYTMAR 8/2 s
+SAXRUB  99999999999999999 w++, 20 e, 13w--, 14e
+SOMMOL 9/1 n 
+CLAHYE 1/1/1 e
+MELNIG 2/2/2 w
+MELFUS 3/3/3 s
+BUCCLA 4/4/4 n
+PANBIA 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+LAGLAG 1ad2subad3juv4 e 
+EMBRUS 1"2juv3subad/W
+EMBPUS 1"2juv3subad/W
+EMBAUR 1"2juv3subad/W
+EMBSCH 1"2juv3subad/W
+PHACAR /7 w
+BOTSTE /8 s
+ARDCIN /9 n 
+CYGOLO /10 e
+LAGMUT 1ad2subad3juv4 w
+PHALOB 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+ASIOTU 1 w
+ASIFLA 1 wnw
+AEGFUN 1 nw
+CAPEUR 1 nnw
+9:00
+9:00
+APUAPU 7 n----
+XENCIN 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+ALCATT 7 n---
+MOTCIN 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+LOXPYT 1"2juv3subad/W
+JYNTOR 7 n--
+PICCAN 7 n-
+PORPAR 1"2subad3'4 w
+CRECRE 1"2subad3'4 s
+DENMAJ 7 n+
+DENLEU 7 n++
+DENMIN 7 n+++
+PICTRI 7 n++++
+LULARB 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+LYRTET 1ad2subad3juv4 s
+MUSSTR 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+PINENU 1"2juv3subad/W
+TETURO 1ad2subad3juv4 n
+PERPER 1ad2subad3juv4 e
+COTCOT 1"2subad3'4 w
+PHACOL 1"2subad3'4 s
+9:30
+10:00
+ALAARV 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+STECUS 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+PLUAPR 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 s
+VANVAN 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n 
+DELURB 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+PARCIN 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+ACTHYP 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+STECAS 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+PARCRI 111/222/333 w, 798/43/12 e, 1 e++, 2e-
+STEAEA 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+LOCFLU         24     e + +
+LOCLUS 45/67/88 n
+ACRSCH	45/67/88 n
+STEALB 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+AQUCLA 9//9 s
+AQUCHR 10//10 n
+PANHAL 1ad2subad3juv4 w
+FALTIN 1"2subad3'4 e
+FALVES 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 s
+FALCOL 1"2subad3'4/1"2subad3'4/1"2subad3'4 n
+CHLNIG 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+ANTCAM 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+FALRUS 1ad2subad3juv4 w
+CARRIS /1W, 2/E, 3/4w
+10:30
+10:30
+EREALP 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+RALAQU 1"2subad3'4 n
+PORPOR 1"2subad3'4 e
+SURULU 1 sse
+GLAPAS 1 s
+STRALU 1 ssw
+STRURA 1 sw
+STRNEB 1 wsw
+RIPRIP 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+EMBCIT 1"2juv3subad/W
+EMBHOR 1"2juv3subad/W
+HIRRUS 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+GRUGRU 1"2subad3'4 w
+SAXTOR 99999999999999999 w++, 20 e, 13w--, 14e
+HAEOST 1"2subad3'4 s
+CHADUB 1"2subad3'4 n
+CHAHIA 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 e
+CHAMOR 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 w
+ANTTRI 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+LUSLUS 99999999999999999 w++
+CORNIX 100SW+-, 200 S +++ ,  300 "W---
+11:00
+11:00
+TRIGLA 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+LUSSVE 99999999999999999 w++
+NUCCAR 100SW+-, 200 S +++ ,  300 "W---
+CORMON 100SW+-, 200 S +++ ,  300 "W---
+ANTPRA 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+TRITOT 1"2subad3'4/1"2subad3'4/1"2subad3'4 n
+TRISTA 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+ANTCER 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+STELON 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+ACRSCI 45/67/88 n
+ACRARU 45/67/88 n
+IDUCAL 45/67/88 n
+CARCAR /1W, 2/E, 3/4w
+LARMIN 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+PODCRI /4 s
+PODGRI /5 n
+ERIRUB 99999999999999999 w++
+PODAUR /6 e 
+CARCHL /1W, 2/E, 3/4w
+LARRID 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+LARCAN 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+LARFUS 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+11:30
+11:30
+LARARG 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+CARSPI /1W, 2/E, 3/4w
+CARCAN /1W, 2/E, 3/4w
+ACCGEN 5//5 s
+NUMARQ 1"2subad3'4/1"2subad3'4/1"2subad3'4 w 
+ACCNIS 6//6 n
+BUTBUT 7//7 e
+BUTLAG 8//8 w
+LARMAR 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n+, 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n-
+LIMLIM 1"2subad3'4/1"2subad3'4/1"2subad3'4 s
+TRINEB 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+ACRDUM 45/67/88 n
+LIMLAP 1"2subad3'4/1"2subad3'4/1"2subad3'4 n
+CALMAR 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 s
+FALSUB 1ad2subad3juv4 e
+CARMEA /1W, 2/E, 3/4w
+CALALP 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 n
+ANTPET 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+CARHOR /1W, 2/E, 3/4w
+LOXLEU /1W, 2/E, 3/4w
+LOXCUR 1"2juv3subad/W
+MOTFLA 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+FRICOE /1W, 2/E, 3/4w
+TRIERY 1"2subad3'4/1"2subad3'4/1"2subad3'4 s
+FRIMON /1W, 2/E, 3/4w
+SERSER /1W, 2/E, 3/4w
+PLENIV 1"2juv3subad/W
+MOTCIT 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+LUSCYA 99999999999999999 w++, 20 e, 13w--, 14e
+PHOOCH 99999999999999999 w++, 20 e, 13w--, 14e
+PHYSIB 45/67/88 n
+PHYCOL 45/67/88 n
+PHYLUS 45/67/88 n
+REGREG 111/222/333 w, 798/43/12 e, 1 e++, 2e- 
+PHOPHO  99999999999999999 w++, 20 e, 13w--, 14e
+12:00
+12:00
+OENOEN         24     e + +
+CARERY 1"2juv3subad/W
+PHYDES 45/67/88 n
+BOMGAR 10000/20000/30000 n+, 70000/60000/20000 n+, 12000/20500/30400 n+, 10005/20200/30900 n+
+CINCIN 999999999999999999 w++
+TURMER         67     e + +
+CALUTA 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 e
+SCORUS 1"2subad3'4/1"2subad3'4/1"2subad3'4 w
+LIMFAL 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 e
+12:30
+12:30
+ACRRIS 45/67/88 n
+TRIOCH 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++, 1/2w+, 2/3e+, 3/4n-, 4/5 w--, 5/6 e---, 6/7n++, 7/8 w++ 
+CORFRU 100SW+-, 200 S +++ ,  300 "W--- 
+PHIPUG 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 w
+STUVUL 100SW+-, 200 S +++ ,  300 "W---
+PASDOM /1W, 2/E, 3/4w
+LYMMIN 1ad2subad3juv4/1ad2subad3juv4/1ad2subad3juv4 s
+GALGAL 1"2subad3'4/1"2subad3'4/1"2subad3'4 n
+PERINF 100SW+-, 200 S +++ ,  300 "W---
+TROTRO 9999999999999999999  w++
+PICPIC 100SW+-, 200 S +++ ,  300 "W---
+SYLNIS 45/67/88 n
+GALMED 1"2subad3'4/1"2subad3'4/1"2subad3'4 e
+CORRAX 100SW+-, 200 S +++ ,  300 "W---
+PASMON /1W, 2/E, 3/4w
+13:00

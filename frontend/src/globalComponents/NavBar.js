@@ -9,6 +9,7 @@ import { getLogout, loginUrl } from "../services";
 import { setUser } from "../reducers/userReducer";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import Header from "./Header";
 
 
 const useStyles = makeStyles({
@@ -86,7 +87,7 @@ const NavBar = () => {
   const welcomeText = user.id
     ?
     <Typography className={classes.title}>
-      {t("welcome")}, {user.name}!
+      {t("welcome")}, {user.fullName}!
     </Typography>
     :
     null;
@@ -105,12 +106,10 @@ const NavBar = () => {
 
       <AppBar position="static" style={{ background: "#514134" }}>
         <Toolbar>
-          <IconButton id="navigationbar" onClick={toggleMenu("right", true)}> {/*navigationbar nimi lisätty testejä varten, että löytyy helpommin*/}
+          <IconButton id="navigationbar" onClick={toggleMenu("right", true)}>
             <Dehaze style={{ color: "white" }} />
           </IconButton>
-          <Typography component={Link} to="/" variant="h5" className={classes.title}>
-            {t("title")}
-          </Typography>
+          <Header />
           <Drawer
             open={state.right}
             onClose={toggleMenu("right", false)}>

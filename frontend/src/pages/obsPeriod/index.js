@@ -60,7 +60,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
     );
   }
 
-  if (!obsPeriod) return <div>obsPeriod is undefined!</div>;
+  if (!obsPeriod) return <div>{t("observationPeriodNotDefined")}</div>;
 
   return (
     <Modal

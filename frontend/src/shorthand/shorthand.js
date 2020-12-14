@@ -143,8 +143,9 @@ const ikaConstructed = () => {
 };
 
 export const constructTaysiHavainto = (startKello, endKello) => {
-  if (!birds.has(lajinimi.toUpperCase()))
+  if (!birds.has(lajinimi.toUpperCase())) {
     throw new Error("Tuntematon lajin nimi!");
+  }
   constructOsahavainto();
   taysiHavainto = {
     species: lajinimi,

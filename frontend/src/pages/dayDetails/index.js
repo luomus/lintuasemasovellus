@@ -70,15 +70,18 @@ const DayDetails = () => {
     .comment
   );
 
-  const dayId = dayList
+  const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
-    .id;
+    .id
+  );
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
     if (editedObservers.length !== 0) {
-      editObservers(dayId, editedObservers);
       setObservers(editedObservers);
+      editObservers(dayId, editedObservers)
+        .then(dayJson => setDayId(dayJson.data.id));
+      console.log("dayId: ", dayId);
     }
     setObserversForm(false);
   };
@@ -86,8 +89,10 @@ const DayDetails = () => {
   const commentOnSubmit = (event) => {
     event.preventDefault();
     if (editedComment.length !== 0) {
-      editComment(dayId, editedComment);
       setComment(editedComment);
+      editComment(dayId, editedComment)
+        .then(dayJson => setDayId(dayJson.data.id));
+      console.log("dayId: ", dayId);
     }
     setCommentForm(false);
   };
@@ -101,6 +106,7 @@ const DayDetails = () => {
     getSummary(dayId)
       .then(periodsJson => setSummary(periodsJson));
   }, [dayId]);
+
 
   const handleOpen = () => {
     setModalOpen(true);

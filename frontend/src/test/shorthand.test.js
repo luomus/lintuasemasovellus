@@ -1,7 +1,7 @@
 import {
   parse,
   resetAll
-} from "./shorthand";
+} from "../shorthand/shorthand";
 
 
 import {

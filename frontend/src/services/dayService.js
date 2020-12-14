@@ -42,3 +42,7 @@ export const getShorthandText = async (dayId, type, location) => {
   return shorthand.data;
 };
 
+export const sendEverything = async (everything) => {
+  const res = await axios.post("/api/addEverything", everything);
+  return res;
+};

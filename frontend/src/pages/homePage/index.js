@@ -19,7 +19,11 @@ import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  sendDay, loopThroughObservationPeriods, loopThroughObservations
+  sendDay,
+  loopThroughObservationPeriods,
+  loopThroughObservations,
+  //sendShorthand,
+  //makeSendDataJson,
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
@@ -93,6 +97,8 @@ export const HomePage = () => {
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
+  const [disabled, setDisabled] = useState(false);
+
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
@@ -110,11 +116,11 @@ export const HomePage = () => {
 
 
   const emptyAllFields = () => {
-    setDay(dateNow);
-    setObservers("");
-    setComment("");
-    setType("");
-    setLocation("");
+    //setDay(dateNow);
+    //setObservers("");
+    //setComment("");
+    //setType("");
+    //setLocation("");
     setShorthand("");
   };
 
@@ -149,6 +155,7 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
+    setDisabled(true);
     try {
       await sendDay({
         day: formatDate(day),
@@ -158,6 +165,8 @@ export const HomePage = () => {
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
+      //await sendShorthand(makeSendDataJson(
+      //  formatDate(day), userObservatory, comment, observers, location, type, rows));
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
@@ -167,6 +176,7 @@ export const HomePage = () => {
       console.error(error.message);
       setErrorHappened(true);
     }
+    setDisabled(false);
   };
 
   const user = useSelector(state => state.user);
@@ -196,9 +206,10 @@ export const HomePage = () => {
               alignItems="flex-start"
               spacing={1}>
               <Grid item xs={6} >
-                <Typography variant="h6" component="h2" >
+                <Typography variant="h5" component="h2" >
                   {t("addObservations")}
                 </Typography>
+                <br />
               </Grid>
               <Grid item xs={6} fullWidth={true}>
                 <Box display="flex" justifyContent="flex-end">
@@ -313,11 +324,11 @@ export const HomePage = () => {
                 id="saveButton"
                 className={classes.sendButton}
                 onClick={sendData}
-                disabled={saveButtonDisabled()}
+                disabled={saveButtonDisabled() || disabled}
                 color="primary"
                 variant="contained"
               >
-                {t("save")}
+                {disabled ? t("loading"): t("save")}
               </Button>
             </Grid>
           </Paper>
@@ -329,7 +340,7 @@ export const HomePage = () => {
                 <Typography variant="h5" component="h2" >
                   {t("latestDays")}
                 </Typography>
-
+                <br />
                 <Table>
                   <TableBody>
                     {
@@ -353,17 +364,15 @@ export const HomePage = () => {
               <br />
               <Grid item xs={12} mt={0}>
                 <Typography variant="h5" component="h2" >
-                  {t("manualTitle")}
+                  {t("Linkit")}
+                  <br />
+                  <br />
+                  <Link style={{ textDecoration: "none", color: "black" }} to="/listdays"><Typography variant="subtitle1">
+                    Näytä päivät</Typography></Link>
                 </Typography>
-                <br />
-              Syötä havainto pikakirjoitusmuodossa:
-                <br />
-                <br />
-              10:00
-                <br />
-              sommol 1/2 W
-                <br />
-              12:00
+                <Link style={{ textDecoration: "none", color: "black" }} to="/manual"><Typography variant="subtitle1">
+                  Käyttöohjeet</Typography></Link>
+
               </Grid>
             </Paper>
           </Grid>

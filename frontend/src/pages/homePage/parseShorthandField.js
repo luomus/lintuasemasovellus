@@ -1,4 +1,4 @@
-import { postDay } from "../../services/dayService";
+import { postDay, sendEverything } from "../../services/dayService";
 import { postObservationPeriod } from "../../services/observationStationService";
 import { postAddObservation, postAddShorthand } from "../../services/observationlistService";
 import { parse, resetAll } from "../../shorthand/shorthand";
@@ -61,6 +61,70 @@ const parseTime = (timeString) => {
   }
   return ret;
 };
+
+const fastIsTime = (text) => {
+  return text[1] === "." || text[1] === ":" || text[2] === "." || text[2] === ":";
+};
+
+const makenum = (subobs, field) => {
+  subobs[String(field)] = Number(subobs[String(field)]);
+};
+
+const countersToNum = (subobservation) => {
+  makenum(subobservation, "adultUnknownCount");
+  makenum(subobservation, "adultFemaleCount");
+  makenum(subobservation, "adultMaleCount");
+  makenum(subobservation, "juvenileUnknownCount");
+  makenum(subobservation, "juvenileFemaleCount");
+  makenum(subobservation, "juvenileMaleCount");
+  makenum(subobservation, "subadultUnknownCount");
+  makenum(subobservation, "subadultFemaleCount");
+  makenum(subobservation, "subadultMaleCount");
+  makenum(subobservation, "unknownUnknownCount");
+  makenum(subobservation, "unknownFemaleCount");
+  makenum(subobservation, "unknownMaleCount");
+};
+
+export const makeSendDataJson = (day, observatory, comment, observers, location, type, shorthandRows) => {
+  let data = {
+    day, observatory, comment, observers, location, type
+  };
+  let startTimeEnc = false;
+  let obsperiods = [];
+  let obsperiod = {};
+  for (const row of shorthandRows) {
+    if (!row) continue;
+    else if(fastIsTime(row) && !startTimeEnc) {
+      startTimeEnc = true;
+      obsperiod["startTime"] = parseTime(row);
+    } else if (fastIsTime(row)) {
+      startTimeEnc = false;
+      obsperiod["endTime"] = parseTime(row);
+    } else {
+      const parsedShorthand = parse(row);
+      resetAll();
+      let observations = [];
+      for (const subobservation of parsedShorthand.osahavainnot) {
+        countersToNum(subobservation);
+        observations.push({
+          species: parsedShorthand.species,
+          shorthandrow: row,
+          ...subobservation,
+        });
+      }
+      obsperiod["observations"] = observations;
+      obsperiods.push(obsperiod);
+    }
+  }
+  data["obsperiods"] = obsperiods;
+  return data;
+};
+
+export const sendShorthand = async (data) => {
+  return await sendEverything(data);
+};
+
+
 
 const sendObservation = async (observation, observationPeriodId, shorthandId) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];

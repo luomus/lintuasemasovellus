@@ -3,7 +3,7 @@ import {
   loopThroughCheckForErrors, getErrors, resetErrors
 } from "../../shorthand/validations";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import errorImg from "./error.png";
+import errorImg from "../../resources/error.png";
 import "./cmError.css";
 import { makeStyles } from "@material-ui/core";
 import "codemirror/lib/codemirror.css";

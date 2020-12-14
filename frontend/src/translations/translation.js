@@ -1,9 +1,9 @@
 const resources = {
   fi: {
     translation: {
-      "intro": "Tämä on täytetekstiä. Suomessa sijaitsee 16 lintuasemaa. Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii sisäänkirjautumisen.",
+      "intro": "Tervetuloa lintuasemasovellus Haukkaan. Suomessa sijaitsee 16 lintuasemaa. Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii sisäänkirjautumisen.",
       "title": "Lintuasemasovellus",
-      "footer": "Lintuasemasovellus | Ohjelmistotuotantoprojekti 2020",
+      "footer": "Lintuasemasovellus Haukka | Luonnontieteellinen keskusmuseo LUOMUS",
       "login": "Kirjaudu sisään",
       "logout": "Kirjaudu ulos",
       "welcome": "Tervetuloa",
@@ -17,12 +17,16 @@ const resources = {
       "observations": "Havainnot",
       "comment": "Kommentti",
       "save": "Tallenna",
+      "loading": "Ladataan...",
       "cancel": "Peruuta",
       "remove": "Poista",
+      "confirm":"Vahvista",
       "oneSpecies": "laji",
       "multipleSpecies": "lajia",
+      "removingCannotBeCancelled":"Poistamista ei voi peruuttaa. Jatketaanko?",
+      "observationPeriodNotDefined":"obsPeriod is undefined!",
 
-
+      "chooseTypeAndLocation":"(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
       "obsPeriods": "Jaksot",
       "edit": "Muokkaa",
@@ -45,6 +49,13 @@ const resources = {
       "manualTitle": "Käyttöohjeet",
       "manualTextShort": "Tähän kirjoitetaan lyhyt versio sovelluksen käyttöohjeista.",
       "manualText": "Tähän kirjoitetaan sovelluksen käyttöohjeet kokonaisuudessaan.",
+      "writeObservationInShorthand":"Syötä havainto pikakirjoitusmuodossa",
+      "evenAmountOfTimesOneSpeciesPerLine":"(parillinen määrä kellonaikoja, yksi laji per rivi)",
+      "timeTen":"10:00",
+      "shorthandExample1":"sommol 1/2 W",
+      "timeEleven":"11:00",
+      "shorthandExample2":"grugru 3ad/2juv/5subad s +-",
+      "timeTwelwe":"12:00",
 
       "speciesTotal":"Lajit lkm",
       "duration": "Kesto",

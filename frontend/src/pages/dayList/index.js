@@ -4,10 +4,11 @@ import {
   TableContainer,
   Typography
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { retrieveDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
 
 const useStyles = makeStyles({
@@ -40,6 +41,12 @@ export const DayList = () => {
   const userObservatory = useSelector(state => state.userObservatory);
 
   const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(retrieveDays());
+  }, [dispatch]);
 
   if (!list) return null;
 
