@@ -16,7 +16,6 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 [Käyttöohjeet](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/manual.md)
 
-[Bugit, keskeneräisyydet ja asiakaspalaute](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/bugsAndUserFeedback.md)
 
 ### Dokumentaatio
 
@@ -33,6 +32,8 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 [Tuntikirjanpito](https://docs.google.com/spreadsheets/d/1V68aoQnG-gI77wLIuzaikG_-l8oi5lEpZsDesqOSz5o/edit?usp=sharing)
 
 ## Ohjeita kehittäjille
+
+[Bugit, keskeneräisyydet ja asiakaspalaute](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/bugsAndUserFeedback.md)
 
 ### Kehitysympäristön asennus
 
