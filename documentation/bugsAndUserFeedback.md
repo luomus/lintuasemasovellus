@@ -2,11 +2,16 @@
 
 ## Oraclessa asuu pahuus
 
-1. Oracle ei siedä isoja kirjaimia tietokantataulujen nimissä.
+1. Oracle ei siedä isoja kirjaimia tietokantataulujen tai sarakkeiden nimissä.
 
-2. Oracle ei siedä user-nimeä tietokantataulussa. Ohjelmassa “account”-nimellä.
+2. Oracle ei siedä user-nimeä tietokantataulussa. Ohjelmassa “account”-nimellä. Jotkin yleiset sarakenimet kuten "row" ovat myös kiellettyjä.
 
-3. Voi tuntua hyvältä idealta käyttää sqliteä testauksessa. Ei kannata. Oracle ja sqlite toimii eri tavalla.
+3. Oracle lisää id:itä täysin satunnaisessa järjestyksessä, turha lähteä ennustamaan seuraavaa id:tä.
+
+4. Oracle ei ole yhteensopiva joidenkin sqlalchemyn metodien kanssa, kuten flush() ja refresh(), joiden avulla voi esim. selvittää lähetettävän olion id:n.
+Siis lähetettävän olion id:n selvittäminen on hyvin vaivalloista Oraclen kanssa.
+
+5. Voi tuntua hyvältä idealta käyttää sqliteä testauksessa. Ei kannata. Oracle ja sqlite toimii eri tavalla.
 
 ## Tiedossa olevia bugeja
 
@@ -23,6 +28,9 @@
 6. Päivämääräbugi -> jos kirjoittaa manuaalisesti ei-validin päivämäärän (esim. 37.1.), niin tieto menee tietokantaan oudosti.
 
 ##  Muuta keskeneräistä
+
+Tärkein: tehokkuusongelma. Pitkän pikakirjoituspötkön lähettäminen on tällä hetkellä hyvin hidasta. 100-rivisessä voi mennä esim. yli 30 sekuntia.
+Tähän on jo aloitettu jotain, kuten backendissä api/addEverything route. Idea oli lähettää kaikki tiedot yhdessä db sessionissa (https://docs.sqlalchemy.org/en/14/orm/persistence_techniques.html#bulk-operations). Aika loppui kesken ja tuli Oracle ongelmia tuon suhteen.
 
 1. Kenttiin tarvitaan lisää validointia. Kenttien ei pidä sallia esimerkiksi syötteitä jotka koostuvat vain välilyönneistä. Päivämäärien pitää olla todellisia päivämääriä, ja niin edelleen.
 2. Lisätarkistus: Yömuuton kellonajan tulisi sisältää tarkistus siitä, että kyseinen kellonaika on yöllä.
