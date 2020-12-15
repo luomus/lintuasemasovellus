@@ -135,8 +135,6 @@ describe("AddObservationDay", function() {
     cy.contains("Näytä päivät").click();
     cy.contains(observer).should("not.exist");
     cy.contains(observer1).click();
-
-    cy.get("#navigationbar").click();
     cy.get("#periodsButton").click();
     cy.contains("Länsireitti");
     cy.contains("Esimerkki1");
