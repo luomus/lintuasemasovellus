@@ -1,5 +1,8 @@
 # Ohjeet Cypress-testaukseen
 ## Käyttöönotto
+
+Huomio: Cypress-testit ajaaksesi sinun täytyy vaihtaa Cypress-kansiosta methods.js tiedostosta käytettävä portti ennen testien ajoa. Tiedostossa kommentoituna ohje tähän. 
+
 Asenna uusimmat riippuvuudet (frontendissa komennolla npm install, backendissa komennolla . install.sh)
 Käynnistä backend ja frontend erikseen. Backend käynnistetään frontend-kansiosta ja kirjoittamalla
 
