@@ -19,7 +19,7 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 ### Dokumentaatio
 
-[Tietokantakaavio](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/tietokantakaavio.png)
+[Tietokantakaavio](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/tietokantakaavio2.png)
 
 [Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
 
