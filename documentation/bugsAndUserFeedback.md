@@ -37,6 +37,8 @@ Tähän on jo aloitettu jotain, kuten backendissä api/addEverything route. Idea
 3. Käyttäjälle tarvitaan ilmoituksia tilanteissa joissa vanhoja tietoja ladataan. Esimerkkinä tilanne jossa päivälle on jo olemassa havainnoijat ja kommentti.
 
 4. Etusivun havaintolomakkeessa on kenttiä jotka täytyy täyttää jotta lomakkeen voi lähettää. Tyhjäksi jääneille kentille tarvitaan jonkinlainen virheviesti.
+5. Soft delete on osittain keskeneräinen. Ideana on, että jos tietokannasta poistetaan jotakin, merkitään sarakkeen is_deleted arvoksi 1. Vastaavasti kohdilla joita ei ole poistettu arvo on 0. Tämän avulla pystytään seuraamaan mitä tietokannassa on tapahtunut.
+Soft delete toimii nyt oikein lukuun ottamatta pikakirjoituksen kautta poistettuja havaintoja, jotka tällä hetkellä poistetaan kokonaan tietokannasta. Tätä pitäisi siis muokata niin, että kun pikakirjoituksen kautta poistetaan jotakin, tulee poistetun kohdan is_deleted arvoksi 1 ja uuden 0.
 
 
 ## Käyttäjäpalautteesta se osa, jota ei ole korjattu
