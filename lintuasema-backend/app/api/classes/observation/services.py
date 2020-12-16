@@ -62,8 +62,8 @@ def addObservationToDb(req):
 
     return jsonify(req)
 
-def deleteObservation(observation_id):
-    observation = Observation.query.filter_by(observation_id).first()
+def deleteObservation(shorthand_id):
+    observation = Observation.query.filter_by(shorthand_id).first()
     observation.is_deleted = 1
 
 
