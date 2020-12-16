@@ -14,11 +14,12 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 [Lisenssi](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/LICENSE)
 
-[Käyttöohjeet] (tulossa)
+[Käyttöohjeet](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/manual.md)
+
 
 ### Dokumentaatio
 
-[Tietokantakaavio](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/tietokantakaavio.png)
+[Tietokantakaavio](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/tietokantakaavio2.png)
 
 [Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
 
@@ -32,6 +33,8 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 ## Ohjeita kehittäjille
 
+[Bugit, keskeneräisyydet ja asiakaspalaute](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/bugsAndUserFeedback.md)
+
 ### Kehitysympäristön asennus
 
 [Ohjelman käynnistäminen paikallisesti](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/localStartOfProject.md)
@@ -39,8 +42,6 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 [API/Backend](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingBackendEnvironment.md)
 
 [Frontend](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingFrontendEnvironment.md)
-
-[Buildaaminen](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/buildingProject.md)
 
 [Docker-ohje](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/dockerGuide.md)
 
