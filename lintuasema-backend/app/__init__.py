@@ -113,7 +113,7 @@ def init_app(database):
             print(e)
     else: 
         try:
-            app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:////home/jkaukora/database/lintuasema.db:'
+            app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
             app.config["SQLALCHEMY_ECHO"] = True
             print('Testitietokantayhteys luotu.')
         except Exception as e:

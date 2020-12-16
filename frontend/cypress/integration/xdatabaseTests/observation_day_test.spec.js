@@ -35,7 +35,7 @@ describe("AddObservationDay", function() {
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
-    cy.wait(1000);
+    cy.wait(5000);
     cy.contains(date);
 
   });
@@ -124,6 +124,8 @@ describe("AddObservationDay", function() {
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
+    cy.wait(5000);
+    cy.contains(date2);
 
 
   });
@@ -136,6 +138,7 @@ describe("AddObservationDay", function() {
     cy.contains(observer).should("not.exist");
     cy.contains(observer1).click();
     cy.get("#periodsButton").click();
+    cy.wait(1000);
     cy.contains("Länsireitti");
     cy.contains("Esimerkki1");
 
