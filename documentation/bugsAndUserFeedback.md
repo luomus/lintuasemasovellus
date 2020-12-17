@@ -27,17 +27,22 @@ Siis lähetettävän olion id:n selvittäminen on hyvin vaivalloista Oraclen kan
 
 6. Päivämääräbugi -> jos kirjoittaa manuaalisesti ei-validin päivämäärän (esim. 37.1.), niin tieto menee tietokantaan oudosti.
 
+7. Uloskirjautumisbugi: joskus ohjelma kirjaa käyttäjän automaattisesti sisään uloskirjautumisen jälkeen ja uloskirjautuminen toimii vasta toisella yrittämällä.
+
 ##  Muuta keskeneräistä
 
-Tärkein: tehokkuusongelma. Pitkän pikakirjoituspötkön lähettäminen on tällä hetkellä hyvin hidasta. 100-rivisessä voi mennä esim. yli 30 sekuntia.
+1. Tärkein: tehokkuusongelma. Pitkän pikakirjoituspötkön lähettäminen on tällä hetkellä hyvin hidasta. 100-rivisessä voi mennä esim. yli 30 sekuntia.
 Tähän on jo aloitettu jotain, kuten backendissä api/addEverything route. Idea oli lähettää kaikki tiedot yhdessä db sessionissa (https://docs.sqlalchemy.org/en/14/orm/persistence_techniques.html#bulk-operations). Aika loppui kesken ja tuli Oracle ongelmia tuon suhteen.
 
-1. Kenttiin tarvitaan lisää validointia. Kenttien ei pidä sallia esimerkiksi syötteitä jotka koostuvat vain välilyönneistä. Päivämäärien pitää olla todellisia päivämääriä, ja niin edelleen.
-2. Lisätarkistus: Yömuuton kellonajan tulisi sisältää tarkistus siitä, että kyseinen kellonaika on yöllä.
-3. Käyttäjälle tarvitaan ilmoituksia tilanteissa joissa vanhoja tietoja ladataan. Esimerkkinä tilanne jossa päivälle on jo olemassa havainnoijat ja kommentti.
+2. Kenttiin tarvitaan lisää validointia. Kenttien ei pidä sallia esimerkiksi syötteitä jotka koostuvat vain välilyönneistä. Päivämäärien pitää olla todellisia päivämääriä, ja niin edelleen.
 
-4. Etusivun havaintolomakkeessa on kenttiä jotka täytyy täyttää jotta lomakkeen voi lähettää. Tyhjäksi jääneille kentille tarvitaan jonkinlainen virheviesti.
-5. Soft delete on osittain keskeneräinen. Ideana on, että jos tietokannasta poistetaan jotakin, merkitään sarakkeen is_deleted arvoksi 1. Vastaavasti kohdilla joita ei ole poistettu arvo on 0. Tämän avulla pystytään seuraamaan mitä tietokannassa on tapahtunut.
+3. Lisätarkistus: Yömuuton kellonajan tulisi sisältää tarkistus siitä, että kyseinen kellonaika on yöllä.
+
+4. Käyttäjälle tarvitaan ilmoituksia tilanteissa joissa vanhoja tietoja ladataan. Esimerkkinä tilanne jossa päivälle on jo olemassa havainnoijat ja kommentti.
+
+5. Etusivun havaintolomakkeessa on kenttiä jotka täytyy täyttää jotta lomakkeen voi lähettää. Tyhjäksi jääneille kentille tarvitaan jonkinlainen virheviesti.
+
+6. Soft delete on osittain keskeneräinen. Ideana on, että jos tietokannasta poistetaan jotakin, merkitään sarakkeen is_deleted arvoksi 1. Vastaavasti kohdilla joita ei ole poistettu arvo on 0. Tämän avulla pystytään seuraamaan mitä tietokannassa on tapahtunut.
 Soft delete toimii nyt oikein lukuun ottamatta pikakirjoituksen kautta poistettuja havaintoja, jotka tällä hetkellä poistetaan kokonaan tietokannasta. Tätä pitäisi siis muokata niin, että kun pikakirjoituksen kautta poistetaan jotakin, tulee poistetun kohdan is_deleted arvoksi 1 ja uuden 0.
 
 
