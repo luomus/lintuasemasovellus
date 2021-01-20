@@ -1,12 +1,12 @@
 # Lintuasemasovellus
 
-Helsingin Yliopiston Ohjelmistotuotantoprojekti, syksy 2020
+Helsingin Yliopiston Ohjelmistotuotantoprojekti, kevät 2021
 
 Suomessa sijaitsee kuusitoista lintuasemaa, joilla tehdään vuosittain satoja tuhansia lintuhavaintoja. Nämä vakioiduilla menetelmillä kerättävät havainnot ovat erittäin arvokkaita, koska niiden tuloksena syntyy vertailukelpoisia pitkiä aikasarjoja, joita voidaan käyttää mm. ilmastomuutoksen etenemisen vaikutuksien seuraamiseen.
 
 Lintuasemilta on toistaiseksi puuttunut yksi yhteinen sovellus tietojen kirjaamiseen, eikä tietoja ole vielä runsaasti julkaistu avoimena datana.
 
-Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaamiseen.
+Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamiseen. Tässä projektissa jatketaan sovelluksen kehittämistä.
 
 ## Projektiin liittyviä linkkejä
 
@@ -25,11 +25,9 @@ Tässä projektissa toteutetaan tietokanta ja käyttöliittymä tietojen kirjaam
 
 ### Projektin edistyminen
 
-[Product backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/1)
+[Product ja sprint backlogit](https://docs.google.com/spreadsheets/d/1iqdNQmT0sBgIXZn_3GQVJOm6KQAJWZhsLp1WrqyltoM/edit?usp=sharing)
 
-[Sprint backlog](https://github.com/Lintuasemasovellus/lintuasemasovellus/projects/2)
-
-[Tuntikirjanpito](https://docs.google.com/spreadsheets/d/1V68aoQnG-gI77wLIuzaikG_-l8oi5lEpZsDesqOSz5o/edit?usp=sharing)
+[Tuntikirjanpito](https://docs.google.com/spreadsheets/d/1k8GIHXPIT1fM0syJx8SgRW209CtBCgexDznDbkPUfeE/edit?usp=sharing)
 
 ## Ohjeita kehittäjille
 
