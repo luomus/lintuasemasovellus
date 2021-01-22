@@ -12,16 +12,16 @@ Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamisee
 
 [Sovellus Rahdissa](https://lintuasema-lintuasema-staging.rahtiapp.fi/)
 
-[Lisenssi](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/LICENSE)
+[Lisenssi](/LICENSE)
 
-[Käyttöohjeet](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/manual.md)
+[Käyttöohjeet](/documentation/manual.md)
 
 
 ### Dokumentaatio
 
-[Tietokantakaavio](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/tietokantakaavio2.png)
+[Tietokantakaavio](/documentation/tietokantakaavio2.png)
 
-[Definion of Done](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/definitionOfDone.md)
+[Definion of Done](/definitionOfDone.md)
 
 ### Projektin edistyminen
 
@@ -31,21 +31,21 @@ Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamisee
 
 ## Ohjeita kehittäjille
 
-[Bugit, keskeneräisyydet ja asiakaspalaute](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/bugsAndUserFeedback.md)
+[Bugit, keskeneräisyydet ja asiakaspalaute](/documentation/bugsAndUserFeedback.md)
 
 ### Kehitysympäristön asennus
 
-[Ohjelman käynnistäminen paikallisesti](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/localStartOfProject.md)
+[Ohjelman käynnistäminen paikallisesti](/documentation/developmentInstructions/localStartOfProject.md)
 
-[API/Backend](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingBackendEnvironment.md)
+[API/Backend](/documentation/developmentInstructions/installingBackendEnvironment.md)
 
-[Frontend](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingFrontendEnvironment.md)
+[Frontend](/documentation/developmentInstructions/installingFrontendEnvironment.md)
 
-[Docker-ohje](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/dockerGuide.md)
+[Docker-ohje](/master/documentation/developmentInstructions/dockerGuide.md)
 
-[Cypress-ohje](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/cypressGuide.md)
+[Cypress-ohje](/master/documentation/developmentInstructions/cypressGuide.md)
 
-[Oracle-client-ohje tietokantaa varten](https://github.com/Lintuasemasovellus/lintuasemasovellus/blob/master/documentation/developmentInstructions/installingOracleClient.md)
+[Oracle-client-ohje tietokantaa varten](/documentation/developmentInstructions/installingOracleClient.md)
 
 
 
