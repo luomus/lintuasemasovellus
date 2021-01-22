@@ -21,7 +21,7 @@ Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamisee
 
 [Tietokantakaavio](/documentation/tietokantakaavio2.png)
 
-[Definion of Done](/definitionOfDone.md)
+[Definion of Done](/documentation/definitionOfDone.md)
 
 ### Projektin edistyminen
 
