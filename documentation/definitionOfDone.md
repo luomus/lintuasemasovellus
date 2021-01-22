@@ -2,7 +2,8 @@
 
 Alla määritelmä sille, mitä vaatimuksia User Story:n tulee täyttää, että sen katsotaan olevan valmis. Vaatimuksia voidaan tarvittaessa tarkentaa projektin edetessä. 
 
-* jaettu taskeihin joissa hyväksymiskriteerit
+* hyväksymikriteerit luotu
+* jaettu taskeihin
 * ohjelmoitu
 * testattu
 * testaus automatisoitu
