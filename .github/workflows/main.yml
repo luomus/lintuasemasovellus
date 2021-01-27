@@ -80,3 +80,4 @@ jobs:
         env:
           webhook_url: ${{ secrets.RAHTI_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.RAHTI_WEBHOOK_SECRET }}
+        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == false }}
