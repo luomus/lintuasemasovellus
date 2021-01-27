@@ -1,6 +1,6 @@
 # Lintuasemasovellus
 
-Helsingin Yliopiston Ohjelmistotuotantoprojekti, kevät 2021
+Helsingin yliopiston Ohjelmistotuotantoprojekti, kevät 2021
 
 Suomessa sijaitsee kuusitoista lintuasemaa, joilla tehdään vuosittain satoja tuhansia lintuhavaintoja. Nämä vakioiduilla menetelmillä kerättävät havainnot ovat erittäin arvokkaita, koska niiden tuloksena syntyy vertailukelpoisia pitkiä aikasarjoja, joita voidaan käyttää mm. ilmastomuutoksen etenemisen vaikutuksien seuraamiseen.
 
