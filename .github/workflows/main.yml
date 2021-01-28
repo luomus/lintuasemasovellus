@@ -61,7 +61,7 @@ jobs:
         username: GitHub Actions
     - name: Report pull request error to Discord
       uses: sarisia/actions-status-discord@v1.8.3
-      if: ${{ github.event_name == 'push' && failure() }}
+      if: ${{ github.event_name != 'push' && failure() }}
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
