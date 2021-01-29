@@ -98,9 +98,19 @@ jobs:
           title: "New version deployed to Rahti!"
           color: 0x08c96b
           username: GitHub Actions
+      - name: Report non-deployed success to Discord
+        uses: sarisia/actions-status-discord@v1.8.3
+        if: ${{ github.event_name == 'push' && success() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          nodetail: true
+          title: "New successful merge to master made - deployment #skipped!"
+          color: 0x08c96b
+          username: GitHub Actions
       - name: Report master branch error to Discord
         uses: sarisia/actions-status-discord@v1.8.3
-        if: ${{ github.event_name == 'push' && failure() }}
+        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == true && failure() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
