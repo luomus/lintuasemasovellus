@@ -6,8 +6,10 @@ import {
   Paper, Grid, Box,
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
-  Table, TableRow, TableBody, TableCell, withStyles
+  Table, TableRow, TableBody, TableCell, withStyles,
+  List, ListItem
 } from "@material-ui/core/";
+import WarningIcon from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -28,13 +30,30 @@ import {
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
+import { getErrors } from "../../shorthand/validations";
 
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
+  obsPaper: {
     background: "white",
     padding: "20px 30px",
-    margin: "10px 10px 10px 10px"
+    margin: "10px 10px 10px 10px",
+    maxHeight: "50vw",
+    overflow: "auto",
+  },
+  infoPaper: {
+    background: "white",
+    padding: "20px 30px",
+    margin: "10px 10px 10px 10px",
+    maxHeight: "34vw",
+    overflow: "auto",
+  },
+  errorPaper: {
+    background: "#f5f890",
+    padding: "20px 30px",
+    margin: "10px 10px 10px 10px",
+    maxHeight: "11vw",
+    overflow: "auto",
   },
   card: {
     background: "white",
@@ -45,7 +64,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   sendButton: {
-    marginBottom: "40px"
+    marginBottom: "40px",
+    position: "static",
   },
 }
 ));
@@ -106,7 +126,7 @@ export const HomePage = () => {
 
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
-  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(true);
+  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
 
 
   useEffect(() => {
@@ -188,6 +208,30 @@ export const HomePage = () => {
     );
   }
 
+  const ErrorPaper = () => {
+    if (codeMirrorHasErrors) {
+      return (
+        <Paper className={classes.errorPaper} >
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h2" >
+              <WarningIcon fontSize="medium" />&nbsp;&nbsp;
+              {t("checkShorthand")}
+            </Typography>
+            <List>
+              {
+                getErrors().map((error, i) =>
+                  <ListItem key={i}>
+                    {error}
+                  </ListItem>
+                )
+              }
+            </List>
+          </Grid>
+        </Paper >);
+    }
+    return null;
+  };
+
   const saveButtonDisabled = () => {
     if (codeMirrorHasErrors || observers === "" || type === "" || location === "")
       return true;
@@ -201,7 +245,7 @@ export const HomePage = () => {
         alignItems="flex-start"
       >
         <Grid item xs={8}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.obsPaper}>
             <Grid container
               alignItems="flex-start"
               spacing={1}>
@@ -328,14 +372,14 @@ export const HomePage = () => {
                 color="primary"
                 variant="contained"
               >
-                {disabled ? t("loading"): t("save")}
+                {disabled ? t("loading") : t("save")}
               </Button>
             </Grid>
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.infoPaper}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h2" >
                   {t("latestDays")}
@@ -364,7 +408,7 @@ export const HomePage = () => {
               <br />
               <Grid item xs={12} mt={0}>
                 <Typography variant="h5" component="h2" >
-                  {t("Linkit")}
+                  {t("links")}
                   <br />
                   <br />
                   <Link style={{ textDecoration: "none", color: "black" }} to="/listdays"><Typography variant="subtitle1">
@@ -375,6 +419,7 @@ export const HomePage = () => {
 
               </Grid>
             </Paper>
+            <ErrorPaper />
           </Grid>
         </Grid>
       </Grid>
