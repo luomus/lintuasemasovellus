@@ -175,8 +175,11 @@ const DayDetails = () => {
                     defaultValue={observers}
                     onChange={(event) => setEditedObservers(event.target.value)}
                   />
-                  <Button id="observerSubmit" type="submit" variant="contained" color="primary">
+                  <Button id="observerSubmit" className={classes.button} type="submit" variant="contained" color="primary">
                     {t("save")}
+                  </Button>
+                  <Button id="observerCancel" className={classes.button} variant="contained" onClick={() => setObserversForm(false)} color="secondary">
+                    {t("cancel")}
                   </Button>
                 </form>
               )}
@@ -201,8 +204,11 @@ const DayDetails = () => {
                     defaultValue={comment}
                     onChange={(event) => setEditedComment(event.target.value)}
                   />
-                  <Button id="commentSubmit" type="submit" variant="contained" color="primary">
+                  <Button id="commentSubmit" className={classes.button} type="submit" variant="contained" color="primary">
                     {t("save")}
+                  </Button>
+                  <Button id="commentCancel" className={classes.button} variant="contained" onClick={() => setObserversForm(false)} color="secondary">
+                    {t("cancel")}
                   </Button>
                 </form>
               )}
