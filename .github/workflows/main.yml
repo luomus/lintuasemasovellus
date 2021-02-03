@@ -100,7 +100,7 @@ jobs:
           username: GitHub Actions
       - name: Report non-deployed success to Discord
         uses: sarisia/actions-status-discord@v1.8.3
-        if: ${{ github.event_name == 'push' && success() }}
+        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == true && success() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
@@ -110,7 +110,7 @@ jobs:
           username: GitHub Actions
       - name: Report master branch error to Discord
         uses: sarisia/actions-status-discord@v1.8.3
-        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == true && failure() }}
+        if: ${{ github.event_name == 'push' && failure() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:

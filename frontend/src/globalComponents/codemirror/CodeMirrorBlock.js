@@ -3,7 +3,7 @@ import {
   loopThroughCheckForErrors, getErrors, resetErrors
 } from "../../shorthand/validations";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import errorImg from "../../resources/error.png";
+//import errorImg from "../../resources/error.png";
 import "./cmError.css";
 import { makeStyles } from "@material-ui/core";
 import "codemirror/lib/codemirror.css";
@@ -17,7 +17,7 @@ let widgets = new Set();
 const useStyles = makeStyles({
   codemirrorBox: {
     position: "relative",
-    opacity: "99%"
+    opacity: "99%",
   },
 });
 
@@ -37,6 +37,7 @@ const CodeMirrorBlock = ({
     }
     widgets.clear();
     const errors = getErrors();
+    /** Vanha errortoiminto
     for (let i = 0; i < errors.length; i++) {
       const msg = document.createElement("div");
       const icon = msg.appendChild(document.createElement("img"));
@@ -48,6 +49,7 @@ const CodeMirrorBlock = ({
         coverGutter: false, noHScroll: true
       }));
     }
+    */
     if (errors.length === 0) setCodeMirrorHasErrors(false);
     else setCodeMirrorHasErrors(true);
     resetErrors();
