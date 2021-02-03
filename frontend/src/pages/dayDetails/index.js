@@ -207,7 +207,7 @@ const DayDetails = () => {
                   <Button id="commentSubmit" className={classes.button} type="submit" variant="contained" color="primary">
                     {t("save")}
                   </Button>
-                  <Button id="commentCancel" className={classes.button} variant="contained" onClick={() => setObserversForm(false)} color="secondary">
+                  <Button id="commentCancel" className={classes.button} variant="contained" onClick={() => setCommentForm(false)} color="secondary">
                     {t("cancel")}
                   </Button>
                 </form>
