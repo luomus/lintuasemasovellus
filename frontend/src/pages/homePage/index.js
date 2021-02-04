@@ -221,7 +221,7 @@ export const HomePage = () => {
               {
                 getErrors().map((error, i) =>
                   <ListItem key={i}>
-                    {error}
+                    {error[1]}
                   </ListItem>
                 )
               }

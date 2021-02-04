@@ -3,7 +3,7 @@ import {
   loopThroughCheckForErrors, getErrors, resetErrors
 } from "../../shorthand/validations";
 import { Controlled as CodeMirror } from "react-codemirror2";
-//import errorImg from "../../resources/error.png";
+import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import { makeStyles } from "@material-ui/core";
 import "codemirror/lib/codemirror.css";
@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 
 
 let timeout = null;
-let widgets = new Set();
+let markers = new Set();
 
 const useStyles = makeStyles({
   codemirrorBox: {
@@ -32,24 +32,31 @@ const CodeMirrorBlock = ({
 
   const errorCheckingLogic = async (editor, data, value) => {
     setSanitizedShorthand(loopThroughCheckForErrors(value));
-    for (const widget of widgets) {
-      editor.removeLineWidget(widget);
+    for (const marker of markers) {
+      marker.clear();
     }
-    widgets.clear();
+    editor.clearGutter("note-gutter");
     const errors = getErrors();
-    /** Vanha errortoiminto
-    for (let i = 0; i < errors.length; i++) {
-      const msg = document.createElement("div");
-      const icon = msg.appendChild(document.createElement("img"));
-      msg.className = "lint-error";
+    for (const error of errors) {
+      const rowNum = error[0];
+      const rowMessage = error[1];
+      const marker = editor.getDoc().markText({
+        line: rowNum,
+        ch: 0
+      }, {
+        line: rowNum,
+        ch: rowMessage.length - 1
+      }, {
+        css: "text-decoration: underline; text-decoration-style: wavy; text-decoration-color: red;",
+        clearOnEnter: true,
+        inclusiveRight: true
+      });
+      const icon = document.createElement("img");
       icon.setAttribute("src", errorImg);
       icon.className = "lint-error-icon";
-      msg.appendChild(document.createTextNode(errors[Number(i)]));
-      widgets.add(editor.addLineWidget(data.to.line, msg, {
-        coverGutter: false, noHScroll: true
-      }));
+      editor.setGutterMarker(rowNum, "note-gutter", icon);
+      markers.add(marker);
     }
-    */
     if (errors.length === 0) setCodeMirrorHasErrors(false);
     else setCodeMirrorHasErrors(true);
     resetErrors();
@@ -69,7 +76,7 @@ const CodeMirrorBlock = ({
     timeout = setTimeout(() => {
       errorCheckingLogic(editor, data, value);
       timeout = null;
-    }, 500);
+    }, 700);
   };
 
 
@@ -83,7 +90,8 @@ const CodeMirrorBlock = ({
         lineNumbers: true,
         autoRefresh: true,
         readOnly: false,
-        lint: false
+        gutters: ["note-gutter"],
+        lint: true
       }}
       editorDidMount={editor => {
         editor.refresh();

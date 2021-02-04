@@ -56,9 +56,9 @@ const acceptableBypassSides = globals.bypass;
 
 const acceptableIka = new Set(["subad", "ad", "juv", "'", "\""]);
 
-const acceptableIkaChar = new Set(["j","v","b","d","e","u","s","a"]);
+const acceptableIkaChar = new Set(["j", "v", "b", "d", "e", "u", "s", "a"]);
 
-const acceptlableIlmansuuntaChar = new Set(["n","w","e","s"]);
+const acceptlableIlmansuuntaChar = new Set(["n", "w", "e", "s"]);
 
 // End sets of acceptable substrings
 
@@ -104,7 +104,7 @@ const constructOsahavainto = () => {
     throw new Error("tuntematon ikä");
   if (!possibleDirections.has(ilmansuunta.toUpperCase()))
     throw new Error("Epäkelpo ilmansuunta");
-  switch(sukupuoliRound) {
+  switch (sukupuoliRound) {
     case 0:
       male[String(ageBucket)] = yksilomaara;
       break;
@@ -182,8 +182,8 @@ const isNumeric = (string) => {
 const acceptableAroundIlmansuuntaHeuristic = (index, line) => {
   if (index === line.length - 1) return true;
   if (index === 0) return false;
-  if (acceptableIkaChar.has(line[index+1])) {
-    return charIsProbablyDirection(line[index+1]);
+  if (acceptableIkaChar.has(line[index + 1])) {
+    return charIsProbablyDirection(line[index + 1]);
   }
   const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
   if (nextNonSpaceyChar === ",") return true;
@@ -354,20 +354,20 @@ const handleSlash = () => {
  * @param {number} index
  */
 const giveMeABucket = (char, line, index) => {
-  switch(char) {
+  switch (char) {
     default:
       handleDefaultAlpha(char, line, index);
       break;
-    case " ":case "\t":case "\n":
+    case " ": case "\t": case "\n":
       handleSpaceySymbol();
       break;
-    case "0":case "1":case "2":
-    case "3":case "4":case "5":
-    case "6":case "7":case "8":
+    case "0": case "1": case "2":
+    case "3": case "4": case "5":
+    case "6": case "7": case "8":
     case "9":
       handleNumeric(char);
       break;
-    case ".":case ":":
+    case ".": case ":":
       handleTimeSymbol();
       break;
     case "(":
@@ -379,10 +379,10 @@ const giveMeABucket = (char, line, index) => {
     case ",":
       handleComma(line, index);
       break;
-    case "'":case "\"":
+    case "'": case "\"":
       handleHipsu(char);
       break;
-    case "+":case "-":
+    case "+": case "-":
       handlePlusMinus(char, line, index);
       break;
     case "/":
@@ -479,7 +479,7 @@ export const parse = (line) => {
   constructTaysiHavainto();
   const fullObservation = getObservation();
   if (emptyObservation(fullObservation)) {
-    throw new Error("tyhjä havainto");
+    throw new Error("Tyhjä havainto!");
   }
   return fullObservation;
 };

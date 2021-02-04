@@ -14,7 +14,7 @@ const checkWholeInputLine = (rowNumber, row) => {
   try {
     parse(row);
   } catch (error) {
-    errors.push(`Error in line ${rowNumber + 1}, ${row}: ${error.message}`);
+    errors.push([rowNumber, `Virhe rivillä ${rowNumber + 1}, "${row}": ${error.message}`]);
   }
   resetAll();
 };
@@ -28,21 +28,24 @@ const sanitize = (text) => {
   const lines = text.trim().split(/\n/);
   let times = 0;
   let ret = [];
+  let counter = 0;
   for (const line of lines) {
-    if (isTime(line)) {
+    if (line.length === 0) {
+      ret.push(line);
+    } else if (isTime(line)) {
       ++times;
       ret.push(line);
     } else if (times & 1) {
       ret.push(line);
     } else {
-      return "Havaintorivien täytyy olla aikojen sisällä";
+      errors.push([counter, `Havaintorivin ${counter + 1} aloitusaika puuttuu!`]);
     }
+    counter++;
   }
   if (times & 1) {
-    return "Pariton määrä aikoja!";
-  } else {
-    return ret;
+    errors.push([counter - 1, "Pariton määrä aikoja!"]);
   }
+  return ret;
 };
 
 /**
@@ -52,10 +55,6 @@ const sanitize = (text) => {
  */
 export const loopThroughCheckForErrors = (shorthandRawText) => {
   const lines = sanitize(shorthandRawText);
-  if (typeof lines === "string") {
-    errors.push(lines);
-    return null;
-  }
   for (let i = 0; i < lines.length; i++) {
     if (!isTime(lines[Number(i)])) {
       checkWholeInputLine(i, lines[Number(i)]);
