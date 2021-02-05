@@ -53,6 +53,11 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "11vw",
     overflow: "auto",
   },
+  errorHeading: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
   card: {
     background: "white",
     margin: "10px 10px 10px 10px"
@@ -211,8 +216,8 @@ export const HomePage = () => {
       return (
         <Paper className={classes.errorPaper} >
           <Grid item xs={12}>
-            <Typography variant="h5" component="h2" >
-              <WarningIcon fontSize="medium" />&nbsp;&nbsp;
+            <Typography variant="h5" component="h2" className={classes.errorHeading} >
+              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
               {t("checkShorthand")}
             </Typography>
             <List>
@@ -253,7 +258,7 @@ export const HomePage = () => {
                 </Typography>
                 <br />
               </Grid>
-              <Grid item xs={6} fullWidth={true}>
+              <Grid item xs={6}>
                 <Box display="flex" justifyContent="flex-end">
                   <ObservatorySelector />
                 </Box>
@@ -267,7 +272,6 @@ export const HomePage = () => {
                     invalidDateMessage
                     variant="inline"
                     format="dd.MM.yyyy"
-                    margin="top"
                     id="date-picker-inline"
                     label={t("date")}
                     value={day}
@@ -409,9 +413,9 @@ export const HomePage = () => {
                   {t("links")}
                   <br />
                   <br />
-                  <Link style={{ textDecoration: "none", color: "black" }} to="/listdays"><Typography variant="subtitle1">
-                    Näytä päivät</Typography></Link>
                 </Typography>
+                <Link style={{ textDecoration: "none", color: "black" }} to="/listdays"><Typography variant="subtitle1">
+                  Näytä päivät</Typography></Link>
                 <Link style={{ textDecoration: "none", color: "black" }} to="/manual"><Typography variant="subtitle1">
                   Käyttöohjeet</Typography></Link>
 

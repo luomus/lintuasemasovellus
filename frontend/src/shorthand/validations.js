@@ -14,7 +14,7 @@ const checkWholeInputLine = (rowNumber, row) => {
   try {
     parse(row);
   } catch (error) {
-    errors.push([rowNumber, `Virhe rivillä ${rowNumber + 1}, "${row}": ${error.message}`]);
+    errors.push([rowNumber, `Tarkista rivi ${rowNumber + 1}, ${row}: ${error.message}`]);
   }
   resetAll();
 };
