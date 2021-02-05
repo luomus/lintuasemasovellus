@@ -38,8 +38,6 @@ const useStyles = makeStyles((theme) => ({
     background: "white",
     padding: "20px 30px",
     margin: "10px 10px 10px 10px",
-    maxHeight: "50vw",
-    overflow: "auto",
   },
   infoPaper: {
     background: "white",
@@ -233,7 +231,7 @@ export const HomePage = () => {
   };
 
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "")
+    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "")
       return true;
     else
       return false;
