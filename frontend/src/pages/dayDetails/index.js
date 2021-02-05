@@ -147,13 +147,6 @@ const DayDetails = () => {
               {stationName.replace("_", " ")}
             </Typography>
           </Grid>
-          <Grid item xs={6}>
-            <Box display="flex" justifyContent="flex-end">
-              <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-                {t("edit")}
-              </Button>{" "}
-            </Box>
-          </Grid>
           <Grid item xs={12} fullWidth={true}>
             <div style={{
               display: "flex",
@@ -164,7 +157,7 @@ const DayDetails = () => {
               </Typography>
               {observersForm === false ? (
                 <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
-                  <EditIcon fontSize="small"/>
+                  <EditIcon fontSize="small" />
                 </IconButton>
               ) : (
                 <form onSubmit={observersOnSubmit}>
@@ -193,7 +186,7 @@ const DayDetails = () => {
               </Typography>
               {commentForm === false ? (
                 <IconButton id="commentButton" size="small" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
-                  <EditIcon fontSize="small"/>
+                  <EditIcon fontSize="small" />
                 </IconButton>
               ) : (
                 <form onSubmit={commentOnSubmit}>
@@ -215,14 +208,21 @@ const DayDetails = () => {
             </div>
           </Grid>
 
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="flex-end">
-              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode==="table1"} onClick={() => setMode("table1")}>
+          <Grid item xs={6}>
+            <Box display="flex" justifyContent="flex-start">
+              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode === "table1"} onClick={() => setMode("table1")}>
                 {t("summary")}
               </Button>
-              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode==="table2"} onClick={() => setMode("table2")}>
+              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode === "table2"} onClick={() => setMode("table2")}>
                 {t("obsPeriods")}
               </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box display="flex" justifyContent="flex-end">
+              <Button variant="contained" color="primary" onClick={() => handleOpen()}>
+                {t("edit")}
+              </Button>{" "}
             </Box>
           </Grid>
 
