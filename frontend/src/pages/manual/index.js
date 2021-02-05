@@ -76,7 +76,7 @@ export const UserManual = () => {
         <br />12:00
         <br />
         <br />
-        Pikakirjoituslomake ilmoittaa pikakirjoituksessa ilmenevistä virheistä. Virheet näkyvät lomakkeessa punaisina virheilmoituksina jotka kuvailevat tapahtuneen virheen. Tallenna-nappi aktivoituu painettavaksi kun pikakirjoituksessa ei ole virheitä ja vaaditut kentät on täytetty. Napin painalluksen myötä päivä ja siihen liittyvät tiedot tallentuvat tietokantaan.
+        Jos pikakirjoituslomakkeessa on virheitä, sovellus ilmoittaa tästä keltaisella varoitusikkunalla ja pyytää tarkistamaan pikakirjoituksen oikeellisuuden. Varoitusikkunassa kerrotaan, millaisen virheen sovellus pikakirjoituksessa havaitsi. Tallenna-nappi aktivoituu painettavaksi kun pikakirjoituksessa ei ole virheitä ja vaaditut kentät on täytetty. Napin painalluksen myötä päivä ja siihen liittyvät tiedot tallentuvat tietokantaan.
         <br /><br />
 
         <Typography variant="h6" component="h2" >
