@@ -67,7 +67,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("sommol");
     const { direction, juvenileMaleCount, adultMaleCount, subadultMaleCount, ...rest }
-       = observation.osahavainnot[0];
+      = observation.osahavainnot[0];
     expect(direction).toBe("w");
     expect(juvenileMaleCount).toBe("2");
     expect(adultMaleCount).toBe("1");
@@ -84,12 +84,12 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("sommol");
     const { direction: direction0, unknownFemaleCount: unknownFemaleCount0, ...rest0 }
-       = observation.osahavainnot[0];
+      = observation.osahavainnot[0];
     const { direction: direction1, unknownMaleCount: unknownMaleCount1, ...rest1 }
-       = observation.osahavainnot[1];
+      = observation.osahavainnot[1];
     const { direction: direction2, unknownFemaleCount: unknownFemaleCount2,
       unknownMaleCount: unknownMaleCount2, ...rest2 }
-       = observation.osahavainnot[2];
+      = observation.osahavainnot[2];
 
     expect(unknownFemaleCount0).toBe("1");
     expect(direction0).toBe("w");
@@ -189,13 +189,13 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     expect(observation.species).toBe("grugru");
     const { direction: direction0, unknownUnknownCount: unknownUnknownCount0,
       bypassSide: bypassSide0, ...rest0 }
-    = observation.osahavainnot[0];
+      = observation.osahavainnot[0];
     const { direction: direction1, unknownUnknownCount: unknownUnknownCount1,
       bypassSide: bypassSide1, ...rest1 }
-    = observation.osahavainnot[1];
+      = observation.osahavainnot[1];
     const { direction: direction2, adultUnknownCount: adultUnknownCount2,
       bypassSide: bypassSide2, ...rest2 }
-    = observation.osahavainnot[2];
+      = observation.osahavainnot[2];
     for (const each of Object.values(rest0)) {
       expect(each).toBe("");
     }
@@ -581,7 +581,7 @@ describe("Bugfixes", () => {
     const line = "sommol";
     expect(() => {
       parse(line);
-    }).toThrow("tyhjä havainto");
+    }).toThrow("Tyhjä havainto!");
   });
 
 
