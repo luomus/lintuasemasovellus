@@ -47,7 +47,7 @@ const CodeMirrorBlock = ({
         line: rowNum,
         ch: rowMessage.length - 1
       }, {
-        css: "text-decoration: underline; text-decoration-style: wavy; text-decoration-color: red;",
+        css: "background-color: #f5f890;",
         clearOnEnter: true,
         inclusiveRight: true
       });
@@ -64,7 +64,7 @@ const CodeMirrorBlock = ({
 
   /**
    * Start checking for errors only after being idle for the duration of
-   * the timeout (700ms).
+   * the timeout (500ms).
    * @param {object} editor
    * @param {object} data
    * @param {string} value
@@ -78,6 +78,7 @@ const CodeMirrorBlock = ({
       timeout = null;
     }, 700);
   };
+
 
   return (
     <CodeMirror
