@@ -41,9 +41,9 @@ Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamisee
 
 [Frontend](/documentation/developmentInstructions/installingFrontendEnvironment.md)
 
-[Docker-ohje](/master/documentation/developmentInstructions/dockerGuide.md)
+[Docker-ohje](/documentation/developmentInstructions/dockerGuide.md)
 
-[Cypress-ohje](/master/documentation/developmentInstructions/cypressGuide.md)
+[Cypress-ohje](/documentation/developmentInstructions/cypressGuide.md)
 
 [Oracle-client-ohje tietokantaa varten](/documentation/developmentInstructions/installingOracleClient.md)
 
