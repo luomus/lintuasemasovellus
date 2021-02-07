@@ -147,7 +147,7 @@ const DayDetails = () => {
               {stationName.replace("_", " ")}
             </Typography>
           </Grid>
-          <Grid item xs={12} fullWidth={true}>
+          <Grid item xs={12} fullwidth="true">
             <div style={{
               display: "flex",
               alignItems: "left"

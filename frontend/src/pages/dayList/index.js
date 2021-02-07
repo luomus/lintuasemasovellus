@@ -5,7 +5,7 @@ import {
   Typography
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { retrieveDays } from "../../reducers/daysReducer";
@@ -16,6 +16,11 @@ const useStyles = makeStyles({
     background: "white",
     padding: "20px 30px",
     margin: "0px 0px 50px 0px",
+  },
+  linkImitator: {
+    cursor: "pointer",
+    textDecoration: "underline",
+    color: "black",
   },
 });
 
@@ -35,6 +40,8 @@ export const DayList = () => {
   const userIsSet = Boolean(user.id);
 
   const { t } = useTranslation();
+
+  const history = useHistory();
 
   const classes = useStyles();
 
@@ -79,6 +86,10 @@ export const DayList = () => {
     setPage(0);
   };
 
+  const handleDateClick = (s) => {
+    history.push(`/daydetails/${s.day}/${userObservatory}`);
+  };
+
   return (
     <div>
       <Paper className={classes.paper}>
@@ -103,19 +114,27 @@ export const DayList = () => {
                   .sort(comparator)
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((s, i) =>
-                    <TableRow id="dayTableRow" hover key={i} component={Link}
-                      to={`/daydetails/${s.day}/${s.observatory}`} >
+                    <TableRow id="dayTableRow" hover key={i}
+                      onClick={() => handleDateClick(s)} className={classes.linkImitator} >
                       <StyledTableCell component="th" scope="row">
-                        {s.day}
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                          {s.day}
+                        </Link>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {s.observers}
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                          {s.observers}
+                        </Link>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {s.comment}
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                          {s.comment}
+                        </Link>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {s.observatory.replace("_", " ")}
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                          {s.observatory.replace("_", " ")}
+                        </Link>
                       </StyledTableCell>
                     </TableRow>
                   )

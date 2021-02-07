@@ -8,6 +8,7 @@ import { DayForm, DayList } from "./pages";
 import { getAuth, getToken } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
+import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import DayDetails from "./pages/dayDetails";
 import Login from "./pages/login";
@@ -22,6 +23,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeStations());
+    dispatch(retrieveDays());
     if (userIsSet) return;
     getToken()
       .then(resp => resp.data)
