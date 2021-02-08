@@ -16,7 +16,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { useTranslation } from "react-i18next";
 import ObservatorySelector from "./observatorySelector";
 import { useSelector, useDispatch } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, Link, useHistory } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
@@ -70,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "40px",
     position: "static",
   },
+  pointerCursor: {
+    cursor: "pointer",
+    textDecoration: "underline",
+  },
 }
 ));
 
@@ -103,11 +107,9 @@ export const HomePage = () => {
 
   const userObservatory = useSelector(state => state.userObservatory);
 
-  const dispatch = useDispatch();
+  const history = useHistory();
 
-  useEffect(() => {
-    dispatch(retrieveDays());
-  }, [dispatch]);
+  const dispatch = useDispatch();
 
   const stations = useSelector(state => state.stations);
 
@@ -240,6 +242,10 @@ export const HomePage = () => {
       return true;
     else
       return false;
+  };
+
+  const handleDateClick = (s) => {
+    history.push(`/daydetails/${s.day}/${userObservatory}`);
   };
 
   return (
@@ -392,13 +398,17 @@ export const HomePage = () => {
                     {
                       latestDays
                         .map((s, i) =>
-                          <TableRow id="latestDaysRow" key={i}
-                            hover component={Link} to={`/daydetails/${s.day}/${userObservatory}`}  >
+                          <TableRow id="latestDaysRow" key={i} hover
+                            onClick={ () => handleDateClick(s) } className={classes.pointerCursor} >
                             <StyledTableCell component="th" scope="row">
-                              {s.day}
+                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
+                                {s.day}
+                              </Link>
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
-                              {s.speciesCount} {t("multipleSpecies")}
+                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
+                                {s.speciesCount} {t("multipleSpecies")}
+                              </Link>
                             </StyledTableCell>
                           </TableRow>
                         )
@@ -414,9 +424,9 @@ export const HomePage = () => {
                   <br />
                   <br />
                 </Typography>
-                <Link style={{ textDecoration: "none", color: "black" }} to="/listdays"><Typography variant="subtitle1">
+                <Link style={{ color: "black" }} to="/listdays"><Typography variant="subtitle1">
                   Näytä päivät</Typography></Link>
-                <Link style={{ textDecoration: "none", color: "black" }} to="/manual"><Typography variant="subtitle1">
+                <Link style={{ color: "black" }} to="/manual"><Typography variant="subtitle1">
                   Käyttöohjeet</Typography></Link>
 
               </Grid>

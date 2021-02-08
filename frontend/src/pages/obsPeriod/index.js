@@ -43,7 +43,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
   const [observations, setObservations] = useState([]);
 
   useEffect(() => {
-    if (obsPeriod === undefined) {
+    if (obsPeriod.id === undefined) {
       console.error("obsPeriod is undefined");
       return;
     }
@@ -126,7 +126,7 @@ ObservationPeriod.propTypes = {
   obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  periodId: PropTypes.string.isRequired,
+  periodId: PropTypes.string,
   handleErrorSnackOpen: PropTypes.func.isRequired,
 };
 

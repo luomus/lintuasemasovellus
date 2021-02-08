@@ -5,7 +5,6 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import ObservationPeriod from "../obsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 
@@ -20,6 +19,11 @@ const ObsPeriodTable = (props) => {
       background: "white",
       padding: "20px 30px",
       margin: "0px 0px 50px 0px",
+    },
+    linkImitator: {
+      cursor: "pointer",
+      textDecoration: "underline",
+      color: "black",
     },
   });
 
@@ -45,7 +49,6 @@ const ObsPeriodTable = (props) => {
     const dateST = new Date(0, 0, 0, startTime[0], startTime[1]);
     const dateET = new Date(0, 0, 0, endTime[0], endTime[1]);
     const diff = dateET.getTime() - dateST.getTime();
-    console.log("diff:", diff);
     return diff;
   };
 
@@ -61,7 +64,6 @@ const ObsPeriodTable = (props) => {
     console.log("handleOpen obsPeriod:", obsPeriod);
     setObsPeriod(obsPeriod);
     setModalOpen(true);
-
   };
 
   const [page, setPage] = useState(0);
@@ -147,8 +149,6 @@ const ObsPeriodTable = (props) => {
               handleClose={handleClose}
               handleErrorSnackOpen={handleErrorSnackOpen}
             />
-
-
           </Table>
         </TableContainer>
         <PeriodTablePagination list={summary} rowsPerPage={rowsPerPage}
@@ -184,13 +184,12 @@ const ObsPeriodTable = (props) => {
               obsPeriods
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
-                  <TableRow hover component={Link} onClick={() => handleOpen(s)} key={i} >
+                  <TableRow hover className={classes.linkImitator} onClick={() => handleOpen(s)} key={i} >
                     <StyledTableCell component="th" scope="row">
                       {s.location}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {s.startTime}
-                      {console.log(s.startTime)}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {s.endTime}
