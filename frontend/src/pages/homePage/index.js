@@ -7,7 +7,7 @@ import {
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles,
-  List, ListItem
+  List, ListItem, FormControlLabel, Checkbox, FormGroup
 } from "@material-ui/core/";
 import WarningIcon from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
@@ -74,6 +74,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     textDecoration: "underline",
   },
+  formControlLabel: {
+    padding: "0px 100px 0px 0px",
+  },
 }
 ));
 
@@ -119,6 +122,10 @@ export const HomePage = () => {
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
+  const [vakiohav, setVakiohav]=useState(false);
+  const [gåu, setGåu]=useState(false);
+  const [ringing, setRinging]=useState(false);
+  const [owl, setOwl]=useState(false);
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
@@ -248,6 +255,22 @@ export const HomePage = () => {
     history.push(`/daydetails/${s.day}/${userObservatory}`);
   };
 
+  const handleVakiohavClick = () => {
+    setVakiohav(!vakiohav);
+  };
+
+  const handleGåuClick = () => {
+    setGåu(!gåu);
+  };
+
+  const handleRingingClick = () => {
+    setRinging(!ringing);
+  };
+
+  const handleOwlClick = () => {
+    setOwl(!owl);
+  };
+
   return (
     <div>
       <Grid container
@@ -314,6 +337,23 @@ export const HomePage = () => {
                   onChange={(event) => setComment(event.target.value)}
                   value={comment}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <FormGroup row className={classes.formGroup}>
+                  <FormControlLabel className={classes.formControlLabel}
+                    control={<Checkbox checked={vakiohav} onChange={() => handleVakiohavClick()} name= "vakioCheck" color="primary"/>}
+                    label= "Vakiohavainnointi" labelPlacement="end"/>
+                  <FormControlLabel className={classes.formControlLabel}
+                    control={<Checkbox checked={gåu} onChange={() => handleGåuClick()} name= "gåuCheck" color="primary"/>}
+                    label= "Gåulla käynti" labelPlacement="end"/>
+                  <FormControlLabel className={classes.formControlLabel}
+                    control={<Checkbox checked={ringing} onChange={() => handleRingingClick()} name= "ringCheck" color="primary"/>}
+                    label= "Rengastusvakio" labelPlacement="end"/>
+                  <FormControlLabel className={classes.formControlLabel}
+                    control={<Checkbox checked={owl} onChange={() => handleOwlClick()} name= "owlInfo" color="primary"/>}
+                    label= "Pöllövakio" labelPlacement="end"/>
+                </FormGroup>
+
               </Grid>
 
               <Grid item xs={3}>
