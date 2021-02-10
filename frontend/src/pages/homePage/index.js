@@ -77,6 +77,11 @@ const useStyles = makeStyles((theme) => ({
   formControlLabel: {
     padding: "0px 100px 0px 0px",
   },
+  attachmentField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 75,
+  },
 }
 ));
 
@@ -126,6 +131,8 @@ export const HomePage = () => {
   const [gåu, setGåu]=useState(false);
   const [ringing, setRinging]=useState(false);
   const [owl, setOwl]=useState(false);
+  const [mammals, setMammals]=useState(false);
+  const [attachments, setAttachments]=useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
@@ -271,6 +278,16 @@ export const HomePage = () => {
     setOwl(!owl);
   };
 
+  const handleMammalClick = () => {
+    setMammals(!mammals);
+  };
+
+  const checkAttachments =(value) => {
+  // usually 0-2, validations: must be int, 0 <= x < 5
+  // input range and type implemented (only corrrect amounts from arrows, but a bad integer can still be written manually)
+    setAttachments(value);
+  };
+
   return (
     <div>
       <Grid container
@@ -350,10 +367,18 @@ export const HomePage = () => {
                     control={<Checkbox checked={ringing} onChange={() => handleRingingClick()} name= "ringCheck" color="primary"/>}
                     label= "Rengastusvakio" labelPlacement="end"/>
                   <FormControlLabel className={classes.formControlLabel}
-                    control={<Checkbox checked={owl} onChange={() => handleOwlClick()} name= "owlInfo" color="primary"/>}
+                    control={<Checkbox checked={owl} onChange={() => handleOwlClick()} name= "owlCheck" color="primary"/>}
                     label= "Pöllövakio" labelPlacement="end"/>
+                  <FormControlLabel className={classes.formControlLabel}
+                    control={<Checkbox checked={mammals} onChange={() => handleMammalClick()} name= "mammalCheck" color="primary"/>}
+                    label= "Nisäkkäät yms. laskettu" labelPlacement="end"/>
+                  <FormControlLabel className={classes.formControlLabel}
+                    control={<TextField className={classes.attachmentField}
+                      id="outlined-number" placeholder="kpl" InputProps={{ inputProps: { min: 0, max: 4 } }}
+                      type="number" variant="outlined" size="small" onChange={(event) => checkAttachments(event.target.value)}
+                      value={attachments}/>}
+                    label= "Liitteitä " labelPlacement="start"/>
                 </FormGroup>
-
               </Grid>
 
               <Grid item xs={3}>
