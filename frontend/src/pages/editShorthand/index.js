@@ -1,8 +1,10 @@
 import {
   Backdrop, Fade, makeStyles, Modal, Grid, Button,
   FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle
+  DialogContent, DialogContentText, DialogTitle,
+  Paper, Typography, List, ListItem
 } from "@material-ui/core";
+import WarningIcon from "@material-ui/icons/Warning";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -17,6 +19,7 @@ import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../homePage/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
+import { getErrors } from "../../shorthand/validations";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +37,18 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
     overflowY: "scroll",
     overflowX: "hidden",
+  },
+  errorPaper: {
+    background: "#f5f890",
+    padding: "20px 30px",
+    marginTop: "10px",
+    maxHeight: "8vw",
+    overflow: "auto",
+  },
+  errorHeading: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   formControl: {
     margin: theme.spacing(0),
@@ -158,6 +173,30 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     }
   });
 
+  const ErrorPaper = () => {
+    if (codeMirrorHasErrors) {
+      return (
+        <Paper className={classes.errorPaper} >
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h2" className={classes.errorHeading} >
+              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
+              {t("checkShorthand")}
+            </Typography>
+            <List>
+              {
+                getErrors().map((error, i) =>
+                  <ListItem key={i}>
+                    {error[1]}
+                  </ListItem>
+                )
+              }
+            </List>
+          </Grid>
+        </Paper >);
+    }
+    return null;
+  };
+
   const { t } = useTranslation();
 
   const user = useSelector(state => state.user);
@@ -240,7 +279,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} height="100%">
+            <Grid item xs={12}>
               <CodeMirrorBlock
                 setCodeMirrorHasErrors={setCodeMirrorHasErrors}
                 setSanitizedShorthand={setSanitizedShorthand}
@@ -248,8 +287,11 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
                 shorthand={shorthand}
               />
             </Grid>
+            <Grid item xs={12}>
+              <ErrorPaper />
+            </Grid>
             <Grid container item xs={12} alignItems="flex-end">
-              <Box pr={2} pt={20}>
+              <Box pr={2} pt={2}>
                 <Button
                   id="saveButtonInShorthandModification"
                   disabled={codeMirrorHasErrors || !shorthand.trim()}
@@ -259,7 +301,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
                   {t("save")}
                 </Button>
               </Box>
-              <Box pr={2} pt={20}>
+              <Box pr={2} pt={2}>
                 <Button
                   id="cancelButtonInShorthandModification"
                   variant="contained"
@@ -268,7 +310,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
                   {t("cancel")}
                 </Button>
               </Box>
-              <Box pr={2} pt={20}>
+              <Box pr={2} pt={2}>
                 <Button
                   id="removeButtonInShorthandModification"
                   disabled={deleteButtonIsDisabled()}
@@ -285,7 +327,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{"Vahvista poisto"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{t("Confirm deletion")}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 {t("removingCannotBeCancelled")}

@@ -21,6 +21,7 @@ const resources = {
       "cancel": "Peruuta",
       "remove": "Poista",
       "confirm": "Vahvista",
+      "Confirm deletion": "Vahvista poisto",
       "oneSpecies": "laji",
       "multipleSpecies": "lajia",
       "removingCannotBeCancelled": "Poistamista ei voi peruuttaa. Jatketaanko?",
