@@ -7,9 +7,7 @@ import {
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles,
-  List, ListItem
 } from "@material-ui/core/";
-import WarningIcon from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -30,7 +28,7 @@ import {
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-import { getErrors } from "../../shorthand/validations";
+import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,24 +37,14 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px 30px",
     margin: "10px 10px 10px 10px",
   },
+  infoGrid: {
+    padding: "10px",
+  },
   infoPaper: {
     background: "white",
     padding: "20px 30px",
-    margin: "10px 10px 10px 10px",
     maxHeight: "34vw",
     overflow: "auto",
-  },
-  errorPaper: {
-    background: "#f5f890",
-    padding: "20px 30px",
-    margin: "10px 10px 10px 10px",
-    maxHeight: "11vw",
-    overflow: "auto",
-  },
-  errorHeading: {
-    display: "flex",
-    alignItems: "center",
-    flexWrap: "wrap",
   },
   card: {
     background: "white",
@@ -213,30 +201,6 @@ export const HomePage = () => {
     );
   }
 
-  const ErrorPaper = () => {
-    if (codeMirrorHasErrors) {
-      return (
-        <Paper className={classes.errorPaper} >
-          <Grid item xs={12}>
-            <Typography variant="h5" component="h2" className={classes.errorHeading} >
-              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
-              {t("checkShorthand")}
-            </Typography>
-            <List>
-              {
-                getErrors().map((error, i) =>
-                  <ListItem key={i}>
-                    {error[1]}
-                  </ListItem>
-                )
-              }
-            </List>
-          </Grid>
-        </Paper >);
-    }
-    return null;
-  };
-
   const saveButtonDisabled = () => {
     if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "")
       return true;
@@ -386,7 +350,7 @@ export const HomePage = () => {
           </Paper>
         </Grid>
         <Grid item xs={4}>
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.infoGrid}>
             <Paper className={classes.infoPaper}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h2" >
@@ -425,13 +389,13 @@ export const HomePage = () => {
                   <br />
                 </Typography>
                 <Link style={{ color: "black" }} to="/listdays"><Typography variant="subtitle1">
-                  Näytä päivät</Typography></Link>
+                  {t("showDaysPage")}</Typography></Link>
                 <Link style={{ color: "black" }} to="/manual"><Typography variant="subtitle1">
-                  Käyttöohjeet</Typography></Link>
+                  {t("manualTitle")}</Typography></Link>
 
               </Grid>
             </Paper>
-            <ErrorPaper />
+            <ErrorPaper codeMirrorHasErrors={codeMirrorHasErrors} />
           </Grid>
         </Grid>
       </Grid>
