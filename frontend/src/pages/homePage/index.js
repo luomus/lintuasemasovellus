@@ -7,7 +7,7 @@ import {
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles,
-  List, ListItem, FormControlLabel, Checkbox, FormGroup
+  List, ListItem
 } from "@material-ui/core/";
 import WarningIcon from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,6 +31,7 @@ import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import { getErrors } from "../../shorthand/validations";
+import HankoActions from "./dailyActions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -127,12 +128,12 @@ export const HomePage = () => {
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
-  const [vakiohav, setVakiohav]=useState(false);
-  const [gåu, setGåu]=useState(false);
-  const [ringing, setRinging]=useState(false);
-  const [owl, setOwl]=useState(false);
-  const [mammals, setMammals]=useState(false);
-  const [attachments, setAttachments]=useState("");
+  const [vakiohav, setVakiohav] = useState(false);
+  const [gåu, setGåu] = useState(false);
+  const [ringing, setRinging] = useState(false);
+  const [owl, setOwl] = useState(false);
+  const [mammals, setMammals] = useState(false);
+  const [attachments, setAttachments] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
@@ -262,32 +263,6 @@ export const HomePage = () => {
     history.push(`/daydetails/${s.day}/${userObservatory}`);
   };
 
-  const handleVakiohavClick = () => {
-    setVakiohav(!vakiohav);
-  };
-
-  const handleGåuClick = () => {
-    setGåu(!gåu);
-  };
-
-  const handleRingingClick = () => {
-    setRinging(!ringing);
-  };
-
-  const handleOwlClick = () => {
-    setOwl(!owl);
-  };
-
-  const handleMammalClick = () => {
-    setMammals(!mammals);
-  };
-
-  const checkAttachments =(value) => {
-  // usually 0-2, validations: must be int, 0 <= x < 5
-  // input range and type implemented (only corrrect amounts from arrows, but a bad integer can still be written manually)
-    setAttachments(value);
-  };
-
   return (
     <div>
       <Grid container
@@ -355,31 +330,20 @@ export const HomePage = () => {
                   value={comment}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormGroup row className={classes.formGroup}>
-                  <FormControlLabel className={classes.formControlLabel}
-                    control={<Checkbox checked={vakiohav} onChange={() => handleVakiohavClick()} name= "vakioCheck" color="primary"/>}
-                    label= "Vakiohavainnointi" labelPlacement="end"/>
-                  <FormControlLabel className={classes.formControlLabel}
-                    control={<Checkbox checked={gåu} onChange={() => handleGåuClick()} name= "gåuCheck" color="primary"/>}
-                    label= "Gåulla käynti" labelPlacement="end"/>
-                  <FormControlLabel className={classes.formControlLabel}
-                    control={<Checkbox checked={ringing} onChange={() => handleRingingClick()} name= "ringCheck" color="primary"/>}
-                    label= "Rengastusvakio" labelPlacement="end"/>
-                  <FormControlLabel className={classes.formControlLabel}
-                    control={<Checkbox checked={owl} onChange={() => handleOwlClick()} name= "owlCheck" color="primary"/>}
-                    label= "Pöllövakio" labelPlacement="end"/>
-                  <FormControlLabel className={classes.formControlLabel}
-                    control={<Checkbox checked={mammals} onChange={() => handleMammalClick()} name= "mammalCheck" color="primary"/>}
-                    label= "Nisäkkäät yms. laskettu" labelPlacement="end"/>
-                  <FormControlLabel className={classes.formControlLabel}
-                    control={<TextField className={classes.attachmentField}
-                      id="outlined-number" placeholder="kpl" InputProps={{ inputProps: { min: 0, max: 4 } }}
-                      type="number" variant="outlined" size="small" onChange={(event) => checkAttachments(event.target.value)}
-                      value={attachments}/>}
-                    label= "Liitteitä " labelPlacement="start"/>
-                </FormGroup>
-              </Grid>
+              <HankoActions
+                vakiohav={vakiohav}
+                setVakiohav={setVakiohav}
+                attachments={attachments}
+                setAttachments={setAttachments}
+                gåu={gåu}
+                setGåu={setGåu}
+                owl={owl}
+                setOwl={setOwl}
+                ringing={ringing}
+                setRinging={setRinging}
+                mammals={mammals}
+                setMammals={setMammals}
+              />
 
               <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
@@ -464,7 +428,7 @@ export const HomePage = () => {
                       latestDays
                         .map((s, i) =>
                           <TableRow id="latestDaysRow" key={i} hover
-                            onClick={ () => handleDateClick(s) } className={classes.pointerCursor} >
+                            onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
                             <StyledTableCell component="th" scope="row">
                               <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
                                 {s.day}
