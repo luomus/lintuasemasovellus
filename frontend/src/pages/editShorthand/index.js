@@ -2,9 +2,7 @@ import {
   Backdrop, Fade, makeStyles, Modal, Grid, Button,
   FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
   DialogContent, DialogContentText, DialogTitle,
-  Paper, Typography, List, ListItem
 } from "@material-ui/core";
-import WarningIcon from "@material-ui/icons/Warning";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -19,7 +17,7 @@ import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../homePage/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-import { getErrors } from "../../shorthand/validations";
+import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -173,30 +171,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     }
   });
 
-  const ErrorPaper = () => {
-    if (codeMirrorHasErrors) {
-      return (
-        <Paper className={classes.errorPaper} >
-          <Grid item xs={12}>
-            <Typography variant="h5" component="h2" className={classes.errorHeading} >
-              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
-              {t("checkShorthand")}
-            </Typography>
-            <List>
-              {
-                getErrors().map((error, i) =>
-                  <ListItem key={i}>
-                    {error[1]}
-                  </ListItem>
-                )
-              }
-            </List>
-          </Grid>
-        </Paper >);
-    }
-    return null;
-  };
-
   const { t } = useTranslation();
 
   const user = useSelector(state => state.user);
@@ -288,7 +262,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <ErrorPaper />
+              <ErrorPaper codeMirrorHasErrors={codeMirrorHasErrors} />
             </Grid>
             <Grid container item xs={12} alignItems="flex-end">
               <Box pr={2} pt={2}>
