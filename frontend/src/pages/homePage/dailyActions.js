@@ -4,6 +4,7 @@ import {
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -37,6 +38,7 @@ const HankoActions = ({
 }) => {
 
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const handleVakiohavClick = () => {
     setVakiohav(!vakiohav);
@@ -58,9 +60,8 @@ const HankoActions = ({
     setMammals(!mammals);
   };
 
-  const checkAttachments = (value) => {
-    // usually 0-2, validations: must be int, 0 <= x < 5
-    // input range and type implemented (only corrrect amounts from arrows, but a bad integer can still be written manually)
+  const chandleAttachments = (value) => {
+    // usually 0-2, validations: must be int, 0 <= x < 5, or should be?
     setAttachments(value);
   };
   return (
@@ -68,28 +69,28 @@ const HankoActions = ({
       <FormGroup row className={classes.formGroup}>
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={vakiohav} onChange={() => handleVakiohavClick()} name="vakioCheck" color="primary" />}
-          label="Vakiohavainnointi" labelPlacement="end" />
+          label={t("Standard observation")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={gåu} onChange={() => handleGåuClick()} name="gåuCheck" color="primary" />}
-          label="Gåulla käynti" labelPlacement="end" />
+          label={t("Gåu visited")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={ringing} onChange={() => handleRingingClick()} name="ringCheck" color="primary" />}
-          label="Rengastusvakio" labelPlacement="end" />
+          label={t("Ringing standard")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={owl} onChange={() => handleOwlClick()} name="owlCheck" color="primary" />}
-          label="Pöllövakio" labelPlacement="end" />
+          label={t("Owl standard")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={mammals} onChange={() => handleMammalClick()} name="mammalCheck" color="primary" />}
-          label="Nisäkkäät yms. laskettu" labelPlacement="end" />
+          label={t("Mammals etc counted")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<NativeSelect className={classes.attachmentField} defaultValue={attachments} onChange={(event) => checkAttachments(event.target.value)}>
+          control={<NativeSelect className={classes.attachmentField} defaultValue={attachments} onChange={(event) => chandleAttachments(event.target.value)}>
             <option value={0}>0</option>
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>
             <option value={4}>4</option>
           </NativeSelect>}
-          label="Liitteitä " labelPlacement="start" />
+          label={t("Attachments")} labelPlacement="start" />
       </FormGroup>
     </Grid>
   );

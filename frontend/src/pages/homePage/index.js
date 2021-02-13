@@ -201,7 +201,8 @@ export const HomePage = () => {
         day: formatDate(day),
         comment,
         observers,
-        observatory: userObservatory
+        observatory: userObservatory,
+        //selectedActions
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);

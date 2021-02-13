@@ -85,6 +85,7 @@ const countersToNum = (subobservation) => {
   makenum(subobservation, "unknownMaleCount");
 };
 
+//Not used anywhere?
 export const makeSendDataJson = (day, observatory, comment, observers, location, type, shorthandRows) => {
   let data = {
     day, observatory, comment, observers, location, type
@@ -94,7 +95,7 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
   let obsperiod = {};
   for (const row of shorthandRows) {
     if (!row) continue;
-    else if(fastIsTime(row) && !startTimeEnc) {
+    else if (fastIsTime(row) && !startTimeEnc) {
       startTimeEnc = true;
       obsperiod["startTime"] = parseTime(row);
     } else if (fastIsTime(row)) {
@@ -120,6 +121,7 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
   return data;
 };
 
+//Not used anywhere?
 export const sendShorthand = async (data) => {
   return await sendEverything(data);
 };
