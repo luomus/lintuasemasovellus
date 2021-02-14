@@ -1,0 +1,35 @@
+{
+"observatories":
+    [
+        {
+        "observatory": "Hangon_Lintuasema",
+        "locations": [
+        "Bunkkeri",
+        "Piha",
+        "Eteläkärki",
+        "Metsä",
+        "Luoto Gåu"
+        ],
+        "types": [
+        "Vakio",
+        "Muu muutto",
+        "Yömuutto",
+        "Hajahavainto",
+        "Paikallinen"
+        ]
+        },
+        {
+        "observatory": "Jurmon_Lintuasema",
+        "locations": [
+        "Korkein kohta",
+        "Länsireitti"
+        ],
+        "types": [
+        "Vakio",
+        "Esimerkki1",
+        "Esimerkki2",
+        "Esimerkki3"
+        ]
+        }
+    ]
+}

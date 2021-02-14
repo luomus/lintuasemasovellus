@@ -1,4 +1,3 @@
-from app import init_app, redirect
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -8,6 +7,16 @@ from flask import (Flask, render_template,
     request, redirect, session, url_for,
     make_response, jsonify)
 
+# ASETUKSET
+# oldapp: Jos käytetään vanhaa tietokantaa, anna True; muuten ohjataan uutta tietokantaa käyttävään backendiin
+oldapp = True
+
+if oldapp == True:
+    from app import init_app, redirect
+    print('Testataan vanhaa backendiä')
+else:
+    from application import init_app, redirect
+    print('Testataan uutta backendiä')
 
 app = init_app("sqlite")
 
