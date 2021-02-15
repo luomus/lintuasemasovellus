@@ -2,7 +2,7 @@ from flask import jsonify
 
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observation.models import Observation
-from application.db import db
+from application.db import db, prefix
 
 from sqlalchemy.sql import text
 
@@ -31,24 +31,24 @@ def addObservation(observation):
 
 
 def getObservationPeriodsByDayId(day_id):     
-    stmt = text(" SELECT v2_Observationperiod.id AS obsperiod_id,"
-                " v2_Observationperiod.start_time, v2_Observationperiod.end_time,"
-                " v2_Type.name AS typename, v2_Location.name AS locationname, v2_Day.id AS day_id,"
-                " COUNT(DISTINCT v2_Observation.species) AS speciescount"
-                " FROM v2_Observationperiod"
-                " JOIN v2_Type ON v2_Type.id = v2_Observationperiod.type_id"
-                " JOIN v2_Location ON v2_Location.id = v2_Observationperiod.location_id"
-                " JOIN v2_Day ON v2_Day.id = v2_Observationperiod.day_id"
-                " JOIN v2_Observation ON v2_Observation.observationperiod_id = v2_Observationperiod.id"
-                " WHERE v2_Day.id = :dayId"
-                " AND v2_Observationperiod.is_deleted = 0"
-                " AND v2_Type.is_deleted = 0"
-                " AND v2_Location.is_deleted = 0"
-                " AND v2_Day.is_deleted = 0"
-                " AND v2_Observation.is_deleted = 0"
-                " GROUP BY obsperiod_id, v2_Observationperiod.start_time,"
-                " v2_Observationperiod.end_time, typename, locationname, day_id"
-                " ORDER BY v2_Observationperiod.start_time").params(dayId = day_id)
+    stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
+                " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time,"
+                " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname, " + prefix + "Day.id AS day_id,"
+                " COUNT(DISTINCT " + prefix + "Observation.species) AS speciescount"
+                " FROM " + prefix + "Observationperiod"
+                " JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
+                " JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
+                " JOIN " + prefix + "Day ON " + prefix + "Day.id = " + prefix + "Observationperiod.day_id"
+                " JOIN " + prefix + "Observation ON " + prefix + "Observation.observationperiod_id = " + prefix + "Observationperiod.id"
+                " WHERE " + prefix + "Day.id = :dayId"
+                " AND " + prefix + "Observationperiod.is_deleted = 0"
+                " AND " + prefix + "Type.is_deleted = 0"
+                " AND " + prefix + "Location.is_deleted = 0"
+                " AND " + prefix + "Day.is_deleted = 0"
+                " AND " + prefix + "Observation.is_deleted = 0"
+                " GROUP BY obsperiod_id, " + prefix + "Observationperiod.start_time,"
+                " " + prefix + "Observationperiod.end_time, typename, locationname, day_id"
+                " ORDER BY " + prefix + "Observationperiod.start_time").params(dayId = day_id)
 
     res = db.engine.execute(stmt)
 

@@ -9,7 +9,7 @@ from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.shorthand.services import deleteShorthand, editShorthand
 
 from application.api import bp
-from application.db import db
+from application.db import db, prefix
 
 from sqlalchemy.sql import text
 
@@ -44,27 +44,27 @@ def getShorthands():
 @bp.route('/api/getShorthandText/<day_id>/<type_name>/<location_name>', methods=["GET"])
 @login_required
 def getShorthandsForEditing(day_id, type_name, location_name):
-    stmt = text("SELECT v2_Shorthand.id AS shorthand_id,"
-                " v2_Shorthand.shorthandrow,"
-                " v2_Shorthand.observationperiod_id,"
-                " v2_Observation.id AS observation_id,"
-                " v2_Observationperiod.start_time, v2_Observationperiod.end_time"
-                " FROM v2_Shorthand"
-                " JOIN v2_Observationperiod ON v2_Observationperiod.id = v2_Shorthand.observationperiod_id"
-                " JOIN v2_Type ON v2_Observationperiod.type_id = v2_Type.id"
-                " JOIN v2_Location ON v2_Observationperiod.location_id = v2_Location.id"
-                " JOIN v2_Observation ON v2_Observation.shorthand_id = v2_Shorthand.id"
-                " JOIN v2_Day ON v2_Day.id = v2_Observationperiod.day_id"
-                " WHERE v2_Day.id = :dayId"
-                " AND v2_Type.name = :type"
-                " AND v2_Location.name = :location"
-                " AND v2_Shorthand.is_deleted = 0"
-                " AND v2_Observationperiod.is_deleted = 0"
-                " AND v2_Type.is_deleted = 0"
-                " AND v2_Location.is_deleted = 0"
-                " AND v2_Observation.is_deleted = 0"
-                " AND v2_Day.is_deleted = 0"
-                " ORDER BY v2_Observationperiod.id, shorthand_id").params(dayId=day_id, type=type_name, location=location_name)
+    stmt = text("SELECT " + prefix + "Shorthand.id AS shorthand_id,"
+                " " + prefix + "Shorthand.shorthandrow,"
+                " " + prefix + "Shorthand.observationperiod_id,"
+                " " + prefix + "Observation.id AS observation_id,"
+                " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time"
+                " FROM " + prefix + "Shorthand"
+                " JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Shorthand.observationperiod_id"
+                " JOIN " + prefix + "Type ON " + prefix + "Observationperiod.type_id = " + prefix + "Type.id"
+                " JOIN " + prefix + "Location ON " + prefix + "Observationperiod.location_id = " + prefix + "Location.id"
+                " JOIN " + prefix + "Observation ON " + prefix + "Observation.shorthand_id = " + prefix + "Shorthand.id"
+                " JOIN " + prefix + "Day ON " + prefix + "Day.id = " + prefix + "Observationperiod.day_id"
+                " WHERE " + prefix + "Day.id = :dayId"
+                " AND " + prefix + "Type.name = :type"
+                " AND " + prefix + "Location.name = :location"
+                " AND " + prefix + "Shorthand.is_deleted = 0"
+                " AND " + prefix + "Observationperiod.is_deleted = 0"
+                " AND " + prefix + "Type.is_deleted = 0"
+                " AND " + prefix + "Location.is_deleted = 0"
+                " AND " + prefix + "Observation.is_deleted = 0"
+                " AND " + prefix + "Day.is_deleted = 0"
+                " ORDER BY " + prefix + "Observationperiod.id, shorthand_id").params(dayId=day_id, type=type_name, location=location_name)
 
     res = db.engine.execute(stmt)
 

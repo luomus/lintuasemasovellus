@@ -31,13 +31,13 @@ def getDayId(day, observatory_id):
     return d.id
 
 def getLatestDays(observatory_id):
-    stmt = text(" SELECT v2_Day.day AS day,"
-                " COUNT(DISTINCT (CASE WHEN (v2_Observationperiod.is_deleted = 0 AND v2_Observation.is_deleted = 0) THEN v2_Observation.species ELSE NULL END)) AS species_count"
-                " FROM v2_Day"
-                " LEFT JOIN v2_Observationperiod ON v2_Day.id = v2_Observationperiod.day_id"
-                " LEFT JOIN v2_Observation ON v2_Observationperiod.id = v2_Observation.observationperiod_id"
-                " WHERE v2_Day.observatory_id = :observatory_id"
-                " AND v2_Day.is_deleted = 0 "
+    stmt = text(" SELECT " + prefix + "Day.day AS day,"
+                " COUNT(DISTINCT (CASE WHEN (v2_Observationperiod.is_deleted = 0 AND " + prefix + "Observation.is_deleted = 0) THEN " + prefix + "Observation.species ELSE NULL END)) AS species_count"
+                " FROM " + prefix + "Day"
+                " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Day.id = " + prefix + "Observationperiod.day_id"
+                " LEFT JOIN " + prefix + "Observation ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
+                " WHERE " + prefix + "Day.observatory_id = :observatory_id"
+                " AND " + prefix + "Day.is_deleted = 0 "
                 " GROUP BY day"
                 " ORDER BY day DESC").params(observatory_id = observatory_id)
 

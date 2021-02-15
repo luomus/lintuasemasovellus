@@ -1,5 +1,5 @@
 from application.api.classes.observation.models import Observation
-from application.db import db
+from application.db import db, prefix
 from flask import jsonify
 from sqlalchemy.sql import text
 
@@ -68,24 +68,24 @@ def deleteObservation(shorthand_id):
 
 
 def getDaySummary(day_id):
-    stmt = text("SELECT v2_Observation.species AS species,"
-                " SUM(CASE WHEN (v2_Type.name = :const OR v2_Type.name = :other OR v2_Type.name = :night OR v2_Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
-                " SUM(CASE WHEN v2_Type.name = :const THEN total_count ELSE 0 END) AS const_migration,"
-                " SUM(CASE WHEN v2_Type.name = :other THEN total_count ELSE 0 END) AS other_migration,"
-                " SUM(CASE WHEN v2_Type.name = :night THEN total_count ELSE 0 END) AS night_migration,"
-                " SUM(CASE WHEN v2_Type.name = :scatter THEN total_count ELSE 0 END) AS scatter_obs,"
-                " SUM(CASE WHEN v2_Type.name = :local THEN total_count ELSE 0 END) AS total_local,"
-                " SUM(CASE WHEN (v2_Type.name = :local AND v2_Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
-                " SUM(CASE WHEN (v2_Type.name = :local AND v2_Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou"
-                " FROM v2_Observation"
-                " LEFT JOIN v2_Observationperiod ON v2_Observationperiod.id = v2_Observation.observationperiod_id"
-                " LEFT JOIN v2_Type ON v2_Type.id = v2_Observationperiod.type_id"
-                " LEFT JOIN v2_Location ON v2_Location.id = v2_Observationperiod.location_id"
-                " WHERE v2_Observationperiod.day_id = :day_id"
-                " AND v2_Observation.is_deleted = 0"
-                " AND v2_Observationperiod.is_deleted = 0"
-                " AND v2_Type.is_deleted = 0"
-                " AND v2_Location.is_deleted = 0"
+    stmt = text("SELECT " + prefix + "Observation.species AS species,"
+                " SUM(CASE WHEN (v2_Type.name = :const OR " + prefix + "Type.name = :other OR " + prefix + "Type.name = :night OR " + prefix + "Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
+                " SUM(CASE WHEN " + prefix + "Type.name = :const THEN total_count ELSE 0 END) AS const_migration,"
+                " SUM(CASE WHEN " + prefix + "Type.name = :other THEN total_count ELSE 0 END) AS other_migration,"
+                " SUM(CASE WHEN " + prefix + "Type.name = :night THEN total_count ELSE 0 END) AS night_migration,"
+                " SUM(CASE WHEN " + prefix + "Type.name = :scatter THEN total_count ELSE 0 END) AS scatter_obs,"
+                " SUM(CASE WHEN " + prefix + "Type.name = :local THEN total_count ELSE 0 END) AS total_local,"
+                " SUM(CASE WHEN (v2_Type.name = :local AND " + prefix + "Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
+                " SUM(CASE WHEN (v2_Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou"
+                " FROM " + prefix + "Observation"
+                " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
+                " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
+                " LEFT JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
+                " WHERE " + prefix + "Observationperiod.day_id = :day_id"
+                " AND " + prefix + "Observation.is_deleted = 0"
+                " AND " + prefix + "Observationperiod.is_deleted = 0"
+                " AND " + prefix + "Type.is_deleted = 0"
+                " AND " + prefix + "Location.is_deleted = 0"
                 " GROUP BY species").params(day_id = day_id, 
                     const = "Vakio", other = "Muu muutto", night = "Yömuutto", scatter = "Hajahavainto",
                     local = "Paikallinen", gou = "Luoto Gåu")
