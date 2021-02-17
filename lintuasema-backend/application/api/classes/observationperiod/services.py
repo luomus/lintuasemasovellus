@@ -6,14 +6,14 @@ from application.db import db, prefix
 
 from sqlalchemy.sql import text
 
-def getObsPerId(starttime, endtime, location_id, day_id):
-    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, location_id=location_id, day_id=day_id).first()
+def getObsPerId(starttime, endtime, location_id, observatoryday_id):
+    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, location_id=location_id, observatoryday_id=observatoryday_id).first()
     return obsp.id
 
-def setObsPerDayId(day_id_old, day_id_new):
-    obsp = Observationperiod.query.filter_by(day_id = day_id_old).all()
+def setObsPerDayId(observatoryday_id_old, observatoryday_id_new):
+    obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
     for obs in obsp:
-        obs.day_id = day_id_new
+        obs.observatoryday_id = observatoryday_id_new
         db.session().commit()
 
 def addObservationperiod(observationperiod):
@@ -30,31 +30,33 @@ def addObservation(observation):
     db.session().commit()
 
 
-def getObservationPeriodsByDayId(day_id):     
+def getObservationPeriodsByDayId(observatoryday_id):     
     stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
                 " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time,"
-                " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname, " + prefix + "Day.id AS day_id,"
+                " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname, " + prefix + "ObservatoryDay.id AS day_id,"
                 " COUNT(DISTINCT " + prefix + "Observation.species) AS speciescount"
                 " FROM " + prefix + "Observationperiod"
                 " JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
                 " JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
-                " JOIN " + prefix + "Day ON " + prefix + "Day.id = " + prefix + "Observationperiod.day_id"
+                " JOIN " + prefix + "ObservatoryDay ON " + prefix + "ObservatoryDay.id = " + prefix + "Observationperiod.observatoryday_id"
                 " JOIN " + prefix + "Observation ON " + prefix + "Observation.observationperiod_id = " + prefix + "Observationperiod.id"
-                " WHERE " + prefix + "Day.id = :dayId"
+                " WHERE " + prefix + "ObservatoryDay.id = :dayId"
                 " AND " + prefix + "Observationperiod.is_deleted = 0"
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
-                " AND " + prefix + "Day.is_deleted = 0"
+                " AND " + prefix + "ObservatoryDay.is_deleted = 0"
                 " AND " + prefix + "Observation.is_deleted = 0"
                 " GROUP BY obsperiod_id, " + prefix + "Observationperiod.start_time,"
-                " " + prefix + "Observationperiod.end_time, typename, locationname, day_id"
-                " ORDER BY " + prefix + "Observationperiod.start_time").params(dayId = day_id)
+                " " + prefix + "Observationperiod.end_time, typename, locationname, observatoryday_id"
+                " ORDER BY " + prefix + "Observationperiod.start_time").params(dayId = observatoryday_id)
 
     res = db.engine.execute(stmt)
 
     response = []
 
     for row in res:
+
+        print("Row is: ", row)
 
         starthours = ""
         startminutes = ""
@@ -86,5 +88,7 @@ def getObservationPeriodsByDayId(day_id):
             'day_id': row.day_id,
             'speciesCount': row.speciescount
         })
+    
+    print("final response", response)
   
     return jsonify(response)

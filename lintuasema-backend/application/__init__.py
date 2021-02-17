@@ -23,7 +23,7 @@ from application.api import bp as api_blueprint
 
 from application.api.classes.observatory import models
 from application.api.classes.user import models
-from application.api.classes.day import models
+from application.api.classes.observatoryday import models
 from application.api.classes.location import models
 from application.api.classes.type import models
 from application.api.classes.observationperiod import models
@@ -33,7 +33,7 @@ from application.api.classes.observation import models
 from application.api.classes.observationperiod import views
 from application.api.classes.location import views, services
 from application.api.classes.observatory import views, services
-from application.api.classes.day import views
+from application.api.classes.observatoryday import views
 from application.api.classes.user import views
 from application.api.classes.shorthand import views
 from application.api.classes.observation import views

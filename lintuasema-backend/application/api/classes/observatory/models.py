@@ -7,7 +7,7 @@ class Observatory(Base):
 
     name = db.Column(db.String(144), nullable=False)
 
-    Day = db.relationship("Day", backref="observatory", lazy=True)
+    ObservatoryDay = db.relationship("ObservatoryDay", backref="observatory", lazy=True)
     Location = db.relationship("Location", backref="observatory", lazy=True)
     Type = db.relationship("Type", backref="observatory", lazy=True)
     

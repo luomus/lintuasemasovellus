@@ -3,8 +3,8 @@ from flask import render_template, request, redirect, url_for,\
 
 from flask_login import login_required
 
-from application.api.classes.day.models import Day
-from application.api.classes.day.services import addDay, getDays, getDayId, getLatestDays
+from application.api.classes.observatoryday.models import ObservatoryDay
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays
 from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
 from application.api.classes.observationperiod.services import setObsPerDayId
 
@@ -13,7 +13,7 @@ from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId
 from application.api.classes.observationperiod.services import getObsPerId
-from application.api.classes.day.services import getDay
+from application.api.classes.observatoryday.services import getDay
 from application.api.classes.type.services import getTypeIdByName
 
 from application.api.classes.observation.models import Observation
@@ -34,12 +34,12 @@ def add_everything():
     req = request.get_json()
     observatory_id = getObservatoryId(req['observatory'])
     
-    day=datetime.strptime(req['day'], '%d.%m.%Y')
+    date = datetime.strptime(req['day'], '%d.%m.%Y')
 
-    day = Day(day=day, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
+    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
 
-    addDay(day)
-    dayId = getDayId(day.day, day.observatory_id)
+    addDay(new_obsday)
+    dayId = getDayId(new_obsday.date, new_obsday.observatory_id)
 
     day = getDay(dayId)
     obsId = day.observatory_id
@@ -51,10 +51,10 @@ def add_everything():
             start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
             type_id=getTypeIdByName(req['type']),
-            location_id=locId, day_id=dayId)
+            location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
 
-        obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.day_id)
+        obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.observatoryday_id)
 
         for observation in obsperiod['observations']:
             shorthand = Shorthand(shorthandrow=observation['shorthandrow'], observationperiod_id=obspId)
@@ -101,12 +101,12 @@ def add_day():
     req = request.get_json()
     observatory_id = getObservatoryId(req['observatory'])
     
-    day=datetime.strptime(req['day'], '%d.%m.%Y')
+    date=datetime.strptime(req['day'], '%d.%m.%Y')
 
-    day = Day(day=day, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
+    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
 
-    addDay(day)
-    addedId = getDayId(day.day, day.observatory_id)
+    addDay(new_obsday)
+    addedId = getDayId(new_obsday.date, new_obsday.observatory_id)
     return jsonify({ 'id': addedId })
 
 
@@ -117,38 +117,38 @@ def list_days():
     dayObjects = getDays()
 
     ret = []
-    for day in dayObjects:
-        dayDatetime = day.day
+    for obsday in dayObjects:
+        dayDatetime = obsday.date
         if not isinstance(dayDatetime, datetime): 
             dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
         dayString = dayDatetime.strftime('%d.%m.%Y')
-        ret.append({ 'id': day.id, 'day': dayString, 'observers': day.observers, 'comment': day.comment, 'observatory': getObservatoryName(day.observatory_id) })
+        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'observatory': getObservatoryName(obsday.observatory_id) })
 
     return jsonify(ret)
 
 
-@bp.route('/api/editComment/<day_id>/<comment>', methods=['POST'])
+@bp.route('/api/editComment/<obsday_id>/<comment>', methods=['POST'])
 @login_required
-def edit_comment(day_id, comment):
-    day=Day.query.get(day_id)
-    day_new = Day(day = day.day, comment = comment, observers = day.observers, observatory_id= day.observatory_id)
-    day.is_deleted = 1
+def edit_comment(obsday_id, comment):
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.date, comment = comment, observers = day_old.observers, observatory_id = day_old.observatory_id)
+    day_old.is_deleted = 1
 
     addDay(day_new)
-    setObsPerDayId(day.id, day_new.id)
+    setObsPerDayId(day_old.id, day_new.id)
 
     db.session().commit()
 
     return jsonify({"id" : day_new.id})
 
-@bp.route('/api/editObservers/<day_id>/<observers>', methods=['POST'])
+@bp.route('/api/editObservers/<obsday_id>/<observers>', methods=['POST'])
 @login_required
-def edit_observers(day_id, observers):
-    day=Day.query.get(day_id)
-    day_new = Day(day = day.day, comment = day.comment, observers = observers, observatory_id = day.observatory_id)
-    day.is_deleted = 1
+def edit_observers(obsday_id, observers):
+    day_old=ObservatoryDay.query.get(obsday_id)
+    day_new = Day(date = day_old.date, comment = day_old.comment, observers = observers, observatory_id = day_old.observatory_id)
+    day_old.is_deleted = 1
     addDay(day_new)
-    setObsPerDayId(day.id, day_new.id)
+    setObsPerDayId(day_old.id, day_new.id)
 
     db.session().commit()
 
@@ -158,15 +158,15 @@ def edit_observers(day_id, observers):
 @login_required
 def search_dayinfo(date, observatory):
 
-    day = Day.query.filter_by(day = date, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
+    obsday = ObservatoryDay.query.filter_by(date = date, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
-    if not day:
+    if not obsday:
         res.append({ 'id': 0, 'comment': "", 'observers': ""})
     else:
-        res.append({ 'id': day.id, 'comment': day.comment, 'observers': day.observers})
+        res.append({ 'id': day.id, 'comment': obsday.comment, 'observers': obsday.observers})
     return jsonify(res)
 
-   
+
 @bp.route('/api/getLatestDays/<observatory>', methods=['GET'])
 @login_required
 def get_latest_days(observatory):

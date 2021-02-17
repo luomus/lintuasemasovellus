@@ -41,9 +41,9 @@ def getShorthands():
     return jsonify(ret)
 
 
-@bp.route('/api/getShorthandText/<day_id>/<type_name>/<location_name>', methods=["GET"])
+@bp.route('/api/getShorthandText/<obsday_id>/<type_name>/<location_name>', methods=["GET"])
 @login_required
-def getShorthandsForEditing(day_id, type_name, location_name):
+def getShorthandsForEditing(obsday_id, type_name, location_name):
     stmt = text("SELECT " + prefix + "Shorthand.id AS shorthand_id,"
                 " " + prefix + "Shorthand.shorthandrow,"
                 " " + prefix + "Shorthand.observationperiod_id,"
@@ -54,8 +54,8 @@ def getShorthandsForEditing(day_id, type_name, location_name):
                 " JOIN " + prefix + "Type ON " + prefix + "Observationperiod.type_id = " + prefix + "Type.id"
                 " JOIN " + prefix + "Location ON " + prefix + "Observationperiod.location_id = " + prefix + "Location.id"
                 " JOIN " + prefix + "Observation ON " + prefix + "Observation.shorthand_id = " + prefix + "Shorthand.id"
-                " JOIN " + prefix + "Day ON " + prefix + "Day.id = " + prefix + "Observationperiod.day_id"
-                " WHERE " + prefix + "Day.id = :dayId"
+                " JOIN " + prefix + "ObservatoryDay ON " + prefix + "ObservatoryDay.id = " + prefix + "Observationperiod.observatoryday_id"
+                " WHERE " + prefix + "ObservatoryDay.id = :dayId"
                 " AND " + prefix + "Type.name = :type"
                 " AND " + prefix + "Location.name = :location"
                 " AND " + prefix + "Shorthand.is_deleted = 0"
@@ -63,8 +63,8 @@ def getShorthandsForEditing(day_id, type_name, location_name):
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
                 " AND " + prefix + "Observation.is_deleted = 0"
-                " AND " + prefix + "Day.is_deleted = 0"
-                " ORDER BY " + prefix + "Observationperiod.id, shorthand_id").params(dayId=day_id, type=type_name, location=location_name)
+                " AND " + prefix + "ObservatoryDay.is_deleted = 0"
+                " ORDER BY " + prefix + "Observationperiod.id, shorthand_id").params(dayId=obsday_id, type=type_name, location=location_name)
 
     res = db.engine.execute(stmt)
 

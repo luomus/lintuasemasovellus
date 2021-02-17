@@ -81,7 +81,7 @@ def getDaySummary(day_id):
                 " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
                 " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
                 " LEFT JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
-                " WHERE " + prefix + "Observationperiod.day_id = :day_id"
+                " WHERE " + prefix + "Observationperiod.observatoryday_id = :day_id"
                 " AND " + prefix + "Observation.is_deleted = 0"
                 " AND " + prefix + "Observationperiod.is_deleted = 0"
                 " AND " + prefix + "Type.is_deleted = 0"

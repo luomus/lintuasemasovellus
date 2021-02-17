@@ -3,12 +3,12 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required
 
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.day.models import Day
+from application.api.classes.observatoryday.models import ObservatoryDay
 from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId, getLocationName
 from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId
-from application.api.classes.day.services import getDay
+from application.api.classes.observatoryday.services import getDay
 from application.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
 
 from application.api import bp
@@ -27,8 +27,8 @@ def addObservationPeriod():
     Pythonin omia datetime-olioita...
     '''
 
-    day = getDay(req['day_id'])
-    obsId = day.observatory_id
+    obsday = getDay(req['day_id'])
+    obsId = obsday.observatory_id
     locId = getLocationId(req['location'], obsId)
 
     createType(req['observationType'], obsId)
@@ -37,14 +37,14 @@ def addObservationPeriod():
         start_time=datetime.strptime(req['startTime'], '%H:%M'),
         end_time=datetime.strptime(req['endTime'], '%H:%M'),
         type_id=getTypeIdByName(req['observationType']),
-        location_id=locId, day_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
+        location_id=locId, observatoryday_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
     #db.session().flush()
     #db.session().refresh(obsp)
     db.session().commit()
 
     #obspId = obsp.id
-    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.day_id)
+    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.observatoryday_id)
     #print("havaintojakson id on", obspId)
     return jsonify({ 'id': obspId })
 
@@ -61,7 +61,7 @@ def getObservationPeriods():
             'endTime': obsPeriod.end_time,
             'type_id': getTypeNameById(obsPeriod.type_id),
             'location': getLocationName(obsPeriod.location_id),
-            'day_id': obsPeriod.day_id
+            'day_id': obsPeriod.observatoryday_id
         })
 
     return jsonify(ret)

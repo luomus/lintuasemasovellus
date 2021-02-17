@@ -12,7 +12,7 @@ def deleteShorthand(id):
 
 def editShorthand(shorthand_id):
     shorthand=Shorthand.query.get(shorthand_id)
-    shorthand_new = Day(shorthandrow = new_row, observationperiod_id = shorthand.observationperiod_id)
+    shorthand_new = ObservatoryDay(shorthandrow = new_row, observationperiod_id = shorthand.observationperiod_id)
     shorthand.is_deleted = 1
     deleteObservation(shorthand_id)
     db.session().add(shorthand_new)
@@ -21,6 +21,6 @@ def editShorthand(shorthand_id):
     return id
 
 def setShorthandPerDayId(day_id_old, day_id_new):
-    shorthand = Shorthand.query.filter_by(day_id = day_id_old).all()
+    shorthand = Shorthand.query.filter_by(observatoryday_id = day_id_old).all()
     for sh in shorthand:
-        sh.day_id = day_id_new
+        sh.observatoryday_id = day_id_new
