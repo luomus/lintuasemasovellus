@@ -31,7 +31,7 @@ import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import { getErrors } from "../../shorthand/validations";
-import HankoActions from "./dailyActions";
+import DailyActions from "./dailyActions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -115,6 +115,7 @@ export const HomePage = () => {
   const dateNow = new Date();
 
   const userObservatory = useSelector(state => state.userObservatory);
+  const dailyActions = useSelector(state => state.dailyActions);
 
   const history = useHistory();
 
@@ -128,12 +129,6 @@ export const HomePage = () => {
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
-  const [vakiohav, setVakiohav] = useState(false);
-  const [gåu, setGåu] = useState(false);
-  const [ringing, setRinging] = useState(false);
-  const [owl, setOwl] = useState(false);
-  const [mammals, setMammals] = useState(false);
-  const [attachments, setAttachments] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
@@ -196,13 +191,14 @@ export const HomePage = () => {
   const sendData = async () => {
     const rows = sanitizedShorthand;
     setDisabled(true);
+    console.log("actions", dailyActions);
     try {
       await sendDay({
         day: formatDate(day),
         comment,
         observers,
         observatory: userObservatory,
-        //selectedActions
+        //selectedActions: dailyActions
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
@@ -331,19 +327,7 @@ export const HomePage = () => {
                   value={comment}
                 />
               </Grid>
-              <HankoActions
-                vakiohav={vakiohav}
-                setVakiohav={setVakiohav}
-                attachments={attachments}
-                setAttachments={setAttachments}
-                gåu={gåu}
-                setGåu={setGåu}
-                owl={owl}
-                setOwl={setOwl}
-                ringing={ringing}
-                setRinging={setRinging}
-                mammals={mammals}
-                setMammals={setMammals}
+              <DailyActions
               />
 
               <Grid item xs={3}>
