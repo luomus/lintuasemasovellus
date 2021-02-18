@@ -29,6 +29,8 @@ class Observation(Base):
 
     shorthand_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'shorthand.id'), nullable=True)
 
+    #TOBEADDED: user_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'user.id'), nullable=True)
+
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
