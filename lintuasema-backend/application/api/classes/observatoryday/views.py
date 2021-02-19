@@ -36,7 +36,7 @@ def add_everything():
     
     date = datetime.strptime(req['day'], '%d.%m.%Y')
 
-    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
+    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], selectedActions=req['selectedActions'], observatory_id=observatory_id) 
 
     addDay(new_obsday)
     dayId = getDayId(new_obsday.date, new_obsday.observatory_id)
@@ -103,7 +103,7 @@ def add_day():
     
     date=datetime.strptime(req['day'], '%d.%m.%Y')
 
-    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], observatory_id=observatory_id) 
+    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], selectedActions=req['selectedActions'], observatory_id=observatory_id) 
 
     addDay(new_obsday)
     addedId = getDayId(new_obsday.date, new_obsday.observatory_id)
@@ -122,7 +122,7 @@ def list_days():
         if not isinstance(dayDatetime, datetime): 
             dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
         dayString = dayDatetime.strftime('%d.%m.%Y')
-        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'observatory': getObservatoryName(obsday.observatory_id) })
+        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedActions': obsday.selectedActions, 'observatory': getObservatoryName(obsday.observatory_id) })
 
     return jsonify(ret)
 
@@ -130,8 +130,8 @@ def list_days():
 @bp.route('/api/editComment/<obsday_id>/<comment>', methods=['POST'])
 @login_required
 def edit_comment(obsday_id, comment):
-    day_old=Observatoryday.query.get(obsday_id)
-    day_new = Observatoryday(day = day_old.date, comment = comment, observers = day_old.observers, observatory_id = day_old.observatory_id)
+    day_old=ObservatoryDay.query.get(obsday_id)
+    day_new = ObservatoryDay(day = day_old.date, comment = comment, observers = day_old.observers, selectedActions = day_old.selectedActions, observatory_id = day_old.observatory_id)
     day_old.is_deleted = 1
 
     addDay(day_new)
@@ -145,7 +145,20 @@ def edit_comment(obsday_id, comment):
 @login_required
 def edit_observers(obsday_id, observers):
     day_old=ObservatoryDay.query.get(obsday_id)
-    day_new = Day(date = day_old.date, comment = day_old.comment, observers = observers, observatory_id = day_old.observatory_id)
+    day_new = Day(date = day_old.date, comment = day_old.comment, observers = observers, selectedActions = day_old.selectedActions, observatory_id = day_old.observatory_id)
+    day_old.is_deleted = 1
+    addDay(day_new)
+    setObsPerDayId(day_old.id, day_new.id)
+
+    db.session().commit()
+
+    return jsonify({"id" : day_new.id})
+
+@bp.route('/api/editActions/<obsday_id>/<actions>', methods=['POST'])
+@login_required
+def edit_observers(obsday_id, actions):
+    day_old=ObservatoryDay.query.get(obsday_id)
+    day_new = Day(date = day_old.date, comment = day_old.comment, observers = day_old.observers, selectedActions = actions, observatory_id = day_old.observatory_id)
     day_old.is_deleted = 1
     addDay(day_new)
     setObsPerDayId(day_old.id, day_new.id)
@@ -161,9 +174,9 @@ def search_dayinfo(date, observatory):
     obsday = ObservatoryDay.query.filter_by(date = date, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
     if not obsday:
-        res.append({ 'id': 0, 'comment': "", 'observers': ""})
+        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedActions': ""})
     else:
-        res.append({ 'id': day.id, 'comment': obsday.comment, 'observers': obsday.observers})
+        res.append({ 'id': obsday.id, 'comment': obsday.comment, 'observers': obsday.observers, 'selectedActions': obsday.selectedActions})
     return jsonify(res)
 
 
