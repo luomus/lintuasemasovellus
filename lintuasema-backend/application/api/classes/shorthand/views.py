@@ -6,7 +6,7 @@ from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.observation.models import Observation
 from application.api.classes.observation.services import deleteObservation
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.shorthand.services import deleteShorthand, editShorthand
+from application.api.classes.shorthand.services import editShorthand
 
 from application.api import bp
 from application.db import db, prefix
@@ -18,13 +18,13 @@ from sqlalchemy.sql import text
 @login_required
 def addShorthand():
     req = request.get_json()
-    shorthand = Shorthand(shorthandrow=req['row'],
+    shorthand = Shorthand(shorthandblock=req['block'],
         observationperiod_id=req['observationperiod_id'])
     db.session().add(shorthand)
     db.session().commit()
 
     shorthand_id = Shorthand.query.filter_by(
-        shorthandrow=req['row'], observationperiod_id=req['observationperiod_id']).first().id
+        shorthandblock=req['block'], observationperiod_id=req['observationperiod_id']).first().id
 
     return jsonify({'id': shorthand_id})
 
@@ -35,17 +35,18 @@ def getShorthands():
     shorthands = Shorthand.query.all()
     ret = []
     for shorthand in shorthands:
-        ret.append({'id': shorthand.id, 'row': shorthand.shorthandrow,
+        ret.append({'id': shorthand.id, 'block': shorthand.shorthandblock,
                    'observationperiod_id': shorthand.observationperiod_id})
 
     return jsonify(ret)
 
 
+#TO BE REFACTORED TOGETHER WITH FRONTEND CHANGES
 @bp.route('/api/getShorthandText/<obsday_id>/<type_name>/<location_name>', methods=["GET"])
 @login_required
 def getShorthandsForEditing(obsday_id, type_name, location_name):
     stmt = text("SELECT " + prefix + "Shorthand.id AS shorthand_id,"
-                " " + prefix + "Shorthand.shorthandrow,"
+                " " + prefix + "Shorthand.shorthandblock,"
                 " " + prefix + "Shorthand.observationperiod_id,"
                 " " + prefix + "Observation.id AS observation_id,"
                 " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time"
@@ -92,13 +93,13 @@ def createObsperiodList(res):
             obsPeriodId = row.observationperiod_id
             startTime = formatTime(row.start_time)
             endTime = formatTime(row.end_time)
-            shorthandText = row.shorthandrow
+            shorthandText = row.shorthandblock
 
         index = index + 1
 
         if row.shorthand_id != shorthandId:
 
-            addShorthand(shorthandList, shorthandId,
+            addToShorthandList(shorthandList, shorthandId,
                          shorthandText, observationList)
             observationList.clear()
             shorthandId = row.shorthand_id
@@ -113,9 +114,9 @@ def createObsperiodList(res):
         observationList.append({'id': row.observation_id})
         startTime = formatTime(row.start_time)
         endTime = formatTime(row.end_time)
-        shorthandText = row.shorthandrow
+        shorthandText = row.shorthandblock
 
-    addShorthand(shorthandList, shorthandId, shorthandText, observationList)
+    addToShorthandList(shorthandList, shorthandId, shorthandText, observationList)
     observationList.clear()
 
     addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
@@ -139,7 +140,7 @@ def formatTime(time):
     return hours + ':' + minutes
 
 
-def addShorthand(shorthandlist, id, text, observations):
+def addToShorthandList(shorthandlist, id, text, observations):
     shorthandlist.append({
         'shorthand_id': id,
         'shorthand_text': text,
@@ -159,7 +160,7 @@ def addObsPeriod(obsperiodlist, id, start, end, shorthands):
 def getShorthandById(shorthand_id):
     shorthand = Shorthand.query.get(shorthand_id)
     ret = []
-    ret.append({ 'id': shorthand.id, 'row': shorthand.shorthandrow, 'observationperiod_id': shorthand.observationperiod_id})
+    ret.append({ 'id': shorthand.id, 'block': shorthand.shorthandblock, 'observationperiod_id': shorthand.observationperiod_id})
     return jsonify(ret)
 
 @bp.route("/api/deleteShorthand", methods=["DELETE"])
@@ -170,17 +171,13 @@ def shorthand_delete():
     Shorthand.query.filter_by(id=shorthand_id).delete()
     db.session.commit()
     return jsonify(req)
-    #req = request.get_json()
-    #shorthand_id = req['shorthand_id']
-    #deleteShorthand(shorthand_id)
-    #return jsonify("")
 
 @bp.route('/api/editShorthand/<shorthand_id>', methods=['POST'])
 @login_required
 def edit_shorthand(shorthand_id):
     req = request.get_json()
-    new_row = req['shorthandrow']
+    new_block = req['block']
 
-    id = editShorthand(shorthand_id)
+    id = editShorthand(shorthand_id, new_block)
 
     return jsonify({"id" : id})

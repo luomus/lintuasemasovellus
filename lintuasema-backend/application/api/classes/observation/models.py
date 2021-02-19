@@ -34,7 +34,8 @@ class Observation(Base):
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
-        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, bypassSide, notes, observationperiod_id, shorthand_id, account_id):
+        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, 
+        bypassSide, notes, observationperiod_id, shorthand_id, account_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
         self.adultFemaleCount = adultFemaleCount
