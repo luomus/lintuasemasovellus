@@ -92,12 +92,12 @@ const resources = {
 
       "checkShorthand": "Tarkista pikakirjoitus",
 
-      "Standard observation": "Vakiohavainnointi",
-      "Gåu visited": "Gåulla käynti",
-      "Ringing standard": "Rengastusvakio",
-      "Owl standard": "Pöllövakio",
-      "Mammals etc counted": "Nisäkkäät yms. laskettu",
-      "Attachments": "Liitteitä",
+      "vakiohavainto": "Vakiohavainnointi",
+      "gåu": "Gåulla käynti",
+      "rengastusvakio": "Rengastusvakio",
+      "pöllövakio": "Pöllövakio",
+      "nisäkkäät": "Nisäkkäät yms. laskettu",
+      "liitteet": "Liitteitä",
 
 
 

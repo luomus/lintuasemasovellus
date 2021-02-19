@@ -38,14 +38,9 @@ const DailyActions = () => {
 };
 
 const HankoActions = () => {
-
   const dispatch = useDispatch();
-
   const classes = useStyles();
   const { t } = useTranslation();
-
-  //const initialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
-
   const clicks = useSelector(state => state.dailyActions);
 
   const handleClick = (target) => {
@@ -53,25 +48,24 @@ const HankoActions = () => {
     //console.log("clicks", clicks);
   };
 
-
   return (
     <Grid item xs={12}>
       <FormGroup row className={classes.formGroup}>
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.vakiohavainto} onChange={(e) => handleClick(e.target)} name="vakiohavainto" color="primary" />}
-          label={t("Standard observation")} labelPlacement="end" />
+          label={t("vakiohavainto")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.gåu} onChange={(e) => handleClick(e.target)} name="gåu" color="primary" />}
-          label={t("Gåu visited")} labelPlacement="end" />
+          label={t("gåu")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.rengastusvakio} onChange={(e) => handleClick(e.target)} name="rengastusvakio" color="primary" />}
-          label={t("Ringing standard")} labelPlacement="end" />
+          label={t("rengastusvakio")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.pöllövakio} onChange={(e) => handleClick(e.target)} name="pöllövakio" color="primary" />}
-          label={t("Owl standard")} labelPlacement="end" />
+          label={t("pöllövakio")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.nisäkkäät} onChange={(e) => handleClick(e.target)} name="nisäkkäät" color="primary" />}
-          label={t("Mammals etc counted")} labelPlacement="end" />
+          label={t("nisäkkäät")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<NativeSelect name="liitteet" className={classes.attachmentField} value={clicks.liitteet} onChange={(e) => handleClick(e.target)}>
             <option value={0}>0</option>
@@ -80,7 +74,7 @@ const HankoActions = () => {
             <option value={3}>3</option>
             <option value={4}>4</option>
           </NativeSelect>}
-          label={t("Attachments")} labelPlacement="start" />
+          label={t("liitteet")} labelPlacement="start" />
       </FormGroup>
     </Grid>
   );
