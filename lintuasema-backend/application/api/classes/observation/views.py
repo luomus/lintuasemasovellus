@@ -31,7 +31,7 @@ def getObservations():
             'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
             'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 'total_count' :obs.total_count,
             'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes, 
-            'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id})
+            'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id, 'account_id': obs.account_id})
 
     return jsonify(ret)
 

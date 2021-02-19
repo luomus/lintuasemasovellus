@@ -55,7 +55,8 @@ def addObservationToDb(req):
         bypassSide=req['bypassSide'],
         notes=req['notes'],
         observationperiod_id=req['observationperiod_id'],
-        shorthand_id=req['shorthand_id'])
+        shorthand_id=req['shorthand_id'],
+        account_id=req['account_id'])
     db.session().add(observation)
     
     db.session().commit()
@@ -69,14 +70,14 @@ def deleteObservation(shorthand_id):
 
 def getDaySummary(day_id):
     stmt = text("SELECT " + prefix + "Observation.species AS species,"
-                " SUM(CASE WHEN (v2_Type.name = :const OR " + prefix + "Type.name = :other OR " + prefix + "Type.name = :night OR " + prefix + "Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
+                " SUM(CASE WHEN (" + prefix + "Type.name = :const OR " + prefix + "Type.name = :other OR " + prefix + "Type.name = :night OR " + prefix + "Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :const THEN total_count ELSE 0 END) AS const_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :other THEN total_count ELSE 0 END) AS other_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :night THEN total_count ELSE 0 END) AS night_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :scatter THEN total_count ELSE 0 END) AS scatter_obs,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :local THEN total_count ELSE 0 END) AS total_local,"
-                " SUM(CASE WHEN (v2_Type.name = :local AND " + prefix + "Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
-                " SUM(CASE WHEN (v2_Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou"
+                " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
+                " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou"
                 " FROM " + prefix + "Observation"
                 " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
                 " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"

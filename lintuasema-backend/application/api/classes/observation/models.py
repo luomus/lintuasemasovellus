@@ -29,12 +29,12 @@ class Observation(Base):
 
     shorthand_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'shorthand.id'), nullable=True)
 
-    #TOBEADDED: user_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'user.id'), nullable=True)
+    account_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'account.id'), nullable=True)
 
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
-        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, bypassSide, notes, observationperiod_id, shorthand_id):
+        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, bypassSide, notes, observationperiod_id, shorthand_id, account_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
         self.adultFemaleCount = adultFemaleCount
@@ -54,6 +54,7 @@ class Observation(Base):
         self.notes = notes
         self.observationperiod_id = observationperiod_id
         self.shorthand_id = shorthand_id
+        self.account_id = account_id
 
         @staticmethod
         def summaryOfBirdsPerDay():

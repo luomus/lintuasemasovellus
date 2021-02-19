@@ -1,7 +1,7 @@
 from application.db import db
 from application.api.models import Base
 
-class User(Base):
+class Account(Base):
 
      __base_tablename__ = 'account'
 

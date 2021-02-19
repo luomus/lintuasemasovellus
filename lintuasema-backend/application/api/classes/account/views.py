@@ -1,4 +1,4 @@
-from application.api.classes.user.models import User
+from application.api.classes.account.models import Account
 
 from application.api import bp
 from application.db import db
@@ -29,9 +29,9 @@ def loginconfirm():
     name = req['fullName']
     email = req['emailAddress']
 
-    user = User.query.filter_by(userId=userId).first()
+    user = Account.query.filter_by(userId=userId).first()
     if not user:
-        user = User(userId=userId, fullName=name, email=email)
+        user = Account(userId=userId, fullName=name, email=email)
         db.session().add(user)
         db.session().commit()
 
@@ -65,7 +65,7 @@ def getcurrentUser():
     u = current_user.get_id()
     if not u:
         return jsonify('no user')
-    user = User.query.filter_by(id=u).first()
+    user = Account.query.filter_by(id=u).first()
     ret = []
     ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email})
     return jsonify(ret)
@@ -83,9 +83,9 @@ def testloginconfirm():
     name = 'Lintu Asema'
     email = 'lintuasema@lintuasema.com'
 
-    user = User.query.filter_by(userId=userId).first()
+    user = Account.query.filter_by(userId=userId).first()
     if not user:
-        user = User(userId=userId, fullName=name, email=email)
+        user = Account(userId=userId, fullName=name, email=email)
         db.session().add(user)
         db.session().commit()
 

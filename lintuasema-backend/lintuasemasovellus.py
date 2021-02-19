@@ -9,9 +9,9 @@ from flask import (Flask, render_template,
 
 # ASETUKSET
 # oldapp: Jos käytetään vanhaa tietokantaa, anna True; muuten ohjataan uutta tietokantaa käyttävään backendiin
-oldapp = True
+oldapp = False
 # db_type: Jos käytetään Oraclea, anna "oracle"; muuten käytetään oletuksena SQLitea
-db_type = "oracle"
+db_type = "asdf"
 
 if oldapp == True:
     from app import init_app, redirect

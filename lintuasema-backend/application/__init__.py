@@ -22,7 +22,7 @@ from sqlalchemy.engine import create_engine
 from application.api import bp as api_blueprint
 
 from application.api.classes.observatory import models
-from application.api.classes.user import models
+from application.api.classes.account import models
 from application.api.classes.observatoryday import models
 from application.api.classes.location import models
 from application.api.classes.type import models
@@ -34,12 +34,12 @@ from application.api.classes.observationperiod import views
 from application.api.classes.location import views, services
 from application.api.classes.observatory import views, services
 from application.api.classes.observatoryday import views
-from application.api.classes.user import views
+from application.api.classes.account import views
 from application.api.classes.shorthand import views
 from application.api.classes.observation import views
 from application.api.classes.type import services
 
-from application.api.classes.user.models import User
+from application.api.classes.account.models import Account
 from application.api.classes.observatory.models import Observatory
 
 from application.api.classes.observatory.services import createObservatory, getObservatoryId
@@ -80,8 +80,8 @@ def init_app(database):
         app.config['LOGIN_DISABLED'] = True
 
     @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(user_id)
+    def load_user(account_id):
+        return Account.query.get(account_id)
 
     #Kayttajaroolit (alustava, kopioitu vanhasta projektista)
     # from functools import wraps
