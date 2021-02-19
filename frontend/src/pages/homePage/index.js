@@ -29,6 +29,7 @@ import {
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
+import { setDailyActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
@@ -157,6 +158,12 @@ export const HomePage = () => {
     //setType("");
     //setLocation("");
     setShorthand("");
+  };
+
+  const setActions = (selectedActions) => {
+    if (selectedActions.length !== 0) {
+      dispatch(setDailyActions(selectedActions));
+    }
   };
 
 
@@ -295,8 +302,12 @@ export const HomePage = () => {
                     value={day}
                     onChange={(date) => {
                       setDay(date);
-                      searchDayInfo(formatDate(date), userObservatory).then(dayJson => setObservers(dayJson[0]["observers"]));
-                      searchDayInfo(formatDate(date), userObservatory).then(dayJson => setComment(dayJson[0]["comment"]));
+                      searchDayInfo(formatDate(date), userObservatory).then((dayJson)  => {
+                        setObservers(dayJson[0]["observers"]);
+                        setComment(dayJson[0]["comment"]);
+                        //setActions(dayJson[0]["selectedActions"]));
+                        setActions({ vakiohavainto:true, gåu:true, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 });
+                      });
                     }}
                     KeyboardButtonProps={{
                       "aria-label": "change date",

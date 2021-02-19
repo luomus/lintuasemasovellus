@@ -1,11 +1,14 @@
-const initialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
+const hankoInitialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
 
 
-const dailyActionsReducer = (state = initialState, action) => {
+const dailyActionsReducer = (state = hankoInitialState, action) => {
   switch (action.type) {
     case "TOGGLE_ACTIONS":
       //console.log("action.data",action.data.changedAction);
       return { ...state,[action.data.changedAction]:action.data.value };
+    case "SET_ACTIONS":
+      console.log("reducer", action.data);
+      return action.data.dailyActions;
     default:
       return state;
   }
@@ -18,6 +21,17 @@ export const toggleDailyActions = (changedAction, value) => {
     data: {
       changedAction:changedAction,
       value:value
+    }
+  };
+};
+
+
+export const setDailyActions = (dailyActions) => {
+  console.log("action", dailyActions);
+  return {
+    type: "SET_ACTIONS",
+    data: {
+      dailyActions
     }
   };
 };

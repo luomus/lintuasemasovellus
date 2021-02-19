@@ -33,7 +33,6 @@ const DailyActions = () => {
   }
   return (
     <div>
-      Something has gone wrong here..
     </div>
   );
 };
@@ -45,10 +44,17 @@ const HankoActions = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 
+  //const initialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
+
   const clicks = useSelector(state => state.dailyActions);
+  //console.log("clicks", clicks);
+  // if (Object.entries(clicks).length === 0 ){
+  //   console.log("Luodaan");
+  //   dispatch(setDailyActions(initialState));
+  // }
 
   const handleClick = (target) => {
-    dispatch(toggleDailyActions(target.name, target.checked ? target.name !== "liitteet" : target.value));
+    dispatch(toggleDailyActions(target.name, target.name === "liitteet" ? target.value : target.checked));
     //console.log("clicks", clicks);
   };
 
