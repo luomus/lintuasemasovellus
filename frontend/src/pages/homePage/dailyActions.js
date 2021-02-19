@@ -47,11 +47,6 @@ const HankoActions = () => {
   //const initialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
 
   const clicks = useSelector(state => state.dailyActions);
-  //console.log("clicks", clicks);
-  // if (Object.entries(clicks).length === 0 ){
-  //   console.log("Luodaan");
-  //   dispatch(setDailyActions(initialState));
-  // }
 
   const handleClick = (target) => {
     dispatch(toggleDailyActions(target.name, target.name === "liitteet" ? target.value : target.checked));
@@ -78,7 +73,7 @@ const HankoActions = () => {
           control={<Checkbox checked={clicks.nisäkkäät} onChange={(e) => handleClick(e.target)} name="nisäkkäät" color="primary" />}
           label={t("Mammals etc counted")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<NativeSelect name="liitteet" className={classes.attachmentField} defaultValue={clicks.liitteet} onChange={(e) => handleClick(e.target)}>
+          control={<NativeSelect name="liitteet" className={classes.attachmentField} value={clicks.liitteet} onChange={(e) => handleClick(e.target)}>
             <option value={0}>0</option>
             <option value={1}>1</option>
             <option value={2}>2</option>

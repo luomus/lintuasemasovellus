@@ -161,9 +161,7 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
-    if (selectedActions.length !== 0) {
-      dispatch(setDailyActions(selectedActions));
-    }
+    dispatch(setDailyActions(selectedActions));
   };
 
 
@@ -306,7 +304,7 @@ export const HomePage = () => {
                         setObservers(dayJson[0]["observers"]);
                         setComment(dayJson[0]["comment"]);
                         //setActions(dayJson[0]["selectedActions"]));
-                        setActions({ vakiohavainto:true, gåu:true, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 });
+                        setActions({ vakiohavainto:true, gåu:true, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 1 });
                       });
                     }}
                     KeyboardButtonProps={{
