@@ -14,9 +14,13 @@ def getObservatoryName(obsId):
     obs = Observatory.query.filter_by(id = obsId).first()
     return obs.name
 
-def createObservatory(name):
+def createObservatory(name, actions):
     obs = Observatory.query.filter_by(name=name).first()
     if not obs:
-        obs = Observatory(name=name)
+        obs = Observatory(name=name, actions=actions)
         db.session().add(obs)
         db.session().commit()
+
+def get_observatory_actions(obsId):
+    obs = Observatory.query.filter_by(id = obsId).first()
+    return obs.actions

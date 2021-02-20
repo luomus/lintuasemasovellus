@@ -156,7 +156,7 @@ def edit_observers(obsday_id, observers):
 
 @bp.route('/api/editActions/<obsday_id>/<actions>', methods=['POST'])
 @login_required
-def edit_observers(obsday_id, actions):
+def edit_actions(obsday_id, actions):
     day_old=ObservatoryDay.query.get(obsday_id)
     day_new = Day(date = day_old.date, comment = day_old.comment, observers = day_old.observers, selectedActions = actions, observatory_id = day_old.observatory_id)
     day_old.is_deleted = 1

@@ -1,35 +1,52 @@
 {
-"observatories":
-    [
-        {
-        "observatory": "Hangon_Lintuasema",
-        "locations": [
+  "observatories": [
+    {
+      "observatory": "Hangon_Lintuasema",
+      "locations": [
         "Bunkkeri",
         "Piha",
         "Eteläkärki",
         "Metsä",
         "Luoto Gåu"
-        ],
-        "types": [
+      ],
+      "types": [
         "Vakio",
         "Muu muutto",
         "Yömuutto",
         "Hajahavainto",
         "Paikallinen"
-        ]
+      ],
+      "actions": [
+        {
+          "type": "Tickbox",
+          "actions": [
+            "vakiohavainto",
+            "gåu",
+            "rengastusvakio",
+            "pöllövakio",
+            "nisäkkäät"
+          ]
         },
         {
-        "observatory": "Jurmon_Lintuasema",
-        "locations": [
+          "type": "Numeric",
+          "actions": [
+            "liitteet"
+          ]
+        }
+      ]
+    },
+    {
+      "observatory": "Jurmon_Lintuasema",
+      "locations": [
         "Korkein kohta",
         "Länsireitti"
-        ],
-        "types": [
+      ],
+      "types": [
         "Vakio",
         "Esimerkki1",
         "Esimerkki2",
         "Esimerkki3"
-        ]
-        }
-    ]
+      ]
+    }
+  ]
 }
