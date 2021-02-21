@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for,\
 
 from flask_login import login_required
 
-from application.api.classes.observatoryday.models import ObservatoryDay
+from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays
 from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
 from application.api.classes.observationperiod.services import setObsPerDayId
@@ -34,12 +34,12 @@ def add_everything():
     req = request.get_json()
     observatory_id = getObservatoryId(req['observatory'])
     
-    date = datetime.strptime(req['day'], '%d.%m.%Y')
+    day = datetime.strptime(req['day'], '%d.%m.%Y')
 
-    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], selectedActions=req['selectedActions'], observatory_id=observatory_id) 
+    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
 
     addDay(new_obsday)
-    dayId = getDayId(new_obsday.date, new_obsday.observatory_id)
+    dayId = getDayId(new_obsday.day, new_obsday.observatory_id)
 
     day = getDay(dayId)
     obsId = day.observatory_id
@@ -101,12 +101,12 @@ def add_day():
     req = request.get_json()
     observatory_id = getObservatoryId(req['observatory'])
     
-    date=datetime.strptime(req['day'], '%d.%m.%Y')
+    day=datetime.strptime(req['day'], '%d.%m.%Y')
 
-    new_obsday = ObservatoryDay(date=date, comment=req['comment'], observers=req['observers'], selectedActions=req['selectedActions'], observatory_id=observatory_id) 
+    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
 
     addDay(new_obsday)
-    addedId = getDayId(new_obsday.date, new_obsday.observatory_id)
+    addedId = getDayId(new_obsday.day, new_obsday.observatory_id)
     return jsonify({ 'id': addedId })
 
 
@@ -118,11 +118,11 @@ def list_days():
 
     ret = []
     for obsday in dayObjects:
-        dayDatetime = obsday.date
+        dayDatetime = obsday.day
         if not isinstance(dayDatetime, datetime): 
             dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
         dayString = dayDatetime.strftime('%d.%m.%Y')
-        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedActions': obsday.selectedActions, 'observatory': getObservatoryName(obsday.observatory_id) })
+        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedactions': obsday.selectedactions, 'observatory': getObservatoryName(obsday.observatory_id) })
 
     return jsonify(ret)
 
@@ -130,8 +130,8 @@ def list_days():
 @bp.route('/api/editComment/<obsday_id>/<comment>', methods=['POST'])
 @login_required
 def edit_comment(obsday_id, comment):
-    day_old=ObservatoryDay.query.get(obsday_id)
-    day_new = ObservatoryDay(day = day_old.date, comment = comment, observers = day_old.observers, selectedActions = day_old.selectedActions, observatory_id = day_old.observatory_id)
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.day, comment = comment, observers = day_old.observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
     day_old.is_deleted = 1
 
     addDay(day_new)
@@ -144,8 +144,8 @@ def edit_comment(obsday_id, comment):
 @bp.route('/api/editObservers/<obsday_id>/<observers>', methods=['POST'])
 @login_required
 def edit_observers(obsday_id, observers):
-    day_old=ObservatoryDay.query.get(obsday_id)
-    day_new = Day(date = day_old.date, comment = day_old.comment, observers = observers, selectedActions = day_old.selectedActions, observatory_id = day_old.observatory_id)
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
     day_old.is_deleted = 1
     addDay(day_new)
     setObsPerDayId(day_old.id, day_new.id)
@@ -157,8 +157,8 @@ def edit_observers(obsday_id, observers):
 @bp.route('/api/editActions/<obsday_id>/<actions>', methods=['POST'])
 @login_required
 def edit_actions(obsday_id, actions):
-    day_old=ObservatoryDay.query.get(obsday_id)
-    day_new = Day(date = day_old.date, comment = day_old.comment, observers = day_old.observers, selectedActions = actions, observatory_id = day_old.observatory_id)
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = day_old.observers, selectedactions = actions, observatory_id = day_old.observatory_id)
     day_old.is_deleted = 1
     addDay(day_new)
     setObsPerDayId(day_old.id, day_new.id)
@@ -167,16 +167,16 @@ def edit_actions(obsday_id, actions):
 
     return jsonify({"id" : day_new.id})
 
-@bp.route('/api/searchDayInfo/<date>/<observatory>', methods=['GET'])
+@bp.route('/api/searchDayInfo/<day>/<observatory>', methods=['GET'])
 @login_required
-def search_dayinfo(date, observatory):
+def search_dayinfo(day, observatory):
 
-    obsday = ObservatoryDay.query.filter_by(date = date, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
+    obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
     if not obsday:
-        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedActions': ""})
+        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
     else:
-        res.append({ 'id': obsday.id, 'comment': obsday.comment, 'observers': obsday.observers, 'selectedActions': obsday.selectedActions})
+        res.append({ 'id': obsday.id, 'comment': obsday.comment, 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
     return jsonify(res)
 
 

@@ -174,6 +174,8 @@ export const HomePage = () => {
         day: formatDate(day),
         comment,
         observers,
+        // REFACTOR WHEN ADDING SELECTEDACTIONS TO FRONTEND
+        selectedactions: "test-actions",
         observatory: userObservatory
       });
       await loopThroughObservationPeriods(rows, type, location);

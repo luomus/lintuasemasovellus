@@ -46,6 +46,14 @@
         "Esimerkki1",
         "Esimerkki2",
         "Esimerkki3"
+      ],
+      "actions": [
+        {
+          "type": "Tickbox",
+          "actions": [
+            "testi"
+          ]
+        }
       ]
     }
   ]

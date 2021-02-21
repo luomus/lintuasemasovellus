@@ -55,8 +55,8 @@ def getShorthandsForEditing(obsday_id, type_name, location_name):
                 " JOIN " + prefix + "Type ON " + prefix + "Observationperiod.type_id = " + prefix + "Type.id"
                 " JOIN " + prefix + "Location ON " + prefix + "Observationperiod.location_id = " + prefix + "Location.id"
                 " JOIN " + prefix + "Observation ON " + prefix + "Observation.shorthand_id = " + prefix + "Shorthand.id"
-                " JOIN " + prefix + "ObservatoryDay ON " + prefix + "ObservatoryDay.id = " + prefix + "Observationperiod.observatoryday_id"
-                " WHERE " + prefix + "ObservatoryDay.id = :dayId"
+                " JOIN " + prefix + "Observatoryday ON " + prefix + "Observatoryday.id = " + prefix + "Observationperiod.observatoryday_id"
+                " WHERE " + prefix + "Observatoryday.id = :dayId"
                 " AND " + prefix + "Type.name = :type"
                 " AND " + prefix + "Location.name = :location"
                 " AND " + prefix + "Shorthand.is_deleted = 0"
@@ -64,7 +64,7 @@ def getShorthandsForEditing(obsday_id, type_name, location_name):
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
                 " AND " + prefix + "Observation.is_deleted = 0"
-                " AND " + prefix + "ObservatoryDay.is_deleted = 0"
+                " AND " + prefix + "Observatoryday.is_deleted = 0"
                 " ORDER BY " + prefix + "Observationperiod.id, shorthand_id").params(dayId=obsday_id, type=type_name, location=location_name)
 
     res = db.engine.execute(stmt)

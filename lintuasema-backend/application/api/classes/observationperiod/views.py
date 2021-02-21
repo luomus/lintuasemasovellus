@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required
 
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.observatoryday.models import ObservatoryDay
+from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId, getLocationName

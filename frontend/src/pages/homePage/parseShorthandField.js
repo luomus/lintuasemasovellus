@@ -8,7 +8,8 @@ let day = {
   day: "",
   comment: "",
   observers: "",
-  observatory_id: ""
+  observatory_id: "",
+  selectedactions: ""
 };
 
 let observationPeriods = [];
@@ -132,6 +133,7 @@ const sendObservation = async (observation, observationPeriodId, shorthandId) =>
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
+  observation["account_id"] = "1053";
   await postAddObservation(observation);
 };
 
@@ -202,7 +204,7 @@ export const loopThroughObservations = async (shorthandRows) => {
       i++;
     } else {
       const parsed = parse(row);
-      shorthand["row"] = row;
+      shorthand["block"] = row;
       shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
       const res = await postAddShorthand(shorthand);
       for (const sub of parsed.osahavainnot) {

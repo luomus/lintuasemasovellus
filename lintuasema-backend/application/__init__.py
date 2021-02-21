@@ -140,7 +140,7 @@ def init_app(database):
             with open(filename) as json_file:
                 data = json.load(json_file)
                 for o in data["observatories"]:
-                    createObservatory(o['observatory'])
+                    createObservatory(o['observatory'], "actiontest")
                     obsId = getObservatoryId(o['observatory'])
                     for l in o["locations"]:
                         createLocation(l, obsId)

@@ -33,21 +33,21 @@ def addObservation(observation):
 def getObservationPeriodsByDayId(observatoryday_id):     
     stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
                 " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time,"
-                " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname, " + prefix + "ObservatoryDay.id AS day_id,"
+                " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname, " + prefix + "Observatoryday.id AS day_id,"
                 " COUNT(DISTINCT " + prefix + "Observation.species) AS speciescount"
                 " FROM " + prefix + "Observationperiod"
                 " JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
                 " JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
-                " JOIN " + prefix + "ObservatoryDay ON " + prefix + "ObservatoryDay.id = " + prefix + "Observationperiod.observatoryday_id"
+                " JOIN " + prefix + "Observatoryday ON " + prefix + "Observatoryday.id = " + prefix + "Observationperiod.observatoryday_id"
                 " JOIN " + prefix + "Observation ON " + prefix + "Observation.observationperiod_id = " + prefix + "Observationperiod.id"
-                " WHERE " + prefix + "ObservatoryDay.id = :dayId"
+                " WHERE " + prefix + "Observatoryday.id = :dayId"
                 " AND " + prefix + "Observationperiod.is_deleted = 0"
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
-                " AND " + prefix + "ObservatoryDay.is_deleted = 0"
+                " AND " + prefix + "Observatoryday.is_deleted = 0"
                 " AND " + prefix + "Observation.is_deleted = 0"
-                " GROUP BY obsperiod_id, " + prefix + "Observationperiod.start_time,"
-                " " + prefix + "Observationperiod.end_time, typename, locationname, observatoryday_id"
+                " GROUP BY " + prefix + "Observationperiod.id, " + prefix + "Observationperiod.start_time,"
+                " " + prefix + "Observationperiod.end_time, " + prefix + "Type.name, " + prefix + "Location.name, " + prefix + "Observatoryday.id"
                 " ORDER BY " + prefix + "Observationperiod.start_time").params(dayId = observatoryday_id)
 
     res = db.engine.execute(stmt)
@@ -55,8 +55,6 @@ def getObservationPeriodsByDayId(observatoryday_id):
     response = []
 
     for row in res:
-
-        print("Row is: ", row)
 
         starthours = ""
         startminutes = ""
@@ -88,7 +86,5 @@ def getObservationPeriodsByDayId(observatoryday_id):
             'day_id': row.day_id,
             'speciesCount': row.speciescount
         })
-    
-    print("final response", response)
   
     return jsonify(response)
