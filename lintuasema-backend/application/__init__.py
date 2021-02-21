@@ -68,15 +68,12 @@ def init_app(database):
     #kirjautuminen
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
     app.config["SESSION_REFRESH_EACH_REQUEST"] = True
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    app.config["SECRET_KEY"] = urandom(32)
     if database == "oracle":
-        login_manager = LoginManager()
-        login_manager.init_app(app)
-        app.config["SECRET_KEY"] = urandom(32)
         app.config['LOGIN_DISABLED'] = False
     else:
-        login_manager = LoginManager()
-        login_manager.init_app(app)
-        app.config["SECRET_KEY"] = urandom(32)
         app.config['LOGIN_DISABLED'] = True
 
     @login_manager.user_loader

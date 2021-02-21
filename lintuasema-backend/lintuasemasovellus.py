@@ -11,7 +11,7 @@ from flask import (Flask, render_template,
 # oldapp: Jos käytetään vanhaa tietokantaa, anna True; muuten ohjataan uutta tietokantaa käyttävään backendiin
 oldapp = False
 # db_type: Jos käytetään Oraclea, anna "oracle"; muuten käytetään oletuksena SQLitea
-db_type = "asdf"
+db_type = "oracle"
 
 if oldapp == True:
     from app import init_app, redirect
