@@ -4,7 +4,7 @@ const hankoInitialState= { vakiohavainto:false, gåu:false, rengastusvakio:false
 const dailyActionsReducer = (state = hankoInitialState, action) => {
   switch (action.type) {
     case "TOGGLE_ACTIONS":
-      //console.log("action.data",action.data.changedAction);
+      //console.log("action.data",action.data);
       return { ...state,[action.data.changedAction]:action.data.value };
     case "SET_ACTIONS":
       console.log("reducer", action.data);

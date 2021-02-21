@@ -75,7 +75,7 @@ const DayDetails = () => {
 
   // const [selectedActions, setSelectedActions] = useState(dayList
   //   .find(d => d.day === day && d.observatory === stationName)
-  //   .selectedActions
+  //   .JSON.parse(selectedActions)
   // );
 
   const selectedActions= { vakiohavainto:true, gåu:false, rengastusvakio:true, pöllövakio:false,nisäkkäät:false,liitteet: 0 };

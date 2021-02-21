@@ -116,7 +116,7 @@ export const HomePage = () => {
   const dateNow = new Date();
 
   const userObservatory = useSelector(state => state.userObservatory);
-  const dailyActions = useSelector(state => state.dailyActions);
+  // const dailyActions = useSelector(state => state.dailyActions);
 
   const history = useHistory();
 
@@ -164,6 +164,15 @@ export const HomePage = () => {
     dispatch(setDailyActions(selectedActions));
   };
 
+  // const readyDailyActions = () => {
+  //   if ("liitteet" in dailyActions) {
+  //     if (dailyActions.liitteet === "" || dailyActions.liitteet <0 ) {
+  //       return JSON.stringify({ ...dailyActions, "liitteet":0 });
+  //     }
+  //   }
+  //   return JSON.stringify(dailyActions);
+  // };
+
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -196,14 +205,13 @@ export const HomePage = () => {
   const sendData = async () => {
     const rows = sanitizedShorthand;
     setDisabled(true);
-    console.log("actions", dailyActions);
     try {
       await sendDay({
         day: formatDate(day),
         comment,
         observers,
         observatory: userObservatory,
-        //selectedActions: dailyActions
+        //selectedActions: readyDailyActions()
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);

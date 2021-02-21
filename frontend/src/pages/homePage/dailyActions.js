@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Grid, NativeSelect, FormControlLabel, Checkbox, FormGroup
+  Grid, FormControlLabel, Checkbox, FormGroup,  InputAdornment, TextField, Dialog,
+  Button, DialogActions, DialogContentText, DialogContent
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
@@ -26,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 const DailyActions = () => {
   const userObservatory = useSelector(state => state.userObservatory);
   if (userObservatory === "Hangon_Lintuasema") {
-    //console.log("toimii");
     return (
       <HankoActions />
     );
@@ -43,7 +43,32 @@ const HankoActions = () => {
   const { t } = useTranslation();
   const clicks = useSelector(state => state.dailyActions);
 
+  const[error, setError] = useState("");
+  const[confirmationAsked, setConfirmantionAsked] = useState(false);
+  const [showModal, setshowModal] =useState(false);
+
+  const handleModalClose = () => {
+    setshowModal(false);
+    setConfirmantionAsked(true);
+  };
+
   const handleClick = (target) => {
+    if (target.name==="liitteet" &&  target.value < 0)  {
+      setError(t("no negative values"));
+    } else if (target.name==="liitteet" &&  !target.value ) {
+      setError(t("no empty values"));
+    }else if (target.name==="liitteet" && target.value > 4 && !confirmationAsked) {
+      setshowModal(true);
+      setError("");
+    } else {
+      setError("");
+      //setConfirmantionAsked(false);
+    }
+
+    //overwrite bad attachment input with 0
+    // if (target.name==="liitteet" && (target.value ==="" || target.value < 0)) {
+    //   dispatch(toggleDailyActions(target.name, 0));
+    // }
     dispatch(toggleDailyActions(target.name, target.name === "liitteet" ? target.value : target.checked));
     //console.log("clicks", clicks);
   };
@@ -67,16 +92,27 @@ const HankoActions = () => {
           control={<Checkbox checked={clicks.nisäkkäät} onChange={(e) => handleClick(e.target)} name="nisäkkäät" color="primary" />}
           label={t("nisäkkäät")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<NativeSelect name="liitteet" className={classes.attachmentField} value={clicks.liitteet} onChange={(e) => handleClick(e.target)}>
-            <option value={0}>0</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-          </NativeSelect>}
-          label={t("liitteet")} labelPlacement="start" />
+          control={<TextField name="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
+            onChange={(e) => handleClick(e.target)}
+            error={error !== ""} helperText= { error ? t(error) : "" }
+            InputProps={{ endAdornment:<InputAdornment position="end">{t("pcs")}</InputAdornment>,inputProps: { min: 0 } }}>
+          </TextField>}
+          label={t("liitteet") } labelPlacement="start" />
       </FormGroup>
+      <Dialog open={showModal} onClose={handleModalClose} disableBackdropClick={true}>
+        <DialogContent>
+          <DialogContentText id="confirmation dialog">
+            {t("Please recheck that you mean to declare that many attachments")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleModalClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
+
   );
 };
 
