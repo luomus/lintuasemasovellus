@@ -133,6 +133,7 @@ const sendObservation = async (observation, observationPeriodId, shorthandId) =>
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
+  // REFACTOR ACCOUNT_ID TO GET ACTUAL USER ID
   observation["account_id"] = "1053";
   await postAddObservation(observation);
 };
