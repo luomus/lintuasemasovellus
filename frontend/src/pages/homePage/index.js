@@ -27,7 +27,10 @@ import {
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
+import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
+//import { getErrors } from "../../shorthand/validations";
+import DailyActions from "./dailyActions";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
 
@@ -62,6 +65,14 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     textDecoration: "underline",
   },
+  formControlLabel: {
+    padding: "0px 100px 0px 0px",
+  },
+  attachmentField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 75,
+  },
 }
 ));
 
@@ -94,6 +105,7 @@ export const HomePage = () => {
   const dateNow = new Date();
 
   const userObservatory = useSelector(state => state.userObservatory);
+  const dailyActions = useSelector(state => state.dailyActions);
 
   const history = useHistory();
 
@@ -137,6 +149,24 @@ export const HomePage = () => {
     setShorthand("");
   };
 
+  const setActions = (selectedActions) => {
+    console.log("ACTIONS", selectedActions);
+    if (selectedActions){
+      dispatch(setDailyActions(JSON.parse(selectedActions)));
+    } else {
+      dispatch(setDefaultActions(userObservatory));
+    }
+  };
+
+  const readyDailyActions = () => {
+    if ("liitteet" in dailyActions) {
+      if (dailyActions.liitteet === "" || dailyActions.liitteet <0 ) {
+        return JSON.stringify({ ...dailyActions, "liitteet":0 });
+      }
+    }
+    return JSON.stringify(dailyActions);
+  };
+
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -174,7 +204,8 @@ export const HomePage = () => {
         day: formatDate(day),
         comment,
         observers,
-        observatory: userObservatory
+        observatory: userObservatory,
+        selectedactions: readyDailyActions()
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
@@ -247,8 +278,11 @@ export const HomePage = () => {
                     value={day}
                     onChange={(date) => {
                       setDay(date);
-                      searchDayInfo(formatDate(date), userObservatory).then(dayJson => setObservers(dayJson[0]["observers"]));
-                      searchDayInfo(formatDate(date), userObservatory).then(dayJson => setComment(dayJson[0]["comment"]));
+                      searchDayInfo(formatDate(date), userObservatory).then((dayJson)  => {
+                        setObservers(dayJson[0]["observers"]);
+                        setComment(dayJson[0]["comment"]);
+                        setActions(dayJson[0]["selectedactions"]);
+                      });
                     }}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -279,6 +313,8 @@ export const HomePage = () => {
                   value={comment}
                 />
               </Grid>
+              <DailyActions
+              />
 
               <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
@@ -363,7 +399,7 @@ export const HomePage = () => {
                       latestDays
                         .map((s, i) =>
                           <TableRow id="latestDaysRow" key={i} hover
-                            onClick={ () => handleDateClick(s) } className={classes.pointerCursor} >
+                            onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
                             <StyledTableCell component="th" scope="row">
                               <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
                                 {s.day}

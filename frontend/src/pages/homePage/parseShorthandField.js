@@ -8,7 +8,8 @@ let day = {
   day: "",
   comment: "",
   observers: "",
-  observatory_id: ""
+  observatory_id: "",
+  selectedactions: ""
 };
 
 let observationPeriods = [];
@@ -85,6 +86,7 @@ const countersToNum = (subobservation) => {
   makenum(subobservation, "unknownMaleCount");
 };
 
+//Not used anywhere?
 export const makeSendDataJson = (day, observatory, comment, observers, location, type, shorthandRows) => {
   let data = {
     day, observatory, comment, observers, location, type
@@ -94,7 +96,7 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
   let obsperiod = {};
   for (const row of shorthandRows) {
     if (!row) continue;
-    else if(fastIsTime(row) && !startTimeEnc) {
+    else if (fastIsTime(row) && !startTimeEnc) {
       startTimeEnc = true;
       obsperiod["startTime"] = parseTime(row);
     } else if (fastIsTime(row)) {
@@ -120,6 +122,7 @@ export const makeSendDataJson = (day, observatory, comment, observers, location,
   return data;
 };
 
+//Not used anywhere?
 export const sendShorthand = async (data) => {
   return await sendEverything(data);
 };
@@ -132,6 +135,8 @@ const sendObservation = async (observation, observationPeriodId, shorthandId) =>
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
+  // REFACTOR ACCOUNT_ID TO GET ACTUAL USER ID
+  observation["account_id"] = "1053";
   await postAddObservation(observation);
 };
 
@@ -202,7 +207,7 @@ export const loopThroughObservations = async (shorthandRows) => {
       i++;
     } else {
       const parsed = parse(row);
-      shorthand["row"] = row;
+      shorthand["block"] = row;
       shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
       const res = await postAddShorthand(shorthand);
       for (const sub of parsed.osahavainnot) {

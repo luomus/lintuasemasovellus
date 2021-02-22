@@ -32,6 +32,9 @@ const DayDetails = () => {
     obsAndComment: {
       marginRight: "5px",
       marginBottom: "5px",
+    },
+    checkmark: {
+      color: "green",
     }
   });
 
@@ -69,6 +72,14 @@ const DayDetails = () => {
     .find(d => d.day === day && d.observatory === stationName)
     .comment
   );
+
+  const selectedActions = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .selectedactions
+    ? JSON.parse(dayList
+      .find(d => d.day === day && d.observatory === stationName)
+      .selectedactions)
+    : {};
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -123,6 +134,8 @@ const DayDetails = () => {
     setModalOpen(false);
     helper();
   };
+
+
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -207,6 +220,27 @@ const DayDetails = () => {
               )}
             </div>
           </Grid>
+
+          {selectedActions ?
+            <Grid item xs={12} fullwidth="true">
+              <div style={{
+                display: "flex",
+                alignItems: "left"
+              }}>
+                {
+                  Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
+                    <Typography variant="h6" component="h2" className={classes.obsAndComment} key={i}>
+                      {t(action)}{": "}{value===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
+                    </Typography>
+                  )
+                }
+                <Typography variant="h6" component="h2" className={classes.obsAndComment} >
+                  {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
+                </Typography>
+              </div>
+            </Grid>
+            : <div></div>
+          }
 
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-start">

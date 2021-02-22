@@ -44,4 +44,4 @@ Edellä kuvatulla epämääräisellä porttikikkailulla saadaan aikaan se, että
 
 Komento `npm install` pitää ehkä joskus ajaa ensin, esim projektin kloonaamisen jälkeen. 
 
-Jos tietokanta ei näytä toimivan, muista vpn-yhteys. Lisäksi backendin juurikansiossa pitää olla tiedosto .env joka sisältää oraclen tunnistetietoja yms. Jos sovelluksen haluaa käynnistää paikallisesti sqlite-tietokannalla, niin tämän voi säätää backendin juurikansiossa lintuasema.py-tiedostossa. .env-tiedoston pitää silti sisältää kirjautumiseen tarvittavia tietoja.
+Jos tietokanta ei näytä toimivan, muista vpn-yhteys. Lisäksi backendin juurikansiossa pitää olla tiedosto .env joka sisältää oraclen tunnistetietoja yms. Jos sovelluksen haluaa käynnistää paikallisesti sqlite-tietokannalla, niin tämän voi säätää backendin juurikansiossa lintuasemasovellus.py-tiedostossa. .env-tiedoston pitää silti sisältää kirjautumiseen tarvittavia tietoja.

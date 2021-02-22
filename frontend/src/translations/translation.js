@@ -93,6 +93,19 @@ const resources = {
 
       "checkShorthand": "Tarkista pikakirjoitus",
 
+      "vakiohavainto": "Vakiohavainnointi",
+      "gåu": "Gåulla käynti",
+      "rengastusvakio": "Rengastusvakio",
+      "pöllövakio": "Pöllövakio",
+      "nisäkkäät": "Nisäkkäät yms. laskettu",
+      "liitteet": "Liitteitä",
+      "Are you sure you have this many attachments?": "Oletko varma, että liitteitä oli näin monta?",
+      "pcs": "kpl",
+      "no negative values": "Negatiivinen arvo!",
+      "Please recheck that you mean to declare that many attachments": "Olet ilmoittamassa poikkeuksellisen ison määrän liitteitä. Tarkistathan, että syöttämäsi summa on oikein.",
+      "no empty values": "Arvo puuttuu!"
+
+
     },
   },
 };

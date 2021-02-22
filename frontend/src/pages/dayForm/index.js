@@ -58,6 +58,8 @@ export const DayForm = () => {
       observers: observers,
       comment: comment,
       observatory: observatory,
+      // REFACTOR WHEN ADDING SELECTEDACTIONS TO FRONTEND
+      selectedactions: "testi-action",
     })
       .then((res) => {
         if (res.status !== 200) {
