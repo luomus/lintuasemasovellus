@@ -228,9 +228,9 @@ const DayDetails = () => {
                 alignItems: "left"
               }}>
                 {
-                  Object.keys(selectedActions).filter(action => action!=="liitteet").map((action, i) =>
+                  Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
                     <Typography variant="h6" component="h2" className={classes.obsAndComment} key={i}>
-                      {t(action)}{": "}{selectedActions[action]===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
+                      {t(action)}{": "}{value===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
                     </Typography>
                   )
                 }
