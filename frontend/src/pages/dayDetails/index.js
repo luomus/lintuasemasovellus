@@ -75,14 +75,11 @@ const DayDetails = () => {
 
   const selectedActions = dayList
     .find(d => d.day === day && d.observatory === stationName)
-    .selectedactions !=="test-actions"
+    .selectedactions
     ? JSON.parse(dayList
       .find(d => d.day === day && d.observatory === stationName)
       .selectedactions)
     : {};
-
-  //const selectedActions= { vakiohavainto:true, gåu:false, rengastusvakio:true, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
-
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)

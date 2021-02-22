@@ -27,7 +27,7 @@ import {
 } from "./parseShorthandField";
 import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
-import { setDailyActions } from "../../reducers/dailyActionsReducer";
+import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 //import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
@@ -150,7 +150,12 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
-    dispatch(setDailyActions(selectedActions));
+    console.log("ACTIONS", selectedActions);
+    if (selectedActions){
+      dispatch(setDailyActions(JSON.parse(selectedActions)));
+    } else {
+      dispatch(setDefaultActions(userObservatory));
+    }
   };
 
   const readyDailyActions = () => {
@@ -276,8 +281,7 @@ export const HomePage = () => {
                       searchDayInfo(formatDate(date), userObservatory).then((dayJson)  => {
                         setObservers(dayJson[0]["observers"]);
                         setComment(dayJson[0]["comment"]);
-                        setActions(JSON.parse(dayJson[0]["selectedactions"]));
-                        //setActions({ vakiohavainto:true, gåu:true, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 1 });
+                        setActions(dayJson[0]["selectedactions"]);
                       });
                     }}
                     KeyboardButtonProps={{

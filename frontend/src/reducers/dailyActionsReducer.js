@@ -26,7 +26,7 @@ export const toggleDailyActions = (changedAction, value) => {
 
 
 export const setDailyActions = (dailyActions) => {
-  console.log("action", dailyActions);
+  //console.log("action", dailyActions);
   return {
     type: "SET_ACTIONS",
     data: {
@@ -34,5 +34,16 @@ export const setDailyActions = (dailyActions) => {
     }
   };
 };
+
+export const setDefaultActions = (observatory) => {
+  if (observatory==="Hangon_Lintuasema") {
+    return {
+      type: "SET_ACTIONS",
+      data: { dailyActions: hankoInitialState }
+    };
+  }
+};
+
+
 
 export default dailyActionsReducer;
