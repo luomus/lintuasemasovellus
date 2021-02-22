@@ -1,4 +1,3 @@
-from app import init_app, redirect
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -8,11 +7,20 @@ from flask import (Flask, render_template,
     request, redirect, session, url_for,
     make_response, jsonify)
 
+# ASETUKSET
+# oldapp: Jos käytetään vanhaa tietokantaa, anna True; muuten ohjataan uutta tietokantaa käyttävään backendiin
+oldapp = False
+# db_type: Jos käytetään Oraclea, anna "oracle"; muuten käytetään oletuksena SQLitea
+db_type = "oracle"
 
-# jos ei halua käyttää oraclea lokaalisti, voi säätää app=init_app("sqlite")
- 
-app = init_app("oracle")
-# app = init_app("sqlite")
+if oldapp == True:
+    from app import init_app, redirect
+    print('Käytetään vanhaa backendiä')
+else:
+    from application import init_app, redirect
+    print('Käytetään uutta backendiä')
+
+app = init_app(db_type)
 
 port = int(os.environ.get("PORT", 3000))
 
