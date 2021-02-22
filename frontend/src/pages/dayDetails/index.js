@@ -73,12 +73,15 @@ const DayDetails = () => {
     .comment
   );
 
-  // const [selectedActions, setSelectedActions] = useState(dayList
-  //   .find(d => d.day === day && d.observatory === stationName)
-  //   .JSON.parse(selectedActions)
-  // );
+  const selectedActions = dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .selectedactions !=="test-actions"
+    ? JSON.parse(dayList
+      .find(d => d.day === day && d.observatory === stationName)
+      .selectedactions)
+    : {};
 
-  const selectedActions= { vakiohavainto:true, gåu:false, rengastusvakio:true, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
+  //const selectedActions= { vakiohavainto:true, gåu:false, rengastusvakio:true, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
 
 
   const [dayId, setDayId] = useState(dayList
@@ -221,25 +224,26 @@ const DayDetails = () => {
             </div>
           </Grid>
 
-
-          <Grid item xs={12} fullwidth="true">
-            <div style={{
-              display: "flex",
-              alignItems: "left"
-            }}>
-              {
-                Object.keys(selectedActions).filter(action => action!=="liitteet").map((action, i) =>
-                  <Typography variant="h6" component="h2" className={classes.obsAndComment} key={i}>
-                    {t(action)}{": "}{selectedActions[action]===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
-                  </Typography>
-                )
-              }
-              <Typography variant="h6" component="h2" className={classes.obsAndComment} >
-                {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
-              </Typography>
-            </div>
-          </Grid>
-
+          {selectedActions ?
+            <Grid item xs={12} fullwidth="true">
+              <div style={{
+                display: "flex",
+                alignItems: "left"
+              }}>
+                {
+                  Object.keys(selectedActions).filter(action => action!=="liitteet").map((action, i) =>
+                    <Typography variant="h6" component="h2" className={classes.obsAndComment} key={i}>
+                      {t(action)}{": "}{selectedActions[action]===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
+                    </Typography>
+                  )
+                }
+                <Typography variant="h6" component="h2" className={classes.obsAndComment} >
+                  {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
+                </Typography>
+              </div>
+            </Grid>
+            : <div></div>
+          }
 
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-start">

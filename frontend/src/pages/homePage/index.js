@@ -29,12 +29,9 @@ import { searchDayInfo, getLatestDays } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-<<<<<<< HEAD
-import { getErrors } from "../../shorthand/validations";
+//import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
-=======
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
->>>>>>> new_db_structure
 
 
 const useStyles = makeStyles((theme) => ({
@@ -108,7 +105,7 @@ export const HomePage = () => {
   const dateNow = new Date();
 
   const userObservatory = useSelector(state => state.userObservatory);
-  // const dailyActions = useSelector(state => state.dailyActions);
+  const dailyActions = useSelector(state => state.dailyActions);
 
   const history = useHistory();
 
@@ -156,14 +153,14 @@ export const HomePage = () => {
     dispatch(setDailyActions(selectedActions));
   };
 
-  // const readyDailyActions = () => {
-  //   if ("liitteet" in dailyActions) {
-  //     if (dailyActions.liitteet === "" || dailyActions.liitteet <0 ) {
-  //       return JSON.stringify({ ...dailyActions, "liitteet":0 });
-  //     }
-  //   }
-  //   return JSON.stringify(dailyActions);
-  // };
+  const readyDailyActions = () => {
+    if ("liitteet" in dailyActions) {
+      if (dailyActions.liitteet === "" || dailyActions.liitteet <0 ) {
+        return JSON.stringify({ ...dailyActions, "liitteet":0 });
+      }
+    }
+    return JSON.stringify(dailyActions);
+  };
 
 
   const handleClose = (event, reason) => {
@@ -203,7 +200,7 @@ export const HomePage = () => {
         comment,
         observers,
         observatory: userObservatory,
-        //selectedactions: readyDailyActions()
+        selectedactions: readyDailyActions()
       });
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows);
@@ -279,8 +276,8 @@ export const HomePage = () => {
                       searchDayInfo(formatDate(date), userObservatory).then((dayJson)  => {
                         setObservers(dayJson[0]["observers"]);
                         setComment(dayJson[0]["comment"]);
-                        //setActions(dayJson[0]["selectedActions"]));
-                        setActions({ vakiohavainto:true, gåu:true, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 1 });
+                        setActions(JSON.parse(dayJson[0]["selectedactions"]));
+                        //setActions({ vakiohavainto:true, gåu:true, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 1 });
                       });
                     }}
                     KeyboardButtonProps={{
