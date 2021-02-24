@@ -5,9 +5,11 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
+import DailyActions from "../homePage/dailyActions";
+import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
@@ -40,6 +42,7 @@ const DayDetails = () => {
 
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
 
   const [obsPeriods, setObsperiods] = useState([]);
@@ -60,7 +63,11 @@ const DayDetails = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [actionsEditMode, setActionsEditMode]= useState(false);
+
   const dayList = useSelector(state => state.days);
+
+  const userObservatory = useSelector(state => state.userObservatory);
 
   const [observers, setObservers] = useState(
     dayList
@@ -121,6 +128,18 @@ const DayDetails = () => {
 
   const handleOpen = () => {
     setModalOpen(true);
+  };
+
+  const handleActionsEditOpen = () => {
+    console.log("Editmode", actionsEditMode);
+    dispatch(setDailyActions(selectedActions));
+    setActionsEditMode(!actionsEditMode);
+  };
+
+  const handleActionsEditClose = () => {
+    console.log("Editmode", actionsEditMode);
+    dispatch(setDefaultActions(userObservatory));
+    setActionsEditMode(!actionsEditMode);
   };
 
   const helper = async () => {
@@ -221,7 +240,7 @@ const DayDetails = () => {
             </div>
           </Grid>
 
-          {selectedActions ?
+          {( selectedActions && !actionsEditMode) ?
             <Grid item xs={12} fullwidth="true">
               <div style={{
                 display: "flex",
@@ -237,9 +256,24 @@ const DayDetails = () => {
                 <Typography variant="h6" component="h2" className={classes.obsAndComment} >
                   {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
                 </Typography>
+                <Box>
+                  <IconButton id="actionsButton" size="small" style={{ left: "20px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Box>
               </div>
             </Grid>
-            : <div></div>
+            :<Grid item xs={12} fullwidth="true">
+              <div style={{
+                display: "flex",
+                alignItems: "left"
+              }}>
+                <DailyActions />
+                <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditClose()} color="secondary">
+                  {t("cancel")}
+                </Button>
+              </div>
+            </Grid>
           }
 
           <Grid item xs={6}>
