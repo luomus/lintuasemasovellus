@@ -1,4 +1,5 @@
 const hankoInitialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
+//used as default state to avoid issues with controlled vs uncontrolled state
 
 
 const dailyActionsReducer = (state = hankoInitialState, action) => {
