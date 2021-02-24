@@ -112,6 +112,7 @@ export const HomePage = () => {
   const dispatch = useDispatch();
 
   const stations = useSelector(state => state.stations);
+  const userID = useSelector(state => state.user.id);
 
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -201,6 +202,7 @@ export const HomePage = () => {
     setDisabled(true);
     try {
       await sendDay({
+        //userID: userID,
         day: formatDate(day),
         comment,
         observers,
@@ -208,7 +210,7 @@ export const HomePage = () => {
         selectedactions: readyDailyActions()
       });
       await loopThroughObservationPeriods(rows, type, location);
-      await loopThroughObservations(rows);
+      await loopThroughObservations(rows, userID);
       //await sendShorthand(makeSendDataJson(
       //  formatDate(day), userObservatory, comment, observers, location, type, rows));
       setFormSent(true);

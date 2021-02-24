@@ -72,6 +72,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const [locations, setLocations] = useState([]);
   const [warning, setWarning] = useState(false);
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+  const userID = useSelector(state => state.user.id);
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
@@ -132,14 +133,12 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     setDayId(dayId);
     const rows = sanitizedShorthand;
     await loopThroughObservationPeriods(rows, type, location);
-    await loopThroughObservations(rows);
+    await loopThroughObservations(rows, userID);
     retrieveShorthand(type, location);
     handleClose();
   };
 
   const retrieveShorthand = async (type, location) => {
-    console.log("location", location);
-    console.log("type", type);
     const res = await getShorthandText(dayId, type, location);
     setDefaultShorthand(res);
     initializeDefaultShorthand(res);

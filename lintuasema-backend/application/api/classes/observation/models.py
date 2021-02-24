@@ -29,7 +29,7 @@ class Observation(Base):
 
     shorthand_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'shorthand.id'), nullable=True)
 
-    account_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'account.id'), nullable=True)
+    account_id = db.Column(db.String(144), db.ForeignKey(Base.the_prefix + 'account.userId'), nullable=False)
 
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,

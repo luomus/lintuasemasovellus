@@ -1,14 +1,16 @@
-from application.db import db
+from application.db import db, prefix
 from application.api.models import Base
 
 class Account(Base):
 
      __base_tablename__ = 'account'
 
-     userId=db.Column(db.String(144), nullable=False)
+     userId=db.Column(db.String(144), nullable=False, unique=True)
      fullName=db.Column(db.String(144), nullable=False)
      email=db.Column(db.String(144), nullable=False)
      #role = db.Column(db.String(255), nullable=False)
+
+     Observation = db.relationship("Observation", backref="account", lazy=True)
 
      def __init__ (self, userId, fullName, email):
      #def __init__ (self, userId, fullName, email, role):
