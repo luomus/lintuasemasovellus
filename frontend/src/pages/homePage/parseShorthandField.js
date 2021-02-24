@@ -128,15 +128,13 @@ export const sendShorthand = async (data) => {
 };
 
 
-
-const sendObservation = async (observation, observationPeriodId, shorthandId) => {
+const sendObservation = async (observation, observationPeriodId, shorthandId, userID) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
   observation["observationperiod_id"] = observationPeriodId;
   observation["shorthand_id"] = shorthandId;
-  // REFACTOR ACCOUNT_ID TO GET ACTUAL USER ID
-  observation["account_id"] = "1053";
+  observation["account_id"] = userID;
   await postAddObservation(observation);
 };
 
@@ -195,7 +193,7 @@ export const setDayId = (id) => {
   day["id"] = id;
 };
 
-export const loopThroughObservations = async (shorthandRows) => {
+export const loopThroughObservations = async (shorthandRows, userID) => {
   let startTimeEncountered = false;
   let i = 0;
   for (const row of shorthandRows) {
@@ -214,7 +212,7 @@ export const loopThroughObservations = async (shorthandRows) => {
         observation = sub;
         observation.species = parsed.species;
         obsCountersToNum();
-        await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id);
+        await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id, userID);
       }
       resetAll();
     }
