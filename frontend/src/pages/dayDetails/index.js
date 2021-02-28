@@ -46,8 +46,6 @@ const DayDetails = () => {
 
   const [summary, setSummary] = useState([]);
 
-  // const [obsPeriodsOther, setObsperiodsOther] = useState([]);
-
   const [observersForm, setObserversForm] = useState(false);
 
   const [commentForm, setCommentForm] = useState(false);
@@ -263,6 +261,7 @@ const DayDetails = () => {
 
           <Grid item xs={12}>
             <ObsPeriodTable
+              date={day}
               obsPeriods={obsPeriods}
               summary={summary}
               mode={mode}

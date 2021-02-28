@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
-  TableBody, TableCell, withStyles, makeStyles, Typography
+  TableBody, TableCell, withStyles, makeStyles, Typography,
+  IconButton
 } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
+import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 
 const ObsPeriodTable = (props) => {
 
-  const { obsPeriods, summary, mode } = props;
+  const { date, obsPeriods, summary, mode } = props;
 
   const { t } = useTranslation();
 
@@ -41,6 +44,8 @@ const ObsPeriodTable = (props) => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
   const [obsPeriod, setObsPeriod] = useState({});
 
   const timeDifference = (time1, time2) => {
@@ -64,6 +69,14 @@ const ObsPeriodTable = (props) => {
     console.log("handleOpen obsPeriod:", obsPeriod);
     setObsPeriod(obsPeriod);
     setModalOpen(true);
+    setEditModalOpen(false);
+  };
+
+  const handleOpenEdit = (obsPeriod) => {
+    console.log("edit obsPeriod:", obsPeriod);
+    setObsPeriod(obsPeriod);
+    setModalOpen(false);
+    setEditModalOpen(true);
   };
 
   const [page, setPage] = useState(0);
@@ -80,6 +93,7 @@ const ObsPeriodTable = (props) => {
 
   const handleClose = () => {
     setModalOpen(false);
+    setEditModalOpen(false);
   };
 
   const handleErrorSnackOpen = () => {
@@ -177,6 +191,7 @@ const ObsPeriodTable = (props) => {
               <StyledTableCell align="right">{t("duration")}</StyledTableCell>
               <StyledTableCell align="right">{t("type")}</StyledTableCell>
               <StyledTableCell align="right">{t("speciesTotal")}</StyledTableCell>
+              <StyledTableCell align="right">{t("Modify")}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -184,24 +199,29 @@ const ObsPeriodTable = (props) => {
               obsPeriods
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
-                  <TableRow hover className={classes.linkImitator} onClick={() => handleOpen(s)} key={i} >
-                    <StyledTableCell component="th" scope="row">
+                  <TableRow hover key={i} >
+                    <StyledTableCell component="th" scope="row" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {s.location}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {s.startTime}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {s.endTime}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {msToTime(timeDifference(s.startTime, s.endTime))}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {s.observationType}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {s.speciesCount}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <IconButton size="small" variant="contained" color="primary" onClick={() => handleOpenEdit(s)}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
                     </StyledTableCell>
                   </TableRow>
                 )
@@ -212,6 +232,12 @@ const ObsPeriodTable = (props) => {
             open={modalOpen}
             handleClose={handleClose}
             handleErrorSnackOpen={handleErrorSnackOpen}
+          />
+          <EditObsPeriod
+            date={date}
+            obsPeriod={obsPeriod}
+            open={editModalOpen}
+            handleClose={handleClose}
           />
         </Table>
       </TableContainer>
@@ -225,6 +251,7 @@ const ObsPeriodTable = (props) => {
 };
 
 ObsPeriodTable.propTypes = {
+  date: PropTypes.string.isRequired,
   obsPeriods: PropTypes.array.isRequired,
   summary: PropTypes.array.isRequired,
   mode: PropTypes.string.isRequired
