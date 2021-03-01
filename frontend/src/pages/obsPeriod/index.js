@@ -43,12 +43,10 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
   const [observations, setObservations] = useState([]);
 
   useEffect(() => {
-    if (obsPeriod.id === undefined) {
-      console.error("obsPeriod is undefined");
-      return;
+    if (obsPeriod.id) {
+      getObservationsByObsPeriod(obsPeriod.id)
+        .then(observationsJson => setObservations(observationsJson));
     }
-    getObservationsByObsPeriod(obsPeriod.id)
-      .then(observationsJson => setObservations(observationsJson));
   }, [obsPeriod.id]);
 
   const user = useSelector(state => state.user);

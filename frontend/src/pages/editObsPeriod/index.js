@@ -14,7 +14,7 @@ import {
   getShorthandByObsPeriod, deleteShorthand, deleteObservations, deleteObservationperiod
 } from "../../services";
 import {
-  loopThroughObservationPeriods, loopThroughObservations
+  loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../homePage/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
@@ -110,27 +110,24 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   };
 
   const handleDelete = async () => {
-    for (const obsperiod of defaultShorthand) {
-      for (const shorthandrow of obsperiod.shorthands) {
-        console.log(shorthandrow.shorthand_id);
-        await deleteObservations({ shorthand_id: Number(shorthandrow.shorthand_id) });
-        await deleteShorthand({ shorthand_id: Number(shorthandrow.shorthand_id) });
-      }
-      console.log(obsperiod.obsPeriodId);
-      await deleteObservationperiod({ obsperiod_id: Number(obsperiod.obsPeriodId) });
+    for (const block of defaultShorthand) {
+      console.log("Deleted shorthandblock", block.id);
+      await deleteObservations({ shorthand_id: Number(block.id) });
+      await deleteShorthand({ shorthand_id: Number(block.id) });
     }
-    // retrieveShorthand(type, location);
+    console.log("Deleted observationperiod", obsPeriod.id);
+    await deleteObservationperiod({ obsperiod_id: Number(obsPeriod.id) });
+    setDefaultShorthand("");
     handleClose();
   };
 
 
   const handleSave = async () => {
     await handleDelete();
-    //setDayId(dayId);
+    setDayId(obsPeriod.day_id);
     const rows = sanitizedShorthand;
     await loopThroughObservationPeriods(rows, type, location);
     await loopThroughObservations(rows, userID);
-    // retrieveShorthand(type, location);
     handleClose();
   };
 

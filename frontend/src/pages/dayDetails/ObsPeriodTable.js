@@ -66,14 +66,12 @@ const ObsPeriodTable = (props) => {
   };
 
   const handleOpen = (obsPeriod) => {
-    console.log("handleOpen obsPeriod:", obsPeriod);
     setObsPeriod(obsPeriod);
     setModalOpen(true);
     setEditModalOpen(false);
   };
 
   const handleOpenEdit = (obsPeriod) => {
-    console.log("edit obsPeriod:", obsPeriod);
     setObsPeriod(obsPeriod);
     setModalOpen(false);
     setEditModalOpen(true);
