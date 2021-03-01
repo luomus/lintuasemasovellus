@@ -221,7 +221,7 @@ const ObsPeriodTable = (props) => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       <IconButton size="small" variant="contained" color="primary" onClick={() => handleOpenEdit(s)}>
-                        <EditIcon fontSize="small" />
+                        <EditIcon fontSize="small" id="editObsPeriod" />
                       </IconButton>
                     </StyledTableCell>
                   </TableRow>

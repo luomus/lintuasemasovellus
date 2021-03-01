@@ -13,9 +13,9 @@ export function myBeforeEach() {
 
 
     const user = {
-      id: "asdfsommol",
-      fullName: "Asdf Sommol",
-      emailAddress: "asdf@sommol.net"
+      id: "asdf",
+      fullName: "Lintu Asema",
+      emailAddress: "lintuasema@lintuasema.com"
     };
 
     cy.window()
