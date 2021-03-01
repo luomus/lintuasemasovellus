@@ -121,7 +121,7 @@ const DayDetails = () => {
     setModalOpen(true);
   };
 
-  const helper = async () => {
+  const refetchObservations = async () => {
     const res = await getDaysObservationPeriods(dayId);
     setObsperiods(res);
     const res2 = await getSummary(dayId);
@@ -130,7 +130,7 @@ const DayDetails = () => {
 
   const handleClose = () => {
     setModalOpen(false);
-    helper();
+    refetchObservations();
   };
 
 
@@ -265,6 +265,7 @@ const DayDetails = () => {
               obsPeriods={obsPeriods}
               summary={summary}
               mode={mode}
+              refetchObservations={refetchObservations}
             />
 
           </Grid>

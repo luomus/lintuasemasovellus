@@ -13,7 +13,7 @@ import PeriodTablePagination from "./PeriodTablePagination";
 
 const ObsPeriodTable = (props) => {
 
-  const { date, obsPeriods, summary, mode } = props;
+  const { date, obsPeriods, summary, mode, refetchObservations } = props;
 
   const { t } = useTranslation();
 
@@ -91,7 +91,10 @@ const ObsPeriodTable = (props) => {
 
   const handleClose = () => {
     setModalOpen(false);
-    setEditModalOpen(false);
+    if (editModalOpen) {
+      refetchObservations();
+      setEditModalOpen(false);
+    }
   };
 
   const handleErrorSnackOpen = () => {
@@ -252,7 +255,8 @@ ObsPeriodTable.propTypes = {
   date: PropTypes.string.isRequired,
   obsPeriods: PropTypes.array.isRequired,
   summary: PropTypes.array.isRequired,
-  mode: PropTypes.string.isRequired
+  mode: PropTypes.string.isRequired,
+  refetchObservations: PropTypes.func.isRequired
 };
 
 export default ObsPeriodTable;
