@@ -49,6 +49,17 @@ jobs:
         npm run cypress:cmd	
       working-directory: ./frontend
       
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: cypress/screenshots
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: cypress-videos
+        path: cypress/videos
+      
     - name: Report successful pull request to Discord
       uses: sarisia/actions-status-discord@v1.8.3
       if: ${{ github.event_name != 'push' && success() }}
