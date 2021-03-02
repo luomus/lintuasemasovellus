@@ -1,5 +1,5 @@
-from app.api.classes.observatory.models import Observatory
-from app.api.classes.observatory.services import getAll #testi aina importattava
+from application.api.classes.observatory.models import Observatory
+from application.api.classes.observatory.services import getAll #testi aina importattava
 
 
 def test_observatories(app): #App annettava

@@ -1,7 +1,7 @@
 
 import pytest
 #from app import init_testapp, db
-from app import init_app, db
+from application import init_app, db
 
 
 @pytest.fixture
