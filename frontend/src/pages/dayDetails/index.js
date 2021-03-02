@@ -46,8 +46,6 @@ const DayDetails = () => {
 
   const [summary, setSummary] = useState([]);
 
-  // const [obsPeriodsOther, setObsperiodsOther] = useState([]);
-
   const [observersForm, setObserversForm] = useState(false);
 
   const [commentForm, setCommentForm] = useState(false);
@@ -123,7 +121,7 @@ const DayDetails = () => {
     setModalOpen(true);
   };
 
-  const helper = async () => {
+  const refetchObservations = async () => {
     const res = await getDaysObservationPeriods(dayId);
     setObsperiods(res);
     const res2 = await getSummary(dayId);
@@ -132,7 +130,7 @@ const DayDetails = () => {
 
   const handleClose = () => {
     setModalOpen(false);
-    helper();
+    refetchObservations();
   };
 
 
@@ -263,9 +261,11 @@ const DayDetails = () => {
 
           <Grid item xs={12}>
             <ObsPeriodTable
+              date={day}
               obsPeriods={obsPeriods}
               summary={summary}
               mode={mode}
+              refetchObservations={refetchObservations}
             />
 
           </Grid>
