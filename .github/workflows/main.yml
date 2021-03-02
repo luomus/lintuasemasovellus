@@ -54,13 +54,13 @@ jobs:
       if: failure()
       with:
         name: cypress-screenshots
-        path: .cache/v/cache
+        path: frontend/cypress/screenshots/
     - name: Save Cypress videos if fails
       uses: actions/upload-artifact@v1
       if: failure()
       with:
         name: cypress-videos
-        path: .cache/v/cache
+        path: frontend/cypress/videos/
       
     - name: Report successful pull request to Discord
       uses: sarisia/actions-status-discord@v1.8.3
