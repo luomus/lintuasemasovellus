@@ -49,16 +49,18 @@ jobs:
         npm run cypress:cmd	
       working-directory: ./frontend
       
-    - uses: actions/upload-artifact@v1
+    - name: Save Cypress screenshots if fails
+      uses: actions/upload-artifact@v1
       if: failure()
       with:
         name: cypress-screenshots
-        path: cypress/screenshots
-    - uses: actions/upload-artifact@v1
+        path: .cache/v/cache
+    - name: Save Cypress videos if fails
+      uses: actions/upload-artifact@v1
       if: failure()
       with:
         name: cypress-videos
-        path: cypress/videos
+        path: .cache/v/cache
       
     - name: Report successful pull request to Discord
       uses: sarisia/actions-status-discord@v1.8.3
