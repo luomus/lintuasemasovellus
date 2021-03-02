@@ -14,7 +14,7 @@ import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsR
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, getSummary
+  editComment, editObservers, editActions, getSummary
 } from "../../services";
 
 
@@ -34,6 +34,9 @@ const DayDetails = () => {
     obsAndComment: {
       marginRight: "5px",
       marginBottom: "5px",
+    },
+    actions: {
+      padding: "0px 70px 0px 0px",
     },
     checkmark: {
       color: "green",
@@ -80,13 +83,16 @@ const DayDetails = () => {
     .comment
   );
 
-  const selectedActions = dayList
+
+  const [selectedActions, setSelectedActions] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .selectedactions
     ? JSON.parse(dayList
       .find(d => d.day === day && d.observatory === stationName)
       .selectedactions)
-    : {};
+    : {});
+
+  const editedActions = useSelector(state => state.dailyActions);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -131,15 +137,27 @@ const DayDetails = () => {
   };
 
   const handleActionsEditOpen = () => {
-    console.log("Editmode", actionsEditMode);
     dispatch(setDailyActions(selectedActions));
     setActionsEditMode(!actionsEditMode);
   };
 
-  const handleActionsEditClose = () => {
-    console.log("Editmode", actionsEditMode);
+  const handleActionsEditCancel = () => {
     dispatch(setDefaultActions(userObservatory));
     setActionsEditMode(!actionsEditMode);
+  };
+
+  const handleActionsEditSave = () => {
+    let actionsToSave = editedActions;
+    if ("liitteet" in actionsToSave) {
+      if (actionsToSave.liitteet === "" || actionsToSave.liitteet <0 ) {
+        actionsToSave = { ...actionsToSave, "liitteet":0 };
+      }
+    }
+    editActions(dayId, JSON.stringify(actionsToSave))
+      .then(dayJson => setDayId(dayJson.data.id));
+    setSelectedActions(editedActions);
+    setActionsEditMode(!actionsEditMode);
+    dispatch(setDefaultActions(userObservatory));
   };
 
   const helper = async () => {
@@ -248,16 +266,16 @@ const DayDetails = () => {
               }}>
                 {
                   Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
-                    <Typography variant="h6" component="h2" className={classes.obsAndComment} key={i}>
+                    <Typography variant="h6" component="h2" className={classes.actions} key={i}>
                       {t(action)}{": "}{value===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
                     </Typography>
                   )
                 }
-                <Typography variant="h6" component="h2" className={classes.obsAndComment} >
+                <Typography variant="h6" component="h2" className={classes.actions} >
                   {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
                 </Typography>
                 <Box>
-                  <IconButton id="actionsButton" size="small" style={{ left: "20px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
+                  <IconButton id="actionsButton" size="small" style={{ left: "100px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
                     <EditIcon fontSize="small" />
                   </IconButton>
                 </Box>
@@ -269,7 +287,10 @@ const DayDetails = () => {
                 alignItems: "left"
               }}>
                 <DailyActions />
-                <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditClose()} color="secondary">
+                <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleActionsEditSave()} color="primary">
+                  {t("save")}
+                </Button>
+                <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
                   {t("cancel")}
                 </Button>
               </div>

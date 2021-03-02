@@ -8,7 +8,7 @@ const dailyActionsReducer = (state = hankoInitialState, action) => {
       //console.log("action.data",action.data);
       return { ...state,[action.data.changedAction]:action.data.value };
     case "SET_ACTIONS":
-      return action.data.dailyActions;
+      return action.data.dailyActions ;
     default:
       return state;
   }

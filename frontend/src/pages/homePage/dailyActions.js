@@ -64,11 +64,6 @@ const HankoActions = () => {
       setError("");
       //setConfirmantionAsked(false);
     }
-
-    //overwrite bad attachment input with 0
-    // if (target.name==="liitteet" && (target.value ==="" || target.value < 0)) {
-    //   dispatch(toggleDailyActions(target.name, 0));
-    // }
     dispatch(toggleDailyActions(target.name, target.name === "liitteet" ? target.value : target.checked));
     //console.log("clicks", clicks);
   };
