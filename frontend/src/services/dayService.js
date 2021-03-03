@@ -17,6 +17,11 @@ export const editObservers = async (dayId, observers) => {
   return await axios.post(`/api/editObservers/${dayId}/${observers}`);
 };
 
+export const editActions = async (dayId, actions) => {
+  console.log("services dayid:",dayId, actions);
+  return await axios.post(`/api/editActions/${dayId}/${actions}`);
+};
+
 export const getLocationsAndTypes = async (observatory) => {
   const locationsTypes = await axios.get(`/api/getLocationsAndTypes/${observatory}`);
   return locationsTypes.data;

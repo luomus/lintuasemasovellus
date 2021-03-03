@@ -5,14 +5,16 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
+import DailyActions from "../homePage/dailyActions";
+import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, getSummary
+  editComment, editObservers, editActions, getSummary
 } from "../../services";
 
 
@@ -33,6 +35,9 @@ const DayDetails = () => {
       marginRight: "5px",
       marginBottom: "5px",
     },
+    actions: {
+      padding: "0px 70px 0px 0px",
+    },
     checkmark: {
       color: "green",
     }
@@ -40,6 +45,7 @@ const DayDetails = () => {
 
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
 
   const [obsPeriods, setObsperiods] = useState([]);
@@ -58,7 +64,11 @@ const DayDetails = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [actionsEditMode, setActionsEditMode]= useState(false);
+
   const dayList = useSelector(state => state.days);
+
+  const userObservatory = useSelector(state => state.userObservatory);
 
   const [observers, setObservers] = useState(
     dayList
@@ -71,13 +81,16 @@ const DayDetails = () => {
     .comment
   );
 
-  const selectedActions = dayList
+
+  const [selectedActions, setSelectedActions] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .selectedactions
     ? JSON.parse(dayList
       .find(d => d.day === day && d.observatory === stationName)
       .selectedactions)
-    : {};
+    : {});
+
+  const editedActions = useSelector(state => state.dailyActions);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -119,6 +132,31 @@ const DayDetails = () => {
 
   const handleOpen = () => {
     setModalOpen(true);
+  };
+
+
+  const handleActionsEditOpen = () => {
+    dispatch(setDailyActions(selectedActions));
+    setActionsEditMode(!actionsEditMode);
+  };
+
+  const handleActionsEditCancel = () => {
+    dispatch(setDefaultActions(userObservatory));
+    setActionsEditMode(!actionsEditMode);
+  };
+
+  const handleActionsEditSave = () => {
+    let actionsToSave = editedActions;
+    if ("liitteet" in actionsToSave) {
+      if (actionsToSave.liitteet === "" || actionsToSave.liitteet < 0 ) {
+        actionsToSave = { ...actionsToSave, "liitteet":0 };
+      }
+    }
+    editActions(dayId, JSON.stringify(actionsToSave))
+      .then(dayJson => setDayId(dayJson.data.id));
+    setSelectedActions(actionsToSave);
+    setActionsEditMode(!actionsEditMode);
+    dispatch(setDefaultActions(userObservatory));
   };
 
   const refetchObservations = async () => {
@@ -219,25 +257,44 @@ const DayDetails = () => {
             </div>
           </Grid>
 
-          {selectedActions ?
+          {( selectedActions && !actionsEditMode) ?
             <Grid item xs={12} fullwidth="true">
+              <div style={{
+                display: "flex",
+                alignItems: "left",
+                flexWrap:"wrap"
+              }}>
+                {
+                  Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
+                    <Typography variant="h6" component="h2" className={classes.actions} key={i}>
+                      {t(action)}{": "}{value===true ? <span name="check" className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
+                    </Typography>
+                  )
+                }
+                <Typography variant="h6" component="h2" id="attachments" className={classes.actions} >
+                  {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
+                </Typography>
+                <Box>
+                  <IconButton id="actionsButton" size="small" style={{ left: "100px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              </div>
+            </Grid>
+            :<Grid item xs={12} fullwidth="true">
               <div style={{
                 display: "flex",
                 alignItems: "left"
               }}>
-                {
-                  Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
-                    <Typography variant="h6" component="h2" className={classes.obsAndComment} key={i}>
-                      {t(action)}{": "}{value===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
-                    </Typography>
-                  )
-                }
-                <Typography variant="h6" component="h2" className={classes.obsAndComment} >
-                  {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
-                </Typography>
+                <DailyActions />
+                <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleActionsEditSave()} color="primary">
+                  {t("save")}
+                </Button>
+                <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
+                  {t("cancel")}
+                </Button>
               </div>
             </Grid>
-            : <div></div>
           }
 
           <Grid item xs={6}>

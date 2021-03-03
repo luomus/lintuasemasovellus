@@ -64,11 +64,6 @@ const HankoActions = () => {
       setError("");
       //setConfirmantionAsked(false);
     }
-
-    //overwrite bad attachment input with 0
-    // if (target.name==="liitteet" && (target.value ==="" || target.value < 0)) {
-    //   dispatch(toggleDailyActions(target.name, 0));
-    // }
     dispatch(toggleDailyActions(target.name, target.name === "liitteet" ? target.value : target.checked));
     //console.log("clicks", clicks);
   };
@@ -92,7 +87,7 @@ const HankoActions = () => {
           control={<Checkbox checked={clicks.nisäkkäät} onChange={(e) => handleClick(e.target)} name="nisäkkäät" color="primary" />}
           label={t("nisäkkäät")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<TextField name="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
+          control={<TextField name="liitteet" id="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
             onChange={(e) => handleClick(e.target)}
             error={error !== ""} helperText= { error ? t(error) : "" }
             InputProps={{ endAdornment:<InputAdornment position="end">{t("pcs")}</InputAdornment>,inputProps: { min: 0 } }}>

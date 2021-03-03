@@ -1,4 +1,5 @@
 const hankoInitialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
+//used as default state to avoid issues with controlled vs uncontrolled state
 
 
 const dailyActionsReducer = (state = hankoInitialState, action) => {
@@ -7,7 +8,7 @@ const dailyActionsReducer = (state = hankoInitialState, action) => {
       //console.log("action.data",action.data);
       return { ...state,[action.data.changedAction]:action.data.value };
     case "SET_ACTIONS":
-      return action.data.dailyActions;
+      return action.data.dailyActions ;
     default:
       return state;
   }
@@ -40,6 +41,11 @@ export const setDefaultActions = (observatory) => {
     return {
       type: "SET_ACTIONS",
       data: { dailyActions: hankoInitialState }
+    };
+  } else {
+    return {
+      type:"SET_ACTIONS",
+      data: { dailyActions: { "liitteet": 0 } }
     };
   }
 };
