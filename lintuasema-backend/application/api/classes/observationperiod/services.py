@@ -61,10 +61,32 @@ def getObservationPeriodsByDayId(observatoryday_id):
     response = []
 
     for row in res:
+        
+        starthours = ""
+        startminutes = ""
+        endhours = ""
+        endminutes = ""
+
+        if isinstance(row.start_time, str):
+            startTimeArray = row.start_time.split(':')
+            starthours = startTimeArray[0][-2:]
+            startminutes = startTimeArray[1][0:2]
+            endTimeArray = row.end_time.split(':')
+            endhours = endTimeArray[0][-2:]
+            endminutes = endTimeArray[1][0:2]
+        else:
+            starthours = row.start_time.strftime('%H')
+            startminutes = row.start_time.strftime('%M')
+            endhours = row.end_time.strftime('%H')
+            endminutes = row.end_time.strftime('%M')
+
+        starttime = starthours + ':' + startminutes
+        endtime = endhours + ':' + endminutes
+
         response.append({
             'id': row.obsperiod_id,
-            'startTime': row.start_time.strftime('%H:%M'),
-            'endTime': row.end_time.strftime('%H:%M'),
+            'startTime': starttime,
+            'endTime': endtime,
             'observationType': row.typename,
             'location': row.locationname,
             'day_id': row.day_id,
