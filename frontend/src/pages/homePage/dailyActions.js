@@ -87,7 +87,7 @@ const HankoActions = () => {
           control={<Checkbox checked={clicks.nisäkkäät} onChange={(e) => handleClick(e.target)} name="nisäkkäät" color="primary" />}
           label={t("nisäkkäät")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<TextField name="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
+          control={<TextField name="liitteet" id="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
             onChange={(e) => handleClick(e.target)}
             error={error !== ""} helperText= { error ? t(error) : "" }
             InputProps={{ endAdornment:<InputAdornment position="end">{t("pcs")}</InputAdornment>,inputProps: { min: 0 } }}>

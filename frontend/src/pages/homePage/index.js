@@ -150,7 +150,6 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
-    console.log("ACTIONS", selectedActions);
     if (selectedActions){
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {

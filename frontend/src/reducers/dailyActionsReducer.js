@@ -42,6 +42,11 @@ export const setDefaultActions = (observatory) => {
       type: "SET_ACTIONS",
       data: { dailyActions: hankoInitialState }
     };
+  } else {
+    return {
+      type:"SET_ACTIONS",
+      data: { dailyActions: { "liitteet": 0 } }
+    };
   }
 };
 

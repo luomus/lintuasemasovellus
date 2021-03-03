@@ -149,13 +149,13 @@ const DayDetails = () => {
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
     if ("liitteet" in actionsToSave) {
-      if (actionsToSave.liitteet === "" || actionsToSave.liitteet <0 ) {
+      if (actionsToSave.liitteet === "" || actionsToSave.liitteet < 0 ) {
         actionsToSave = { ...actionsToSave, "liitteet":0 };
       }
     }
     editActions(dayId, JSON.stringify(actionsToSave))
       .then(dayJson => setDayId(dayJson.data.id));
-    setSelectedActions(editedActions);
+    setSelectedActions(actionsToSave);
     setActionsEditMode(!actionsEditMode);
     dispatch(setDefaultActions(userObservatory));
   };
@@ -262,16 +262,17 @@ const DayDetails = () => {
             <Grid item xs={12} fullwidth="true">
               <div style={{
                 display: "flex",
-                alignItems: "left"
+                alignItems: "left",
+                flexWrap:"wrap"
               }}>
                 {
                   Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
                     <Typography variant="h6" component="h2" className={classes.actions} key={i}>
-                      {t(action)}{": "}{value===true ? <span className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
+                      {t(action)}{": "}{value===true ? <span name="check" className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
                     </Typography>
                   )
                 }
-                <Typography variant="h6" component="h2" className={classes.actions} >
+                <Typography variant="h6" component="h2" id="attachments" className={classes.actions} >
                   {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
                 </Typography>
                 <Box>

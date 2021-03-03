@@ -1,7 +1,7 @@
 import { myBeforeEach } from "../methods.js";
 
 
-const date = "02.01.2020"; 
+const date = "02.01.2020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
@@ -28,82 +28,82 @@ const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand14];
 
 describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
-    beforeEach(function() {
-      myBeforeEach();
-    });
+  beforeEach(function() {
+    myBeforeEach();
+  });
 
-it("Tallenna button is not active if shorthand is invalid", function () {
-
-  cy.get("#selectType").click().get("#Vakio").click();
-  cy.get("#selectLocation").click().get("#Bunkkeri").click();
-
-  for (var i = 0; i < shorthands.length; i++) {
-
-    //pikakirjoituskentän tyhjentäminen:
-    cy.get(".CodeMirror")
-      .first()
-      .then((editor) => {
-        editor[0].CodeMirror.setValue("");
-      });
-
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
-
-    cy.get ("#observers").clear();
-    cy.get ("#observers").type(observer);
-
-    cy.get("#comment").clear();
-    cy.get("#comment").type(comment);
+  it("Tallenna button is not active if shorthand is invalid", function () {
 
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
 
-    cy.get(".CodeMirror textarea").type(shorthands[i], { force: true });
+    for (var i = 0; i < shorthands.length; i++) {
+
+      //pikakirjoituskentän tyhjentäminen:
+      cy.get(".CodeMirror")
+        .first()
+        .then((editor) => {
+          editor[0].CodeMirror.setValue("");
+        });
+
+      cy.get("#date-picker-inline").clear();
+      cy.get("#date-picker-inline").type(date);
+
+      cy.get ("#observers").clear();
+      cy.get ("#observers").type(observer);
+
+      cy.get("#comment").clear();
+      cy.get("#comment").type(comment);
+
+      cy.get("#selectType").click().get("#Vakio").click();
+      cy.get("#selectLocation").click().get("#Bunkkeri").click();
+
+      cy.get(".CodeMirror textarea").type(shorthands[i], { force: true });
+      cy.wait(1000);
+      cy.get("#saveButton").should("be.disabled");
+    }
+  });
+
+  it("Tallenna button is not active if observers is left empty", function () {
+
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").clear();
+    cy.get("#comment").clear();
+    cy.get("#comment").type(comment);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
+
     cy.get("#saveButton").should("be.disabled");
-  }
-});
-
-it("Tallenna button is not active if observers is left empty", function () {
-
-  cy.get("#date-picker-inline").clear();
-  cy.get("#date-picker-inline").type(date);
-  cy.get ("#observers").clear();
-  cy.get("#comment").clear();
-  cy.get("#comment").type(comment);
-  cy.get("#selectType").click().get("#Vakio").click();
-  cy.get("#selectLocation").click().get("#Bunkkeri").click();
-  cy.get(".CodeMirror textarea").type(shorthand, { force: true });
-  cy.wait(1000);
-
-  cy.get("#saveButton").should("be.disabled");
-});
+  });
 
 
-it("Tallenna button is not active if type is not selected", function () {
+  it("Tallenna button is not active if type is not selected", function () {
 
-  cy.get("#date-picker-inline").clear();
-  cy.get("#date-picker-inline").type(date);
-  cy.get ("#observers").type(observer);
-  cy.get("#comment").type(comment);
-  cy.get("#selectLocation").click().get("#Bunkkeri").click();
-  cy.get(".CodeMirror textarea").type(shorthand, { force: true });
-  cy.wait(1000);
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").type(observer);
+    cy.get("#comment").type(comment);
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
 
-  cy.get("#saveButton").should("be.disabled");
-});
+    cy.get("#saveButton").should("be.disabled");
+  });
 
-it("Tallenna button is not active if location is not selected", function () {
+  it("Tallenna button is not active if location is not selected", function () {
 
-  cy.get("#date-picker-inline").clear();
-  cy.get("#date-picker-inline").type(date);
-  cy.get ("#observers").type(observer);
-  cy.get("#comment").type(comment);
-  cy.get("#selectType").click().get("#Vakio").click();
-  cy.get(".CodeMirror textarea").type(shorthand, { force: true });
-  cy.wait(1000);
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get ("#observers").type(observer);
+    cy.get("#comment").type(comment);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
 
-  cy.get("#saveButton").should("be.disabled");
-});
+    cy.get("#saveButton").should("be.disabled");
+  });
 
 });
