@@ -9,9 +9,9 @@ from flask import (Flask, render_template,
 
 # ASETUKSET
 # oldapp: Jos käytetään vanhaa tietokantaa, anna True; muuten ohjataan uutta tietokantaa käyttävään backendiin
-oldapp = True
+oldapp = False
 
-if oldapp == True:
+if oldapp:
     from app import init_app, redirect
     print('Testataan vanhaa backendiä')
 else:

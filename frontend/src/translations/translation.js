@@ -103,8 +103,11 @@ const resources = {
       "pcs": "kpl",
       "no negative values": "Negatiivinen arvo!",
       "Please recheck that you mean to declare that many attachments": "Olet ilmoittamassa poikkeuksellisen ison määrän liitteitä. Tarkistathan, että syöttämäsi summa on oikein.",
-      "no empty values": "Arvo puuttuu!"
+      "no empty values": "Arvo puuttuu!",
 
+      "Modify": "Muokkaa",
+      "Observation period": "Havaintojakso",
+      "at": "kello"
 
     },
   },
