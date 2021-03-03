@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  Grid, FormControlLabel, Checkbox, FormGroup,  InputAdornment, TextField, Dialog,
+  Grid, FormControlLabel, Checkbox, FormGroup, InputAdornment, TextField, Dialog,
   Button, DialogActions, DialogContentText, DialogContent
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core";
@@ -43,9 +43,9 @@ const HankoActions = () => {
   const { t } = useTranslation();
   const clicks = useSelector(state => state.dailyActions);
 
-  const[error, setError] = useState("");
-  const[confirmationAsked, setConfirmantionAsked] = useState(false);
-  const [showModal, setshowModal] =useState(false);
+  const [error, setError] = useState("");
+  const [confirmationAsked, setConfirmantionAsked] = useState(false);
+  const [showModal, setshowModal] = useState(false);
 
   const handleModalClose = () => {
     setshowModal(false);
@@ -53,11 +53,11 @@ const HankoActions = () => {
   };
 
   const handleClick = (target) => {
-    if (target.name==="liitteet" &&  target.value < 0)  {
+    if (target.name === "liitteet" && target.value < 0) {
       setError(t("no negative values"));
-    } else if (target.name==="liitteet" &&  !target.value ) {
+    } else if (target.name === "liitteet" && !target.value) {
       setError(t("no empty values"));
-    }else if (target.name==="liitteet" && target.value > 4 && !confirmationAsked) {
+    } else if (target.name === "liitteet" && target.value > 4 && !confirmationAsked) {
       setshowModal(true);
       setError("");
     } else {
@@ -94,10 +94,10 @@ const HankoActions = () => {
         <FormControlLabel className={classes.formControlLabel}
           control={<TextField name="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
             onChange={(e) => handleClick(e.target)}
-            error={error !== ""} helperText= { error ? t(error) : "" }
-            InputProps={{ endAdornment:<InputAdornment position="end">{t("pcs")}</InputAdornment>,inputProps: { min: 0 } }}>
+            error={error !== ""} helperText={error ? t(error) : ""}
+            InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
           </TextField>}
-          label={t("liitteet") } labelPlacement="start" />
+          label={t("liitteet")} labelPlacement="start" />
       </FormGroup>
       <Dialog open={showModal} onClose={handleModalClose} disableBackdropClick={true}>
         <DialogContent>
