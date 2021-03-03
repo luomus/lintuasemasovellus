@@ -68,6 +68,7 @@ def init_app(database):
     #kirjautuminen
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
     app.config["SESSION_REFRESH_EACH_REQUEST"] = True
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     login_manager = LoginManager()
     login_manager.init_app(app)
     app.config["SECRET_KEY"] = urandom(32)

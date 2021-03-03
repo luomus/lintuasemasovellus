@@ -163,6 +163,15 @@ def getShorthandById(shorthand_id):
     ret.append({ 'id': shorthand.id, 'block': shorthand.shorthandblock, 'observationperiod_id': shorthand.observationperiod_id})
     return jsonify(ret)
 
+@bp.route('/api/getShorthandByObsPeriod/<obsperiod_id>/', methods=["GET"])
+@login_required
+def getShorthandByObsPeriod(obsperiod_id):
+    shorthandblocks = Shorthand.query.filter(Shorthand.observationperiod_id == obsperiod_id, Shorthand.is_deleted == 0).order_by(Shorthand.id).all()
+    ret = []
+    for row in shorthandblocks:
+        ret.append({ 'id': row.id, 'shorthandBlock': row.shorthandblock })
+    return jsonify(ret)
+
 @bp.route("/api/deleteShorthand", methods=["DELETE"])
 @login_required
 def shorthand_delete():

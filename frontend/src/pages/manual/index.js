@@ -62,9 +62,9 @@ export const UserManual = () => {
         <br />
         Sovelluksen etusivulta löytyy pikakirjoituslomake, jonka avulla tietokantaan lisätään päiviä, havaintojaksoja ja havaintoja.
         Käyttäjä valitsee kalenterista tai kirjoittaa päivämäärän jolle havaintojaksot lisätään.
-        <br /> <br />Jos päivä löytyy jo tietokannasta, sovellus näyttää kyseiselle päivälle tallennetut havainnoijat ja kommentit. Käyttäjä voi halutessaan päivittää nämä mieleisikseen.
-        <br />Jos päivää ei ole lisätty tietokantaan aiemmin, uusi päivä luodaan. Käyttäjän tulee kirjoittaa päivälle havainnoija(t). Kommenttikenttä on vapaaehtoinen.
-        <br /> <br />Käyttäjän tulee valita lisättävien havaintojaksojen tyyppi sekä havaintopaikka jossa havaintojaksot on kirjattu. Nämä valinnat tapahtuvat pudotusvalikoista pikakirjoituslomakkeessa.
+        <br /> <br />Jos päivä löytyy jo tietokannasta, sovellus näyttää kyseiselle päivälle tallennetut havainnoijat, kommentit ja lisätiedot. Käyttäjä voi halutessaan päivittää nämä mieleisikseen.
+        <br />Jos päivää ei ole lisätty tietokantaan aiemmin, uusi päivä luodaan. Käyttäjän tulee kirjoittaa päivälle havainnoija(t). Kommenttikenttä sekä lisätiedot ovat vapaaehtoisia. Lisätiedot voivat olla valintanappeja tai esimerkiksi liitteiden kappalemäärän ilmaisuja. Lisätietokentät ovat lintuasemakohtaisia.
+        <br /> <br />Käyttäjän tulee valita lisättävien havaintojaksojen tyyppi sekä havaintopaikka, jossa havaintojaksot on kirjattu. Nämä valinnat tapahtuvat pudotusvalikoista pikakirjoituslomakkeessa.
         <br /> <br />Havaintojaksot ja niiden sisältämät havaintojaksot kirjataan pikakirjoituskenttään. Havainnot ja jaksot syötetään pikakirjoitusmuodossa:
         <br />(parillinen määrä kellonaikoja, yksi laji per rivi, kullekin jaksolle aloitus- ja lopetusaika)
         <br />
@@ -84,8 +84,8 @@ export const UserManual = () => {
         </Typography>
         <br />
         Viimeisimmät viisi päivää näkyvät sivupalkissa sovelluksen etusivulla, ja niihin päästään siirtymään klikkaamalla. Muita päiviä pääsee selaamaan Näytä päivät -linkin kautta. Avautuvassa listassa näkyvät kaikki valitulle lintuasemalle tallennetut päivät aikajärjestyksessä, sekä päiviin liittyvät havainnoijat ja kommentit.
-        <br /> <br />Päivää klikkaamalla päästään tarkastelemaan kyseiseen päivään liittyvää yhteenvetoa. Yhteenvetosivulla näkyy päivän havainnoijat sekä kommentti. Sivulta löytyy myös kaksi yhteenvetotaulukkoa (lajit ja jaksot) joiden välillä liikutaan nappia painamalla.
-        Lajit-taulukossa näkyvät kaikki kyseisenä päivänä havaitut lajit kultakin havaintojaksotyypiltä. Jaksot-taulukossa taas näkyvät kunkin jakson tiedot kyseiseltä päivältä. Jaksoa klikkaamalla aukeaa ikkuna jossa on yhteenveto jakson aikana tehdyistä havainnoista. Ikkuna sulkeutuu klikkaamalla sen ulkopuolelle.
+        <br /> <br />Päivää klikkaamalla päästään tarkastelemaan kyseiseen päivään liittyvää yhteenvetoa. Yhteenvetosivulla näkyy päivän havainnoijat, kommentti ja lisätiedot. Sivulta löytyy myös kaksi yhteenvetotaulukkoa (lajit ja jaksot) joiden välillä liikutaan nappia painamalla.
+        Lajit-taulukossa näkyvät kaikki kyseisenä päivänä havaitut lajit kultakin havaintojaksotyypiltä. Jaksot-taulukossa taas näkyvät kunkin jakson tiedot kyseiseltä päivältä. Jaksoa klikkaamalla aukeaa ikkuna, jossa on yhteenveto jakson aikana tehdyistä havainnoista. Ikkuna sulkeutuu klikkaamalla sen ulkopuolelle. Jaksorivin lopussa on myös kynäikoni, josta kyseistä havaintojaksoa pääsee muokkaamaan.
         <br />
         <br />
 
@@ -94,7 +94,7 @@ export const UserManual = () => {
         </Typography>
         <br />
         Havainnoijien ja kommentin muokkaaminen tapahtuu yhteenvetosivulta. Havainnoija(t) ja Kommentti -kenttien vieressä olevia kynäikoneja painamalla aukeavat muokkauskentät joiden avulla tietoja voidaan päivittää.
-        <br /> Jaksojen ja havaintojen muokkaaminen tapahtuu yläreunan Muokkaa-napin kautta. Aukeaa pikakirjoituskenttä, jonka yläreunasta valitaan jakso ja sijainti joiden tietoja halutaan muokata. Tällöin pikakirjoituskenttään latautuu kyseiseen jaksotyyppiin ja sijaintiin liittyvä pikakirjoitus jota voidaan muokata. Poista-napin kautta pikakirjoitus voidaan myös kokonaan poistaa.
+        <br /> Jaksojen ja havaintojen muokkaaminen tapahtuu Jaksot-näkymästä. Etsi havaintojakso, jota haluat muokata, ja paina kyseisen havaintojaksorivin lopussa olevaa kynäikonia. Havaintojakson muokkaustila aukeaa, ja voit muokata kyseisen havaintojakson tyyppiä, sijaintia sekä pikakirjoitusta. Poista-napin kautta havaintojakso voidaan myös kokonaan poistaa.
         <br />
         <br />
 

@@ -13,7 +13,7 @@ def addDay(obsday):
     if  not d and obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
         db.session().add(obsday)
         db.session().commit()
-    else:
+    elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
         d.is_deleted = 1
         db.session().add(obsday)
         db.session.commit()
