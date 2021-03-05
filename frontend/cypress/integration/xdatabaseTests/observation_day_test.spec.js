@@ -72,7 +72,7 @@ describe("AddObservationDay", function() {
     cy.contains("Hilla Havainnoitsija").click();
     cy.get("#periodsButton").click();
     cy.get("[name=check]").should("have.length", 1);
-    cy.get("[name=attachments]").should("have.value", "1 kpl");
+    cy.get("[name=attachments]").should("have.value", " 1 kpl");
     cy.wait(1000);
     cy.contains("Bunkkeri");
     cy.contains("10:00");
@@ -121,7 +121,7 @@ describe("AddObservationDay", function() {
     cy.get("#actionsEditSave").click();
     cy.wait(1000);
     cy.get("[name=check]").should("have.length", 2);
-    cy.get("[name=attachments]").should("have.value", "2 kpl");
+    cy.get("[name=attachments]").should("have.value", " 2 kpl");
   });
 
 
@@ -208,7 +208,7 @@ describe("AddObservationDay", function() {
     cy.get("#liitteet").type("-2");
     cy.get("#actionsEditSave").click();
     cy.wait(1000);
-    cy.get("[name=attachments]").should("have.value", "0 kpl");
+    cy.get("[name=attachments]").should("have.value", " 0 kpl");
   });
 
 });
