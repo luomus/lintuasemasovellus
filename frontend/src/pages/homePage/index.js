@@ -152,12 +152,7 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
-<<<<<<< HEAD
     if (selectedActions){
-=======
-    console.log("ACTIONS", selectedActions);
-    if (selectedActions) {
->>>>>>> 2b68a580560826443ee27991854379de7d2e7a2b
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
