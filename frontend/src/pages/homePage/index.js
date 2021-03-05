@@ -31,6 +31,7 @@ import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsR
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 //import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
+import CatchTypes from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
 
@@ -151,7 +152,12 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
+<<<<<<< HEAD
     if (selectedActions){
+=======
+    console.log("ACTIONS", selectedActions);
+    if (selectedActions) {
+>>>>>>> 2b68a580560826443ee27991854379de7d2e7a2b
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
@@ -160,8 +166,8 @@ export const HomePage = () => {
 
   const readyDailyActions = () => {
     if ("liitteet" in dailyActions) {
-      if (dailyActions.liitteet === "" || dailyActions.liitteet <0 ) {
-        return JSON.stringify({ ...dailyActions, "liitteet":0 });
+      if (dailyActions.liitteet === "" || dailyActions.liitteet < 0) {
+        return JSON.stringify({ ...dailyActions, "liitteet": 0 });
       }
     }
     return JSON.stringify(dailyActions);
@@ -279,7 +285,7 @@ export const HomePage = () => {
                     value={day}
                     onChange={(date) => {
                       setDay(date);
-                      searchDayInfo(formatDate(date), userObservatory).then((dayJson)  => {
+                      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
                         setObservers(dayJson[0]["observers"]);
                         setComment(dayJson[0]["comment"]);
                         setActions(dayJson[0]["selectedactions"]);
@@ -316,45 +322,49 @@ export const HomePage = () => {
               </Grid>
               <DailyActions
               />
-
+              <CatchTypes />
               <Grid item xs={3}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="Tyyppi">{t("type")}</InputLabel>
-                  <Select required
-                    labelId="type"
-                    fullWidth={true}
-                    id="selectType"
-                    value={type}
-                    onChange={(event) => setType(event.target.value)}
-                  >
-                    {
-                      types.map((type, i) =>
-                        <MenuItem id={type} value={type} key={i}>
-                          {type}
-                        </MenuItem>
-                      )
-                    }
-                  </Select>
-                </FormControl>
               </Grid>
-              <Grid item xs={3}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="Location">{t("location")}</InputLabel>
-                  <Select required
-                    labelId="location"
-                    id="selectLocation"
-                    value={location}
-                    onChange={(event) => setLocation(event.target.value)}
-                  >
-                    {
-                      locations.map((location, i) =>
-                        <MenuItem id={location} value={location} key={i}>
-                          {location}
-                        </MenuItem>
-                      )
-                    }
-                  </Select>
-                </FormControl>
+              <Grid container spacing={1}>
+                <Grid item xs={3}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel id="Tyyppi">{t("type")}</InputLabel>
+                    <Select required
+                      labelId="type"
+                      fullWidth={true}
+                      id="selectType"
+                      value={type}
+                      onChange={(event) => setType(event.target.value)}
+                    >
+                      {
+                        types.map((type, i) =>
+                          <MenuItem id={type} value={type} key={i}>
+                            {type}
+                          </MenuItem>
+                        )
+                      }
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={3}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel id="Location">{t("location")}</InputLabel>
+                    <Select required
+                      labelId="location"
+                      id="selectLocation"
+                      value={location}
+                      onChange={(event) => setLocation(event.target.value)}
+                    >
+                      {
+                        locations.map((location, i) =>
+                          <MenuItem id={location} value={location} key={i}>
+                            {location}
+                          </MenuItem>
+                        )
+                      }
+                    </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
 
               <br />

@@ -26,6 +26,11 @@ const resources = {
       "multipleSpecies": "lajia",
       "removingCannotBeCancelled": "Poistamista ei voi peruuttaa. Jatketaanko?",
       "observationPeriodNotDefined": "obsPeriod is undefined!",
+      "catchType": "Pyydys",
+      "netCodes": "Verkkokoodit",
+      "catchArea": "Pyyntialue",
+      "netLength": "Verkon pituus",
+      "catchCount": "Lukumäärä",
 
       "chooseTypeAndLocation": "(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
