@@ -289,7 +289,7 @@ const DayDetails = () => {
                   Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
                     <FormControlLabel className={classes.formControlLabel}
                       control={ value
-                        ? <CheckCircleIcon fontSize="small" className={classes.checkedDailyAction} color="primary" />
+                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
                         : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
                       }
                       label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
@@ -297,7 +297,7 @@ const DayDetails = () => {
                   )
                 }
                 <FormControlLabel className={classes.FormControlLabel}
-                  control={<DisabledTextField name="liitteet" id="liitteet" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
+                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
                     disabled InputProps={{ disableUnderline: true }} />}
                   label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet") }</span>} labelPlacement="start" />
 
