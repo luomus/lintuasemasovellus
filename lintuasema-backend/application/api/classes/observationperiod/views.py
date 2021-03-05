@@ -7,7 +7,7 @@ from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId, getLocationName
-from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId
+from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, addObservationperiod
 from application.api.classes.observatoryday.services import getDay
 from application.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
 
@@ -38,14 +38,9 @@ def addObservationPeriod():
         end_time=datetime.strptime(req['endTime'], '%H:%M'),
         type_id=getTypeIdByName(req['observationType']),
         location_id=locId, observatoryday_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
-    db.session().add(obsp)
-    #db.session().flush()
-    #db.session().refresh(obsp)
-    db.session().commit()
-
-    #obspId = obsp.id
+    addObservationperiod(obsp)
+    #Haetaan tietokannassa luotu id
     obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.observatoryday_id)
-    #print("havaintojakson id on", obspId)
     return jsonify({ 'id': obspId })
 
 @bp.route('/api/getObservationPeriods', methods=["GET"])

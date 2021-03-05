@@ -18,11 +18,13 @@ def setObsPerDayId(observatoryday_id_old, observatoryday_id_new):
         obs.observatoryday_id = observatoryday_id_new
         db.session().commit()
 
+def getObservationperiods():
+    periodObjects = Observationperiod.query.filter_by(is_deleted=0).all()
+    return periodObjects
 
-def addObservationperiod(observationperiod):
-        db.session().add(observationperiod)
-        db.session().commit()
-
+def addObservationperiod(obsperiod):
+      db.session().add(obsperiod)
+      db.session().commit()
 
 def setObservationId(observationperiod_id_old, observationperiod_id_new):
     observations = Observation.query.filter_by(observationperiod_id = observationperiod_id_old).all()
