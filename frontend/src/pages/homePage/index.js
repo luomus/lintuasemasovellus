@@ -31,7 +31,8 @@ import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsR
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 //import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
-import CatchTypes from "./catchType";
+import { addOneCatchRow, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
+import CatchType from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
 
@@ -61,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
   sendButton: {
     marginBottom: "40px",
     position: "static",
+  },
+  addRemoveCatchTypesButton: {
+    marginLeft: theme.spacing(1),
+    marginTop: theme.spacing(0),
   },
   pointerCursor: {
     cursor: "pointer",
@@ -114,6 +119,7 @@ export const HomePage = () => {
 
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
+  const catchRows = useSelector(state => state.catchRows);
 
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -152,7 +158,7 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
-    if (selectedActions){
+    if (selectedActions) {
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
@@ -224,6 +230,17 @@ export const HomePage = () => {
     }
     setDisabled(false);
   };
+
+  const deleteLastRow = () => {
+    const lastRow = catchRows[catchRows.length - 1];
+    dispatch(deleteOneCatchRow(lastRow));
+  };
+
+
+  const addCatchRow = () => {
+    dispatch(addOneCatchRow());
+  };
+
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -317,7 +334,28 @@ export const HomePage = () => {
               </Grid>
               <DailyActions
               />
-              <CatchTypes />
+              {catchRows.map((cr, i) => (
+                <div key={i}>
+                  <CatchType key={cr.key} />
+                </div>
+              ))}
+              <Grid item xs={12}>
+                <Button
+                  className={classes.addRemoveCatchTypesButton}
+                  onClick={addCatchRow}
+                >
+                  {"+"}
+                </Button>
+                <Button
+                  onClick={() => deleteLastRow()}
+                  className={classes.addRemoveCatchTypesButton}
+                  color="default"
+                  variant="contained"
+                  size="small"
+                >
+                  {"–"}
+                </Button>
+              </Grid>
               <Grid item xs={3}>
               </Grid>
               <Grid container spacing={1}>

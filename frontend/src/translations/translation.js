@@ -31,6 +31,7 @@ const resources = {
       "catchArea": "Pyyntialue",
       "netLength": "Verkon pituus",
       "catchCount": "Lukumäärä",
+      "add catch row": "Lisää pyydysrivi",
 
       "chooseTypeAndLocation": "(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
