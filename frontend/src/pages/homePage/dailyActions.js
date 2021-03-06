@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   formControlLabel: {
-    padding: "0px 100px 0px 0px",
+    padding: "0px 60px 0px 0px",
   },
   attachmentField: {
     marginLeft: theme.spacing(1),
@@ -69,8 +69,8 @@ const HankoActions = () => {
   };
 
   return (
-    <Grid item xs={12}>
-      <FormGroup row className={classes.formGroup}>
+    <Grid item xs={12} >
+      <FormGroup row className={classes.formGroup} >
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.vakiohavainto} onChange={(e) => handleClick(e.target)} name="vakiohavainto" color="primary" />}
           label={t("vakiohavainto")} labelPlacement="end" />

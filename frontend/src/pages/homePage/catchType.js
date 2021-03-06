@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react"; //
 import {
   TextField, InputLabel, Select, MenuItem, FormControl,
-  FormControlLabel, InputAdornment, Grid, FormGroup
+  FormControlLabel, InputAdornment, Grid, FormGroup,
+  Dialog, DialogActions, DialogContentText, DialogContent, Button
 } from "@material-ui/core/";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -50,6 +51,23 @@ const catchAreas = {
   "": [""]
 };
 
+
+const amountLimits ={
+  "Vakioverkko": 11,
+  "Lisäverkko": 9,
+  "Petoverkot": 8,
+};
+
+
+const catchesWithoutLength = ["Katiska", "Lokkihäkki"];
+
+const preSetLengths = {
+  "Vakioverkot muu": 9,
+  "Vakioverkot K": 12,
+  "Piha": 9,
+  "Vakiopetoverkot":12
+};
+
 //const maxNumbers = {
 //  "Vakioverkko": 11,
 //  "Lisäverkko": 9,
@@ -61,14 +79,43 @@ const catchAreas = {
 //};
 
 
+
 const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [modalMessage, setModalMessage] = useState("");
+  const [showModal, setshowModal] = useState(false);
 
   const handleChange = (target) => {
-    console.log("click", target);
+    if (target.name==="lukumaara") {
+      if (cr.pyydys in amountLimits && target.value > amountLimits[String(cr.pyydys)]) {
+        setModalMessage(t("Please recheck that you mean to declare that many catches"));
+        setshowModal(true);
+      }
+    } else if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
+      //autofill length for nets that are always the same length
+      if (target.value in preSetLengths) {
+        dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
+      }
+    } else if(target.name==="pyydys" && cr.verkonPituus!==0) {
+      //remove previous length autofill, when catch changes
+      dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
+    }
+    // seuraava ongelmallinen, koska modaali triggeröityy, jo kun kirjoittaa '1' luvusta '11'
+    // } else if (target.name==="verkonPituus"){
+    //   if ( target.value < 9 || target.value > 12 ) {
+    //     setModalMessage(t("Net length is usually between 9 and 12 meters. Please check that your value is right."));
+    //     setshowModal(true);
+    //   }
+    //}
+
+
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
+  };
+
+  const handleModalClose = () => {
+    setshowModal(false);
   };
 
   return (
@@ -114,8 +161,42 @@ const CatchType = ({ cr }) => {
               }</Select>
           </FormControl>} />
 
+        <FormControlLabel className={classes.formControlLabel2}
+          label={t("netopened")} labelPlacement="start"
+          control={<TextField
+            id="opened"
+            type="time"
+            defaultValue={cr.alku}
+            name="alku"
+            style={{ paddingLeft: "5px" }}
+            onChange={(event) => handleChange(event.target)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 60,
+            }}
+          />} />
+
+        <FormControlLabel className={classes.formControlLabel2}
+          label={t("netclosed")} labelPlacement="start"
+          control={<TextField
+            id="closed"
+            type="time"
+            name="loppu"
+            defaultValue={cr.loppu}
+            style={{ paddingLeft: "5px" }}
+            onChange={(event) => handleChange(event.target)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 60,
+            }}
+          />} />
+
         <FormControl className={classes.formControlLabel}>
-          <TextField required
+          <TextField
             className={classes.netCodes}
             id="netCodes"
             name="verkkokoodit"
@@ -138,52 +219,37 @@ const CatchType = ({ cr }) => {
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
             />
           } />
-        <FormControlLabel className={classes.formControlLabel2}
-          label={t("netLength")} labelPlacement="start"
-          control={<TextField
-            className={classes.textField}
-            id="selectNetLength"
-            required
-            name="verkonPituus"
-            type="number"
-            value={cr.verkonPituus}
-            onChange={(event) => handleChange(event.target)}
-            InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
-          />
 
-          } />
-        <FormControlLabel className={classes.formControlLabel2}
-          label={t("netopened")} labelPlacement="start"
-          control={<TextField
-            id="opened"
-            type="time"
-            defaultValue={cr.alku}
-            name="alku"
-            onChange={(event) => handleChange(event.target)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 60,
-            }}
-          />} />
-
-        <FormControlLabel className={classes.formControlLabel2}
-          label={t("netclosed") } labelPlacement="start"
-          control={<TextField
-            id="closed"
-            type="time"
-            name="loppu"
-            defaultValue={cr.loppu}
-            onChange={(event) => handleChange(event.target)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 60,
-            }}
-          />} />
+        { (cr.pyydys.length > 1  && catchesWithoutLength.indexOf(cr.pyydys) > -1 ) //is a catch without length
+          ? <div></div>
+          :
+          <FormControlLabel className={classes.formControlLabel2}
+            label={t("netLength")} labelPlacement="start"
+            control={<TextField
+              className={classes.textField}
+              id="selectNetLength"
+              required
+              name="verkonPituus"
+              type="number"
+              value={cr.verkonPituus}
+              onChange={(event) => handleChange(event.target)}
+              InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
+            />
+            } />
+        }
       </FormGroup>
+      <Dialog open={showModal} onClose={handleModalClose}  disableBackdropClick={true}>
+        <DialogContent>
+          <DialogContentText id="confirmation dialog">
+            {modalMessage}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleModalClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
 
   );

@@ -73,11 +73,6 @@ const useStyles = makeStyles((theme) => ({
   formControlLabel: {
     padding: "0px 100px 0px 0px",
   },
-  attachmentField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 75,
-  },
 }
 ));
 
@@ -266,7 +261,7 @@ export const HomePage = () => {
       <Grid container
         alignItems="flex-start"
       >
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Paper className={classes.obsPaper}>
             <Grid container
               alignItems="flex-start"
@@ -333,6 +328,7 @@ export const HomePage = () => {
               </Grid>
               <DailyActions
               />
+
               {catchRows.map((cr, i) => (
                 <div key={i}>
                   <CatchType key={cr.key} cr={cr} />
@@ -428,7 +424,7 @@ export const HomePage = () => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Grid item xs={12} className={classes.infoGrid}>
             <Paper className={classes.infoPaper}>
               <Grid item xs={12}>

@@ -46,7 +46,6 @@ export const deleteOneCatchRow = (lastRow) => {
 };
 
 export const toggleCatchDetails = (key, changedDetail, newValue) => {
-  console.log("click ");
   return {
     type: "TOGGLE_ROW_DETAILS",
     data: {
