@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
-  Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField
+  Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField,
+  FormGroup, FormControlLabel, withStyles
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import RemoveCircleOutlineRoundedIcon from "@material-ui/icons/RemoveCircleOutlineRounded";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
@@ -22,7 +25,7 @@ const DayDetails = () => {
 
   const { day, stationName } = useParams();
 
-  const useStyles = makeStyles({
+  const useStyles = makeStyles((theme) => ({
     paper: {
       background: "white",
       padding: "20px 30px",
@@ -35,13 +38,28 @@ const DayDetails = () => {
       marginRight: "5px",
       marginBottom: "5px",
     },
-    actions: {
-      padding: "0px 70px 0px 0px",
+    formControlLabel: {
+      padding: "0px 100px 0px 0px",
     },
-    checkmark: {
-      color: "green",
+    checkedDailyAction: {
+      margin: "11px",
+    },
+    uncheckedDailyAction: {
+      margin: "11px",
+    },
+    attachment: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 75,
+    },
+    blackDisabledLabel: {
+      label: {
+        color: "rgba(0, 0, 0, 1)",
+        fontSize: "50px"
+      }
     }
-  });
+  })
+  );
 
   const classes = useStyles();
   const { t } = useTranslation();
@@ -171,6 +189,13 @@ const DayDetails = () => {
     refetchObservations();
   };
 
+  const DisabledTextField = withStyles({
+    root: {
+      "& .MuiInputBase-root.Mui-disabled": {
+        color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
+      }
+    }
+  })(TextField);
 
 
   const user = useSelector(state => state.user);
@@ -259,27 +284,29 @@ const DayDetails = () => {
 
           {( selectedActions && !actionsEditMode) ?
             <Grid item xs={12} fullwidth="true">
-              <div style={{
-                display: "flex",
-                alignItems: "left",
-                flexWrap:"wrap"
-              }}>
+              <FormGroup row className={classes.formGroup}>
                 {
                   Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
-                    <Typography variant="h6" component="h2" className={classes.actions} key={i}>
-                      {t(action)}{": "}{value===true ? <span name="check" className={classes.checkmark}>&#10003;</span> : <span>&#9747;</span>}{" "}
-                    </Typography>
+                    <FormControlLabel className={classes.formControlLabel}
+                      control={ value
+                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
+                        : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
+                      }
+                      label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
+                    />
                   )
                 }
-                <Typography variant="h6" component="h2" id="attachments" className={classes.actions} >
-                  {t("liitteet")}{": "}{selectedActions.liitteet}{" "}
-                </Typography>
+                <FormControlLabel className={classes.FormControlLabel}
+                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
+                    disabled InputProps={{ disableUnderline: true }} />}
+                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet") }</span>} labelPlacement="start" />
+
                 <Box>
                   <IconButton id="actionsButton" size="small" style={{ left: "100px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
-                    <EditIcon fontSize="small" />
+                    <EditIcon fontSize="medium" />
                   </IconButton>
                 </Box>
-              </div>
+              </FormGroup>
             </Grid>
             :<Grid item xs={12} fullwidth="true">
               <div style={{
