@@ -62,16 +62,12 @@ const catchAreas = {
 
 
 const CatchType = ({ cr }) => {
-  // const [catchType, setCatchType] = useState(cr.pyydys);
-  // const [netCodes, setNetCodes] = useState(cr.verkkokoodit);
-  // const [catchCount, setCatchCount] = useState(cr.lukumaara);
-  // const [catchArea, setCatchArea] = useState(cr.pyyntialue);
-  // const [netLength, setNetLength] = useState(cr.verkonPituus);
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const handleChange = (target) => {
+    console.log("click", target);
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
   };
 
@@ -137,7 +133,6 @@ const CatchType = ({ cr }) => {
               name="lukumaara"
               required
               type="number"
-              labelId="catchCount"
               value={cr.lukumaara}
               onChange={(event) => handleChange(event.target)}
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
@@ -151,13 +146,43 @@ const CatchType = ({ cr }) => {
             required
             name="verkonPituus"
             type="number"
-            labelId="netLength"
             value={cr.verkonPituus}
             onChange={(event) => handleChange(event.target)}
             InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
           />
 
           } />
+        <FormControlLabel className={classes.formControlLabel2}
+          label={t("netopened")} labelPlacement="start"
+          control={<TextField
+            id="opened"
+            type="time"
+            defaultValue={cr.alku}
+            name="alku"
+            onChange={(event) => handleChange(event.target)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 60,
+            }}
+          />} />
+
+        <FormControlLabel className={classes.formControlLabel2}
+          label={t("netclosed") } labelPlacement="start"
+          control={<TextField
+            id="closed"
+            type="time"
+            name="loppu"
+            defaultValue={cr.loppu}
+            onChange={(event) => handleChange(event.target)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 60,
+            }}
+          />} />
       </FormGroup>
     </Grid>
 

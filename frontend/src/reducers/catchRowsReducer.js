@@ -1,5 +1,5 @@
 const initialState =
-  [{ key: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "0.00", loppu: "0.00" }];
+  [{ key: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" }];
 
 const catchRowsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -9,7 +9,7 @@ const catchRowsReducer = (state = initialState, action) => {
         ...state,
         {
           key: state.length +1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
-          verkonPituus: 0, alku: "0.00", loppu: "0.00"
+          verkonPituus: 0, alku: "00:00", loppu: "00:00"
         }
       ];
     case "DELETE_ROW":

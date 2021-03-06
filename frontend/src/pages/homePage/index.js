@@ -35,7 +35,6 @@ import { addOneCatchRow, deleteOneCatchRow } from "../../reducers/catchRowsReduc
 import CatchType from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
-
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
     background: "white",

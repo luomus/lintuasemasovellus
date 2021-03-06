@@ -63,6 +63,8 @@ const resources = {
       "timeEleven": "11:00",
       "shorthandExample2": "grugru 3ad/2juv/5subad s +-",
       "timeTwelwe": "12:00",
+      "netopened": "Avattu",
+      "netclosed": "Suljettu",
 
       "speciesTotal": "Lajit lkm",
       "duration": "Kesto",
