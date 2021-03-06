@@ -1,5 +1,5 @@
 const initialState =
-  [{ key: 1, pyydys: null, pyyntialue: null, verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "0.00", loppu: "0.00" }];
+  [{ key: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "0.00", loppu: "0.00" }];
 
 const catchRowsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -8,14 +8,24 @@ const catchRowsReducer = (state = initialState, action) => {
       return [
         ...state,
         {
-          key: action.data, pyydys: null, pyyntialue: null, verkkokoodit: "", lukumaara: 0,
+          key: state.length +1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
           verkonPituus: 0, alku: "0.00", loppu: "0.00"
         }
       ];
     case "DELETE_ROW":
       console.log("delete");
-      //var newState = Object.keys(state).filter(key => (key !== action.data));
-      return [state.filter(row => row.key !== action.data)];
+      return state.filter(row => row.key !== action.data.key);
+    case "TOGGLE_ROW_DETAILS":
+      console.log("You fools! This is not even my final form!");
+      console.log(state);
+      return state.map(row =>
+        row.key !== action.data.key
+          ? row
+          : {
+            ...row,
+            [action.data.changedDetail]: action.data.newValue
+          }
+      );
     default:
       return state;
   }
@@ -23,20 +33,27 @@ const catchRowsReducer = (state = initialState, action) => {
 
 
 export const addOneCatchRow = () => {
-  //var newCatchRows = this.state;
-  console.log("hello world");
-  const id = Math.floor(Math.random() * 1000000) + 2;
   return {
-    type: "ADD_ROW",
-    data: id
+    type: "ADD_ROW"
   };
 };
 
 export const deleteOneCatchRow = (lastRow) => {
-  console.log("last row:", lastRow);
   return {
     type: "DELETE_ROW",
     data: lastRow
+  };
+};
+
+export const toggleCatchDetails = (key, changedDetail, newValue) => {
+  console.log("click ");
+  return {
+    type: "TOGGLE_ROW_DETAILS",
+    data: {
+      key: key,
+      changedDetail:changedDetail,
+      newValue: newValue
+    }
   };
 };
 

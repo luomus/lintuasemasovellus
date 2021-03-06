@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   TextField, InputLabel, Select, MenuItem, FormControl,
   FormControlLabel, InputAdornment, Grid, FormGroup
 } from "@material-ui/core/";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { toggleCatchDetails } from "../../reducers/catchRowsReducer";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -58,14 +61,19 @@ const catchAreas = {
 //};
 
 
-const CatchType = () => {
-  const [catchType, setCatchType] = useState("");
-  const [netCodes, setNetCodes] = useState("");
-  const [catchCount, setCatchCount] = useState(0);
-  const [catchArea, setCatchArea] = useState("");
-  const [netLength, setNetLength] = useState(0);
+const CatchType = ({ cr }) => {
+  // const [catchType, setCatchType] = useState(cr.pyydys);
+  // const [netCodes, setNetCodes] = useState(cr.verkkokoodit);
+  // const [catchCount, setCatchCount] = useState(cr.lukumaara);
+  // const [catchArea, setCatchArea] = useState(cr.pyyntialue);
+  // const [netLength, setNetLength] = useState(cr.verkonPituus);
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleChange = (target) => {
+    dispatch(toggleCatchDetails(cr.key, target.name, target.value));
+  };
 
   return (
     <Grid item xs={12}>
@@ -77,8 +85,9 @@ const CatchType = () => {
               required
               labelId="catchType"
               id="selectCatchType"
-              value={catchType}
-              onChange={(event) => setCatchType(event.target.value)}
+              name="pyydys"
+              value={cr.pyydys}
+              onChange={(event) => handleChange(event.target)}
             >
               {
                 catchTypes.map((catchType, i) =>
@@ -96,12 +105,13 @@ const CatchType = () => {
               required
               labelId="catchArea"
               id="selectCatchArea"
-              value={catchArea}
-              onChange={(event) => setCatchArea(event.target.value)}
+              name="pyyntialue"
+              value={cr.pyyntialue}
+              onChange={(event) => handleChange(event.target)}
             >
               {
-                catchAreas[String(catchType)].map((cArea, i) =>
-                  <MenuItem id={catchArea} value={cArea} key={i}>
+                catchAreas[String(cr.pyydys)].map((cArea, i) =>
+                  <MenuItem id={cArea} value={cArea} key={i}>
                     {cArea}
                   </MenuItem>
                 )
@@ -112,9 +122,10 @@ const CatchType = () => {
           <TextField required
             className={classes.netCodes}
             id="netCodes"
+            name="verkkokoodit"
             label={t("netCodes")}
-            onChange={(event) => setNetCodes(event.target.value)}
-            value={netCodes}
+            onChange={(event) => handleChange(event.target)}
+            value={cr.verkkokoodit}
           />
         </FormControl>
         <FormControlLabel className={classes.formControlLabel2}
@@ -123,11 +134,12 @@ const CatchType = () => {
             <TextField
               className={classes.textField}
               id="selectCatchCount"
+              name="lukumaara"
               required
               type="number"
               labelId="catchCount"
-              value={catchCount}
-              onChange={(event) => setCatchCount(event.target.value)}
+              value={cr.lukumaara}
+              onChange={(event) => handleChange(event.target)}
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
             />
           } />
@@ -137,10 +149,11 @@ const CatchType = () => {
             className={classes.textField}
             id="selectNetLength"
             required
+            name="verkonPituus"
             type="number"
             labelId="netLength"
-            value={netLength}
-            onChange={(event) => setNetLength(event.target.value)}
+            value={cr.verkonPituus}
+            onChange={(event) => handleChange(event.target)}
             InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
           />
 
@@ -149,6 +162,10 @@ const CatchType = () => {
     </Grid>
 
   );
+};
+
+CatchType.propTypes = {
+  cr: PropTypes.object.isRequired,
 };
 
 export default CatchType;

@@ -336,7 +336,7 @@ export const HomePage = () => {
               />
               {catchRows.map((cr, i) => (
                 <div key={i}>
-                  <CatchType key={cr.key} />
+                  <CatchType key={cr.key} cr={cr} />
                 </div>
               ))}
               <Grid item xs={12}>
