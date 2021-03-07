@@ -29,6 +29,7 @@ from application.api.classes.type import models
 from application.api.classes.observationperiod import models
 from application.api.classes.shorthand import models
 from application.api.classes.observation import models
+from application.api.classes.catch import models
 
 from application.api.classes.observationperiod import views
 from application.api.classes.location import views, services
