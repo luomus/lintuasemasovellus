@@ -8,7 +8,7 @@ from sqlalchemy.sql import text
 
 
 def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
-    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, type_id=type_id, location_id=location_id, observatoryday_id=observatoryday_id).first()
+    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, type_id=type_id, location_id=location_id, observatoryday_id=observatoryday_id, is_deleted=0).first()
     return obsp.id
 
 

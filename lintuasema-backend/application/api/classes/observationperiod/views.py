@@ -47,7 +47,7 @@ def addObservationPeriod():
 @bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required
 def getObservationPeriods():
-    observationPeriods = Observationperiod.query.all()
+    observationPeriods = Observationperiod.query.filter_by(is_deleted=0).all()
     ret = []
     for obsPeriod in observationPeriods:
         ret.append(
@@ -76,6 +76,7 @@ def getDaysObservationPeriods(day_id):
 def observationperiod_delete():
     req = request.get_json()
     obsperiod_id = req['obsperiod_id']
-    Observationperiod.query.filter_by(id=obsperiod_id).delete()
+    deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
+    deleted_obsperiod.is_deleted = 1
     db.session.commit()
     return jsonify(req)

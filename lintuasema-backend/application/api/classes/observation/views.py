@@ -52,7 +52,9 @@ def getObservationsByObservationPeriod(observationperiod_id):
 def observations_delete():
     req = request.get_json()
     shorthand_id = req['shorthand_id']
-    Observation.query.filter_by(shorthand_id=shorthand_id).delete()
+    observations_to_delete = Observation.query.filter_by(shorthand_id=shorthand_id).all()
+    for observation in observations_to_delete:
+        observation.is_deleted = 1
     db.session.commit()
     return jsonify(req)
 
