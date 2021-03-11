@@ -32,7 +32,7 @@ def addShorthand():
 @bp.route('/api/getShorthands', methods=["GET"])
 @login_required
 def getShorthands():
-    shorthands = Shorthand.query.all()
+    shorthands = Shorthand.query.filter(is_deleted=0).all()
     ret = []
     for shorthand in shorthands:
         ret.append({'id': shorthand.id, 'block': shorthand.shorthandblock,
@@ -177,7 +177,8 @@ def getShorthandByObsPeriod(obsperiod_id):
 def shorthand_delete():
     req = request.get_json()
     shorthand_id = req['shorthand_id']
-    Shorthand.query.filter_by(id=shorthand_id).delete()
+    deleted_shorthand = Shorthand.query.get(shorthand_id)
+    deleted_shorthand.is_deleted = 1
     db.session.commit()
     return jsonify(req)
 

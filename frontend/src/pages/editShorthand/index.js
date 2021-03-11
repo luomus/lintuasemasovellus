@@ -307,10 +307,10 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleDialogConfirm} color="secondary">
+              <Button onClick={handleDialogConfirm} color="secondary" id="confirmButton">
                 {t("confirm")}
               </Button>
-              <Button onClick={handleDialogClose} color="default" autoFocus>
+              <Button onClick={handleDialogClose} color="default" id="cancelButton" autoFocus>
                 {t("cancel")}
               </Button>
             </DialogActions>

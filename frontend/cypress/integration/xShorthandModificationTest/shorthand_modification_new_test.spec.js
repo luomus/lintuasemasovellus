@@ -8,7 +8,7 @@ const shorthand = "10:00\nsommol 1/2 W\n12:00";
 const shorthandModified = "10:00\ngrugru 1/2 W\n12:00";
 
 
-describe("ShorthandModificationNew", function () {
+describe("ShorthandModificationPerObservationPeriod", function () {
 
   beforeEach(function () {
     myBeforeEach();

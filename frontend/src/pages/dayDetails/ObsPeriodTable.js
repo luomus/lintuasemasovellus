@@ -107,7 +107,7 @@ const ObsPeriodTable = (props) => {
           Lajit
         </Typography>
         <TableContainer>
-          <Table className={classes.table}>
+          <Table className={classes.table} id="speciesTable">
             <TableHead>
               <TableRow>
                 <StyledTableCell >{t("species")}</StyledTableCell>
