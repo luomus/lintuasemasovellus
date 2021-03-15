@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
-import { toggleCatchDetails } from "../../reducers/catchRowsReducer";
+import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -118,6 +118,11 @@ const CatchType = ({ cr }) => {
     setshowModal(false);
   };
 
+  const handleRowRemove = () => {
+    dispatch(deleteOneCatchRow(cr));
+  };
+
+
   return (
     <Grid item xs={12}>
       <FormGroup row className={classes.formGroup}>
@@ -220,7 +225,7 @@ const CatchType = ({ cr }) => {
             />
           } />
 
-        { (cr.pyydys.length > 1  && catchesWithoutLength.indexOf(cr.pyydys) > -1 ) //is a catch without length
+        { (cr.pyydys.length === 0 || (cr.pyydys.length > 1  && catchesWithoutLength.indexOf(cr.pyydys) > -1 )) //is a catch without length
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -237,6 +242,9 @@ const CatchType = ({ cr }) => {
             />
             } />
         }
+        <Button id="removeButton" size="small" onClick={() => handleRowRemove()}  >
+            &#10060;
+        </Button>
       </FormGroup>
       <Dialog open={showModal} onClose={handleModalClose}  disableBackdropClick={true}>
         <DialogContent>
