@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
+import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
@@ -82,7 +83,9 @@ const DayDetails = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [actionsEditMode, setActionsEditMode]= useState(false);
+  const [actionsEditMode, setActionsEditMode] = useState(false);
+
+  const [catchesEditMode, setCatchesEditMode] = useState(false);
 
   const dayList = useSelector(state => state.days);
 
@@ -108,7 +111,18 @@ const DayDetails = () => {
       .selectedactions)
     : {});
 
+  //selectedCatches on nyt vasta kopio selectedActionsista
+  const [selectedCatches, setSelectedCatches] = useState(dayList
+    .find(d => d.day === day && d.observatory === stationName)
+    .selectedactions
+    ? JSON.parse(dayList
+      .find(d => d.day === day && d.observatory === stationName)
+      .selectedactions)
+    : {});
+
   const editedActions = useSelector(state => state.dailyActions);
+
+  const editedCatches = useSelector(state => state.catchRows);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -158,6 +172,11 @@ const DayDetails = () => {
     setActionsEditMode(!actionsEditMode);
   };
 
+  const handleCatchesEditOpen = () => {
+    // send info to reducer
+    setCatchesEditMode(!actionsEditMode);
+  };
+
   const handleActionsEditCancel = () => {
     dispatch(setDefaultActions(userObservatory));
     setActionsEditMode(!actionsEditMode);
@@ -166,8 +185,8 @@ const DayDetails = () => {
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
     if ("liitteet" in actionsToSave) {
-      if (actionsToSave.liitteet === "" || actionsToSave.liitteet < 0 ) {
-        actionsToSave = { ...actionsToSave, "liitteet":0 };
+      if (actionsToSave.liitteet === "" || actionsToSave.liitteet < 0) {
+        actionsToSave = { ...actionsToSave, "liitteet": 0 };
       }
     }
     editActions(dayId, JSON.stringify(actionsToSave))
@@ -175,6 +194,13 @@ const DayDetails = () => {
     setSelectedActions(actionsToSave);
     setActionsEditMode(!actionsEditMode);
     dispatch(setDefaultActions(userObservatory));
+  };
+
+  const handleCatchesEditSave = () => {
+    let catchesToSave = editedCatches;
+
+    setSelectedCatches(catchesToSave);
+    setCatchesEditMode(!catchesEditMode);
   };
 
   const refetchObservations = async () => {
@@ -282,13 +308,13 @@ const DayDetails = () => {
             </div>
           </Grid>
 
-          {( selectedActions && !actionsEditMode) ?
+          {(selectedActions && !actionsEditMode) ?
             <Grid item xs={12} fullwidth="true">
               <FormGroup row className={classes.formGroup}>
                 {
-                  Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
+                  Object.entries(selectedActions).filter(([key]) => key !== "liitteet").map(([action, value], i) =>
                     <FormControlLabel className={classes.formControlLabel}
-                      control={ value
+                      control={value
                         ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
                         : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
                       }
@@ -299,22 +325,65 @@ const DayDetails = () => {
                 <FormControlLabel className={classes.FormControlLabel}
                   control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
                     disabled InputProps={{ disableUnderline: true }} />}
-                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet") }</span>} labelPlacement="start" />
+                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet")}</span>} labelPlacement="start" />
 
                 <Box>
-                  <IconButton id="actionsButton" size="small" style={{ left: "100px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
+                  <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
                     <EditIcon fontSize="medium" />
                   </IconButton>
                 </Box>
               </FormGroup>
             </Grid>
-            :<Grid item xs={12} fullwidth="true">
+            : <Grid item xs={12} fullwidth="true">
               <div style={{
                 display: "flex",
                 alignItems: "left"
               }}>
                 <DailyActions />
                 <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleActionsEditSave()} color="primary">
+                  {t("save")}
+                </Button>
+                <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
+                  {t("cancel")}
+                </Button>
+              </div>
+            </Grid>
+          }
+
+          {/* NET ACTIONS */}
+          {(selectedCatches && !catchesEditMode) ?
+            <Grid item xs={12} fullwidth="true">
+              <FormGroup row className={classes.formGroup}>
+                {
+                  Object.entries(selectedCatches).filter(([key]) => key !== "liitteet").map(([action, value], i) =>
+                    <FormControlLabel className={classes.formControlLabel}
+                      control={value
+                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
+                        : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
+                      }
+                      label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
+                    />
+                  )
+                }
+                <FormControlLabel className={classes.FormControlLabel}
+                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
+                    disabled InputProps={{ disableUnderline: true }} />}
+                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet")}</span>} labelPlacement="start" />
+
+                <Box>
+                  <IconButton id="catchesButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
+                    <EditIcon fontSize="medium" />
+                  </IconButton>
+                </Box>
+              </FormGroup>
+            </Grid> :
+            <Grid item xs={12} fullwidth="true">
+              <div style={{
+                display: "flex",
+                alignItems: "left"
+              }}>
+                <CatchType />
+                <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleCatchesEditSave()} color="primary">
                   {t("save")}
                 </Button>
                 <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
