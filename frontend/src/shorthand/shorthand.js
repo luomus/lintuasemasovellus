@@ -101,9 +101,9 @@ const softReset = () => {
 
 const constructOsahavainto = () => {
   if (ika)
-    throw new Error("tuntematon ikä");
+    throw new Error("Unknown age");
   if (!possibleDirections.has(ilmansuunta.toUpperCase()))
-    throw new Error("Epäkelpo ilmansuunta");
+    throw new Error("Unknown direction");
   switch (sukupuoliRound) {
     case 0:
       male[String(ageBucket)] = yksilomaara;
@@ -115,7 +115,7 @@ const constructOsahavainto = () => {
       unknown[String(ageBucket)] = yksilomaara;
       break;
     default:
-      throw new Error("illegal sukupuoliround");
+      throw new Error("Unknown sex");
   }
   const osahavainto = {
     adultUnknownCount: unknown["ad"],
@@ -144,7 +144,7 @@ const ikaConstructed = () => {
 
 export const constructTaysiHavainto = (startKello, endKello) => {
   if (!birds.has(lajinimi.toUpperCase())) {
-    throw new Error("Tuntematon lajin nimi!");
+    throw new Error("Unknown species!");
   }
   constructOsahavainto();
   taysiHavainto = {
@@ -161,7 +161,7 @@ const lajinimiNotSet = () => {
 
 const setAgeBucket = () => {
   if (!ageCanBeSet) {
-    throw new Error("yhdellä havainnolla on monta ikää");
+    throw new Error("One observation has multiple ages");
   }
   ageCanBeSet = false;
   if (ika === "'") {
@@ -187,7 +187,7 @@ const acceptableAroundIlmansuuntaHeuristic = (index, line) => {
   }
   const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
   if (nextNonSpaceyChar === ",") return true;
-  if (isNumeric(nextNonSpaceyChar)) throw new Error("suunnan jälkeen tulee numero");
+  if (isNumeric(nextNonSpaceyChar)) throw new Error("Number after direction");
   return true;
 };
 
@@ -212,7 +212,7 @@ const fillSukupuoliBucketsSlash = () => {
       sukupuoliRound = 1;
       break;
     default:
-      throw new Error("illegal sukupuoliRound");
+      throw new Error("Unknown sex");
   }
   yksilomaara = "";
   ageBucket = "unk";
@@ -230,7 +230,7 @@ const fillSukupuoliBucketsNotSlash = () => {
       unknown[String(ageBucket)] = yksilomaara;
       break;
     default:
-      throw new Error("illegal sukupuoliRound");
+      throw new Error("Unknown sex");
   }
   yksilomaara = "";
   ageBucket = "unk";
@@ -273,7 +273,7 @@ const handleDefaultAlpha = (char, line, index) => {
   } else if (acceptableIkaChar.has(char)) {
     ika += char;
   } else {
-    throw new Error(`tuntematon merkki: ${char}`);
+    throw new Error(`Unknown character: ${char}`);
   }
 };
 
@@ -283,56 +283,56 @@ const handleSpaceySymbol = () => {
 
 const handleNumeric = (char) => {
   if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+    throw new Error("Missing space after species name");
   }
   ageCanBeSet = true;
   yksilomaara += char;
 };
 
 const handleTimeSymbol = () => {
-  throw new Error("ylimääräinen piste tai kaksoispiste");
+  throw new Error("Extra period or colon");
 };
 
 const handleBracketOpen = () => {
   if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+    throw new Error("Missing space after species name");
   }
   openLisatietoBucket();
 };
 
 const handleBracketClose = () => {
   if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+    throw new Error("Missing space after species name");
   }
   closeLisatietoBucket();
 };
 
 const handleComma = (line, index) => {
   if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+    throw new Error("Missing space after species name");
   }
   if (isTooManyCommasHeuristic(index, line)) {
-    throw new Error("ylimääräisiä pilkkuja");
+    throw new Error("Extra commas");
   }
   constructOsahavainto();
 };
 
 const handleHipsu = (char) => {
   if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+    throw new Error("Missing space after species name");
   }
   ika += char;
 };
 
 const handlePlusMinus = (char, line, index) => {
   if (lajinimiNotSet()) {
-    throw new Error("lajinimen jälkeen puuttuu välilyönti");
+    throw new Error("Missing space after species name");
   }
   if (!acceptableBypassSides.has(ohituspuoli += char)) {
-    throw new Error("tuntematon ohituspuoli");
+    throw new Error("Unknown bypass side");
   }
   if (!bypassSideIsLast(index, line)) {
-    throw new Error("ohituspuolen pitää olla viimeisenä");
+    throw new Error("Bypass side needs to come last");
   }
 };
 
@@ -342,7 +342,7 @@ const handleSlash = () => {
     return;
   }
   if (++slashes > 2) {
-    throw new Error("ylimääräisiä kauttaviivoja");
+    throw new Error("Extra slashes");
   }
   fillSukupuoliBucketsSlash();
 };
@@ -442,7 +442,7 @@ const specialTrimmer = (line) => {
 };
 
 const checkBracketsFirstPass = (line) => {
-  const bracketsErr = new Error("sulut väärin");
+  const bracketsErr = new Error("Incorrect brackets");
   let leftGuy = false;
   for (let i = 0; i < line.length; i++) {
     if (line[Number(i)] === "(") {
@@ -479,7 +479,7 @@ export const parse = (line) => {
   constructTaysiHavainto();
   const fullObservation = getObservation();
   if (emptyObservation(fullObservation)) {
-    throw new Error("Tyhjä havainto!");
+    throw new Error("Empty observation");
   }
   return fullObservation;
 };

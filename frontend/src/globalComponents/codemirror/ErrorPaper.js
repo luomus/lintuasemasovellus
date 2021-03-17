@@ -38,9 +38,25 @@ const ErrorPaper = ({ codeMirrorHasErrors }) => {
           <List>
             {
               getErrors().map((error, i) =>
-                <ListItem key={i}>
-                  {error[1]}
-                </ListItem>
+                error[1].substring(0, 5) === "Start" ?
+                  <ListItem key={i}>
+                    {t(error[1], { row: (error[0] + 1) })}
+                  </ListItem>
+                  : error[1].includes("character") ?
+                    <ListItem key={i}>
+                      {t("Check row", { row: (error[0] + 1) })} {t("Unknown character")} : {error[1].slice(-1)}
+                    </ListItem>
+                    : error[1].substring(0, 5) === "Row" ?
+                      <ListItem key={i}>
+                        {t("Row ")}{t(error[1], { row: (error[0] + 1) })}
+                      </ListItem>
+                      : error[1].substring(0, 5) === "Check" ?
+                        <ListItem key={i}>
+                          {t("Check row", { row: (error[0] + 1) })} {t(error[1].split(": ")[1])}
+                        </ListItem>
+                        : <ListItem key={i}>
+                          {t(error[1])}
+                        </ListItem>
               )
             }
           </List>
