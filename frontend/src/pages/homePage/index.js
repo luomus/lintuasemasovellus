@@ -11,6 +11,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
 import ObservatorySelector from "./observatorySelector";
 import { useSelector, useDispatch } from "react-redux";
@@ -278,7 +279,7 @@ export const HomePage = () => {
                 </Box>
               </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
                   <KeyboardDatePicker
                     className={classes.datePicker}
                     required

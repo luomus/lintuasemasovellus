@@ -38,15 +38,16 @@ def addObservationPeriod():
         end_time=datetime.strptime(req['endTime'], '%H:%M'),
         type_id=getTypeIdByName(req['observationType']),
         location_id=locId, observatoryday_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
-    addObservationperiod(obsp)
-    #Haetaan tietokannassa luotu id
-    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.observatoryday_id)
+    db.session().add(obsp)
+    db.session().commit()
+
+    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
     return jsonify({ 'id': obspId })
 
 @bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required
 def getObservationPeriods():
-    observationPeriods = Observationperiod.query.all()
+    observationPeriods = Observationperiod.query.filter_by(is_deleted=0).all()
     ret = []
     for obsPeriod in observationPeriods:
         ret.append(
@@ -75,6 +76,7 @@ def getDaysObservationPeriods(day_id):
 def observationperiod_delete():
     req = request.get_json()
     obsperiod_id = req['obsperiod_id']
-    Observationperiod.query.filter_by(id=obsperiod_id).delete()
+    deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
+    deleted_obsperiod.is_deleted = 1
     db.session.commit()
     return jsonify(req)

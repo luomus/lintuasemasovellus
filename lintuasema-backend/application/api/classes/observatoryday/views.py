@@ -54,7 +54,7 @@ def add_everything():
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
 
-        obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.location_id, obsp.observatoryday_id)
+        obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
 
         for observation in obsperiod['observations']:
             shorthand = Shorthand(shorthandblock=observation['shorthandblock'], observationperiod_id=obspId)
@@ -62,7 +62,7 @@ def add_everything():
 
 
             shorthand_id = Shorthand.query.filter_by(
-                shorthandblock=observation['shorthandblock'], observationperiod_id=obspId).first().id
+                shorthandblock=observation['shorthandblock'], observationperiod_id=obspId, is_deleted=0).first().id
 
 
             birdCount = observation['adultUnknownCount'] + observation['adultFemaleCount'] + observation['adultMaleCount'] + observation['juvenileUnknownCount'] + observation['juvenileFemaleCount'] + observation['juvenileMaleCount'] + observation['subadultUnknownCount'] + observation['subadultFemaleCount'] + observation['subadultMaleCount'] + observation['unknownUnknownCount'] + observation['unknownFemaleCount'] + observation['unknownMaleCount']
