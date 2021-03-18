@@ -8,11 +8,8 @@ from application.api import bp
 @bp.route('/api/addCatches', methods=['POST'])
 @login_required
 def addCatches():
-    print("OLEN PRINTTAAJA JA SANON:")
-    print(request)
-    
+  
     req = request.get_json()
-
     create_catches(req)
 
     return jsonify(req)
