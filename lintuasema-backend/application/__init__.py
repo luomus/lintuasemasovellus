@@ -39,6 +39,8 @@ from application.api.classes.account import views
 from application.api.classes.shorthand import views
 from application.api.classes.observation import views
 from application.api.classes.type import services
+from application.api.classes.catch import views, services
+
 
 from application.api.classes.account.models import Account
 from application.api.classes.observatory.models import Observatory

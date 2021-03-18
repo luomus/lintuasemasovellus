@@ -1,4 +1,4 @@
-import { postDay, sendEverything } from "../../services/dayService";
+import { postDay, sendEverything, postCatches } from "../../services/dayService";
 import { postObservationPeriod } from "../../services/observationStationService";
 import { postAddObservation, postAddShorthand } from "../../services/observationlistService";
 import { parse, resetAll } from "../../shorthand/shorthand";
@@ -142,6 +142,13 @@ export const sendDay = async (paramDay) => {
   day = { ...paramDay };
   const res = await postDay(day);
   day["id"] = res.data.id;
+};
+
+export const sendCatches = async (catches) => {
+  const catchesToSend = [day["id"], ...catches];
+  console.log("catchesToSend:", catchesToSend);
+  const res = await postCatches(catchesToSend);
+  console.log(res);
 };
 
 export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc) => {

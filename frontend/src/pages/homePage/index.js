@@ -23,6 +23,7 @@ import {
   sendDay,
   loopThroughObservationPeriods,
   loopThroughObservations,
+  sendCatches,
   //sendShorthand,
   //makeSendDataJson,
 } from "./parseShorthandField";
@@ -107,35 +108,27 @@ export const HomePage = () => {
 
   const userObservatory = useSelector(state => state.userObservatory);
   const dailyActions = useSelector(state => state.dailyActions);
-
-  const history = useHistory();
-
-  const dispatch = useDispatch();
-
+  const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
-  const catchRows = useSelector(state => state.catchRows);
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
-
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-
   const [disabled, setDisabled] = useState(false);
-
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
-
   const [latestDays, setLatestDays] = useState([]);
-
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
-
 
   useEffect(() => {
     getLatestDays(userObservatory)
@@ -210,6 +203,7 @@ export const HomePage = () => {
         observatory: userObservatory,
         selectedactions: readyDailyActions()
       });
+      await sendCatches(catchRows);
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows, userID);
       //await sendShorthand(makeSendDataJson(

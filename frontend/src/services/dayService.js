@@ -9,6 +9,10 @@ export const postDay = async (day) => {
   return await axios.post("/api/addDay", day);
 };
 
+export const postCatches = async (catches) => {
+  return await axios.post("/api/addCatches", catches);
+};
+
 export const editComment = async (dayId, comment) => {
   return await axios.post(`/api/editComment/${dayId}/${comment}`);
 };

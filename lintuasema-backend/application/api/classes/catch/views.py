@@ -1,17 +1,21 @@
-from flask import request
+from flask import request, jsonify, json
 from flask_login import login_required
-from application.api.classes.catch.services import create_catch, get_all
+from application.api.classes.catch.services import create_catches, get_all
 from application.api.classes.observatory.services import getObservatoryId
 from application.api.classes.observatoryday.services import getDayId
 from application.api import bp
 
-@bp.route('/api/addCatch', methods=['POST'])
+@bp.route('/api/addCatches', methods=['POST'])
 @login_required
-def addCatch():
+def addCatches():
+    print("OLEN PRINTTAAJA JA SANON:")
+    print(request)
+    
     req = request.get_json()
-    create_catch(req)
 
-    return req
+    create_catches(req)
+
+    return jsonify(req)
 
 @bp.route('/api/getAllCatchDetails/<day>/<observatory>', methods=['GET'])
 @login_required
