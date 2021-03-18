@@ -182,6 +182,11 @@ const DayDetails = () => {
     setActionsEditMode(!actionsEditMode);
   };
 
+
+  const handleCatchesEditCancel = () => {
+    setCatchesEditMode(!catchesEditMode);
+  };
+
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
     if ("liitteet" in actionsToSave) {
@@ -351,7 +356,8 @@ const DayDetails = () => {
           }
 
           {/* NET ACTIONS */}
-          {(selectedCatches && !catchesEditMode) ?
+          {(selectedCatches //&& !catchesEditMode
+          ) ?
             <Grid item xs={12} fullwidth="true">
               <FormGroup row className={classes.formGroup}>
                 {
@@ -386,7 +392,7 @@ const DayDetails = () => {
                 <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleCatchesEditSave()} color="primary">
                   {t("save")}
                 </Button>
-                <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
+                <Button id="catchessEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
                   {t("cancel")}
                 </Button>
               </div>
