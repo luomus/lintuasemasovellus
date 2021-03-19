@@ -8,7 +8,7 @@ from application.api import bp
 @bp.route('/api/addCatches', methods=['POST'])
 @login_required
 def addCatches():
-  
+
     req = request.get_json()
     create_catches(req)
 
@@ -18,7 +18,6 @@ def addCatches():
 @login_required
 def getAllCatchDetails(day, observatory):
     obsday_id = getDayId(day, getObservatoryId(observatory))
-    #HUOM! Vastausta ei ole vielä JSONifoitu
     res = get_all(obsday_id)
 
-    return res
+    return jsonify(res)

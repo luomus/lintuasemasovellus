@@ -3,7 +3,7 @@ from application.api.classes.catch.models import Catch
 from application.db import db
 
 def get_all(obsday_id):
-    catchdetails = Catch.query.filter_by(observatoryday_id = obsday_id).all()
+    catchdetails = Catch.query.filter_by(observatoryday_id = obsday_id, is_deleted = 0).all()
     print(catchdetails)
     return catchdetails
 
@@ -37,8 +37,8 @@ def create_catch(row, day_id):
      or old_catch.catchType != catch.catchType
      or old_catch.location != catch.location
      or old_catch.netCode != catch.netCode
-     or old_catch.amount != catch.amount
-     or old_catch.length != catch.length
+     or int(old_catch.amount) != int(catch.amount)
+     or int(old_catch.length) != int(catch.length)
      or old_catch.openedAt != catch.openedAt
      or old_catch.closedAt != catch.closedAt):
       old_catch.is_deleted = 1
