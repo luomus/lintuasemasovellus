@@ -12,13 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
-import CatchType from "../homePage/catchType";
+//import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, editActions, getSummary
+  editComment, editObservers, editActions, getSummary, getCatches
 } from "../../services";
 
 
@@ -67,6 +67,7 @@ const DayDetails = () => {
   const dispatch = useDispatch();
 
 
+
   const [obsPeriods, setObsperiods] = useState([]);
 
   const [summary, setSummary] = useState([]);
@@ -85,11 +86,14 @@ const DayDetails = () => {
 
   const [actionsEditMode, setActionsEditMode] = useState(false);
 
-  const [catchesEditMode, setCatchesEditMode] = useState(false);
+  //const [catchesEditMode, setCatchesEditMode] = useState(false);
 
   const dayList = useSelector(state => state.days);
 
   const userObservatory = useSelector(state => state.userObservatory);
+
+  const [catches, setCatches] = useState([]);
+
 
   const [observers, setObservers] = useState(
     dayList
@@ -111,23 +115,22 @@ const DayDetails = () => {
       .selectedactions)
     : {});
 
-  //selectedCatches on nyt vasta kopio selectedActionsista
-  const [selectedCatches, setSelectedCatches] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .selectedactions
-    ? JSON.parse(dayList
-      .find(d => d.day === day && d.observatory === stationName)
-      .selectedactions)
-    : {});
-
   const editedActions = useSelector(state => state.dailyActions);
 
-  const editedCatches = useSelector(state => state.catchRows);
+  //  const editedCatches = useSelector(state => state.catchRows);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .id
   );
+
+  useEffect(() => {
+    getCatches(dayId)
+      .then(res => setCatches(res))
+      .then(console.log("type", typeof (catches), catches));
+  }, [dayId]);
+
+  console.log("Rivit päiväsivulla", catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -135,7 +138,7 @@ const DayDetails = () => {
       setObservers(editedObservers);
       editObservers(dayId, editedObservers)
         .then(dayJson => setDayId(dayJson.data.id));
-      console.log("dayId: ", dayId);
+      //console.log("dayId: ", dayId);
     }
     setObserversForm(false);
   };
@@ -146,7 +149,7 @@ const DayDetails = () => {
       setComment(editedComment);
       editComment(dayId, editedComment)
         .then(dayJson => setDayId(dayJson.data.id));
-      console.log("dayId: ", dayId);
+      //console.log("dayId: ", dayId);
     }
     setCommentForm(false);
   };
@@ -174,7 +177,7 @@ const DayDetails = () => {
 
   const handleCatchesEditOpen = () => {
     // send info to reducer
-    setCatchesEditMode(!actionsEditMode);
+    //setCatchesEditMode(!actionsEditMode);
   };
 
   const handleActionsEditCancel = () => {
@@ -183,9 +186,9 @@ const DayDetails = () => {
   };
 
 
-  const handleCatchesEditCancel = () => {
-    setCatchesEditMode(!catchesEditMode);
-  };
+  // const handleCatchesEditCancel = () => {
+  //   setCatchesEditMode(!catchesEditMode);
+  // };
 
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
@@ -201,12 +204,12 @@ const DayDetails = () => {
     dispatch(setDefaultActions(userObservatory));
   };
 
-  const handleCatchesEditSave = () => {
-    let catchesToSave = editedCatches;
+  // const handleCatchesEditSave = () => {
+  //   let catchesToSave = editedCatches;
 
-    setSelectedCatches(catchesToSave);
-    setCatchesEditMode(!catchesEditMode);
-  };
+  //   setSelectedCatches(catchesToSave);
+  //   setCatchesEditMode(!catchesEditMode);
+  // };
 
   const refetchObservations = async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -328,7 +331,7 @@ const DayDetails = () => {
                   )
                 }
                 <FormControlLabel className={classes.FormControlLabel}
-                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
+                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet > + " " + t("pcs")}
                     disabled InputProps={{ disableUnderline: true }} />}
                   label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet")}</span>} labelPlacement="start" />
 
@@ -356,48 +359,29 @@ const DayDetails = () => {
           }
 
           {/* NET ACTIONS */}
-          {(selectedCatches //&& !catchesEditMode
-          ) ?
-            <Grid item xs={12} fullwidth="true">
-              <FormGroup row className={classes.formGroup}>
-                {
-                  Object.entries(selectedCatches).filter(([key]) => key !== "liitteet").map(([action, value], i) =>
-                    <FormControlLabel className={classes.formControlLabel}
-                      control={value
-                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
-                        : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
-                      }
-                      label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
-                    />
-                  )
+          <Grid item xs={12} fullwidth="true">
+            <Typography variant="h6" component="h2" >
+              Pyydykset
+            </Typography>
+            <FormGroup row className={classes.formGroup}>
+              <Typography variant="body">
+                {Object.keys(catches).map((c, i) =>
+                  <div key={i}>{Object.entries(catches[c])
+                    .filter(([key]) => key !== "key")
+                    .map(([k, v], y) =>
+                      <Typography variant="body" key={y}> {k}: {v}  </Typography>
+                    )}
+                  </div>)
                 }
-                <FormControlLabel className={classes.FormControlLabel}
-                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
-                    disabled InputProps={{ disableUnderline: true }} />}
-                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet")}</span>} labelPlacement="start" />
+              </Typography>
+              <Box>
+                <IconButton id="catchesButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
+                  <EditIcon fontSize="medium" />
+                </IconButton>
+              </Box>
+            </FormGroup>
+          </Grid>
 
-                <Box>
-                  <IconButton id="catchesButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
-                    <EditIcon fontSize="medium" />
-                  </IconButton>
-                </Box>
-              </FormGroup>
-            </Grid> :
-            <Grid item xs={12} fullwidth="true">
-              <div style={{
-                display: "flex",
-                alignItems: "left"
-              }}>
-                <CatchType />
-                <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleCatchesEditSave()} color="primary">
-                  {t("save")}
-                </Button>
-                <Button id="catchessEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
-                  {t("cancel")}
-                </Button>
-              </div>
-            </Grid>
-          }
 
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-start">

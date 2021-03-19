@@ -13,8 +13,9 @@ class Catch(Base):
     length = db.Column(db.Integer, nullable = False)
     openedAt = db.Column(db.String(144), nullable = False)
     closedAt = db.Column(db.String(144), nullable = False)
+    dayRowNumber = db.Column(db.Integer, nullable = False)
 
-    def __init__ (self, observatoryday_id, catchType, location, netCode, amount, length, openedAt, closedAt):
+    def __init__ (self, observatoryday_id, catchType, location, netCode, amount, length, openedAt, closedAt, dayRowNumber):
         self.observatoryday_id = observatoryday_id
         self.catchType = catchType
         self.location = location
@@ -23,3 +24,4 @@ class Catch(Base):
         self.length = length
         self.openedAt = openedAt
         self.closedAt = closedAt
+        self.dayRowNumber = dayRowNumber

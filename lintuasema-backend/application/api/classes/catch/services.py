@@ -1,17 +1,33 @@
-
 from application.api.classes.catch.models import Catch
 from application.db import db
 
 def get_all(obsday_id):
     catchdetails = Catch.query.filter_by(observatoryday_id = obsday_id, is_deleted = 0).all()
-    print(catchdetails)
-    return catchdetails
+    ret = []
+    for catch in catchdetails:
+        ret.append({ 'pyydys': catch.catchType, 
+                     'pyyntialue': catch.location,
+                     'verkkokoodit': catch.netCode,
+                     'lukumaara': catch.amount,
+                     'verkonPituus': catch.length,
+                     'alku': catch.openedAt,
+                     'loppu': catch.closedAt,
+                     'key': catch.dayRowNumber})
+    return ret
 
 def create_catches(catches):
   day_id = catches[0]
+  used_key_set = {}
+  
   for row in catches[1:]:
-    print(catches)
     create_catch(row,day_id)
+    used_key_set.add(int(row['key']))
+  
+  db_catches = Catch.query.filter_by(observatoryday_id = day_id, is_deleted = 0).all()
+  for catch in db_catches:
+    if int(catch.dayRowNumber) not in used_key_set:
+       catch.is_deleted = 1
+       db.session.commit()
 
 def set_catch_day_id(id_old, id_new):
     catches = Catch.query.filter_by(observatoryday_id = id_old, is_deleted = 0).all()
@@ -28,8 +44,9 @@ def create_catch(row, day_id):
       amount = row['lukumaara'],
       length = row['verkonPituus'],
       openedAt = row['alku'],
-      closedAt = row['loppu'])
-  old_catch = Catch.query.filter_by(observatoryday_id = day_id, catchType = catch.catchType, location = catch.location, netCode = catch.netCode, is_deleted = 0).first()
+      closedAt = row['loppu'],
+      dayRowNumber = row['key'])
+  old_catch = Catch.query.filter_by(observatoryday_id = day_id, dayRowNumber = catch.dayRowNumber, is_deleted = 0).first()
   if not old_catch:
     db.session().add(catch)
     db.session().commit()

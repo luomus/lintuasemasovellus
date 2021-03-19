@@ -14,10 +14,9 @@ def addCatches():
 
     return jsonify(req)
 
-@bp.route('/api/getAllCatchDetails/<day>/<observatory>', methods=['GET'])
+@bp.route('/api/getCatchDetails/<dayId>', methods=['GET'])
 @login_required
-def getAllCatchDetails(day, observatory):
-    obsday_id = getDayId(day, getObservatoryId(observatory))
-    res = get_all(obsday_id)
+def getCatchDetails(dayId):
 
+    res = get_all(dayId)
     return jsonify(res)
