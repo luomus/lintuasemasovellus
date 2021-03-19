@@ -21,31 +21,31 @@ describe("basic higher order validations", () => {
   test("no times throws err", () => {
     const text = "sommol 2 w";
     loopThroughCheckForErrors(text);
-    expect(getErrors()[0][1]).toContain("Havaintorivin 1 aloitusaika puuttuu!");
+    expect(getErrors()[0][1]).toContain("Start time missing");
   });
 
   test("odd amount of times throws err", () => {
     const text = "9.00\nsommol 2 w";
     loopThroughCheckForErrors(text);
-    expect(getErrors()[0][1]).toContain("Pariton määrä aikoja!");
+    expect(getErrors()[0][1]).toContain("Odd number of times");
   });
 
   test("times in wrong place throws err 1", () => {
     const text = "9.00\n10.00\nsommol 2 w";
     loopThroughCheckForErrors(text);
-    expect(getErrors()[0][1]).toContain("Havaintorivin 3 aloitusaika puuttuu!");
+    expect(getErrors()[0][1]).toContain("Start time missing");
   });
 
   test("times in wrong place throws err 2", () => {
     const text = "sommol 2 w\n9.00\n10.00";
     loopThroughCheckForErrors(text);
-    expect(getErrors()[0][1]).toContain("Havaintorivin 1 aloitusaika puuttuu!");
+    expect(getErrors()[0][1]).toContain("Start time missing");
   });
 
   test("times in wrong place throws err 3", () => {
     const text = "9.00\nsommol 2 w\n10.00\nanacre 1 w";
     loopThroughCheckForErrors(text);
-    expect(getErrors()[0][1]).toContain("Havaintorivin 4 aloitusaika puuttuu!");
+    expect(getErrors()[0][1]).toContain("Start time missing");
   });
 
   test("multiline shorthand lines 1", () => {
