@@ -5,6 +5,7 @@ const timeRegex = globals.timeRegex;
 
 let errors = [];
 
+
 const isTime = (row) => {
   return String(row).trim().match(timeRegex);
 };
@@ -14,7 +15,7 @@ const checkWholeInputLine = (rowNumber, row) => {
   try {
     parse(row);
   } catch (error) {
-    errors.push([rowNumber, `Tarkista rivi ${rowNumber + 1}, ${row}: ${error.message}`]);
+    errors.push([rowNumber, `Check row ${rowNumber + 1}: ${error.message}`]);
   }
   resetAll();
 };
@@ -38,12 +39,12 @@ const sanitize = (text) => {
     } else if (times & 1) {
       ret.push(line);
     } else {
-      errors.push([counter, `Havaintorivin ${counter + 1} aloitusaika puuttuu!`]);
+      errors.push([counter, "Start time missing!"]);
     }
     counter++;
   }
   if (times & 1) {
-    errors.push([counter - 1, "Pariton määrä aikoja!"]);
+    errors.push([counter - 1, "Odd number of times!"]);
   }
   return ret;
 };
