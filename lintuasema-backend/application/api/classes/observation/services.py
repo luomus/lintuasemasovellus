@@ -3,69 +3,27 @@ from application.db import db, prefix
 from flask import jsonify
 from sqlalchemy.sql import text
 
-def parseCountString(obs):
+def getObservationByPeriod(observationperiod_id):
+    observations = Observation.query.filter_by(observationperiod_id = observationperiod_id)
+    ret = []
+    for observation in observations:
+        countString = parseCountString(observation)
+        ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide})
     
-    countString = ""
-    if obs.adultUnknownCount != 0:
-        countString = countString + str(obs.adultUnknownCount) + " tunt. sukupuolta (aikuinen), "
-    if obs.adultFemaleCount != 0:
-        countString = countString + str(obs.adultFemaleCount) + " naarasta (aikuinen), "
-    if obs.adultMaleCount != 0:
-        countString = countString + str(obs.adultMaleCount) + " koirasta (aikuinen), "
-    if obs.juvenileUnknownCount != 0:
-        countString = countString + str(obs.juvenileUnknownCount) + " tunt. sukupuolta (poikanen), "
-    if obs.juvenileFemaleCount != 0:
-        countString = countString + str(obs.juvenileFemaleCount) + " naarasta (poikanen), "
-    if obs.juvenileMaleCount != 0:
-        countString = countString + str(obs.juvenileMaleCount) + " koirasta (poikanen), "
-    if obs.subadultUnknownCount != 0:
-        countString = countString + str(obs.subadultUnknownCount) + " tunt. sukupuolta (esiaikuinen), "
-    if obs.subadultFemaleCount != 0:
-        countString = countString + str(obs.subadultFemaleCount) + " naarasta (esiaikuinen), "
-    if obs.subadultMaleCount != 0:
-        countString = countString + str(obs.subadultMaleCount) + " koirasta (esiaikuinen), "
-    if obs.unknownUnknownCount != 0:
-        countString = countString + str(obs.unknownUnknownCount) + " tunt. sukupuolta (tunt. ikä), "
-    if obs.unknownFemaleCount != 0:
-        countString = countString + str(obs.unknownFemaleCount) + " naarasta (tunt. ikä), "
-    if obs.unknownMaleCount != 0:
-        countString = countString + str(obs.unknownMaleCount) + " koirasta (tunt. ikä), "
-    countString = countString[0:(len(countString) - 2)]
+    return ret
 
-    return countString
-    
-def addObservationToDb(req):
-    birdCount = req['adultUnknownCount'] + req['adultFemaleCount'] + req['adultMaleCount'] + req['juvenileUnknownCount'] + req['juvenileFemaleCount'] + req['juvenileMaleCount'] + req['subadultUnknownCount'] + req['subadultFemaleCount'] + req['subadultMaleCount'] + req['unknownUnknownCount'] + req['unknownFemaleCount'] + req['unknownMaleCount']
+def getAllObservations():
+    observations = Observation.query.all()
+    ret = []
+    for obs in observations:
+        ret.append({ 'species': obs.species, 'adultUnknownCount': obs.adultUnknownCount, 'adultFemaleCount': obs.adultFemaleCount, 'adultMaleCount': obs.adultMaleCount,
+            'juvenileUnknownCount': obs.juvenileUnknownCount, 'juvenileFemaleCount': obs.juvenileFemaleCount, 'juvenileMaleCount': obs.juvenileMaleCount,
+            'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
+            'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 'total_count' :obs.total_count,
+            'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes, 
+            'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id, 'account_id': obs.account_id})
 
-    observation = Observation(species=req['species'],
-        adultUnknownCount=req['adultUnknownCount'],
-        adultFemaleCount=req['adultFemaleCount'],
-        adultMaleCount=req['adultMaleCount'],
-        juvenileUnknownCount=req['juvenileUnknownCount'],
-        juvenileFemaleCount=req['juvenileFemaleCount'],
-        juvenileMaleCount=req['juvenileMaleCount'],
-        subadultUnknownCount=req['subadultUnknownCount'],
-        subadultFemaleCount=req['subadultFemaleCount'],
-        subadultMaleCount=req['subadultMaleCount'],
-        unknownUnknownCount=req['unknownUnknownCount'],
-        unknownFemaleCount=req['unknownFemaleCount'],
-        unknownMaleCount=req['unknownMaleCount'],
-        total_count = birdCount,
-        direction=req['direction'],
-        bypassSide=req['bypassSide'],
-        notes=req['notes'],
-        observationperiod_id=req['observationperiod_id'],
-        shorthand_id=req['shorthand_id'],
-        account_id=req['account_id'])
-    db.session().add(observation)
-    
-    db.session().commit()
-
-    return jsonify(req)
-
-def deleteObservation(shorthand_id):
-    observation = Observation.query.filter_by(shorthand_id).first()
-    observation.is_deleted = 1
+    return ret
 
 
 def getDaySummary(day_id):
@@ -108,4 +66,85 @@ def getDaySummary(day_id):
             "localGåu":row.local_gou
             })
   
-    return jsonify(response) 
+    return jsonify(response)
+
+def parseCountString(obs):
+    countString = ""
+    
+    if obs.adultUnknownCount != 0:
+        countString = countString + str(obs.adultUnknownCount) + " tunt. sukupuolta (aikuinen), "
+    if obs.adultFemaleCount != 0:
+        countString = countString + str(obs.adultFemaleCount) + " naarasta (aikuinen), "
+    if obs.adultMaleCount != 0:
+        countString = countString + str(obs.adultMaleCount) + " koirasta (aikuinen), "
+    if obs.juvenileUnknownCount != 0:
+        countString = countString + str(obs.juvenileUnknownCount) + " tunt. sukupuolta (poikanen), "
+    if obs.juvenileFemaleCount != 0:
+        countString = countString + str(obs.juvenileFemaleCount) + " naarasta (poikanen), "
+    if obs.juvenileMaleCount != 0:
+        countString = countString + str(obs.juvenileMaleCount) + " koirasta (poikanen), "
+    if obs.subadultUnknownCount != 0:
+        countString = countString + str(obs.subadultUnknownCount) + " tunt. sukupuolta (esiaikuinen), "
+    if obs.subadultFemaleCount != 0:
+        countString = countString + str(obs.subadultFemaleCount) + " naarasta (esiaikuinen), "
+    if obs.subadultMaleCount != 0:
+        countString = countString + str(obs.subadultMaleCount) + " koirasta (esiaikuinen), "
+    if obs.unknownUnknownCount != 0:
+        countString = countString + str(obs.unknownUnknownCount) + " tunt. sukupuolta (tunt. ikä), "
+    if obs.unknownFemaleCount != 0:
+        countString = countString + str(obs.unknownFemaleCount) + " naarasta (tunt. ikä), "
+    if obs.unknownMaleCount != 0:
+        countString = countString + str(obs.unknownMaleCount) + " koirasta (tunt. ikä), "
+    countString = countString[0:(len(countString) - 2)]
+
+    return countString
+    
+def addObservationToDb(req):
+    birdCount = (req['adultUnknownCount'] 
+               + req['adultFemaleCount'] 
+               + req['adultMaleCount'] 
+               + req['juvenileUnknownCount'] 
+               + req['juvenileFemaleCount'] 
+               + req['juvenileMaleCount'] 
+               + req['subadultUnknownCount'] 
+               + req['subadultFemaleCount'] 
+               + req['subadultMaleCount'] 
+               + req['unknownUnknownCount'] 
+               + req['unknownFemaleCount'] 
+               + req['unknownMaleCount'])
+
+    observation = Observation(species=req['species'],
+        adultUnknownCount=req['adultUnknownCount'],
+        adultFemaleCount=req['adultFemaleCount'],
+        adultMaleCount=req['adultMaleCount'],
+        juvenileUnknownCount=req['juvenileUnknownCount'],
+        juvenileFemaleCount=req['juvenileFemaleCount'],
+        juvenileMaleCount=req['juvenileMaleCount'],
+        subadultUnknownCount=req['subadultUnknownCount'],
+        subadultFemaleCount=req['subadultFemaleCount'],
+        subadultMaleCount=req['subadultMaleCount'],
+        unknownUnknownCount=req['unknownUnknownCount'],
+        unknownFemaleCount=req['unknownFemaleCount'],
+        unknownMaleCount=req['unknownMaleCount'],
+        total_count = birdCount,
+        direction=req['direction'],
+        bypassSide=req['bypassSide'],
+        notes=req['notes'],
+        observationperiod_id=req['observationperiod_id'],
+        shorthand_id=req['shorthand_id'],
+        account_id=req['account_id'])
+    
+    db.session().add(observation)
+    db.session().commit()
+
+    return jsonify(req)
+
+def deleteObservation(shorthand_id):
+    observation = Observation.query.filter_by(shorthand_id).first()
+    observation.is_deleted = 1
+
+def deleteObservations(shorthand_id):
+    observations_to_delete = Observation.query.filter_by(shorthand_id=shorthand_id).all()
+    for observation in observations_to_delete:
+        observation.is_deleted = 1
+    db.session.commit()

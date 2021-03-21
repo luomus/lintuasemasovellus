@@ -4,9 +4,8 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq
 from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
-from application.api.classes.observationperiod.services import setObsPerDayId
 
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.type.models import Type
@@ -25,8 +24,7 @@ from sqlalchemy.sql import text
 
 from datetime import datetime
 
-
-
+#Tämä jää näin, sillä vaatii lisätutkimuksia.
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
@@ -97,32 +95,17 @@ def add_everything():
 @bp.route('/api/addDay', methods=['POST'])
 @login_required
 def add_day():
-
     req = request.get_json()
-    observatory_id = getObservatoryId(req['observatory'])
-    
-    day=datetime.strptime(req['day'], '%d.%m.%Y')
+  
+    ret = addDayFromReq(req)
 
-    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
-
-    addDay(new_obsday)
-    addedId = getDayId(new_obsday.day, new_obsday.observatory_id)
-    return jsonify({ 'id': addedId })
+    return jsonify(ret)
 
 
 @bp.route('/api/listDays', methods=['GET'])
 @login_required
 def list_days():
-
-    dayObjects = getDays()
-
-    ret = []
-    for obsday in dayObjects:
-        dayDatetime = obsday.day
-        if not isinstance(dayDatetime, datetime): 
-            dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
-        dayString = dayDatetime.strftime('%d.%m.%Y')
-        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedactions': obsday.selectedactions, 'observatory': getObservatoryName(obsday.observatory_id) })
+    ret = listDays()
 
     return jsonify(ret)
 

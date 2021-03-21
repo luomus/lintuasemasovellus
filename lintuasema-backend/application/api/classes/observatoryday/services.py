@@ -1,13 +1,23 @@
-
 from application.api.classes.observatoryday.models import Observatoryday
 from application.db import db, prefix
 from sqlalchemy.sql import text
-from application.api.classes.observationperiod.services import setObsPerDayId
 from application.api.classes.catch.services import set_catch_day_id
-
+from application.api.classes.observationperiod.services import set_new_day_id
 from flask import jsonify
 
 from datetime import datetime
+
+def addDayFromReq(req):
+    observatory_id = getObservatoryId(req['observatory'])
+    day=datetime.strptime(req['day'], '%d.%m.%Y')
+    
+    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
+
+    addDay(new_obsday)
+    
+    addedId = getDayId(new_obsday.day, new_obsday.observatory_id)
+    
+    return { 'id': addedId }
 
 def addDay(obsday):
     d = Observatoryday.query.filter_by(day = obsday.day, observatory_id = obsday.observatory_id, is_deleted = 0).first()
@@ -19,9 +29,22 @@ def addDay(obsday):
         d.is_deleted = 1
         db.session().add(obsday)
         db.session.commit()
-        setObsPerDayId(d.id, obsday.id)
+        set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
-       
+
+def listDays():
+    dayObjects = getDays()
+
+    ret = []
+    for obsday in dayObjects:
+        dayDatetime = obsday.day
+        if not isinstance(dayDatetime, datetime): 
+            dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
+        dayString = dayDatetime.strftime('%d.%m.%Y')
+        ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedactions': obsday.selectedactions, 'observatory': getObservatoryName(obsday.observatory_id) })
+    
+    return ret
+
 def getDays():
     dayObjects = Observatoryday.query.filter_by(is_deleted=0).all()
     return dayObjects
