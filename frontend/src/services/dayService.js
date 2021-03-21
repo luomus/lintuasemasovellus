@@ -26,11 +26,8 @@ export const editActions = async (dayId, actions) => {
 };
 
 export const getCatches = async (dayId) => {
-  console.log("Getin DayID: ", dayId);
   const catches=await axios.get(`/api/getCatchDetails/${dayId}`);
-  console.log("Get result", catches.data);
   return catches.data;
-  //return await axios.get(`/api/getCatchDetails/${dayId}`);
 };
 
 

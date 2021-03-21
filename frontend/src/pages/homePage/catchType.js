@@ -200,16 +200,6 @@ const CatchType = ({ cr }) => {
             }}
           />} />
 
-        <FormControl className={classes.formControlLabel}>
-          <TextField
-            className={classes.netCodes}
-            id="netCodes"
-            name="verkkokoodit"
-            label={t("netCodes")}
-            onChange={(event) => handleChange(event.target)}
-            value={cr.verkkokoodit}
-          />
-        </FormControl>
         <FormControlLabel className={classes.formControlLabel2}
           label={t("catchCount")} labelPlacement="start"
           control={
@@ -224,6 +214,17 @@ const CatchType = ({ cr }) => {
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
             />
           } />
+
+        <FormControl className={classes.formControlLabel}>
+          <TextField
+            className={classes.netCodes}
+            id="netCodes"
+            name="verkkokoodit"
+            label={t("netCodes")}
+            onChange={(event) => handleChange(event.target)}
+            value={cr.verkkokoodit}
+          />
+        </FormControl>
 
         { (cr.pyydys.length === 0 || (cr.pyydys.length > 1  && catchesWithoutLength.indexOf(cr.pyydys) > -1 )) //is a catch without length
           ? <div></div>

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
   Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField,
-  FormGroup, FormControlLabel, withStyles
+  FormGroup, FormControlLabel, withStyles,
+  Table, TableBody, TableCell, TableHead, TableRow
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -58,7 +59,10 @@ const DayDetails = () => {
         color: "rgba(0, 0, 0, 1)",
         fontSize: "50px"
       }
-    }
+    },
+    catchTable: {
+      maxWidth: "65%",
+    },
   })
   );
 
@@ -360,25 +364,71 @@ const DayDetails = () => {
           {/* NET ACTIONS */}
           <Grid item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
-              Pyydykset
+              Pyydykset:
             </Typography>
-            <FormGroup row className={classes.formGroup}>
-              <Typography variant="body">
-                {Object.keys(catches).map((c, i) =>
-                  <div key={i}>{Object.entries(catches[c])
-                    .filter(([key]) => key !== "key")
-                    .map(([k, v], y) =>
-                      <Typography variant="body" key={y}> {k}: {v}  </Typography>
-                    )}
-                  </div>)
+            {/*}
+            {Object.keys(catches).map((c, i) =>
+              <Box key={i} display="flex"  >
+                <Typography variant="body1" >
+                  <b>Pyydys:</b> {catches[c].pyydys}
+                </Typography>
+                <Typography variant="body1" style={{ marginLeft: "25px", }}>
+                  <b>Pyyntialue:</b> {catches[c].pyyntialue}
+                </Typography>
+                <Typography variant="body1"style={{ marginLeft: "25px", }}>
+                  <b>Auki:</b> {catches[c].alku} - {catches[c].loppu}
+                </Typography>
+                <Typography variant="body1" style={{ marginLeft: "25px", }}>
+                  <b>Lkm:</b> {catches[c].lukumaara}
+                </Typography>
+                <Typography variant="body1" style={{ marginLeft: "25px", }}>
+                  <b>Verkkokoodit:</b> {catches[c].verkkokoodit}
+                </Typography>
+                {(catches[c].verkonPituus > 0) ?
+                  <Typography variant="body1" style={{ marginLeft: "25px", }}>
+                    <b>Pituus:</b> {catches[c].verkonPituus} m
+                  </Typography>
+                  : <br />
                 }
-              </Typography>
-              <Box>
-                <IconButton id="catchesButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
-                  <EditIcon fontSize="medium" />
+                <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
+                  <EditIcon fontSize="small" />
                 </IconButton>
               </Box>
-            </FormGroup>
+            )
+            }
+          */}
+            <Table className={classes.catchTable} size="normal" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Pyydys</TableCell>
+                  <TableCell align="left">Pyyntialue</TableCell>
+                  <TableCell align="left">Auki</TableCell>
+                  <TableCell align="left">Lkm</TableCell>
+                  <TableCell align="left">Verkkokoodit</TableCell>
+                  <TableCell align="left">Pituus (m)</TableCell>
+                  <TableCell align="left"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.keys(catches).map((c) =>
+                  <TableRow key={catches[c].key}>
+                    <TableCell component="th" scope="row">{catches[c].pyydys}</TableCell>
+                    <TableCell align="left">{catches[c].pyyntialue}</TableCell>
+                    <TableCell align="left">{catches[c].alku} - {catches[c].loppu}</TableCell>
+                    <TableCell align="left">{catches[c].lukumaara}</TableCell>
+                    <TableCell align="left">{catches[c].verkkokoodit.length > 0 ? catches[c].verkkokoodit : "-"}</TableCell>
+                    <TableCell align="left">{catches[c].verkonPituus > 0 ? catches[c].verkonPituus : "-"}</TableCell>
+                    <TableCell align="left">
+                      <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+
+
           </Grid>
 
 
