@@ -7,7 +7,7 @@ const catchRowsReducer = (state = initialState, action) => {
       return [
         ...state,
         {
-          key: state[state.length-1].key +1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
+          key: state.length > 0 ? state[state.length-1].key +1: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
           verkonPituus: 0, alku: "00:00", loppu: "00:00"
         }
       ];
