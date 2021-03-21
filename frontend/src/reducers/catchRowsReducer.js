@@ -7,12 +7,11 @@ const catchRowsReducer = (state = initialState, action) => {
       return [
         ...state,
         {
-          key: state[state.length-1].key +1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
+          key: state.length > 0 ? state[state.length-1].key +1: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
           verkonPituus: 0, alku: "00:00", loppu: "00:00"
         }
       ];
     case "DELETE_ROW":
-      //console.log("delete");
       return state.filter(row => row.key !== action.data.key);
     case "TOGGLE_ROW_DETAILS":
       //console.log("You fools! This is not even my final form!");
@@ -25,6 +24,8 @@ const catchRowsReducer = (state = initialState, action) => {
             [action.data.changedDetail]: action.data.newValue
           }
       );
+    case "SET_ROWS":
+      return action.data;
     default:
       return state;
   }
@@ -53,6 +54,22 @@ export const toggleCatchDetails = (key, changedDetail, newValue) => {
       newValue: newValue
     }
   };
+};
+
+
+export const setCatches = (rowData) => {
+  if (rowData.length === 0) {
+    console.log("heo");
+    return {
+      type: "SET_ROWS",
+      data: initialState
+    };
+  } else {
+    return {
+      type: "SET_ROWS",
+      data: rowData
+    };
+  }
 };
 
 export default catchRowsReducer;
