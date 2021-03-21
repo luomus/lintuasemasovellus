@@ -19,6 +19,8 @@ from application.api.classes.type.services import getTypeIdByName
 from application.api.classes.observation.models import Observation
 from application.api.classes.shorthand.models import Shorthand
 
+from application.api.classes.catch.services import set_catch_day_id
+
 from application.api import bp
 from application.db import db
 from sqlalchemy.sql import text
@@ -136,6 +138,7 @@ def edit_comment(obsday_id, comment):
 
     addDay(day_new)
     setObsPerDayId(day_old.id, day_new.id)
+    set_catch_day_id(day_old.id, day_new.id)
 
     db.session().commit()
 
@@ -149,6 +152,7 @@ def edit_observers(obsday_id, observers):
     day_old.is_deleted = 1
     addDay(day_new)
     setObsPerDayId(day_old.id, day_new.id)
+    set_catch_day_id(day_old.id, day_new.id)
 
     db.session().commit()
 
@@ -162,6 +166,7 @@ def edit_actions(obsday_id, actions):
     day_old.is_deleted = 1
     addDay(day_new)
     setObsPerDayId(day_old.id, day_new.id)
+    set_catch_day_id(day_old.id, day_new.id)
 
     db.session().commit()
 

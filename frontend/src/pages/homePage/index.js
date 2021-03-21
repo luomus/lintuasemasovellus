@@ -27,15 +27,16 @@ import {
   //sendShorthand,
   //makeSendDataJson,
 } from "./parseShorthandField";
-import { searchDayInfo, getLatestDays } from "../../services";
+import { searchDayInfo, getLatestDays, getCatches } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 //import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
-import { addOneCatchRow, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
+import { addOneCatchRow, deleteOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
+
 
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
@@ -151,6 +152,16 @@ export const HomePage = () => {
     } else {
       dispatch(setDefaultActions(userObservatory));
     }
+  };
+
+
+  const setCatchRows = (dayId) => {
+    console.log("DATE", dayId);
+    getCatches(dayId)
+      .then(res => dispatch(setCatches(res)));
+
+
+
   };
 
   const readyDailyActions = () => {
@@ -290,6 +301,7 @@ export const HomePage = () => {
                         setObservers(dayJson[0]["observers"]);
                         setComment(dayJson[0]["comment"]);
                         setActions(dayJson[0]["selectedactions"]);
+                        setCatchRows(dayJson[0]["id"]);
                       });
                     }}
                     KeyboardButtonProps={{

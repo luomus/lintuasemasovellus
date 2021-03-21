@@ -12,25 +12,30 @@ import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/catchRowsR
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 100,
+    minWidth: 95,
   },
   formControlLabel: {
     padding: "0px 30px 0px 0px",
     margin: theme.spacing(1),
   },
   formControlLabel2: {
-    padding: "0px 30px 0px 0px",
+    padding: "0px 25px 0px 0px",
     margin: theme.spacing(1),
     marginTop: theme.spacing(3),
   },
   netCodes: {
     width: 110,
   },
-  textField: {
+  numberField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 75,
+    width: 75
   },
+  netCodesField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 175
+  }
 }
 ));
 
@@ -201,10 +206,10 @@ const CatchType = ({ cr }) => {
           />} />
 
         <FormControlLabel className={classes.formControlLabel2}
-          label={t("catchCount")} labelPlacement="start"
+          label="" labelPlacement="start"
           control={
             <TextField
-              className={classes.textField}
+              className={classes.numberField}
               id="selectCatchCount"
               name="lukumaara"
               required
@@ -217,7 +222,7 @@ const CatchType = ({ cr }) => {
 
         <FormControl className={classes.formControlLabel}>
           <TextField
-            className={classes.netCodes}
+            className={classes.netCodesField}
             id="netCodes"
             name="verkkokoodit"
             label={t("netCodes")}
@@ -232,7 +237,7 @@ const CatchType = ({ cr }) => {
           <FormControlLabel className={classes.formControlLabel2}
             label={t("netLength")} labelPlacement="start"
             control={<TextField
-              className={classes.textField}
+              className={classes.numberField}
               id="selectNetLength"
               required
               name="verkonPituus"

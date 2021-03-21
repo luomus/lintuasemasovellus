@@ -12,7 +12,6 @@ const catchRowsReducer = (state = initialState, action) => {
         }
       ];
     case "DELETE_ROW":
-      //console.log("delete");
       return state.filter(row => row.key !== action.data.key);
     case "TOGGLE_ROW_DETAILS":
       //console.log("You fools! This is not even my final form!");
@@ -25,6 +24,8 @@ const catchRowsReducer = (state = initialState, action) => {
             [action.data.changedDetail]: action.data.newValue
           }
       );
+    case "SET_ROWS":
+      return action.data;
     default:
       return state;
   }
@@ -53,6 +54,22 @@ export const toggleCatchDetails = (key, changedDetail, newValue) => {
       newValue: newValue
     }
   };
+};
+
+
+export const setCatches = (rowData) => {
+  if (rowData.length === 0) {
+    console.log("heo");
+    return {
+      type: "SET_ROWS",
+      data: initialState
+    };
+  } else {
+    return {
+      type: "SET_ROWS",
+      data: rowData
+    };
+  }
 };
 
 export default catchRowsReducer;
