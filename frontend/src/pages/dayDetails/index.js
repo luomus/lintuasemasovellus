@@ -126,8 +126,7 @@ const DayDetails = () => {
 
   useEffect(() => {
     getCatches(dayId)
-      .then(res => setCatches(res))
-      .then(console.log("type", typeof (catches), catches));
+      .then(res => setCatches(res));
   }, [dayId]);
 
   console.log("Rivit päiväsivulla", catches);

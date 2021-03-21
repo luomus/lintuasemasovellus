@@ -22,7 +22,6 @@ export const editObservers = async (dayId, observers) => {
 };
 
 export const editActions = async (dayId, actions) => {
-  console.log("services dayid:", dayId, actions);
   return await axios.post(`/api/editActions/${dayId}/${actions}`);
 };
 
