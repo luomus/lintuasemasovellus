@@ -121,6 +121,7 @@ const resources = {
 
       "checkShorthand": "Tarkista pikakirjoitus",
 
+      "Observation activity": "Havaintoaktiivisuus",
       "vakiohavainto": "Vakiohavainnointi",
       "gåu": "Gåulla käynti",
       "rengastusvakio": "Rengastusvakio",
@@ -132,6 +133,12 @@ const resources = {
       "no negative values": "Negatiivinen arvo!",
       "Please recheck that you mean to declare that many attachments": "Olet ilmoittamassa poikkeuksellisen ison määrän liitteitä. Tarkistathan, että syöttämäsi summa on oikein.",
       "no empty values": "Arvo puuttuu!",
+
+      "Catches":"Pyydykset",
+      "was open": "Auki",
+      "amount":"Lkm",
+      "length": "Pituus (m)",
+      "No catches declared":"Ei ilmoitettuja pyydyksiä.",
       "Please recheck that you mean to declare that many catches": "Pyydysten määrä on huomattavan suuri, Tarkistathan, että se on oikein.",
       "Net length is usually between 9 and 12 meters. Please check that your value is right.": "Verkon pituus on yleensä 9-12 metriä. Tarkistathan, että syötit tarkoittamasi pituuden.",
 

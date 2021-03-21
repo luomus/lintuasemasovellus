@@ -90,7 +90,7 @@ const DayDetails = () => {
 
   const [actionsEditMode, setActionsEditMode] = useState(false);
 
-  //const [catchesEditMode, setCatchesEditMode] = useState(false);
+  const [catchesEditMode, setCatchesEditMode] = useState(false);
 
   const dayList = useSelector(state => state.days);
 
@@ -180,7 +180,7 @@ const DayDetails = () => {
 
   const handleCatchesEditOpen = () => {
     // send info to reducer
-    //setCatchesEditMode(!actionsEditMode);
+    setCatchesEditMode(!actionsEditMode);
   };
 
   const handleActionsEditCancel = () => {
@@ -321,6 +321,9 @@ const DayDetails = () => {
 
           {(selectedActions && !actionsEditMode) ?
             <Grid item xs={12} fullwidth="true">
+              <Typography variant="h6" component="h2" >
+                {t("Observation activity")}:
+              </Typography>
               <FormGroup row className={classes.formGroup}>
                 {
                   Object.entries(selectedActions).filter(([key]) => key !== "liitteet").map(([action, value], i) =>
@@ -364,71 +367,50 @@ const DayDetails = () => {
           {/* NET ACTIONS */}
           <Grid item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
-              Pyydykset:
+              {t("Catches")}:
             </Typography>
-            {/*}
-            {Object.keys(catches).map((c, i) =>
-              <Box key={i} display="flex"  >
-                <Typography variant="body1" >
-                  <b>Pyydys:</b> {catches[c].pyydys}
-                </Typography>
-                <Typography variant="body1" style={{ marginLeft: "25px", }}>
-                  <b>Pyyntialue:</b> {catches[c].pyyntialue}
-                </Typography>
-                <Typography variant="body1"style={{ marginLeft: "25px", }}>
-                  <b>Auki:</b> {catches[c].alku} - {catches[c].loppu}
-                </Typography>
-                <Typography variant="body1" style={{ marginLeft: "25px", }}>
-                  <b>Lkm:</b> {catches[c].lukumaara}
-                </Typography>
-                <Typography variant="body1" style={{ marginLeft: "25px", }}>
-                  <b>Verkkokoodit:</b> {catches[c].verkkokoodit}
-                </Typography>
-                {(catches[c].verkonPituus > 0) ?
-                  <Typography variant="body1" style={{ marginLeft: "25px", }}>
-                    <b>Pituus:</b> {catches[c].verkonPituus} m
-                  </Typography>
-                  : <br />
-                }
-                <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Box>
-            )
-            }
-          */}
-            <Table className={classes.catchTable} size="normal" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Pyydys</TableCell>
-                  <TableCell align="left">Pyyntialue</TableCell>
-                  <TableCell align="left">Auki</TableCell>
-                  <TableCell align="left">Lkm</TableCell>
-                  <TableCell align="left">Verkkokoodit</TableCell>
-                  <TableCell align="left">Pituus (m)</TableCell>
-                  <TableCell align="left"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.keys(catches).map((c) =>
-                  <TableRow key={catches[c].key}>
-                    <TableCell component="th" scope="row">{catches[c].pyydys}</TableCell>
-                    <TableCell align="left">{catches[c].pyyntialue}</TableCell>
-                    <TableCell align="left">{catches[c].alku} - {catches[c].loppu}</TableCell>
-                    <TableCell align="left">{catches[c].lukumaara}</TableCell>
-                    <TableCell align="left">{catches[c].verkkokoodit.length > 0 ? catches[c].verkkokoodit : "-"}</TableCell>
-                    <TableCell align="left">{catches[c].verkonPituus > 0 ? catches[c].verkonPituus : "-"}</TableCell>
-                    <TableCell align="left">
-                      <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
+            {(catches.length > 0 && !catchesEditMode)
+              ?
+              <Table className={classes.catchTable} size="normal" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t("catchType")}</TableCell>
+                    <TableCell align="left">{t("catchArea")}</TableCell>
+                    <TableCell align="left">{t("was open")}</TableCell>
+                    <TableCell align="left">{t("amount")}</TableCell>
+                    <TableCell align="left">{t("netCodes")}</TableCell>
+                    <TableCell align="left">{t("length")}</TableCell>
+                    <TableCell align="left"></TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-
-
+                </TableHead>
+                <TableBody>
+                  {Object.keys(catches).map((c) =>
+                    <TableRow key={catches[c].key}>
+                      <TableCell component="th" scope="row">{catches[c].pyydys}</TableCell>
+                      <TableCell align="left">{catches[c].pyyntialue}</TableCell>
+                      <TableCell align="left">{catches[c].alku} - {catches[c].loppu}</TableCell>
+                      <TableCell align="left">{catches[c].lukumaara}</TableCell>
+                      <TableCell align="left">{catches[c].verkkokoodit.length > 0 ? catches[c].verkkokoodit : "-"}</TableCell>
+                      <TableCell align="left">{catches[c].verkonPituus > 0 ? catches[c].verkonPituus : "-"}</TableCell>
+                      <TableCell align="left">
+                        <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+              : (catches.length > 0 && catchesEditMode)
+                ?
+                <Typography variant="body1" >
+                  Edit mode goes here.
+                </Typography>
+                :
+                <Typography variant="body1" >
+                  {t("No catches declared")}
+                </Typography>
+            }
           </Grid>
 
 
