@@ -1,8 +1,9 @@
 from application.api.classes.observatoryday.models import Observatoryday
+from application.api.classes.observationperiod.models import Observationperiod
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
-from application.api.classes.observationperiod.services import set_new_day_id
+from application.api.classes.observatory.services import getObservatoryId
 from flask import jsonify
 
 from datetime import datetime
@@ -31,6 +32,13 @@ def addDay(obsday):
         db.session.commit()
         set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
+
+
+def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
+    obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
+    for obs in obsp:
+      obs.observatoryday_id = observatoryday_id_new
+    db.session().commit()
 
 def listDays():
     dayObjects = getDays()

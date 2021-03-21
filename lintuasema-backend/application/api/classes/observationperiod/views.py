@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask_login import login_required
 
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, getObservationperiods, addObservationperiod
+from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, getObservationperiodList, addObservationperiod
 
 from application.api import bp
 from application.db import db
@@ -16,14 +16,14 @@ from datetime import datetime
 def addObservationPeriod():
     req = request.get_json()
     
-    ret = addObservationperiod(req)
+    ret = addObservationperiod(req['day_id'], req['location'], req['observationType'], req['startTime'], req['endTime'])
 
     return jsonify(ret)
 
 @bp.route('/api/getObservationPeriods', methods=["GET"])
 @login_required
 def getObservationPeriods():
-    ret = getObservationperiods()
+    ret = getObservationperiodList()
 
     return jsonify(ret)
 

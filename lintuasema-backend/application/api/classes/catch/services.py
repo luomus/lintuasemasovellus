@@ -17,7 +17,7 @@ def get_all(obsday_id):
 
 def create_catches(catches):
   day_id = catches[0]
-  used_key_set = set() #{}
+  used_key_set = set()
   
   for row in catches[1:]:
     create_catch(row,day_id)

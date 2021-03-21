@@ -7,30 +7,24 @@ from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId, getLocationName
 from application.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
+from application.api.classes.observatoryday.services import getDay
 
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from datetime import datetime
 
-def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
-    obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
-    for obs in obsp:
-      obs.observatoryday_id = observatoryday_id_new
-    db.session().commit()
+def addObservationperiod(day_id, location, observationType, startTime, endTime):
 
-from application.api.classes.observatoryday.services import getDay
-
-def addObservationperiod(req):
-    obsday = getDay(req['day_id'])
+    obsday = getDay(day_id)
     obsId = obsday.observatory_id
-    locId = getLocationId(req['location'], obsId)
-    createType(req['observationType'], obsId)
+    locId = getLocationId(location, obsId)
+    createType(observationType, obsId)
 
     obsp = Observationperiod(
-        start_time=datetime.strptime(req['startTime'], '%H:%M'),
-        end_time=datetime.strptime(req['endTime'], '%H:%M'),
-        type_id=getTypeIdByName(req['observationType']),
-        location_id=locId, observatoryday_id=req['day_id'])#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
+        start_time=datetime.strptime(startTime, '%H:%M'),
+        end_time=datetime.strptime(endTime, '%H:%M'),
+        type_id=getTypeIdByName(observationType),
+        location_id=locId, observatoryday_id=day_id)#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
     db.session().commit()
     
@@ -112,7 +106,7 @@ def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
     obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, type_id=type_id, location_id=location_id, observatoryday_id=observatoryday_id, is_deleted=0).first()
     return obsp.id
 
-def getObservationperiods():
+def getObservationperiodList():
     observationPeriods = Observationperiod.query.filter_by(is_deleted=0).all()
     
     ret = []
@@ -129,6 +123,9 @@ def getObservationperiods():
         })
 
     return ret
+
+def getObservationperiods():
+    return Observationperiod.query.filter_by(is_deleted=0).all()
 
 def deleteObservationperiod(obsperiod_id):
     deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
