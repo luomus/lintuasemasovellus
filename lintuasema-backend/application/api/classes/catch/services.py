@@ -20,8 +20,9 @@ def create_catches(catches):
   used_key_set = set() #{}
   
   for row in catches[1:]:
-    create_catch(row,day_id)
-    used_key_set.add(int(row['key']))
+    if(row['pyydys'] and row['pyyntialue'] and row['lukumaara'] and row['alku'] and row['loppu'] and row['key']):
+      create_catch(row,day_id)
+      used_key_set.add(int(row['key']))
   
   db_catches = Catch.query.filter_by(observatoryday_id = day_id, is_deleted = 0).all()
   for catch in db_catches:
