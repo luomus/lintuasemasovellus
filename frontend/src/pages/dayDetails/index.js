@@ -390,7 +390,7 @@ const DayDetails = () => {
                       <TableCell align="left">{catches[c].pyyntialue}</TableCell>
                       <TableCell align="left">{catches[c].alku} - {catches[c].loppu}</TableCell>
                       <TableCell align="left">{catches[c].lukumaara}</TableCell>
-                      <TableCell align="left">{catches[c].verkkokoodit.length > 0 ? catches[c].verkkokoodit : "-"}</TableCell>
+                      <TableCell align="left">{catches[c].verkkokoodit ? catches[c].verkkokoodit : "-"}</TableCell>
                       <TableCell align="left">{catches[c].verkonPituus > 0 ? catches[c].verkonPituus : "-"}</TableCell>
                       <TableCell align="left">
                         <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
