@@ -20,17 +20,17 @@
         {
           "type": "Tickbox",
           "actions": [
-            "vakiohavainto",
+            "standardObs",
             "gåu",
-            "rengastusvakio",
-            "pöllövakio",
-            "nisäkkäät"
+            "standardRing",
+            "owlStandard",
+            "mammals"
           ]
         },
         {
           "type": "Numeric",
           "actions": [
-            "liitteet"
+            "attachments"
           ]
         }
       ]

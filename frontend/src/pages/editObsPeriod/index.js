@@ -192,7 +192,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
       <Fade in={open}>
         <div className={classes.paper}>
           <h2> {t("editShorthand")} </h2>
-          <h3> {t("Observation period")} {date} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
+          <h3> {t("obsPeriod")} {date} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
           <Grid
             container
             height="100%"
@@ -289,7 +289,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{t("Confirm deletion")}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{t("confirmDeletion")}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 {t("removingCannotBeCancelled")}

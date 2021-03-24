@@ -165,9 +165,9 @@ const DayDetails = () => {
 
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
-    if ("liitteet" in actionsToSave) {
-      if (actionsToSave.liitteet === "" || actionsToSave.liitteet < 0 ) {
-        actionsToSave = { ...actionsToSave, "liitteet":0 };
+    if ("attachments" in actionsToSave) {
+      if (actionsToSave.attachments === "" || actionsToSave.attachments < 0 ) {
+        actionsToSave = { ...actionsToSave, "attachments":0 };
       }
     }
     editActions(dayId, JSON.stringify(actionsToSave))
@@ -286,7 +286,7 @@ const DayDetails = () => {
             <Grid item xs={12} fullwidth="true">
               <FormGroup row className={classes.formGroup}>
                 {
-                  Object.entries(selectedActions).filter(([key]) => key!=="liitteet").map(([action, value], i) =>
+                  Object.entries(selectedActions).filter(([key]) => key!=="attachments").map(([action, value], i) =>
                     <FormControlLabel className={classes.formControlLabel}
                       control={ value
                         ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
@@ -297,9 +297,9 @@ const DayDetails = () => {
                   )
                 }
                 <FormControlLabel className={classes.FormControlLabel}
-                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.liitteet + " " + t("pcs")}
+                  control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.attachments + " " + t("pcs")}
                     disabled InputProps={{ disableUnderline: true }} />}
-                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("liitteet") }</span>} labelPlacement="start" />
+                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments") }</span>} labelPlacement="start" />
 
                 <Box>
                   <IconButton id="actionsButton" size="small" style={{ left: "100px",alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
