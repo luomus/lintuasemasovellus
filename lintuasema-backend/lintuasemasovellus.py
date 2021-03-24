@@ -10,7 +10,7 @@ from application import init_app, redirect
 
 # ASETUKSET
 # db_type: Jos käytetään Oraclea, anna "oracle"; muuten käytetään oletuksena SQLitea
-db_type = "oracle"
+db_type = "asdf"
 
 app = init_app(db_type)
 
