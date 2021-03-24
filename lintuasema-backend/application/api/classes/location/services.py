@@ -1,4 +1,3 @@
-
 from application.api.classes.location.models import Location
 from application.db import db
 from application.api.classes.observatory.models import Observatory
