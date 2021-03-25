@@ -53,18 +53,18 @@ const HankoActions = () => {
   };
 
   const handleClick = (target) => {
-    if (target.name === "liitteet" && target.value < 0) {
-      setError(t("no negative values"));
-    } else if (target.name === "liitteet" && !target.value) {
+    if (target.name === "attachments" && target.value < 0) {
+      setError(t("valueIsNegative"));
+    } else if (target.name === "attachments" && !target.value) {
       setError(t("no empty values"));
-    } else if (target.name === "liitteet" && target.value > 4 && !confirmationAsked) {
+    } else if (target.name === "attachments" && target.value > 4 && !confirmationAsked) {
       setshowModal(true);
       setError("");
     } else {
       setError("");
       //setConfirmantionAsked(false);
     }
-    dispatch(toggleDailyActions(target.name, target.name === "liitteet" ? target.value : target.checked));
+    dispatch(toggleDailyActions(target.name, target.name === "attachments" ? target.value : target.checked));
     //console.log("clicks", clicks);
   };
 
@@ -72,32 +72,32 @@ const HankoActions = () => {
     <Grid item xs={12} >
       <FormGroup row className={classes.formGroup} >
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.vakiohavainto} onChange={(e) => handleClick(e.target)} name="vakiohavainto" color="primary" />}
-          label={t("vakiohavainto")} labelPlacement="end" />
+          control={<Checkbox checked={clicks.standardObs} onChange={(e) => handleClick(e.target)} name="standardObs" color="primary" />}
+          label={t("standardObs")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.gåu} onChange={(e) => handleClick(e.target)} name="gåu" color="primary" />}
           label={t("gåu")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.rengastusvakio} onChange={(e) => handleClick(e.target)} name="rengastusvakio" color="primary" />}
-          label={t("rengastusvakio")} labelPlacement="end" />
+          control={<Checkbox checked={clicks.standardRing} onChange={(e) => handleClick(e.target)} name="standardRing" color="primary" />}
+          label={t("standardRing")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.pöllövakio} onChange={(e) => handleClick(e.target)} name="pöllövakio" color="primary" />}
-          label={t("pöllövakio")} labelPlacement="end" />
+          control={<Checkbox checked={clicks.owlStandard} onChange={(e) => handleClick(e.target)} name="owlStandard" color="primary" />}
+          label={t("owlStandard")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.nisäkkäät} onChange={(e) => handleClick(e.target)} name="nisäkkäät" color="primary" />}
-          label={t("nisäkkäät")} labelPlacement="end" />
+          control={<Checkbox checked={clicks.mammals} onChange={(e) => handleClick(e.target)} name="mammals" color="primary" />}
+          label={t("mammals")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<TextField name="liitteet" id="liitteet" type="number" className={classes.attachmentField} value={clicks.liitteet}
+          control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={clicks.attachments}
             onChange={(e) => handleClick(e.target)}
             error={error !== ""} helperText={error ? t(error) : ""}
             InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
           </TextField>}
-          label={t("liitteet")} labelPlacement="start" />
+          label={t("attachments")} labelPlacement="start" />
       </FormGroup>
       <Dialog open={showModal} onClose={handleModalClose} disableBackdropClick={true}>
         <DialogContent>
           <DialogContentText id="confirmation dialog">
-            {t("Please recheck that you mean to declare that many attachments")}
+            {t("recheckLargeNumberOfAttachments")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

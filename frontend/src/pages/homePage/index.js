@@ -165,9 +165,9 @@ export const HomePage = () => {
   };
 
   const readyDailyActions = () => {
-    if ("liitteet" in dailyActions) {
-      if (dailyActions.liitteet === "" || dailyActions.liitteet < 0) {
-        return JSON.stringify({ ...dailyActions, "liitteet": 0 });
+    if ("attachments" in dailyActions) {
+      if (dailyActions.attachments === "" || dailyActions.attachments <0 ) {
+        return JSON.stringify({ ...dailyActions, "attachments":0 });
       }
     }
     return JSON.stringify(dailyActions);

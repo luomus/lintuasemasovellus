@@ -101,9 +101,9 @@ const softReset = () => {
 
 const constructOsahavainto = () => {
   if (ika)
-    throw new Error("Unknown age");
+    throw new Error("unknownAge");
   if (!possibleDirections.has(ilmansuunta.toUpperCase()))
-    throw new Error("Unknown direction");
+    throw new Error("unknownDirection");
   switch (sukupuoliRound) {
     case 0:
       male[String(ageBucket)] = yksilomaara;
@@ -115,7 +115,7 @@ const constructOsahavainto = () => {
       unknown[String(ageBucket)] = yksilomaara;
       break;
     default:
-      throw new Error("Unknown sex");
+      throw new Error("unknownSex");
   }
   const osahavainto = {
     adultUnknownCount: unknown["ad"],
@@ -144,7 +144,7 @@ const ikaConstructed = () => {
 
 export const constructTaysiHavainto = (startKello, endKello) => {
   if (!birds.has(lajinimi.toUpperCase())) {
-    throw new Error("Unknown species!");
+    throw new Error("unknownSpeciesError");
   }
   constructOsahavainto();
   taysiHavainto = {
@@ -161,7 +161,7 @@ const lajinimiNotSet = () => {
 
 const setAgeBucket = () => {
   if (!ageCanBeSet) {
-    throw new Error("One observation has multiple ages");
+    throw new Error("observationHasMultipleAges");
   }
   ageCanBeSet = false;
   if (ika === "'") {
@@ -187,7 +187,7 @@ const acceptableAroundIlmansuuntaHeuristic = (index, line) => {
   }
   const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
   if (nextNonSpaceyChar === ",") return true;
-  if (isNumeric(nextNonSpaceyChar)) throw new Error("Number after direction");
+  if (isNumeric(nextNonSpaceyChar)) throw new Error("numberAfterDirection");
   return true;
 };
 
@@ -212,7 +212,7 @@ const fillSukupuoliBucketsSlash = () => {
       sukupuoliRound = 1;
       break;
     default:
-      throw new Error("Unknown sex");
+      throw new Error("unknownSex");
   }
   yksilomaara = "";
   ageBucket = "unk";
@@ -230,7 +230,7 @@ const fillSukupuoliBucketsNotSlash = () => {
       unknown[String(ageBucket)] = yksilomaara;
       break;
     default:
-      throw new Error("Unknown sex");
+      throw new Error("unknownSex");
   }
   yksilomaara = "";
   ageBucket = "unk";
@@ -273,7 +273,7 @@ const handleDefaultAlpha = (char, line, index) => {
   } else if (acceptableIkaChar.has(char)) {
     ika += char;
   } else {
-    throw new Error(`Unknown character: ${char}`);
+    throw new Error(`unknownCharacter:${char}`);
   }
 };
 
@@ -283,56 +283,56 @@ const handleSpaceySymbol = () => {
 
 const handleNumeric = (char) => {
   if (lajinimiNotSet()) {
-    throw new Error("Missing space after species name");
+    throw new Error("missingSpaceAfterSpecies");
   }
   ageCanBeSet = true;
   yksilomaara += char;
 };
 
 const handleTimeSymbol = () => {
-  throw new Error("Extra period or colon");
+  throw new Error("extraPeriodOrColon");
 };
 
 const handleBracketOpen = () => {
   if (lajinimiNotSet()) {
-    throw new Error("Missing space after species name");
+    throw new Error("missingSpaceAfterSpecies");
   }
   openLisatietoBucket();
 };
 
 const handleBracketClose = () => {
   if (lajinimiNotSet()) {
-    throw new Error("Missing space after species name");
+    throw new Error("missingSpaceAfterSpecies");
   }
   closeLisatietoBucket();
 };
 
 const handleComma = (line, index) => {
   if (lajinimiNotSet()) {
-    throw new Error("Missing space after species name");
+    throw new Error("missingSpaceAfterSpecies");
   }
   if (isTooManyCommasHeuristic(index, line)) {
-    throw new Error("Extra commas");
+    throw new Error("extraCommas");
   }
   constructOsahavainto();
 };
 
 const handleHipsu = (char) => {
   if (lajinimiNotSet()) {
-    throw new Error("Missing space after species name");
+    throw new Error("missingSpaceAfterSpecies");
   }
   ika += char;
 };
 
 const handlePlusMinus = (char, line, index) => {
   if (lajinimiNotSet()) {
-    throw new Error("Missing space after species name");
+    throw new Error("missingSpaceAfterSpecies");
   }
   if (!acceptableBypassSides.has(ohituspuoli += char)) {
-    throw new Error("Unknown bypass side");
+    throw new Error("unknownBypassSide");
   }
   if (!bypassSideIsLast(index, line)) {
-    throw new Error("Bypass side needs to come last");
+    throw new Error("bypassSideNotLast");
   }
 };
 
@@ -342,7 +342,7 @@ const handleSlash = () => {
     return;
   }
   if (++slashes > 2) {
-    throw new Error("Extra slashes");
+    throw new Error("extraSlashes");
   }
   fillSukupuoliBucketsSlash();
 };
@@ -442,7 +442,7 @@ const specialTrimmer = (line) => {
 };
 
 const checkBracketsFirstPass = (line) => {
-  const bracketsErr = new Error("Incorrect brackets");
+  const bracketsErr = new Error("incorrectBrackets");
   let leftGuy = false;
   for (let i = 0; i < line.length; i++) {
     if (line[Number(i)] === "(") {
@@ -479,7 +479,7 @@ export const parse = (line) => {
   constructTaysiHavainto();
   const fullObservation = getObservation();
   if (emptyObservation(fullObservation)) {
-    throw new Error("Empty observation");
+    throw new Error("emptyObservation");
   }
   return fullObservation;
 };

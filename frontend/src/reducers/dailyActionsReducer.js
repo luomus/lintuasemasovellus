@@ -1,4 +1,4 @@
-const hankoInitialState= { vakiohavainto:false, gåu:false, rengastusvakio:false, pöllövakio:false,nisäkkäät:false,liitteet: 0 };
+const hankoInitialState= { standardObs:false, gåu:false, standardRing:false, owlStandard:false,mammals:false,attachments: 0 };
 //used as default state to avoid issues with controlled vs uncontrolled state
 
 
@@ -45,7 +45,7 @@ export const setDefaultActions = (observatory) => {
   } else {
     return {
       type:"SET_ACTIONS",
-      data: { dailyActions: { "liitteet": 0 } }
+      data: { dailyActions: { "attachments": 0 } }
     };
   }
 };

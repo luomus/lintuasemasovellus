@@ -129,7 +129,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Number after direction");
+    }).toThrow("numberAfterDirection");
   });
 
   test("Eightball", () => {
@@ -170,7 +170,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown bypass side");
+    }).toThrow("unknownBypassSide");
   });
 
   test("Twelve", () => {
@@ -178,7 +178,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Bypass side needs to come last");
+    }).toThrow("bypassSideNotLast");
   });
 
   test("Thirteen", () => {
@@ -221,7 +221,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Extra commas");
+    }).toThrow("extraCommas");
   });
 
   test("Fifteen", () => {
@@ -229,7 +229,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Incorrect brackets");
+    }).toThrow("incorrectBrackets");
   });
 
   test("Sixteen", () => {
@@ -237,7 +237,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Incorrect brackets");
+    }).toThrow("incorrectBrackets");
   });
 
   test("Seventeen", () => {
@@ -245,7 +245,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Incorrect brackets");
+    }).toThrow("incorrectBrackets");
   });
 
   test("End of the world", () => {
@@ -253,7 +253,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Incorrect brackets");
+    }).toThrow("incorrectBrackets");
   });
 
   test("three bypass sides in a row", () => {
@@ -302,7 +302,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown age");
+    }).toThrow("unknownAge");
 
   });
 
@@ -311,7 +311,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown age");
+    }).toThrow("unknownAge");
   });
 
   test("wrong age 3", () => {
@@ -319,7 +319,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown age");
+    }).toThrow("unknownAge");
   });
 
   test("some wrong ages", () => {
@@ -327,7 +327,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown age");
+    }).toThrow("unknownAge");
   });
 
   test("wrong direction 1", () => {
@@ -335,7 +335,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown direction");
+    }).toThrow("unknownDirection");
   });
 
   test("wrong direction 2", () => {
@@ -343,7 +343,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown direction");
+    }).toThrow("unknownDirection");
   });
 
   test("not wrong direction", () => {
@@ -351,7 +351,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(() => {
       parse(lineOfText);
-    }).not.toThrow("Unknown direction");
+    }).not.toThrow("unknownDirection");
   });
 
   test("age is separated from direction", () => {
@@ -396,7 +396,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 1su";
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown age");
+    }).toThrow("unknownAge");
 
   });
 
@@ -465,14 +465,14 @@ describe("Bugfixes", () => {
     const lineOfText = "anacre 1ad+++++";
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown bypass side");
+    }).toThrow("unknownBypassSide");
   });
 
   test("too long bypassSide 2", () => {
     const lineOfText = "anacre 1ad-----";
     expect(() => {
       parse(lineOfText);
-    }).toThrow("Unknown bypass side");
+    }).toThrow("unknownBypassSide");
   });
 
   test("AYTMAR is found (one with a slash)", () => {
@@ -486,28 +486,28 @@ describe("Bugfixes", () => {
     const line = "sommol 1juv/3ad/12'/    ++---    ";
     expect(() => {
       parse(line);
-    }).toThrow("Extra slashes");
+    }).toThrow("extraSlashes");
   });
 
   test("too many slashes 2", () => {
     const line = "sommol 1juv/3ad/12'////    ++---    ";
     expect(() => {
       parse(line);
-    }).toThrow("Extra slashes");
+    }).toThrow("extraSlashes");
   });
 
   test("too many slashes 3", () => {
     const line = "sommol 1juv/3ad/12', 2/3/1/, 2/3/1    ++---    ";
     expect(() => {
       parse(line);
-    }).toThrow("Extra slashes");
+    }).toThrow("extraSlashes");
   });
 
   test("too many slashes 4", () => {
     const line = "sommol //1/";
     expect(() => {
       parse(line);
-    }).toThrow("Extra slashes");
+    }).toThrow("extraSlashes");
   });
 
   test("empty in-between slashes 1", () => {
@@ -553,35 +553,35 @@ describe("Bugfixes", () => {
     const line = "sommol 2 ++-";
     expect(() => {
       parse(line);
-    }).toThrow("Unknown bypass side");
+    }).toThrow("unknownBypassSide");
   });
 
   test("illegal bypassSides 2", () => {
     const line = "sommol 2 +++---";
     expect(() => {
       parse(line);
-    }).toThrow("Unknown bypass side");
+    }).toThrow("unknownBypassSide");
   });
 
   test("multiple ages in observation 1", () => {
     const line = "Grugru 2\"adsubad'juv";
     expect(() => {
       parse(line);
-    }).toThrow("One observation has multiple ages");
+    }).toThrow("observationHasMultipleAges");
   });
 
   test("multiple ages in observation 2", () => {
     const line = "parmaj 1\"''''''";
     expect(() => {
       parse(line);
-    }).toThrow("One observation has multiple ages");
+    }).toThrow("observationHasMultipleAges");
   });
 
   test("empty observation", () => {
     const line = "sommol";
     expect(() => {
       parse(line);
-    }).toThrow("Empty observation");
+    }).toThrow("emptyObservation");
   });
 
 

@@ -192,7 +192,7 @@ const ObsPeriodTable = (props) => {
               <StyledTableCell align="right">{t("duration")}</StyledTableCell>
               <StyledTableCell align="right">{t("type")}</StyledTableCell>
               <StyledTableCell align="right">{t("speciesTotal")}</StyledTableCell>
-              <StyledTableCell align="right">{t("Modify")}</StyledTableCell>
+              <StyledTableCell align="right">{t("modify")}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
