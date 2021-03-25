@@ -62,3 +62,8 @@ def create_catch(row, day_id):
       old_catch.is_deleted = 1
       db.session().add(catch)
       db.session.commit()
+
+
+
+  
+

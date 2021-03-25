@@ -13,13 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
-//import CatchType from "../homePage/catchType";
+import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
+import { setCatches } from "../../reducers/catchRowsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, editActions, getSummary, getCatches
+  editComment, editObservers, editActions, getSummary, getCatches, editCatchRow
 } from "../../services";
 
 
@@ -96,8 +97,7 @@ const DayDetails = () => {
 
   const userObservatory = useSelector(state => state.userObservatory);
 
-  const [catches, setCatches] = useState([]);
-
+  const [catches, setDayCatches] = useState([]);
 
   const [observers, setObservers] = useState(
     dayList
@@ -121,7 +121,7 @@ const DayDetails = () => {
 
   const editedActions = useSelector(state => state.dailyActions);
 
-  //  const editedCatches = useSelector(state => state.catchRows);
+  const editedCatches = useSelector(state => state.catchRows);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -130,7 +130,7 @@ const DayDetails = () => {
 
   useEffect(() => {
     getCatches(dayId)
-      .then(res => setCatches(res));
+      .then(res => setDayCatches(res));
   }, [dayId]);
 
   console.log("Rivit päiväsivulla", catches);
@@ -172,15 +172,9 @@ const DayDetails = () => {
     setModalOpen(true);
   };
 
-
   const handleActionsEditOpen = () => {
     dispatch(setDailyActions(selectedActions));
     setActionsEditMode(!actionsEditMode);
-  };
-
-  const handleCatchesEditOpen = () => {
-    // send info to reducer
-    setCatchesEditMode(!actionsEditMode);
   };
 
   const handleActionsEditCancel = () => {
@@ -188,22 +182,11 @@ const DayDetails = () => {
     setActionsEditMode(!actionsEditMode);
   };
 
-
-  // const handleCatchesEditCancel = () => {
-  //   setCatchesEditMode(!catchesEditMode);
-  // };
-
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
-<<<<<<< HEAD
-    if ("liitteet" in actionsToSave) {
-      if (actionsToSave.liitteet === "" || actionsToSave.liitteet < 0) {
-        actionsToSave = { ...actionsToSave, "liitteet": 0 };
-=======
     if ("attachments" in actionsToSave) {
       if (actionsToSave.attachments === "" || actionsToSave.attachments < 0 ) {
         actionsToSave = { ...actionsToSave, "attachments":0 };
->>>>>>> master
       }
     }
     editActions(dayId, JSON.stringify(actionsToSave))
@@ -213,12 +196,25 @@ const DayDetails = () => {
     dispatch(setDefaultActions(userObservatory));
   };
 
-  // const handleCatchesEditSave = () => {
-  //   let catchesToSave = editedCatches;
+  const handleCatchesEditOpen = (key) => {
+    // send info to reducer
+    const row=catches.filter(c => c.key === key);
+    //setRowToEdit(row[0]);
+    dispatch(setCatches(row));
+    setCatchesEditMode(!actionsEditMode);
+  };
 
-  //   setSelectedCatches(catchesToSave);
-  //   setCatchesEditMode(!catchesEditMode);
-  // };
+  const handleCatchesEditCancel = () => {
+    //setRowToEdit({});
+    dispatch(setCatches({}));
+    setCatchesEditMode(!catchesEditMode);
+  };
+
+  const handleCatchesEditSave = () => {
+    editCatchRow(dayId, editedCatches);
+    dispatch(setCatches({}));
+    setCatchesEditMode(!catchesEditMode);
+  };
 
   const refetchObservations = async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -391,15 +387,15 @@ const DayDetails = () => {
                 </TableHead>
                 <TableBody>
                   {Object.keys(catches).map((c) =>
-                    <TableRow key={catches[c].key}>
-                      <TableCell component="th" scope="row">{catches[c].pyydys}</TableCell>
-                      <TableCell align="left">{catches[c].pyyntialue}</TableCell>
-                      <TableCell align="left">{catches[c].alku} - {catches[c].loppu}</TableCell>
-                      <TableCell align="left">{catches[c].lukumaara}</TableCell>
-                      <TableCell align="left">{catches[c].verkkokoodit ? catches[c].verkkokoodit : "-"}</TableCell>
-                      <TableCell align="left">{catches[c].verkonPituus > 0 ? catches[c].verkonPituus : "-"}</TableCell>
+                    <TableRow key={catches[String(c)].key}>
+                      <TableCell component="th" scope="row">{catches[String(c)].pyydys}</TableCell>
+                      <TableCell align="left">{catches[String(c)].pyyntialue}</TableCell>
+                      <TableCell align="left">{catches[String(c)].alku} - {catches[String(c)].loppu}</TableCell>
+                      <TableCell align="left">{catches[String(c)].lukumaara}</TableCell>
+                      <TableCell align="left">{catches[String(c)].verkkokoodit ? catches[String(c)].verkkokoodit : "-"}</TableCell>
+                      <TableCell align="left">{catches[String(c)].verkonPituus > 0 ? catches[String(c)].verkonPituus : "-"}</TableCell>
                       <TableCell align="left">
-                        <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen()} variant="contained" color="primary"  >
+                        <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen(catches[String(c)].key)} variant="contained" color="primary"  >
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </TableCell>
@@ -409,9 +405,15 @@ const DayDetails = () => {
               </Table>
               : (catches.length > 0 && catchesEditMode)
                 ?
-                <Typography variant="body1" >
-                  Edit mode goes here.
-                </Typography>
+                <div>
+                  <CatchType cr={editedCatches[0]} />
+                  <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
+                    {t("cancel")}
+                  </Button>
+                  <Button id="catchesEditSave" className={classes.button} variant="contained" onClick={() => handleCatchesEditSave()} color="primary">
+                    {t("save")}
+                  </Button>
+                </div>
                 :
                 <Typography variant="body1" >
                   {t("No catches declared")}

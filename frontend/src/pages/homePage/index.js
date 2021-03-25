@@ -159,9 +159,6 @@ export const HomePage = () => {
     console.log("DATE", dayId);
     getCatches(dayId)
       .then(res => dispatch(setCatches(res)));
-
-
-
   };
 
   const readyDailyActions = () => {

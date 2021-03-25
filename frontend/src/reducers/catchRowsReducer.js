@@ -14,8 +14,8 @@ const catchRowsReducer = (state = initialState, action) => {
     case "DELETE_ROW":
       return state.filter(row => row.key !== action.data.key);
     case "TOGGLE_ROW_DETAILS":
-      //console.log("You fools! This is not even my final form!");
-      //console.log(state);
+      console.log("You fools! This is not even my final form!");
+      console.log(state);
       return state.map(row =>
         row.key !== action.data.key
           ? row
@@ -59,7 +59,6 @@ export const toggleCatchDetails = (key, changedDetail, newValue) => {
 
 export const setCatches = (rowData) => {
   if (rowData.length === 0) {
-    console.log("heo");
     return {
       type: "SET_ROWS",
       data: initialState
