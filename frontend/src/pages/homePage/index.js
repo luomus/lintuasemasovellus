@@ -3,7 +3,7 @@ import React, {
   useState
 } from "react";
 import {
-  Paper, Grid, Box,
+  Paper, Grid,
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles,
@@ -13,7 +13,6 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns";
 import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
-import ObservatorySelector from "./observatorySelector";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, Link, useHistory } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
@@ -269,16 +268,11 @@ export const HomePage = () => {
             <Grid container
               alignItems="flex-start"
               spacing={1}>
-              <Grid item xs={6} >
+              <Grid item xs={12} >
                 <Typography variant="h5" component="h2" >
                   {t("addObservations")}
                 </Typography>
                 <br />
-              </Grid>
-              <Grid item xs={6}>
-                <Box display="flex" justifyContent="flex-end">
-                  <ObservatorySelector />
-                </Box>
               </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>

@@ -6,6 +6,7 @@ const resources = {
       "footer": "Lintuasemasovellus Haukka | Luonnontieteellinen keskusmuseo LUOMUS",
       "login": "Kirjaudu sisään",
       "logout": "Kirjaudu ulos",
+      "User": "Käyttäjä",
       "welcome": "Tervetuloa",
       "frontpage": "Etusivu",
       "addDayPage": "Lisää päivä",
@@ -76,6 +77,7 @@ const resources = {
 
       "addObservations": "Lisää havaintoja",
 
+      "Change Observatory": "Vaihda lintuasemaa",
       "chooseObservatory": "Valitse lintuasema",
       "currentObservatory": "Valittu asema: ",
 
