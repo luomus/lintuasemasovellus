@@ -99,7 +99,7 @@ const DayDetails = () => {
 
   const [catches, setDayCatches] = useState([]);
 
-  const [catchRowToEdit, setCatchRowToEdit] =useState({});
+  const [catchRowToEdit, setCatchRowToEdit] = useState({});
 
   const [observers, setObservers] = useState(
     dayList
@@ -135,7 +135,7 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  console.log("Rivit päiväsivulla", catches);
+  //console.log("Rivit päiväsivulla", catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -208,7 +208,7 @@ const DayDetails = () => {
 
   const handleCatchesEditCancel = () => {
     setCatchRowToEdit({});
-    dispatch(setCatches({}));
+    dispatch(setCatches([]));
     setCatchesEditMode(!catchesEditMode);
   };
 
@@ -217,8 +217,12 @@ const DayDetails = () => {
       deleteCatchRow(dayId, catchRowToEdit);
     } else {
       editCatchRow(dayId, editedCatches);
+      setDayCatches(catches.map(row => row.key === editedCatches[0].key
+        ? editedCatches[0]
+        : row));
     }
-    dispatch(setCatches({}));
+    dispatch(setCatches([]));
+    setCatchRowToEdit({});
     setCatchesEditMode(!catchesEditMode);
   };
 
@@ -327,6 +331,7 @@ const DayDetails = () => {
             </div>
           </Grid>
 
+          {/* DAILY ACTIONS */}
           {(selectedActions && !actionsEditMode) ?
             <Grid item xs={12} fullwidth="true">
               <Typography variant="h6" component="h2" >
@@ -378,7 +383,7 @@ const DayDetails = () => {
               {t("Catches")}:
             </Typography>
             {(catches.length > 0 && !catchesEditMode)
-              ?
+              ? /* LIST CATCHES */
               <Table className={classes.catchTable} size="normal" aria-label="a dense table">
                 <TableHead>
                   <TableRow>
@@ -409,13 +414,13 @@ const DayDetails = () => {
                   )}
                 </TableBody>
               </Table>
-              : (catches.length > 0 && catchesEditMode)
+              : (catches.length > 0 && catchesEditMode) /* EDIT ONE CATCH ROW */
                 ?
                 <div>
                   {(editedCatches.length >0 )
-                    ?
+                    ? /* SHOW CATCH ROW AS EDITABLE ELEMENT */
                     <CatchType cr={editedCatches[0]} />
-                    :
+                    : /* IF ROW-TO-EDIT IS DELETED, SHOW CONFIRMATION */
                     <Typography variant="body1" color="secondary" style= {{ padding:5, }}> {t("rowRemoved")}</Typography>
                   }
                   <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
@@ -425,7 +430,7 @@ const DayDetails = () => {
                     {t("save")}
                   </Button>
                 </div>
-                :
+                : /* NO CATCHES FOR THAT DAY*/
                 <Typography variant="body1"  >
                   {t("No catches declared")}
                 </Typography>

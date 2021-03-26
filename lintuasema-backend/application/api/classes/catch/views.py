@@ -28,14 +28,12 @@ def editCatches(dayId):
     req = request.get_json()
     if len(req) > 0:
         create_catch(req[0], dayId)
-    #print('\nBäkkäriin saapui', type(req[0]), req, '\n')
     
     return jsonify(req)
 
 @bp.route('/api/deleteCatch/<dayId>/<dayRowNumber>', methods=['DELETE'])
 @login_required  
 def deleteCatch(dayId, dayRowNumber):
-    #print('\nBäkkäriin saapui', dayId, dayRowNumber, '\n')
     delete_catch(dayRowNumber, dayId)
 
     return dayRowNumber

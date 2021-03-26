@@ -26,12 +26,10 @@ export const editActions = async (dayId, actions) => {
 };
 
 export const editCatchRow = async (dayId, editedRow) => {
-  console.log("service", editedRow);
   return await axios.post(`/api/editCatches/${dayId}`, editedRow);
 };
 
 export const deleteCatchRow = async (dayId, catchRowToDelete) => {
-  console.log("originaali", catchRowToDelete);
   const dayRowNumber=catchRowToDelete.key;
   return await axios.delete(`/api/deleteCatch/${dayId}/${dayRowNumber}`);
 };
