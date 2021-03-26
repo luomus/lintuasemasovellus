@@ -1,6 +1,6 @@
 from flask import request, jsonify, json
 from flask_login import login_required
-from application.api.classes.catch.services import create_catches, get_all, create_catch
+from application.api.classes.catch.services import create_catches, get_all, create_catch, delete_catch
 from application.api.classes.observatory.services import getObservatoryId
 from application.api.classes.observatoryday.services import getDayId
 from application.api import bp
@@ -30,5 +30,13 @@ def editCatches(dayId):
         create_catch(req[0], dayId)
     #print('\nBäkkäriin saapui', type(req[0]), req, '\n')
     
+    return jsonify(req)
 
-    return 'success'
+@bp.route('/api/deleteCatch/<dayId>/<dayRowNumber>', methods=['DELETE'])
+@login_required  
+def deleteCatch(dayId, dayRowNumber):
+    #print('\nBäkkäriin saapui', dayId, dayRowNumber, '\n')
+    delete_catch(dayRowNumber, dayId)
+
+    return dayRowNumber
+

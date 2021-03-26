@@ -64,6 +64,10 @@ def create_catch(row, day_id):
       db.session.commit()
 
 
+def delete_catch(day_row_number, day_id):
+    old_catch = Catch.query.filter_by(observatoryday_id = day_id, dayRowNumber = day_row_number, is_deleted = 0).first()
+    old_catch.is_deleted = 1
+    db.session.commit()
 
   
 

@@ -140,7 +140,8 @@ const resources = {
       "Net length is usually between 9 and 12 meters. Please check that your value is right.": "Verkon pituus on yleensä 9-12 metriä. Tarkistathan, että syötit tarkoittamasi pituuden.",
       "modify": "Muokkaa",
       "obsPeriod": "Havaintojakso",
-      "at": "kello"
+      "at": "kello",
+      "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'."
 
     },
   },

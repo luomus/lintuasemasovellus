@@ -20,7 +20,7 @@ import { setCatches } from "../../reducers/catchRowsReducer";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
-  editComment, editObservers, editActions, getSummary, getCatches, editCatchRow
+  editComment, editObservers, editActions, getSummary, getCatches, editCatchRow, deleteCatchRow
 } from "../../services";
 
 
@@ -98,6 +98,8 @@ const DayDetails = () => {
   const userObservatory = useSelector(state => state.userObservatory);
 
   const [catches, setDayCatches] = useState([]);
+
+  const [catchRowToEdit, setCatchRowToEdit] =useState({});
 
   const [observers, setObservers] = useState(
     dayList
@@ -199,19 +201,23 @@ const DayDetails = () => {
   const handleCatchesEditOpen = (key) => {
     // send info to reducer
     const row=catches.filter(c => c.key === key);
-    //setRowToEdit(row[0]);
+    setCatchRowToEdit(row[0]);
     dispatch(setCatches(row));
     setCatchesEditMode(!actionsEditMode);
   };
 
   const handleCatchesEditCancel = () => {
-    //setRowToEdit({});
+    setCatchRowToEdit({});
     dispatch(setCatches({}));
     setCatchesEditMode(!catchesEditMode);
   };
 
   const handleCatchesEditSave = () => {
-    editCatchRow(dayId, editedCatches);
+    if (editedCatches.length === 0) {
+      deleteCatchRow(dayId, catchRowToEdit);
+    } else {
+      editCatchRow(dayId, editedCatches);
+    }
     dispatch(setCatches({}));
     setCatchesEditMode(!catchesEditMode);
   };
@@ -406,7 +412,12 @@ const DayDetails = () => {
               : (catches.length > 0 && catchesEditMode)
                 ?
                 <div>
-                  <CatchType cr={editedCatches[0]} />
+                  {(editedCatches.length >0 )
+                    ?
+                    <CatchType cr={editedCatches[0]} />
+                    :
+                    <Typography variant="body1" color="secondary" style= {{ padding:5, }}> {t("rowRemoved")}</Typography>
+                  }
                   <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
                     {t("cancel")}
                   </Button>
@@ -415,7 +426,7 @@ const DayDetails = () => {
                   </Button>
                 </div>
                 :
-                <Typography variant="body1" >
+                <Typography variant="body1"  >
                   {t("No catches declared")}
                 </Typography>
             }
