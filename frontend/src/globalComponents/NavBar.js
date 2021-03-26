@@ -12,7 +12,7 @@ import { setUserObservatory } from "../reducers/userObservatoryReducer";
 import { setUser } from "../reducers/userReducer";
 import store from "../store";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import Header from "./Header";
 import NavBarLinks from "./NavBarLinks";
 
@@ -57,6 +57,8 @@ const NavBar = () => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
 
 
   const [state, setState] = useState({
@@ -89,6 +91,9 @@ const NavBar = () => {
   const selectUserObservatory = (event) => {
     event.preventDefault();
     store.dispatch(setUserObservatory(observatory));
+    if (location.pathname.includes("daydetails")) {
+      history.push("/");
+    }
   };
 
   const handleLogout = () => {
