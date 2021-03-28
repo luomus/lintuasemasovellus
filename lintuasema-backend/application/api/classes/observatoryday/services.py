@@ -3,7 +3,7 @@ from application.api.classes.observationperiod.models import Observationperiod
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
-from application.api.classes.observatory.services import getObservatoryId
+from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
 from flask import jsonify
 
 from datetime import datetime

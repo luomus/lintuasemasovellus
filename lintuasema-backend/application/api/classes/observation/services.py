@@ -66,7 +66,7 @@ def getDaySummary(day_id):
             "localGåu":row.local_gou
             })
   
-    return jsonify(response)
+    return response
 
 def parseCountString(obs):
     countString = ""

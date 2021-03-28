@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq, listDays
 from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
 
 from application.api.classes.observationperiod.models import Observationperiod
