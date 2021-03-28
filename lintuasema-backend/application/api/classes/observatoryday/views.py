@@ -4,8 +4,8 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq, listDays
-from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.type.models import Type
@@ -18,15 +18,13 @@ from application.api.classes.type.services import getTypeIdByName
 from application.api.classes.observation.models import Observation
 from application.api.classes.shorthand.models import Shorthand
 
-from application.api.classes.catch.services import set_catch_day_id
-
 from application.api import bp
 from application.db import db
 from sqlalchemy.sql import text
 
 from datetime import datetime
 
-#Tämä jää näin, sillä vaatii lisätutkimuksia.
+#Tämä voisi olla pohjana tallennuksen optimoinnille, selvitellään.
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
@@ -115,70 +113,40 @@ def list_days():
 @bp.route('/api/editComment/<obsday_id>/<comment>', methods=['POST'])
 @login_required
 def edit_comment(obsday_id, comment):
-    day_old=Observatoryday.query.get(obsday_id)
-    day_new = Observatoryday(day = day_old.day, comment = comment, observers = day_old.observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
-    day_old.is_deleted = 1
+    ret = update_comment(obsday_id, comment)
 
-    addDay(day_new)
-    setObsPerDayId(day_old.id, day_new.id)
-    set_catch_day_id(day_old.id, day_new.id)
-
-    db.session().commit()
-
-    return jsonify({"id" : day_new.id})
+    return jsonify(ret)
 
 @bp.route('/api/editObservers/<obsday_id>/<observers>', methods=['POST'])
 @login_required
 def edit_observers(obsday_id, observers):
-    day_old=Observatoryday.query.get(obsday_id)
-    day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
-    day_old.is_deleted = 1
-    addDay(day_new)
-    setObsPerDayId(day_old.id, day_new.id)
-    set_catch_day_id(day_old.id, day_new.id)
+    ret = update_observers(obsday_id, observers)
 
-    db.session().commit()
-
-    return jsonify({"id" : day_new.id})
+    return jsonify(ret)
 
 @bp.route('/api/editActions/<obsday_id>/<actions>', methods=['POST'])
 @login_required
 def edit_actions(obsday_id, actions):
-    day_old=Observatoryday.query.get(obsday_id)
-    day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = day_old.observers, selectedactions = actions, observatory_id = day_old.observatory_id)
-    day_old.is_deleted = 1
-    addDay(day_new)
-    setObsPerDayId(day_old.id, day_new.id)
-    set_catch_day_id(day_old.id, day_new.id)
-
-    db.session().commit()
-
-    return jsonify({"id" : day_new.id})
+    ret = update_actions(obsday_id, actions)
+    
+    return jsonify(ret)
 
 @bp.route('/api/searchDayInfo/<day>/<observatory>', methods=['GET'])
 @login_required
 def search_dayinfo(day, observatory):
+    ret = get_day_without_id(day, observatory)
 
-    obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
-    res = []
-    if not obsday:
-        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
-    else:
-        res.append({ 'id': obsday.id, 'comment': obsday.comment, 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
-    return jsonify(res)
+    return jsonify(ret)
 
 
 @bp.route('/api/getLatestDays/<observatory>', methods=['GET'])
 @login_required
 def get_latest_days(observatory):
-
-    if observatory == '[object Object]':
-        #Jos lintuasemaa ei ole valittu, frontista tulee merkkijono '[object Object]' ja kysely menee rikki
-        response = []
-        return jsonify(response)
-    else:
+    res = []
+    #Jos lintuasemaa ei ole valittu, frontista tulee merkkijono '[object Object]' ja kysely menee rikki
+    if observatory != '[object Object]':
         observatory_id = getObservatoryId(observatory)
-
+        
         res = getLatestDays(observatory_id)
 
-        return res
+    return jsonify(res)

@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask_login import login_required
 
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, getObservationperiodList, addObservationperiod
+from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, getObservationperiodList, addObservationperiod, deleteObservationperiod
 
 from application.api import bp
 from application.db import db

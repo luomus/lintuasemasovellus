@@ -60,6 +60,15 @@ def getDays():
 def getDay(obsday_id):
     return Observatoryday.query.get(obsday_id)
 
+def get_day_without_id(day, observatory):
+    obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
+    res = []
+    if not obsday:
+        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
+    else:
+        res.append({ 'id': obsday.id, 'comment': obsday.comment, 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
+    return res
+
 def getDayId(day, observatory_id):
     d = Observatoryday.query.filter_by(day = day, observatory_id = observatory_id, is_deleted = 0).first()
     return d.id
@@ -92,4 +101,33 @@ def getLatestDays(observatory_id):
             "speciesCount": row.species_count
             })
       
-    return jsonify(response)
+    return response
+
+def update_comment(obsday_id, comment):
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.day, comment = comment, observers = day_old.observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
+    
+    return update_edited_day(day_new, day_old)
+
+def update_observers(obsday_id, observers):
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
+    
+    return update_edited_day(day_new, day_old)
+
+def update_actions(obsday_id, actions):
+    day_old=Observatoryday.query.get(obsday_id)
+    day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = day_old.observers, selectedactions = actions, observatory_id = day_old.observatory_id)
+    
+    return update_edited_day(day_new, day_old)
+
+def update_edited_day(day_new, day_old):
+    day_old.is_deleted = 1
+
+    addDay(day_new)
+    set_new_day_id(day_old.id, day_new.id)
+    set_catch_day_id(day_old.id, day_new.id)
+
+    db.session().commit()
+
+    return {"id" : day_new.id}
