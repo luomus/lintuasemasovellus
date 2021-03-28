@@ -15,7 +15,7 @@ const checkWholeInputLine = (rowNumber, row) => {
   try {
     parse(row);
   } catch (error) {
-    errors.push([rowNumber, `Check row ${rowNumber + 1}: ${error.message}`]);
+    errors.push([rowNumber, `${error.message}`]);
   }
   resetAll();
 };
@@ -39,12 +39,12 @@ const sanitize = (text) => {
     } else if (times & 1) {
       ret.push(line);
     } else {
-      errors.push([counter, "Start time missing!"]);
+      errors.push([counter, "startTimeMissing"]);
     }
     counter++;
   }
   if (times & 1) {
-    errors.push([counter - 1, "Odd number of times!"]);
+    errors.push([counter - 1, "oddNumberOfTimes"]);
   }
   return ret;
 };

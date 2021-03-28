@@ -8,7 +8,7 @@ class Catch(Base):
     observatoryday_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'observatoryday.id'), nullable=False)
     catchType = db.Column(db.String(144), nullable = False)
     location = db.Column(db.String(144), nullable = False)
-    netCode = db.Column(db.String(144), nullable = False)
+    netCode = db.Column(db.String(144), nullable = True)
     amount = db.Column(db.Integer, nullable = False)
     length = db.Column(db.Integer, nullable = False)
     openedAt = db.Column(db.String(144), nullable = False)

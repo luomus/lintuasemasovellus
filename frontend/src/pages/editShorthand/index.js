@@ -300,7 +300,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{t("Confirm deletion")}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{t("confirmDeletion")}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 {t("removingCannotBeCancelled")}

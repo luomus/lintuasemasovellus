@@ -25,11 +25,19 @@ export const editActions = async (dayId, actions) => {
   return await axios.post(`/api/editActions/${dayId}/${actions}`);
 };
 
+export const editCatchRow = async (dayId, editedRow) => {
+  return await axios.post(`/api/editCatches/${dayId}`, editedRow);
+};
+
+export const deleteCatchRow = async (dayId, catchRowToDelete) => {
+  const dayRowNumber=catchRowToDelete.key;
+  return await axios.delete(`/api/deleteCatch/${dayId}/${dayRowNumber}`);
+};
+
 export const getCatches = async (dayId) => {
   const catches=await axios.get(`/api/getCatchDetails/${dayId}`);
   return catches.data;
 };
-
 
 export const getLocationsAndTypes = async (observatory) => {
   const locationsTypes = await axios.get(`/api/getLocationsAndTypes/${observatory}`);
