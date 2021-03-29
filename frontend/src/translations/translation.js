@@ -16,7 +16,7 @@ const resources = {
       "date": "Päivämäärä",
       "observers": "Havainnoija(t)",
       "observations": "Havainnot",
-      "comment": "Kommentti",
+      "comment": "Päivän havainto- ja pyydyskommentit",
       "save": "Tallenna",
       "loading": "Ladataan...",
       "cancel": "Peruuta",
