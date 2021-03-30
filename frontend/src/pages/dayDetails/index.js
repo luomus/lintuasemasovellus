@@ -212,17 +212,20 @@ const DayDetails = () => {
   const handleCatchesEditCancel = () => {
     setCatchRowToEdit({});
     dispatch(setCatches([]));
-    setCatchesEditMode(!catchesEditMode);
+    setCatchesEditMode(false);
     setAddingNewRowMode(false);
   };
 
   const handleAddNewCatch = () => {
     setAddingNewRowMode(true);
-    //setCatchRowToEdit(editedCatches[0]);
-    const maxKey = Math.max.apply(Math, catches.map(row => row.key));
-    dispatch(addOneCatchRow(maxKey+1));
-    console.log("handle", editedCatches);
-    setCatchesEditMode(!catchesEditMode);
+    if (catches.length === 0) {
+      dispatch(setCatches([]));
+    } else {
+      const maxKey = Math.max.apply(Math, catches.map(row => row.key));
+      dispatch(addOneCatchRow(maxKey+1));
+    }
+    //console.log("handle", editedCatches);
+    setCatchesEditMode(true);
   };
 
   const handleCatchesEditSave = () => {
@@ -241,7 +244,7 @@ const DayDetails = () => {
     }
     dispatch(setCatches([]));
     setCatchRowToEdit({});
-    setCatchesEditMode(!catchesEditMode);
+    setCatchesEditMode(false);
     setAddingNewRowMode(false);
   };
 
@@ -437,7 +440,7 @@ const DayDetails = () => {
                   )}
                 </TableBody>
               </Table>
-              : (catches.length > 0 && catchesEditMode) /* EDIT ONE CATCH ROW */
+              : (catchesEditMode) /* EDIT ONE CATCH ROW */
                 ?
                 <div>
                   {(editedCatches.length >0 )
@@ -456,6 +459,9 @@ const DayDetails = () => {
                 : /* NO CATCHES FOR THAT DAY*/
                 <Typography variant="body1"  >
                   {t("No catches declared")}
+                  <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
                 </Typography>
             }
           </Grid>
