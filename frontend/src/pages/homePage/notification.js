@@ -2,36 +2,43 @@ import React from "react";//
 import {
   Typography
 } from "@material-ui/core/";
-import PropTypes from "prop-types";
+import  { useSelector } from "react-redux";
 
 
-// { notifications:["1", "2"], errors:["a", "b"] };
-const Notification = ({ notifications }) => {
+const Notification = ({ category }) => {
+  if ( category === "catches" ) {
 
-  //const notifications = useSelector(state => state.notifications);
-  console.log("notif in NotifiCation", notifications);
+    const allNotificationsByRow = useSelector(state => state.notifications);
+    let notificationsSet = new Set();
+    let errorsSet = new Set();
 
+    Object.keys(allNotificationsByRow).map(i => {
+      allNotificationsByRow[String(i)].notifications.forEach(n => notificationsSet.add(n));
+      allNotificationsByRow[String(i)].errors.forEach(e => errorsSet.add(e));
+    });
 
+    const notifications = [... notificationsSet];
+    const errors = [... errorsSet];
 
-  return (
-    <div>
-      { notifications.errors.length > 0 &&
-        notifications.errors.map((e, i) => (
-          <Typography key={i} variant="subtitle2" color="secondary">{e}</Typography>
-        ))
-      }
+    console.log("notes and errors", notifications, errors);
 
-      { notifications.notifications.length > 0 &&
-        notifications.notifications.map((n, i) => (
-          <Typography key={i} variant="subtitle2" >{n}</Typography>
-        ))
-      }
-    </div>
-  );
+    return (
+      <div>
+        { errors.length > 0 &&
+          errors.map((e, i) => (
+            <Typography key={i} variant="subtitle2" color="secondary">{e}</Typography>
+          ))
+        }
+
+        { notifications.length > 0 &&
+          notifications.map((n, i) => (
+            <Typography key={i} variant="subtitle2" >{n}</Typography>
+          ))
+        }
+      </div>
+    );
+  }
 };
 
-Notification.propTypes ={
-  notifications: PropTypes.object.isRequired
-};
 
 export default Notification;

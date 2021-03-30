@@ -1,10 +1,13 @@
-const notificationsReducer = (state = { notifications:[], errors:[] }, action) => {
+const intitialState =
+{
+  1:{ notifications:[], errors:[] }
+};
+
+const notificationsReducer = (state = intitialState, action) => {
   switch (action.type) {
-    case "SET_NOTIFICATIONS":
-      console.log("action.data",action.data);
-      return action.data;
-    // case "SET_ACTIONS":
-    //   return action.data.dailyActions ;
+    case "SET_CATCH_NOTIFICATIONS":
+      //console.log("action.data",action.key, action.data);
+      return { ...state, [action.key]:action.data };
     default:
       return state;
   }
@@ -13,12 +16,15 @@ const notificationsReducer = (state = { notifications:[], errors:[] }, action) =
 
 
 
-export const setNotifications = (notifications, errors) => {
-  return {
-    type:"SET_NOTIFICATIONS",
-    data: { notifications: notifications, errors: errors }
-  };
-
+export const setNotifications = (validationResult, rowKey=-1) => {
+  if (rowKey !== -1){
+    return {
+      type:"SET_CATCH_NOTIFICATIONS",
+      category: "catches",
+      key: rowKey,
+      data: { notifications: validationResult[0], errors: validationResult[1] }
+    };
+  }
 };
 
 

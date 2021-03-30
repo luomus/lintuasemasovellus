@@ -120,8 +120,8 @@ export const HomePage = () => {
   const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
-  const notifications = useSelector(state => state.notifications);
-  console.log("notif in catchtype", notifications);
+  //const notifications = useSelector(state => state.notifications);
+  //console.log("notif in index", notifications);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -237,11 +237,6 @@ export const HomePage = () => {
     }
     setDisabled(false);
   };
-
-  // const deleteLastRow = () => {
-  //   const lastRow = catchRows[catchRows.length - 1];
-  //   dispatch(deleteOneCatchRow(lastRow));
-  // };
 
 
   const addCatchRow = () => {
@@ -376,7 +371,7 @@ export const HomePage = () => {
                       alignItems="flex-start"
                       spacing={1}
                     >
-                      <Notification notifications={notifications}/>
+                      <Notification category="catches"/>
 
                       {catchRows.map((cr, i) => (
                         <div key={i} id={i}>
@@ -394,17 +389,7 @@ export const HomePage = () => {
                         >
                           {"+"}
                         </Button>
-                        {/* <Button
-                          onClick={() => deleteLastRow()}
-                          className={classes.addRemoveCatchTypesButton}
-                          color="default"
-                          variant="contained"
-                          size="small"
-                          id="minus-catch-row-button"
-                        >
-                          {"–"}
-                        </Button>
-                        */}
+
                       </Grid>
                       <Grid item xs={3}>
                       </Grid>

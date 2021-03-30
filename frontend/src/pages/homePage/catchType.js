@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
 import { setNotifications } from "../../reducers/notificationsReducer";
 
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: 95,
@@ -79,26 +80,24 @@ const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  //const [modalMessage, setModalMessage] = useState("");
-  //const [showModal, setshowModal] = useState(false);
-  let toNotifications = [];
-  let toErrors = [];
 
-
-
-  //run validations on change
-  if (cr.pyydys in amountLimits && cr.lukumaara > amountLimits[String(cr.pyydys)]) {
-    toNotifications.push(t("Please recheck that you mean to declare that many catches"));
-  }
-  if ( cr.pyydys && cr.pyyntialue && !catchesWithoutLength.includes(cr.pyydys) && ( cr.verkonPituus < 9 || cr.verkonPituus > 12 )) {
-    toNotifications.push(t("NetLength"));
-  }
-  if (cr.lukumaara < 0 || cr.verkonPituus < 0){
-    toErrors.push(t("noNegativeValues"));
-  }
-  console.log("catch", toNotifications, toErrors);
 
   const handleChange = (target) => {
+
+    let toNotifications = [];
+    let toErrors = [];
+
+
+    //run validations on change
+    if (cr.pyydys in amountLimits && cr.lukumaara > amountLimits[String(cr.pyydys)]) {
+      toNotifications.push(t("Please recheck that you mean to declare that many catches"));
+    }
+    if ( cr.pyydys && cr.pyyntialue && !catchesWithoutLength.includes(cr.pyydys) && ( cr.verkonPituus < 9 || cr.verkonPituus > 12 )) {
+      toNotifications.push(t("NetLength"));
+    }
+    if (cr.lukumaara < 0 || cr.verkonPituus < 0){
+      toErrors.push(t("noNegativeValues"));
+    }
     if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
       //autofill length for nets that are always the same length
       if (target.value in preSetLengths) {
@@ -108,14 +107,11 @@ const CatchType = ({ cr }) => {
       //remove previous length autofill, when catch changes
       dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
     }
-    dispatch(toggleCatchDetails(cr.key, target.name, target.value));
-    dispatch(setNotifications(toNotifications,toErrors));
-  };
 
-  //console.log("dispatch", cr.pyydys);
-  // const handleModalClose = () => {
-  //   setshowModal(false);
-  // };
+
+    dispatch(toggleCatchDetails(cr.key, target.name, target.value));
+    dispatch(setNotifications([toNotifications, toErrors], cr.key));
+  };
 
   const handleRowRemove = () => {
     dispatch(deleteOneCatchRow(cr));
@@ -246,18 +242,6 @@ const CatchType = ({ cr }) => {
             &#10060;
         </Button>
       </FormGroup>
-      {/* <Dialog open={showModal} onClose={handleModalClose}  disableBackdropClick={true}>
-        <DialogContent>
-          <DialogContentText id="confirmation dialog">
-            {modalMessage}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleModalClose} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog> */}
     </Grid>
 
   );
