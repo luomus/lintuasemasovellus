@@ -4,28 +4,33 @@ import { myBeforeEach } from "../methods.js";
 const observStation = "Hangon Lintuasema";
 const date = "01.01.2020";
 const observer = "Hilla Havainnoitsija";
-const observer1 = "ONan Observoija";
-const changedObserver= "Aarni Apulaishavainnoitsija";
+const observer1 = "Otso Observoija";
+const changedObserver = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa kiva sää.";
-const comment1="Satoi aivan kaatamalla";
-const changedComment= "hihihi asdfsommol";
+const comment1 = "Satoi aivan kaatamalla";
+const changedComment = "hihihi asdfsommol";
 const date2 = "02.02.2020";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
+const opened = "06:00";
+const closed = "07:00";
+const netCodes = "abcde";
 
 
 
-describe("AddObservationDay", function() {
-  beforeEach(function() {
+describe("AddObservationDay", function () {
+  beforeEach(function () {
     myBeforeEach();
   });
 
 
-  it("An observation and observation day can be saved on firstpage for Vakio", function() {
+  it("An observation and observation day can be saved on firstpage for Vakio", function () {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get("#observers").clear();
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
+    cy.get("#activity-header").click();
     cy.get("#attachments").clear();
     cy.wait(1000);
     cy.get("#observers").type(observer);
@@ -34,6 +39,17 @@ describe("AddObservationDay", function() {
     cy.get("#attachments").type("1");
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get("#catches-header").click();
+    cy.get("#selectCatchType").click();
+    cy.contains("Vakioverkko").click();
+    cy.get("#selectCatchArea").click();
+    cy.contains("Vakioverkot K").click();
+    cy.get("#opened").clear();
+    cy.get("#opened").type(opened);
+    cy.get("#closed").clear();
+    cy.get("#closed").type(closed);
+    cy.get("#selectCatchCount").type("2");
+    cy.get("#netCodes").type(netCodes);
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
@@ -44,7 +60,7 @@ describe("AddObservationDay", function() {
 
 
 
-  it("Day can be clicked on first page", function() {
+  it("Day can be clicked on first page", function () {
 
     cy.contains(date).click();
     cy.contains(observer);
@@ -57,7 +73,7 @@ describe("AddObservationDay", function() {
 
 
 
-  it("Day and period has been added for Vakio", function() {
+  it("Day and period has been added for Vakio", function () {
     cy.contains("Näytä päivät").click();
     cy.contains(observer);
     cy.contains(comment);
@@ -67,7 +83,7 @@ describe("AddObservationDay", function() {
   });
 
 
-  it("Observation can be opened to a new page", function() {
+  it("Observation can be opened to a new page", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
     cy.get("#periodsButton").click();
@@ -78,7 +94,7 @@ describe("AddObservationDay", function() {
     cy.contains("10:00");
   });
 
-  it("Comment and observer can be edited", function() {
+  it("Comment and observer can be edited", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
     cy.get("#commentButton").click();
@@ -111,7 +127,7 @@ describe("AddObservationDay", function() {
     cy.contains(changedObserver).should("not.exist");
   });
 
-  it("Daily actions can be edited", function() {
+  it("Daily actions can be edited", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Hilla Havainnoitsija").click();
     cy.get("#actionsButton").click();
@@ -125,7 +141,7 @@ describe("AddObservationDay", function() {
   });
 
 
-  it("An observation and observation day can be saved on firstpage for something else than vakio", function() {
+  it("An observation and observation day can be saved on firstpage for something else than vakio", function () {
     cy.get("#observatorySelector").click();
     cy.get("#select-observatory").click().get("ul > li").eq(1).click();
     cy.get("#submit").contains("Tallenna").click();
@@ -135,6 +151,7 @@ describe("AddObservationDay", function() {
     cy.wait(1000);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer1);
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.get("#comment").type(comment1);
     cy.get("#selectType").click().get("#Esimerkki1").click();
@@ -148,7 +165,7 @@ describe("AddObservationDay", function() {
 
   });
 
-  it("Day and period for non-Vakio has been added for observationlist", function() {
+  it("Day and period for non-Vakio has been added for observationlist", function () {
     cy.get("#observatorySelector").click();
     cy.get("#select-observatory").click().get("ul > li").eq(1).click();
     cy.get("#submit").contains("Tallenna").click();
@@ -168,8 +185,9 @@ describe("AddObservationDay", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
-    cy.get ("#observers").clear();
+    cy.get("#observers").clear();
     cy.get("#observers").type(observer);
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
@@ -185,7 +203,7 @@ describe("AddObservationDay", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date2);
-    cy.get ("#observers").clear();
+    cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);

@@ -54,7 +54,7 @@ describe("FirstpageFieldsAndModification", function() {
 
   });
 
-  it.only("Catch rows can be added and removed", function(){
+  it("Catch rows can be added and removed", function(){
     cy.get("#catches-header").click();
     cy.get("#0").contains("Pyydys")
     cy.get("#plus-catch-row-button").click();
