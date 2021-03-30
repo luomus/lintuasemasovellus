@@ -11,9 +11,13 @@ const catchRowsReducer = (state = initialState, action) => {
           verkonPituus: 0, alku: "00:00", loppu: "00:00"
         }
       ];
+    case "ADD_ROW_WITH_KEY":
+      //console.log("key", action.data);
+      return [{ key: action.data, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" }];
     case "DELETE_ROW":
       return state.filter(row => row.key !== action.data.key);
     case "TOGGLE_ROW_DETAILS":
+      //console.log("muutos", state);
       return state.map(row =>
         row.key !== action.data.key
           ? row
@@ -30,11 +34,20 @@ const catchRowsReducer = (state = initialState, action) => {
 };
 
 
-export const addOneCatchRow = () => {
-  return {
-    type: "ADD_ROW"
-  };
+export const addOneCatchRow = (key = -1) => {
+  if (key === -1){
+    return {
+      type: "ADD_ROW"
+    };
+  } else {
+    return {
+      type: "ADD_ROW_WITH_KEY",
+      data: key
+    };
+  }
 };
+
+
 
 export const deleteOneCatchRow = (lastRow) => {
   return {

@@ -6,6 +6,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableRow
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/Add";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import RemoveCircleOutlineRoundedIcon from "@material-ui/icons/RemoveCircleOutlineRounded";
 import { useTranslation } from "react-i18next";
@@ -15,7 +16,7 @@ import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
 import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
-import { setCatches } from "../../reducers/catchRowsReducer";
+import { setCatches, addOneCatchRow } from "../../reducers/catchRowsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
@@ -93,6 +94,8 @@ const DayDetails = () => {
 
   const [catchesEditMode, setCatchesEditMode] = useState(false);
 
+  const [addingNewRowMode, setAddingNewRowMode] = useState(false);
+
   const dayList = useSelector(state => state.days);
 
   const userObservatory = useSelector(state => state.userObservatory);
@@ -135,7 +138,7 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  //console.log("Rivit päiväsivulla", catches);
+  console.log("Rivit päiväsivulla",dayId, catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -210,20 +213,36 @@ const DayDetails = () => {
     setCatchRowToEdit({});
     dispatch(setCatches([]));
     setCatchesEditMode(!catchesEditMode);
+    setAddingNewRowMode(false);
+  };
+
+  const handleAddNewCatch = () => {
+    setAddingNewRowMode(true);
+    //setCatchRowToEdit(editedCatches[0]);
+    const maxKey = Math.max.apply(Math, catches.map(row => row.key));
+    dispatch(addOneCatchRow(maxKey+1));
+    console.log("handle", editedCatches);
+    setCatchesEditMode(!catchesEditMode);
   };
 
   const handleCatchesEditSave = () => {
     if (editedCatches.length === 0) {
       deleteCatchRow(dayId, catchRowToEdit);
+      setDayCatches(catches.filter(row => row.key !== catchRowToEdit.key));
     } else {
       editCatchRow(dayId, editedCatches);
-      setDayCatches(catches.map(row => row.key === editedCatches[0].key
-        ? editedCatches[0]
-        : row));
+      if (addingNewRowMode){
+        setDayCatches([...catches, editedCatches[0]]);
+      } else {
+        setDayCatches(catches.map(row => row.key === editedCatches[0].key
+          ? editedCatches[0]
+          : row));
+      }
     }
     dispatch(setCatches([]));
     setCatchRowToEdit({});
     setCatchesEditMode(!catchesEditMode);
+    setAddingNewRowMode(false);
   };
 
   const refetchObservations = async () => {
@@ -384,7 +403,7 @@ const DayDetails = () => {
             </Typography>
             {(catches.length > 0 && !catchesEditMode)
               ? /* LIST CATCHES */
-              <Table className={classes.catchTable} size="normal" aria-label="a dense table">
+              <Table className={classes.catchTable} size="medium" aria-label="a dense table">
                 <TableHead>
                   <TableRow>
                     <TableCell>{t("catchType")}</TableCell>
@@ -393,7 +412,11 @@ const DayDetails = () => {
                     <TableCell align="left">{t("amount")}</TableCell>
                     <TableCell align="left">{t("netCodes")}</TableCell>
                     <TableCell align="left">{t("length")}</TableCell>
-                    <TableCell align="left"></TableCell>
+                    <TableCell align="left">
+                      <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
+                        <AddIcon fontSize="medium" />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
