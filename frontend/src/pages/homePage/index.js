@@ -34,9 +34,10 @@ import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsR
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 //import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
-import { addOneCatchRow, deleteOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
+import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
+import Notification from "./notification";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -119,6 +120,8 @@ export const HomePage = () => {
   const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
+  const notifications = useSelector(state => state.notifications);
+  console.log("notif in catchtype", notifications);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -235,10 +238,10 @@ export const HomePage = () => {
     setDisabled(false);
   };
 
-  const deleteLastRow = () => {
-    const lastRow = catchRows[catchRows.length - 1];
-    dispatch(deleteOneCatchRow(lastRow));
-  };
+  // const deleteLastRow = () => {
+  //   const lastRow = catchRows[catchRows.length - 1];
+  //   dispatch(deleteOneCatchRow(lastRow));
+  // };
 
 
   const addCatchRow = () => {
@@ -373,6 +376,7 @@ export const HomePage = () => {
                       alignItems="flex-start"
                       spacing={1}
                     >
+                      <Notification notifications={notifications}/>
 
                       {catchRows.map((cr, i) => (
                         <div key={i} id={i}>
@@ -383,11 +387,14 @@ export const HomePage = () => {
                         <Button
                           className={classes.addRemoveCatchTypesButton}
                           onClick={addCatchRow}
+                          color="primary"
                           id="plus-catch-row-button"
+                          variant="contained"
+                          size="small"
                         >
                           {"+"}
                         </Button>
-                        <Button
+                        {/* <Button
                           onClick={() => deleteLastRow()}
                           className={classes.addRemoveCatchTypesButton}
                           color="default"
@@ -397,6 +404,7 @@ export const HomePage = () => {
                         >
                           {"–"}
                         </Button>
+                        */}
                       </Grid>
                       <Grid item xs={3}>
                       </Grid>

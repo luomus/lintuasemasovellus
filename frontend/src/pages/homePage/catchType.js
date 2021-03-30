@@ -1,14 +1,15 @@
-import React, { useState } from "react"; //
+import React from "react"; //
 import {
   TextField, InputLabel, Select, MenuItem, FormControl,
-  FormControlLabel, InputAdornment, Grid, FormGroup,
-  Dialog, DialogActions, DialogContentText, DialogContent, Button
+  FormControlLabel, InputAdornment, Grid, FormGroup, Button,
+  //Dialog, DialogActions, DialogContentText, DialogContent,
 } from "@material-ui/core/";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
+import { setNotifications } from "../../reducers/notificationsReducer";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -78,16 +79,27 @@ const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [modalMessage, setModalMessage] = useState("");
-  const [showModal, setshowModal] = useState(false);
+  //const [modalMessage, setModalMessage] = useState("");
+  //const [showModal, setshowModal] = useState(false);
+  let toNotifications = [];
+  let toErrors = [];
+
+
+
+  //run validations on change
+  if (cr.pyydys in amountLimits && cr.lukumaara > amountLimits[String(cr.pyydys)]) {
+    toNotifications.push(t("Please recheck that you mean to declare that many catches"));
+  }
+  if ( cr.pyydys && cr.pyyntialue && !catchesWithoutLength.includes(cr.pyydys) && ( cr.verkonPituus < 9 || cr.verkonPituus > 12 )) {
+    toNotifications.push(t("NetLength"));
+  }
+  if (cr.lukumaara < 0 || cr.verkonPituus < 0){
+    toErrors.push(t("noNegativeValues"));
+  }
+  console.log("catch", toNotifications, toErrors);
 
   const handleChange = (target) => {
-    if (target.name==="lukumaara") {
-      if (cr.pyydys in amountLimits && target.value > amountLimits[String(cr.pyydys)]) {
-        setModalMessage(t("Please recheck that you mean to declare that many catches"));
-        setshowModal(true);
-      }
-    } else if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
+    if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
       //autofill length for nets that are always the same length
       if (target.value in preSetLengths) {
         dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
@@ -96,21 +108,14 @@ const CatchType = ({ cr }) => {
       //remove previous length autofill, when catch changes
       dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
     }
-    // seuraava ongelmallinen, koska modaali triggeröityy, jo kun kirjoittaa '1' luvusta '11'
-    // } else if (target.name==="verkonPituus"){
-    //   if ( target.value < 9 || target.value > 12 ) {
-    //     setModalMessage(t("Net length is usually between 9 and 12 meters. Please check that your value is right."));
-    //     setshowModal(true);
-    //   }
-    //}
-
-
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
+    dispatch(setNotifications(toNotifications,toErrors));
   };
 
-  const handleModalClose = () => {
-    setshowModal(false);
-  };
+  //console.log("dispatch", cr.pyydys);
+  // const handleModalClose = () => {
+  //   setshowModal(false);
+  // };
 
   const handleRowRemove = () => {
     dispatch(deleteOneCatchRow(cr));
@@ -241,7 +246,7 @@ const CatchType = ({ cr }) => {
             &#10060;
         </Button>
       </FormGroup>
-      <Dialog open={showModal} onClose={handleModalClose}  disableBackdropClick={true}>
+      {/* <Dialog open={showModal} onClose={handleModalClose}  disableBackdropClick={true}>
         <DialogContent>
           <DialogContentText id="confirmation dialog">
             {modalMessage}
@@ -252,7 +257,7 @@ const CatchType = ({ cr }) => {
             OK
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </Grid>
 
   );
