@@ -10,7 +10,21 @@ describe("FirstpageFieldsAndModification", function() {
     cy.contains("Lisää havaintoja");
     cy.contains("Päivämäärä");
     cy.contains("Havainnoija(t)");
-    cy.contains("Kommentti");
+    cy.get("#comment-header").click();
+    cy.contains("Päivän havainto- ja pyydyskommentit");
+    cy.get("#activity-header").click();
+    cy.contains("Vakiohavainnointi");
+    cy.contains("Gåulla käynti");
+    cy.contains("Rengastusvakio");
+    cy.contains("Pöllövakio");
+    cy.contains("Nisäkkäät yms. laskettu");
+    cy.contains("Liitteitä");
+    cy.get("#catches-header").click();
+    cy.contains("Pyydys");
+    cy.contains("Pyyntialue");
+    cy.contains("Avattu");
+    cy.contains("Suljettu");
+    cy.contains("Verkkokoodit");
     cy.contains("Tyyppi");
     cy.contains("Sijainti");
     cy.contains("Rengastusvakio");
@@ -38,8 +52,18 @@ describe("FirstpageFieldsAndModification", function() {
     cy.get("#frontpage").click({ force:true });
     cy.contains("Lisää havaintoja");
 
+  });
 
-
+  it.only("Catch rows can be added and removed", function(){
+    cy.get("#catches-header").click();
+    cy.get("#0").contains("Pyydys")
+    cy.get("#plus-catch-row-button").click();
+    cy.get("#1").contains("Pyydys")
+    cy.get("#minus-catch-row-button").click();
+    cy.get("#1").should("not.exist");
+    cy.get("#plus-catch-row-button").click();
+    cy.get("#0 #removeButton").click();
+    cy.get("#1").should("not.exist");
 
   });
 

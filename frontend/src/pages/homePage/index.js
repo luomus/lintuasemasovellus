@@ -375,7 +375,7 @@ export const HomePage = () => {
                     >
 
                       {catchRows.map((cr, i) => (
-                        <div key={i}>
+                        <div key={i} id={i}>
                           <CatchType key={cr.key} cr={cr} />
                         </div>
                       ))}
@@ -383,6 +383,7 @@ export const HomePage = () => {
                         <Button
                           className={classes.addRemoveCatchTypesButton}
                           onClick={addCatchRow}
+                          id="plus-catch-row-button"
                         >
                           {"+"}
                         </Button>
@@ -392,6 +393,7 @@ export const HomePage = () => {
                           color="default"
                           variant="contained"
                           size="small"
+                          id="minus-catch-row-button"
                         >
                           {"–"}
                         </Button>

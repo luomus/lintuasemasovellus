@@ -73,17 +73,6 @@ const preSetLengths = {
   "Vakiopetoverkot":12
 };
 
-//const maxNumbers = {
-//  "Vakioverkko": 11,
-//  "Lisäverkko": 9,
-//  "Petoverkot": 12,
-//  "Rastasverkko": 9,
-//  "Katiska": 12,
-//  "Lokkihäkki": 12,
-//  "": ""
-//};
-
-
 
 const CatchType = ({ cr }) => {
   const { t } = useTranslation();
