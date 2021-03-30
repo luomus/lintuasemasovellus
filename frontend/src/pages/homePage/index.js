@@ -83,6 +83,15 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionHeading: {
     fontSize: "20px",
+    flexBasis: "33.33%",
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: "15px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    opacity: "0.6",
   },
 }
 ));
@@ -331,6 +340,7 @@ export const HomePage = () => {
                     id="comment-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("comment")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{ comment ? t("commentAdded") : t("noComment")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <TextField
@@ -352,6 +362,8 @@ export const HomePage = () => {
                     id="activity-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
+                    {/* FIX THIS: Miten selvitetään, onko jokin havaintoaktiviteetti valittu? */}
+                    <Typography className={classes.secondaryHeading}>{ (dailyActions.attachments === "0") ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <DailyActions />
@@ -365,6 +377,7 @@ export const HomePage = () => {
                     id="catches-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{ (catchRows.length === 0 || catchRows[0].pyydys === "") ? t("noCatches") : t("catchesAdded")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid container

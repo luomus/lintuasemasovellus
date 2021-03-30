@@ -16,7 +16,9 @@ const resources = {
       "date": "Päivämäärä",
       "observers": "Havainnoija(t)",
       "observations": "Havainnot",
-      "comment": "Päivän havainto- ja pyydyskommentit",
+      "comment": "Havainto- ja pyydyskommentit",
+      "commentAdded": "Kommentteja kirjattu",
+      "noComment": "Ei kommentteja",
       "save": "Tallenna",
       "loading": "Ladataan...",
       "cancel": "Peruuta",
@@ -122,6 +124,8 @@ const resources = {
 
       "checkShorthand": "Tarkista pikakirjoitus",
       "Observation activity": "Havaintoaktiivisuus",
+      "observationActivityAdded": "Havaintoaktiivisuus kirjattu",
+      "noObservationActivity": "Ei havaintoaktiivisuusmerkintöjä",
       "standardObs": "Vakiohavainnointi",
       "gåu": "Gåulla käynti",
       "standardRing": "Rengastusvakio",
@@ -135,6 +139,8 @@ const resources = {
       "noNegativeValues": "Negatiiviset arvot ei sallittuja!",
 
       "Catches":"Pyydykset",
+      "catchesAdded":"Pyydystietoja kirjattu",
+      "noCatches":"Ei pyydyksiä",
       "was open": "Auki",
       "amount":"Lkm",
       "length": "Pituus (m)",
