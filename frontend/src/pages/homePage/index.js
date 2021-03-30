@@ -365,7 +365,7 @@ export const HomePage = () => {
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
                     {/* FIX THIS: Miten selvitetään, onko jokin havaintoaktiviteetti valittu? */}
-                    <Typography className={classes.secondaryHeading}>{ (dailyActions.attachments === 0) ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{ (dailyActions.attachments === "0") ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <DailyActions />
