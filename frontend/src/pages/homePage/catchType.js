@@ -76,13 +76,39 @@ const preSetLengths = {
 };
 
 
+
 const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
 
-
   const handleChange = (target) => {
+    let realTimeRow = cr;
+
+    if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
+      //autofill length for nets that are always the same length
+      if (target.value in preSetLengths) {
+        dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
+        realTimeRow = { ...realTimeRow, verkonPituus: preSetLengths[String(target.value)] };
+      }
+    } else if(target.name==="pyydys" && cr.verkonPituus!==0) {
+      //remove previous length autofill, when catch changes
+      dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
+      realTimeRow = { ...realTimeRow, verkonPituus: 0 };
+    }
+
+    dispatch(toggleCatchDetails(cr.key, target.name, target.value));
+    const result = validate({ ...realTimeRow, [target.name]:target.value });
+    dispatch(setNotifications([result[0], result[1]], cr.key));
+  };
+
+  const handleRowRemove = () => {
+    dispatch(deleteOneCatchRow(cr));
+  };
+
+  const validate = (cr) => {
+    console.log("Validating", cr);
+
 
     let toNotifications = [];
     let toErrors = [];
@@ -98,23 +124,7 @@ const CatchType = ({ cr }) => {
     if (cr.lukumaara < 0 || cr.verkonPituus < 0){
       toErrors.push(t("noNegativeValues"));
     }
-    if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
-      //autofill length for nets that are always the same length
-      if (target.value in preSetLengths) {
-        dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
-      }
-    } else if(target.name==="pyydys" && cr.verkonPituus!==0) {
-      //remove previous length autofill, when catch changes
-      dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
-    }
-
-
-    dispatch(toggleCatchDetails(cr.key, target.name, target.value));
-    dispatch(setNotifications([toNotifications, toErrors], cr.key));
-  };
-
-  const handleRowRemove = () => {
-    dispatch(deleteOneCatchRow(cr));
+    return [toNotifications, toErrors];
   };
 
 

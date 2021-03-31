@@ -3,10 +3,13 @@ import {
   Typography
 } from "@material-ui/core/";
 import  { useSelector } from "react-redux";
+//import { validateCatchRows } from "./catchType";
 
 
 const Notification = ({ category }) => {
+
   if ( category === "catches" ) {
+    console.log("notes in note");
 
     const allNotificationsByRow = useSelector(state => state.notifications);
     let notificationsSet = new Set();
@@ -16,6 +19,7 @@ const Notification = ({ category }) => {
       allNotificationsByRow[String(i)].notifications.forEach(n => notificationsSet.add(n));
       allNotificationsByRow[String(i)].errors.forEach(e => errorsSet.add(e));
     });
+
 
     const notifications = [... notificationsSet];
     const errors = [... errorsSet];

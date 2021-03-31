@@ -4,6 +4,7 @@ const initialState =
 const catchRowsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_ROW":
+      console.log("State", state);
       return [
         ...state,
         {
