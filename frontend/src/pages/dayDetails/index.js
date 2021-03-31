@@ -17,7 +17,7 @@ import DailyActions from "../homePage/dailyActions";
 import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
-// import ObsPeriodTableOther from "./ObsPeriodTableOther";
+import { resetNotifications } from "../../reducers/notificationsReducer";
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
@@ -203,6 +203,7 @@ const DayDetails = () => {
 
   const handleCatchesEditOpen = (key) => {
     // send info to reducer
+    dispatch(resetNotifications());
     const row=catches.filter(c => c.key === key);
     setCatchRowToEdit(row[0]);
     dispatch(setCatches(row));
@@ -212,6 +213,7 @@ const DayDetails = () => {
   const handleCatchesEditCancel = () => {
     setCatchRowToEdit({});
     dispatch(setCatches([]));
+    dispatch(resetNotifications());
     setCatchesEditMode(false);
     setAddingNewRowMode(false);
   };
@@ -225,6 +227,7 @@ const DayDetails = () => {
       dispatch(addOneCatchRow(maxKey+1));
     }
     //console.log("handle", editedCatches);
+    dispatch(resetNotifications());
     setCatchesEditMode(true);
   };
 
@@ -244,6 +247,7 @@ const DayDetails = () => {
     }
     dispatch(setCatches([]));
     setCatchRowToEdit({});
+    dispatch(resetNotifications());
     setCatchesEditMode(false);
     setAddingNewRowMode(false);
   };

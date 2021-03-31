@@ -8,6 +8,8 @@ const notificationsReducer = (state = intitialState, action) => {
     case "SET_CATCH_NOTIFICATIONS":
       console.log("action.data",action.key, action.data);
       return { ...state, [action.key]:action.data };
+    case "RESET":
+      return intitialState;
     default:
       return state;
   }
@@ -27,6 +29,11 @@ export const setNotifications = (validationResult, rowKey=-1) => {
   }
 };
 
+export const resetNotifications = () => {
+  return {
+    type:"RESET",
+  };
+};
 
 
 export default notificationsReducer;
