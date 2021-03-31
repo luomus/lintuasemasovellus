@@ -264,10 +264,21 @@ export const HomePage = () => {
   }
 
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "")
+    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInCatchesOrActions())
       return true;
     else
       return false;
+  };
+
+  const errorsInCatchesOrActions = () => {
+    let value = false;
+    Object.keys(notifications).map(row => {
+      console.log("mapping", notifications[String(row)]);
+      if (notifications[String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    return value;
   };
 
   const handleDateClick = (s) => {
