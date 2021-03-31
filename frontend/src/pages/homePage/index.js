@@ -130,9 +130,8 @@ export const HomePage = () => {
   const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
-
   const notifications = useSelector(state => state.notifications);
-  console.log("notif in index", notifications);
+
 
   const history = useHistory();
   const dispatch = useDispatch();

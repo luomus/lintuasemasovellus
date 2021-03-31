@@ -18,6 +18,8 @@ import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
 import { resetNotifications } from "../../reducers/notificationsReducer";
+import Notification from "../homePage/notification";
+
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
@@ -99,6 +101,8 @@ const DayDetails = () => {
   const dayList = useSelector(state => state.days);
 
   const userObservatory = useSelector(state => state.userObservatory);
+
+  const notifications = useSelector(state => state.notifications);
 
   const [catches, setDayCatches] = useState([]);
 
@@ -252,6 +256,21 @@ const DayDetails = () => {
     setAddingNewRowMode(false);
   };
 
+  const errorsInCatches = () => {
+    let value = false;
+    Object.keys(notifications).map(row => {
+      if (notifications[String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    Object.keys(editedCatches).map(row => {
+      if(editedCatches[String(row)].lukumaara === 0){
+        value = true;
+      }
+    });
+    return value;
+  };
+
   const refetchObservations = async () => {
     const res = await getDaysObservationPeriods(dayId);
     setObsperiods(res);
@@ -272,7 +291,7 @@ const DayDetails = () => {
     }
   })(TextField);
 
-
+  console.log("notes", notifications);
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
 
@@ -449,14 +468,19 @@ const DayDetails = () => {
                 <div>
                   {(editedCatches.length >0 )
                     ? /* SHOW CATCH ROW AS EDITABLE ELEMENT */
-                    <CatchType cr={editedCatches[0]} />
+                    <div>
+                      <Notification category="catches"/>
+                      <CatchType cr={editedCatches[0]} />
+                    </div>
                     : /* IF ROW-TO-EDIT IS DELETED, SHOW CONFIRMATION */
                     <Typography variant="body1" color="secondary" style= {{ padding:5, }}> {t("rowRemoved")}</Typography>
                   }
                   <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
                     {t("cancel")}
                   </Button>
-                  <Button id="catchesEditSave" className={classes.button} variant="contained" onClick={() => handleCatchesEditSave()} color="primary">
+                  <Button id="catchesEditSave" className={classes.button} variant="contained"
+                    onClick = {() => handleCatchesEditSave()} color="primary"
+                    disabled = { errorsInCatches() }>
                     {t("save")}
                   </Button>
                 </div>

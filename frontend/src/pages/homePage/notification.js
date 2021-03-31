@@ -32,7 +32,7 @@ const Notification = ({ category }) => {
     const notifications = [... notificationsSet];
     const errors = [... errorsSet];
 
-    console.log("notes and errors", notifications, errors);
+    //console.log("notes and errors", notifications, errors);
 
     return (
       <div className={classes.container}>
