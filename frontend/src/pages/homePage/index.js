@@ -38,6 +38,7 @@ import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 import Notification from "./notification";
+import { resetNotifications } from "../../reducers/notificationsReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -129,9 +130,8 @@ export const HomePage = () => {
   const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
-
   const notifications = useSelector(state => state.notifications);
-  console.log("notif in index", notifications);
+
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -326,6 +326,7 @@ export const HomePage = () => {
                         setComment(dayJson[0]["comment"]);
                         setActions(dayJson[0]["selectedactions"]);
                         setCatchRows(dayJson[0]["id"]);
+                        dispatch(resetNotifications());
                       });
                     }}
                     KeyboardButtonProps={{
@@ -404,11 +405,12 @@ export const HomePage = () => {
 
                       <Notification category="catches"/>
 
-                      {catchRows.map((cr, i) => (
+                      { catchRows.map((cr, i) => (
                         <div key={i} id={i}>
                           <CatchType key={cr.key} cr={cr} />
                         </div>
                       ))}
+
                       <Grid item xs={12}>
                         <Button
                           className={classes.addRemoveCatchTypesButton}
@@ -420,7 +422,7 @@ export const HomePage = () => {
                         >
                           {"+"}
                         </Button>
-
+                        &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}
                       </Grid>
                       <Grid item xs={3}>
                       </Grid>

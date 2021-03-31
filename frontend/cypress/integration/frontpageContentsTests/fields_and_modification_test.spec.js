@@ -27,11 +27,8 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Nisäkkäät yms. laskettu");
     cy.contains("Liitteitä");
     cy.get("#catches-header").click();
-    cy.contains("Pyydys");
-    cy.contains("Pyyntialue");
-    cy.contains("Avattu");
-    cy.contains("Suljettu");
-    cy.contains("Verkkokoodit");
+    cy.contains("+");
+
     cy.contains("Tyyppi");
     cy.contains("Sijainti");
     cy.contains("Rengastusvakio");
@@ -63,7 +60,10 @@ describe("FirstpageFieldsAndModification", function () {
 
   it("Catch rows can be added and removed", function () {
     cy.get("#catches-header").click();
+    cy.get("#plus-catch-row-button").click();
+
     cy.get("#0").contains("Pyydys")
+    cy.get("#0").contains("Pyyntialue")
     cy.get("#plus-catch-row-button").click();
     cy.get("#0 #removeButton").click();
     cy.get("#1").should("not.exist");

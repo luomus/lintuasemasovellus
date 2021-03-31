@@ -153,6 +153,7 @@ const resources = {
       "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'.",
       "closeBeforeOpen": "Pyydys '{{char}}' merkattu suljetuksi ennen avausaikaa.",
       "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
+      "addRowByClicking": "Lisää pyydys painamalla '+'.",
 
     },
   },

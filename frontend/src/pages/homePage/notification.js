@@ -3,10 +3,19 @@ import {
   Typography
 } from "@material-ui/core/";
 import  { useSelector } from "react-redux";
-//import { validateCatchRows } from "./catchType";
+import { makeStyles } from "@material-ui/core";
 
+const useStyles = makeStyles(() => ({
+  container: {
+    padding: "5px",
+    //background: "#f0ede6",
+    borderRadius: 3,
+    //boxShadow: "0 0px 0px 2px #f0ede6",
+  }
+}));
 
 const Notification = ({ category }) => {
+  const classes = useStyles();
 
   if ( category === "catches" ) {
 
@@ -23,21 +32,21 @@ const Notification = ({ category }) => {
     const notifications = [... notificationsSet];
     const errors = [... errorsSet];
 
-    console.log("notes and errors", notifications, errors);
+    //console.log("notes and errors", notifications, errors);
 
     return (
-      <div>
+      <div className={classes.container}>
         { errors.length > 0 &&
           errors.map((e, i) => (
             <Typography key={i} variant="subtitle2" color="secondary">{e}</Typography>
           ))
         }
-
         { notifications.length > 0 &&
           notifications.map((n, i) => (
             <Typography key={i} variant="subtitle2" >{n}</Typography>
           ))
         }
+        <br />
       </div>
     );
   }

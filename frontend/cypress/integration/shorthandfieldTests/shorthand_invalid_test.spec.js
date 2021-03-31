@@ -24,11 +24,11 @@ const invalidShorthand14 = "12:00\nsommolo 1/2 W\n10:00"; //kellonajat väärinp
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
   invalidShorthand6, invalidShorthand7, invalidShorthand8,
-  invalidShorthand10, invalidShorthand11,  invalidShorthand13,
+  invalidShorthand10, invalidShorthand11, invalidShorthand13,
   invalidShorthand14];
 
-describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
-  beforeEach(function() {
+describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
+  beforeEach(function () {
     myBeforeEach();
   });
 
@@ -36,6 +36,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
 
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get("#comment-header").click();
 
     for (var i = 0; i < shorthands.length; i++) {
 
@@ -49,8 +50,8 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
       cy.get("#date-picker-inline").clear();
       cy.get("#date-picker-inline").type(date);
 
-      cy.get ("#observers").clear();
-      cy.get ("#observers").type(observer);
+      cy.get("#observers").clear();
+      cy.get("#observers").type(observer);
 
       cy.get("#comment").clear();
       cy.get("#comment").type(comment);
@@ -68,7 +69,8 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
-    cy.get ("#observers").clear();
+    cy.get("#observers").clear();
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
@@ -84,7 +86,8 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
-    cy.get ("#observers").type(observer);
+    cy.get("#observers").type(observer);
+    cy.get("#comment-header").click();
     cy.get("#comment").type(comment);
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
@@ -97,7 +100,8 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function() {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
-    cy.get ("#observers").type(observer);
+    cy.get("#observers").type(observer);
+    cy.get("#comment-header").click();
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
