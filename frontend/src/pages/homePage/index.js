@@ -278,6 +278,11 @@ export const HomePage = () => {
         value = true;
       }
     });
+    Object.keys(catchRows).map(row => {
+      if(catchRows[String(row)].lukumaara === 0){
+        value = true;
+      }
+    });
     return value;
   };
 
@@ -397,19 +402,7 @@ export const HomePage = () => {
                       spacing={1}
                     >
 
-
-
-
-
                       <Notification category="catches"/>
-
-
-
-
-
-
-
-
 
                       {catchRows.map((cr, i) => (
                         <div key={i} id={i}>

@@ -9,7 +9,6 @@ import  { useSelector } from "react-redux";
 const Notification = ({ category }) => {
 
   if ( category === "catches" ) {
-    console.log("notes in note");
 
     const allNotificationsByRow = useSelector(state => state.notifications);
     let notificationsSet = new Set();

@@ -16,7 +16,7 @@ import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
 import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
-import { setCatches, addOneCatchRow } from "../../reducers/catchRowsReducer";
+import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
 // import ObsPeriodTableOther from "./ObsPeriodTableOther";
 import {
   getDaysObservationPeriods,
@@ -219,7 +219,7 @@ const DayDetails = () => {
   const handleAddNewCatch = () => {
     setAddingNewRowMode(true);
     if (catches.length === 0) {
-      dispatch(setCatches([]));
+      dispatch(setNewCatchRow());
     } else {
       const maxKey = Math.max.apply(Math, catches.map(row => row.key));
       dispatch(addOneCatchRow(maxKey+1));
