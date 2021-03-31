@@ -57,7 +57,7 @@ from os import urandom
 
 from flask_cors import CORS #siirretty vikaksi tietokantatestijärjestelmän debuggausta varten
 
-def init_app(database):
+def init_app(database, print_db_echo):
 
     #importtaa oracle tarvittaessa
     if database == "oracle":
@@ -108,14 +108,14 @@ def init_app(database):
         dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')
         try:
             app.config["SQLALCHEMY_DATABASE_URI"] = "oracle://"+oracleConfig.username+":"+oracleConfig.password+"@"+dnsStr
-            app.config["SQLALCHEMY_ECHO"] = True
+            app.config["SQLALCHEMY_ECHO"] = print_db_echo
             print('Tietokantayhteys luotu.')
         except Exception as e:
             print(e)
     else: 
         try:
             app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
-            app.config["SQLALCHEMY_ECHO"] = True
+            app.config["SQLALCHEMY_ECHO"] = print_db_echo
             print('Testitietokantayhteys luotu.')
         except Exception as e:
             print(e)

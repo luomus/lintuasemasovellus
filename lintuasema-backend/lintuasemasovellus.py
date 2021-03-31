@@ -10,9 +10,11 @@ from application import init_app, redirect
 
 # ASETUKSET
 # db_type: Jos käytetään Oraclea, anna "oracle"; muuten käytetään oletuksena SQLitea
+# print_db_echo: Jos haluat tietokantatulosteet komentoriville, anna True; muuten False
 db_type = "oracle"
+print_db_echo = False
 
-app = init_app(db_type)
+app = init_app(db_type, print_db_echo)
 
 port = int(os.environ.get("PORT", 3000))
 
