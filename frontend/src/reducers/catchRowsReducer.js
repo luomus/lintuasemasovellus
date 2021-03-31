@@ -1,7 +1,7 @@
 const initialState =
   [{ key: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" }];
 
-const catchRowsReducer = (state = initialState, action) => {
+const catchRowsReducer = (state = [], action) => {
   switch (action.type) {
     case "ADD_ROW":
       console.log("State", state);
@@ -73,7 +73,7 @@ export const setCatches = (rowData) => {
   if (rowData.length === 0 || !rowData) {
     return {
       type: "SET_ROWS",
-      data: initialState
+      data: []//initialState
     };
   } else {
     return {
@@ -81,6 +81,13 @@ export const setCatches = (rowData) => {
       data: rowData
     };
   }
+};
+
+export const setNewCatchRow = () => {
+  return {
+    type: "SET_ROWS",
+    data: initialState
+  };
 };
 
 export default catchRowsReducer;

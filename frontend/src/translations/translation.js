@@ -145,12 +145,14 @@ const resources = {
       "amount":"Lkm",
       "length": "Pituus (m)",
       "No catches declared":"Ei ilmoitettuja pyydyksiä.",
-      "Please recheck that you mean to declare that many catches": "Pyydysten määrä on huomattavan suuri. Tarkistathan, että se on oikein ennen kuin tallennat.",
-      "NetLength": "Verkon pituus on yleensä 9-12 metriä. Tarkistathan ennen tallentamista, että syötit tarkoittamasi pituuden.",
+      "Please recheck that you mean to declare that many catches": "Pyydysten '{{char}}' määrä on huomattavan suuri. Tarkistathan, että se on oikein ennen kuin tallennat.",
+      "NetLength": "Verkon '{{char}}' pituus on yleensä 9-12 metriä. Tarkistathan ennen tallentamista, että syötit tarkoittamasi pituuden.",
       "modify": "Muokkaa",
       "obsPeriod": "Havaintojakso",
       "at": "kello",
-      "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'."
+      "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'.",
+      "closeBeforeOpen": "Pyydys '{{char}}' merkattu suljetuksi ennen avausaikaa.",
+      "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
 
     },
   },
