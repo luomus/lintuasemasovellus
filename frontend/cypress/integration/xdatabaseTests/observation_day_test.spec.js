@@ -139,6 +139,7 @@ describe("AddObservationDay", function () {
   it("Catches can be edited", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
+    cy.wait(1000);
     cy.get("#catchesButton").click();
     cy.get("#selectCatchArea").click();
     cy.contains("Vakioverkot muu").click();
