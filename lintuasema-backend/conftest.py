@@ -8,7 +8,7 @@ from application import init_app, db
 
 def app():
     #app = init_testapp()
-    app = init_app("sqlite")
+    app = init_app("sqlite", True)
     with app.app_context():   
         db.create_all()
         yield app   # Note that we changed return for yield, see below for why
