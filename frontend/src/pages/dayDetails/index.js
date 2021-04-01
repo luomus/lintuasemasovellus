@@ -74,7 +74,15 @@ const DayDetails = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const user = useSelector(state => state.user);
+  const userIsSet = Boolean(user.id);
 
+
+  if (!userIsSet) {
+    return (
+      <Redirect to="/login" />
+    );
+  }
 
   const [obsPeriods, setObsperiods] = useState([]);
 
@@ -290,18 +298,6 @@ const DayDetails = () => {
       }
     }
   })(TextField);
-
-  console.log("notes", notifications);
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
-
 
   return (
 
