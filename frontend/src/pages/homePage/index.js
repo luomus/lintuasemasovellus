@@ -171,6 +171,7 @@ export const HomePage = () => {
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
+      console.log(dailyActions);
     }
   };
 
@@ -183,8 +184,8 @@ export const HomePage = () => {
 
   const readyDailyActions = () => {
     if ("attachments" in dailyActions) {
-      if (dailyActions.attachments === "" || dailyActions.attachments <0 ) {
-        return JSON.stringify({ ...dailyActions, "attachments":0 });
+      if (dailyActions.attachments === "" || dailyActions.attachments < 0) {
+        return JSON.stringify({ ...dailyActions, "attachments": 0 });
       }
     }
     return JSON.stringify(dailyActions);
@@ -279,7 +280,7 @@ export const HomePage = () => {
       }
     });
     Object.keys(catchRows).map(row => {
-      if(catchRows[String(row)].lukumaara === 0){
+      if (catchRows[String(row)].lukumaara === 0) {
         value = true;
       }
     });
@@ -358,7 +359,7 @@ export const HomePage = () => {
                     id="comment-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("comment")}</Typography>
-                    <Typography className={classes.secondaryHeading}>{ comment ? t("commentAdded") : t("noComment")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{comment ? t("commentAdded") : t("noComment")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <TextField
@@ -380,8 +381,8 @@ export const HomePage = () => {
                     id="activity-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
-                    {/* FIX THIS: Miten selvitetään, onko jokin havaintoaktiviteetti valittu? */}
-                    <Typography className={classes.secondaryHeading}>{ (dailyActions.attachments === "0") ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
+
+                    <Typography className={classes.secondaryHeading}>{((dailyActions.attachments === "0" || dailyActions.attachments === "") && dailyActions.gåu === false && dailyActions.mammals === false && dailyActions.owlStandard === false && dailyActions.standardObs === false && dailyActions.standardRing === false) ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <DailyActions />
@@ -395,7 +396,7 @@ export const HomePage = () => {
                     id="catches-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
-                    <Typography className={classes.secondaryHeading}>{ (catchRows.length === 0 || catchRows[0].pyydys === "") ? t("noCatches") : t("catchesAdded")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{(catchRows.length === 0 || catchRows[0].pyydys === "") ? t("noCatches") : t("catchesAdded")}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid container
@@ -403,9 +404,9 @@ export const HomePage = () => {
                       spacing={1}
                     >
 
-                      <Notification category="catches"/>
+                      <Notification category="catches" />
 
-                      { catchRows.map((cr, i) => (
+                      {catchRows.map((cr, i) => (
                         <div key={i} id={i}>
                           <CatchType key={cr.key} cr={cr} />
                         </div>

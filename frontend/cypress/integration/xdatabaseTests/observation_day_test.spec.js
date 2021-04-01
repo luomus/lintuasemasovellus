@@ -58,7 +58,6 @@ describe("AddObservationDay", function () {
   });
 
 
-
   it("Day can be clicked on first page", function () {
     cy.contains(date).click();
     cy.contains(observer);
@@ -67,7 +66,6 @@ describe("AddObservationDay", function () {
     cy.contains(observStation);
     cy.contains(date);
   });
-
 
 
   it("Day and period has been added for Vakio", function () {

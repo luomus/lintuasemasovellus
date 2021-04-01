@@ -136,7 +136,8 @@ const resources = {
       "valueIsNegative": "Negatiivinen arvo!",
       "recheckLargeNumberOfAttachments": "Olet ilmoittamassa poikkeuksellisen ison määrän liitteitä. Tarkistathan, että syöttämäsi summa on oikein.",
       "valueMissing": "Arvo puuttuu!",
-      "noNegativeValues": "Negatiiviset arvot ei sallittuja!",
+      "noNegativeValues": "Negatiiviset arvot eivät ole sallittuja!",
+      "noEmptyValues": "Kenttä ei saa olla tyhjä",
 
       "Catches":"Pyydykset",
       "catchesAdded":"Pyydystietoja kirjattu",
@@ -151,7 +152,7 @@ const resources = {
       "obsPeriod": "Havaintojakso",
       "at": "kello",
       "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'.",
-      "closeBeforeOpen": "Pyydys '{{char}}' merkattu suljetuksi ennen avausaikaa.",
+      "closeBeforeOpen": "Pyydys '{{char}}' merkitty suljetuksi ennen avausaikaa.",
       "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
       "addRowByClicking": "Lisää pyydys painamalla '+'.",
 

@@ -15,7 +15,7 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Havainnoija(t)");
     cy.get("#catches-header").contains("Ei pyydyksiä");
     cy.get("#comment-header").contains("Ei kommentteja");
-    //cy.get("#acvtivity-header").contains("Ei aktiivisuutta");
+    cy.get("#activity-header").contains("Ei havaintoaktiivisuusmerkintöjä");
 
     cy.get("#comment-header").click();
     cy.contains("Havainto- ja pyydyskommentit");
