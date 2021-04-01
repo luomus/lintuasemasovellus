@@ -56,7 +56,7 @@ const HankoActions = () => {
     if (target.name === "attachments" && target.value < 0) {
       setError(t("valueIsNegative"));
     } else if (target.name === "attachments" && !target.value) {
-      setError(t("no empty values"));
+      setError(t("noEmptyValues"));
     } else if (target.name === "attachments" && target.value > 4 && !confirmationAsked) {
       setshowModal(true);
       setError("");

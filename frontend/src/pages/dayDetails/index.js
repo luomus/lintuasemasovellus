@@ -6,6 +6,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableRow
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/Add";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import RemoveCircleOutlineRoundedIcon from "@material-ui/icons/RemoveCircleOutlineRounded";
 import { useTranslation } from "react-i18next";
@@ -15,8 +16,10 @@ import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
 import CatchType from "../homePage/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
-import { setCatches } from "../../reducers/catchRowsReducer";
-// import ObsPeriodTableOther from "./ObsPeriodTableOther";
+import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
+import { resetNotifications } from "../../reducers/notificationsReducer";
+import Notification from "../homePage/notification";
+
 import {
   getDaysObservationPeriods,
   // getDaysObservationPeriodsOther,
@@ -93,9 +96,13 @@ const DayDetails = () => {
 
   const [catchesEditMode, setCatchesEditMode] = useState(false);
 
+  const [addingNewRowMode, setAddingNewRowMode] = useState(false);
+
   const dayList = useSelector(state => state.days);
 
   const userObservatory = useSelector(state => state.userObservatory);
+
+  const notifications = useSelector(state => state.notifications);
 
   const [catches, setDayCatches] = useState([]);
 
@@ -135,7 +142,7 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  //console.log("Rivit päiväsivulla", catches);
+  console.log("Rivit päiväsivulla", dayId, catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -187,8 +194,8 @@ const DayDetails = () => {
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
     if ("attachments" in actionsToSave) {
-      if (actionsToSave.attachments === "" || actionsToSave.attachments < 0 ) {
-        actionsToSave = { ...actionsToSave, "attachments":0 };
+      if (actionsToSave.attachments === "" || actionsToSave.attachments < 0) {
+        actionsToSave = { ...actionsToSave, "attachments": 0 };
       }
     }
     editActions(dayId, JSON.stringify(actionsToSave))
@@ -200,7 +207,8 @@ const DayDetails = () => {
 
   const handleCatchesEditOpen = (key) => {
     // send info to reducer
-    const row=catches.filter(c => c.key === key);
+    dispatch(resetNotifications());
+    const row = catches.filter(c => c.key === key);
     setCatchRowToEdit(row[0]);
     dispatch(setCatches(row));
     setCatchesEditMode(!actionsEditMode);
@@ -209,21 +217,58 @@ const DayDetails = () => {
   const handleCatchesEditCancel = () => {
     setCatchRowToEdit({});
     dispatch(setCatches([]));
-    setCatchesEditMode(!catchesEditMode);
+    dispatch(resetNotifications());
+    setCatchesEditMode(false);
+    setAddingNewRowMode(false);
+  };
+
+  const handleAddNewCatch = () => {
+    setAddingNewRowMode(true);
+    if (catches.length === 0) {
+      dispatch(setNewCatchRow());
+    } else {
+      const maxKey = Math.max.apply(Math, catches.map(row => row.key));
+      dispatch(addOneCatchRow(maxKey + 1));
+    }
+    //console.log("handle", editedCatches);
+    dispatch(resetNotifications());
+    setCatchesEditMode(true);
   };
 
   const handleCatchesEditSave = () => {
     if (editedCatches.length === 0) {
       deleteCatchRow(dayId, catchRowToEdit);
+      setDayCatches(catches.filter(row => row.key !== catchRowToEdit.key));
     } else {
       editCatchRow(dayId, editedCatches);
-      setDayCatches(catches.map(row => row.key === editedCatches[0].key
-        ? editedCatches[0]
-        : row));
+      if (addingNewRowMode) {
+        setDayCatches([...catches, editedCatches[0]]);
+      } else {
+        setDayCatches(catches.map(row => row.key === editedCatches[0].key
+          ? editedCatches[0]
+          : row));
+      }
     }
     dispatch(setCatches([]));
     setCatchRowToEdit({});
-    setCatchesEditMode(!catchesEditMode);
+    dispatch(resetNotifications());
+    setCatchesEditMode(false);
+    setAddingNewRowMode(false);
+  };
+
+  const errorsInCatches = () => {
+    let value = false;
+    Object.keys(notifications).map(row => {
+      if (notifications[String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    Object.keys(editedCatches).map(row => {
+      if (editedCatches[String(row)].lukumaara === 0) {
+        value = true;
+      }
+    });
+    return value;
   };
 
   const refetchObservations = async () => {
@@ -246,7 +291,7 @@ const DayDetails = () => {
     }
   })(TextField);
 
-
+  console.log("notes", notifications);
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
 
@@ -339,7 +384,7 @@ const DayDetails = () => {
               </Typography>
               <FormGroup row className={classes.formGroup}>
                 {
-                  Object.entries(selectedActions).filter(([key]) => key!=="attachments").map(([action, value], i) =>
+                  Object.entries(selectedActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
                     <FormControlLabel className={classes.formControlLabel}
                       control={value
                         ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
@@ -352,7 +397,7 @@ const DayDetails = () => {
                 <FormControlLabel className={classes.FormControlLabel}
                   control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.attachments + " " + t("pcs")}
                     disabled InputProps={{ disableUnderline: true }} />}
-                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments") }</span>} labelPlacement="start" />
+                  label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
 
                 <Box>
                   <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
@@ -384,7 +429,7 @@ const DayDetails = () => {
             </Typography>
             {(catches.length > 0 && !catchesEditMode)
               ? /* LIST CATCHES */
-              <Table className={classes.catchTable} size="normal" aria-label="a dense table">
+              <Table className={classes.catchTable} size="medium" aria-label="a dense table">
                 <TableHead>
                   <TableRow>
                     <TableCell>{t("catchType")}</TableCell>
@@ -393,18 +438,22 @@ const DayDetails = () => {
                     <TableCell align="left">{t("amount")}</TableCell>
                     <TableCell align="left">{t("netCodes")}</TableCell>
                     <TableCell align="left">{t("length")}</TableCell>
-                    <TableCell align="left"></TableCell>
+                    <TableCell align="left">
+                      <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
+                        <AddIcon fontSize="medium" />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {Object.keys(catches).map((c) =>
                     <TableRow key={catches[String(c)].key}>
                       <TableCell component="th" scope="row">{catches[String(c)].pyydys}</TableCell>
-                      <TableCell align="left">{catches[String(c)].pyyntialue}</TableCell>
-                      <TableCell align="left">{catches[String(c)].alku} - {catches[String(c)].loppu}</TableCell>
-                      <TableCell align="left">{catches[String(c)].lukumaara}</TableCell>
-                      <TableCell align="left">{catches[String(c)].verkkokoodit ? catches[String(c)].verkkokoodit : "-"}</TableCell>
-                      <TableCell align="left">{catches[String(c)].verkonPituus > 0 ? catches[String(c)].verkonPituus : "-"}</TableCell>
+                      <TableCell align="left" id="catchArea">{catches[String(c)].pyyntialue}</TableCell>
+                      <TableCell align="left" id="wasOpen">{catches[String(c)].alku} - {catches[String(c)].loppu}</TableCell>
+                      <TableCell align="left" id="amount">{catches[String(c)].lukumaara}</TableCell>
+                      <TableCell align="left" id="netCodes">{catches[String(c)].verkkokoodit ? catches[String(c)].verkkokoodit : "-"}</TableCell>
+                      <TableCell align="left" id="netLength">{catches[String(c)].verkonPituus > 0 ? catches[String(c)].verkonPituus : "-"}</TableCell>
                       <TableCell align="left">
                         <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen(catches[String(c)].key)} variant="contained" color="primary"  >
                           <EditIcon fontSize="small" />
@@ -414,25 +463,33 @@ const DayDetails = () => {
                   )}
                 </TableBody>
               </Table>
-              : (catches.length > 0 && catchesEditMode) /* EDIT ONE CATCH ROW */
+              : (catchesEditMode) /* EDIT ONE CATCH ROW */
                 ?
                 <div>
-                  {(editedCatches.length >0 )
+                  {(editedCatches.length > 0)
                     ? /* SHOW CATCH ROW AS EDITABLE ELEMENT */
-                    <CatchType cr={editedCatches[0]} />
+                    <div>
+                      <Notification category="catches" />
+                      <CatchType cr={editedCatches[0]} />
+                    </div>
                     : /* IF ROW-TO-EDIT IS DELETED, SHOW CONFIRMATION */
-                    <Typography variant="body1" color="secondary" style= {{ padding:5, }}> {t("rowRemoved")}</Typography>
+                    <Typography variant="body1" color="secondary" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
                   }
                   <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
                     {t("cancel")}
                   </Button>
-                  <Button id="catchesEditSave" className={classes.button} variant="contained" onClick={() => handleCatchesEditSave()} color="primary">
+                  <Button id="catchesEditSave" className={classes.button} variant="contained"
+                    onClick={() => handleCatchesEditSave()} color="primary"
+                    disabled={errorsInCatches()}>
                     {t("save")}
                   </Button>
                 </div>
                 : /* NO CATCHES FOR THAT DAY*/
                 <Typography variant="body1"  >
                   {t("No catches declared")}
+                  <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
                 </Typography>
             }
           </Grid>

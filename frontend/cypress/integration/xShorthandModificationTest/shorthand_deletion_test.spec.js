@@ -19,10 +19,12 @@ describe("ShorthandDeletion", function () {
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get("#observers").clear();
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.wait(1000);
     cy.get("#observers").type(observer);
     cy.get("#comment").type(comment);
+    cy.get("#activity-header").click();
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
