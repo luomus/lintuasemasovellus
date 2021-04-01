@@ -3,17 +3,18 @@ import React, {
   useState
 } from "react";
 import {
-  Paper, Grid, Box,
+  Paper, Grid,
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
-  Table, TableRow, TableBody, TableCell, withStyles,
+  Table, TableRow, TableBody, TableCell, withStyles, Accordion,
+  AccordionSummary, AccordionDetails
 } from "@material-ui/core/";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
-import ObservatorySelector from "./observatorySelector";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, Link, useHistory } from "react-router-dom";
 import Alert from "../../globalComponents/Alert";
@@ -23,16 +24,21 @@ import {
   sendDay,
   loopThroughObservationPeriods,
   loopThroughObservations,
+  sendCatches,
   //sendShorthand,
   //makeSendDataJson,
 } from "./parseShorthandField";
-import { searchDayInfo, getLatestDays } from "../../services";
+import { searchDayInfo, getLatestDays, getCatches } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 //import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
+import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
+import CatchType from "./catchType";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
+import Notification from "./notification";
+import { resetNotifications } from "../../reducers/notificationsReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "40px",
     position: "static",
   },
+  addRemoveCatchTypesButton: {
+    marginLeft: theme.spacing(1),
+    marginTop: theme.spacing(0),
+  },
   pointerCursor: {
     cursor: "pointer",
     textDecoration: "underline",
@@ -69,10 +79,20 @@ const useStyles = makeStyles((theme) => ({
   formControlLabel: {
     padding: "0px 100px 0px 0px",
   },
-  attachmentField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 75,
+  accordionRoot: {
+    width: "100%",
+  },
+  sectionHeading: {
+    fontSize: "20px",
+    flexBasis: "33.33%",
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: "15px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    opacity: "0.6",
   },
 }
 ));
@@ -107,34 +127,29 @@ export const HomePage = () => {
 
   const userObservatory = useSelector(state => state.userObservatory);
   const dailyActions = useSelector(state => state.dailyActions);
-
-  const history = useHistory();
-
-  const dispatch = useDispatch();
-
+  const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
   const userID = useSelector(state => state.user.id);
+  const notifications = useSelector(state => state.notifications);
+
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
-
   const [day, setDay] = useState(dateNow);
   const [observers, setObservers] = useState("");
   const [comment, setComment] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-
   const [disabled, setDisabled] = useState(false);
-
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
-
   const [latestDays, setLatestDays] = useState([]);
-
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
-
 
   useEffect(() => {
     getLatestDays(userObservatory)
@@ -152,17 +167,25 @@ export const HomePage = () => {
   };
 
   const setActions = (selectedActions) => {
-    if (selectedActions){
+    if (selectedActions) {
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
+      console.log(dailyActions);
     }
+  };
+
+
+  const setCatchRows = (dayId) => {
+    console.log("DATE", dayId);
+    getCatches(dayId)
+      .then(res => dispatch(setCatches(res)));
   };
 
   const readyDailyActions = () => {
     if ("attachments" in dailyActions) {
-      if (dailyActions.attachments === "" || dailyActions.attachments <0 ) {
-        return JSON.stringify({ ...dailyActions, "attachments":0 });
+      if (dailyActions.attachments === "" || dailyActions.attachments < 0) {
+        return JSON.stringify({ ...dailyActions, "attachments": 0 });
       }
     }
     return JSON.stringify(dailyActions);
@@ -209,6 +232,7 @@ export const HomePage = () => {
         observatory: userObservatory,
         selectedactions: readyDailyActions()
       });
+      await sendCatches(catchRows);
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows, userID);
       //await sendShorthand(makeSendDataJson(
@@ -225,6 +249,12 @@ export const HomePage = () => {
     setDisabled(false);
   };
 
+
+  const addCatchRow = () => {
+    dispatch(addOneCatchRow());
+  };
+
+
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
 
@@ -235,10 +265,26 @@ export const HomePage = () => {
   }
 
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "")
+    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInCatchesOrActions())
       return true;
     else
       return false;
+  };
+
+  const errorsInCatchesOrActions = () => {
+    let value = false;
+    Object.keys(notifications).map(row => {
+      console.log("mapping", notifications[String(row)]);
+      if (notifications[String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    Object.keys(catchRows).map(row => {
+      if (catchRows[String(row)].lukumaara === 0) {
+        value = true;
+      }
+    });
+    return value;
   };
 
   const handleDateClick = (s) => {
@@ -250,22 +296,18 @@ export const HomePage = () => {
       <Grid container
         alignItems="flex-start"
       >
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Paper className={classes.obsPaper}>
             <Grid container
               alignItems="flex-start"
               spacing={1}>
-              <Grid item xs={6} >
+              <Grid item xs={12} >
                 <Typography variant="h5" component="h2" >
                   {t("addObservations")}
                 </Typography>
                 <br />
               </Grid>
-              <Grid item xs={6}>
-                <Box display="flex" justifyContent="flex-end">
-                  <ObservatorySelector />
-                </Box>
-              </Grid>
+
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
                   <KeyboardDatePicker
@@ -280,10 +322,12 @@ export const HomePage = () => {
                     value={day}
                     onChange={(date) => {
                       setDay(date);
-                      searchDayInfo(formatDate(date), userObservatory).then((dayJson)  => {
+                      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
                         setObservers(dayJson[0]["observers"]);
                         setComment(dayJson[0]["comment"]);
                         setActions(dayJson[0]["selectedactions"]);
+                        setCatchRows(dayJson[0]["id"]);
+                        dispatch(resetNotifications());
                       });
                     }}
                     KeyboardButtonProps={{
@@ -304,90 +348,181 @@ export const HomePage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  rows={5}
-                  multiline={true}
-                  id="comment"
-                  fullWidth={true}
-                  label={t("comment")}
-                  onChange={(event) => setComment(event.target.value)}
-                  value={comment}
-                />
-              </Grid>
-              <DailyActions
-              />
+              <div className={classes.accordionRoot}>
 
-              <Grid item xs={3}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="Tyyppi">{t("type")}</InputLabel>
-                  <Select required
-                    labelId="type"
-                    fullWidth={true}
-                    id="selectType"
-                    value={type}
-                    onChange={(event) => setType(event.target.value)}
-                  >
-                    {
-                      types.map((type, i) =>
-                        <MenuItem id={type} value={type} key={i}>
-                          {type}
-                        </MenuItem>
-                      )
-                    }
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={3}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="Location">{t("location")}</InputLabel>
-                  <Select required
-                    labelId="location"
-                    id="selectLocation"
-                    value={location}
-                    onChange={(event) => setLocation(event.target.value)}
-                  >
-                    {
-                      locations.map((location, i) =>
-                        <MenuItem id={location} value={location} key={i}>
-                          {location}
-                        </MenuItem>
-                      )
-                    }
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <br />
-              <br />
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                </Grid>
                 <br />
-              </Grid>
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="comment-content"
+                    id="comment-header"
+                  >
+                    <Typography className={classes.sectionHeading}>{t("comment")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{comment ? t("commentAdded") : t("noComment")}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <TextField
+                      rows={3}
+                      multiline={true}
+                      id="comment"
+                      fullWidth={true}
+                      label={t("comment")}
+                      onChange={(event) => setComment(event.target.value)}
+                      value={comment}
+                    />
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="activity-content"
+                    id="activity-header"
+                  >
+                    <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
+
+                    <Typography className={classes.secondaryHeading}>{((dailyActions.attachments === "0" || dailyActions.attachments === "") && dailyActions.gåu === false && dailyActions.mammals === false && dailyActions.owlStandard === false && dailyActions.standardObs === false && dailyActions.standardRing === false) ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <DailyActions />
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="catches-content"
+                    id="catches-header"
+                  >
+                    <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{(catchRows.length === 0 || catchRows[0].pyydys === "") ? t("noCatches") : t("catchesAdded")}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Grid container
+                      alignItems="flex-start"
+                      spacing={1}
+                    >
+
+                      <Notification category="catches" />
+
+                      {catchRows.map((cr, i) => (
+                        <div key={i} id={i}>
+                          <CatchType key={cr.key} cr={cr} />
+                        </div>
+                      ))}
+
+                      <Grid item xs={12}>
+                        <Button
+                          className={classes.addRemoveCatchTypesButton}
+                          onClick={addCatchRow}
+                          color="primary"
+                          id="plus-catch-row-button"
+                          variant="contained"
+                          size="small"
+                        >
+                          {"+"}
+                        </Button>
+                        &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}
+                      </Grid>
+                      <Grid item xs={3}>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion defaultExpanded>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="obervation-content"
+                    id="observation-header"
+                  >
+                    <Typography className={classes.sectionHeading}>{t("observations")} *</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+
+                    <Grid container
+                      alignItems="flex-start"
+                      spacing={1}
+                    >
+
+                      <Grid item xs={3}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="Tyyppi">{t("type")}</InputLabel>
+                          <Select required
+                            labelId="type"
+                            fullWidth={true}
+                            id="selectType"
+                            value={type}
+                            onChange={(event) => setType(event.target.value)}
+                          >
+                            {
+                              types.map((type, i) =>
+                                <MenuItem id={type} value={type} key={i}>
+                                  {type}
+                                </MenuItem>
+                              )
+                            }
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item xs={3}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="Location">{t("location")}</InputLabel>
+                          <Select required
+                            labelId="location"
+                            id="selectLocation"
+                            value={location}
+                            onChange={(event) => setLocation(event.target.value)}
+                          >
+                            {
+                              locations.map((location, i) =>
+                                <MenuItem id={location} value={location} key={i}>
+                                  {location}
+                                </MenuItem>
+                              )
+                            }
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item xs={6}>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <CodeMirrorBlock
+                          shorthand={shorthand}
+                          setShorthand={setShorthand}
+                          setSanitizedShorthand={setSanitizedShorthand}
+                          setCodeMirrorHasErrors={setCodeMirrorHasErrors}
+                        />
+                      </Grid>
+                    </Grid>
+
+                  </AccordionDetails>
+                </Accordion>
+
+              </div>
 
               <Grid item xs={12}>
-                <CodeMirrorBlock
-                  shorthand={shorthand}
-                  setShorthand={setShorthand}
-                  setSanitizedShorthand={setSanitizedShorthand}
-                  setCodeMirrorHasErrors={setCodeMirrorHasErrors}
-                />
+                <br />
+                <Button
+                  id="saveButton"
+                  className={classes.sendButton}
+                  onClick={sendData}
+                  disabled={saveButtonDisabled() || disabled}
+                  color="primary"
+                  variant="contained"
+                >
+                  {disabled ? t("loading") : t("save")}
+                </Button>
               </Grid>
-              <Button
-                id="saveButton"
-                className={classes.sendButton}
-                onClick={sendData}
-                disabled={saveButtonDisabled() || disabled}
-                color="primary"
-                variant="contained"
-              >
-                {disabled ? t("loading") : t("save")}
-              </Button>
+
             </Grid>
           </Paper>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Grid item xs={12} className={classes.infoGrid}>
             <Paper className={classes.infoPaper}>
               <Grid item xs={12}>

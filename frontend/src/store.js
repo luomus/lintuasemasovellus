@@ -4,8 +4,9 @@ import daysReducer from "./reducers/daysReducer";
 import stationsReducer from "./reducers/obsStationReducer";
 import userObservatoryReducer from "./reducers/userObservatoryReducer";
 import dailyActionsReducer from "./reducers/dailyActionsReducer";
-
+import catchRowsReducer from "./reducers/catchRowsReducer";
 import userReducer from "./reducers/userReducer";
+import notificationsReducer from "./reducers/notificationsReducer";
 
 
 const reducer = combineReducers({
@@ -14,6 +15,8 @@ const reducer = combineReducers({
   days: daysReducer,
   userObservatory: userObservatoryReducer,
   dailyActions: dailyActionsReducer,
+  catchRows: catchRowsReducer,
+  notifications: notificationsReducer,
 });
 
 const store = createStore(

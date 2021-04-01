@@ -7,7 +7,7 @@ from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId, getLocationName
-from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId
+from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, addObservationperiod
 from application.api.classes.observatoryday.services import getDay
 from application.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
 

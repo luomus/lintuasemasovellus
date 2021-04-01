@@ -29,6 +29,7 @@ from application.api.classes.type import models
 from application.api.classes.observationperiod import models
 from application.api.classes.shorthand import models
 from application.api.classes.observation import models
+from application.api.classes.catch import models
 
 from application.api.classes.observationperiod import views
 from application.api.classes.location import views, services
@@ -38,6 +39,8 @@ from application.api.classes.account import views
 from application.api.classes.shorthand import views
 from application.api.classes.observation import views
 from application.api.classes.type import services
+from application.api.classes.catch import views, services
+
 
 from application.api.classes.account.models import Account
 from application.api.classes.observatory.models import Observatory
@@ -54,7 +57,7 @@ from os import urandom
 
 from flask_cors import CORS #siirretty vikaksi tietokantatestijärjestelmän debuggausta varten
 
-def init_app(database):
+def init_app(database, print_db_echo):
 
     #importtaa oracle tarvittaessa
     if database == "oracle":
@@ -105,14 +108,14 @@ def init_app(database):
         dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')
         try:
             app.config["SQLALCHEMY_DATABASE_URI"] = "oracle://"+oracleConfig.username+":"+oracleConfig.password+"@"+dnsStr
-            app.config["SQLALCHEMY_ECHO"] = True
+            app.config["SQLALCHEMY_ECHO"] = print_db_echo
             print('Tietokantayhteys luotu.')
         except Exception as e:
             print(e)
     else: 
         try:
             app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
-            app.config["SQLALCHEMY_ECHO"] = True
+            app.config["SQLALCHEMY_ECHO"] = print_db_echo
             print('Testitietokantayhteys luotu.')
         except Exception as e:
             print(e)

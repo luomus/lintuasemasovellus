@@ -6,6 +6,7 @@ const resources = {
       "footer": "Lintuasemasovellus Haukka | Luonnontieteellinen keskusmuseo LUOMUS",
       "login": "Kirjaudu sisään",
       "logout": "Kirjaudu ulos",
+      "User": "Käyttäjä",
       "welcome": "Tervetuloa",
       "frontpage": "Etusivu",
       "addDayPage": "Lisää päivä",
@@ -15,7 +16,9 @@ const resources = {
       "date": "Päivämäärä",
       "observers": "Havainnoija(t)",
       "observations": "Havainnot",
-      "comment": "Kommentti",
+      "comment": "Havainto- ja pyydyskommentit",
+      "commentAdded": "Kommentteja kirjattu",
+      "noComment": "Ei kommentteja",
       "save": "Tallenna",
       "loading": "Ladataan...",
       "cancel": "Peruuta",
@@ -26,6 +29,12 @@ const resources = {
       "multipleSpecies": "lajia",
       "removingCannotBeCancelled": "Poistamista ei voi peruuttaa. Jatketaanko?",
       "observationPeriodNotDefined": "obsPeriod is undefined!",
+      "catchType": "Pyydys",
+      "netCodes": "Verkkokoodit",
+      "catchArea": "Pyyntialue",
+      "netLength": "Verkon pituus",
+      "catchCount": "Lukumäärä",
+      "add catch row": "Lisää pyydysrivi",
 
       "chooseTypeAndLocation": "(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
@@ -57,6 +66,8 @@ const resources = {
       "timeEleven": "11:00",
       "shorthandExample2": "grugru 3ad/2juv/5subad s +-",
       "timeTwelwe": "12:00",
+      "netopened": "Avattu",
+      "netclosed": "Suljettu",
 
       "speciesTotal": "Lajit lkm",
       "duration": "Kesto",
@@ -68,6 +79,7 @@ const resources = {
 
       "addObservations": "Lisää havaintoja",
 
+      "Change Observatory": "Vaihda lintuasemaa",
       "chooseObservatory": "Valitse lintuasema",
       "currentObservatory": "Valittu asema: ",
 
@@ -111,7 +123,9 @@ const resources = {
       "to": ", Yhteensä: ",
 
       "checkShorthand": "Tarkista pikakirjoitus",
-
+      "Observation activity": "Havaintoaktiivisuus",
+      "observationActivityAdded": "Havaintoaktiivisuus kirjattu",
+      "noObservationActivity": "Ei havaintoaktiivisuusmerkintöjä",
       "standardObs": "Vakiohavainnointi",
       "gåu": "Gåulla käynti",
       "standardRing": "Rengastusvakio",
@@ -122,10 +136,25 @@ const resources = {
       "valueIsNegative": "Negatiivinen arvo!",
       "recheckLargeNumberOfAttachments": "Olet ilmoittamassa poikkeuksellisen ison määrän liitteitä. Tarkistathan, että syöttämäsi summa on oikein.",
       "valueMissing": "Arvo puuttuu!",
+      "noNegativeValues": "Negatiiviset arvot eivät ole sallittuja!",
+      "noEmptyValues": "Kenttä ei saa olla tyhjä",
 
+      "Catches":"Pyydykset",
+      "catchesAdded":"Pyydystietoja kirjattu",
+      "noCatches":"Ei pyydyksiä",
+      "was open": "Auki",
+      "amount":"Lkm",
+      "length": "Pituus (m)",
+      "No catches declared":"Ei ilmoitettuja pyydyksiä.",
+      "Please recheck that you mean to declare that many catches": "Pyydysten '{{char}}' määrä on huomattavan suuri. Tarkistathan, että se on oikein ennen kuin tallennat.",
+      "NetLength": "Verkon '{{char}}' pituus on yleensä 9-12 metriä. Tarkistathan ennen tallentamista, että syötit tarkoittamasi pituuden.",
       "modify": "Muokkaa",
       "obsPeriod": "Havaintojakso",
-      "at": "kello"
+      "at": "kello",
+      "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'.",
+      "closeBeforeOpen": "Pyydys '{{char}}' merkitty suljetuksi ennen avausaikaa.",
+      "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
+      "addRowByClicking": "Lisää pyydys painamalla '+'.",
 
     },
   },

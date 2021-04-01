@@ -13,7 +13,7 @@ class Observatoryday(Base):
     observatory_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'observatory.id'), nullable=False)
 
     Observationperiod=db.relationship("Observationperiod", backref="observatoryday", lazy=True)
-    
+    Catch=db.relationship("Catch", backref="observatoryday", lazy=True)
 
     def __init__ (self, day, comment, observers, selectedactions, observatory_id):
         self.day=day

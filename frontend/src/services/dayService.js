@@ -9,6 +9,10 @@ export const postDay = async (day) => {
   return await axios.post("/api/addDay", day);
 };
 
+export const postCatches = async (catches) => {
+  return await axios.post("/api/addCatches", catches);
+};
+
 export const editComment = async (dayId, comment) => {
   return await axios.post(`/api/editComment/${dayId}/${comment}`);
 };
@@ -18,8 +22,21 @@ export const editObservers = async (dayId, observers) => {
 };
 
 export const editActions = async (dayId, actions) => {
-  console.log("services dayid:",dayId, actions);
   return await axios.post(`/api/editActions/${dayId}/${actions}`);
+};
+
+export const editCatchRow = async (dayId, editedRow) => {
+  return await axios.post(`/api/editCatches/${dayId}`, editedRow);
+};
+
+export const deleteCatchRow = async (dayId, catchRowToDelete) => {
+  const dayRowNumber=catchRowToDelete.key;
+  return await axios.delete(`/api/deleteCatch/${dayId}/${dayRowNumber}`);
+};
+
+export const getCatches = async (dayId) => {
+  const catches=await axios.get(`/api/getCatchDetails/${dayId}`);
+  return catches.data;
 };
 
 export const getLocationsAndTypes = async (observatory) => {

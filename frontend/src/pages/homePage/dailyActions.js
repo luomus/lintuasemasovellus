@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   formControlLabel: {
-    padding: "0px 100px 0px 0px",
+    padding: "0px 60px 0px 0px",
   },
   attachmentField: {
     marginLeft: theme.spacing(1),
@@ -56,7 +56,7 @@ const HankoActions = () => {
     if (target.name === "attachments" && target.value < 0) {
       setError(t("valueIsNegative"));
     } else if (target.name === "attachments" && !target.value) {
-      setError(t("no empty values"));
+      setError(t("noEmptyValues"));
     } else if (target.name === "attachments" && target.value > 4 && !confirmationAsked) {
       setshowModal(true);
       setError("");
@@ -69,8 +69,8 @@ const HankoActions = () => {
   };
 
   return (
-    <Grid item xs={12}>
-      <FormGroup row className={classes.formGroup}>
+    <Grid item xs={12} >
+      <FormGroup row className={classes.formGroup} >
         <FormControlLabel className={classes.formControlLabel}
           control={<Checkbox checked={clicks.standardObs} onChange={(e) => handleClick(e.target)} name="standardObs" color="primary" />}
           label={t("standardObs")} labelPlacement="end" />

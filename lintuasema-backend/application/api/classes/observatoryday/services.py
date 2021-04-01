@@ -3,6 +3,7 @@ from application.api.classes.observatoryday.models import Observatoryday
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.observationperiod.services import setObsPerDayId
+from application.api.classes.catch.services import set_catch_day_id
 
 from flask import jsonify
 
@@ -12,12 +13,14 @@ def addDay(obsday):
     d = Observatoryday.query.filter_by(day = obsday.day, observatory_id = obsday.observatory_id, is_deleted = 0).first()
     if  not d and obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
         db.session().add(obsday)
-        db.session().commit()
+        db.session().commit() 
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
+      if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
         db.session().add(obsday)
         db.session.commit()
         setObsPerDayId(d.id, obsday.id)
+        set_catch_day_id(d.id, obsday.id)
        
 def getDays():
     dayObjects = Observatoryday.query.filter_by(is_deleted=0).all()

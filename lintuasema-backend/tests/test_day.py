@@ -77,7 +77,6 @@ def test_addDayRoute(app):
         content_type='application/json',)
     
     print("response", response)
-    #data = json.loads(response.get_data())
     data = response.get_json()
     print('status code ',  response.status_code)
     assert response.status_code == 200
