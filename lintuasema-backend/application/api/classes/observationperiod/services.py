@@ -2,40 +2,45 @@ from flask import jsonify
 
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observation.models import Observation
+from application.api.classes.observatoryday.models import Observatoryday
+from application.api.classes.type.models import Type
+from application.api.classes.observatory.models import Observatory
+from application.api.classes.location.services import getLocationId, getLocationName
+from application.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
+from application.api.classes.observatoryday.services import getDay
+
 from application.db import db, prefix
-
 from sqlalchemy.sql import text
+from datetime import datetime
 
+def addObservationperiod(day_id, location, observationType, startTime, endTime):
 
-def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
-    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, type_id=type_id, location_id=location_id, observatoryday_id=observatoryday_id, is_deleted=0).first()
-    return obsp.id
+    obsday = getDay(day_id)
+    obsId = obsday.observatory_id
+    locId = getLocationId(location, obsId)
+    createType(observationType, obsId)
 
-
-def setObsPerDayId(observatoryday_id_old, observatoryday_id_new):
-    obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
-    for obs in obsp:
-        obs.observatoryday_id = observatoryday_id_new
-        db.session().commit()
-
-def getObservationperiods():
-    periodObjects = Observationperiod.query.filter_by(is_deleted=0).all()
-    return periodObjects
-
-def addObservationperiod(obsperiod):
-      db.session().add(obsperiod)
-      db.session().commit()
-
-def setObservationId(observationperiod_id_old, observationperiod_id_new):
-    observations = Observation.query.filter_by(observationperiod_id = observationperiod_id_old).all()
-    for x in observations:
-        x.observationperiod_id = observationperiod_id_new
-
+    obsp = Observationperiod(
+        start_time=datetime.strptime(startTime, '%H:%M'),
+        end_time=datetime.strptime(endTime, '%H:%M'),
+        type_id=getTypeIdByName(observationType),
+        location_id=locId, observatoryday_id=day_id)#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
+    db.session().add(obsp)
+    db.session().commit()
+    
+    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
+    
+    return { 'id': obspId }
 
 def addObservation(observation):
     db.session().add(observation)
     db.session().commit()
 
+def setObservationId(observationperiod_id_old, observationperiod_id_new):
+    observations = Observation.query.filter_by(observationperiod_id = observationperiod_id_old).all()
+    for x in observations:
+        x.observationperiod_id = observationperiod_id_new
+    db.session().commit()
 
 def getObservationPeriodsByDayId(observatoryday_id):     
     stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
@@ -96,3 +101,33 @@ def getObservationPeriodsByDayId(observatoryday_id):
         })
   
     return jsonify(response)
+
+def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
+    obsp = Observationperiod.query.filter_by(start_time = starttime, end_time=endtime, type_id=type_id, location_id=location_id, observatoryday_id=observatoryday_id, is_deleted=0).first()
+    return obsp.id
+
+def getObservationperiodList():
+    observationPeriods = Observationperiod.query.filter_by(is_deleted=0).all()
+    
+    ret = []
+
+    for obsPeriod in observationPeriods:
+        ret.append(
+        {
+            'id': obsPeriod.id,
+            'startTime': obsPeriod.start_time,
+            'endTime': obsPeriod.end_time,
+            'type_id': getTypeNameById(obsPeriod.type_id),
+            'location': getLocationName(obsPeriod.location_id),
+            'day_id': obsPeriod.observatoryday_id
+        })
+
+    return ret
+
+def getObservationperiods():
+    return Observationperiod.query.filter_by(is_deleted=0).all()
+
+def deleteObservationperiod(obsperiod_id):
+    deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
+    deleted_obsperiod.is_deleted = 1
+    db.session.commit()

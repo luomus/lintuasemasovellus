@@ -1,10 +1,9 @@
-from flask import render_template, request, redirect, url_for,\
-    jsonify
+from flask import jsonify
 
 from flask_login import login_required
 
 from application.api.classes.observatory.models import Observatory
-from application.api.classes.observatory.services import getAll
+from application.api.classes.observatory.services import getAllJSON
 
 from application.api import bp
 from application.db import db
@@ -14,9 +13,6 @@ from application.db import db
 @login_required
 def get_observatories():
 
-    observatories = getAll()
-    ret = []
-    for obs in observatories:
-        ret.append({'id': obs.id, 'name': obs.name})
+    ret = getAllJSON()
 
     return jsonify(ret)
