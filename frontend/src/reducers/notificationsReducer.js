@@ -6,7 +6,6 @@ const intitialState =
 const notificationsReducer = (state = intitialState, action) => {
   switch (action.type) {
     case "SET_CATCH_NOTIFICATIONS":
-      console.log("action.data",action.key, action.data);
       return { ...state, [action.key]:action.data };
     case "RESET":
       return intitialState;

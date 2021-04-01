@@ -132,7 +132,6 @@ export const HomePage = () => {
   const userID = useSelector(state => state.user.id);
   const notifications = useSelector(state => state.notifications);
 
-
   const history = useHistory();
   const dispatch = useDispatch();
 
