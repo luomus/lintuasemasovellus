@@ -18,7 +18,7 @@ else:
     from application import init_app, redirect
     print('Testataan uutta backendiä')
 
-app = init_app("sqlite")
+app = init_app("sqlite", True)
 
 port = int(os.environ.get("PORT", 3000))
 
