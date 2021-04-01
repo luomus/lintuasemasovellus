@@ -83,7 +83,6 @@ const CatchType = ({ cr }) => {
   const dispatch = useDispatch();
 
   const validate = (cr) => {
-    console.log("Validating", cr);
     let toNotifications = [];
     let toErrors = [];
 
