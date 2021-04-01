@@ -381,7 +381,7 @@ export const HomePage = () => {
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
 
-                    <Typography className={classes.secondaryHeading}>{((dailyActions.attachments === "0" || dailyActions.attachments === "") && dailyActions.gåu === false && dailyActions.mammals === false && dailyActions.owlStandard === false && dailyActions.standardObs === false && dailyActions.standardRing === false) ? t("noObservationActivity") : t("observationActivityAdded")}</Typography>
+                    <Typography className={classes.secondaryHeading}>{(dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded") : t("noObservationActivity") } </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <DailyActions />
