@@ -149,7 +149,7 @@ export const HomePage = () => {
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
-  const [dateChangeConfirm, setDateChangeConfirm] = useState(true);
+  const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
 
   useEffect(() => {
     getLatestDays(userObservatory)
@@ -328,7 +328,7 @@ export const HomePage = () => {
                     label={t("date")}
                     value={day}
                     onChange={(date) => {
-                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm === true) {
+                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
                         setDay(date);
                         searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
                           setObservers(dayJson[0]["observers"]);
