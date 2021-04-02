@@ -9,7 +9,7 @@ import {
   Table, TableRow, TableBody, TableCell, withStyles, Accordion,
   AccordionSummary, AccordionDetails
 } from "@material-ui/core/";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { ExpandMore, Event } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -332,6 +332,7 @@ export const HomePage = () => {
                     KeyboardButtonProps={{
                       "aria-label": "change date",
                     }}
+                    keyboardIcon={<Event color="primary" />}
                   />
 
                 </MuiPickersUtilsProvider>
@@ -353,7 +354,7 @@ export const HomePage = () => {
 
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="comment-content"
                     id="comment-header"
                   >
@@ -375,7 +376,7 @@ export const HomePage = () => {
 
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="activity-content"
                     id="activity-header"
                   >
@@ -390,7 +391,7 @@ export const HomePage = () => {
 
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="catches-content"
                     id="catches-header"
                   >
@@ -432,7 +433,7 @@ export const HomePage = () => {
 
                 <Accordion defaultExpanded>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="obervation-content"
                     id="observation-header"
                   >

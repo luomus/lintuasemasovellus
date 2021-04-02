@@ -383,7 +383,7 @@ const DayDetails = () => {
                   Object.entries(selectedActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
                     <FormControlLabel className={classes.formControlLabel}
                       control={value
-                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
+                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} />
                         : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
                       }
                       label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
