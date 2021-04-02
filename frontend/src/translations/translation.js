@@ -151,7 +151,7 @@ const resources = {
       "modify": "Muokkaa",
       "obsPeriod": "Havaintojakso",
       "at": "kello",
-      "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Tallenna'.",
+      "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Poista'.",
       "closeBeforeOpen": "Pyydys '{{char}}' merkitty suljetuksi ennen avausaikaa.",
       "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
       "addRowByClicking": "Lisää pyydys painamalla '+'.",

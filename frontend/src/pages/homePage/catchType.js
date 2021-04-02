@@ -1,7 +1,8 @@
 import React from "react"; //
+import { HighlightOff } from "@material-ui/icons";
 import {
   TextField, InputLabel, Select, MenuItem, FormControl,
-  FormControlLabel, InputAdornment, Grid, FormGroup, Button,
+  FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
   //Dialog, DialogActions, DialogContentText, DialogContent,
 } from "@material-ui/core/";
 import { useDispatch } from "react-redux";
@@ -17,11 +18,15 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 95,
   },
   formControlLabel: {
-    padding: "0px 30px 0px 0px",
+    padding: "0px 15px 0px 0px",
     margin: theme.spacing(1),
   },
   formControlLabel2: {
-    padding: "0px 25px 0px 0px",
+    padding: "0px 15px 0px 0px",
+    margin: theme.spacing(1),
+    marginTop: theme.spacing(3),
+  },
+  formControlLabel3: {
     margin: theme.spacing(1),
     marginTop: theme.spacing(3),
   },
@@ -291,9 +296,10 @@ const CatchType = ({ cr }) => {
               } />
         }
 
-        <Button id="removeButton" size="small" onClick={() => handleRowRemove()}  >
-            &#10060;
-        </Button>
+
+        <IconButton id="removeButton" size="small" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
+          <HighlightOff fontSize="medium" color="error" />
+        </IconButton>
       </FormGroup>
     </Grid>
 

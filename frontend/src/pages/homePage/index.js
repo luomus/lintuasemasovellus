@@ -7,9 +7,9 @@ import {
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles, Accordion,
-  AccordionSummary, AccordionDetails
+  AccordionSummary, AccordionDetails, IconButton
 } from "@material-ui/core/";
-import { ExpandMore, Event } from "@material-ui/icons";
+import { Add, ExpandMore, Event } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -407,22 +407,15 @@ export const HomePage = () => {
                       <Notification category="catches" />
 
                       {catchRows.map((cr, i) => (
-                        <div key={i} id={i}>
+                        <Grid key={i} id={i} item xs={12}>
                           <CatchType key={cr.key} cr={cr} />
-                        </div>
+                        </Grid>
                       ))}
 
                       <Grid item xs={12}>
-                        <Button
-                          className={classes.addRemoveCatchTypesButton}
-                          onClick={addCatchRow}
-                          color="primary"
-                          id="plus-catch-row-button"
-                          variant="contained"
-                          size="small"
-                        >
-                          {"+"}
-                        </Button>
+                        <IconButton id="plus-catch-row-button" size="small" onClick={addCatchRow} variant="contained" color="primary">
+                          <Add fontSize="medium" />
+                        </IconButton>
                         &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}
                       </Grid>
                       <Grid item xs={3}>
@@ -522,6 +515,8 @@ export const HomePage = () => {
             </Grid>
           </Paper>
         </Grid>
+
+        {/* Side panel */}
         <Grid item xs={3}>
           <Grid item xs={12} className={classes.infoGrid}>
             <Paper className={classes.infoPaper}>
