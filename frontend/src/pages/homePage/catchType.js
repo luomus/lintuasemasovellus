@@ -296,7 +296,6 @@ const CatchType = ({ cr }) => {
               } />
         }
 
-
         <IconButton id="removeButton" size="small" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
           <HighlightOff fontSize="medium" color="error" />
         </IconButton>
