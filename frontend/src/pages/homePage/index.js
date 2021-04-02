@@ -328,7 +328,16 @@ export const HomePage = () => {
                     label={t("date")}
                     value={day}
                     onChange={(date) => {
-                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm === true || confirm(t("changeDateWhenObservationsConfirm"))) {
+                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm === true) {
+                        setDay(date);
+                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+                          setObservers(dayJson[0]["observers"]);
+                          setComment(dayJson[0]["comment"]);
+                          setActions(dayJson[0]["selectedactions"]);
+                          setCatchRows(dayJson[0]["id"]);
+                          dispatch(resetNotifications());
+                        });
+                      } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
                         confirmDate();
                         setDay(date);
                         searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
