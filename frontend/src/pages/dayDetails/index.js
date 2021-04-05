@@ -204,6 +204,16 @@ const DayDetails = () => {
     setActionsEditMode(!actionsEditMode);
   };
 
+  const errorsInActions = () => {
+    let value = false;
+    Object.keys(notifications["dailyactions"]).map(row => {
+      if (notifications["dailyactions"][String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    return value;
+  };
+
   const handleActionsEditSave = () => {
     let actionsToSave = editedActions;
     if ("attachments" in actionsToSave) {
@@ -411,7 +421,7 @@ const DayDetails = () => {
                 alignItems: "left"
               }}>
                 <DailyActions />
-                <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleActionsEditSave()} color="primary">
+                <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions()} onClick={() => handleActionsEditSave()} color="primary">
                   {t("save")}
                 </Button>
                 <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">

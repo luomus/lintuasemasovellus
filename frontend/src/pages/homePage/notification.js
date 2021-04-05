@@ -1,6 +1,6 @@
 import React from "react";//
 import {
-  Typography
+  Typography, Grid
 } from "@material-ui/core/";
 import PropTypes from "prop-types";
 import  { useSelector } from "react-redux";
@@ -35,7 +35,7 @@ const Notification = ({ category="all" }) => {
   const errors = [... errorsSet];
 
   return (
-    <div>
+    <Grid item xs={12} >
       { errors.length > 0 &&
         errors.map((e, i) => (
           <Typography className={classes.container} key={i} variant="subtitle2" color="error">{e}</Typography>
@@ -46,8 +46,7 @@ const Notification = ({ category="all" }) => {
           <Typography className={classes.container} key={i} variant="subtitle2" >{n}</Typography>
         ))
       }
-      <br />
-    </div>
+    </Grid>
   );
 
 };

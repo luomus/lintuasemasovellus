@@ -388,7 +388,6 @@ export const HomePage = () => {
                       alignItems="flex-start"
                       spacing={1}
                     >
-                      <Notification category="dailyactions" />
                       <DailyActions />
                     </Grid>
                   </AccordionDetails>
