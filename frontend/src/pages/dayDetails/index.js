@@ -271,8 +271,8 @@ const DayDetails = () => {
 
   const errorsInCatches = () => {
     let value = false;
-    Object.keys(notifications).map(row => {
-      if (notifications[String(row)].errors.length > 0) {
+    Object.keys(notifications["catches"]).map(row => {
+      if (notifications["catches"][String(row)].errors.length > 0) {
         value = true;
       }
     });
@@ -402,7 +402,7 @@ const DayDetails = () => {
 
                 <Box>
                   <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
-                    <Edit fontSize="medium" />
+                    <Edit fontSize="default" />
                   </IconButton>
                 </Box>
               </FormGroup>
@@ -439,7 +439,7 @@ const DayDetails = () => {
                     <TableCell align="left">{t("length")}</TableCell>
                     <TableCell align="left">
                       <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary">
-                        <Add fontSize="medium" />
+                        <Add fontSize="small" />
                       </IconButton>
                     </TableCell>
                   </TableRow>

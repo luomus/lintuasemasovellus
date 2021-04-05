@@ -68,8 +68,8 @@ const HankoActions = () => {
   const handleChange = (target) => {
     dispatch(toggleDailyActions(target.name, target.name === "attachments" ? target.value : target.checked));
     //run validations on change
-    const result = validate({ [target.name]:target.value });
-    dispatch(setNotifications([result[0], result[1]], "dailyAttachment"));
+    const result = validate(target);
+    dispatch(setNotifications([result[0], result[1]], "dailyactions", target.name));
   };
 
   return (

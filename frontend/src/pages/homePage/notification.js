@@ -2,6 +2,7 @@ import React from "react";//
 import {
   Typography
 } from "@material-ui/core/";
+import PropTypes from "prop-types";
 import  { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 
@@ -14,43 +15,45 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Notification = ({ category }) => {
+const Notification = ({ category="all" }) => {
   const classes = useStyles();
 
-  if ( category === "catches" ) {
+  let allNotifications = useSelector(state => state.notifications);
+  let notificationsSet = new Set();
+  let errorsSet = new Set();
 
-    const allNotificationsByRow = useSelector(state => state.notifications);
-    let notificationsSet = new Set();
-    let errorsSet = new Set();
+  Object.keys(allNotifications).map(cat => {
+    if (cat === category || category === "all") {
+      Object.keys(allNotifications[String(cat)]).map(i => {
+        allNotifications[String(cat)][String(i)].notifications.forEach(n => notificationsSet.add(n));
+        allNotifications[String(cat)][String(i)].errors.forEach(e => errorsSet.add(e));
+      });
+    }
+  });
 
-    Object.keys(allNotificationsByRow).map(i => {
-      allNotificationsByRow[String(i)].notifications.forEach(n => notificationsSet.add(n));
-      allNotificationsByRow[String(i)].errors.forEach(e => errorsSet.add(e));
-    });
+  const notifications = [... notificationsSet];
+  const errors = [... errorsSet];
 
+  return (
+    <div>
+      { errors.length > 0 &&
+        errors.map((e, i) => (
+          <Typography className={classes.container} key={i} variant="subtitle2" color="error">{e}</Typography>
+        ))
+      }
+      { notifications.length > 0 &&
+        notifications.map((n, i) => (
+          <Typography className={classes.container} key={i} variant="subtitle2" >{n}</Typography>
+        ))
+      }
+      <br />
+    </div>
+  );
 
-    const notifications = [... notificationsSet];
-    const errors = [... errorsSet];
-
-    //console.log("notes and errors", notifications, errors);
-
-    return (
-      <div>
-        { errors.length > 0 &&
-          errors.map((e, i) => (
-            <Typography className={classes.container} key={i} variant="subtitle2" color="error">{e}</Typography>
-          ))
-        }
-        { notifications.length > 0 &&
-          notifications.map((n, i) => (
-            <Typography className={classes.container} key={i} variant="subtitle2" >{n}</Typography>
-          ))
-        }
-        <br />
-      </div>
-    );
-  }
 };
 
+Notification.propTypes = {
+  category: PropTypes.string,
+};
 
 export default Notification;
