@@ -271,19 +271,13 @@ export const HomePage = () => {
   };
 
   const errorsInCatchesOrActions = () => {
-    let value = false;
     Object.keys(notifications).map(row => {
       console.log("mapping", notifications[String(row)]);
       if (notifications[String(row)].errors.length > 0) {
-        value = true;
+        return true;
       }
     });
-    Object.keys(catchRows).map(row => {
-      if (catchRows[String(row)].lukumaara === 0) {
-        value = true;
-      }
-    });
-    return value;
+    return false;
   };
 
   const handleDateClick = (s) => {
