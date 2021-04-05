@@ -94,6 +94,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     opacity: "0.6",
   },
+  catchRowEven: {
+    backgroundColor: "#f7f7f7",
+  },
 }
 ));
 
@@ -401,9 +404,17 @@ export const HomePage = () => {
                       <Notification category="catches" />
 
                       {catchRows.map((cr, i) => (
-                        <Grid key={i} id={i} item xs={12}>
-                          <CatchType key={cr.key} cr={cr} />
-                        </Grid>
+                        i % 2 === 0
+                          ? (
+                            <Grid key={i} id={i} item xs={12}>
+                              <CatchType key={cr.key} cr={cr} />
+                            </Grid>
+                          )
+                          : (
+                            <Grid key={i} id={i} item xs={12} className={classes.catchRowEven}>
+                              <CatchType key={cr.key} cr={cr} />
+                            </Grid>
+                          )
                       ))}
 
                       <Grid item xs={12}>
