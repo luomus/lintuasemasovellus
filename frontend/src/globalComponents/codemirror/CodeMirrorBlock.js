@@ -64,7 +64,7 @@ const CodeMirrorBlock = ({
 
   /**
    * Start checking for errors only after being idle for the duration of
-   * the timeout (500ms).
+   * the timeout (700ms).
    * @param {object} editor
    * @param {object} data
    * @param {string} value

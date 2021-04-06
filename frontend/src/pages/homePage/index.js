@@ -7,9 +7,9 @@ import {
   Typography, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles, Accordion,
-  AccordionSummary, AccordionDetails
+  AccordionSummary, AccordionDetails, IconButton
 } from "@material-ui/core/";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Add, ExpandMore, Event } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -93,6 +93,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     opacity: "0.6",
+  },
+  catchRowEven: {
+    backgroundColor: "#f7f7f7",
   },
 }
 ));
@@ -332,6 +335,7 @@ export const HomePage = () => {
                     KeyboardButtonProps={{
                       "aria-label": "change date",
                     }}
+                    keyboardIcon={<Event color="primary" />}
                   />
 
                 </MuiPickersUtilsProvider>
@@ -353,7 +357,7 @@ export const HomePage = () => {
 
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="comment-content"
                     id="comment-header"
                   >
@@ -375,7 +379,7 @@ export const HomePage = () => {
 
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="activity-content"
                     id="activity-header"
                   >
@@ -390,7 +394,7 @@ export const HomePage = () => {
 
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="catches-content"
                     id="catches-header"
                   >
@@ -406,22 +410,23 @@ export const HomePage = () => {
                       <Notification category="catches" />
 
                       {catchRows.map((cr, i) => (
-                        <div key={i} id={i}>
-                          <CatchType key={cr.key} cr={cr} />
-                        </div>
+                        i % 2 === 0
+                          ? (
+                            <Grid key={i} id={i} item xs={12}>
+                              <CatchType key={cr.key} cr={cr} />
+                            </Grid>
+                          )
+                          : (
+                            <Grid key={i} id={i} item xs={12} className={classes.catchRowEven}>
+                              <CatchType key={cr.key} cr={cr} />
+                            </Grid>
+                          )
                       ))}
 
                       <Grid item xs={12}>
-                        <Button
-                          className={classes.addRemoveCatchTypesButton}
-                          onClick={addCatchRow}
-                          color="primary"
-                          id="plus-catch-row-button"
-                          variant="contained"
-                          size="small"
-                        >
-                          {"+"}
-                        </Button>
+                        <IconButton id="plus-catch-row-button" size="small" onClick={addCatchRow} variant="contained" color="primary">
+                          <Add fontSize="medium" />
+                        </IconButton>
                         &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}
                       </Grid>
                       <Grid item xs={3}>
@@ -432,7 +437,7 @@ export const HomePage = () => {
 
                 <Accordion defaultExpanded>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore color="primary" />}
                     aria-controls="obervation-content"
                     id="observation-header"
                   >
@@ -521,6 +526,8 @@ export const HomePage = () => {
             </Grid>
           </Paper>
         </Grid>
+
+        {/* Side panel */}
         <Grid item xs={3}>
           <Grid item xs={12} className={classes.infoGrid}>
             <Paper className={classes.infoPaper}>

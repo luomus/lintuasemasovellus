@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 75,
   },
+  checkbox: {
+    color: theme.palette.primary.main,
+  }
 }
 ));
 
@@ -72,19 +75,19 @@ const HankoActions = () => {
     <Grid item xs={12} >
       <FormGroup row className={classes.formGroup} >
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.standardObs} onChange={(e) => handleClick(e.target)} name="standardObs" color="primary" />}
+          control={<Checkbox checked={clicks.standardObs} onChange={(e) => handleClick(e.target)} name="standardObs" color="primary" className={classes.checkbox} />}
           label={t("standardObs")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.gåu} onChange={(e) => handleClick(e.target)} name="gåu" color="primary" />}
+          control={<Checkbox checked={clicks.gåu} onChange={(e) => handleClick(e.target)} name="gåu" color="primary" className={classes.checkbox} />}
           label={t("gåu")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.standardRing} onChange={(e) => handleClick(e.target)} name="standardRing" color="primary" />}
+          control={<Checkbox checked={clicks.standardRing} onChange={(e) => handleClick(e.target)} name="standardRing" color="primary" className={classes.checkbox} />}
           label={t("standardRing")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.owlStandard} onChange={(e) => handleClick(e.target)} name="owlStandard" color="primary" />}
+          control={<Checkbox checked={clicks.owlStandard} onChange={(e) => handleClick(e.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
           label={t("owlStandard")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.mammals} onChange={(e) => handleClick(e.target)} name="mammals" color="primary" />}
+          control={<Checkbox checked={clicks.mammals} onChange={(e) => handleClick(e.target)} name="mammals" color="primary" className={classes.checkbox} />}
           label={t("mammals")} labelPlacement="end" />
         <FormControlLabel className={classes.formControlLabel}
           control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={clicks.attachments}

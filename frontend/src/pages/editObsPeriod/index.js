@@ -52,6 +52,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0),
     minWidth: 120,
   },
+  deleteButton: {
+    color: "white",
+    backgroundColor: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
+  },
   root: {
     "& .MuiFormControl-root": {
       width: "70%",
@@ -267,7 +274,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
                 <Button
                   id="cancelButtonInShorthandModification"
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={handleClose}>
                   {t("cancel")}
                 </Button>
@@ -277,8 +284,8 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
                   id="removeButtonInShorthandModification"
                   disabled={deleteButtonIsDisabled()}
                   variant="contained"
-                  color="secondary"
-                  onClick={handleDialogOpen}>
+                  onClick={handleDialogOpen}
+                  className={classes.deleteButton}>
                   {t("remove")}
                 </Button>
               </Box>
@@ -296,7 +303,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleDialogConfirm} color="secondary" id="confirmButton">
+              <Button onClick={handleDialogConfirm} color="error" id="confirmButton">
                 {t("confirm")}
               </Button>
               <Button onClick={handleDialogClose} color="default" id="cancelButton" autoFocus>
