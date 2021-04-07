@@ -5,10 +5,7 @@ import {
   FormGroup, FormControlLabel, withStyles,
   Table, TableBody, TableCell, TableHead, TableRow
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import RemoveCircleOutlineRoundedIcon from "@material-ui/icons/RemoveCircleOutlineRounded";
+import { Edit, Add, CheckCircle, RemoveCircleOutlineRounded } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import ObsPeriodTable from "./ObsPeriodTable";
@@ -66,6 +63,14 @@ const DayDetails = () => {
     },
     catchTable: {
       maxWidth: "65%",
+    },
+    deleteButton: {
+      marginLeft: "5px",
+      color: "white",
+      backgroundColor: theme.palette.error.main,
+      "&:hover": {
+        backgroundColor: theme.palette.error.dark,
+      },
     },
   })
   );
@@ -320,8 +325,8 @@ const DayDetails = () => {
                 {t("observers")}{": "}{observers}{" "}
               </Typography>
               {observersForm === false ? (
-                <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary"  >
-                  <EditIcon fontSize="small" />
+                <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary">
+                  <Edit fontSize="small" />
                 </IconButton>
               ) : (
                 <form onSubmit={observersOnSubmit}>
@@ -350,7 +355,7 @@ const DayDetails = () => {
               </Typography>
               {commentForm === false ? (
                 <IconButton id="commentButton" size="small" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
-                  <EditIcon fontSize="small" />
+                  <Edit fontSize="small" />
                 </IconButton>
               ) : (
                 <form onSubmit={commentOnSubmit}>
@@ -373,18 +378,18 @@ const DayDetails = () => {
           </Grid>
 
           {/* DAILY ACTIONS */}
-          {(selectedActions && !actionsEditMode) ?
-            <Grid item xs={12} fullwidth="true">
-              <Typography variant="h6" component="h2" >
-                {t("Observation activity")}:
-              </Typography>
+          <Grid item xs={12} fullwidth="true">
+            <Typography variant="h6" component="h2" >
+              {t("Observation activity")}
+            </Typography>
+            {(selectedActions && !actionsEditMode) ?
               <FormGroup row className={classes.formGroup}>
                 {
                   Object.entries(selectedActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
                     <FormControlLabel className={classes.formControlLabel}
                       control={value
-                        ? <CheckCircleIcon name="check" fontSize="small" className={classes.checkedDailyAction} color="primary" />
-                        : <RemoveCircleOutlineRoundedIcon fontSize="small" className={classes.uncheckedDailyAction} />
+                        ? <CheckCircle name="check" fontSize="small" className={classes.checkedDailyAction} />
+                        : <RemoveCircleOutlineRounded fontSize="small" className={classes.uncheckedDailyAction} />
                       }
                       label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
                     />
@@ -397,13 +402,11 @@ const DayDetails = () => {
 
                 <Box>
                   <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
-                    <EditIcon fontSize="medium" />
+                    <Edit fontSize="medium" />
                   </IconButton>
                 </Box>
               </FormGroup>
-            </Grid>
-            : <Grid item xs={12} fullwidth="true">
-              <div style={{
+              : <div style={{
                 display: "flex",
                 alignItems: "left"
               }}>
@@ -415,13 +418,13 @@ const DayDetails = () => {
                   {t("cancel")}
                 </Button>
               </div>
-            </Grid>
-          }
+            }
+          </Grid>
 
           {/* NET ACTIONS */}
           <Grid item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
-              {t("Catches")}:
+              {t("Catches")}
             </Typography>
             {(catches.length > 0 && !catchesEditMode)
               ? /* LIST CATCHES */
@@ -435,8 +438,8 @@ const DayDetails = () => {
                     <TableCell align="left">{t("netCodes")}</TableCell>
                     <TableCell align="left">{t("length")}</TableCell>
                     <TableCell align="left">
-                      <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
-                        <AddIcon fontSize="medium" />
+                      <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary">
+                        <Add fontSize="medium" />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -451,8 +454,8 @@ const DayDetails = () => {
                       <TableCell align="left" id="netCodes">{catches[String(c)].verkkokoodit ? catches[String(c)].verkkokoodit : "-"}</TableCell>
                       <TableCell align="left" id="netLength">{catches[String(c)].verkonPituus > 0 ? catches[String(c)].verkonPituus : "-"}</TableCell>
                       <TableCell align="left">
-                        <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen(catches[String(c)].key)} variant="contained" color="primary"  >
-                          <EditIcon fontSize="small" />
+                        <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen(catches[String(c)].key)} variant="contained" color="primary">
+                          <Edit fontSize="small" />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -467,24 +470,34 @@ const DayDetails = () => {
                     <div>
                       <Notification category="catches" />
                       <CatchType cr={editedCatches[0]} />
+                      <Button id="catchesEditSave" className={classes.button} variant="contained"
+                        onClick={() => handleCatchesEditSave()} color="primary"
+                        disabled={errorsInCatches()}>
+                        {t("save")}
+                      </Button>
+                      <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
+                        {t("cancel")}
+                      </Button>
                     </div>
                     : /* IF ROW-TO-EDIT IS DELETED, SHOW CONFIRMATION */
-                    <Typography variant="body1" color="secondary" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
+                    <div>
+                      <Typography variant="body1" color="error" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
+                      <Button id="catchesEditSave" className={classes.deleteButton} variant="contained"
+                        onClick={() => handleCatchesEditSave()}
+                        disabled={errorsInCatches()}>
+                        {t("remove")}
+                      </Button>
+                      <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
+                        {t("cancel")}
+                      </Button>
+                    </div>
                   }
-                  <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
-                    {t("cancel")}
-                  </Button>
-                  <Button id="catchesEditSave" className={classes.button} variant="contained"
-                    onClick={() => handleCatchesEditSave()} color="primary"
-                    disabled={errorsInCatches()}>
-                    {t("save")}
-                  </Button>
                 </div>
                 : /* NO CATCHES FOR THAT DAY*/
                 <Typography variant="body1"  >
                   {t("No catches declared")}
                   <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
-                    <AddIcon fontSize="small" />
+                    <Add fontSize="small" />
                   </IconButton>
                 </Typography>
             }

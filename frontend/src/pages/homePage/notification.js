@@ -35,15 +35,15 @@ const Notification = ({ category }) => {
     //console.log("notes and errors", notifications, errors);
 
     return (
-      <div className={classes.container}>
+      <div>
         { errors.length > 0 &&
           errors.map((e, i) => (
-            <Typography key={i} variant="subtitle2" color="secondary">{e}</Typography>
+            <Typography className={classes.container} key={i} variant="subtitle2" color="error">{e}</Typography>
           ))
         }
         { notifications.length > 0 &&
           notifications.map((n, i) => (
-            <Typography key={i} variant="subtitle2" >{n}</Typography>
+            <Typography className={classes.container} key={i} variant="subtitle2" >{n}</Typography>
           ))
         }
         <br />
