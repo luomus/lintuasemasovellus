@@ -138,6 +138,7 @@ const resources = {
       "valueMissing": "Arvo puuttuu!",
       "noNegativeValues": "Negatiiviset arvot eivät ole sallittuja!",
       "noEmptyValues": "Kenttä ei saa olla tyhjä",
+      "changeDateWhenObservationsConfirm": "Päivän vaihtaminen hävittää tekemäsi merkinnät. Haluatko vaihtaa päivää?",
 
       "Catches":"Pyydykset",
       "catchesAdded":"Pyydystietoja kirjattu",

@@ -152,6 +152,7 @@ export const HomePage = () => {
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
+  const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
 
   useEffect(() => {
     getLatestDays(userObservatory)
@@ -256,6 +257,13 @@ export const HomePage = () => {
     dispatch(addOneCatchRow());
   };
 
+  const confirmDate = () => {
+    setDateChangeConfirm(true);
+    setTimeout(function () {
+      setDateChangeConfirm(false);
+    }, 10000);
+  };
+
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -323,14 +331,26 @@ export const HomePage = () => {
                     label={t("date")}
                     value={day}
                     onChange={(date) => {
-                      setDay(date);
-                      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-                        setObservers(dayJson[0]["observers"]);
-                        setComment(dayJson[0]["comment"]);
-                        setActions(dayJson[0]["selectedactions"]);
-                        setCatchRows(dayJson[0]["id"]);
-                        dispatch(resetNotifications());
-                      });
+                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
+                        setDay(date);
+                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+                          setObservers(dayJson[0]["observers"]);
+                          setComment(dayJson[0]["comment"]);
+                          setActions(dayJson[0]["selectedactions"]);
+                          setCatchRows(dayJson[0]["id"]);
+                          dispatch(resetNotifications());
+                        });
+                      } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
+                        confirmDate();
+                        setDay(date);
+                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+                          setObservers(dayJson[0]["observers"]);
+                          setComment(dayJson[0]["comment"]);
+                          setActions(dayJson[0]["selectedactions"]);
+                          setCatchRows(dayJson[0]["id"]);
+                          dispatch(resetNotifications());
+                        });
+                      }
                     }}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -385,7 +405,7 @@ export const HomePage = () => {
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
 
-                    <Typography className={classes.secondaryHeading}>{(dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded") : t("noObservationActivity") } </Typography>
+                    <Typography className={classes.secondaryHeading}>{(dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded") : t("noObservationActivity")} </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <DailyActions />
