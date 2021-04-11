@@ -1,6 +1,4 @@
-import { postDay, sendEverything, postCatches } from "../services/dayService";
-import { postObservationPeriod } from "../services/observationStationService";
-import { postAddObservation, postAddShorthand } from "../services/observationlistService";
+import { sendEverything } from "../services/dayService";
 import { parse, resetAll } from "./shorthand";
 import globals from "../globalConstants";
 
@@ -19,7 +17,6 @@ let observationPeriod = {
   startTime: "",
   endTime: "",
   observationType: "",
-  day_id: ""
 };
 
 let observation = {
@@ -43,8 +40,8 @@ let observation = {
 };
 
 let shorthand = {
-  row: "",
-  observationperiod_id: 0
+  block: "",
+  //observationperiod_id: 0
 };
 
 const isTime = (row) => {
@@ -63,94 +60,39 @@ const parseTime = (timeString) => {
   return ret;
 };
 
-const fastIsTime = (text) => {
-  return text[1] === "." || text[1] === ":" || text[2] === "." || text[2] === ":";
-};
-
-const makenum = (subobs, field) => {
-  subobs[String(field)] = Number(subobs[String(field)]);
-};
-
-const countersToNum = (subobservation) => {
-  makenum(subobservation, "adultUnknownCount");
-  makenum(subobservation, "adultFemaleCount");
-  makenum(subobservation, "adultMaleCount");
-  makenum(subobservation, "juvenileUnknownCount");
-  makenum(subobservation, "juvenileFemaleCount");
-  makenum(subobservation, "juvenileMaleCount");
-  makenum(subobservation, "subadultUnknownCount");
-  makenum(subobservation, "subadultFemaleCount");
-  makenum(subobservation, "subadultMaleCount");
-  makenum(subobservation, "unknownUnknownCount");
-  makenum(subobservation, "unknownFemaleCount");
-  makenum(subobservation, "unknownMaleCount");
-};
-
-//Not used anywhere?
-export const makeSendDataJson = (day, observatory, comment, observers, location, type, shorthandRows) => {
-  let data = {
-    day, observatory, comment, observers, location, type
-  };
-  let startTimeEnc = false;
-  let obsperiods = [];
-  let obsperiod = {};
-  for (const row of shorthandRows) {
-    if (!row) continue;
-    else if (fastIsTime(row) && !startTimeEnc) {
-      startTimeEnc = true;
-      obsperiod["startTime"] = parseTime(row);
-    } else if (fastIsTime(row)) {
-      startTimeEnc = false;
-      obsperiod["endTime"] = parseTime(row);
-      obsperiods.push({ ...obsperiod });
-    } else {
-      const parsedShorthand = parse(row);
-      let observations = [];
-      for (const subobservation of parsedShorthand.osahavainnot) {
-        countersToNum(subobservation);
-        observations.push({
-          species: parsedShorthand.species,
-          shorthandrow: row,
-          ...subobservation,
-        });
-      }
-      obsperiod["observations"] = observations;
-      resetAll();
-    }
-  }
-  data["obsperiods"] = obsperiods;
-  return data;
-};
-
 //Not used anywhere?
 export const sendShorthand = async (data) => {
   return await sendEverything(data);
 };
 
 
-const sendObservation = async (observation, observationPeriodId, shorthandId, userID) => {
+const sendObservation = async (observation, userID) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
-  observation["observationperiod_id"] = observationPeriodId;
-  observation["shorthand_id"] = shorthandId;
   observation["account_id"] = userID;
-  await postAddObservation(observation);
+  return observation;
+  //await postAddObservation(observation);
 };
 
-export const sendDay = async (paramDay) => {
-  day = { ...paramDay };
-  const res = await postDay(day);
-  day["id"] = res.data.id;
-};
+//Becomes useless after sendEverything
+// export const sendDay = async (paramDay) => {
+//   day = { ...paramDay };
+//   const res = await postDay(day);
+//   day["id"] = res.data.id;
+// };
 
-export const sendCatches = async (catches) => {
-  const catchesToSend = [day["id"], ...catches];
-  console.log("catchesToSend:", catchesToSend);
-  const res = await postCatches(catchesToSend);
-  console.log(res);
-};
+//Becomes useless after sendEverything,
+//remember to edit backend to add dayID to catches before saving to DB!!
+// export const sendCatches = async (catches) => {
+//   const catchesToSend = [day["id"], ...catches];
+//   console.log("catchesToSend:", catchesToSend);
+//   const res = await postCatches(catchesToSend);
+//   console.log(res);
+// };
 
+
+//remmebre to add dayID to periods in backend
 export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc) => {
   observationPeriods = [];
   let startTimeEncountered = false;
@@ -162,16 +104,22 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc)
     } else if (isTime(row)) {
       startTimeEncountered = false;
       observationPeriod["endTime"] = parseTime(row);
+      observationPeriod["observationType"] = obsType;
+      observationPeriod["location"] = loc;
       observationPeriods.push({ ...observationPeriod });
     }
   }
+
+  /*
   for (const observationPeriod of observationPeriods) {
     observationPeriod["observationType"] = obsType;
     observationPeriod["location"] = loc;
-    observationPeriod["day_id"] = day["id"];
-    const res = await postObservationPeriod(observationPeriod);
-    observationPeriod["id"] = res.data.id;
+    //observationPeriod["day_id"] = day["id"];
+    // const res = await postObservationPeriod(observationPeriod);
+    // observationPeriod["id"] = res.data.id;
   }
+  */
+  return observationPeriods;
 };
 
 const toNum = (field) => {
@@ -203,6 +151,7 @@ export const setDayId = (id) => {
 export const loopThroughObservations = async (shorthandRows, userID) => {
   let startTimeEncountered = false;
   let i = 0;
+  const observations = [];// [ i: { shorthadRow: row, subObservations: []  }]
   for (const row of shorthandRows) {
     if (!row) continue;
     if (isTime(row) && !startTimeEncountered) {
@@ -211,17 +160,20 @@ export const loopThroughObservations = async (shorthandRows, userID) => {
       startTimeEncountered = false;
       i++;
     } else {
+      observations[String(i)].shorthandRow = row;
       const parsed = parse(row);
       shorthand["block"] = row;
       shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
-      const res = await postAddShorthand(shorthand);
+      //const res = await postAddShorthand(shorthand);
       for (const sub of parsed.osahavainnot) {
         observation = sub;
         observation.species = parsed.species;
         obsCountersToNum();
-        await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id, userID);
+        //await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id, userID);
+        observations[String(i)].subObservations.push(sendObservation(observation, userID));
       }
       resetAll();
     }
   }
+  return observations;
 };

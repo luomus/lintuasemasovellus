@@ -21,14 +21,14 @@ import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  sendDay,
+  //sendDay,
   loopThroughObservationPeriods,
   loopThroughObservations,
-  sendCatches,
+  //sendCatches,
   //sendShorthand,
   //makeSendDataJson,
 } from "../../shorthand/parseShorthandField";
-import { searchDayInfo, getLatestDays, getCatches } from "../../services";
+import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
@@ -226,8 +226,19 @@ export const HomePage = () => {
   const sendData = async () => {
     const rows = sanitizedShorthand;
     setDisabled(true);
+    let data = {
+      dayDetails: { day:formatDate(day), comment: comment, observers: observers,
+        observatory: userObservatory,
+        selectedactions: readyDailyActions()
+      },
+      userID: userID,
+      observationPeriods: loopThroughObservationPeriods(rows, type, location),
+      observervations: loopThroughObservations(rows, userID)
+    };
+
     try {
-      await sendDay({
+      await sendEverything(data);
+      /*await sendDay({
         //userID: userID,
         day: formatDate(day),
         comment,
@@ -238,8 +249,11 @@ export const HomePage = () => {
       await sendCatches(catchRows);
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows, userID);
-      //await sendShorthand(makeSendDataJson(
-      //  formatDate(day), userObservatory, comment, observers, location, type, rows));
+      */
+
+      ////await sendShorthand(makeSendDataJson(
+      ////  formatDate(day), userObservatory, comment, observers, location, type, rows));
+
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
