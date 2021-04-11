@@ -27,7 +27,7 @@ import {
   sendCatches,
   //sendShorthand,
   //makeSendDataJson,
-} from "./parseShorthandField";
+} from "../../shorthand/parseShorthandField";
 import { searchDayInfo, getLatestDays, getCatches } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";

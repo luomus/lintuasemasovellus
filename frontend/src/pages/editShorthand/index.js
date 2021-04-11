@@ -15,7 +15,7 @@ import {
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
-} from "../homePage/parseShorthandField";
+} from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 

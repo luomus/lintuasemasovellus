@@ -1,4 +1,4 @@
-import { makeSendDataJson } from "../pages/homePage/parseShorthandField";
+import { makeSendDataJson } from "../shorthand/parseShorthandField";
 
 import fs from "fs";
 import path from "path";

@@ -1,8 +1,8 @@
-import { postDay, sendEverything, postCatches } from "../../services/dayService";
-import { postObservationPeriod } from "../../services/observationStationService";
-import { postAddObservation, postAddShorthand } from "../../services/observationlistService";
-import { parse, resetAll } from "../../shorthand/shorthand";
-import globals from "../../globalConstants";
+import { postDay, sendEverything, postCatches } from "../services/dayService";
+import { postObservationPeriod } from "../services/observationStationService";
+import { postAddObservation, postAddShorthand } from "../services/observationlistService";
+import { parse, resetAll } from "./shorthand";
+import globals from "../globalConstants";
 
 let day = {
   day: "",
