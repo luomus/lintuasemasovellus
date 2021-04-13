@@ -15,6 +15,8 @@ from application.api.classes.observationperiod.services import getObsPerId
 from application.api.classes.observatoryday.services import getDay
 from application.api.classes.type.services import getTypeIdByName
 
+from application.api.classes.catch.services import create_catches
+
 from application.api.classes.observation.models import Observation
 from application.api.classes.shorthand.models import Shorthand
 
@@ -28,22 +30,59 @@ from datetime import datetime
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
+  # SAAPUVA DATA:
+  # {
+  #    day, comment, observers, observatory, selectedactions, userID,
+  #    catches,
+  #    observationPeriods,
+  #    observervations
+  #  };
 
+  # Ensimmäinen rivi kaikki stringejä
+  # catches: Lista pyydysobjekteja, TARVITSEE dayIDn ennen tallentamista
+  # Observationperiods: Lista havaintojakso-objekteja, TARVITSEE dayID:n ennen tallentamista
+          # observationPeriod = {
+          #   location,
+          #   startTime,
+          #   endTime,
+          #   observationType,
+          # };
+  # observations: lista objekteja, joista jokainen sisältää orig. pikakirjoitusrivin
+    # ja listan osahavainto-objekteja:
+        # [{ periodOrderNum: i, shorthandRow: row, subObservations: [] },  ]
+
+    # shorthand TARVITSEE observationperiod-ID:n 
+    # subObservation TARVITSEE obsperiod-IDn ja shorthandID:n  
+    # Observations objektin tietueen 'periodOrderNum, pitäisi vastata observationsPeriods-listan indekseihin,
+    # eli jos periodOrderNum on 1, liittyy se observationPeriods-listan indeksissä 1 olevaan havaintojaksoon.
+    # Tätä tietoa tarvitaan oikean jakson id:n liittämisessä havaintoonzo
+
+    print('***\nData arriving in add-everything')
     req = request.get_json()
+
+    # Save observatoryDay 
     observatory_id = getObservatoryId(req['observatory'])
-    
+    print('observatory_id', observatory_id)
     day = datetime.strptime(req['day'], '%d.%m.%Y')
 
-    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
-
+    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id)
     addDay(new_obsday)
-    dayId = getDayId(new_obsday.day, new_obsday.observatory_id)
 
+    # get dayID of just created day and and then the actual day as Flask/db object
+    dayId = getDayId(new_obsday.day, new_obsday.observatory_id)
     day = getDay(dayId)
+
+    #Miksi tämä otetaan taas? Sehän on jo haettu aiemmin kerran, ei pitäisi muuttua?
     obsId = day.observatory_id
 
-    for obsperiod in req['obsperiods']:
-        locId = getLocationId(req['location'], obsId)
+    # Save catches
+    catches_with_dayId = req['catches'].insert(0, dayId)
+    create_catches(catches_with_dayId)
+
+
+    #Save observationperiods
+    for obsperiod in req['observationPeriods']:
+        locId = getLocationId(obsperiod['location'], obsId)
 
         obsp = Observationperiod(
             start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
@@ -88,6 +127,8 @@ def add_everything():
             db.session().add(observation)
 
     db.session().commit()
+
+    print('End of add_everything***\n')
 
     return jsonify(req)
 

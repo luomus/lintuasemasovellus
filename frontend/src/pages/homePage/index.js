@@ -227,11 +227,13 @@ export const HomePage = () => {
     const rows = sanitizedShorthand;
     setDisabled(true);
     let data = {
-      dayDetails: { day:formatDate(day), comment: comment, observers: observers,
-        observatory: userObservatory,
-        selectedactions: readyDailyActions()
-      },
+      day:formatDate(day),
+      comment: comment,
+      observers: observers,
+      observatory: userObservatory,
+      selectedactions: readyDailyActions(),
       userID: userID,
+      catches: catchRows,
       observationPeriods: loopThroughObservationPeriods(rows, type, location),
       observervations: loopThroughObservations(rows, userID)
     };

@@ -1,6 +1,7 @@
-import { sendEverything } from "../services/dayService";
+//import { sendEverything } from "../services/dayService";
 import { parse, resetAll } from "./shorthand";
 import globals from "../globalConstants";
+import { EventAvailableRounded } from "@material-ui/icons";
 
 let day = {
   day: "",
@@ -39,10 +40,10 @@ let observation = {
   observationperiod_id: ""
 };
 
-let shorthand = {
-  block: "",
-  //observationperiod_id: 0
-};
+//let shorthand = {
+//  block: "",
+//observationperiod_: 0
+//};
 
 const isTime = (row) => {
   return String(row).match(globals.timeRegex);
@@ -61,12 +62,12 @@ const parseTime = (timeString) => {
 };
 
 //Not used anywhere?
-export const sendShorthand = async (data) => {
-  return await sendEverything(data);
-};
+// export const sendShorthand = async (data) => {
+//   return await sendEverything(data);
+// };
 
 
-const sendObservation = async (observation, userID) => {
+const readyObservation = async (observation, userID) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
@@ -151,7 +152,7 @@ export const setDayId = (id) => {
 export const loopThroughObservations = async (shorthandRows, userID) => {
   let startTimeEncountered = false;
   let i = 0;
-  const observations = [];// [ i: { shorthadRow: row, subObservations: []  }]
+  const observations = [];// [ { periodOrderNum: i, shorthandRow: row, subObservations: []  }]
   for (const row of shorthandRows) {
     if (!row) continue;
     if (isTime(row) && !startTimeEncountered) {
@@ -160,18 +161,21 @@ export const loopThroughObservations = async (shorthandRows, userID) => {
       startTimeEncountered = false;
       i++;
     } else {
-      observations[String(i)].shorthandRow = row;
       const parsed = parse(row);
-      shorthand["block"] = row;
-      shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
+      let observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
+      observationObject["periodOrderNum"] = String(i);
+      observationObject["shorthandRow"]= row;
+      //shorthand["block"] = row;
+      //shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
       //const res = await postAddShorthand(shorthand);
       for (const sub of parsed.osahavainnot) {
         observation = sub;
         observation.species = parsed.species;
         obsCountersToNum();
         //await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id, userID);
-        observations[String(i)].subObservations.push(sendObservation(observation, userID));
+        observationObject.subObservations.push(readyObservation(observation, userID));
       }
+      observations.push(observationObject); // add observation to list of observations
       resetAll();
     }
   }
