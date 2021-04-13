@@ -171,8 +171,9 @@ export const loopThroughObservations = async (shorthandRows, userID) => {
         observation = sub;
         observation.species = parsed.species;
         obsCountersToNum();
+        const obsToAdd = await readyObservation(observation, userID);
         //await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id, userID);
-        observationObject.subObservations.push(readyObservation(observation, userID));
+        observationObject.subObservations.push(obsToAdd);
       }
       observations.push(observationObject); // add observation to list of observations
       resetAll();

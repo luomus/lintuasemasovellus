@@ -225,6 +225,8 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
+    const observationPeriodsToSend = await loopThroughObservationPeriods(rows, type, location);
+    const observationsToSend = await loopThroughObservations(rows, userID);
     setDisabled(true);
     let data = {
       day:formatDate(day),
@@ -234,9 +236,10 @@ export const HomePage = () => {
       selectedactions: readyDailyActions(),
       userID: userID,
       catches: catchRows,
-      observationPeriods: loopThroughObservationPeriods(rows, type, location),
-      observervations: loopThroughObservations(rows, userID)
+      observationPeriods: observationPeriodsToSend,
+      observations: observationsToSend
     };
+    console.log("data", data);
 
     try {
       await sendEverything(data);
@@ -300,7 +303,7 @@ export const HomePage = () => {
   const errorsInCatchesOrActions = () => {
     let value = false;
     Object.keys(notifications).map(row => {
-      console.log("mapping", notifications[String(row)]);
+      //console.log("mapping", notifications[String(row)]);
       if (notifications[String(row)].errors.length > 0) {
         value = true;
       }

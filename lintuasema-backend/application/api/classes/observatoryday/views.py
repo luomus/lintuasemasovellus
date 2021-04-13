@@ -35,7 +35,7 @@ def add_everything():
   #    day, comment, observers, observatory, selectedactions, userID,
   #    catches, [{},{},{}]
   #    observationPeriods, [{},{},{}]
-  #    observervations [{},{},{}]
+  #    observations [{},{},{}]
   #  };
 
   # Ensimmäinen rivi kaikki stringejä
@@ -57,7 +57,7 @@ def add_everything():
     # eli jos periodOrderNum on 1, liittyy se observationPeriods-listan indeksissä 1 olevaan havaintojaksoon.
     # Tätä tietoa tarvitaan oikean jakson id:n liittämisessä havaintoonzo
 
-    print('***\nData arriving in add-everything')
+    #print('***\nData arriving in add-everything')
     req = request.get_json()
 
     # Save observatoryDay 
@@ -76,58 +76,93 @@ def add_everything():
     obsId = day.observatory_id
 
     # Save catches
-    catches_with_dayId = req['catches'].insert(0, dayId)
-    create_catches(catches_with_dayId)
+    if len(req['catches']) > 0:
+        catches = req['catches']
+        #print('catches type', type(catches))
+        
+        print('dayId', type(dayId))
+        catches_with_dayId = catches
+        catches_with_dayId.insert(0, dayId)
+        #print('catches', catches_with_dayId)
+        create_catches(catches_with_dayId)
 
 
     #Save observation periods
-    for obsperiod in req['observationPeriods']:
+    for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
-
         obsp = Observationperiod(
             start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
-            type_id=getTypeIdByName(req['type']),
+            type_id=getTypeIdByName(obsperiod['observationType']),
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
 
-        #observation period ID
+        # observation period ID
+        # tämän voisi suorittaa tyylikkäämmin parametrina pelkkä obsp
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
 
-
+        #Save observation related to this period
         
-        for observation in obsperiod['observations']:
-            shorthand = Shorthand(shorthandblock=observation['shorthandblock'], observationperiod_id=obspId)
-            db.session().add(shorthand)
+        for observation in req['observations']: #observation = { periodOrderNum: i, shorthandRow: row, subObservations: [] }
+            print(observation['periodOrderNum'])
+            if observation['periodOrderNum'] == str(i):
+                # Save original shorthand row
+                shorthand = Shorthand(shorthandblock=observation['shorthandRow'], observationperiod_id=obspId)
+                db.session().add(shorthand)
 
+                # Toimisi shorthand_id = shorthand.id tms, jolloin ei tarvittaisi seuraava erillistä queryä MUTTA vaatii db.committin
+                shorthand_id = Shorthand.query.filter_by(
+                    shorthandblock=observation['shorthandRow'], observationperiod_id=obspId, is_deleted=0).first().id
 
-            shorthand_id = Shorthand.query.filter_by(
-                shorthandblock=observation['shorthandblock'], observationperiod_id=obspId, is_deleted=0).first().id
+                for subObservation in observation['subObservations']:
+                    # subObservation = {
+                        # species: "",
+                        # adultUnknownCount: 0,
+                        # adultFemaleCount: 0,
+                        # adultMaleCount: 0,
+                        # juvenileUnknownCount: 0,
+                        # juvenileFemaleCount: 0,
+                        # juvenileMaleCount: 0,
+                        # subadultUnknownCount: 0,
+                        # subadultFemaleCount: 0,
+                        # subadultMaleCount: 0,
+                        # unknownUnknownCount: 0,
+                        # unknownFemaleCount: 0,
+                        # unknownMaleCount: 0,
+                        # direction: "",
+                        # bypassSide: "",
+                        # notes: "",
+                        # observationperiod_id: ""
+                        # };
 
+                    birdCount = subObservation['adultUnknownCount'] + subObservation['adultFemaleCount']\
+                    + subObservation['adultMaleCount'] + subObservation['juvenileUnknownCount'] + subObservation['juvenileFemaleCount']\
+                    + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
+                    + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
+                    + subObservation['unknownMaleCount']
+                    
+                    sub_observation = Observation(species=subObservation['species'],
+                        adultUnknownCount=subObservation['adultUnknownCount'],
+                        adultFemaleCount=subObservation['adultFemaleCount'],
+                        adultMaleCount=subObservation['adultMaleCount'],
+                        juvenileUnknownCount=subObservation['juvenileUnknownCount'],
+                        juvenileFemaleCount=subObservation['juvenileFemaleCount'],
+                        juvenileMaleCount=subObservation['juvenileMaleCount'],
+                        subadultUnknownCount=subObservation['subadultUnknownCount'],
+                        subadultFemaleCount=subObservation['subadultFemaleCount'],
+                        subadultMaleCount=subObservation['subadultMaleCount'],
+                        unknownUnknownCount=subObservation['unknownUnknownCount'],
+                        unknownFemaleCount=subObservation['unknownFemaleCount'],
+                        unknownMaleCount=subObservation['unknownMaleCount'],
+                        total_count = birdCount,
+                        direction=subObservation['direction'],
+                        bypassSide=subObservation['bypassSide'],
+                        notes=subObservation['notes'],
+                        observationperiod_id=obspId,
+                        shorthand_id=shorthand_id,
+                        account_id=req['userID'])
 
-            birdCount = observation['adultUnknownCount'] + observation['adultFemaleCount'] + observation['adultMaleCount'] + observation['juvenileUnknownCount'] + observation['juvenileFemaleCount'] + observation['juvenileMaleCount'] + observation['subadultUnknownCount'] + observation['subadultFemaleCount'] + observation['subadultMaleCount'] + observation['unknownUnknownCount'] + observation['unknownFemaleCount'] + observation['unknownMaleCount']
-
-            observation = Observation(species=observation['species'],
-                adultUnknownCount=observation['adultUnknownCount'],
-                adultFemaleCount=observation['adultFemaleCount'],
-                adultMaleCount=observation['adultMaleCount'],
-                juvenileUnknownCount=observation['juvenileUnknownCount'],
-                juvenileFemaleCount=observation['juvenileFemaleCount'],
-                juvenileMaleCount=observation['juvenileMaleCount'],
-                subadultUnknownCount=observation['subadultUnknownCount'],
-                subadultFemaleCount=observation['subadultFemaleCount'],
-                subadultMaleCount=observation['subadultMaleCount'],
-                unknownUnknownCount=observation['unknownUnknownCount'],
-                unknownFemaleCount=observation['unknownFemaleCount'],
-                unknownMaleCount=observation['unknownMaleCount'],
-                total_count = birdCount,
-                direction=observation['direction'],
-                bypassSide=observation['bypassSide'],
-                notes=observation['notes'],
-                observationperiod_id=obspId,
-                shorthand_id=shorthand_id)
-
-            db.session().add(observation)
+                    db.session().add(sub_observation)
 
     db.session().commit()
 
