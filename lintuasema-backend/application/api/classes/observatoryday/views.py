@@ -33,9 +33,9 @@ def add_everything():
   # SAAPUVA DATA:
   # {
   #    day, comment, observers, observatory, selectedactions, userID,
-  #    catches,
-  #    observationPeriods,
-  #    observervations
+  #    catches, [{},{},{}]
+  #    observationPeriods, [{},{},{}]
+  #    observervations [{},{},{}]
   #  };
 
   # Ensimmäinen rivi kaikki stringejä
@@ -80,7 +80,7 @@ def add_everything():
     create_catches(catches_with_dayId)
 
 
-    #Save observationperiods
+    #Save observation periods
     for obsperiod in req['observationPeriods']:
         locId = getLocationId(obsperiod['location'], obsId)
 
@@ -91,8 +91,11 @@ def add_everything():
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
 
+        #observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
 
+
+        
         for observation in obsperiod['observations']:
             shorthand = Shorthand(shorthandblock=observation['shorthandblock'], observationperiod_id=obspId)
             db.session().add(shorthand)

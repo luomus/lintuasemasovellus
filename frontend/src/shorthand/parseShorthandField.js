@@ -1,7 +1,6 @@
 //import { sendEverything } from "../services/dayService";
 import { parse, resetAll } from "./shorthand";
 import globals from "../globalConstants";
-import { EventAvailableRounded } from "@material-ui/icons";
 
 let day = {
   day: "",
