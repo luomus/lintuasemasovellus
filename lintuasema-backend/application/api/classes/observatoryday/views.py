@@ -101,18 +101,19 @@ def add_everything():
         # tämän voisi suorittaa tyylikkäämmin parametrina pelkkä obsp
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
 
+        # Save original shorthand block of observation period
+        shorthand = Shorthand(shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId)
+        db.session().add(shorthand)
+
+        # Toimisi shorthand_id = shorthand.id tms, jolloin ei tarvittaisi seuraava erillistä queryä MUTTA vaatii db.committin
+        shorthand_id = Shorthand.query.filter_by(
+            shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId, is_deleted=0).first().id
+
         #Save observation related to this period
         
         for observation in req['observations']: #observation = { periodOrderNum: i, shorthandRow: row, subObservations: [] }
             print(observation['periodOrderNum'])
             if observation['periodOrderNum'] == str(i):
-                # Save original shorthand row
-                shorthand = Shorthand(shorthandblock=observation['shorthandRow'], observationperiod_id=obspId)
-                db.session().add(shorthand)
-
-                # Toimisi shorthand_id = shorthand.id tms, jolloin ei tarvittaisi seuraava erillistä queryä MUTTA vaatii db.committin
-                shorthand_id = Shorthand.query.filter_by(
-                    shorthandblock=observation['shorthandRow'], observationperiod_id=obspId, is_deleted=0).first().id
 
                 for subObservation in observation['subObservations']:
                     # subObservation = {

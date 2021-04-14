@@ -141,6 +141,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     const rows = sanitizedShorthand;
     await loopThroughObservationPeriods(rows, type, location);
     await loopThroughObservations(rows, userID);
+    // TÄHÄN LISÄTTÄVÄ TALLENTAMINEN!!!
     retrieveShorthand(type, location);
     handleClose();
   };

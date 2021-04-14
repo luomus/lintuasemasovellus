@@ -16,6 +16,7 @@ let observationPeriod = {
   location: "",
   startTime: "",
   endTime: "",
+  shorthandBlock: "",
   observationType: "",
 };
 
@@ -107,6 +108,13 @@ export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc)
       observationPeriod["observationType"] = obsType;
       observationPeriod["location"] = loc;
       observationPeriods.push({ ...observationPeriod });
+      observationPeriod["shorthandBlock"] = "";
+    } else {
+      if (observationPeriod["shorthandBlock"] === "") {
+        observationPeriod["shorthandBlock"] = row;
+      } else {
+        observationPeriod["shorthandBlock"] = observationPeriod["shorthandBlock"] + "\n" + row;
+      }
     }
   }
 

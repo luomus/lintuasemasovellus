@@ -35,10 +35,9 @@ def get_shorthand_by_id(shorthand_id):
     return ret
 
 def get_shorthands_by_obsperiod(obsperiod_id):
-    shorthandblocks = Shorthand.query.filter(Shorthand.observationperiod_id == obsperiod_id, Shorthand.is_deleted == 0).order_by(Shorthand.id).all()
+    shorthandblock = Shorthand.query.filter(Shorthand.observationperiod_id == obsperiod_id, Shorthand.is_deleted == 0).order_by(Shorthand.id).first()
     ret = []
-    for row in shorthandblocks:
-        ret.append({ 'id': row.id, 'shorthandBlock': row.shorthandblock })
+    ret.append({ 'id': shorthandblock.id, 'shorthandBlock': shorthandblock.shorthandblock })
     
     return ret
 

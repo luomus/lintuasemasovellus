@@ -104,7 +104,7 @@ const ObsPeriodTable = (props) => {
     return (
       <div>
         <Typography variant="h6" >
-          Lajit
+          {t("summary")}
         </Typography>
         <TableContainer>
           <Table className={classes.table} id="speciesTable">
@@ -180,7 +180,7 @@ const ObsPeriodTable = (props) => {
 
     <div>
       <Typography variant="h6" >
-        Jaksot
+        {t("obsPeriods")}
       </Typography>
       <TableContainer>
         <Table className={classes.table}>
