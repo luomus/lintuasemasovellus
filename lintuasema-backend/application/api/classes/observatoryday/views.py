@@ -46,16 +46,17 @@ def add_everything():
           #   startTime,
           #   endTime,
           #   observationType,
+          #   shorthandBlock,
           # };
   # observations: lista objekteja, joista jokainen sisältää orig. pikakirjoitusrivin
     # ja listan osahavainto-objekteja:
-        # [{ periodOrderNum: i, shorthandRow: row, subObservations: [] },  ]
+        # [{ periodOrderNum: i, subObservations: [] },  ]
 
     # shorthand TARVITSEE observationperiod-ID:n 
     # subObservation TARVITSEE obsperiod-IDn ja shorthandID:n  
     # Observations objektin tietueen 'periodOrderNum, pitäisi vastata observationsPeriods-listan indekseihin,
     # eli jos periodOrderNum on 1, liittyy se observationPeriods-listan indeksissä 1 olevaan havaintojaksoon.
-    # Tätä tietoa tarvitaan oikean jakson id:n liittämisessä havaintoonzo
+    # Tätä tietoa tarvitaan oikean jakson id:n liittämisessä havaintoon
 
     #print('***\nData arriving in add-everything')
     req = request.get_json()
@@ -72,7 +73,6 @@ def add_everything():
     dayId = getDayId(new_obsday.day, new_obsday.observatory_id)
     day = getDay(dayId)
 
-    #Miksi tämä otetaan taas? Sehän on jo haettu aiemmin kerran, ei pitäisi muuttua?
     obsId = day.observatory_id
 
     # Save catches
@@ -111,7 +111,7 @@ def add_everything():
 
         #Save observation related to this period
         
-        for observation in req['observations']: #observation = { periodOrderNum: i, shorthandRow: row, subObservations: [] }
+        for observation in req['observations']: #observation = { periodOrderNum: i, subObservations: [] }
             print(observation['periodOrderNum'])
             if observation['periodOrderNum'] == str(i):
 

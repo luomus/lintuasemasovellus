@@ -1,7 +1,7 @@
 from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.observation.models import Observation
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.observation.services import deleteObservation
+from application.api.classes.observation.services import deleteObservation, deleteObservations
 
 from application.api import bp
 from application.db import db, prefix
@@ -41,7 +41,7 @@ def get_shorthands_by_obsperiod(obsperiod_id):
     
     return ret
 
-def editShorthand(shorthand_id, new_block):
+def edit_shorthand(shorthand_id, new_block):
     shorthand_old=Shorthand.query.get(shorthand_id)
     shorthand_new = Shorthand(shorthandblock = new_block, observationperiod_id = shorthand_old.observationperiod_id)
     shorthand_old.is_deleted = 1
@@ -56,9 +56,15 @@ def setShorthandPerDayId(day_id_old, day_id_new):
     for sh in shorthand:
         sh.observatoryday_id = day_id_new
 
+def delete_shorthands_by_obsperiod(obsperiod_id):
+    shorthands = get_shorthands_by_obsperiod(obsperiod_id)
+    for shorthand in shorthands:
+        delete_shorthand(shorthand['id'])
+
 def delete_shorthand(shorthand_id):
-    deleted_shorthand = Shorthand.query.get(shorthand_id)
-    deleted_shorthand.is_deleted = 1
+    shorthand_to_delete = Shorthand.query.get(shorthand_id)
+    deleteObservations(shorthand_id)
+    shorthand_to_delete.is_deleted = 1
     db.session.commit()
 
 def get_shorthands_for_editing(obsday_id, type_name, location_name):

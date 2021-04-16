@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required
 
 from application.api.classes.shorthand.models import Shorthand
-from application.api.classes.shorthand.services import editShorthand, add_shorthand, get_shorthands, delete_shorthand, get_shorthands_for_editing, get_shorthands_by_obsperiod, get_shorthand_by_id
+from application.api.classes.shorthand.services import edit_shorthand, add_shorthand, get_shorthands, delete_shorthand, get_shorthands_for_editing, get_shorthands_by_obsperiod, get_shorthand_by_id
 
 from application.api import bp
 from application.db import db
@@ -55,9 +55,9 @@ def shorthand_delete():
 
 @bp.route('/api/editShorthand/<shorthand_id>', methods=['POST'])
 @login_required
-def edit_shorthand(shorthand_id):
+def shorthand_edit(shorthand_id):
     req = request.get_json()
 
-    id = editShorthand(shorthand_id, req['block'])
+    id = edit_shorthand(shorthand_id, req['block'])
 
     return jsonify({"id" : id})

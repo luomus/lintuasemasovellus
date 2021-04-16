@@ -8,6 +8,7 @@ from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId, getLocationName
 from application.api.classes.type.services import getTypeIdByName, getTypeNameById, createType
 from application.api.classes.observatoryday.services import getDay
+from application.api.classes.shorthand.services import delete_shorthands_by_obsperiod
 
 from application.db import db, prefix
 from sqlalchemy.sql import text
@@ -31,6 +32,8 @@ def addObservationperiod(day_id, location, observationType, startTime, endTime):
     obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
     
     return { 'id': obspId }
+
+# def editObservationPeriod
 
 def addObservation(observation):
     db.session().add(observation)
@@ -128,6 +131,12 @@ def getObservationperiods():
     return Observationperiod.query.filter_by(is_deleted=0).all()
 
 def deleteObservationperiod(obsperiod_id):
+    delete_shorthands_by_obsperiod(obsperiod_id)
     deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
     deleted_obsperiod.is_deleted = 1
     db.session.commit()
+
+def delete_observationperiods(req):
+    for observationperiod_id in req:
+        deleteObservationperiod(observationperiod_id)
+    

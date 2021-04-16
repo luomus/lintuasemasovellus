@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  getShorthandText, deleteShorthand, deleteObservations, deleteObservationperiod
+  getShorthandText,//deleteShorthand, deleteObservations, deleteObservationperiod,
+  sendEditedShorthand,deleteObservationperiods
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
@@ -79,14 +80,18 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const [locations, setLocations] = useState([]);
   const [warning, setWarning] = useState(false);
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+
   const userID = useSelector(state => state.user.id);
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
   const initializeDefaultShorthand = (defaultShorthand) => {
+    console.log("kannasta shorthand", defaultShorthand);
+
     let text = "";
     for (const shorthandObject of defaultShorthand) {
+      //periodId = shorthandObject.obsPeriodId;
       text += shorthandObject.startTime;
       text += "\n";
       for (const shorthandObject2 of shorthandObject.shorthands) {
@@ -121,15 +126,15 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   };
 
   const handleDelete = async () => {
+    //const t0 = new Date().getTime();
+
+    let removable_ids = [];
     for (const obsperiod of defaultShorthand) {
-      for (const shorthandrow of obsperiod.shorthands) {
-        console.log(shorthandrow.shorthand_id);
-        await deleteObservations({ shorthand_id: Number(shorthandrow.shorthand_id) });
-        await deleteShorthand({ shorthand_id: Number(shorthandrow.shorthand_id) });
-      }
-      console.log(obsperiod.obsPeriodId);
-      await deleteObservationperiod({ obsperiod_id: Number(obsperiod.obsPeriodId) });
+      removable_ids.push(obsperiod.obsPeriodId);
     }
+    await deleteObservationperiods(removable_ids);
+    //const t2 = new Date().getTime();
+    //console.log("Aikaa kulunut loopissa: " + Math.round((t2-t0) / 1000));
     retrieveShorthand(type, location);
     handleClose();
   };
@@ -139,10 +144,11 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     await handleDelete();
     setDayId(dayId);
     const rows = sanitizedShorthand;
-    await loopThroughObservationPeriods(rows, type, location);
-    await loopThroughObservations(rows, userID);
-    // TÄHÄN LISÄTTÄVÄ TALLENTAMINEN!!!
-    retrieveShorthand(type, location);
+    const periods = loopThroughObservationPeriods(rows, type, location);
+    const observations = loopThroughObservations(rows, userID);
+
+    await sendEditedShorthand(periods, observations, dayId, userID);
+    await retrieveShorthand(type, location);
     handleClose();
   };
 

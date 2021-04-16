@@ -67,7 +67,7 @@ const parseTime = (timeString) => {
 // };
 
 
-const readyObservation = async (observation, userID) => {
+const readyObservation = (observation, userID) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
@@ -94,7 +94,7 @@ const readyObservation = async (observation, userID) => {
 
 
 //remmebre to add dayID to periods in backend
-export const loopThroughObservationPeriods = async (shorthandRows, obsType, loc) => {
+export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
   observationPeriods = [];
   let startTimeEncountered = false;
   for (const row of shorthandRows) {
@@ -156,7 +156,7 @@ export const setDayId = (id) => {
   day["id"] = id;
 };
 
-export const loopThroughObservations = async (shorthandRows, userID) => {
+export const loopThroughObservations = (shorthandRows, userID) => {
   let startTimeEncountered = false;
   let i = 0;
   const observations = [];// [ { periodOrderNum: i, shorthandRow: row, subObservations: []  }]
@@ -171,7 +171,7 @@ export const loopThroughObservations = async (shorthandRows, userID) => {
       const parsed = parse(row);
       let observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
       observationObject["periodOrderNum"] = String(i);
-      observationObject["shorthandRow"]= row;
+      //observationObject["shorthandRow"]= row;
       //shorthand["block"] = row;
       //shorthand["observationperiod_id"] = observationPeriods[Number(i)]["id"];
       //const res = await postAddShorthand(shorthand);
@@ -179,7 +179,7 @@ export const loopThroughObservations = async (shorthandRows, userID) => {
         observation = sub;
         observation.species = parsed.species;
         obsCountersToNum();
-        const obsToAdd = await readyObservation(observation, userID);
+        const obsToAdd = readyObservation(observation, userID);
         //await sendObservation(observation, observationPeriods[Number(i)]["id"], res.data.id, userID);
         observationObject.subObservations.push(obsToAdd);
       }

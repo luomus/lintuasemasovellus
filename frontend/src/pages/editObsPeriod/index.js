@@ -133,8 +133,8 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
     await handleDelete();
     setDayId(obsPeriod.day_id);
     const rows = sanitizedShorthand;
-    await loopThroughObservationPeriods(rows, type, location);
-    await loopThroughObservations(rows, userID);
+    loopThroughObservationPeriods(rows, type, location);
+    loopThroughObservations(rows, userID);
     handleClose();
   };
 

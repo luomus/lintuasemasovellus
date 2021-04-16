@@ -225,8 +225,8 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
-    const observationPeriodsToSend = await loopThroughObservationPeriods(rows, type, location);
-    const observationsToSend = await loopThroughObservations(rows, userID);
+    const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
+    const observationsToSend = loopThroughObservations(rows, userID);
     setDisabled(true);
     let data = {
       day:formatDate(day),

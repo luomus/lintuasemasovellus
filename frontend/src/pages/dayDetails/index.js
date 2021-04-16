@@ -155,7 +155,7 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  console.log("Rivit päiväsivulla", dayId, catches);
+  //console.log("Rivit päiväsivulla", dayId, catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
