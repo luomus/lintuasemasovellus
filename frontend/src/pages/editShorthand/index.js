@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditShorthand = ({ date, dayId, open, handleClose }) => {
+const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
 
   const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
@@ -156,11 +156,16 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     initializeDefaultShorthand(res);
   };
 
+  const handleClose = () => {
+    setType("");
+    setLocation("");
+    setShorthand("");
+    handleCloseModal();
+  };
 
   useEffect(async () => {
     await retrieveShorthand();
   }, [dayId]);
-
 
   useEffect(() => {
     if (Object.keys(userObservatory).length !== 0) {
@@ -169,11 +174,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
           .find(s => s.observatory === userObservatory)
           .types
       );
-    }
-  });
-
-  useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)
@@ -337,7 +337,7 @@ EditShorthand.propTypes = {
   date: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
 export default EditShorthand;

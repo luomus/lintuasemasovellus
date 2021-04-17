@@ -89,36 +89,24 @@ const DayDetails = () => {
     );
   }
 
-  const [obsPeriods, setObsperiods] = useState([]);
-
-  const [summary, setSummary] = useState([]);
-
-  const [observersForm, setObserversForm] = useState(false);
-
-  const [commentForm, setCommentForm] = useState(false);
-
-  const [editedComment, setEditedComment] = useState("");
-
-  const [editedObservers, setEditedObservers] = useState("");
-
-  const [mode, setMode] = useState("table1");
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const [actionsEditMode, setActionsEditMode] = useState(false);
-
-  const [catchesEditMode, setCatchesEditMode] = useState(false);
-
-  const [addingNewRowMode, setAddingNewRowMode] = useState(false);
-
   const dayList = useSelector(state => state.days);
-
   const userObservatory = useSelector(state => state.userObservatory);
-
   const notifications = useSelector(state => state.notifications);
+  const editedActions = useSelector(state => state.dailyActions);
+  const editedCatches = useSelector(state => state.catchRows);
 
+  const [obsPeriods, setObsperiods] = useState([]);
+  const [summary, setSummary] = useState([]);
+  const [observersForm, setObserversForm] = useState(false);
+  const [commentForm, setCommentForm] = useState(false);
+  const [editedComment, setEditedComment] = useState("");
+  const [editedObservers, setEditedObservers] = useState("");
+  const [mode, setMode] = useState("table1");
+  const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
+  const [actionsEditMode, setActionsEditMode] = useState(false);
+  const [catchesEditMode, setCatchesEditMode] = useState(false);
+  const [addingNewRowMode, setAddingNewRowMode] = useState(false);
   const [catches, setDayCatches] = useState([]);
-
   const [catchRowToEdit, setCatchRowToEdit] = useState({});
 
   const [observers, setObservers] = useState(
@@ -132,7 +120,6 @@ const DayDetails = () => {
     .comment
   );
 
-
   const [selectedActions, setSelectedActions] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .selectedactions
@@ -140,10 +127,6 @@ const DayDetails = () => {
       .find(d => d.day === day && d.observatory === stationName)
       .selectedactions)
     : {});
-
-  const editedActions = useSelector(state => state.dailyActions);
-
-  const editedCatches = useSelector(state => state.catchRows);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -190,8 +173,8 @@ const DayDetails = () => {
   }, [dayId]);
 
 
-  const handleOpen = () => {
-    setModalOpen(true);
+  const handleEditShorthandOpen = () => {
+    setEditShorthandModalOpen(true);
   };
 
   const handleActionsEditOpen = () => {
@@ -301,8 +284,8 @@ const DayDetails = () => {
     setSummary(res2);
   };
 
-  const handleClose = () => {
-    setModalOpen(false);
+  const handleEditShorthandClose = () => {
+    setEditShorthandModalOpen(false);
     refetchObservations();
   };
 
@@ -526,8 +509,8 @@ const DayDetails = () => {
           </Grid>
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-end">
-              <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-                {t("edit")}
+              <Button variant="contained" color="primary" onClick={() => handleEditShorthandOpen()}>
+                {t("editObservations")}
               </Button>{" "}
             </Box>
           </Grid>
@@ -547,8 +530,8 @@ const DayDetails = () => {
         <EditShorthand
           date={day}
           dayId={dayId}
-          open={modalOpen}
-          handleClose={handleClose}
+          open={editShorthandModalOpen}
+          handleCloseModal={handleEditShorthandClose}
         />
       </Paper>
     </div>

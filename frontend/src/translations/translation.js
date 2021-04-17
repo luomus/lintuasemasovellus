@@ -40,6 +40,7 @@ const resources = {
       "summary": "Lajit",
       "obsPeriods": "Jaksot",
       "edit": "Muokkaa",
+      "editObservations": "Muokkaa havaintoja",
       "editShorthand": "Muokkaa pikakirjoitusta",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
