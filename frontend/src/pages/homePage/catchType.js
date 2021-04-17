@@ -100,15 +100,18 @@ const CatchType = ({ cr }) => {
       toNotifications.push(t("NetLength", { char: cr.pyydys }));
     }
     //errors, prevent saving
-    if (cr.lukumaara < 0 || cr.verkonPituus < 0){
+    if (cr.lukumaara < 0 || cr.verkonPituus < 0) {
       toErrors.push(t("noNegativeValues"));
+    }
+    if (cr.pyydys && !cr.pyyntialue) {
+      toErrors.push(t("noCatchArea"));
     }
     if (cr.alku !== "00:00" && cr.loppu !== "00:00") {
       console.log("alku", cr.alku, typeof(cr.alku));
       if (cr.alku.slice(0,2) > cr.loppu.slice(0,2) || (cr.alku.slice(0,2) === cr.loppu.slice(0,2) && cr.alku.slice(3,5) > cr.loppu.slice(3,5)))
         toErrors.push(t("closeBeforeOpen", { char: cr.pyydys }));
     }
-    if (cr.pyydys && cr.pyyntialue && cr.lukumaara === "0" ){
+    if (cr.pyydys && cr.pyyntialue && cr.lukumaara === "0") {
       toErrors.push(t("noZeroAmount", { char: cr.pyydys }));
     }
     return [toNotifications, toErrors];

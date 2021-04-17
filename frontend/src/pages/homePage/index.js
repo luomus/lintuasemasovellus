@@ -294,20 +294,22 @@ export const HomePage = () => {
   }
 
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInCatchesOrActions())
+    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
     else
       return false;
   };
 
-  const errorsInCatchesOrActions = () => {
+  const errorsInInput = (category="all") => {
     let value = false;
     Object.keys(notifications).map(cat => {
-      Object.keys(notifications[String(cat)]).map(row => {
-        if (notifications[String(cat)][String(row)].errors.length > 0) {
-          value = true;
-        }
-      });
+      if (cat === category || category === "all") {
+        Object.keys(notifications[String(cat)]).map(row => {
+          if (notifications[String(cat)][String(row)].errors.length > 0) {
+            value = true;
+          }
+        });
+      }
     });
     return value;
   };
@@ -420,7 +422,13 @@ export const HomePage = () => {
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
 
-                    <Typography className={classes.secondaryHeading}>{(dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded") : t("noObservationActivity")} </Typography>
+                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("dailyactions")) ? "error" : "inherit" }>
+                      {
+                        (errorsInInput("dailyactions")) ? t("errorsInObservationActivity")
+                          : (dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded")
+                            : t("noObservationActivity")
+                      }
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid container
@@ -439,7 +447,13 @@ export const HomePage = () => {
                     id="catches-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
-                    <Typography className={classes.secondaryHeading}>{(catchRows.length === 0 || catchRows[0].pyydys === "") ? t("noCatches") : t("catchesAdded")}</Typography>
+                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("catches")) ? "error" : "inherit" }>
+                      {
+                        (errorsInInput("catches")) ? t("errorsInCatches")
+                          : (catchRows.length === 0 || catchRows[0].pyydys === "" || catchRows[0].pyyntialue === "") ? t("noCatches")
+                            : t("catchesAdded")
+                      }
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid container

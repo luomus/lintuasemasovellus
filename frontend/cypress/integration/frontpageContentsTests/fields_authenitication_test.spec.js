@@ -50,6 +50,8 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#catches-header").click();
     cy.get("#saveButton").should("not.be.disabled");
     cy.get("#plus-catch-row-button").click();
+    cy.get("#selectCatchType").click();
+    cy.contains("Vakioverkko").click();
     cy.get("#saveButton").should("be.disabled");
     cy.get("#0 #removeButton").click();
     cy.get("#saveButton").should("not.be.disabled");
@@ -90,9 +92,10 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.wait(1000);
     cy.get("#observers").type(observer);
     cy.get("#attachments").type("-1");
-    cy.contains("Negatiivinen arvo!");
+    cy.contains("Negatiiviset arvot eivät ole sallittuja!");
     cy.get("#attachments").clear();
     cy.contains("Kenttä ei saa olla tyhjä");
+    cy.get("#attachments").type("0");
     cy.contains("Gåulla käynti").click();
     cy.get("#activity-header").contains("Havaintoaktiivisuus kirjattu");
     cy.contains("Gåulla käynti").click();
@@ -105,7 +108,6 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#catches-header").click();
     cy.get("#saveButton").should("not.be.disabled");
     cy.get("#plus-catch-row-button").click();
-    cy.get("#saveButton").should("be.disabled");
     cy.get("#selectCatchType").click();
     cy.contains("Petoverkot").click();
     cy.get("#saveButton").should("be.disabled");
