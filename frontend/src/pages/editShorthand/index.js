@@ -87,21 +87,19 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const stations = useSelector(state => state.stations);
 
   const initializeDefaultShorthand = (defaultShorthand) => {
-    console.log("kannasta shorthand", defaultShorthand);
-
     let text = "";
     for (const shorthandObject of defaultShorthand) {
-      //periodId = shorthandObject.obsPeriodId;
-      text += shorthandObject.startTime;
-      text += "\n";
+      text += shorthandObject.startTime + "\n";
       for (const shorthandObject2 of shorthandObject.shorthands) {
-        text += shorthandObject2.shorthand_text;
-        text += "\n";
+        text += shorthandObject2.shorthand_text + "\n";
       }
-      text += shorthandObject.endTime;
-      text += "\n";
+      text += shorthandObject.endTime + "\n";
     }
-    setShorthand(text);
+    if (text.replace(/(\r\n|\n|\r)/gm, "").trim() === "") {
+      setShorthand("");
+    } else {
+      setShorthand(text);
+    }
   };
 
   const handleDialogOpen = () => {
