@@ -145,12 +145,12 @@ const CatchType = ({ cr }) => {
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
     //run validations on change
     const result = validate({ ...realTimeRow, [target.name]:target.value });
-    dispatch(setNotifications([result[0], result[1]], cr.key));
+    dispatch(setNotifications([result[0], result[1]], "catches", cr.key));
   };
 
   const handleRowRemove = () => {
     dispatch(deleteOneCatchRow(cr));
-    dispatch(setNotifications([[], []], cr.key));
+    dispatch(setNotifications([[], []], "catches", cr.key));
   };
 
 
@@ -297,7 +297,7 @@ const CatchType = ({ cr }) => {
         }
 
         <IconButton id="removeButton" size="small" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
-          <HighlightOff fontSize="medium" color="error" />
+          <HighlightOff fontSize="default" color="error" />
         </IconButton>
       </FormGroup>
     </Grid>

@@ -302,16 +302,12 @@ export const HomePage = () => {
 
   const errorsInCatchesOrActions = () => {
     let value = false;
-    Object.keys(notifications).map(row => {
-      //console.log("mapping", notifications[String(row)]);
-      if (notifications[String(row)].errors.length > 0) {
-        value = true;
-      }
-    });
-    Object.keys(catchRows).map(row => {
-      if (catchRows[String(row)].lukumaara === 0) {
-        value = true;
-      }
+    Object.keys(notifications).map(cat => {
+      Object.keys(notifications[String(cat)]).map(row => {
+        if (notifications[String(cat)][String(row)].errors.length > 0) {
+          value = true;
+        }
+      });
     });
     return value;
   };
@@ -427,7 +423,12 @@ export const HomePage = () => {
                     <Typography className={classes.secondaryHeading}>{(dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded") : t("noObservationActivity")} </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <DailyActions />
+                    <Grid container
+                      alignItems="flex-start"
+                      spacing={1}
+                    >
+                      <DailyActions />
+                    </Grid>
                   </AccordionDetails>
                 </Accordion>
 
@@ -445,7 +446,6 @@ export const HomePage = () => {
                       alignItems="flex-start"
                       spacing={1}
                     >
-
                       <Notification category="catches" />
 
                       {catchRows.map((cr, i) => (
@@ -464,7 +464,7 @@ export const HomePage = () => {
 
                       <Grid item xs={12}>
                         <IconButton id="plus-catch-row-button" size="small" onClick={addCatchRow} variant="contained" color="primary">
-                          <Add fontSize="medium" />
+                          <Add fontSize="default" />
                         </IconButton>
                         &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}
                       </Grid>
