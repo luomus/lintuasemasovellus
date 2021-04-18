@@ -157,17 +157,24 @@ export const setDayId = (id) => {
 };
 
 export const loopThroughObservations = (shorthandRows, userID) => {
+  //const t0 = new Date().getTime();
   let startTimeEncountered = false;
   let i = 0;
   const observations = [];// [ { periodOrderNum: i, shorthandRow: row, subObservations: []  }]
   for (const row of shorthandRows) {
     if (!row) continue;
     if (isTime(row) && !startTimeEncountered) {
+      //const t1 = new Date().getTime();
+      //console.log("Start time found. Time passed", (t1 - t0));
       startTimeEncountered = true;
     } else if (isTime(row)) {
+      //const t1 = new Date().getTime();
+      //console.log("End time found. Time passed", (t1 - t0));
       startTimeEncountered = false;
       i++;
     } else {
+      //const t1 = new Date().getTime();
+      //console.log("Normal row found. Time passed", (t1 - t0));
       const parsed = parse(row);
       let observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
       observationObject["periodOrderNum"] = String(i);

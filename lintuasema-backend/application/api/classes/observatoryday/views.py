@@ -101,11 +101,27 @@ def add_everything():
         # tämän voisi suorittaa tyylikkäämmin parametrina pelkkä obsp
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
 
+        whole_shorthand = shorthandblock=obsperiod['shorthandBlock']
+
+        # if shorthand is long, split it into blocks of max 1000 chars
+        while len(whole_shorthand) >= 1000:
+            i = whole_shorthand.find("\n", -1000)
+
+            #print("sh before cut", whole_shorthand[(i + 1):])
+
+            shorthand = Shorthand(shorthandblock=whole_shorthand[(i + 1):], observationperiod_id=obspId)
+
+            db.session().add(shorthand)
+            whole_shorthand = whole_shorthand[:i]
+            #print("sh after cut", whole_shorthand)
+
         # Save original shorthand block of observation period
-        shorthand = Shorthand(shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId)
+        shorthand = Shorthand(shorthandblock=whole_shorthand, observationperiod_id=obspId)
+
         db.session().add(shorthand)
 
         # Toimisi shorthand_id = shorthand.id tms, jolloin ei tarvittaisi seuraava erillistä queryä MUTTA vaatii db.committin
+        #print("obspId", obspId)
         shorthand_id = Shorthand.query.filter_by(
             shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId, is_deleted=0).first().id
 
@@ -167,7 +183,7 @@ def add_everything():
 
     db.session().commit()
 
-    print('End of add_everything***\n')
+    #print('End of add_everything***\n')
 
     return jsonify(req)
 
