@@ -224,6 +224,7 @@ export const HomePage = () => {
   });
 
   const sendData = async () => {
+    const t0 = new Date().getTime();
     const rows = sanitizedShorthand;
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
     const observationsToSend = loopThroughObservations(rows, userID);
@@ -242,7 +243,6 @@ export const HomePage = () => {
     console.log("data", data);
 
     try {
-      const t0 = new Date().getTime();
       await sendEverything(data);
       /*await sendDay({
         //userID: userID,
@@ -259,9 +259,6 @@ export const HomePage = () => {
 
       ////await sendShorthand(makeSendDataJson(
       ////  formatDate(day), userObservatory, comment, observers, location, type, rows));
-      const t1 = new Date().getTime();
-      console.log("Entire time to sendEverything", (t1 - t0));
-
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
@@ -272,6 +269,8 @@ export const HomePage = () => {
       setErrorHappened(true);
     }
     setDisabled(false);
+    const t1 = new Date().getTime();
+    console.log("Time to sendData", (t1 - t0));
   };
 
 
