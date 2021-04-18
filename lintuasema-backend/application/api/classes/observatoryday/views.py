@@ -26,11 +26,10 @@ from sqlalchemy.sql import text
 
 from datetime import datetime
 
-#Tämä voisi olla pohjana tallennuksen optimoinnille, selvitellään.
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
-  # SAAPUVA DATA:
+  # ARRIVING DATA:
   # {
   #    day, comment, observers, observatory, selectedactions, userID,
   #    catches, [{},{},{}]
@@ -38,27 +37,6 @@ def add_everything():
   #    observations [{},{},{}]
   #  };
 
-  # Ensimmäinen rivi kaikki stringejä
-  # catches: Lista pyydysobjekteja, TARVITSEE dayIDn ennen tallentamista
-  # Observationperiods: Lista havaintojakso-objekteja, TARVITSEE dayID:n ennen tallentamista
-          # observationPeriod = {
-          #   location,
-          #   startTime,
-          #   endTime,
-          #   observationType,
-          #   shorthandBlock,
-          # };
-  # observations: lista objekteja, joista jokainen sisältää orig. pikakirjoitusrivin
-    # ja listan osahavainto-objekteja:
-        # [{ periodOrderNum: i, subObservations: [] },  ]
-
-    # shorthand TARVITSEE observationperiod-ID:n 
-    # subObservation TARVITSEE obsperiod-IDn ja shorthandID:n  
-    # Observations objektin tietueen 'periodOrderNum, pitäisi vastata observationsPeriods-listan indekseihin,
-    # eli jos periodOrderNum on 1, liittyy se observationPeriods-listan indeksissä 1 olevaan havaintojaksoon.
-    # Tätä tietoa tarvitaan oikean jakson id:n liittämisessä havaintoon
-
-    #print('***\nData arriving in add-everything')
     req = request.get_json()
 
     # Save observatoryDay 
@@ -78,12 +56,8 @@ def add_everything():
     # Save catches
     if len(req['catches']) > 0:
         catches = req['catches']
-        #print('catches type', type(catches))
-        
-        print('dayId', type(dayId))
         catches_with_dayId = catches
         catches_with_dayId.insert(0, dayId)
-        #print('catches', catches_with_dayId)
         create_catches(catches_with_dayId)
 
 
@@ -120,38 +94,15 @@ def add_everything():
 
         db.session().add(shorthand)
 
-        # Toimisi shorthand_id = shorthand.id tms, jolloin ei tarvittaisi seuraava erillistä queryä MUTTA vaatii db.committin
-        #print("obspId", obspId)
         shorthand_id = Shorthand.query.filter_by(
             shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId, is_deleted=0).first().id
 
         #Save observation related to this period
-        
         for observation in req['observations']: #observation = { periodOrderNum: i, subObservations: [] }
             print(observation['periodOrderNum'])
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:
-                    # subObservation = {
-                        # species: "",
-                        # adultUnknownCount: 0,
-                        # adultFemaleCount: 0,
-                        # adultMaleCount: 0,
-                        # juvenileUnknownCount: 0,
-                        # juvenileFemaleCount: 0,
-                        # juvenileMaleCount: 0,
-                        # subadultUnknownCount: 0,
-                        # subadultFemaleCount: 0,
-                        # subadultMaleCount: 0,
-                        # unknownUnknownCount: 0,
-                        # unknownFemaleCount: 0,
-                        # unknownMaleCount: 0,
-                        # direction: "",
-                        # bypassSide: "",
-                        # notes: "",
-                        # observationperiod_id: ""
-                        # };
-
                     birdCount = subObservation['adultUnknownCount'] + subObservation['adultFemaleCount']\
                     + subObservation['adultMaleCount'] + subObservation['juvenileUnknownCount'] + subObservation['juvenileFemaleCount']\
                     + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\

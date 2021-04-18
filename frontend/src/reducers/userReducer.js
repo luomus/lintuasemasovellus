@@ -1,5 +1,3 @@
-
-// Presume "user" is going to be JSON
 export const setUser = (user) => {
   return {
     type: "SET_USER",

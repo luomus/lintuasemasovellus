@@ -97,7 +97,7 @@ def get_shorthands_for_editing(obsday_id, type_name, location_name):
 
     return obsPeriodList
 
-#Apufunktiot yllä olevalle get_shorthands_for_editing-metodille
+#Helper functions for get_shorthands_for_editing
 
 def createObsperiodList(res):
 

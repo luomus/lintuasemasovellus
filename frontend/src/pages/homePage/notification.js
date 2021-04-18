@@ -9,9 +9,7 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles(() => ({
   container: {
     padding: "5px",
-    //background: "#f0ede6",
     borderRadius: 3,
-    //boxShadow: "0 0px 0px 2px #f0ede6",
   }
 }));
 

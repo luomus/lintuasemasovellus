@@ -6,7 +6,7 @@ import {
 import WarningIcon from "@material-ui/icons/Warning";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { getErrors } from "../../shorthand/validations";
+import { getErrors } from "../../shorthand/newValidations";
 
 const useStyles = makeStyles(() => ({
   errorPaper: {
