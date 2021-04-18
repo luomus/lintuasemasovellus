@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  Grid, FormControlLabel, Checkbox, FormGroup, InputAdornment, TextField, Dialog,
-  Button, DialogActions, DialogContentText, DialogContent
+  Grid, FormControlLabel, Checkbox, FormGroup, InputAdornment, TextField
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDailyActions } from "../../reducers/dailyActionsReducer";
+import { setNotifications } from "../../reducers/notificationsReducer";
+import Notification from "../homePage/notification";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -46,71 +47,64 @@ const HankoActions = () => {
   const { t } = useTranslation();
   const clicks = useSelector(state => state.dailyActions);
 
-  const [error, setError] = useState("");
-  const [confirmationAsked, setConfirmantionAsked] = useState(false);
-  const [showModal, setshowModal] = useState(false);
+  const validate = (target) => {
+    let toNotifications = [];
+    let toErrors = [];
 
-  const handleModalClose = () => {
-    setshowModal(false);
-    setConfirmantionAsked(true);
+    //things for user to doublecheck
+    if (target.name === "attachments" && target.value > 4) {
+      toNotifications.push(t("recheckLargeNumberOfAttachments"));
+    }
+    //errors, prevent saving
+    if (target.name === "attachments" && target.value < 0){
+      toErrors.push(t("noNegativeValues"));
+    }
+    if (target.name === "attachments" && !target.value){
+      toErrors.push(t("noEmptyValues"));
+    }
+
+    return [toNotifications, toErrors];
   };
 
-  const handleClick = (target) => {
-    if (target.name === "attachments" && target.value < 0) {
-      setError(t("valueIsNegative"));
-    } else if (target.name === "attachments" && !target.value) {
-      setError(t("noEmptyValues"));
-    } else if (target.name === "attachments" && target.value > 4 && !confirmationAsked) {
-      setshowModal(true);
-      setError("");
-    } else {
-      setError("");
-      //setConfirmantionAsked(false);
-    }
+  const handleChange = (target) => {
     dispatch(toggleDailyActions(target.name, target.name === "attachments" ? target.value : target.checked));
-    //console.log("clicks", clicks);
+    //run validations on change
+    const result = validate(target);
+    dispatch(setNotifications([result[0], result[1]], "dailyactions", target.name));
   };
 
   return (
-    <Grid item xs={12} >
-      <FormGroup row className={classes.formGroup} >
-        <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.standardObs} onChange={(e) => handleClick(e.target)} name="standardObs" color="primary" className={classes.checkbox} />}
-          label={t("standardObs")} labelPlacement="end" />
-        <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.gåu} onChange={(e) => handleClick(e.target)} name="gåu" color="primary" className={classes.checkbox} />}
-          label={t("gåu")} labelPlacement="end" />
-        <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.standardRing} onChange={(e) => handleClick(e.target)} name="standardRing" color="primary" className={classes.checkbox} />}
-          label={t("standardRing")} labelPlacement="end" />
-        <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.owlStandard} onChange={(e) => handleClick(e.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
-          label={t("owlStandard")} labelPlacement="end" />
-        <FormControlLabel className={classes.formControlLabel}
-          control={<Checkbox checked={clicks.mammals} onChange={(e) => handleClick(e.target)} name="mammals" color="primary" className={classes.checkbox} />}
-          label={t("mammals")} labelPlacement="end" />
-        <FormControlLabel className={classes.formControlLabel}
-          control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={clicks.attachments}
-            onChange={(e) => handleClick(e.target)}
-            error={error !== ""} helperText={error ? t(error) : ""}
-            InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
-          </TextField>}
-          label={t("attachments")} labelPlacement="start" />
-      </FormGroup>
-      <Dialog open={showModal} onClose={handleModalClose} disableBackdropClick={true}>
-        <DialogContent>
-          <DialogContentText id="confirmation dialog">
-            {t("recheckLargeNumberOfAttachments")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleModalClose} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <Grid container
+      alignItems="flex-start"
+      spacing={1}
+    >
+      <Notification category="dailyactions" />
+      <Grid item xs={12} >
+        <FormGroup row className={classes.formGroup} >
+          <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={clicks.standardObs} onChange={(event) => handleChange(event.target)} name="standardObs" color="primary" className={classes.checkbox} />}
+            label={t("standardObs")} labelPlacement="end" />
+          <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={clicks.gåu} onChange={(event) => handleChange(event.target)} name="gåu" color="primary" className={classes.checkbox} />}
+            label={t("gåu")} labelPlacement="end" />
+          <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={clicks.standardRing} onChange={(event) => handleChange(event.target)} name="standardRing" color="primary" className={classes.checkbox} />}
+            label={t("standardRing")} labelPlacement="end" />
+          <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={clicks.owlStandard} onChange={(event) => handleChange(event.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
+            label={t("owlStandard")} labelPlacement="end" />
+          <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={clicks.mammals} onChange={(event) => handleChange(event.target)} name="mammals" color="primary" className={classes.checkbox} />}
+            label={t("mammals")} labelPlacement="end" />
+          <FormControlLabel className={classes.formControlLabel}
+            control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={clicks.attachments}
+              onChange={(event) => handleChange(event.target)}
+              InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
+            </TextField>}
+            label={t("attachments")} labelPlacement="start" />
+        </FormGroup>
+      </Grid>
     </Grid>
-
   );
 };
 

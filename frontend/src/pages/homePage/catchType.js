@@ -100,15 +100,18 @@ const CatchType = ({ cr }) => {
       toNotifications.push(t("NetLength", { char: cr.pyydys }));
     }
     //errors, prevent saving
-    if (cr.lukumaara < 0 || cr.verkonPituus < 0){
+    if (cr.lukumaara < 0 || cr.verkonPituus < 0) {
       toErrors.push(t("noNegativeValues"));
+    }
+    if (cr.pyydys && !cr.pyyntialue) {
+      toErrors.push(t("noCatchArea"));
     }
     if (cr.alku !== "00:00" && cr.loppu !== "00:00") {
       console.log("alku", cr.alku, typeof(cr.alku));
       if (cr.alku.slice(0,2) > cr.loppu.slice(0,2) || (cr.alku.slice(0,2) === cr.loppu.slice(0,2) && cr.alku.slice(3,5) > cr.loppu.slice(3,5)))
         toErrors.push(t("closeBeforeOpen", { char: cr.pyydys }));
     }
-    if (cr.pyydys && cr.pyyntialue && cr.lukumaara === "0" ){
+    if (cr.pyydys && cr.pyyntialue && cr.lukumaara === "0") {
       toErrors.push(t("noZeroAmount", { char: cr.pyydys }));
     }
     return [toNotifications, toErrors];
@@ -145,12 +148,12 @@ const CatchType = ({ cr }) => {
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
     //run validations on change
     const result = validate({ ...realTimeRow, [target.name]:target.value });
-    dispatch(setNotifications([result[0], result[1]], cr.key));
+    dispatch(setNotifications([result[0], result[1]], "catches", cr.key));
   };
 
   const handleRowRemove = () => {
     dispatch(deleteOneCatchRow(cr));
-    dispatch(setNotifications([[], []], cr.key));
+    dispatch(setNotifications([[], []], "catches", cr.key));
   };
 
 
@@ -297,7 +300,7 @@ const CatchType = ({ cr }) => {
         }
 
         <IconButton id="removeButton" size="small" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
-          <HighlightOff fontSize="medium" color="error" />
+          <HighlightOff fontSize="default" color="error" />
         </IconButton>
       </FormGroup>
     </Grid>

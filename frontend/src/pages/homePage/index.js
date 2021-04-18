@@ -21,14 +21,14 @@ import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  sendDay,
+  //sendDay,
   loopThroughObservationPeriods,
   loopThroughObservations,
-  sendCatches,
+  //sendCatches,
   //sendShorthand,
   //makeSendDataJson,
-} from "./parseShorthandField";
-import { searchDayInfo, getLatestDays, getCatches } from "../../services";
+} from "../../shorthand/parseShorthandField";
+import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
@@ -225,9 +225,25 @@ export const HomePage = () => {
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
+    const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
+    const observationsToSend = loopThroughObservations(rows, userID);
     setDisabled(true);
+    let data = {
+      day:formatDate(day),
+      comment: comment,
+      observers: observers,
+      observatory: userObservatory,
+      selectedactions: readyDailyActions(),
+      userID: userID,
+      catches: catchRows,
+      observationPeriods: observationPeriodsToSend,
+      observations: observationsToSend
+    };
+    console.log("data", data);
+
     try {
-      await sendDay({
+      await sendEverything(data);
+      /*await sendDay({
         //userID: userID,
         day: formatDate(day),
         comment,
@@ -238,8 +254,11 @@ export const HomePage = () => {
       await sendCatches(catchRows);
       await loopThroughObservationPeriods(rows, type, location);
       await loopThroughObservations(rows, userID);
-      //await sendShorthand(makeSendDataJson(
-      //  formatDate(day), userObservatory, comment, observers, location, type, rows));
+      */
+
+      ////await sendShorthand(makeSendDataJson(
+      ////  formatDate(day), userObservatory, comment, observers, location, type, rows));
+
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
@@ -275,23 +294,21 @@ export const HomePage = () => {
   }
 
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInCatchesOrActions())
+    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
     else
       return false;
   };
 
-  const errorsInCatchesOrActions = () => {
+  const errorsInInput = (category="all") => {
     let value = false;
-    Object.keys(notifications).map(row => {
-      console.log("mapping", notifications[String(row)]);
-      if (notifications[String(row)].errors.length > 0) {
-        value = true;
-      }
-    });
-    Object.keys(catchRows).map(row => {
-      if (catchRows[String(row)].lukumaara === 0) {
-        value = true;
+    Object.keys(notifications).map(cat => {
+      if (cat === category || category === "all") {
+        Object.keys(notifications[String(cat)]).map(row => {
+          if (notifications[String(cat)][String(row)].errors.length > 0) {
+            value = true;
+          }
+        });
       }
     });
     return value;
@@ -405,10 +422,21 @@ export const HomePage = () => {
                   >
                     <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
 
-                    <Typography className={classes.secondaryHeading}>{(dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded") : t("noObservationActivity")} </Typography>
+                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("dailyactions")) ? "error" : "inherit" }>
+                      {
+                        (errorsInInput("dailyactions")) ? t("errorsInObservationActivity")
+                          : (dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded")
+                            : t("noObservationActivity")
+                      }
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <DailyActions />
+                    <Grid container
+                      alignItems="flex-start"
+                      spacing={1}
+                    >
+                      <DailyActions />
+                    </Grid>
                   </AccordionDetails>
                 </Accordion>
 
@@ -419,14 +447,19 @@ export const HomePage = () => {
                     id="catches-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
-                    <Typography className={classes.secondaryHeading}>{(catchRows.length === 0 || catchRows[0].pyydys === "") ? t("noCatches") : t("catchesAdded")}</Typography>
+                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("catches")) ? "error" : "inherit" }>
+                      {
+                        (errorsInInput("catches")) ? t("errorsInCatches")
+                          : (catchRows.length === 0 || catchRows[0].pyydys === "" || catchRows[0].pyyntialue === "") ? t("noCatches")
+                            : t("catchesAdded")
+                      }
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid container
                       alignItems="flex-start"
                       spacing={1}
                     >
-
                       <Notification category="catches" />
 
                       {catchRows.map((cr, i) => (
@@ -445,7 +478,7 @@ export const HomePage = () => {
 
                       <Grid item xs={12}>
                         <IconButton id="plus-catch-row-button" size="small" onClick={addCatchRow} variant="contained" color="primary">
-                          <Add fontSize="medium" />
+                          <Add fontSize="default" />
                         </IconButton>
                         &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}
                       </Grid>

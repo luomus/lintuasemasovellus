@@ -89,36 +89,24 @@ const DayDetails = () => {
     );
   }
 
-  const [obsPeriods, setObsperiods] = useState([]);
-
-  const [summary, setSummary] = useState([]);
-
-  const [observersForm, setObserversForm] = useState(false);
-
-  const [commentForm, setCommentForm] = useState(false);
-
-  const [editedComment, setEditedComment] = useState("");
-
-  const [editedObservers, setEditedObservers] = useState("");
-
-  const [mode, setMode] = useState("table1");
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const [actionsEditMode, setActionsEditMode] = useState(false);
-
-  const [catchesEditMode, setCatchesEditMode] = useState(false);
-
-  const [addingNewRowMode, setAddingNewRowMode] = useState(false);
-
   const dayList = useSelector(state => state.days);
-
   const userObservatory = useSelector(state => state.userObservatory);
-
   const notifications = useSelector(state => state.notifications);
+  const editedActions = useSelector(state => state.dailyActions);
+  const editedCatches = useSelector(state => state.catchRows);
 
+  const [obsPeriods, setObsperiods] = useState([]);
+  const [summary, setSummary] = useState([]);
+  const [observersForm, setObserversForm] = useState(false);
+  const [commentForm, setCommentForm] = useState(false);
+  const [editedComment, setEditedComment] = useState("");
+  const [editedObservers, setEditedObservers] = useState("");
+  const [mode, setMode] = useState("table1");
+  const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
+  const [actionsEditMode, setActionsEditMode] = useState(false);
+  const [catchesEditMode, setCatchesEditMode] = useState(false);
+  const [addingNewRowMode, setAddingNewRowMode] = useState(false);
   const [catches, setDayCatches] = useState([]);
-
   const [catchRowToEdit, setCatchRowToEdit] = useState({});
 
   const [observers, setObservers] = useState(
@@ -132,7 +120,6 @@ const DayDetails = () => {
     .comment
   );
 
-
   const [selectedActions, setSelectedActions] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
     .selectedactions
@@ -140,10 +127,6 @@ const DayDetails = () => {
       .find(d => d.day === day && d.observatory === stationName)
       .selectedactions)
     : {});
-
-  const editedActions = useSelector(state => state.dailyActions);
-
-  const editedCatches = useSelector(state => state.catchRows);
 
   const [dayId, setDayId] = useState(dayList
     .find(d => d.day === day && d.observatory === stationName)
@@ -155,7 +138,7 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  console.log("Rivit päiväsivulla", dayId, catches);
+  //console.log("Rivit päiväsivulla", dayId, catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -190,8 +173,8 @@ const DayDetails = () => {
   }, [dayId]);
 
 
-  const handleOpen = () => {
-    setModalOpen(true);
+  const handleEditShorthandOpen = () => {
+    setEditShorthandModalOpen(true);
   };
 
   const handleActionsEditOpen = () => {
@@ -202,6 +185,16 @@ const DayDetails = () => {
   const handleActionsEditCancel = () => {
     dispatch(setDefaultActions(userObservatory));
     setActionsEditMode(!actionsEditMode);
+  };
+
+  const errorsInActions = () => {
+    let value = false;
+    Object.keys(notifications["dailyactions"]).map(row => {
+      if (notifications["dailyactions"][String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    return value;
   };
 
   const handleActionsEditSave = () => {
@@ -271,8 +264,8 @@ const DayDetails = () => {
 
   const errorsInCatches = () => {
     let value = false;
-    Object.keys(notifications).map(row => {
-      if (notifications[String(row)].errors.length > 0) {
+    Object.keys(notifications["catches"]).map(row => {
+      if (notifications["catches"][String(row)].errors.length > 0) {
         value = true;
       }
     });
@@ -291,8 +284,8 @@ const DayDetails = () => {
     setSummary(res2);
   };
 
-  const handleClose = () => {
-    setModalOpen(false);
+  const handleEditShorthandClose = () => {
+    setEditShorthandModalOpen(false);
     refetchObservations();
   };
 
@@ -402,7 +395,7 @@ const DayDetails = () => {
 
                 <Box>
                   <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
-                    <Edit fontSize="medium" />
+                    <Edit fontSize="default" />
                   </IconButton>
                 </Box>
               </FormGroup>
@@ -411,7 +404,7 @@ const DayDetails = () => {
                 alignItems: "left"
               }}>
                 <DailyActions />
-                <Button id="actionsEditSave" className={classes.button} variant="contained" onClick={() => handleActionsEditSave()} color="primary">
+                <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions()} onClick={() => handleActionsEditSave()} color="primary">
                   {t("save")}
                 </Button>
                 <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
@@ -439,7 +432,7 @@ const DayDetails = () => {
                     <TableCell align="left">{t("length")}</TableCell>
                     <TableCell align="left">
                       <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary">
-                        <Add fontSize="medium" />
+                        <Add fontSize="small" />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -516,8 +509,8 @@ const DayDetails = () => {
           </Grid>
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-end">
-              <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-                {t("edit")}
+              <Button variant="contained" color="primary" onClick={() => handleEditShorthandOpen()}>
+                {t("editObservations")}
               </Button>{" "}
             </Box>
           </Grid>
@@ -537,8 +530,8 @@ const DayDetails = () => {
         <EditShorthand
           date={day}
           dayId={dayId}
-          open={modalOpen}
-          handleClose={handleClose}
+          open={editShorthandModalOpen}
+          handleCloseModal={handleEditShorthandClose}
         />
       </Paper>
     </div>

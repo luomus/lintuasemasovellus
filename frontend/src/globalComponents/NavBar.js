@@ -140,23 +140,23 @@ const NavBar = () => {
   const observatoryAndUserInfo = () => {
     if ((Object.keys(userObservatory).length !== 0) && userIsSet) {
       return (
-        <div>
+        <Typography className={classes.title}>
           {userObservatory.replace("_", " ")} / {t("User")}: {user.fullName}
-        </div>
+        </Typography>
       );
     }
     if (Object.keys(userObservatory).length !== 0) {
       return (
-        <div>
+        <Typography className={classes.title}>
           {userObservatory.replace("_", " ")}
-        </div>
+        </Typography>
       );
     }
     if (userIsSet) {
       return (
-        <div>
+        <Typography className={classes.title}>
           {t("User")}: {user.fullName}
-        </div>
+        </Typography>
       );
     }
   };
@@ -219,9 +219,7 @@ const NavBar = () => {
           </Drawer>
           <section className={classes.rightMenu}>
             {observatorySelector}
-            <Typography className={classes.title}>
-              {observatoryAndUserInfo()}
-            </Typography>
+            {observatoryAndUserInfo()}
             {logoutLogin}
             {selectObservatory}
           </section>

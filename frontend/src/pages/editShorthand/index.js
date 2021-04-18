@@ -11,11 +11,12 @@ import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  getShorthandText, deleteShorthand, deleteObservations, deleteObservationperiod
+  getShorthandText,//deleteShorthand, deleteObservations, deleteObservationperiod,
+  sendEditedShorthand,deleteObservationperiods
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
-} from "../homePage/parseShorthandField";
+} from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditShorthand = ({ date, dayId, open, handleClose }) => {
+const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
 
   const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
@@ -79,6 +80,7 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const [locations, setLocations] = useState([]);
   const [warning, setWarning] = useState(false);
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+
   const userID = useSelector(state => state.user.id);
 
   const userObservatory = useSelector(state => state.userObservatory);
@@ -87,16 +89,17 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   const initializeDefaultShorthand = (defaultShorthand) => {
     let text = "";
     for (const shorthandObject of defaultShorthand) {
-      text += shorthandObject.startTime;
-      text += "\n";
+      text += shorthandObject.startTime + "\n";
       for (const shorthandObject2 of shorthandObject.shorthands) {
-        text += shorthandObject2.shorthand_text;
-        text += "\n";
+        text += shorthandObject2.shorthand_text + "\n";
       }
-      text += shorthandObject.endTime;
-      text += "\n";
+      text += shorthandObject.endTime + "\n";
     }
-    setShorthand(text);
+    if (text.replace(/(\r\n|\n|\r)/gm, "").trim() === "") {
+      setShorthand("");
+    } else {
+      setShorthand(text);
+    }
   };
 
   const handleDialogOpen = () => {
@@ -121,15 +124,15 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
   };
 
   const handleDelete = async () => {
+    //const t0 = new Date().getTime();
+
+    let removable_ids = [];
     for (const obsperiod of defaultShorthand) {
-      for (const shorthandrow of obsperiod.shorthands) {
-        console.log(shorthandrow.shorthand_id);
-        await deleteObservations({ shorthand_id: Number(shorthandrow.shorthand_id) });
-        await deleteShorthand({ shorthand_id: Number(shorthandrow.shorthand_id) });
-      }
-      console.log(obsperiod.obsPeriodId);
-      await deleteObservationperiod({ obsperiod_id: Number(obsperiod.obsPeriodId) });
+      removable_ids.push(obsperiod.obsPeriodId);
     }
+    await deleteObservationperiods(removable_ids);
+    //const t2 = new Date().getTime();
+    //console.log("Aikaa kulunut loopissa: " + Math.round((t2-t0) / 1000));
     retrieveShorthand(type, location);
     handleClose();
   };
@@ -139,9 +142,11 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     await handleDelete();
     setDayId(dayId);
     const rows = sanitizedShorthand;
-    await loopThroughObservationPeriods(rows, type, location);
-    await loopThroughObservations(rows, userID);
-    retrieveShorthand(type, location);
+    const periods = loopThroughObservationPeriods(rows, type, location);
+    const observations = loopThroughObservations(rows, userID);
+
+    await sendEditedShorthand(periods, observations, dayId, userID);
+    await retrieveShorthand(type, location);
     handleClose();
   };
 
@@ -151,11 +156,16 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
     initializeDefaultShorthand(res);
   };
 
+  const handleClose = () => {
+    setType("");
+    setLocation("");
+    setShorthand("");
+    handleCloseModal();
+  };
 
   useEffect(async () => {
     await retrieveShorthand();
   }, [dayId]);
-
 
   useEffect(() => {
     if (Object.keys(userObservatory).length !== 0) {
@@ -164,11 +174,6 @@ const EditShorthand = ({ date, dayId, open, handleClose }) => {
           .find(s => s.observatory === userObservatory)
           .types
       );
-    }
-  });
-
-  useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)
@@ -332,7 +337,7 @@ EditShorthand.propTypes = {
   date: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
 export default EditShorthand;

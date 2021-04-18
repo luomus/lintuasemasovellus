@@ -226,13 +226,14 @@ describe("AddObservationDay", function () {
     cy.contains(date2);
   });
 
-  it("An invalid attachment amount has been overwritten at save", function () {
+  it("An invalid attachment amount cannot be saved", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.get("#actionsButton").click();
     cy.get("#attachments").clear();
     cy.get("#attachments").type("-2");
-    cy.get("#actionsEditSave").click();
+    cy.get("#actionsEditSave").should("be.disabled");
+    cy.get("#actionsEditCancel").click();
     cy.wait(1000);
     cy.get("[name=attachments]").should("have.value", " 0 kpl");
   });

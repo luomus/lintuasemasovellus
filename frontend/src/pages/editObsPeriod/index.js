@@ -11,11 +11,11 @@ import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  getShorthandByObsPeriod, deleteShorthand, deleteObservations, deleteObservationperiod
+  getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
-} from "../homePage/parseShorthandField";
+} from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
 
-  const [defaultShorthand, setDefaultShorthand] = useState([]);
+  //const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
   const [type, setType] = useState("");
@@ -79,19 +79,19 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   const [locations, setLocations] = useState([]);
   const [warning, setWarning] = useState(false);
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+
   const userID = useSelector(state => state.user.id);
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
-    setDefaultShorthand(shorthandblocks);
+    //setDefaultShorthand(shorthandblocks);
     let text = obsPeriod.startTime + "\n";
     for (const block of shorthandblocks) {
-      text += block.shorthandBlock;
-      text += "\n";
+      text += block.shorthandBlock + "\n";
     }
-    text += obsPeriod.endTime + "\n";
+    text += obsPeriod.endTime;
     setShorthand(text);
   };
 
@@ -117,14 +117,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   };
 
   const handleDelete = async () => {
-    for (const block of defaultShorthand) {
-      console.log("Deleted shorthandblock", block.id);
-      await deleteObservations({ shorthand_id: Number(block.id) });
-      await deleteShorthand({ shorthand_id: Number(block.id) });
-    }
-    console.log("Deleted observationperiod", obsPeriod.id);
-    await deleteObservationperiod({ obsperiod_id: Number(obsPeriod.id) });
-    setDefaultShorthand("");
+    await deleteObservationperiods([Number(obsPeriod.id)]);
     handleClose();
   };
 
@@ -133,8 +126,10 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
     await handleDelete();
     setDayId(obsPeriod.day_id);
     const rows = sanitizedShorthand;
-    await loopThroughObservationPeriods(rows, type, location);
-    await loopThroughObservations(rows, userID);
+    const periods = loopThroughObservationPeriods(rows, type, location);
+    const observations = loopThroughObservations(rows, userID);
+
+    await sendEditedShorthand(periods, observations, obsPeriod.day_id, userID);
     handleClose();
   };
 
