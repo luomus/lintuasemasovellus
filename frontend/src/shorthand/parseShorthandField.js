@@ -96,19 +96,17 @@ const readyObservation = (observation, userID) => {
 //remmebre to add dayID to periods in backend
 export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
   observationPeriods = [];
-  let startTimeEncountered = false;
   for (const row of shorthandRows) {
     if (!row) continue;
-    if (isTime(row) && !startTimeEncountered) {
-      startTimeEncountered = true;
+    if (isTime(row) && observationPeriod["shorthandBlock"] === "") {
       observationPeriod["startTime"] = parseTime(row);
     } else if (isTime(row)) {
-      startTimeEncountered = false;
       observationPeriod["endTime"] = parseTime(row);
       observationPeriod["observationType"] = obsType;
       observationPeriod["location"] = loc;
       observationPeriods.push({ ...observationPeriod });
       observationPeriod["shorthandBlock"] = "";
+      observationPeriod["startTime"] = parseTime(row);
     } else {
       if (observationPeriod["shorthandBlock"] === "") {
         observationPeriod["shorthandBlock"] = row;
@@ -157,17 +155,18 @@ export const setDayId = (id) => {
 };
 
 export const loopThroughObservations = (shorthandRows, userID) => {
-  let startTimeEncountered = false;
-  let i = 0;
+  let oneBeforeWasTime = false;
+  let i = -1;
   const observations = [];// [ { periodOrderNum: i, shorthandRow: row, subObservations: []  }]
   for (const row of shorthandRows) {
     if (!row) continue;
-    if (isTime(row) && !startTimeEncountered) {
-      startTimeEncountered = true;
-    } else if (isTime(row)) {
-      startTimeEncountered = false;
-      i++;
+    if (isTime(row)) {
+      oneBeforeWasTime = true;
     } else {
+      if (oneBeforeWasTime) {
+        i++;
+      }
+      oneBeforeWasTime = false;
       const parsed = parse(row);
       let observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
       observationObject["periodOrderNum"] = String(i);

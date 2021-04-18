@@ -38,13 +38,14 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
 
       if (timeEncountered) {
         endsWithTime = false !== true;
+        console.log(endsWithTime);
       } else {
         timeEncountered = true;
         endsWithTime = false;
       }
 
       // Push error, if time is before current start time
-      if (periodStartTime && (periodStartTime >= parsedTime)) {
+      if (periodStartTime && (periodStartTime > parsedTime)) {
         errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
       } else {
         periodStartTime = parsedTime;
