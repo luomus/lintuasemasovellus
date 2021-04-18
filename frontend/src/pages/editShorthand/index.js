@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  getShorthandText,//deleteShorthand, deleteObservations, deleteObservationperiod,
+  getShorthandText,
   sendEditedShorthand,deleteObservationperiods
 } from "../../services";
 import {

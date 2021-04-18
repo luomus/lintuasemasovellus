@@ -4,7 +4,7 @@ import NavBar from "./globalComponents/NavBar";
 import { Switch, Route } from "react-router-dom";
 import { HomePage, UserManual } from "./pages";
 import Footer from "./globalComponents/Footer";
-import { DayForm, DayList } from "./pages";
+import { DayList } from "./pages";
 import { getAuth, getToken } from "./services";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/userReducer";
@@ -39,9 +39,6 @@ const App = () => {
       <div>
         <NavBar isLoggedIn={userIsSet} />
         <Switch>
-          <Route path="/newday">
-            <DayForm />
-          </Route>
           <Route path="/listdays">
             <DayList />
           </Route>

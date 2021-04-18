@@ -70,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
 
 const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
 
-  //const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
   const [type, setType] = useState("");
@@ -86,7 +85,6 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   const stations = useSelector(state => state.stations);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
-    //setDefaultShorthand(shorthandblocks);
     let text = obsPeriod.startTime + "\n";
     for (const block of shorthandblocks) {
       text += block.shorthandBlock + "\n";

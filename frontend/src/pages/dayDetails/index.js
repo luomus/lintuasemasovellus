@@ -19,7 +19,6 @@ import Notification from "../homePage/notification";
 
 import {
   getDaysObservationPeriods,
-  // getDaysObservationPeriodsOther,
   editComment, editObservers, editActions, getSummary, getCatches, editCatchRow, deleteCatchRow
 } from "../../services";
 
@@ -138,7 +137,6 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  //console.log("Rivit päiväsivulla", dayId, catches);
 
   const observersOnSubmit = (event) => {
     event.preventDefault();
@@ -146,7 +144,6 @@ const DayDetails = () => {
       setObservers(editedObservers);
       editObservers(dayId, editedObservers)
         .then(dayJson => setDayId(dayJson.data.id));
-      //console.log("dayId: ", dayId);
     }
     setObserversForm(false);
   };
@@ -157,7 +154,6 @@ const DayDetails = () => {
       setComment(editedComment);
       editComment(dayId, editedComment)
         .then(dayJson => setDayId(dayJson.data.id));
-      //console.log("dayId: ", dayId);
     }
     setCommentForm(false);
   };
@@ -236,7 +232,6 @@ const DayDetails = () => {
       const maxKey = Math.max.apply(Math, catches.map(row => row.key));
       dispatch(addOneCatchRow(maxKey + 1));
     }
-    //console.log("handle", editedCatches);
     dispatch(resetNotifications());
     setCatchesEditMode(true);
   };

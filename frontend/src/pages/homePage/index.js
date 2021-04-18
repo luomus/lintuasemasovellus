@@ -161,11 +161,6 @@ export const HomePage = () => {
 
 
   const emptyAllFields = () => {
-    //setDay(dateNow);
-    //setObservers("");
-    //setComment("");
-    //setType("");
-    //setLocation("");
     setShorthand("");
   };
 
@@ -243,22 +238,6 @@ export const HomePage = () => {
 
     try {
       await sendEverything(data);
-      /*await sendDay({
-        //userID: userID,
-        day: formatDate(day),
-        comment,
-        observers,
-        observatory: userObservatory,
-        selectedactions: readyDailyActions()
-      });
-      await sendCatches(catchRows);
-      await loopThroughObservationPeriods(rows, type, location);
-      await loopThroughObservations(rows, userID);
-      */
-
-      ////await sendShorthand(makeSendDataJson(
-      ////  formatDate(day), userObservatory, comment, observers, location, type, rows));
-
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
