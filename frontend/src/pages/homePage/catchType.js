@@ -5,7 +5,7 @@ import {
   FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
   //Dialog, DialogActions, DialogContentText, DialogContent,
 } from "@material-ui/core/";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -64,12 +64,15 @@ const catchAreas = {
 };
 
 
-const amountLimits ={
-  "Vakioverkko": 11,
-  "Lisäverkko": 9,
-  "Petoverkot": 8,
+const softAmountLimits ={
+  "Lisäverkko": { "Piha": 9 },
+  "Petoverkot": { "Vakiopetoverkot": 8 },
 };
 
+const hardAmountLimits = {
+  "Vakioverkot K": 1,
+  "Vakioverkot muu": 11
+};
 
 const catchesWithoutLength = ["Katiska", "Lokkihäkki"];
 
@@ -77,7 +80,8 @@ const preSetLengths = {
   "Vakioverkot muu": 9,
   "Vakioverkot K": 12,
   "Piha": 9,
-  "Vakiopetoverkot":12
+  "Vakiopetoverkot": 12,
+  "Muut petoverkot": 12,
 };
 
 
@@ -86,18 +90,28 @@ const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const dailyActions = useSelector(state => state.dailyActions);
+  const allCatchRows = useSelector(state => state.catchRows);
+
 
   const validate = (cr) => {
     let toNotifications = [];
     let toErrors = [];
 
     //things for user to doublecheck
-    if ((cr.pyydys in amountLimits && cr.lukumaara > amountLimits[String(cr.pyydys)]) || cr.lukumaara > 15) {
+    if ((cr.pyydys in softAmountLimits &&  cr.pyyntialue in softAmountLimits[String(cr.pyydys)] && cr.lukumaara > softAmountLimits[String(cr.pyydys)][String(cr.pyyntialue)]) || cr.lukumaara > 15) {
       toNotifications.push(t("Please recheck that you mean to declare that many catches", { char: cr.pyydys }));
     }
     if ( cr.pyydys && cr.pyyntialue && catchAreas[String(cr.pyydys)].includes(cr.pyyntialue)
       && !catchesWithoutLength.includes(cr.pyydys) && ( cr.verkonPituus < 9 || cr.verkonPituus > 12 )) {
       toNotifications.push(t("NetLength", { char: cr.pyydys }));
+    }
+    if (cr.pyydys && cr.pyyntialue) {
+      Object.keys(allCatchRows).map((c) => {
+        if (allCatchRows[String(c)].key !== cr.key && allCatchRows[String(c)].pyydys === cr.pyydys && allCatchRows[String(c)].pyyntialue === cr.pyyntialue) {
+          toNotifications.push(t("dublicateCatches", { char1: cr.pyydys, char2:cr.pyyntialue }));
+        }
+      });
     }
     //errors, prevent saving
     if (cr.lukumaara < 0 || cr.verkonPituus < 0) {
@@ -114,6 +128,24 @@ const CatchType = ({ cr }) => {
     if (cr.pyydys && cr.pyyntialue && cr.lukumaara === "0") {
       toErrors.push(t("noZeroAmount", { char: cr.pyydys }));
     }
+    if ((cr.pyyntialue in hardAmountLimits && cr.lukumaara > hardAmountLimits[String(cr.pyyntialue)])) {
+      toErrors.push(t("maxCatchValue", { char1: cr.pyyntialue, char2: hardAmountLimits[String(cr.pyyntialue)] }));
+    }
+    if (dailyActions.standardObs) {
+      let standardCatch = false;
+      Object.keys(allCatchRows).map((c) => {
+        if (allCatchRows[String(c)].pyydys === "Vakioverkko") {
+          standardCatch = true;
+        }
+      });
+      if (!standardCatch) {
+        dispatch(setNotifications([[], [t("expectingStandardCatch")]], "catches", 0));
+      }
+      else {
+        dispatch(setNotifications([[], []], "catches", 0));
+      }
+    }
+
     return [toNotifications, toErrors];
   };
 
@@ -134,11 +166,14 @@ const CatchType = ({ cr }) => {
       realTimeRow = { ...realTimeRow, lukumaara: 1 };
     }
 
-    if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
+    if (target.name==="pyyntialue" && !catchesWithoutLength.includes(cr.pyydys)) {//cr.pyydys !== "Rastasverkko") {
       //autofill length for nets that are always the same length
       if (target.value in preSetLengths) {
         dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
         realTimeRow = { ...realTimeRow, verkonPituus: preSetLengths[String(target.value)] };
+      } else {
+        dispatch(toggleCatchDetails(cr.key, "verkonPituus", 9));
+        realTimeRow = { ...realTimeRow, verkonPituus: 9 };
       }
     } else if(target.name==="pyydys" && cr.verkonPituus!==0) {
       //remove previous length autofill, when catch changes

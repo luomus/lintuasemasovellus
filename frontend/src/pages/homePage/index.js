@@ -306,8 +306,6 @@ export const HomePage = () => {
     history.push(`/daydetails/${s.day}/${userObservatory}`);
   };
 
-
-
   const handleCopyConfirm = () => {
     let previousDay = new Date();
     previousDay.setDate(day.getDate() - 1);

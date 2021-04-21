@@ -46,6 +46,7 @@ const HankoActions = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const clicks = useSelector(state => state.dailyActions);
+  const allCatchRows = useSelector(state => state.catchRows);
 
   const validate = (target) => {
     let toNotifications = [];
@@ -61,6 +62,24 @@ const HankoActions = () => {
     }
     if (target.name === "attachments" && !target.value){
       toErrors.push(t("noEmptyValues"));
+    }
+    if (target.name === "standardObs") {
+      if (target.checked) {
+        let standardCatch = false;
+        Object.keys(allCatchRows).map((c) => {
+          if (allCatchRows[String(c)].pyydys === "Vakioverkko") {
+            standardCatch = true;
+          }
+        });
+        if (!standardCatch) {
+          dispatch(setNotifications([[], [t("expectingStandardCatch")]], "catches", 0));
+        }
+        else {
+          dispatch(setNotifications([[], []], "catches", 0));
+        }
+      } else {
+        dispatch(setNotifications([[], []], "catches", 0));
+      }
     }
 
     return [toNotifications, toErrors];
