@@ -72,7 +72,7 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#selectCatchCount").type("-3");
     cy.get("#saveButton").should("be.disabled");
     cy.get("#selectCatchCount").clear();
-    cy.get("#selectCatchCount").type("2");
+    cy.get("#selectCatchCount").type("1");
     cy.get("#saveButton").should("not.be.disabled");
 
     cy.get("#opened").clear();
@@ -113,7 +113,6 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#saveButton").should("be.disabled");
     cy.get("#selectCatchArea").click();
     cy.contains("Muut petoverkot").click();
-    cy.contains("Verkon 'Petoverkot' pituus on yleensä");
     cy.get("#opened").clear();
     cy.get("#opened").type(opened);
     cy.get("#closed").clear();
@@ -122,7 +121,7 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#selectCatchCount").clear();
     cy.get("#selectCatchCount").type("0");
 
-    cy.contains("lukumäärä ei voi olla 0")
+    cy.contains("lukumäärä ei voi olla 0");
     cy.get("#selectCatchCount").clear();
     cy.get("#selectCatchCount").type("-3");
     cy.contains("Negatiiviset arvot");
@@ -143,5 +142,37 @@ describe("FieldsAndAuthenticationTest", function () {
 
   });
 
+  it("Further error messaging is correct", function () {
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get("#observers").clear();
+    cy.get("#activity-header").click();
+    cy.contains("Vakiohavainnointi").click();
+    cy.get("#activity-header").contains("Havaintoaktiivisuus kirjattu");
+    cy.get("#catches-header").contains("Virheitä pyydyksissä");
+    cy.get("#catches-header").click();
+    cy.contains("Lisää ainakin yksi vakioverkko.");
+    cy.get("#plus-catch-row-button").click();
+    cy.get("#selectCatchType").click();
+    cy.contains("Vakioverkko").click();
+    cy.get("#saveButton").should("be.disabled");
+    cy.get("#selectCatchArea").click();
+    cy.contains("Vakioverkot K").click();
+    cy.should("not.contain", "Lisää ainakin yksi vakioverkko.");
 
+    // cy.get("#plus-catch-row-button").click();
+    // cy.get("#1 #selectCatchType").click();
+    // cy.contains("Vakioverkko").click({ force: true });
+    // cy.get("#1 #selectCatchArea").click();
+    // cy.contains("Vakioverkot K").click({ force: true });
+    // cy.contains("on ilmoitettu useampaan kertaan");
+    // cy.get("#0 #removeButton").click();
+    // cy.should("not.contain", "on ilmoitettu useampaan kertaan");
+
+    //cy.get("#selectCatchCount").clear();
+    cy.get("#selectCatchCount").type("2");
+    cy.contains("Pyydyksen 'Vakioverkot K' lukumäärä voi olla korkeintaan 1.");
+    cy.get("#saveButton").should("be.disabled");
+
+  });
 });

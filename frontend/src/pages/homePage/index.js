@@ -367,7 +367,7 @@ export const HomePage = () => {
                 <br />
               </Grid>
               <Grid container item xs={1} justify="flex-end">
-                <IconButton id="plus-catch-row-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
                   <FileCopy fontSize="default" />
                 </IconButton>
               </Grid>
