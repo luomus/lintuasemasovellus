@@ -35,6 +35,9 @@ const resources = {
       "netLength": "Verkon pituus",
       "catchCount": "Lukumäärä",
       "add catch row": "Lisää pyydysrivi",
+      "copy": "Kopioi edellinen päivä",
+      "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
+      "overwrite":"Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
 
       "chooseTypeAndLocation": "(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
@@ -124,7 +127,7 @@ const resources = {
       "to": ", Yhteensä: ",
 
       "checkShorthand": "Tarkista pikakirjoitus",
-      "Observation activity": "Havaintoaktiivisuus",
+      "ObservationActivity": "Havaintoaktiivisuus",
       "observationActivityAdded": "Havaintoaktiivisuus kirjattu",
       "noObservationActivity": "Ei havaintoaktiivisuusmerkintöjä",
       "errorsInObservationActivity": "Virheitä havaintoaktiivisuusmerkinnöissä!",

@@ -3,13 +3,13 @@ import React, {
   useState
 } from "react";
 import {
-  Paper, Grid,
-  Typography, TextField, Button,
+  Paper, Grid, Modal, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+  Typography, TextField, Button, Checkbox, FormControlLabel,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles, Accordion,
   AccordionSummary, AccordionDetails, IconButton
 } from "@material-ui/core/";
-import { Add, ExpandMore, Event } from "@material-ui/icons";
+import { Add, ExpandMore, Event, FileCopy } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -153,6 +153,11 @@ export const HomePage = () => {
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
+  const [openCopy, setOpenCopy] = useState(false);
+  const [toCopy, setToCopy] = useState({
+    "observers":false, "comment":false,
+    "observationActivity":false, "catches":false
+  });
 
   useEffect(() => {
     getLatestDays(userObservatory)
@@ -180,7 +185,6 @@ export const HomePage = () => {
 
 
   const setCatchRows = (dayId) => {
-    console.log("DATE", dayId);
     getCatches(dayId)
       .then(res => dispatch(setCatches(res)));
   };
@@ -243,22 +247,6 @@ export const HomePage = () => {
 
     try {
       await sendEverything(data);
-      /*await sendDay({
-        //userID: userID,
-        day: formatDate(day),
-        comment,
-        observers,
-        observatory: userObservatory,
-        selectedactions: readyDailyActions()
-      });
-      await sendCatches(catchRows);
-      await loopThroughObservationPeriods(rows, type, location);
-      await loopThroughObservations(rows, userID);
-      */
-
-      ////await sendShorthand(makeSendDataJson(
-      ////  formatDate(day), userObservatory, comment, observers, location, type, rows));
-
       setFormSent(true);
       emptyAllFields();
       dispatch(retrieveDays());
@@ -318,6 +306,52 @@ export const HomePage = () => {
     history.push(`/daydetails/${s.day}/${userObservatory}`);
   };
 
+
+
+  const handleCopyConfirm = () => {
+    let previousDay = new Date();
+    previousDay.setDate(day.getDate() - 1);
+    searchDayInfo(formatDate(previousDay), userObservatory).then((dayJson) => {
+      if (dayJson[0]["id"] !== 0) {
+        if (toCopy.observers) {
+          setObservers(dayJson[0]["observers"]);
+        }
+        if (toCopy.comment) {
+          setComment(dayJson[0]["comment"]);
+        }
+        if (toCopy.observationActivity) {
+          setActions(dayJson[0]["selectedactions"]);
+        }
+        if (toCopy.catches) {
+          setCatchRows(dayJson[0]["id"]);
+        }
+        dispatch(resetNotifications());
+      }
+    });
+    setToCopy({
+      "observers":false, "comment":false,
+      "observationActivity":false, "catches":false
+    });
+    setOpenCopy(false);
+  };
+
+  const handleCopyClose = () => {
+    setToCopy({
+      "observers":false, "comment":false,
+      "observationActivity":false, "catches":false
+    });
+    setOpenCopy(false);
+  };
+
+  const handleOpenCopy = () => {
+    setOpenCopy(true);
+  };
+
+  const handleCopyChange = (name) => {
+    setToCopy({ ...toCopy, [name]: !toCopy[String(name)] });
+  };
+
+
   return (
     <div>
       <Grid container
@@ -328,13 +362,17 @@ export const HomePage = () => {
             <Grid container
               alignItems="flex-start"
               spacing={1}>
-              <Grid item xs={12} >
+              <Grid item xs={11} >
                 <Typography variant="h5" component="h2" >
                   {t("addObservations")}
                 </Typography>
                 <br />
               </Grid>
-
+              <Grid container item xs={1} justify="flex-end">
+                <IconButton id="plus-catch-row-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                  <FileCopy fontSize="default" />
+                </IconButton>
+              </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
                   <KeyboardDatePicker
@@ -389,9 +427,7 @@ export const HomePage = () => {
               </Grid>
 
               <div className={classes.accordionRoot}>
-
                 <br />
-
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMore color="primary" />}
@@ -420,7 +456,7 @@ export const HomePage = () => {
                     aria-controls="activity-content"
                     id="activity-header"
                   >
-                    <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
+                    <Typography className={classes.sectionHeading}>{t("ObservationActivity")}</Typography>
 
                     <Typography className={classes.secondaryHeading} color={ (errorsInInput("dailyactions")) ? "error" : "inherit" }>
                       {
@@ -641,6 +677,47 @@ export const HomePage = () => {
           {t("formNotSent")}
         </Alert>
       </Snackbar>
+      <Modal
+        open={openCopy}
+        onClose={handleCopyClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Dialog
+          open={openCopy}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("copy")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("chooseCopy")} <br/>
+              {t("overwrite")}
+            </DialogContentText>
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox checked={toCopy.observers} onChange={(event) => handleCopyChange(event.target.name)} name="observers" color="primary" className={classes.checkbox} />}
+              label={t("observers")} labelPlacement="end" />
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox checked={toCopy.comment} onChange={(event) => handleCopyChange(event.target.name)} name="comment" color="primary" className={classes.checkbox} />}
+              label={t("comment")} labelPlacement="end" />
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox checked={toCopy.observationActivity} onChange={(event) => handleCopyChange(event.target.name)} name="observationActivity" color="primary" className={classes.checkbox} />}
+              label={t("ObservationActivity")} labelPlacement="end" />
+            <br/>
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox checked={toCopy.catches} onChange={(event) => handleCopyChange(event.target.name)} name="catches" color="primary" className={classes.checkbox} />}
+              label={t("Catches")} labelPlacement="end" />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCopyConfirm} color="primary" variant="contained" id="confirmCopyButton">
+              {t("confirm")}
+            </Button>
+            <Button onClick={handleCopyClose} color="secondary" variant="contained" id="canceCopyButton" autoFocus>
+              {t("cancel")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Modal>
     </div>
   );
 };
