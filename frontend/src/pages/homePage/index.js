@@ -312,6 +312,7 @@ export const HomePage = () => {
     let previousDay = new Date();
     previousDay.setDate(day.getDate() - 1);
     searchDayInfo(formatDate(previousDay), userObservatory).then((dayJson) => {
+      console.log(dayJson[0]);
       if (dayJson[0]["id"] !== 0) {
         if (toCopy.observers) {
           setObservers(dayJson[0]["observers"]);
@@ -369,7 +370,7 @@ export const HomePage = () => {
                 <br />
               </Grid>
               <Grid container item xs={1} justify="flex-end">
-                <IconButton id="plus-catch-row-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
                   <FileCopy fontSize="default" />
                 </IconButton>
               </Grid>
@@ -695,24 +696,24 @@ export const HomePage = () => {
               {t("overwrite")}
             </DialogContentText>
             <FormControlLabel className={classes.formControlLabel}
-              control={<Checkbox checked={toCopy.observers} onChange={(event) => handleCopyChange(event.target.name)} name="observers" color="primary" className={classes.checkbox} />}
+              control={<Checkbox id="copy-observers-box" checked={toCopy.observers} onChange={(event) => handleCopyChange(event.target.name)} name="observers" color="primary" className={classes.checkbox} />}
               label={t("observers")} labelPlacement="end" />
             <FormControlLabel className={classes.formControlLabel}
-              control={<Checkbox checked={toCopy.comment} onChange={(event) => handleCopyChange(event.target.name)} name="comment" color="primary" className={classes.checkbox} />}
+              control={<Checkbox id="copy-comment-box" checked={toCopy.comment} onChange={(event) => handleCopyChange(event.target.name)} name="comment" color="primary" className={classes.checkbox} />}
               label={t("comment")} labelPlacement="end" />
             <FormControlLabel className={classes.formControlLabel}
-              control={<Checkbox checked={toCopy.observationActivity} onChange={(event) => handleCopyChange(event.target.name)} name="observationActivity" color="primary" className={classes.checkbox} />}
+              control={<Checkbox id="copy-activity-box" checked={toCopy.observationActivity} onChange={(event) => handleCopyChange(event.target.name)} name="observationActivity" color="primary" className={classes.checkbox} />}
               label={t("ObservationActivity")} labelPlacement="end" />
             <br/>
             <FormControlLabel className={classes.formControlLabel}
-              control={<Checkbox checked={toCopy.catches} onChange={(event) => handleCopyChange(event.target.name)} name="catches" color="primary" className={classes.checkbox} />}
+              control={<Checkbox id="copy-catches-box" checked={toCopy.catches} onChange={(event) => handleCopyChange(event.target.name)} name="catches" color="primary" className={classes.checkbox} />}
               label={t("Catches")} labelPlacement="end" />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCopyConfirm} color="primary" variant="contained" id="confirmCopyButton">
+            <Button id="confirm-copy-button" onClick={handleCopyConfirm} color="primary" variant="contained">
               {t("confirm")}
             </Button>
-            <Button onClick={handleCopyClose} color="secondary" variant="contained" id="canceCopyButton" autoFocus>
+            <Button id="cancel-copy-button" onClick={handleCopyClose} color="secondary" variant="contained" autoFocus>
               {t("cancel")}
             </Button>
           </DialogActions>
