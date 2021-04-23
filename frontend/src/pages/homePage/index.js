@@ -155,8 +155,8 @@ export const HomePage = () => {
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
   const [openCopy, setOpenCopy] = useState(false);
   const [toCopy, setToCopy] = useState({
-    "observers":false, "comment":false,
-    "observationActivity":false, "catches":false
+    "observers": false, "comment": false,
+    "observationActivity": false, "catches": false
   });
 
   useEffect(() => {
@@ -179,7 +179,6 @@ export const HomePage = () => {
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
-      console.log(dailyActions);
     }
   };
 
@@ -233,7 +232,7 @@ export const HomePage = () => {
     const observationsToSend = loopThroughObservations(rows, userID);
     setDisabled(true);
     let data = {
-      day:formatDate(day),
+      day: formatDate(day),
       comment: comment,
       observers: observers,
       observatory: userObservatory,
@@ -288,7 +287,7 @@ export const HomePage = () => {
       return false;
   };
 
-  const errorsInInput = (category="all") => {
+  const errorsInInput = (category = "all") => {
     let value = false;
     Object.keys(notifications).map(cat => {
       if (cat === category || category === "all") {
@@ -307,8 +306,11 @@ export const HomePage = () => {
   };
 
   const handleCopyConfirm = () => {
-    let previousDay = new Date();
+    let previousDay = new Date(day);
     previousDay.setDate(day.getDate() - 1);
+    console.log("day.getDate()", day.getDate());
+    console.log("day", day);
+    console.log("previousDay", previousDay);
     searchDayInfo(formatDate(previousDay), userObservatory).then((dayJson) => {
       console.log(dayJson[0]);
       if (dayJson[0]["id"] !== 0) {
@@ -328,16 +330,16 @@ export const HomePage = () => {
       }
     });
     setToCopy({
-      "observers":false, "comment":false,
-      "observationActivity":false, "catches":false
+      "observers": false, "comment": false,
+      "observationActivity": false, "catches": false
     });
     setOpenCopy(false);
   };
 
   const handleCopyClose = () => {
     setToCopy({
-      "observers":false, "comment":false,
-      "observationActivity":false, "catches":false
+      "observers": false, "comment": false,
+      "observationActivity": false, "catches": false
     });
     setOpenCopy(false);
   };
@@ -348,6 +350,31 @@ export const HomePage = () => {
 
   const handleCopyChange = (name) => {
     setToCopy({ ...toCopy, [name]: !toCopy[String(name)] });
+  };
+
+  const handleDateChange = (date) => {
+    if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
+      const newDate = date;
+      setDay(newDate);
+      console.log("formatted date in handleDateChange", formatDate(date));
+      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        setObservers(dayJson[0]["observers"]);
+        setComment(dayJson[0]["comment"]);
+        setActions(dayJson[0]["selectedactions"]);
+        setCatchRows(dayJson[0]["id"]);
+        dispatch(resetNotifications());
+      });
+    } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
+      confirmDate();
+      setDay(date);
+      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        setObservers(dayJson[0]["observers"]);
+        setComment(dayJson[0]["comment"]);
+        setActions(dayJson[0]["selectedactions"]);
+        setCatchRows(dayJson[0]["id"]);
+        dispatch(resetNotifications());
+      });
+    }
   };
 
 
@@ -385,26 +412,7 @@ export const HomePage = () => {
                     label={t("date")}
                     value={day}
                     onChange={(date) => {
-                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
-                        setDay(date);
-                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-                          setObservers(dayJson[0]["observers"]);
-                          setComment(dayJson[0]["comment"]);
-                          setActions(dayJson[0]["selectedactions"]);
-                          setCatchRows(dayJson[0]["id"]);
-                          dispatch(resetNotifications());
-                        });
-                      } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
-                        confirmDate();
-                        setDay(date);
-                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-                          setObservers(dayJson[0]["observers"]);
-                          setComment(dayJson[0]["comment"]);
-                          setActions(dayJson[0]["selectedactions"]);
-                          setCatchRows(dayJson[0]["id"]);
-                          dispatch(resetNotifications());
-                        });
-                      }
+                      handleDateChange(date);
                     }}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -457,7 +465,7 @@ export const HomePage = () => {
                   >
                     <Typography className={classes.sectionHeading}>{t("ObservationActivity")}</Typography>
 
-                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("dailyactions")) ? "error" : "inherit" }>
+                    <Typography className={classes.secondaryHeading} color={(errorsInInput("dailyactions")) ? "error" : "inherit"}>
                       {
                         (errorsInInput("dailyactions")) ? t("errorsInObservationActivity")
                           : (dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded")
@@ -482,7 +490,7 @@ export const HomePage = () => {
                     id="catches-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
-                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("catches")) ? "error" : "inherit" }>
+                    <Typography className={classes.secondaryHeading} color={(errorsInInput("catches")) ? "error" : "inherit"}>
                       {
                         (errorsInInput("catches")) ? t("errorsInCatches")
                           : (catchRows.length === 0 || catchRows[0].pyydys === "" || catchRows[0].pyyntialue === "") ? t("noCatches")
@@ -690,7 +698,7 @@ export const HomePage = () => {
           <DialogTitle id="alert-dialog-title">{t("copy")}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {t("chooseCopy")} <br/>
+              {t("chooseCopy")} <br />
               {t("overwrite")}
             </DialogContentText>
             <FormControlLabel className={classes.formControlLabel}
@@ -702,7 +710,7 @@ export const HomePage = () => {
             <FormControlLabel className={classes.formControlLabel}
               control={<Checkbox id="copy-activity-box" checked={toCopy.observationActivity} onChange={(event) => handleCopyChange(event.target.name)} name="observationActivity" color="primary" className={classes.checkbox} />}
               label={t("ObservationActivity")} labelPlacement="end" />
-            <br/>
+            <br />
             <FormControlLabel className={classes.formControlLabel}
               control={<Checkbox id="copy-catches-box" checked={toCopy.catches} onChange={(event) => handleCopyChange(event.target.name)} name="catches" color="primary" className={classes.checkbox} />}
               label={t("Catches")} labelPlacement="end" />

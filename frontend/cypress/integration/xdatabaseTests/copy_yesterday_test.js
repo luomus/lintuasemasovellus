@@ -18,29 +18,32 @@ describe("CopyYesterdaysData", function () {
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get("#observers").clear();
+    cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
     cy.get("#comment").clear();
+    cy.get("#comment").type(comment);
     cy.get("#activity-header").click();
     cy.get("#attachments").clear();
     cy.wait(1000);
-    cy.get("#observers").type(observer);
-    cy.get("#comment").type(comment);
     cy.get("[name=standardRing]").click();
     cy.get("#attachments").type("1");
-    cy.get("#selectType").click().get("#Vakio").click();
-    cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
     cy.get("#selectCatchType").click();
-    cy.contains("Vakioverkko").click();
-    cy.get("#selectCatchArea").click();
-    cy.contains("Vakioverkot K").click();
-    cy.get("#opened").clear();
+    cy.contains("Vakioverkko").click({ force: true });
+    cy.contains("Petoverkot").click({ force: true });
+    cy.get("#selectCatchArea").click({ force: true });
+    cy.contains("Vakiopetoverkot").click({ force: true });
+    cy.get("#opened").clear({ force: true });
     cy.get("#opened").type(opened);
     cy.get("#closed").clear();
     cy.get("#closed").type(closed);
+    cy.get("#selectCatchCount").clear();
     cy.get("#selectCatchCount").type("2");
+    cy.get("#netCodes").clear();
     cy.get("#netCodes").type(netCodes);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
@@ -56,7 +59,12 @@ describe("CopyYesterdaysData", function () {
 
 
     cy.get("#confirm-copy-button").click();
-    cy.get("#observers").contains("Helmi Havainnoitsija")
+
+    cy.wait(1000);
+    cy.get("#observers").should("have.value", "Helmi Havainnoitsija");
+    cy.contains("Vakiopetoverkot");
+    cy.get("#netCodes"). should("have.value", netCodes);
+    cy.get("[name=standardRing]").should("be.checked");
 
   });
 
