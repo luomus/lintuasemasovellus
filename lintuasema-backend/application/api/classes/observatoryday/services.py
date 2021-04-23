@@ -61,6 +61,7 @@ def getDay(obsday_id):
     return Observatoryday.query.get(obsday_id)
 
 def get_day_without_id(day, observatory):
+    day = datetime.strptime(day, '%d.%m.%Y')
     obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
     if not obsday:
