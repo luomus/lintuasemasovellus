@@ -63,7 +63,7 @@ const HankoActions = () => {
     if (target.name === "attachments" && !target.value){
       toErrors.push(t("noEmptyValues"));
     }
-    if (target.name === "standardObs") {
+    if (target.name === "standardRing") {
       if (target.checked) {
         let standardCatch = false;
         Object.keys(allCatchRows).map((c) => {

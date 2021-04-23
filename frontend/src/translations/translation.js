@@ -164,8 +164,8 @@ const resources = {
       "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
       "addRowByClicking": "Lisää pyydys painamalla '+'.",
       "maxCatchValue": "Pyydyksen '{{char1}}' lukumäärä voi olla korkeintaan {{char2}}.",
-      "expectingStandardCatch": "Vakiohavainnointi on merkitty tehdyksi. Lisää ainakin yksi vakioverkko.",
-      "dublicateCatches": "Pyydys '{{char1}}', pyyntialueella '{{char2}}' on ilmoitettu useampaan kertaan. Tarkistathan, että se on oikein.",
+      "expectingStandardCatch": "Rengastusvakio on merkitty tehdyksi. Lisää ainakin yksi vakioverkko.",
+      "duplicateCatches": "Pyyntialueella '{{char}}' on ilmoitettu samanlainen pyydys useampaan kertaan. Tarkistathan pyydykset.",
 
     },
   },
