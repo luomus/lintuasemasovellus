@@ -234,7 +234,7 @@ describe("AddObservationDay", function () {
     cy.get("#actionsEditSave").should("be.disabled");
     cy.get("#actionsEditCancel").click();
     cy.wait(1000);
-    cy.get("[name=attachments]").should("have.value", " 0 kpl");
+    cy.get("[name=attachments]").should("have.value", " 2 kpl");
   });
 
 });
