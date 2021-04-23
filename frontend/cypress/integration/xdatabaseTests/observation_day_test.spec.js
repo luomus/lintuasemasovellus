@@ -47,7 +47,6 @@ describe("AddObservationDay", function () {
     cy.get("#opened").type(opened);
     cy.get("#closed").clear();
     cy.get("#closed").type(closed);
-    cy.get("#selectCatchCount").type("2");
     cy.get("#netCodes").type(netCodes);
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
