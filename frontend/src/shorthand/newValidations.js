@@ -37,8 +37,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       let parsedTime = parseTime(line);
 
       if (timeEncountered) {
-        endsWithTime = false !== true;
-        console.log(endsWithTime);
+        endsWithTime = true;
       } else {
         timeEncountered = true;
         endsWithTime = false;
