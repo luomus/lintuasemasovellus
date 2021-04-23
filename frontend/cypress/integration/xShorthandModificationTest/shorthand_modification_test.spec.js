@@ -1,7 +1,7 @@
 import { myBeforeEach } from "../methods.js";
 
 
-const date = "02.01.2020";
+const date = "07.01.2020";
 const observer = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";

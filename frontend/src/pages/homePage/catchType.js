@@ -5,7 +5,7 @@ import {
   FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
   //Dialog, DialogActions, DialogContentText, DialogContent,
 } from "@material-ui/core/";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -64,12 +64,15 @@ const catchAreas = {
 };
 
 
-const amountLimits ={
-  "Vakioverkko": 11,
-  "Lisäverkko": 9,
-  "Petoverkot": 8,
+const softAmountLimits = {
+  "Lisäverkko": { "Piha": 9 },
+  "Petoverkot": { "Vakiopetoverkot": 8 },
 };
 
+const hardAmountLimits = {
+  "Vakioverkot K": 1,
+  "Vakioverkot muu": 11
+};
 
 const catchesWithoutLength = ["Katiska", "Lokkihäkki"];
 
@@ -77,7 +80,8 @@ const preSetLengths = {
   "Vakioverkot muu": 9,
   "Vakioverkot K": 12,
   "Piha": 9,
-  "Vakiopetoverkot":12
+  "Vakiopetoverkot": 12,
+  "Muut petoverkot": 12,
 };
 
 
@@ -86,19 +90,23 @@ const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const dailyActions = useSelector(state => state.dailyActions);
+  const allCatchRows = useSelector(state => state.catchRows);
+
 
   const validate = (cr) => {
     let toNotifications = [];
     let toErrors = [];
 
     //things for user to doublecheck
-    if ((cr.pyydys in amountLimits && cr.lukumaara > amountLimits[String(cr.pyydys)]) || cr.lukumaara > 15) {
+    if ((cr.pyydys in softAmountLimits && cr.pyyntialue in softAmountLimits[String(cr.pyydys)] && cr.lukumaara > softAmountLimits[String(cr.pyydys)][String(cr.pyyntialue)]) || cr.lukumaara > 15) {
       toNotifications.push(t("Please recheck that you mean to declare that many catches", { char: cr.pyydys }));
     }
-    if ( cr.pyydys && cr.pyyntialue && catchAreas[String(cr.pyydys)].includes(cr.pyyntialue)
-      && !catchesWithoutLength.includes(cr.pyydys) && ( cr.verkonPituus < 9 || cr.verkonPituus > 12 )) {
+    if (cr.pyydys && cr.pyyntialue && catchAreas[String(cr.pyydys)].includes(cr.pyyntialue)
+      && !catchesWithoutLength.includes(cr.pyydys) && (cr.verkonPituus < 9 || cr.verkonPituus > 12)) {
       toNotifications.push(t("NetLength", { char: cr.pyydys }));
     }
+
     //errors, prevent saving
     if (cr.lukumaara < 0 || cr.verkonPituus < 0) {
       toErrors.push(t("noNegativeValues"));
@@ -107,13 +115,39 @@ const CatchType = ({ cr }) => {
       toErrors.push(t("noCatchArea"));
     }
     if (cr.alku !== "00:00" && cr.loppu !== "00:00") {
-      console.log("alku", cr.alku, typeof(cr.alku));
-      if (cr.alku.slice(0,2) > cr.loppu.slice(0,2) || (cr.alku.slice(0,2) === cr.loppu.slice(0,2) && cr.alku.slice(3,5) > cr.loppu.slice(3,5)))
+      console.log("alku", cr.alku, typeof (cr.alku));
+      if (cr.alku.slice(0, 2) > cr.loppu.slice(0, 2) || (cr.alku.slice(0, 2) === cr.loppu.slice(0, 2) && cr.alku.slice(3, 5) > cr.loppu.slice(3, 5)))
         toErrors.push(t("closeBeforeOpen", { char: cr.pyydys }));
     }
     if (cr.pyydys && cr.pyyntialue && cr.lukumaara === "0") {
       toErrors.push(t("noZeroAmount", { char: cr.pyydys }));
     }
+    if ((cr.pyyntialue in hardAmountLimits && cr.lukumaara > hardAmountLimits[String(cr.pyyntialue)])) {
+      toErrors.push(t("maxCatchValue", { char1: cr.pyyntialue, char2: hardAmountLimits[String(cr.pyyntialue)] }));
+    }
+    if (dailyActions.standardRing) {
+      let standardCatch = false;
+      Object.keys(allCatchRows).map((c) => {
+        if (allCatchRows[String(c)].pyydys === "Vakioverkko") {
+          standardCatch = true;
+        }
+      });
+      if (!standardCatch) {
+        dispatch(setNotifications([[], [t("expectingStandardCatch")]], "catches", 0));
+      }
+    }
+    if (cr.pyydys && cr.pyyntialue) {
+      Object.keys(allCatchRows).map((c) => {
+        if (allCatchRows[String(c)].key !== cr.key && allCatchRows[String(c)].pyydys === cr.pyydys && allCatchRows[String(c)].pyyntialue === cr.pyyntialue && allCatchRows[String(c)].alku === cr.alku && allCatchRows[String(c)].loppu === cr.loppu) {
+          toErrors.push(t("duplicateCatches", { char: cr.pyyntialue }));
+        }
+      });
+    }
+    else {
+      dispatch(setNotifications([[], []], "catches", 0));
+
+    }
+
     return [toNotifications, toErrors];
   };
 
@@ -122,32 +156,35 @@ const CatchType = ({ cr }) => {
     let realTimeRow = cr;
 
 
-    if (target.name==="pyydys") {
+    if (target.name === "pyydys") {
       //rechoosing catchType, empty area to prevent previous options are from persisting
       dispatch(toggleCatchDetails(cr.key, "pyyntialue", ""));
       dispatch(toggleCatchDetails(cr.key, "lukumaara", 0));
-      realTimeRow = { ...realTimeRow, lukumaara: 0, pyyntialue:"" };
+      realTimeRow = { ...realTimeRow, lukumaara: 0, pyyntialue: "" };
     }
-    if (target.name==="pyyntialue") {
+    if (target.name === "pyyntialue") {
       //catch actively clicked, set amount to minumn,
       dispatch(toggleCatchDetails(cr.key, "lukumaara", 1));
       realTimeRow = { ...realTimeRow, lukumaara: 1 };
     }
 
-    if (target.name==="pyyntialue" && cr.pyydys !== "Rastasverkko") {
+    if (target.name === "pyyntialue" && !catchesWithoutLength.includes(cr.pyydys)) {//cr.pyydys !== "Rastasverkko") {
       //autofill length for nets that are always the same length
       if (target.value in preSetLengths) {
         dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
         realTimeRow = { ...realTimeRow, verkonPituus: preSetLengths[String(target.value)] };
+      } else {
+        dispatch(toggleCatchDetails(cr.key, "verkonPituus", 9));
+        realTimeRow = { ...realTimeRow, verkonPituus: 9 };
       }
-    } else if(target.name==="pyydys" && cr.verkonPituus!==0) {
+    } else if (target.name === "pyydys" && cr.verkonPituus !== 0) {
       //remove previous length autofill, when catch changes
       dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
       realTimeRow = { ...realTimeRow, verkonPituus: 0 };
     }
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
     //run validations on change
-    const result = validate({ ...realTimeRow, [target.name]:target.value });
+    const result = validate({ ...realTimeRow, [target.name]: target.value });
     dispatch(setNotifications([result[0], result[1]], "catches", cr.key));
   };
 
@@ -202,7 +239,7 @@ const CatchType = ({ cr }) => {
           </FormControl>} />
 
 
-        { (cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -223,7 +260,7 @@ const CatchType = ({ cr }) => {
             />} />
         }
 
-        { (cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -244,7 +281,7 @@ const CatchType = ({ cr }) => {
             />} />
         }
 
-        { (cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -263,7 +300,7 @@ const CatchType = ({ cr }) => {
             } />
         }
 
-        { (cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
           ? <div></div>
           :
           <FormControl className={classes.formControlLabel}>
@@ -278,10 +315,10 @@ const CatchType = ({ cr }) => {
           </FormControl>
         }
 
-        { (cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
           ? <div></div>
           :
-          (cr.pyydys.length === 0 || (cr.pyydys.length > 1  && catchesWithoutLength.indexOf(cr.pyydys) > -1 )) //is a catch without length
+          (cr.pyydys.length === 0 || (cr.pyydys.length > 1 && catchesWithoutLength.indexOf(cr.pyydys) > -1)) //is a catch without length
             ? <div></div>
             :
             <FormControlLabel className={classes.formControlLabel2}

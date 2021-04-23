@@ -215,7 +215,7 @@ def edit_actions(obsday_id, actions):
 @login_required
 def search_dayinfo(day, observatory):
     ret = get_day_without_id(day, observatory)
-
+    print(ret)
     return jsonify(ret)
 
 

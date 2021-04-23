@@ -373,7 +373,7 @@ const DayDetails = () => {
           {/* DAILY ACTIONS */}
           <Grid item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
-              {t("Observation activity")}
+              {t("ObservationActivity")}
             </Typography>
             {(selectedActions && !actionsEditMode) ?
               <FormGroup row className={classes.formGroup}>
