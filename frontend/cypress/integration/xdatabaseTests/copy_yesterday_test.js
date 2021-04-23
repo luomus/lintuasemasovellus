@@ -25,7 +25,7 @@ describe("CopyYesterdaysData", function () {
     cy.get("#activity-header").click();
     cy.get("#attachments").clear();
     cy.wait(1000);
-    cy.get("[name=standardRing]").click();
+    cy.get("[name=standardObs]").click();
     cy.get("#attachments").type("1");
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
@@ -64,7 +64,7 @@ describe("CopyYesterdaysData", function () {
     cy.get("#observers").should("have.value", "Helmi Havainnoitsija");
     cy.contains("Vakiopetoverkot");
     cy.get("#netCodes"). should("have.value", netCodes);
-    cy.get("[name=standardRing]").should("be.checked");
+    cy.get("[name=standardObs]").should("be.checked");
 
   });
 

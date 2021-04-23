@@ -308,9 +308,6 @@ export const HomePage = () => {
   const handleCopyConfirm = () => {
     let previousDay = new Date(day);
     previousDay.setDate(day.getDate() - 1);
-    console.log("day.getDate()", day.getDate());
-    console.log("day", day);
-    console.log("previousDay", previousDay);
     searchDayInfo(formatDate(previousDay), userObservatory).then((dayJson) => {
       console.log(dayJson[0]);
       if (dayJson[0]["id"] !== 0) {
