@@ -98,31 +98,33 @@ export const DayDetails = ({ userObservatory }) => {
   const [catches, setDayCatches] = useState([]);
   const [catchRowToEdit, setCatchRowToEdit] = useState({});
 
+  const thisDay = dayList
+    .find(d => d.day === day && d.observatory === userObservatory);
 
+  if (!thisDay) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h5" component="h2" >
+          {day} {" "}
+          {userObservatory.replace("_", " ")}
+        </Typography>
+        <Typography>
+          {t("noObservationsFound")}
+        </Typography>
+      </Paper>
+    );
+  }
 
-  const [observers, setObservers] = useState(
-    dayList
-      .find(d => d.day === day && d.observatory === userObservatory)
-      .observers
-  );
-
-  const [comment, setComment] = useState(dayList
-    .find(d => d.day === day && d.observatory === userObservatory)
-    .comment
-  );
-
-  const [selectedActions, setSelectedActions] = useState(dayList
-    .find(d => d.day === day && d.observatory === userObservatory)
-    .selectedactions
-    ? JSON.parse(dayList
-      .find(d => d.day === day && d.observatory === userObservatory)
-      .selectedactions)
-    : {});
-
-  const [dayId, setDayId] = useState(dayList
-    .find(d => d.day === day && d.observatory === userObservatory)
-    .id
-  );
+  const [dayId, setDayId] = useState(thisDay.id);
+  const [observers, setObservers] = useState(thisDay.observers);
+  const [comment, setComment] = useState(thisDay.comment);
+  const [selectedActions, setSelectedActions] = useState(
+    thisDay
+      .selectedactions
+      ? JSON.parse(dayList
+        .find(d => d.day === day && d.observatory === userObservatory)
+        .selectedactions)
+      : {});
 
   useEffect(() => {
     getCatches(dayId)
