@@ -2,8 +2,8 @@ import { getDays } from "../services";
 
 export const retrieveDays = () => {
   return async dispatch => {
-    const stations = await getDays();
-    dispatch(setDays(stations));
+    const days = await getDays();
+    dispatch(setDays(days));
   };
 };
 

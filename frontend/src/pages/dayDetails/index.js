@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField,
   FormGroup, FormControlLabel, withStyles,
@@ -8,6 +8,7 @@ import {
 import { Edit, Add, CheckCircle, RemoveCircleOutlineRounded } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
 import DailyActions from "../homePage/dailyActions";
@@ -23,7 +24,7 @@ import {
 } from "../../services";
 
 
-const DayDetails = () => {
+export const DayDetails = ({ userObservatory }) => {
 
   const { day } = useParams();
 
@@ -78,18 +79,7 @@ const DayDetails = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
-
   const dayList = useSelector(state => state.days);
-  const userObservatory = useSelector(state => state.userObservatory);
   const notifications = useSelector(state => state.notifications);
   const editedActions = useSelector(state => state.dailyActions);
   const editedCatches = useSelector(state => state.catchRows);
@@ -100,13 +90,15 @@ const DayDetails = () => {
   const [commentForm, setCommentForm] = useState(false);
   const [editedComment, setEditedComment] = useState("");
   const [editedObservers, setEditedObservers] = useState("");
-  const [mode, setMode] = useState("table1");
+  const [mode, setMode] = useState("speciesTable");
   const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
   const [actionsEditMode, setActionsEditMode] = useState(false);
   const [catchesEditMode, setCatchesEditMode] = useState(false);
   const [addingNewRowMode, setAddingNewRowMode] = useState(false);
   const [catches, setDayCatches] = useState([]);
   const [catchRowToEdit, setCatchRowToEdit] = useState({});
+
+
 
   const [observers, setObservers] = useState(
     dayList
@@ -149,11 +141,9 @@ const DayDetails = () => {
 
   const commentOnSubmit = (event) => {
     event.preventDefault();
-    if (editedComment.length !== 0) {
-      setComment(editedComment);
-      editComment(dayId, editedComment)
-        .then(dayJson => setDayId(dayJson.data.id));
-    }
+    setComment(editedComment);
+    editComment(dayId, editedComment)
+      .then(dayJson => setDayId(dayJson.data.id));
     setCommentForm(false);
   };
 
@@ -493,10 +483,10 @@ const DayDetails = () => {
 
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-start">
-              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode === "table1"} onClick={() => setMode("table1")}>
+              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode === "speciesTable"} onClick={() => setMode("speciesTable")}>
                 {t("summary")}
               </Button>
-              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode === "table2"} onClick={() => setMode("table2")}>
+              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode === "obsPeriodTable"} onClick={() => setMode("obsPeriodTable")}>
                 {t("obsPeriods")}
               </Button>
             </Box>
@@ -533,4 +523,6 @@ const DayDetails = () => {
   );
 };
 
-export default DayDetails;
+DayDetails.propTypes = {
+  userObservatory: PropTypes.string.isRequired
+};

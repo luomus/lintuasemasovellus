@@ -5,9 +5,10 @@ import {
   Typography
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 import { retrieveDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
 
@@ -34,18 +35,13 @@ const StyledTableCell = withStyles(() => ({
   },
 }))(TableCell);
 
-export const DayList = () => {
-
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
+export const DayList = ({ userObservatory }) => {
 
   const { t } = useTranslation();
 
   const history = useHistory();
 
   const classes = useStyles();
-
-  const userObservatory = useSelector(state => state.userObservatory);
 
   const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
 
@@ -56,12 +52,6 @@ export const DayList = () => {
   }, [dispatch]);
 
   if (!list) return null;
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
 
   const comparator = (a, b) => {
     const day1 = a.day.split(".");
@@ -150,4 +140,8 @@ export const DayList = () => {
       </Paper>
     </div>
   );
+};
+
+DayList.propTypes = {
+  userObservatory: PropTypes.string.isRequired
 };

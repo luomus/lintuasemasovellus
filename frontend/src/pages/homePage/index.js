@@ -16,7 +16,8 @@ import DateFnsUtils from "@date-io/date-fns";
 import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Redirect, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
@@ -107,7 +108,7 @@ const StyledTableCell = withStyles(() => ({
 }))(TableCell);
 
 
-export const HomePage = () => {
+export const HomePage = ({ user, userObservatory }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
@@ -123,11 +124,9 @@ export const HomePage = () => {
 
   const dateNow = new Date();
 
-  const userObservatory = useSelector(state => state.userObservatory);
   const dailyActions = useSelector(state => state.dailyActions);
   const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
-  const userID = useSelector(state => state.user.id);
   const notifications = useSelector(state => state.notifications);
 
   const history = useHistory();
@@ -159,6 +158,10 @@ export const HomePage = () => {
       .then(daysJson => setLatestDays(daysJson));
   }, [userObservatory]);
 
+
+  useEffect(() => {
+    dispatch(retrieveDays());
+  }, [dispatch]);
 
   const emptyAllFields = () => {
     //setDay(dateNow);
@@ -224,7 +227,7 @@ export const HomePage = () => {
   const sendData = async () => {
     const rows = sanitizedShorthand;
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
-    const observationsToSend = loopThroughObservations(rows, userID);
+    const observationsToSend = loopThroughObservations(rows, user.id);
     setDisabled(true);
     let data = {
       day: formatDate(day),
@@ -232,7 +235,7 @@ export const HomePage = () => {
       observers: observers,
       observatory: userObservatory,
       selectedactions: readyDailyActions(),
-      userID: userID,
+      userID: user.id,
       catches: catchRows,
       observationPeriods: observationPeriodsToSend,
       observations: observationsToSend
@@ -264,16 +267,6 @@ export const HomePage = () => {
       setDateChangeConfirm(false);
     }, 10000);
   };
-
-
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
 
   const saveButtonDisabled = () => {
     if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
@@ -719,4 +712,9 @@ export const HomePage = () => {
       </Modal>
     </div>
   );
+};
+
+HomePage.propTypes = {
+  user: PropTypes.object.isRequired,
+  userObservatory: PropTypes.string.isRequired
 };
