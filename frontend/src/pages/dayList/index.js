@@ -117,22 +117,22 @@ export const DayList = () => {
                     <TableRow id="dayTableRow" hover key={i}
                       onClick={() => handleDateClick(s)} className={classes.linkImitator} >
                       <StyledTableCell component="th" scope="row">
-                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.day}
                         </Link>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.observers}
                         </Link>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.comment}
                         </Link>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${s.observatory}`}>
+                        <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.observatory.replace("_", " ")}
                         </Link>
                       </StyledTableCell>

@@ -21,18 +21,13 @@ import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  //sendDay,
   loopThroughObservationPeriods,
   loopThroughObservations,
-  //sendCatches,
-  //sendShorthand,
-  //makeSendDataJson,
 } from "../../shorthand/parseShorthandField";
 import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-//import { getErrors } from "../../shorthand/validations";
 import DailyActions from "./dailyActions";
 import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "./catchType";
@@ -302,7 +297,7 @@ export const HomePage = () => {
   };
 
   const handleDateClick = (s) => {
-    history.push(`/daydetails/${s.day}/${userObservatory}`);
+    history.push(`/daydetails/${s.day}`);
   };
 
   const handleCopyConfirm = () => {
@@ -637,12 +632,12 @@ export const HomePage = () => {
                           <TableRow id="latestDaysRow" key={i} hover
                             onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
                             <StyledTableCell component="th" scope="row">
-                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
+                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                                 {s.day}
                               </Link>
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
-                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
+                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                                 {s.speciesCount} {t("multipleSpecies")}
                               </Link>
                             </StyledTableCell>

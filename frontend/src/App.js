@@ -45,7 +45,7 @@ const App = () => {
           <Route path="/listdays">
             <DayList />
           </Route>
-          <Route path="/daydetails/:day/:stationName">
+          <Route path="/daydetails/:day">
             <DayDetails />
           </Route>
           <Route path="/manual">

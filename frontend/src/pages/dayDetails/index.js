@@ -19,14 +19,13 @@ import Notification from "../homePage/notification";
 
 import {
   getDaysObservationPeriods,
-  // getDaysObservationPeriodsOther,
   editComment, editObservers, editActions, getSummary, getCatches, editCatchRow, deleteCatchRow
 } from "../../services";
 
 
 const DayDetails = () => {
 
-  const { day, stationName } = useParams();
+  const { day } = useParams();
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -111,25 +110,25 @@ const DayDetails = () => {
 
   const [observers, setObservers] = useState(
     dayList
-      .find(d => d.day === day && d.observatory === stationName)
+      .find(d => d.day === day && d.observatory === userObservatory)
       .observers
   );
 
   const [comment, setComment] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
+    .find(d => d.day === day && d.observatory === userObservatory)
     .comment
   );
 
   const [selectedActions, setSelectedActions] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
+    .find(d => d.day === day && d.observatory === userObservatory)
     .selectedactions
     ? JSON.parse(dayList
-      .find(d => d.day === day && d.observatory === stationName)
+      .find(d => d.day === day && d.observatory === userObservatory)
       .selectedactions)
     : {});
 
   const [dayId, setDayId] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
+    .find(d => d.day === day && d.observatory === userObservatory)
     .id
   );
 
@@ -138,15 +137,12 @@ const DayDetails = () => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-  //console.log("Rivit päiväsivulla", dayId, catches);
-
   const observersOnSubmit = (event) => {
     event.preventDefault();
     if (editedObservers.length !== 0) {
       setObservers(editedObservers);
       editObservers(dayId, editedObservers)
         .then(dayJson => setDayId(dayJson.data.id));
-      //console.log("dayId: ", dayId);
     }
     setObserversForm(false);
   };
@@ -157,7 +153,6 @@ const DayDetails = () => {
       setComment(editedComment);
       editComment(dayId, editedComment)
         .then(dayJson => setDayId(dayJson.data.id));
-      //console.log("dayId: ", dayId);
     }
     setCommentForm(false);
   };
@@ -236,7 +231,6 @@ const DayDetails = () => {
       const maxKey = Math.max.apply(Math, catches.map(row => row.key));
       dispatch(addOneCatchRow(maxKey + 1));
     }
-    //console.log("handle", editedCatches);
     dispatch(resetNotifications());
     setCatchesEditMode(true);
   };
@@ -306,7 +300,7 @@ const DayDetails = () => {
           <Grid item xs={6}>
             <Typography variant="h5" component="h2" >
               {day} {" "}
-              {stationName.replace("_", " ")}
+              {userObservatory.replace("_", " ")}
             </Typography>
           </Grid>
           <Grid item xs={12} fullwidth="true">
