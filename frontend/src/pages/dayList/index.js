@@ -87,7 +87,7 @@ export const DayList = () => {
   };
 
   const handleDateClick = (s) => {
-    history.push(`/daydetails/${s.day}/${userObservatory}`);
+    history.push(`/daydetails/${s.day}`);
   };
 
   return (
