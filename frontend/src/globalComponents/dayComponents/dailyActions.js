@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDailyActions } from "../../reducers/dailyActionsReducer";
 import { setNotifications } from "../../reducers/notificationsReducer";
-import Notification from "../homePage/notification";
+import Notification from "../Notification";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

@@ -11,12 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
-import DailyActions from "../homePage/dailyActions";
-import CatchType from "../homePage/catchType";
+import DailyActions from "../../globalComponents/dayComponents/dailyActions";
+import CatchType from "../../globalComponents/dayComponents/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
 import { resetNotifications } from "../../reducers/notificationsReducer";
-import Notification from "../homePage/notification";
+import Notification from "../../globalComponents/Notification";
 
 import {
   getDaysObservationPeriods,
