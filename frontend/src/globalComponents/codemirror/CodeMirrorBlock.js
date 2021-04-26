@@ -1,14 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { makeStyles } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+import { Controlled as CodeMirror } from "react-codemirror2";
 import {
   loopThroughCheckForErrors, getErrors, resetErrors
 } from "../../shorthand/validations";
-import { Controlled as CodeMirror } from "react-codemirror2";
 import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
-import { makeStyles } from "@material-ui/core";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import PropTypes from "prop-types";
+import { setNotifications } from "../../reducers/notificationsReducer";
 
 
 let timeout = null;
@@ -24,22 +27,28 @@ const useStyles = makeStyles({
 const CodeMirrorBlock = ({
   shorthand,
   setShorthand,
-  setCodeMirrorHasErrors,
   setSanitizedShorthand,
 }) => {
 
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const classes = useStyles();
 
-  const errorCheckingLogic = async (editor, data, value) => {
+  const validate = (editor, data, value) => {
+    let toErrors = [];
+
     setSanitizedShorthand(loopThroughCheckForErrors(value));
     for (const marker of markers) {
       marker.clear();
     }
     editor.clearGutter("note-gutter");
-    const errors = getErrors();
-    for (const error of errors) {
+    const shorthandErrors = getErrors();
+    for (const error of shorthandErrors) {
       const rowNum = error[0];
       const rowMessage = error[1];
+      (rowMessage.includes("unknownCharacter")) ?
+        toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
+        : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
       const marker = editor.getDoc().markText({
         line: rowNum,
         ch: 0
@@ -57,9 +66,8 @@ const CodeMirrorBlock = ({
       editor.setGutterMarker(rowNum, "note-gutter", icon);
       markers.add(marker);
     }
-    if (errors.length === 0) setCodeMirrorHasErrors(false);
-    else setCodeMirrorHasErrors(true);
     resetErrors();
+    return toErrors;
   };
 
   /**
@@ -74,7 +82,8 @@ const CodeMirrorBlock = ({
       clearTimeout(timeout);
     }
     timeout = setTimeout(() => {
-      errorCheckingLogic(editor, data, value);
+      const result = validate(editor, data, value);
+      dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);
   };
@@ -99,7 +108,9 @@ const CodeMirrorBlock = ({
       onBeforeChange={(editor, data, value) => {
         setShorthand(value);
       }}
-      onChange={codemirrorOnchange}
+      onChange={(editor, data, value) => {
+        codemirrorOnchange(editor, data, value);
+      }}
     />
   );
 };
@@ -107,7 +118,6 @@ const CodeMirrorBlock = ({
 CodeMirrorBlock.propTypes = {
   shorthand: PropTypes.string.isRequired,
   setShorthand: PropTypes.func.isRequired,
-  setCodeMirrorHasErrors: PropTypes.func.isRequired,
   setSanitizedShorthand: PropTypes.func.isRequired,
 };
 

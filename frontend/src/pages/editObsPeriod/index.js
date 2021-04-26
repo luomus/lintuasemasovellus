@@ -6,7 +6,6 @@ import {
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
@@ -17,7 +16,7 @@ import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
+import Notification from "../../globalComponents/Notification";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,10 +68,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
+  const { t } = useTranslation();
+  const classes = useStyles();
 
-  //const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [shorthand, setShorthand] = useState("");
-  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [types, setTypes] = useState([]);
@@ -84,9 +83,9 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
+  const notifications = useSelector(state => state.notifications);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
-    //setDefaultShorthand(shorthandblocks);
     let text = obsPeriod.startTime + "\n";
     for (const block of shorthandblocks) {
       text += block.shorthandBlock + "\n";
@@ -106,6 +105,21 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   const handleDialogConfirm = () => {
     setWarning(false);
     handleDelete();
+  };
+
+  const saveButtonIsDisabled = (category = "shorthand") => {
+    if (!shorthand.trim()) return true;
+    let value = false;
+    Object.keys(notifications).map(cat => {
+      if (cat === category) {
+        Object.keys(notifications[String(cat)]).map(row => {
+          if (notifications[String(cat)][String(row)].errors.length > 0) {
+            value = true;
+          }
+        });
+      }
+    });
+    return value;
   };
 
   const deleteButtonIsDisabled = () => {
@@ -163,19 +177,6 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
       );
     }
   });
-
-  const { t } = useTranslation();
-
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-  const classes = useStyles();
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
 
   return (
     <Modal
@@ -245,20 +246,19 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock
-                setCodeMirrorHasErrors={setCodeMirrorHasErrors}
                 setSanitizedShorthand={setSanitizedShorthand}
                 setShorthand={setShorthand}
                 shorthand={shorthand}
               />
             </Grid>
             <Grid item xs={12}>
-              <ErrorPaper codeMirrorHasErrors={codeMirrorHasErrors} />
+              <Notification category="shorthand" />
             </Grid>
             <Grid container item xs={12} alignItems="flex-end">
               <Box pr={2} pt={2}>
                 <Button
                   id="saveButtonInShorthandModification"
-                  disabled={codeMirrorHasErrors || !shorthand.trim()}
+                  disabled={saveButtonIsDisabled()}
                   variant="contained"
                   color="primary"
                   onClick={handleSave}>

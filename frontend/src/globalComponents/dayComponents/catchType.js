@@ -1,9 +1,8 @@
-import React from "react"; //
+import React from "react";
 import { HighlightOff } from "@material-ui/icons";
 import {
   TextField, InputLabel, Select, MenuItem, FormControl,
   FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
-  //Dialog, DialogActions, DialogContentText, DialogContent,
 } from "@material-ui/core/";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -142,10 +141,8 @@ const CatchType = ({ cr }) => {
           toErrors.push(t("duplicateCatches", { char: cr.pyyntialue }));
         }
       });
-    }
-    else {
+    } else {
       dispatch(setNotifications([[], []], "catches", 0));
-
     }
 
     return [toNotifications, toErrors];

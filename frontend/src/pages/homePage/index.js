@@ -29,11 +29,10 @@ import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-import DailyActions from "./dailyActions";
+import DailyActions from "../../globalComponents/dayComponents/dailyActions";
 import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
-import CatchType from "./catchType";
-import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
-import Notification from "./notification";
+import CatchType from "../../globalComponents/dayComponents/catchType";
+import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 
 
@@ -145,7 +144,6 @@ export const HomePage = ({ user, userObservatory }) => {
   const [latestDays, setLatestDays] = useState([]);
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
-  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
   const [openCopy, setOpenCopy] = useState(false);
   const [toCopy, setToCopy] = useState({
@@ -158,17 +156,13 @@ export const HomePage = ({ user, userObservatory }) => {
       .then(daysJson => setLatestDays(daysJson));
   }, [userObservatory]);
 
-
   useEffect(() => {
     dispatch(retrieveDays());
   }, [dispatch]);
 
   const emptyAllFields = () => {
-    //setDay(dateNow);
-    //setObservers("");
-    //setComment("");
-    //setType("");
-    //setLocation("");
+    setType("");
+    setLocation("");
     setShorthand("");
   };
 
@@ -269,7 +263,7 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
+    if (observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
     else
       return false;
@@ -580,7 +574,6 @@ export const HomePage = ({ user, userObservatory }) => {
                           shorthand={shorthand}
                           setShorthand={setShorthand}
                           setSanitizedShorthand={setSanitizedShorthand}
-                          setCodeMirrorHasErrors={setCodeMirrorHasErrors}
                         />
                       </Grid>
                     </Grid>
@@ -655,7 +648,7 @@ export const HomePage = ({ user, userObservatory }) => {
 
               </Grid>
             </Paper>
-            <ErrorPaper codeMirrorHasErrors={codeMirrorHasErrors} />
+            <Notification category="shorthand" />
           </Grid>
         </Grid>
       </Grid>
