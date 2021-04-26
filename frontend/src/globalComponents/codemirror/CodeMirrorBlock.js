@@ -83,7 +83,6 @@ const CodeMirrorBlock = ({
     }
     timeout = setTimeout(() => {
       const result = validate(editor, data, value);
-      console.log("validated: ", result);
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);
@@ -109,7 +108,9 @@ const CodeMirrorBlock = ({
       onBeforeChange={(editor, data, value) => {
         setShorthand(value);
       }}
-      onChange={codemirrorOnchange}
+      onChange={(editor, data, value) => {
+        codemirrorOnchange(editor, data, value);
+      }}
     />
   );
 };
