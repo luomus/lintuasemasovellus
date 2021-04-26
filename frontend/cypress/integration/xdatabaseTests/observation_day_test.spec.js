@@ -212,6 +212,7 @@ describe("AddObservationDay", function () {
     cy.get("#date-picker-inline").type(date2);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();

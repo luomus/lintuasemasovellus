@@ -39,6 +39,7 @@ const resources = {
       "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
       "overwrite":"Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
 
+      "noObservationsFound": "Havaintotietoja ei löytynyt tälle päivälle.",
       "chooseTypeAndLocation": "(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
       "obsPeriods": "Jaksot",

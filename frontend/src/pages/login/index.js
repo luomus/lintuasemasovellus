@@ -10,8 +10,6 @@ import banner from "../../resources/banner.png";
 import luomuslogo from "../../resources/luomuslogo.png";
 import haukkalogo from "../../resources/haukka-logo-circle.svg";
 
-
-
 export const Login = () => {
 
   const useStyles = makeStyles({
@@ -128,5 +126,3 @@ export const Login = () => {
     </div>
   );
 };
-
-export default Login;

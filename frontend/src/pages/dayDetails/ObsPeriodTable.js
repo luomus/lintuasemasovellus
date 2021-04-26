@@ -100,7 +100,7 @@ const ObsPeriodTable = (props) => {
   const handleErrorSnackOpen = () => {
   };
 
-  if (mode === "table1") {
+  if (mode === "speciesTable") {
     return (
       <div>
         <Typography variant="h6" >
