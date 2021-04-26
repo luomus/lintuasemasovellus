@@ -158,6 +158,7 @@ export const HomePage = ({ user, userObservatory }) => {
 
   useEffect(() => {
     dispatch(retrieveDays());
+    handleDateChange(dateNow);
   }, [dispatch]);
 
   const emptyAllFields = () => {
