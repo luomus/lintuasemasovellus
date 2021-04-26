@@ -32,7 +32,6 @@ import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import DailyActions from "../../globalComponents/dayComponents/dailyActions";
 import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "../../globalComponents/dayComponents/catchType";
-// import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
 import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 
@@ -162,11 +161,8 @@ export const HomePage = ({ user, userObservatory }) => {
   }, [dispatch]);
 
   const emptyAllFields = () => {
-    //setDay(dateNow);
-    //setObservers("");
-    //setComment("");
-    //setType("");
-    //setLocation("");
+    setType("");
+    setLocation("");
     setShorthand("");
   };
 

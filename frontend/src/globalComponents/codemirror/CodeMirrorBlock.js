@@ -47,8 +47,8 @@ const CodeMirrorBlock = ({
       const rowNum = error[0];
       const rowMessage = error[1];
       (rowMessage.includes("unknownCharacter")) ?
-        toErrors.push(t("checkRow", { row: rowNum }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
-        : toErrors.push(t("checkRow", { row: rowNum }) + t(rowMessage));
+        toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
+        : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
       const marker = editor.getDoc().markText({
         line: rowNum,
         ch: 0
