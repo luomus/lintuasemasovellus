@@ -32,11 +32,14 @@ const App = () => {
   }, [dispatch, user]);
 
   useEffect(() => {
+    if (user.id === "asdf") {
+      dispatch(setUserObservatory("Hangon_Lintuasema"));
+      return;
+    }
     getCurrentUser()
       .then(currentUser => {
         const observatory = currentUser.data[0].observatory;
         if (observatory) {
-          console.log("observatory", observatory);
           dispatch(setUserObservatory(observatory));
         }
       });
