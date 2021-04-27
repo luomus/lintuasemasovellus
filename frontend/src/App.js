@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { HomePage, UserManual, DayList, DayDetails, Login } from "./pages";
 import NavBar from "./globalComponents/NavBar";
 import Footer from "./globalComponents/Footer";
-import { getAuth, getToken } from "./services";
+import { getAuth, getCurrentUser, getToken } from "./services";
 import { setUser } from "./reducers/userReducer";
+import { setUserObservatory } from "./reducers/userObservatoryReducer";
 import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 
@@ -29,6 +30,18 @@ const App = () => {
         .catch(() => console.error("user not set"))
       ).catch(() => console.error("token not set"));
   }, [dispatch, user]);
+
+  useEffect(() => {
+    console.log("getting new user");
+    getCurrentUser()
+      .then(currentUser => {
+        const observatory = currentUser.data[0].observatory;
+        if (observatory) {
+          console.log("observatory", observatory);
+          dispatch(setUserObservatory(observatory));
+        }
+      });
+  }, [user]);
 
   if (!user.id) {
     return (

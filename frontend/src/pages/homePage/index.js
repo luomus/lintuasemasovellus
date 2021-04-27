@@ -369,7 +369,7 @@ export const HomePage = ({ user, userObservatory }) => {
               spacing={1}>
               <Grid item xs={11} >
                 <Typography variant="h5" component="h2" >
-                  {t("addObservations")}
+                  {t("addObservations")} - {userObservatory.replace("_", " ")}
                 </Typography>
                 <br />
               </Grid>
