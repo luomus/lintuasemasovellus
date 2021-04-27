@@ -32,7 +32,6 @@ const App = () => {
   }, [dispatch, user]);
 
   useEffect(() => {
-    console.log("getting new user");
     getCurrentUser()
       .then(currentUser => {
         const observatory = currentUser.data[0].observatory;
