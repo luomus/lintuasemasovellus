@@ -68,7 +68,7 @@ const NavBar = ({ user }) => {
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
-  const observatoryIsSelected = Boolean(Object.keys(userObservatory).length !== 0);
+  const observatoryIsSelected = Boolean(userObservatory !== "");
 
   useEffect(() => {
     if (observatoryIsSelected) {
@@ -87,7 +87,7 @@ const NavBar = ({ user }) => {
   };
 
   const handleSelectorOpen = () => {
-    store.dispatch(setUserObservatory({}));
+    store.dispatch(setUserObservatory(""));
     setSelectorOpen(true);
   };
 
@@ -139,7 +139,7 @@ const NavBar = ({ user }) => {
     </Dialog>;
 
   const observatoryAndUserInfo = () => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       return (
         <Typography className={classes.title}>
           {userObservatory.replace("_", " ")} / {t("User")}: {user.fullName}

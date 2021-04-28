@@ -32,10 +32,6 @@ const App = () => {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (user.id === "asdf") {
-      dispatch(setUserObservatory("Hangon_Lintuasema"));
-      return;
-    }
     getCurrentUser()
       .then(currentUser => {
         const observatory = currentUser.data[0].observatory;
@@ -54,7 +50,7 @@ const App = () => {
         </div>
       </CssBaseline>
     );
-  } else if (Object.keys(userObservatory).length !== 0) {
+  } else if (userObservatory !== "") {
     return (
       <CssBaseline>
         <div>

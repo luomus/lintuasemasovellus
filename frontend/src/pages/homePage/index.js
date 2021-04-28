@@ -199,7 +199,7 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)
@@ -209,7 +209,7 @@ export const HomePage = ({ user, userObservatory }) => {
   });
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)
