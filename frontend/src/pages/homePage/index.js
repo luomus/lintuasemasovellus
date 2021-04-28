@@ -199,24 +199,26 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   useEffect(() => {
-    if (userObservatory !== "") {
+    if (stations.length > 0 && userObservatory !== "") {
+      console.log("stations: ", stations);
+      console.log("userObservatory: ", userObservatory);
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)
           .types
       );
     }
-  });
+  }, [stations, userObservatory]);
 
   useEffect(() => {
-    if (userObservatory !== "") {
+    if (stations.length > 0 && userObservatory !== "") {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)
           .locations
       );
     }
-  });
+  }, [stations, userObservatory]);
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
