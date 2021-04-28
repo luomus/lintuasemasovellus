@@ -29,9 +29,19 @@ export function myBeforeEach() {
       },
     });
 
+  cy.get('body').wait(1000)
+    .then(($body) => {
+      if ($body.text().includes('Valitse')) {
+        cy.get("#select-observatory").click();
+        cy.contains("Hangon Lintuasema").click();
+        cy.get("#submit").contains("Tallenna").click();
+      } else if ($body.text().includes('Jurmon Lintuasema')) {
+        cy.get("#observatorySelector").click();
+        cy.get("#select-observatory").click();
+        cy.contains("Hangon Lintuasema").click();
+        cy.get("#submit").contains("Tallenna").click();
+      }
+    });
 
-  cy.get("#select-observatory").click();
-  cy.contains("Hangon Lintuasema").click();
-  cy.get("#submit").contains("Tallenna").click();
   cy.contains("Hangon Lintuasema");
 }

@@ -1,4 +1,7 @@
 from application.api.classes.account.models import Account
+from application.api.classes.observatory.models import Observatory
+
+from application.api.classes.observatory.services import getObservatoryName
 
 from application.api import bp
 from application.db import db
@@ -8,7 +11,7 @@ import requests
 from flask import (Flask, render_template, 
     request, redirect, session, url_for,
     make_response, jsonify)
-from flask_login import login_user, logout_user , current_user
+from flask_login import login_user, logout_user , current_user, login_required
 
 
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
@@ -67,7 +70,23 @@ def getcurrentUser():
         return jsonify('no user')
     user = Account.query.filter_by(id=u).first()
     ret = []
-    ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email})
+    ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email, 'observatory':user.observatory })
+    return jsonify(ret)
+
+@bp.route('/api/setUserObservatory', methods=['POST'])
+@login_required
+def setUserObservatory():
+    req = request.get_json()
+    u = current_user.get_id()
+    if not u:
+        return jsonify('no user')
+    user = Account.query.filter_by(id=u).first()
+    user.observatory = req['observatory']
+
+    db.session().commit()
+
+    ret = []
+    ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email, 'observatory':user.observatory })
     return jsonify(ret)
 
 # tarvitaan cypress testejä varten

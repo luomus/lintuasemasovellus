@@ -178,7 +178,7 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   }, [dayId]);
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)

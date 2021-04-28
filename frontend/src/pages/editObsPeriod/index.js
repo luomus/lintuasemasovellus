@@ -159,7 +159,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
 
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)
@@ -169,7 +169,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   });
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)

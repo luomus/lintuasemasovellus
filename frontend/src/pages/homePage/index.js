@@ -200,24 +200,26 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (stations.length > 0 && userObservatory !== "") {
+      console.log("stations: ", stations);
+      console.log("userObservatory: ", userObservatory);
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)
           .types
       );
     }
-  });
+  }, [stations, userObservatory]);
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (stations.length > 0 && userObservatory !== "") {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)
           .locations
       );
     }
-  });
+  }, [stations, userObservatory]);
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
@@ -370,7 +372,7 @@ export const HomePage = ({ user, userObservatory }) => {
               spacing={1}>
               <Grid item xs={11} >
                 <Typography variant="h5" component="h2" >
-                  {t("addObservations")}
+                  {t("addObservations")} - {userObservatory.replace("_", " ")}
                 </Typography>
                 <br />
               </Grid>

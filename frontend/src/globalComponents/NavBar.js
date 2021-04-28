@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Typography, Box, Button,
@@ -8,7 +8,7 @@ import { AppBar, Toolbar, IconButton, Typography, Box, Button,
 import { Dehaze, Replay } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { getLogout } from "../services";
+import { getLogout, postUserObservatory } from "../services";
 import { setUserObservatory } from "../reducers/userObservatoryReducer";
 import { setUser } from "../reducers/userReducer";
 import store from "../store";
@@ -63,12 +63,20 @@ const NavBar = ({ user }) => {
     right: false
   });
   const [observatory, setObservatory] = useState("");
-  const [selectorOpen, setSelectorOpen] = useState(true);
+  const [selectorOpen, setSelectorOpen] = useState(false);
 
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
 
-  const observatoryIsSelected = Boolean(Object.keys(userObservatory).length !== 0);
+  const observatoryIsSelected = Boolean(userObservatory !== "");
+
+  useEffect(() => {
+    if (observatoryIsSelected) {
+      setSelectorOpen(false);
+    } else {
+      setSelectorOpen(true);
+    }
+  }, [userObservatory]);
 
   const toggleMenu = (slider, open) => () => {
     setState({ ...state, [slider]: open });
@@ -79,15 +87,14 @@ const NavBar = ({ user }) => {
   };
 
   const handleSelectorOpen = () => {
-    store.dispatch(setUserObservatory({}));
-    window.localStorage.removeItem("haukkaUserObservatory");
+    store.dispatch(setUserObservatory(""));
     setSelectorOpen(true);
   };
 
   const selectUserObservatory = (event) => {
     event.preventDefault();
+    postUserObservatory({ observatory:observatory });
     store.dispatch(setUserObservatory(observatory));
-    window.localStorage.setItem("haukkaUserObservatory", observatory);
   };
 
   const handleLogout = () => {
@@ -132,7 +139,7 @@ const NavBar = ({ user }) => {
     </Dialog>;
 
   const observatoryAndUserInfo = () => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (userObservatory !== "") {
       return (
         <Typography className={classes.title}>
           {userObservatory.replace("_", " ")} / {t("User")}: {user.fullName}

@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { HomePage, UserManual, DayList, DayDetails, Login } from "./pages";
 import NavBar from "./globalComponents/NavBar";
 import Footer from "./globalComponents/Footer";
-import { getAuth, getToken } from "./services";
+import { getAuth, getCurrentUser, getToken } from "./services";
 import { setUser } from "./reducers/userReducer";
+import { setUserObservatory } from "./reducers/userObservatoryReducer";
 import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 
@@ -30,6 +31,16 @@ const App = () => {
       ).catch(() => console.error("token not set"));
   }, [dispatch, user]);
 
+  useEffect(() => {
+    getCurrentUser()
+      .then(currentUser => {
+        const observatory = currentUser.data[0].observatory;
+        if (observatory) {
+          dispatch(setUserObservatory(observatory));
+        }
+      });
+  }, [user]);
+
   if (!user.id) {
     return (
       <CssBaseline>
@@ -39,7 +50,7 @@ const App = () => {
         </div>
       </CssBaseline>
     );
-  } else if (Object.keys(userObservatory).length !== 0) {
+  } else if (userObservatory !== "") {
     return (
       <CssBaseline>
         <div>

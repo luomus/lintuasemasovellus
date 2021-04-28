@@ -8,6 +8,7 @@ class Account(Base):
      userId=db.Column(db.String(144), nullable=False, unique=True)
      fullName=db.Column(db.String(144), nullable=False)
      email=db.Column(db.String(144), nullable=False)
+     observatory=db.Column(db.String(144), nullable=True)
      #role = db.Column(db.String(255), nullable=False)
 
      Observation = db.relationship("Observation", backref="account", lazy=True)
@@ -17,6 +18,7 @@ class Account(Base):
           self.userId=userId
           self.fullName=fullName
           self.email=email
+          self.observatory=None
           #self.role = role
 
      def get_id(self):
