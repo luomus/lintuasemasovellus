@@ -160,7 +160,7 @@ const NavBar = ({ user }) => {
       id="observatorySelector"
       startIcon={<Replay />}
     >
-      {t("Change Observatory")}
+      {t("changeObservatory")}
     </Button>
     :
     null;

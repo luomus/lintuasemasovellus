@@ -99,11 +99,11 @@ const CatchType = ({ cr }) => {
 
     //things for user to doublecheck
     if ((cr.pyydys in softAmountLimits && cr.pyyntialue in softAmountLimits[String(cr.pyydys)] && cr.lukumaara > softAmountLimits[String(cr.pyydys)][String(cr.pyyntialue)]) || cr.lukumaara > 15) {
-      toNotifications.push(t("Please recheck that you mean to declare that many catches", { char: cr.pyydys }));
+      toNotifications.push(t("checkNumberOfCatches", { char: cr.pyydys }));
     }
     if (cr.pyydys && cr.pyyntialue && catchAreas[String(cr.pyydys)].includes(cr.pyyntialue)
       && !catchesWithoutLength.includes(cr.pyydys) && (cr.verkonPituus < 9 || cr.verkonPituus > 12)) {
-      toNotifications.push(t("NetLength", { char: cr.pyydys }));
+      toNotifications.push(t("checkNetLength", { char: cr.pyydys }));
     }
 
     //errors, prevent saving
@@ -114,7 +114,6 @@ const CatchType = ({ cr }) => {
       toErrors.push(t("noCatchArea"));
     }
     if (cr.alku !== "00:00" && cr.loppu !== "00:00") {
-      console.log("alku", cr.alku, typeof (cr.alku));
       if (cr.alku.slice(0, 2) > cr.loppu.slice(0, 2) || (cr.alku.slice(0, 2) === cr.loppu.slice(0, 2) && cr.alku.slice(3, 5) > cr.loppu.slice(3, 5)))
         toErrors.push(t("closeBeforeOpen", { char: cr.pyydys }));
     }

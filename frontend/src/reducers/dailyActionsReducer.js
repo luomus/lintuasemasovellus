@@ -26,7 +26,6 @@ export const toggleDailyActions = (changedAction, value) => {
 
 
 export const setDailyActions = (dailyActions) => {
-  //console.log("action", dailyActions);
   return {
     type: "SET_ACTIONS",
     data: {

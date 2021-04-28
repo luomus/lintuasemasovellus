@@ -1,4 +1,3 @@
-//import { cy } from "date-fns/locale";
 import { myBeforeEach } from "../methods.js";
 
 const date = "01.01.2020";

@@ -1,6 +1,3 @@
-// commenting out cy import because it sometimes causes an error
-// and this works without it
-//import { cy } from "date-fns/locale";
 import { myBeforeEach } from "../methods.js";
 
 describe("FirstpageFieldsAndModification", function () {
