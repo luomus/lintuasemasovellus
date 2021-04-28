@@ -42,12 +42,6 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Jurmon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
     cy.contains("Jurmo");
-    cy.get("#observatorySelector").click();
-    cy.get("#select-observatory").click();
-    cy.contains("Hangon Lintuasema").click();
-    cy.get("#submit").contains("Tallenna").click();
-    cy.contains("Hangon");
-
   });
 
   it("Navigationbar works", function () {

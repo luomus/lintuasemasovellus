@@ -6,8 +6,8 @@ export function myBeforeEach() {
 
   // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
 
-  cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-  //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+  //cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+  cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
   cy.visit("http://localhost:3000");
 
 
@@ -35,15 +35,13 @@ export function myBeforeEach() {
         cy.get("#select-observatory").click();
         cy.contains("Hangon Lintuasema").click();
         cy.get("#submit").contains("Tallenna").click();
+      } else if ($body.text().includes('Jurmon Lintuasema')) {
+        cy.get("#observatorySelector").click();
+        cy.get("#select-observatory").click();
+        cy.contains("Hangon Lintuasema").click();
+        cy.get("#submit").contains("Tallenna").click();
       }
     });
-  
-  if(cy.contains("Jurmon Lintuasema")) {
-    cy.get("#observatorySelector").click();
-    cy.get("#select-observatory").click();
-    cy.contains("Hangon Lintuasema").click();
-    cy.get("#submit").contains("Tallenna").click();
-  }
 
   cy.contains("Hangon Lintuasema");
 }
