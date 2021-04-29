@@ -2,14 +2,14 @@ import { myBeforeEach } from "../methods.js";
 
 
 const observStation = "Hangon Lintuasema";
-const date = "01.01.2020";
+const date = "05.01.2020";
 const observer = "Helmi Havainnoitsija";
 const observer1 = "Otso Observoija";
 const changedObserver = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa kiva sää.";
 const comment1 = "Satoi aivan kaatamalla";
 const changedComment = "hihihi asdfsommol";
-const date2 = "02.02.2020";
+const date2 = "06.02.2020";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 const opened = "06:00";
 const opened1 = "06:30";
@@ -47,7 +47,6 @@ describe("AddObservationDay", function () {
     cy.get("#opened").type(opened);
     cy.get("#closed").clear();
     cy.get("#closed").type(closed);
-    cy.get("#selectCatchCount").type("2");
     cy.get("#netCodes").type(netCodes);
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
@@ -213,6 +212,7 @@ describe("AddObservationDay", function () {
     cy.get("#date-picker-inline").type(date2);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
+    cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);
     cy.get("#selectType").click().get("#Vakio").click();
@@ -235,7 +235,7 @@ describe("AddObservationDay", function () {
     cy.get("#actionsEditSave").should("be.disabled");
     cy.get("#actionsEditCancel").click();
     cy.wait(1000);
-    cy.get("[name=attachments]").should("have.value", " 0 kpl");
+    cy.get("[name=attachments]").should("have.value", " 2 kpl");
   });
 
 });

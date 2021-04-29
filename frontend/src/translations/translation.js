@@ -35,7 +35,11 @@ const resources = {
       "netLength": "Verkon pituus",
       "catchCount": "Lukumäärä",
       "add catch row": "Lisää pyydysrivi",
+      "copy": "Kopioi edellinen päivä",
+      "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
+      "overwrite":"Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
 
+      "noObservationsFound": "Havaintotietoja ei löytynyt tälle päivälle.",
       "chooseTypeAndLocation": "(Valitse tyyppi ja sijainti)",
       "summary": "Lajit",
       "obsPeriods": "Jaksot",
@@ -124,7 +128,7 @@ const resources = {
       "to": ", Yhteensä: ",
 
       "checkShorthand": "Tarkista pikakirjoitus",
-      "Observation activity": "Havaintoaktiivisuus",
+      "ObservationActivity": "Havaintoaktiivisuus",
       "observationActivityAdded": "Havaintoaktiivisuus kirjattu",
       "noObservationActivity": "Ei havaintoaktiivisuusmerkintöjä",
       "errorsInObservationActivity": "Virheitä havaintoaktiivisuusmerkinnöissä!",
@@ -160,6 +164,9 @@ const resources = {
       "closeBeforeOpen": "Pyydys '{{char}}' merkitty suljetuksi ennen avausaikaa.",
       "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
       "addRowByClicking": "Lisää pyydys painamalla '+'.",
+      "maxCatchValue": "Pyydyksen '{{char1}}' lukumäärä voi olla korkeintaan {{char2}}.",
+      "expectingStandardCatch": "Rengastusvakio on merkitty tehdyksi. Lisää ainakin yksi vakioverkko.",
+      "duplicateCatches": "Pyyntialueella '{{char}}' on ilmoitettu samanlainen pyydys useampaan kertaan. Tarkistathan pyydykset.",
 
     },
   },

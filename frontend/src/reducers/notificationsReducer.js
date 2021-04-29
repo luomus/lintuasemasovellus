@@ -6,6 +6,9 @@ const intitialState =
   catches: {
     0: { notifications: [], errors: [] },
   },
+  shorthand: {
+    0: { notifications: [], errors: [] },
+  },
 };
 
 const notificationsReducer = (state = intitialState, action) => {
@@ -26,6 +29,14 @@ const notificationsReducer = (state = intitialState, action) => {
           [action.key]: action.data,
         },
       };
+    case "SET_SHORTHAND_NOTIFICATIONS":
+      return {
+        ...state,
+        shorthand: {
+          ...state.shorthand,
+          [action.key]: action.data,
+        },
+      };
     case "RESET":
       return intitialState;
     default:
@@ -33,17 +44,24 @@ const notificationsReducer = (state = intitialState, action) => {
   }
 };
 
-export const setNotifications = (validationResult, category, rowKey=-1) => {
-  if (category === "dailyactions"){
+export const setNotifications = (validationResult, category, rowKey = -1) => {
+  if (category === "dailyactions") {
     return {
-      type:"SET_DAILYACTION_NOTIFICATIONS",
+      type: "SET_DAILYACTION_NOTIFICATIONS",
       key: rowKey,
       data: { notifications: validationResult[0], errors: validationResult[1] }
     };
   }
-  if (category === "catches"){
+  if (category === "catches") {
     return {
-      type:"SET_CATCH_NOTIFICATIONS",
+      type: "SET_CATCH_NOTIFICATIONS",
+      key: rowKey,
+      data: { notifications: validationResult[0], errors: validationResult[1] }
+    };
+  }
+  if (category === "shorthand") {
+    return {
+      type: "SET_SHORTHAND_NOTIFICATIONS",
       key: rowKey,
       data: { notifications: validationResult[0], errors: validationResult[1] }
     };
@@ -52,7 +70,7 @@ export const setNotifications = (validationResult, category, rowKey=-1) => {
 
 export const resetNotifications = () => {
   return {
-    type:"RESET",
+    type: "RESET",
   };
 };
 

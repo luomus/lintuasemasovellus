@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField,
   FormGroup, FormControlLabel, withStyles,
@@ -8,14 +8,15 @@ import {
 import { Edit, Add, CheckCircle, RemoveCircleOutlineRounded } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import ObsPeriodTable from "./ObsPeriodTable";
 import EditShorthand from "../editShorthand";
-import DailyActions from "../homePage/dailyActions";
-import CatchType from "../homePage/catchType";
+import DailyActions from "../../globalComponents/dayComponents/dailyActions";
+import CatchType from "../../globalComponents/dayComponents/catchType";
 import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsReducer";
 import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
 import { resetNotifications } from "../../reducers/notificationsReducer";
-import Notification from "../homePage/notification";
+import Notification from "../../globalComponents/Notification";
 
 import {
   getDaysObservationPeriods,
@@ -23,9 +24,9 @@ import {
 } from "../../services";
 
 
-const DayDetails = () => {
+export const DayDetails = ({ userObservatory }) => {
 
-  const { day, stationName } = useParams();
+  const { day } = useParams();
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -78,18 +79,7 @@ const DayDetails = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
-
   const dayList = useSelector(state => state.days);
-  const userObservatory = useSelector(state => state.userObservatory);
   const notifications = useSelector(state => state.notifications);
   const editedActions = useSelector(state => state.dailyActions);
   const editedCatches = useSelector(state => state.catchRows);
@@ -100,7 +90,7 @@ const DayDetails = () => {
   const [commentForm, setCommentForm] = useState(false);
   const [editedComment, setEditedComment] = useState("");
   const [editedObservers, setEditedObservers] = useState("");
-  const [mode, setMode] = useState("table1");
+  const [mode, setMode] = useState("speciesTable");
   const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
   const [actionsEditMode, setActionsEditMode] = useState(false);
   const [catchesEditMode, setCatchesEditMode] = useState(false);
@@ -108,36 +98,43 @@ const DayDetails = () => {
   const [catches, setDayCatches] = useState([]);
   const [catchRowToEdit, setCatchRowToEdit] = useState({});
 
-  const [observers, setObservers] = useState(
-    dayList
-      .find(d => d.day === day && d.observatory === stationName)
-      .observers
-  );
+  const thisDay = dayList
+    .find(d => d.day === day && d.observatory === userObservatory);
 
-  const [comment, setComment] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .comment
-  );
+  if (!thisDay) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h5" component="h2" >
+          {day} {" "}
+          {userObservatory.replace("_", " ")}
+        </Typography>
+        <Typography>
+          {t("noObservationsFound")}
+        </Typography>
+      </Paper>
+    );
+  }
 
-  const [selectedActions, setSelectedActions] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .selectedactions
-    ? JSON.parse(dayList
-      .find(d => d.day === day && d.observatory === stationName)
-      .selectedactions)
-    : {});
-
-  const [dayId, setDayId] = useState(dayList
-    .find(d => d.day === day && d.observatory === stationName)
-    .id
-  );
+  const [dayId, setDayId] = useState(thisDay.id);
+  const [observers, setObservers] = useState(thisDay.observers);
+  const [comment, setComment] = useState(thisDay.comment);
+  const [selectedActions, setSelectedActions] = useState(
+    thisDay
+      .selectedactions
+      ? JSON.parse(dayList
+        .find(d => d.day === day && d.observatory === userObservatory)
+        .selectedactions)
+      : {});
 
   useEffect(() => {
     getCatches(dayId)
       .then(res => setDayCatches(res));
   }, [dayId]);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ac2b519d86828fff25f1306710fc7a795dea3672
   const observersOnSubmit = (event) => {
     event.preventDefault();
     if (editedObservers.length !== 0) {
@@ -150,11 +147,9 @@ const DayDetails = () => {
 
   const commentOnSubmit = (event) => {
     event.preventDefault();
-    if (editedComment.length !== 0) {
-      setComment(editedComment);
-      editComment(dayId, editedComment)
-        .then(dayJson => setDayId(dayJson.data.id));
-    }
+    setComment(editedComment);
+    editComment(dayId, editedComment)
+      .then(dayJson => setDayId(dayJson.data.id));
     setCommentForm(false);
   };
 
@@ -301,7 +296,7 @@ const DayDetails = () => {
           <Grid item xs={6}>
             <Typography variant="h5" component="h2" >
               {day} {" "}
-              {stationName.replace("_", " ")}
+              {userObservatory.replace("_", " ")}
             </Typography>
           </Grid>
           <Grid item xs={12} fullwidth="true">
@@ -368,7 +363,7 @@ const DayDetails = () => {
           {/* DAILY ACTIONS */}
           <Grid item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
-              {t("Observation activity")}
+              {t("ObservationActivity")}
             </Typography>
             {(selectedActions && !actionsEditMode) ?
               <FormGroup row className={classes.formGroup}>
@@ -494,10 +489,10 @@ const DayDetails = () => {
 
           <Grid item xs={6}>
             <Box display="flex" justifyContent="flex-start">
-              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode === "table1"} onClick={() => setMode("table1")}>
+              <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode === "speciesTable"} onClick={() => setMode("speciesTable")}>
                 {t("summary")}
               </Button>
-              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode === "table2"} onClick={() => setMode("table2")}>
+              <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode === "obsPeriodTable"} onClick={() => setMode("obsPeriodTable")}>
                 {t("obsPeriods")}
               </Button>
             </Box>
@@ -534,4 +529,6 @@ const DayDetails = () => {
   );
 };
 
-export default DayDetails;
+DayDetails.propTypes = {
+  userObservatory: PropTypes.string.isRequired
+};

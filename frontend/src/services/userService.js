@@ -24,3 +24,7 @@ export const getCurrentUser = async () => {
   const currentUser = await axios.get("/api/getUser");
   return currentUser;
 };
+
+export const postUserObservatory = async (observatory) => {
+  return await axios.post("/api/setUserObservatory", observatory);
+};

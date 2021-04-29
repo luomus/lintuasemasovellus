@@ -3,41 +3,36 @@ import React, {
   useState
 } from "react";
 import {
-  Paper, Grid,
-  Typography, TextField, Button,
+  Paper, Grid, Modal, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+  Typography, TextField, Button, Checkbox, FormControlLabel,
   FormControl, InputLabel, Select, MenuItem, Snackbar,
   Table, TableRow, TableBody, TableCell, withStyles, Accordion,
   AccordionSummary, AccordionDetails, IconButton
 } from "@material-ui/core/";
-import { Add, ExpandMore, Event } from "@material-ui/icons";
+import { Add, ExpandMore, Event, FileCopy } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Redirect, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
-  //sendDay,
   loopThroughObservationPeriods,
   loopThroughObservations,
-  //sendCatches,
-  //sendShorthand,
-  //makeSendDataJson,
 } from "../../shorthand/parseShorthandField";
 import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
-//import { getErrors } from "../../shorthand/validations";
-import DailyActions from "./dailyActions";
+import DailyActions from "../../globalComponents/dayComponents/dailyActions";
 import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
-import CatchType from "./catchType";
-import ErrorPaper from "../../globalComponents/codemirror/ErrorPaper";
-import Notification from "./notification";
+import CatchType from "../../globalComponents/dayComponents/catchType";
+import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 
 
@@ -112,7 +107,7 @@ const StyledTableCell = withStyles(() => ({
 }))(TableCell);
 
 
-export const HomePage = () => {
+export const HomePage = ({ user, userObservatory }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
@@ -128,11 +123,9 @@ export const HomePage = () => {
 
   const dateNow = new Date();
 
-  const userObservatory = useSelector(state => state.userObservatory);
   const dailyActions = useSelector(state => state.dailyActions);
   const catchRows = useSelector(state => state.catchRows);
   const stations = useSelector(state => state.stations);
-  const userID = useSelector(state => state.user.id);
   const notifications = useSelector(state => state.notifications);
 
   const history = useHistory();
@@ -151,16 +144,26 @@ export const HomePage = () => {
   const [latestDays, setLatestDays] = useState([]);
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
-  const [codeMirrorHasErrors, setCodeMirrorHasErrors] = useState(false);
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
+  const [openCopy, setOpenCopy] = useState(false);
+  const [toCopy, setToCopy] = useState({
+    "observers": false, "comment": false,
+    "observationActivity": false, "catches": false
+  });
 
   useEffect(() => {
     getLatestDays(userObservatory)
       .then(daysJson => setLatestDays(daysJson));
   }, [userObservatory]);
 
+  useEffect(() => {
+    dispatch(retrieveDays());
+    handleDateChange(dateNow);
+  }, [dispatch]);
 
   const emptyAllFields = () => {
+    setType("");
+    setLocation("");
     setShorthand("");
   };
 
@@ -169,13 +172,11 @@ export const HomePage = () => {
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
       dispatch(setDefaultActions(userObservatory));
-      console.log(dailyActions);
     }
   };
 
 
   const setCatchRows = (dayId) => {
-    console.log("DATE", dayId);
     getCatches(dayId)
       .then(res => dispatch(setCatches(res)));
   };
@@ -199,37 +200,39 @@ export const HomePage = () => {
   };
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (stations.length > 0 && userObservatory !== "") {
+      console.log("stations: ", stations);
+      console.log("userObservatory: ", userObservatory);
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)
           .types
       );
     }
-  });
+  }, [stations, userObservatory]);
 
   useEffect(() => {
-    if (Object.keys(userObservatory).length !== 0) {
+    if (stations.length > 0 && userObservatory !== "") {
       setLocations(
         stations
           .find(s => s.observatory === userObservatory)
           .locations
       );
     }
-  });
+  }, [stations, userObservatory]);
 
   const sendData = async () => {
     const rows = sanitizedShorthand;
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
-    const observationsToSend = loopThroughObservations(rows, userID);
+    const observationsToSend = loopThroughObservations(rows, user.id);
     setDisabled(true);
     let data = {
-      day:formatDate(day),
+      day: formatDate(day),
       comment: comment,
       observers: observers,
       observatory: userObservatory,
       selectedactions: readyDailyActions(),
-      userID: userID,
+      userID: user.id,
       catches: catchRows,
       observationPeriods: observationPeriodsToSend,
       observations: observationsToSend
@@ -262,24 +265,14 @@ export const HomePage = () => {
     }, 10000);
   };
 
-
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-  if (!userIsSet) {
-    return (
-      <Redirect to="/login" />
-    );
-  }
-
   const saveButtonDisabled = () => {
-    if (codeMirrorHasErrors || observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
+    if (observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
     else
       return false;
   };
 
-  const errorsInInput = (category="all") => {
+  const errorsInInput = (category = "all") => {
     let value = false;
     Object.keys(notifications).map(cat => {
       if (cat === category || category === "all") {
@@ -294,8 +287,78 @@ export const HomePage = () => {
   };
 
   const handleDateClick = (s) => {
-    history.push(`/daydetails/${s.day}/${userObservatory}`);
+    history.push(`/daydetails/${s.day}`);
   };
+
+  const handleCopyConfirm = () => {
+    let previousDay = new Date(day);
+    previousDay.setDate(day.getDate() - 1);
+    searchDayInfo(formatDate(previousDay), userObservatory).then((dayJson) => {
+      console.log(dayJson[0]);
+      if (dayJson[0]["id"] !== 0) {
+        if (toCopy.observers) {
+          setObservers(dayJson[0]["observers"]);
+        }
+        if (toCopy.comment) {
+          setComment(dayJson[0]["comment"]);
+        }
+        if (toCopy.observationActivity) {
+          setActions(dayJson[0]["selectedactions"]);
+        }
+        if (toCopy.catches) {
+          setCatchRows(dayJson[0]["id"]);
+        }
+        dispatch(resetNotifications());
+      }
+    });
+    setToCopy({
+      "observers": false, "comment": false,
+      "observationActivity": false, "catches": false
+    });
+    setOpenCopy(false);
+  };
+
+  const handleCopyClose = () => {
+    setToCopy({
+      "observers": false, "comment": false,
+      "observationActivity": false, "catches": false
+    });
+    setOpenCopy(false);
+  };
+
+  const handleOpenCopy = () => {
+    setOpenCopy(true);
+  };
+
+  const handleCopyChange = (name) => {
+    setToCopy({ ...toCopy, [name]: !toCopy[String(name)] });
+  };
+
+  const handleDateChange = (date) => {
+    if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
+      const newDate = date;
+      setDay(newDate);
+      console.log("formatted date in handleDateChange", formatDate(date));
+      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        setObservers(dayJson[0]["observers"]);
+        setComment(dayJson[0]["comment"]);
+        setActions(dayJson[0]["selectedactions"]);
+        setCatchRows(dayJson[0]["id"]);
+        dispatch(resetNotifications());
+      });
+    } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
+      confirmDate();
+      setDay(date);
+      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        setObservers(dayJson[0]["observers"]);
+        setComment(dayJson[0]["comment"]);
+        setActions(dayJson[0]["selectedactions"]);
+        setCatchRows(dayJson[0]["id"]);
+        dispatch(resetNotifications());
+      });
+    }
+  };
+
 
   return (
     <div>
@@ -307,13 +370,17 @@ export const HomePage = () => {
             <Grid container
               alignItems="flex-start"
               spacing={1}>
-              <Grid item xs={12} >
+              <Grid item xs={11} >
                 <Typography variant="h5" component="h2" >
-                  {t("addObservations")}
+                  {t("addObservations")} - {userObservatory.replace("_", " ")}
                 </Typography>
                 <br />
               </Grid>
-
+              <Grid container item xs={1} justify="flex-end">
+                <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                  <FileCopy fontSize="default" />
+                </IconButton>
+              </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
                   <KeyboardDatePicker
@@ -327,26 +394,7 @@ export const HomePage = () => {
                     label={t("date")}
                     value={day}
                     onChange={(date) => {
-                      if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
-                        setDay(date);
-                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-                          setObservers(dayJson[0]["observers"]);
-                          setComment(dayJson[0]["comment"]);
-                          setActions(dayJson[0]["selectedactions"]);
-                          setCatchRows(dayJson[0]["id"]);
-                          dispatch(resetNotifications());
-                        });
-                      } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
-                        confirmDate();
-                        setDay(date);
-                        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-                          setObservers(dayJson[0]["observers"]);
-                          setComment(dayJson[0]["comment"]);
-                          setActions(dayJson[0]["selectedactions"]);
-                          setCatchRows(dayJson[0]["id"]);
-                          dispatch(resetNotifications());
-                        });
-                      }
+                      handleDateChange(date);
                     }}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -368,9 +416,7 @@ export const HomePage = () => {
               </Grid>
 
               <div className={classes.accordionRoot}>
-
                 <br />
-
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMore color="primary" />}
@@ -399,9 +445,9 @@ export const HomePage = () => {
                     aria-controls="activity-content"
                     id="activity-header"
                   >
-                    <Typography className={classes.sectionHeading}>{t("Observation activity")}</Typography>
+                    <Typography className={classes.sectionHeading}>{t("ObservationActivity")}</Typography>
 
-                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("dailyactions")) ? "error" : "inherit" }>
+                    <Typography className={classes.secondaryHeading} color={(errorsInInput("dailyactions")) ? "error" : "inherit"}>
                       {
                         (errorsInInput("dailyactions")) ? t("errorsInObservationActivity")
                           : (dailyActions.attachments > "0" || Object.values(dailyActions).includes(true)) ? t("observationActivityAdded")
@@ -426,7 +472,7 @@ export const HomePage = () => {
                     id="catches-header"
                   >
                     <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
-                    <Typography className={classes.secondaryHeading} color={ (errorsInInput("catches")) ? "error" : "inherit" }>
+                    <Typography className={classes.secondaryHeading} color={(errorsInInput("catches")) ? "error" : "inherit"}>
                       {
                         (errorsInInput("catches")) ? t("errorsInCatches")
                           : (catchRows.length === 0 || catchRows[0].pyydys === "" || catchRows[0].pyyntialue === "") ? t("noCatches")
@@ -531,7 +577,6 @@ export const HomePage = () => {
                           shorthand={shorthand}
                           setShorthand={setShorthand}
                           setSanitizedShorthand={setSanitizedShorthand}
-                          setCodeMirrorHasErrors={setCodeMirrorHasErrors}
                         />
                       </Grid>
                     </Grid>
@@ -576,12 +621,12 @@ export const HomePage = () => {
                           <TableRow id="latestDaysRow" key={i} hover
                             onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
                             <StyledTableCell component="th" scope="row">
-                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
+                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                                 {s.day}
                               </Link>
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
-                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}/${userObservatory}`}>
+                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                                 {s.speciesCount} {t("multipleSpecies")}
                               </Link>
                             </StyledTableCell>
@@ -606,7 +651,7 @@ export const HomePage = () => {
 
               </Grid>
             </Paper>
-            <ErrorPaper codeMirrorHasErrors={codeMirrorHasErrors} />
+            <Notification category="shorthand" />
           </Grid>
         </Grid>
       </Grid>
@@ -620,6 +665,52 @@ export const HomePage = () => {
           {t("formNotSent")}
         </Alert>
       </Snackbar>
+      <Modal
+        open={openCopy}
+        onClose={handleCopyClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Dialog
+          open={openCopy}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("copy")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("chooseCopy")} <br />
+              {t("overwrite")}
+            </DialogContentText>
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox id="copy-observers-box" checked={toCopy.observers} onChange={(event) => handleCopyChange(event.target.name)} name="observers" color="primary" className={classes.checkbox} />}
+              label={t("observers")} labelPlacement="end" />
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox id="copy-comment-box" checked={toCopy.comment} onChange={(event) => handleCopyChange(event.target.name)} name="comment" color="primary" className={classes.checkbox} />}
+              label={t("comment")} labelPlacement="end" />
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox id="copy-activity-box" checked={toCopy.observationActivity} onChange={(event) => handleCopyChange(event.target.name)} name="observationActivity" color="primary" className={classes.checkbox} />}
+              label={t("ObservationActivity")} labelPlacement="end" />
+            <br />
+            <FormControlLabel className={classes.formControlLabel}
+              control={<Checkbox id="copy-catches-box" checked={toCopy.catches} onChange={(event) => handleCopyChange(event.target.name)} name="catches" color="primary" className={classes.checkbox} />}
+              label={t("Catches")} labelPlacement="end" />
+          </DialogContent>
+          <DialogActions>
+            <Button id="confirm-copy-button" onClick={handleCopyConfirm} color="primary" variant="contained">
+              {t("confirm")}
+            </Button>
+            <Button id="cancel-copy-button" onClick={handleCopyClose} color="secondary" variant="contained" autoFocus>
+              {t("cancel")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Modal>
     </div>
   );
+};
+
+HomePage.propTypes = {
+  user: PropTypes.object.isRequired,
+  userObservatory: PropTypes.string.isRequired
 };

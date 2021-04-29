@@ -42,7 +42,6 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Jurmon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
     cy.contains("Jurmo");
-
   });
 
   it("Navigationbar works", function () {

@@ -6,7 +6,7 @@ from application.api.classes.catch.services import set_catch_day_id
 from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
 from flask import jsonify
 
-from datetime import datetime
+from datetime import datetime, date
 
 def addDayFromReq(req):
     observatory_id = getObservatoryId(req['observatory'])
@@ -61,6 +61,8 @@ def getDay(obsday_id):
     return Observatoryday.query.get(obsday_id)
 
 def get_day_without_id(day, observatory):
+    if not isinstance(day, date) and not day == '0NaN.0NaN.NaN':
+        day = datetime.strptime(day, '%d.%m.%Y')
     obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
     res = []
     if not obsday:

@@ -9,7 +9,7 @@ export const setUserObservatory = (observatory) => {
 };
 
 // reducer
-const userObservatoryReducer = (state = {}, action) => {
+const userObservatoryReducer = (state = "", action) => {
   switch (action.type) {
     case "SET_OBSERVATORY":
       return action.data.observatory;
