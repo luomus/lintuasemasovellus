@@ -14,8 +14,6 @@ export const getLogout = async () => {
 };
 
 export const getAuth = async (token, auth_token) => {
-  //req = requests.get('https://apitest.laji.fi/v0/person/'
-  // + personToken + '?access_token=' + AUTH_TOKEN)
   const auth = await axios.get(`https://apitest.laji.fi/v0/person/${token}/?access_token=${auth_token}`);
   return auth;
 };
