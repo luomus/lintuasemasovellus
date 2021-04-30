@@ -55,6 +55,10 @@ const parseTime = (timeString) => {
   return ret;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 39b622fc9836ce457357296255c3fd8ca59784df
 const readyObservation = (observation, userID) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
@@ -63,6 +67,11 @@ const readyObservation = (observation, userID) => {
   return observation;
 };
 
+<<<<<<< HEAD
+=======
+
+//remember to add dayID to periods in backend
+>>>>>>> 39b622fc9836ce457357296255c3fd8ca59784df
 export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
   let pausePeriod = false;
   observationPeriods = [];
@@ -91,6 +100,10 @@ export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
       }
     }
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 39b622fc9836ce457357296255c3fd8ca59784df
   return observationPeriods;
 };
 

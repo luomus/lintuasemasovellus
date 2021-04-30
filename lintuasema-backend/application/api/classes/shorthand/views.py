@@ -45,14 +45,6 @@ def getShorthandByObsPeriod(obsperiod_id):
 
     return jsonify(ret)
 
-@bp.route("/api/deleteShorthand", methods=["DELETE"])
-@login_required
-def shorthand_delete():
-    req = request.get_json()
-    delete_shorthand(req['shorthand_id'])
-    
-    return jsonify(req)
-
 @bp.route('/api/editShorthand/<shorthand_id>', methods=['POST'])
 @login_required
 def shorthand_edit(shorthand_id):
