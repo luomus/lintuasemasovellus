@@ -15,7 +15,6 @@ const invalidShorthand5 = "10:00\nsommolo 1/2 W\n12:00"; //liikaa merkkejä laji
 const invalidShorthand6 = "10:00\nosommol 1/2 W\n12:00"; //liikaa merkkejä lajinimessä
 
 const invalidShorthand7 = "10:00\nsommo 1/2 W\n12:00"; //invalid lajinimi
-const invalidShorthand8 = "10:00\nsommol 1/2 W\n12:00\nsommol 3/4 W \n13:00"; //pariton määrä kellonaikoja
 const invalidShorthand10 = "10:00\nsommol 1/2 W\n12:0\n0";//rivinvaihto väärässä paikassa
 const invalidShorthand11 = "10:00\nsommol 1/2 WW\n12:00"; //virheellinen ilmansuunta
 const invalidShorthand13 = "10.00\nsommol 1/2 W\n11.00\nSommol /4 E\nAnacre 1\"2juv3subad/W\nMeralb /1W, 2/E, 3/4w\n13.00\n07.00\ngrugru 100SW+-, 200 S +++ ,  300 \"W---\nsommol 1/2 W\n08.00";//välikellonaika poistettu
