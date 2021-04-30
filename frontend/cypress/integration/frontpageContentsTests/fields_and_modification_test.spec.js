@@ -47,7 +47,7 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Havainnointiasema");
     cy.get("#navigationbar").click();
     cy.get("#manual").click({ force: true });
-    cy.contains("Lintuaseman valinta");
+    cy.contains("Päivän ja havaintojen lisääminen");
     cy.get("#navigationbar").click();
     cy.get("#frontpage").click({ force: true });
     cy.contains("Lisää havaintoja");
