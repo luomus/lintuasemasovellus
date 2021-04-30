@@ -131,10 +131,6 @@ export const DayDetails = ({ userObservatory }) => {
       .then(res => setDayCatches(res));
   }, [dayId]);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ac2b519d86828fff25f1306710fc7a795dea3672
   const observersOnSubmit = (event) => {
     event.preventDefault();
     if (editedObservers.length !== 0) {

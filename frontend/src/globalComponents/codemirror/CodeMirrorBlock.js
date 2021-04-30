@@ -7,7 +7,6 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import {
   loopThroughCheckForErrors, getErrors, resetErrors
 } from "../../shorthand/newValidations";
-import { Controlled as CodeMirror } from "react-codemirror2";
 import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";

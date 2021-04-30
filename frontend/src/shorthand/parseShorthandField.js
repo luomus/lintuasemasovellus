@@ -63,8 +63,6 @@ const readyObservation = (observation, userID) => {
   return observation;
 };
 
-
-//This implementation should be bulletproof with pauses, since it cleverly skips them
 export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
   let pausePeriod = false;
   observationPeriods = [];
@@ -80,10 +78,11 @@ export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
       observationPeriods.push({ ...observationPeriod });
       observationPeriod["shorthandBlock"] = "";
       observationPeriod["startTime"] = parseTime(row);
+      pausePeriod = false;
     } else if (!pausePeriod){
       if (row.trim() === "tauko"){
+        observationPeriod["shorthandBlock"] = row;
         pausePeriod = true;
-        observationPeriod["shorthandBlock"] = "";
       }
       else if (observationPeriod["shorthandBlock"] === "") {
         observationPeriod["shorthandBlock"] = row;
@@ -121,7 +120,6 @@ export const setDayId = (id) => {
   day["id"] = id;
 };
 
-
 export const loopThroughObservations = (shorthandRows, userID) => {
   let oneBeforeWasTime = false;
   let isPausePeriod = false;
@@ -140,7 +138,6 @@ export const loopThroughObservations = (shorthandRows, userID) => {
         i++;
       }
       if(row.trim() === "tauko"){
-        i--;
         observationsOfPeriod = [];
         isPausePeriod = true;
       } else {

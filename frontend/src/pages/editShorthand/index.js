@@ -161,9 +161,11 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   };
 
   const retrieveShorthand = async (type, location) => {
-    const res = await getShorthandText(dayId, type, location);
-    setDefaultShorthand(res);
-    initializeDefaultShorthand(res);
+    if(type && location){
+      const res = await getShorthandText(dayId, type, location);
+      setDefaultShorthand(res);
+      initializeDefaultShorthand(res);
+    }
   };
 
   const handleClose = () => {
