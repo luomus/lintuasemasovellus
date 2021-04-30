@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import {
   loopThroughCheckForErrors, getErrors, resetErrors
-} from "../../shorthand/validations";
+} from "../../shorthand/newValidations";
 import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
