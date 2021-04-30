@@ -294,7 +294,6 @@ export const HomePage = ({ user, userObservatory }) => {
     let previousDay = new Date(day);
     previousDay.setDate(day.getDate() - 1);
     searchDayInfo(formatDate(previousDay), userObservatory).then((dayJson) => {
-      console.log(dayJson[0]);
       if (dayJson[0]["id"] !== 0) {
         if (toCopy.observers) {
           setObservers(dayJson[0]["observers"]);
@@ -338,7 +337,7 @@ export const HomePage = ({ user, userObservatory }) => {
     if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
       const newDate = date;
       setDay(newDate);
-      console.log("formatted date in handleDateChange", formatDate(date));
+      //console.log("formatted date in handleDateChange", formatDate(date));
       searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
         setObservers(dayJson[0]["observers"]);
         setComment(dayJson[0]["comment"]);
@@ -471,7 +470,7 @@ export const HomePage = ({ user, userObservatory }) => {
                     aria-controls="catches-content"
                     id="catches-header"
                   >
-                    <Typography className={classes.sectionHeading}>{t("Catches")}</Typography>
+                    <Typography className={classes.sectionHeading}>{t("catches")}</Typography>
                     <Typography className={classes.secondaryHeading} color={(errorsInInput("catches")) ? "error" : "inherit"}>
                       {
                         (errorsInInput("catches")) ? t("errorsInCatches")
@@ -694,7 +693,7 @@ export const HomePage = ({ user, userObservatory }) => {
             <br />
             <FormControlLabel className={classes.formControlLabel}
               control={<Checkbox id="copy-catches-box" checked={toCopy.catches} onChange={(event) => handleCopyChange(event.target.name)} name="catches" color="primary" className={classes.checkbox} />}
-              label={t("Catches")} labelPlacement="end" />
+              label={t("catches")} labelPlacement="end" />
           </DialogContent>
           <DialogActions>
             <Button id="confirm-copy-button" onClick={handleCopyConfirm} color="primary" variant="contained">

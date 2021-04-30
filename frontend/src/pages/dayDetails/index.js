@@ -403,7 +403,7 @@ export const DayDetails = ({ userObservatory }) => {
           {/* NET ACTIONS */}
           <Grid item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
-              {t("Catches")}
+              {t("catches")}
             </Typography>
             {(catches.length > 0 && !catchesEditMode)
               ? /* LIST CATCHES */
@@ -412,7 +412,7 @@ export const DayDetails = ({ userObservatory }) => {
                   <TableRow>
                     <TableCell>{t("catchType")}</TableCell>
                     <TableCell align="left">{t("catchArea")}</TableCell>
-                    <TableCell align="left">{t("was open")}</TableCell>
+                    <TableCell align="left">{t("wasOpen")}</TableCell>
                     <TableCell align="left">{t("amount")}</TableCell>
                     <TableCell align="left">{t("netCodes")}</TableCell>
                     <TableCell align="left">{t("length")}</TableCell>
@@ -474,7 +474,7 @@ export const DayDetails = ({ userObservatory }) => {
                 </div>
                 : /* NO CATCHES FOR THAT DAY*/
                 <Typography variant="body1"  >
-                  {t("No catches declared")}
+                  {t("noCatchesDeclared")}
                   <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
                     <Add fontSize="small" />
                   </IconButton>
