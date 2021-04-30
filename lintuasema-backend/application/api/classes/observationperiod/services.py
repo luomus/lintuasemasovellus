@@ -33,7 +33,6 @@ def addObservationperiod(day_id, location, observationType, startTime, endTime):
     
     return { 'id': obspId }
 
-# def editObservationPeriod
 
 def addObservation(observation):
     db.session().add(observation)

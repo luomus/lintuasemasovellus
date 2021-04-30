@@ -55,7 +55,6 @@ const parseTime = (timeString) => {
   return ret;
 };
 
-
 const readyObservation = (observation, userID) => {
   observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
@@ -67,29 +66,33 @@ const readyObservation = (observation, userID) => {
 
 //remember to add dayID to periods in backend
 export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
+  let pausePeriod = false;
   observationPeriods = [];
-  let startTimeEncountered = false;
   for (const row of shorthandRows) {
     if (!row) continue;
-    if (isTime(row) && !startTimeEncountered) {
-      startTimeEncountered = true;
+    if (isTime(row) && observationPeriod["shorthandBlock"] === "") {
       observationPeriod["startTime"] = parseTime(row);
+      pausePeriod = false;
     } else if (isTime(row)) {
-      startTimeEncountered = false;
       observationPeriod["endTime"] = parseTime(row);
       observationPeriod["observationType"] = obsType;
       observationPeriod["location"] = loc;
       observationPeriods.push({ ...observationPeriod });
       observationPeriod["shorthandBlock"] = "";
-    } else {
-      if (observationPeriod["shorthandBlock"] === "") {
+      observationPeriod["startTime"] = parseTime(row);
+      pausePeriod = false;
+    } else if (!pausePeriod){
+      if (row.trim() === "tauko"){
+        observationPeriod["shorthandBlock"] = row;
+        pausePeriod = true;
+      }
+      else if (observationPeriod["shorthandBlock"] === "") {
         observationPeriod["shorthandBlock"] = row;
       } else {
         observationPeriod["shorthandBlock"] = observationPeriod["shorthandBlock"] + "\n" + row;
       }
     }
   }
-
   return observationPeriods;
 };
 
@@ -120,30 +123,40 @@ export const setDayId = (id) => {
 };
 
 export const loopThroughObservations = (shorthandRows, userID) => {
-  let startTimeEncountered = false;
-  let i = 0;
-  const observations = [];
+  let oneBeforeWasTime = false;
+  let isPausePeriod = false;
+  let i = -1;
+  const observations = [];// [ { periodOrderNum: i, shorthandRow: row, subObservations: []  }]
+  let observationsOfPeriod = []; //Acts as a helper cache, since some pause period observations will otherwise be saved (which would be bad).
   for (const row of shorthandRows) {
     if (!row) continue;
-    if (isTime(row) && !startTimeEncountered) {
-      startTimeEncountered = true;
-    } else if (isTime(row)) {
-      startTimeEncountered = false;
-      i++;
-    } else {
-      const parsed = parse(row);
-      let observationObject = { subObservations: [] }; // create object of one observation (= shorthand row)
-      observationObject["periodOrderNum"] = String(i);
-
-      for (const sub of parsed.osahavainnot) {
-        observation = sub;
-        observation.species = parsed.species;
-        obsCountersToNum();
-        const obsToAdd = readyObservation(observation, userID);
-        observationObject.subObservations.push(obsToAdd);
+    if (isTime(row)) {
+      oneBeforeWasTime = true;
+      observations.push(...observationsOfPeriod);
+      observationsOfPeriod = [];
+      isPausePeriod = false;
+    } else if(!isPausePeriod){
+      if (oneBeforeWasTime) {
+        i++;
       }
-      observations.push(observationObject); // add observation to list of observations
-      resetAll();
+      if(row.trim() === "tauko"){
+        observationsOfPeriod = [];
+        isPausePeriod = true;
+      } else {
+        oneBeforeWasTime = false;
+        const parsed = parse(row);
+        let observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
+        observationObject["periodOrderNum"] = String(i);
+        for (const sub of parsed.osahavainnot) {
+          observation = sub;
+          observation.species = parsed.species;
+          obsCountersToNum();
+          const obsToAdd = readyObservation(observation, userID);
+          observationObject.subObservations.push(obsToAdd);
+        }
+        observationsOfPeriod.push(observationObject);
+        resetAll();
+      }
     }
   }
   return observations;

@@ -70,7 +70,7 @@ export const setCatches = (rowData) => {
   if (rowData.length === 0 || !rowData) {
     return {
       type: "SET_ROWS",
-      data: []//initialState
+      data: []
     };
   } else {
     return {
