@@ -201,8 +201,6 @@ export const HomePage = ({ user, userObservatory }) => {
 
   useEffect(() => {
     if (stations.length > 0 && userObservatory !== "") {
-      console.log("stations: ", stations);
-      console.log("userObservatory: ", userObservatory);
       setTypes(
         stations
           .find(s => s.observatory === userObservatory)
@@ -340,7 +338,8 @@ export const HomePage = ({ user, userObservatory }) => {
       //console.log("formatted date in handleDateChange", formatDate(date));
       searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
         setObservers(dayJson[0]["observers"]);
-        setComment(dayJson[0]["comment"]);
+        dayJson[0]["comment"] === null ? setComment("") :
+          setComment(dayJson[0]["comment"]);
         setActions(dayJson[0]["selectedactions"]);
         setCatchRows(dayJson[0]["id"]);
         dispatch(resetNotifications());
@@ -350,7 +349,8 @@ export const HomePage = ({ user, userObservatory }) => {
       setDay(date);
       searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
         setObservers(dayJson[0]["observers"]);
-        setComment(dayJson[0]["comment"]);
+        dayJson[0]["comment"] === null ? setComment("") :
+          setComment(dayJson[0]["comment"]);
         setActions(dayJson[0]["selectedactions"]);
         setCatchRows(dayJson[0]["id"]);
         dispatch(resetNotifications());

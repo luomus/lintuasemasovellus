@@ -51,19 +51,16 @@ describe("FirstpageFieldsAndModification", function () {
     cy.get("#navigationbar").click();
     cy.get("#frontpage").click({ force: true });
     cy.contains("Lisää havaintoja");
-
   });
 
   it("Catch rows can be added and removed", function () {
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
-
     cy.get("#0").contains("Pyydys")
     cy.get("#0").contains("Pyyntialue")
     cy.get("#plus-catch-row-button").click();
     cy.get("#0 #removeButton").click();
     cy.get("#1").should("not.exist");
-
   });
 
 });
