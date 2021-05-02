@@ -72,7 +72,6 @@ def add_everything():
         db.session().add(obsp)
 
         # observation period ID
-        # tämän voisi suorittaa tyylikkäämmin parametrina pelkkä obsp
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
 
         # Save original shorthand block of observation period

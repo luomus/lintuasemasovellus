@@ -45,7 +45,6 @@ def getDaysObservationPeriods(day_id):
 @login_required
 def delete_all():
     req = request.get_json()
-    print('****reg***', req)
     delete_observationperiods(req)
     
     return jsonify(req)
