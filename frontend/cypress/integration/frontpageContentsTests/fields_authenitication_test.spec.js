@@ -194,17 +194,6 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#selectCatchArea").click();
     cy.contains("Vakioverkot K").click();
     cy.should("not.contain", "Lisää ainakin yksi vakioverkko.");
-
-    // cy.get("#plus-catch-row-button").click();
-    // cy.get("#1 #selectCatchType").click();
-    // cy.contains("Vakioverkko").click({ force: true });
-    // cy.get("#1 #selectCatchArea").click();
-    // cy.contains("Vakioverkot K").click({ force: true });
-    // cy.contains("on ilmoitettu useampaan kertaan");
-    // cy.get("#0 #removeButton").click();
-    // cy.should("not.contain", "on ilmoitettu useampaan kertaan");
-
-    //cy.get("#selectCatchCount").clear();
     cy.get("#selectCatchCount").type("2");
     cy.contains("Pyydyksen 'Vakioverkot K' lukumäärä voi olla korkeintaan 1.");
     cy.get("#saveButton").should("be.disabled");

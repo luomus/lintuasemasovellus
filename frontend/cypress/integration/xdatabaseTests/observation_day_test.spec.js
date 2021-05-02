@@ -26,28 +26,28 @@ describe("AddObservationDay", function () {
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get("#observers").clear();
+    cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
     cy.get("#comment").clear();
+    cy.get("#comment").type(comment);
     cy.get("#activity-header").click();
     cy.get("#attachments").clear();
     cy.wait(1000);
-    cy.get("#observers").type(observer);
-    cy.get("#comment").type(comment);
     cy.get("[name=standardRing]").click();
     cy.get("#attachments").type("1");
-    cy.get("#selectType").click().get("#Vakio").click();
-    cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
     cy.get("#selectCatchType").click();
-    cy.contains("Vakioverkko").click();
+    cy.get(".MuiList-root").contains("Vakioverkko").click();
     cy.get("#selectCatchArea").click();
-    cy.contains("Vakioverkot K").click();
+    cy.get(".MuiList-root").contains("Vakioverkot K").click();
     cy.get("#opened").clear();
     cy.get("#opened").type(opened);
     cy.get("#closed").clear();
     cy.get("#closed").type(closed);
     cy.get("#netCodes").type(netCodes);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
@@ -94,27 +94,51 @@ describe("AddObservationDay", function () {
     cy.get("#commentField").clear();
     cy.get("#commentField").type(changedComment);
     cy.get("#commentSubmit").click();
+    cy.get('[alt="haukka"]').click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Helmi Havainnoitsija").click();
     cy.contains(changedComment);
     cy.contains(comment).should("not.exist");
 
+    // change comment to be empty
+    cy.get("#commentButton").click();
+    cy.get("#commentField").clear();
+    cy.get("#commentSubmit").click();
+    cy.get('[alt="haukka"]').click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Helmi Havainnoitsija").click();
+    cy.contains(changedComment).should("not.exist");
+
+    // change comment back to original
     cy.get("#commentButton").click();
     cy.get("#commentField").clear();
     cy.get("#commentField").type(comment);
     cy.get("#commentSubmit").click();
+    cy.get('[alt="haukka"]').click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Helmi Havainnoitsija").click();
     cy.contains(comment);
     cy.contains(changedComment).should("not.exist");
 
+    // change name of observer
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(changedObserver);
     cy.get("#observerSubmit").click();
+    cy.get('[alt="haukka"]').click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Aarni Apulaishavainnoitsija").click();
     cy.contains(changedObserver);
     cy.contains(observer).should("not.exist");
 
+    // change observer back to original
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(observer);
     cy.get("#observerSubmit").click();
+    cy.get('[alt="haukka"]').click();
+    cy.contains("Näytä päivät").click();
+    cy.contains("Helmi Havainnoitsija").click();
     cy.contains(observer);
     cy.contains(changedObserver).should("not.exist");
   });
