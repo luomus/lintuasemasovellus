@@ -264,9 +264,8 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   const saveButtonDisabled = () => {
-    if (observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput()) {
+    if (observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
-    }
     else
       return false;
   };
@@ -338,6 +337,7 @@ export const HomePage = ({ user, userObservatory }) => {
       setDay(newDate);
       //console.log("formatted date in handleDateChange", formatDate(date));
       searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        setObservers(dayJson[0]["observers"]);
         dayJson[0]["comment"] === null ? setComment("") :
           setComment(dayJson[0]["comment"]);
         setActions(dayJson[0]["selectedactions"]);

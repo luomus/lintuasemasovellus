@@ -6,11 +6,9 @@ export const getDays = async () => {
 };
 
 export const editComment = async (dayId, comment) => {
-  console.log("comment", comment);
   if (comment !== "") {
     return await axios.post(`/api/editComment/${dayId}/${comment}`);
   }
-  console.log("yay");
   return await axios.post(`/api/removeComment/${dayId}`);
 };
 

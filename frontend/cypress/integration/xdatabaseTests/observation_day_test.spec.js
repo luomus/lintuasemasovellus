@@ -100,6 +100,7 @@ describe("AddObservationDay", function () {
     cy.contains(changedComment);
     cy.contains(comment).should("not.exist");
 
+    // change comment to be empty
     cy.get("#commentButton").click();
     cy.get("#commentField").clear();
     cy.get("#commentSubmit").click();
@@ -108,6 +109,7 @@ describe("AddObservationDay", function () {
     cy.contains("Helmi Havainnoitsija").click();
     cy.contains(changedComment).should("not.exist");
 
+    // change comment back to original
     cy.get("#commentButton").click();
     cy.get("#commentField").clear();
     cy.get("#commentField").type(comment);
@@ -118,16 +120,18 @@ describe("AddObservationDay", function () {
     cy.contains(comment);
     cy.contains(changedComment).should("not.exist");
 
+    // change name of observer
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(changedObserver);
     cy.get("#observerSubmit").click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
-    cy.contains("Aarni Apulaishavainnoistsija").click();
+    cy.contains("Aarni Apulaishavainnoitsija").click();
     cy.contains(changedObserver);
     cy.contains(observer).should("not.exist");
 
+    // change observer back to original
     cy.get("#observerButton").click();
     cy.get("#observerField").clear();
     cy.get("#observerField").type(observer);

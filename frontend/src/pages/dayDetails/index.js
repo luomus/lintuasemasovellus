@@ -144,8 +144,6 @@ export const DayDetails = ({ userObservatory }) => {
   const commentOnSubmit = (event) => {
     event.preventDefault();
     setComment(editedComment);
-    console.log("edited comment", editedComment);
-    console.log(typeof (editedComment));
     editComment(dayId, editedComment)
       .then(dayJson => setDayId(dayJson.data.id));
     setCommentForm(false);
