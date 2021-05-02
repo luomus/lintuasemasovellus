@@ -338,7 +338,6 @@ export const HomePage = ({ user, userObservatory }) => {
       setDay(newDate);
       //console.log("formatted date in handleDateChange", formatDate(date));
       searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-        console.log(dayJson);
         dayJson[0]["comment"] === null ? setComment("") :
           setComment(dayJson[0]["comment"]);
         setActions(dayJson[0]["selectedactions"]);

@@ -141,6 +141,12 @@ def list_days():
 
     return jsonify(ret)
 
+@bp.route('/api/removeComment/<obsday_id>', methods=['POST'])
+@login_required
+def remove_comment(obsday_id):
+    ret = update_comment(obsday_id, null)
+
+    return jsonify(ret)
 
 @bp.route('/api/editComment/<obsday_id>/<comment>', methods=['POST'])
 @login_required
