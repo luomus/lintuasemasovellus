@@ -41,12 +41,3 @@ def getAllLocations():
         data = json.load(json_file)
         obs = data["observatories"] 
     return jsonify(obs)
-
-def editLocation(observatoryname, locationname):
-    req = request.get_json()
-    newLocName = req['editedname']
-    obs = db.session.query(Observatory).filter(name = observatoryname).first()
-    location = db.session.query(Location).filter(observatory_id = obs.id, name = locationname).first()
-    location.name = newLocName    
-    db.session.commit()
-    return req    
