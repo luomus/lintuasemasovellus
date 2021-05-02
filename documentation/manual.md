@@ -62,7 +62,7 @@ Mikäli jaksojen väliin tulee taukoja, muista määritellä aiemman jakson lopp
 
 &nbsp;&nbsp;&nbsp;_12:30_
 
-Tauon voi myös merkitä erikseen.
+Tauon voi myös merkitä erikseen. (Pelkää taukoa ilman varsinaisia havaintojaksoja ei kuitenkaan voi ilmoittaa.)
 
 &nbsp;&nbsp;&nbsp;_11:00_
 
@@ -73,6 +73,20 @@ Tauon voi myös merkitä erikseen.
 &nbsp;&nbsp;&nbsp;_grugru 3ad/2juv/5subad s +-_
 
 &nbsp;&nbsp;&nbsp;_12:00_
+
+Jakso, jollon havainnointia suoritettiin, mutta ei tehty yhtään havaintoa, voidaan ilmoittaa viivalla:
+
+&nbsp;&nbsp;&nbsp;_11:00_
+
+&nbsp;&nbsp;&nbsp;-
+
+&nbsp;&nbsp;&nbsp;_11:30_
+
+&nbsp;&nbsp;&nbsp;_grugru 3ad/2juv/5subad s +-_
+
+&nbsp;&nbsp;&nbsp;_12:00_
+
+<br/>
 
 Pikakirjoituslomake ilmoittaa pikakirjoituksessa ilmenevistä virheistä. Virheet näkyvät pikakirjoituskentän vasemmassa reunassa varoituskolmioina virheellisten rivien kohdalla. Lisäksi sivun oikeaan laitaan ilmestyy keltainen laatikko, jossa kuvaillaan löydetyt virheet. 
 
