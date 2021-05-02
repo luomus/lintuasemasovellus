@@ -111,6 +111,9 @@ const resources = {
       "loading": "Ladataan...",
 
       // notifications & errors
+      "invalidDate": "Virheellinen päivämäärä",
+      "maxDateError": "Päivämäärä on liian suuri",
+      "minDateError": "Päivämäärä on liian pieni",
       "periodSaved": "Lomake tallennettu tietokantaan",
       "periodNotSaved": "Lomakkeen tallennuksessa ongelmia.",
       "lineError": "Virhe rivillä ",

@@ -1,6 +1,9 @@
 import { myBeforeEach } from "../methods.js";
 
 const date = "01.01.2020";
+const largeDate = "01.01.5020";
+const smallDate = "01.01.1020";
+const invalidDate = "01.01.020";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
@@ -104,6 +107,37 @@ describe("FieldsAndAuthenticationTest", function () {
 
   });
 
+  it.only("Incorrect date and no observers prevent saving", function () {
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(largeDate);
+    cy.get("#observers").clear();
+    cy.get("#activity-header").click();
+    cy.get("#attachments").clear();
+    cy.wait(1000);
+    cy.get("#observers").type(observer);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.get("#saveButton").should("be.disabled");
+    cy.contains("Päivämäärä on liian suuri");
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(smallDate);
+    cy.get("#saveButton").should("be.disabled");
+    cy.contains("Päivämäärä on liian pieni");
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(invalidDate);
+    cy.get("#saveButton").should("be.disabled");
+    cy.contains("Virheellinen päivämäärä");
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get("#saveButton").should("not.be.disabled");
+    cy.should("not.contain", "Virheellinen päivämäärä");
+    cy.should("not.contain", "Päivämäärä on liian suuri");
+    cy.should("not.contain", "Päivämäärä on liian pieni");
+
+
+  });
+
   it("Error messaging is correct", function () {
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
@@ -157,7 +191,6 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#opened").clear();
     cy.get("#opened").type(opened);
     cy.should("not.contain", "suljetuksi ennen avausaikaa");
-
     cy.get("#netCodes").type(netCodes);
     cy.get("#saveButton").should("not.be.disabled");
 
@@ -199,6 +232,5 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#saveButton").should("be.disabled");
 
   });
-
 
 });
