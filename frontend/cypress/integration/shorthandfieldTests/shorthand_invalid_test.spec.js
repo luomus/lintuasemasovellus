@@ -27,6 +27,8 @@ const invalidShorthand17 = "-\n10:00\nsommol 1/2 W\n12:00"; //tyhjä ennen aikoj
 const invalidShorthand18 = "10:00\nsommol 1/2 W\n12:00\n-"; //tyhjä aikojen jälkeen
 const invalidShorthand19 = "tauko\n10:00\nsommol 1/2 W\n12:00"; //tauko ennen aikoja
 const invalidShorthand20 = "10:00\nsommol 1/2 W\n12:00\ntauko"; //tauko aikojen jälkeen
+const invalidShorthand21 = "10:00\ntauko\n-\n12:00"; //tauko ja tyhjä samassa
+const invalidShorthand22 = "10:00\n-\ntauko\n12:00"; //tyhjä ja tauko samassa
 
 
 const shorthands = [invalidShorthand0, invalidShorthand1,

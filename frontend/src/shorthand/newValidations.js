@@ -64,6 +64,16 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
         errors.push([rowNumber, "startTimeMissing"]);
       }
 
+      // Push error, if tauko is already active
+      if (pauseIsActive) {
+        errors.push([rowNumber, "pauseAlreadyActive"]);
+      }
+
+      // Push error, if period should be empty
+      if (emptyPeriod) {
+        errors.push([rowNumber, "noPauseDuringEmptyPeriod"]);
+      }
+
       // Push error, if period contains something before pause line
       if (periodContainsLines) {
         errors.push([rowNumber, "noObservationsDuringPause"]);
@@ -80,6 +90,16 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       // Push error, if doesn't start with time
       if (!timeEncountered) {
         errors.push([rowNumber, "startTimeMissing"]);
+      }
+
+      // Push error, if is already marked empty
+      if (emptyPeriod) {
+        errors.push([rowNumber, "alreadyEmpty"]);
+      }
+
+      // Push error, if period should be pause
+      if (pauseIsActive) {
+        errors.push([rowNumber, "noEmptyDuringPause"]);
       }
 
       // Push error, if period contains something before empty line
