@@ -10,6 +10,8 @@ let errors = [];
  */
 export const loopThroughCheckForErrors = (shorthandRawText) => {
   const lines = shorthandRawText.trim().split(/\n/);
+  let shortHandContainsMoreThanTimes = false;
+  let emptyPeriod = false;
   let timeEncountered = false;
   let observationsEncountered = false;
   let endsWithTime = true;
@@ -50,6 +52,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
         periodStartTime = parsedTime;
         periodContainsLines = false;
         pauseIsActive = false;
+        emptyPeriod = false;
       }
 
     } else if (line.trim() === "tauko") {
@@ -69,9 +72,30 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       pauseIsActive = true;
       periodStartTime = null;
 
+    } else if (line.trim() === "-") {
+
+      // CHECK EMPTY
+
+      // Push error, if doesn't start with time
+      if (!timeEncountered) {
+        errors.push([rowNumber, "startTimeMissing"]);
+      }
+
+      // Push error, if period contains something before empty line
+      if (periodContainsLines) {
+        errors.push([rowNumber, "noObservationsDuringEmptyPeriod"]);
+      }
+
+      emptyPeriod = true;
+
     } else {
 
       // CHECK OTHER LINES
+
+      // Push error, if period has been marked empty
+      if(emptyPeriod) {
+        errors.push([rowNumber, "noObservationsDuringEmptyPeriod"]);
+      }
 
       // Push error, if doesn't start with time
       if (!timeEncountered) {
@@ -93,6 +117,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       resetAll();
 
       periodContainsLines = true;
+      shortHandContainsMoreThanTimes = true;
       endsWithTime = false;
 
     }
@@ -103,8 +128,12 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
   }
 
   // Push error if doesn't end with time
-  if (observationsEncountered && !endsWithTime) {
+  if (!endsWithTime && observationsEncountered) {
     errors.push([rowNumber - 1, "mustEndWithTime"]);
+  }
+
+  if (!shortHandContainsMoreThanTimes && shorthandRawText){
+    errors.push([rowNumber - 1, "noObservations"]);
   }
 
   return ret;
