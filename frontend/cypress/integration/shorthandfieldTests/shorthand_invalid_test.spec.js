@@ -29,14 +29,17 @@ const invalidShorthand19 = "tauko\n10:00\nsommol 1/2 W\n12:00"; //tauko ennen ai
 const invalidShorthand20 = "10:00\nsommol 1/2 W\n12:00\ntauko"; //tauko aikojen jälkeen
 const invalidShorthand21 = "10:00\ntauko\n-\n12:00"; //tauko ja tyhjä samassa
 const invalidShorthand22 = "10:00\n-\ntauko\n12:00"; //tyhjä ja tauko samassa
-
+const invalidShorthand23 = "10:00\nsommol 1W/\n10:30"; //ilmansuunta ennen lukumäärän loppua
+const invalidShorthand24 = "10:00\ngrugru 100-200SW+-\n10:30"; //ohituspuoli välissä ilman pilkkua
+const invalidShorthand25 = "10:00\ngrugru 100SW ,,, ,200S\n10:30"; //liikaa pilkkuja
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
   invalidShorthand6, invalidShorthand7, invalidShorthand8, invalidShorthand9,
   invalidShorthand10, invalidShorthand11, invalidShorthand12, invalidShorthand13,
   invalidShorthand14, invalidShorthand15, invalidShorthand16, invalidShorthand17,
-  invalidShorthand18, invalidShorthand19, invalidShorthand20];
+  invalidShorthand18, invalidShorthand19, invalidShorthand20, invalidShorthand21,
+  invalidShorthand22, invalidShorthand23, invalidShorthand24, invalidShorthand25];
 
 describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
   beforeEach(function () {
@@ -48,6 +51,12 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#comment-header").click();
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get("#observers").clear();
+    cy.get("#observers").type(observer);
+    cy.get("#comment").clear();
+    cy.get("#comment").type(comment);
 
     for (var i = 0; i < shorthands.length; i++) {
 
@@ -58,20 +67,8 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
           editor[0].CodeMirror.setValue("");
         });
 
-      cy.get("#date-picker-inline").clear();
-      cy.get("#date-picker-inline").type(date);
-
-      cy.get("#observers").clear();
-      cy.get("#observers").type(observer);
-
-      cy.get("#comment").clear();
-      cy.get("#comment").type(comment);
-
-      cy.get("#selectType").click().get("#Vakio").click();
-      cy.get("#selectLocation").click().get("#Bunkkeri").click();
-
       cy.get(".CodeMirror textarea").type(shorthands[i], { force: true });
-      cy.wait(1000);
+      cy.wait(1500);
       cy.get("#saveButton").should("be.disabled");
     }
   });

@@ -1,5 +1,5 @@
 import { parse, resetAll } from "./shorthand";
-import { isTime, parseTime } from "./timeHelper.js";
+import { isTime, parseTime, parseTimeForComparison } from "./timeHelper.js";
 
 let errors = [];
 
@@ -46,7 +46,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       }
 
       // Push error, if time is before current start time
-      if (periodStartTime && (periodStartTime > parsedTime)) {
+      if (periodStartTime && (parseTimeForComparison(periodStartTime) > parseTimeForComparison(parsedTime))) {
         errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
       } else {
         periodStartTime = parsedTime;

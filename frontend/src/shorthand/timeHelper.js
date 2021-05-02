@@ -15,3 +15,15 @@ export const parseTime = (timeString) => {
   }
   return ret;
 };
+
+export const parseTimeForComparison = (timeString) => {
+  let ret = 0;
+  let tens = 1;
+  for (let i = timeString.length - 1; i >= 0; i--) {
+    if (!timeString[Number(i)] === ".") {
+      ret += timeString[Number(i)] * tens;
+      tens *= 10;
+    }
+  }
+  return ret;
+};
