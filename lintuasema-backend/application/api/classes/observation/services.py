@@ -99,45 +99,6 @@ def parseCountString(obs):
 
     return countString
     
-def addObservationToDb(req):
-    birdCount = (req['adultUnknownCount'] 
-               + req['adultFemaleCount'] 
-               + req['adultMaleCount'] 
-               + req['juvenileUnknownCount'] 
-               + req['juvenileFemaleCount'] 
-               + req['juvenileMaleCount'] 
-               + req['subadultUnknownCount'] 
-               + req['subadultFemaleCount'] 
-               + req['subadultMaleCount'] 
-               + req['unknownUnknownCount'] 
-               + req['unknownFemaleCount'] 
-               + req['unknownMaleCount'])
-
-    observation = Observation(species=req['species'],
-        adultUnknownCount=req['adultUnknownCount'],
-        adultFemaleCount=req['adultFemaleCount'],
-        adultMaleCount=req['adultMaleCount'],
-        juvenileUnknownCount=req['juvenileUnknownCount'],
-        juvenileFemaleCount=req['juvenileFemaleCount'],
-        juvenileMaleCount=req['juvenileMaleCount'],
-        subadultUnknownCount=req['subadultUnknownCount'],
-        subadultFemaleCount=req['subadultFemaleCount'],
-        subadultMaleCount=req['subadultMaleCount'],
-        unknownUnknownCount=req['unknownUnknownCount'],
-        unknownFemaleCount=req['unknownFemaleCount'],
-        unknownMaleCount=req['unknownMaleCount'],
-        total_count = birdCount,
-        direction=req['direction'],
-        bypassSide=req['bypassSide'],
-        notes=req['notes'],
-        observationperiod_id=req['observationperiod_id'],
-        shorthand_id=req['shorthand_id'],
-        account_id=req['account_id'])
-    
-    db.session().add(observation)
-    db.session().commit()
-
-    return jsonify(req)
 
 def deleteObservation(shorthand_id):
     observation = Observation.query.filter_by(shorthand_id).first()

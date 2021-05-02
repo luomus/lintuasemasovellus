@@ -9,31 +9,6 @@ from application.db import db, prefix
 from sqlalchemy.sql import text
 
 
-def add_shorthand(req):
-    shorthand = Shorthand(shorthandblock=req['block'], observationperiod_id=req['observationperiod_id'])
-    db.session().add(shorthand)
-    db.session().commit()
-
-    shorthand_id = Shorthand.query.filter_by(shorthandblock=req['block'], observationperiod_id=req['observationperiod_id']).first().id
-
-    return {'id': shorthand_id}
-
-def get_shorthands():
-    shorthands = Shorthand.query.filter(is_deleted=0).all()
-    ret = []
-    for shorthand in shorthands:
-        ret.append({'id': shorthand.id, 'block': shorthand.shorthandblock,
-                   'observationperiod_id': shorthand.observationperiod_id})
-
-    return ret
-
-def get_shorthand_by_id(shorthand_id):
-    shorthand = Shorthand.query.get(shorthand_id)
-    ret = []
-    ret.append({ 'id': shorthand.id, 'block': shorthand.shorthandblock, 'observationperiod_id': shorthand.observationperiod_id})
-
-    return ret
-
 def get_shorthands_by_obsperiod(obsperiod_id):
     shorthandblock = Shorthand.query.filter(Shorthand.observationperiod_id == obsperiod_id, Shorthand.is_deleted == 0).order_by(Shorthand.id).first()
     ret = []
@@ -41,21 +16,6 @@ def get_shorthands_by_obsperiod(obsperiod_id):
         ret.append({ 'id': shorthandblock.id, 'shorthandBlock': shorthandblock.shorthandblock })
     
     return ret
-
-def edit_shorthand(shorthand_id, new_block):
-    shorthand_old=Shorthand.query.get(shorthand_id)
-    shorthand_new = Shorthand(shorthandblock = new_block, observationperiod_id = shorthand_old.observationperiod_id)
-    shorthand_old.is_deleted = 1
-    deleteObservation(shorthand_id)
-    db.session().add(shorthand_new)
-    db.session().commit()
-    id = str(shorthand_new.id)
-    return id
-
-def setShorthandPerDayId(day_id_old, day_id_new):
-    shorthand = Shorthand.query.filter_by(observatoryday_id = day_id_old).all()
-    for sh in shorthand:
-        sh.observatoryday_id = day_id_new
 
 def delete_shorthands_by_obsperiod(obsperiod_id):
     shorthands = get_shorthands_by_obsperiod(obsperiod_id)

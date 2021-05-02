@@ -61,7 +61,6 @@ def getSessionToken():
 @bp.route('/loginRedirect', methods=['POST', 'GET'])
 def login():
     return redirect('https://fmnh-ws-test.it.helsinki.fi/laji-auth/login?target=%s&redirectMethod=GET&next=' % (TARGET))
-    # return redirect('https://login.laji.fi/login?target=%s&redirectMethod=POST&next=/index' % (TARGET))
 
 @bp.route('/api/getUser', methods=['GET'])
 def getcurrentUser():

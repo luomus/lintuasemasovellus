@@ -45,7 +45,6 @@ def getDaysObservationPeriods(day_id):
 @login_required
 def delete_all():
     req = request.get_json()
-    print('****reg***', req)
     delete_observationperiods(req)
     
     return jsonify(req)
@@ -93,7 +92,6 @@ def save_edited_observationperiods():
 
         #Save observation related to this period
         for observation in observations: #observation = { periodOrderNum: i, subObservations: [] }
-            #print(observation['periodOrderNum'])
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:
