@@ -3,19 +3,10 @@ from flask import request, jsonify
 from flask_login import login_required
 
 from application.api.classes.observation.models import Observation
-from application.api.classes.observation.services import parseCountString, addObservationToDb, getDaySummary, getAllObservations, getObservationByPeriod, deleteObservations
+from application.api.classes.observation.services import parseCountString, getDaySummary, getAllObservations, getObservationByPeriod, deleteObservations
 
 from application.api import bp
 from application.db import db
-
-@bp.route('/api/addObservation', methods=['POST'])
-@login_required
-def addObservation():
-    req = request.get_json()
-    
-    addObservationToDb(req)
-
-    return jsonify(req)
 
 
 @bp.route('/api/getObservations', methods=["GET"])
