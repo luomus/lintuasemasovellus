@@ -386,7 +386,9 @@ export const HomePage = ({ user, userObservatory }) => {
                     className={classes.datePicker}
                     required
                     disableToolbar
-                    invalidDateMessage
+                    invalidDateMessage={t("invalidDate")}
+                    minDateMessage={t("minDateError")}
+                    maxDateMessage={t("maxDateError")}
                     variant="inline"
                     format="dd.MM.yyyy"
                     id="date-picker-inline"
