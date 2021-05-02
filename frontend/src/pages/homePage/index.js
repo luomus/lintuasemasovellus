@@ -5,7 +5,7 @@ import React, {
 import {
   Paper, Grid, Modal, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
   Typography, TextField, Button, Checkbox, FormControlLabel,
-  FormControl, InputLabel, Select, MenuItem, Snackbar,
+  FormControl, InputLabel, Select, MenuItem, Snackbar, CircularProgress,
   Table, TableRow, TableBody, TableCell, withStyles, Accordion,
   AccordionSummary, AccordionDetails, IconButton
 } from "@material-ui/core/";
@@ -92,6 +92,10 @@ const useStyles = makeStyles((theme) => ({
   catchRowEven: {
     backgroundColor: "#f7f7f7",
   },
+  loadingIcon: {
+    padding: "0px 5px 0px 0px",
+    margin: "0px 0px 10px 10px"
+  }
 }
 ));
 
@@ -140,6 +144,7 @@ export const HomePage = ({ user, userObservatory }) => {
   const [location, setLocation] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [formSent, setFormSent] = useState(false);
+  const [loadingIcon, setLoadingIcon] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
   const [latestDays, setLatestDays] = useState([]);
   const [shorthand, setShorthand] = useState("");
@@ -220,6 +225,7 @@ export const HomePage = ({ user, userObservatory }) => {
   }, [stations, userObservatory]);
 
   const sendData = async () => {
+    setLoadingIcon(true);
     const rows = sanitizedShorthand;
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
     const observationsToSend = loopThroughObservations(rows, user.id);
@@ -235,7 +241,6 @@ export const HomePage = ({ user, userObservatory }) => {
       observationPeriods: observationPeriodsToSend,
       observations: observationsToSend
     };
-    console.log("data", data);
 
     try {
       await sendEverything(data);
@@ -248,6 +253,7 @@ export const HomePage = ({ user, userObservatory }) => {
       console.error(error.message);
       setErrorHappened(true);
     }
+    setLoadingIcon(false);
     setDisabled(false);
   };
 
@@ -335,7 +341,6 @@ export const HomePage = ({ user, userObservatory }) => {
     if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
       const newDate = date;
       setDay(newDate);
-      //console.log("formatted date in handleDateChange", formatDate(date));
       searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
         setObservers(dayJson[0]["observers"]);
         dayJson[0]["comment"] === null ? setComment("") :
@@ -597,6 +602,9 @@ export const HomePage = ({ user, userObservatory }) => {
                 >
                   {disabled ? t("loading") : t("save")}
                 </Button>
+                { (loadingIcon) &&
+                  <CircularProgress className={classes.loadingIcon} color="primary"/>
+                }
               </Grid>
 
             </Grid>

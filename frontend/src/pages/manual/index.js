@@ -53,7 +53,7 @@ export const UserManual = () => {
           <br /> <br />Havaintoaktiivisuus valitaan valintapainikkeilla tai kirjoittamalla pyydetty numeroarvo.
           <br /> <br />Pyydystietojen kirjaaminen aloitetaan valitsemalla pyydyksen tyyppi ja pyyntialue, minkä jälkeen käyttäjältä kysytään kyseiseen pyydykseen liittyvät lisätiedot.
           <br /> <br />Varsinaisia havaintoja lisätäkseen käyttäjän tulee valita lisättävien havaintojaksojen tyyppi sekä havaintopaikka, jossa havaintojaksot on kirjattu. Nämä valinnat tapahtuvat pudotusvalikoista pikakirjoituslomakkeen yläpuolelta.
-          <br /> <br />Havaintojaksot ja niiden sisältämät havaintojaksot kirjataan pikakirjoituskenttään. Havainnot ja jaksot syötetään pikakirjoitusmuodossa:
+          <br /> <br />Havaintojaksot ja niiden sisältämät havaintojaksot kirjataan kronologisessa järjestyksessä pikakirjoituskenttään. Havainnot ja jaksot syötetään pikakirjoitusmuodossa:
           <br />(havaintojaksun alku- ja loppuaika sekä näiden välissä yksi laji per rivi)
         </div>
         <em>

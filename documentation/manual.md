@@ -36,7 +36,7 @@ Käyttäjän tulee valita lisättävien havaintojaksojen tyyppi sekä havaintopa
 Havaintojaksot ja niiden sisältämät havaintojaksot kirjataan pikakirjoituskenttään. Havainnot ja jaksot syötetään pikakirjoitusmuodossa:
 (Yksi laji per rivi, kullekin jaksolle aloitus- ja lopetusaika, joiden väliin havainnot tulevat)
 
-Mikäli ilmoitetaan peräkkäisiä jaksoja, eli edellisen jakson loppuaika on sama kuin seuraavan jakson alkuaika, riittää, että kellonaika ilmoitetaan vain kerran (sen saa halutessaan tosin merkata kahdesti peräkkäin)
+Mikäli ilmoitetaan peräkkäisiä jaksoja, eli edellisen jakson loppuaika on sama kuin seuraavan jakson alkuaika, riittää, että kellonaika ilmoitetaan vain kerran (sen saa halutessaan tosin merkata kahdesti peräkkäin). Jaksojen tulee olla kronologisessa järjestyksessä.
 
 &nbsp;&nbsp;&nbsp;_10:00_
 
