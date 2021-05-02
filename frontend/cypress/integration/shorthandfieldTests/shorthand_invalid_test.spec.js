@@ -23,12 +23,18 @@ const invalidShorthand13 = "10:00\n-\ngrugru 2\n12:00"; //havaintoja periodilla 
 const invalidShorthand14 = "10:00\ngrugru 2\n-\n12:00"; //havaintoja periodilla ennen tyhjää merkkiä
 const invalidShorthand15 = "10:00\ntauko\nsommol 1/2 W\n12:00"; //havaintoja periodilla taukomerkin jälkeen
 const invalidShorthand16 = "10:00\nsommol 1/2 W\ntauko\n12:00"; //havaintoja periodilla ennen taukomerkkiä
+const invalidShorthand17 = "-\n10:00\nsommol 1/2 W\n12:00"; //tyhjä ennen aikoja
+const invalidShorthand18 = "10:00\nsommol 1/2 W\n12:00\n-"; //tyhjä aikojen jälkeen
+const invalidShorthand19 = "tauko\n10:00\nsommol 1/2 W\n12:00"; //tauko ennen aikoja
+const invalidShorthand20 = "10:00\nsommol 1/2 W\n12:00\ntauko"; //tauko aikojen jälkeen
+
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
   invalidShorthand6, invalidShorthand7, invalidShorthand8, invalidShorthand9,
   invalidShorthand10, invalidShorthand11, invalidShorthand12, invalidShorthand13,
-  invalidShorthand14, invalidShorthand15, invalidShorthand16];
+  invalidShorthand14, invalidShorthand15, invalidShorthand16, invalidShorthand17,
+  invalidShorthand18, invalidShorthand19, invalidShorthand20];
 
 describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
   beforeEach(function () {

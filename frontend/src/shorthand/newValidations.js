@@ -71,6 +71,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
 
       pauseIsActive = true;
       periodStartTime = null;
+      endsWithTime = false;
 
     } else if (line.trim() === "-") {
 
@@ -87,6 +88,8 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       }
 
       emptyPeriod = true;
+      shortHandContainsMoreThanTimes = true;
+      endsWithTime = false;
 
     } else {
 
