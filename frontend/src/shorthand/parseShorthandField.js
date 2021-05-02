@@ -66,13 +66,13 @@ const readyObservation = (observation, userID) => {
 
 //remember to add dayID to periods in backend
 export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
-  let pausePeriod = false;
+  let pauseOrEmptyPeriod = false;
   observationPeriods = [];
   for (const row of shorthandRows) {
     if (!row) continue;
     if (isTime(row) && observationPeriod["shorthandBlock"] === "") {
       observationPeriod["startTime"] = parseTime(row);
-      pausePeriod = false;
+      pauseOrEmptyPeriod = false;
     } else if (isTime(row)) {
       observationPeriod["endTime"] = parseTime(row);
       observationPeriod["observationType"] = obsType;
@@ -80,11 +80,11 @@ export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {
       observationPeriods.push({ ...observationPeriod });
       observationPeriod["shorthandBlock"] = "";
       observationPeriod["startTime"] = parseTime(row);
-      pausePeriod = false;
-    } else if (!pausePeriod){
-      if (row.trim() === "tauko"){
+      pauseOrEmptyPeriod = false;
+    } else if (!pauseOrEmptyPeriod){
+      if (row.trim() === "tauko" || row.trim() === "-"){
         observationPeriod["shorthandBlock"] = row;
-        pausePeriod = true;
+        pauseOrEmptyPeriod = true;
       }
       else if (observationPeriod["shorthandBlock"] === "") {
         observationPeriod["shorthandBlock"] = row;
@@ -124,7 +124,7 @@ export const setDayId = (id) => {
 
 export const loopThroughObservations = (shorthandRows, userID) => {
   let oneBeforeWasTime = false;
-  let isPausePeriod = false;
+  let isPauseOrEmptyPeriod = false;
   let i = -1;
   const observations = [];// [ { periodOrderNum: i, shorthandRow: row, subObservations: []  }]
   let observationsOfPeriod = []; //Acts as a helper cache, since some pause period observations will otherwise be saved (which would be bad).
@@ -134,14 +134,14 @@ export const loopThroughObservations = (shorthandRows, userID) => {
       oneBeforeWasTime = true;
       observations.push(...observationsOfPeriod);
       observationsOfPeriod = [];
-      isPausePeriod = false;
-    } else if(!isPausePeriod){
+      isPauseOrEmptyPeriod = false;
+    } else if(!isPauseOrEmptyPeriod){
       if (oneBeforeWasTime) {
         i++;
       }
-      if(row.trim() === "tauko"){
+      if(row.trim() === "tauko" || row.trim() === "-"){
         observationsOfPeriod = [];
-        isPausePeriod = true;
+        isPauseOrEmptyPeriod = true;
       } else {
         oneBeforeWasTime = false;
         const parsed = parse(row);
