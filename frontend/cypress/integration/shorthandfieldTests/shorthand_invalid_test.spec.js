@@ -13,16 +13,22 @@ const invalidShorthand3 = " ";//tyhjä pikakirjoitus
 const invalidShorthand4 = "\nsommol 1/2 W\n"; //ei kellonaikaa
 const invalidShorthand5 = "10:00\nsommolo 1/2 W\n12:00"; //liikaa merkkejä lajinimessä
 const invalidShorthand6 = "10:00\nosommol 1/2 W\n12:00"; //liikaa merkkejä lajinimessä
-
 const invalidShorthand7 = "10:00\nsommo 1/2 W\n12:00"; //invalid lajinimi
 const invalidShorthand8 = "10:00\nsommol 1/2 W\n12:0\n0";//rivinvaihto väärässä paikassa
 const invalidShorthand9 = "10:00\nsommol 1/2 WW\n12:00"; //virheellinen ilmansuunta
 const invalidShorthand10 = "12:00\nsommolo 1/2 W\n10:00"; //kellonajat väärinpäin
+const invalidShorthand11 = "10:00\ntauko\n12:00"; //pelkkä tauko
+const invalidShorthand12 = "10:00\n12:00"; //vain kellonaikoja
+const invalidShorthand13 = "10:00\n-\ngrugru 2\n12:00"; //havaintoja periodilla tyhjän merkin jälkeen
+const invalidShorthand14 = "10:00\ngrugru 2\n-\n12:00"; //havaintoja periodilla ennen tyhjää merkkiä
+const invalidShorthand15 = "10:00\ntauko\nsommol 1/2 W\n12:00"; //havaintoja periodilla taukomerkin jälkeen
+const invalidShorthand16 = "10:00\nsommol 1/2 W\ntauko\n12:00"; //havaintoja periodilla ennen taukomerkkiä
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
-  invalidShorthand6, invalidShorthand7, invalidShorthand8,
-  invalidShorthand9, invalidShorthand10];
+  invalidShorthand6, invalidShorthand7, invalidShorthand8, invalidShorthand9,
+  invalidShorthand10, invalidShorthand11, invalidShorthand12, invalidShorthand13,
+  invalidShorthand14, invalidShorthand15, invalidShorthand16];
 
 describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
   beforeEach(function () {
