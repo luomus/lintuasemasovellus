@@ -62,10 +62,7 @@ def test_addDayRoute(app):
         '/api/addDay',
         data=json.dumps({'day': '01.03.2020', 'observers': 'Teppo Testaaja', 'selectedactions': 'Vakkari', 'comment': 'Kaunis ilma.', 'observatory': 'Hangon_Lintuasema'}),
         content_type='application/json',)
-    
-    print("response", response)
     data = response.get_json()
-    print('status code ',  response.status_code)
     assert response.status_code == 200
     assert data['id'] == 1
 

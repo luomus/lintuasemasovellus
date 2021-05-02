@@ -92,7 +92,6 @@ def save_edited_observationperiods():
 
         #Save observation related to this period
         for observation in observations: #observation = { periodOrderNum: i, subObservations: [] }
-            #print(observation['periodOrderNum'])
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:

@@ -1,6 +1,6 @@
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observationperiod.services import addObservation
-from application.api.classes.observationperiod.services import getObservationperiods #testi aina importattava
+from application.api.classes.observationperiod.services import getObservationperiods
 from datetime import datetime
 
 
@@ -20,7 +20,6 @@ def addAndFind(fields):
     obsperiods = getObservationperiods()
     found = False
     for obsperiod in obsperiods:
-      print(obsperiod)
       if (obsperiod.start_time == datetime.strptime(fields['startTime'], '%H:%M') and obsperiod.end_time == datetime.strptime(fields['endTime'], '%H:%M')
           and obsperiod.type_id == fields['type_id'] and obsperiod.location_id == fields['location_id'] and obsperiod.observatoryday_id == fields['observatoryday_id']):
         found = True

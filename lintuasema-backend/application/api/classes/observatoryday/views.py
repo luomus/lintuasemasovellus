@@ -41,7 +41,6 @@ def add_everything():
 
     # Save observatoryDay 
     observatory_id = getObservatoryId(req['observatory'])
-    print('observatory_id', observatory_id)
     day = datetime.strptime(req['day'], '%d.%m.%Y')
 
     new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id)
@@ -83,7 +82,6 @@ def add_everything():
 
         #Save observation related to this period
         for observation in req['observations']: #observation = { periodOrderNum: i, subObservations: [] }
-            print(observation['periodOrderNum'])
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:
@@ -117,8 +115,6 @@ def add_everything():
                     db.session().add(sub_observation)
 
     db.session().commit()
-
-    print('End of add_everything***\n')
 
     return jsonify(req)
 
@@ -172,7 +168,6 @@ def edit_actions(obsday_id, actions):
 @login_required
 def search_dayinfo(day, observatory):
     ret = get_day_without_id(day, observatory)
-    print(ret)
     return jsonify(ret)
 
 
