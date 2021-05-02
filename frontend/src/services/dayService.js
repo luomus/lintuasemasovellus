@@ -10,7 +10,6 @@ export const editComment = async (dayId, comment) => {
   if (comment !== "") {
     return await axios.post(`/api/editComment/${dayId}/${comment}`);
   }
-  console.log("yay");
   return await axios.post(`/api/removeComment/${dayId}`);
 };
 
