@@ -107,7 +107,7 @@ describe("FieldsAndAuthenticationTest", function () {
 
   });
 
-  it.only("Incorrect date and no observers prevent saving", function () {
+  it("Incorrect date and no observers prevent saving", function () {
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(largeDate);
     cy.get("#observers").clear();
@@ -130,6 +130,7 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.contains("Virheellinen päivämäärä");
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
+    cy.get("#observers").type(observer);
     cy.get("#saveButton").should("not.be.disabled");
     cy.should("not.contain", "Virheellinen päivämäärä");
     cy.should("not.contain", "Päivämäärä on liian suuri");
