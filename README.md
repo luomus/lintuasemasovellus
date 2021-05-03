@@ -47,5 +47,5 @@ Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamisee
 
 [Oracle-client-ohje tietokantaa varten](/documentation/developmentInstructions/installingOracleClient.md)
 
-
+[Jatkuva käyttöönotto - CI/CD Pipeline](/documentation/developmentInstructions/continuousDeployment.md)
 
