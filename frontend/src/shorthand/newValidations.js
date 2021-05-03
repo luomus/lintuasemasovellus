@@ -46,7 +46,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       }
 
       // Push error, if time is before current start time
-      if (periodStartTime && (parseTimeForComparison(periodStartTime) > parseTimeForComparison(parsedTime))) {
+      if (periodStartTime && periodContainsLines && (parseTimeForComparison(periodStartTime) > parseTimeForComparison(parsedTime))) {
         errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
       } else {
         periodStartTime = parsedTime;
@@ -108,6 +108,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       }
 
       emptyPeriod = true;
+      periodContainsLines = true;
       shortHandContainsMoreThanTimes = true;
       endsWithTime = false;
 

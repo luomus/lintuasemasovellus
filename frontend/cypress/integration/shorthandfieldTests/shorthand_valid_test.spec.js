@@ -23,12 +23,12 @@ const shorthands = [validShorthand0, validShorthand1,
   validShorthand6, validShorthand7, validShorthand8, validShorthand9,
   validShorthand10];
 
-describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
+describe("validShorthand", function () {
   beforeEach(function () {
     myBeforeEach();
   });
 
-  it("Tallenna button is not active if shorthand is invalid", function () {
+  it("Tallenna button will activate if shorthand is valid", function () {
 
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
