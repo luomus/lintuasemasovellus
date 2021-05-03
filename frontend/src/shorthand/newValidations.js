@@ -1,5 +1,5 @@
 import { parse, resetAll } from "./shorthand";
-import { isTime, parseTime } from "./timeHelper.js";
+import { isTime, parseTime, parseTimeForComparison } from "./timeHelper.js";
 
 let errors = [];
 
@@ -46,7 +46,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       }
 
       // Push error, if time is before current start time
-      if (periodStartTime && (periodStartTime > parsedTime)) {
+      if (periodStartTime && (parseTimeForComparison(periodStartTime) > parseTimeForComparison(parsedTime))) {
         errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
       } else {
         periodStartTime = parsedTime;
@@ -64,6 +64,16 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
         errors.push([rowNumber, "startTimeMissing"]);
       }
 
+      // Push error, if tauko is already active
+      if (pauseIsActive) {
+        errors.push([rowNumber, "pauseAlreadyActive"]);
+      }
+
+      // Push error, if period should be empty
+      if (emptyPeriod) {
+        errors.push([rowNumber, "noPauseDuringEmptyPeriod"]);
+      }
+
       // Push error, if period contains something before pause line
       if (periodContainsLines) {
         errors.push([rowNumber, "noObservationsDuringPause"]);
@@ -71,6 +81,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
 
       pauseIsActive = true;
       periodStartTime = null;
+      endsWithTime = false;
 
     } else if (line.trim() === "-") {
 
@@ -81,12 +92,24 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
         errors.push([rowNumber, "startTimeMissing"]);
       }
 
+      // Push error, if is already marked empty
+      if (emptyPeriod) {
+        errors.push([rowNumber, "alreadyEmpty"]);
+      }
+
+      // Push error, if period should be pause
+      if (pauseIsActive) {
+        errors.push([rowNumber, "noEmptyDuringPause"]);
+      }
+
       // Push error, if period contains something before empty line
       if (periodContainsLines) {
         errors.push([rowNumber, "noObservationsDuringEmptyPeriod"]);
       }
 
       emptyPeriod = true;
+      shortHandContainsMoreThanTimes = true;
+      endsWithTime = false;
 
     } else {
 

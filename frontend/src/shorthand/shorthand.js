@@ -341,6 +341,9 @@ const handleSlash = () => {
     lajinimi += "/";
     return;
   }
+  if (ilmansuunta !== "") {
+    throw new Error("bypassBeforeSlash");
+  }
   if (++slashes > 2) {
     throw new Error("extraSlashes");
   }
