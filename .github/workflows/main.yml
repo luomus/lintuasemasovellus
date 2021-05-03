@@ -1,5 +1,11 @@
 name: CI/CD pipeline
 
+# NOTE: Pipeline contains notifications sent to Discord on succesful/unsuccesful tests and deployment.
+# Notifications have been commented out. To enable notifications, you must create webhook for your
+# Discord channel and add it as secret in GitHub.
+
+# NOTE 2: Inserting "#skip" into commit message skips deployment to Rahti.
+
 on:
   push:
     branches:
@@ -10,6 +16,7 @@ on:
 
 jobs:
      
+  # Tests to run for new pull requests and merges to master
   tests:
     runs-on: ubuntu-latest      
     steps:
@@ -62,34 +69,36 @@ jobs:
         name: cypress-videos
         path: frontend/cypress/videos/
       
-    - name: Report successful pull request to Discord
-      uses: sarisia/actions-status-discord@v1.8.3
-      if: ${{ github.event_name != 'push' && success() }}
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      with:
-        title: "Pull request mergeable"
-        description: "A new pull request has passed tests - you may merge it to the master now"
-        color: 0x08c96b
-        username: GitHub Actions
-    - name: Report pull request error to Discord
-      uses: sarisia/actions-status-discord@v1.8.3
-      if: ${{ github.event_name != 'push' && failure() }}
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      with:
-        title: "Error in pull request"
-        color: 0xff91a4
-        description: "Tests for a new pull request have failed - check the logs and do your magic"
-        username: GitHub Actions
+   # - name: Report successful pull request to Discord
+   #   uses: sarisia/actions-status-discord@v1.8.3
+   #   if: ${{ github.event_name != 'push' && success() }}
+   #   env:
+   #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+   #   with:
+   #     title: "Pull request mergeable"
+   #     description: "A new pull request has passed tests - you may merge it to the master now"
+   #     color: 0x08c96b
+   #     username: GitHub Actions
+   # - name: Report pull request error to Discord
+   #   uses: sarisia/actions-status-discord@v1.8.3
+   #   if: ${{ github.event_name != 'push' && failure() }}
+   #   env:
+   #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+   #   with:
+   #     title: "Error in pull request"
+   #     color: 0xff91a4
+   #     description: "Tests for a new pull request have failed - check the logs and do your magic"
+   #     username: GitHub Actions
 
+  # Build a new Docker image to be sent to Rahti
   docker-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker image
         run: docker build . --file Dockerfile -t test
-        
+  
+  # Deployment to Rahti run after successful merge to master and Docker image build
   deploy:
     needs: [tests, docker-build]
     runs-on: ubuntu-latest
@@ -101,33 +110,33 @@ jobs:
           webhook_url: ${{ secrets.RAHTI_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.RAHTI_WEBHOOK_SECRET }}
         if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == false }}
-      - name: Report deploy success to Discord
-        uses: sarisia/actions-status-discord@v1.8.3
-        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == false && success() }}
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          nodetail: true
-          title: "New version deployed to Rahti!"
-          color: 0x08c96b
-          username: GitHub Actions
-      - name: Report non-deployed success to Discord
-        uses: sarisia/actions-status-discord@v1.8.3
-        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == true && success() }}
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          nodetail: true
-          title: "New successful merge to master made - deployment #skipped!"
-          color: 0x08c96b
-          username: GitHub Actions
-      - name: Report master branch error to Discord
-        uses: sarisia/actions-status-discord@v1.8.3
-        if: ${{ github.event_name == 'push' && failure() }}
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          title: "Error in master branch!"
-          color: 0xff91a4
-          description: "The new commit to master branch did not pass CI/CD pipeline - check the commit ASAP!"
-          username: GitHub Actions
+     # - name: Report deploy success to Discord
+     #   uses: sarisia/actions-status-discord@v1.8.3
+     #   if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == false && success() }}
+     #   env:
+     #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+     #   with:
+     #     nodetail: true
+     #     title: "New version deployed to Rahti!"
+     #     color: 0x08c96b
+     #     username: GitHub Actions
+     # - name: Report non-deployed success to Discord
+     #   uses: sarisia/actions-status-discord@v1.8.3
+     #   if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ', '), '#skip') == true && success() }}
+     #   env:
+     #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+     #   with:
+     #     nodetail: true
+     #     title: "New successful merge to master made - deployment #skipped!"
+     #     color: 0x08c96b
+     #     username: GitHub Actions
+     # - name: Report master branch error to Discord
+     #   uses: sarisia/actions-status-discord@v1.8.3
+     #   if: ${{ github.event_name == 'push' && failure() }}
+     #   env:
+     #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+     #   with:
+     #     title: "Error in master branch!"
+     #     color: 0xff91a4
+     #     description: "The new commit to master branch did not pass CI/CD pipeline - check the commit ASAP!"
+     #     username: GitHub Actions
