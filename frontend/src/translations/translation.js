@@ -158,6 +158,7 @@ const resources = {
       "noEmptyDuringPause": "Jaksoa ei voi kirjata tyhjäksi tauolla.",
       "noObservationsDuringEmptyPeriod": "Tyhjällä jaksolla ei voi olla havaintoja.",
       "noObservations": "Jaksolle ei ole kirjattu havaintoja.",
+      "mustEndWithTime": "Havaintojen on päätyttävä kellonaikaan.",
     },
   },
 };
