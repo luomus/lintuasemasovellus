@@ -525,7 +525,7 @@ export const HomePage = ({ user, userObservatory }) => {
                     aria-controls="obervation-content"
                     id="observation-header"
                   >
-                    <Typography className={classes.sectionHeading}>{t("observations")} *</Typography>
+                    <Typography className={classes.sectionHeading}>{t("migrantObservations")} *</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
 

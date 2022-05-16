@@ -35,6 +35,7 @@ const resources = {
       "date": "Päivämäärä",
       "observers": "Havainnoija(t)",
       "observations": "Havainnot",
+      "migrantObservations": "Muuttohavainnot",
       "comment": "Havainto- ja pyydyskommentit",
       "commentAdded": "Kommentteja kirjattu",
       "noComment": "Ei kommentteja",
