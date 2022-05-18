@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     float: "right",
     size: "small",
     color: "white",
-    backgroundColor: "olivegreen",
+    backgroundColor: "#2691d9",
   },
   title: {
     color: "white",
@@ -167,7 +167,7 @@ const NavBar = ({ user }) => {
 
   return (
     <div>
-      <AppBar position="static" style={{ background: "#514134" }}>
+      <AppBar position="static" style={{ backgroundColor: "#2691d9" , borderColor: "#1f74ad", borderBottom: "1px solid" }}>
         <Toolbar>
           <IconButton id="navigationbar" onClick={toggleMenu("right", true)}>
             <Dehaze style={{ color: "white" }} />
