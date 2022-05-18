@@ -19,6 +19,11 @@ import NavBarLinks from "./NavBarLinks";
 
 
 const useStyles = makeStyles((theme) => ({
+  navBarContainer: {
+    backgroundColor: "#2691d9" ,
+    borderColor: "#1f74ad",
+    borderBottom: "1px solid"
+  },
   drawerContainer: {
     background: "white",
     padding: "20px 30px",
@@ -167,7 +172,7 @@ const NavBar = ({ user }) => {
 
   return (
     <div>
-      <AppBar position="static" style={{ backgroundColor: "#2691d9" , borderColor: "#1f74ad", borderBottom: "1px solid" }}>
+      <AppBar position="static" className={classes.navBarContainer}>
         <Toolbar>
           <IconButton id="navigationbar" onClick={toggleMenu("right", true)}>
             <Dehaze style={{ color: "white" }} />
