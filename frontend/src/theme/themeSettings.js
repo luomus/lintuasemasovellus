@@ -5,7 +5,7 @@ import {
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#7fa149",
+      main: "#2691d9",
     },
     secondary: {
       main: "#ecc94b",
@@ -14,7 +14,7 @@ const theme = createMuiTheme({
       main: "#c53030",
     },
     navbar: {
-      main: "#514134",
+      main: "#2691d9",
     },
   },
 });

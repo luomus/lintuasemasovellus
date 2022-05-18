@@ -20,8 +20,8 @@ import NavBarLinks from "./NavBarLinks";
 
 const useStyles = makeStyles((theme) => ({
   navBarContainer: {
-    backgroundColor: "#2691d9" ,
-    borderColor: "#1f74ad",
+    backgroundColor: theme.navbar,
+    borderBottomColor: "#1f74ad",
     borderBottom: "1px solid"
   },
   drawerContainer: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     float: "right",
     size: "small",
     color: "white",
-    backgroundColor: "#2691d9",
+    backgroundColor: theme.main,
   },
   title: {
     color: "white",
