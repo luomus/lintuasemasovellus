@@ -29,11 +29,11 @@ Pyydystiedot voi lisätä 'Pyydystiedot'-otsakkeen alta. Pyydykset ilmoitetaan y
 Mikäli halutaan muokata jo ilmoitettujen pyydysten lukumääriä tai verkkokoodeja, tulee lisäykset tehdä edellisten merkintöjen lisäksi, eli jos esimerkiksi halutaan lisätä pyydsten määrää yhdellä, on lukumääräksi laitettava aiempi arvo + 1, ei vain 1. 
 Mikäli pyydystietojen täytössä on jotain virheitä tai huomautettavaa, ilmestyy tästä viesti'Pyydystiedot'-otsakkene alle. Punaisella olevat virheet estävät tallentamisen.
 
-### Havaintojen lisääminen
+### Muuttohavaintojen lisääminen
 
-Käyttäjän tulee valita lisättävien havaintojaksojen tyyppi sekä havaintopaikka, jossa havaintojaksot on kirjattu. Nämä valinnat tapahtuvat pudotusvalikoista pikakirjoituslomakkeessa 'Havainnot*'-otsakkeen alla.
+Käyttäjän tulee valita lisättävien havaintojaksojen tyyppi sekä havaintopaikka, jossa havaintojaksot on kirjattu. Nämä valinnat tapahtuvat pudotusvalikoista pikakirjoituslomakkeessa 'Muuttohavainnot*'-otsakkeen alla.
 
-Havaintojaksot ja niiden sisältämät havaintojaksot kirjataan pikakirjoituskenttään. Havainnot ja jaksot syötetään pikakirjoitusmuodossa:
+Havaintojaksot ja niiden sisältämät muuttohavainnot kirjataan pikakirjoituskenttään. Havainnot ja jaksot syötetään pikakirjoitusmuodossa:
 (Yksi laji per rivi, kullekin jaksolle aloitus- ja lopetusaika, joiden väliin havainnot tulevat)
 
 Mikäli ilmoitetaan peräkkäisiä jaksoja, eli edellisen jakson loppuaika on sama kuin seuraavan jakson alkuaika, riittää, että kellonaika ilmoitetaan vain kerran (sen saa halutessaan tosin merkata kahdesti peräkkäin). Jaksojen tulee olla kronologisessa järjestyksessä.
