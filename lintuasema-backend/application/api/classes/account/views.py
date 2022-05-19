@@ -49,6 +49,9 @@ def loginconfirm():
 
 @bp.route('/logout', methods=['POST', 'GET'])
 def logoutCleanup():
+
+    req = requests.delete('https://apitest.laji.fi/v0/person-token/' + session['token'] + '?access_token=' + AUTH_TOKEN)
+
     session.clear()
     session.pop('token', None)
     logout_user()
