@@ -63,4 +63,24 @@ describe("FirstpageFieldsAndModification", function () {
     cy.get("#1").should("not.exist");
   });
 
+  it("Observation header contains 'Muuttohavainnot'", function () {
+    cy.get("#observation-header");
+    cy.contains("Muuttohavainnot");
+  });
+
+  it("Type dropdown menu contains types 'Vakio', 'Muu muutto', 'Yömuutto' and 'Hajahavainto'", function () {
+    cy.get("#selectType").click();
+    cy.get('ul').children()
+      .should('contain','Vakio')
+      .and('contain','Muu muutto')
+      .and('contain','Yömuutto')
+      .and('contain','Hajahavainto');
+  });
+
+  it("Type dropdown menu does not contain type 'Paikallinen'", function () {
+    cy.get("#selectType").click();
+    cy.get('ul').children()
+      .should('not.contain','Paikallinen');
+  });
+
 });
