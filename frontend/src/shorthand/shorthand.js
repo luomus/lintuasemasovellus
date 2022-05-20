@@ -463,10 +463,11 @@ const emptyObservation = (fullObservation) => {
 
   for (const subobs of fullObservation.osahavainnot) {
     for (const field in subobs) {
-      if (subobs[String(field)] === "0") {
+      if (subobs[String(field)] === "0" || subobs[String(field)] === "w" ||
+      subobs[String(field)] === "e" || subobs[String(field)] === "n" ||
+      subobs[String(field)] === "s") {
         return true;
-      }
-      if (subobs[String(field)]) {
+      } else if (subobs[String(field)]) {
         return false;
       }
     }

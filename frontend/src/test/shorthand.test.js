@@ -462,6 +462,20 @@ describe("Bugfixes", () => {
     resetAll();
   });
 
+  test("can't add observation with only direction", () => {
+    const lineOfText = "kt s";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
+  test("can't add observation with only direction2", () => {
+    const lineOfText = "kt e";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
   test("can't add observation with 0 birds", () => {
     const lineOfText = "kt 0";
     expect(() => {
