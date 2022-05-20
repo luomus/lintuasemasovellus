@@ -476,6 +476,42 @@ describe("Bugfixes", () => {
     }).toThrow("emptyObservation");
   });
 
+  test("can't add observation with only direction3", () => {
+    const lineOfText = "kt sw";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
+  test("can't add observation with only direction4", () => {
+    const lineOfText = "kt ne";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
+  test("can't add observation with only direction5", () => {
+    const lineOfText = "kt nw";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
+  test("can't add observation with only direction6", () => {
+    const lineOfText = "kt se";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
+  test("can't add observation with only direction7", () => {
+    const lineOfText = "kt sw";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
+  });
+
+
   test("can't add observation with 0 birds", () => {
     const lineOfText = "kt 0";
     expect(() => {

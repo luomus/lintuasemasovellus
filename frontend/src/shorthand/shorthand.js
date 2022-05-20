@@ -465,7 +465,9 @@ const emptyObservation = (fullObservation) => {
     for (const field in subobs) {
       if (subobs[String(field)] === "0" || subobs[String(field)] === "w" ||
       subobs[String(field)] === "e" || subobs[String(field)] === "n" ||
-      subobs[String(field)] === "s") {
+      subobs[String(field)] === "s" || subobs[String(field)] === "ne" ||
+      subobs[String(field)] === "nw" || subobs[String(field)] === "se" ||
+      subobs[String(field)] === "sw") {
         return true;
       } else if (subobs[String(field)]) {
         return false;
