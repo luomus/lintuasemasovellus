@@ -18,6 +18,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     resetAll();
   });
 
+
   test("Extremely basic test", () => {
     const lineOfText = "sommol 2/W";
 
@@ -459,6 +460,13 @@ describe("Bugfixes", () => {
 
   beforeEach(() => {
     resetAll();
+  });
+
+  test("can't add observation with 0 birds", () => {
+    const lineOfText = "kt 0";
+    expect(() => {
+      parse(lineOfText);
+    }).toThrow("emptyObservation");
   });
 
   test("too long bypassSide 1", () => {

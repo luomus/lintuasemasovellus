@@ -460,9 +460,15 @@ const checkBracketsFirstPass = (line) => {
 };
 
 const emptyObservation = (fullObservation) => {
+
   for (const subobs of fullObservation.osahavainnot) {
     for (const field in subobs) {
-      if (subobs[String(field)]) return false;
+      if (subobs[String(field)] === "0") {
+        return true;
+      }
+      if (subobs[String(field)]) {
+        return false;
+      }
     }
   }
   return true;
