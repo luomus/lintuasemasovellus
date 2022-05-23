@@ -270,7 +270,7 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   const saveButtonDisabled = () => {
-    if (observers === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
+    if (observers === "" || observers.trim() === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
     else
       return false;
