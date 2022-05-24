@@ -260,8 +260,8 @@ export const HomePage = ({ user, userObservatory }) => {
 
   const handleToDayDetailsClick = async () => {
     setLoadingIcon(true);
-    //setDisabled(true); TODO Own state for toDayDetails. 
-    //May be good idea to disable also save button.
+    //setDisabled(true);
+    //TODO Own state for toDayDetails. May be good idea to disable also save button.
     let data = {
       day: formatDate(day),
       comment: comment,
