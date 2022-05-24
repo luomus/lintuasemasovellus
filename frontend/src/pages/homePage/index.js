@@ -260,10 +260,8 @@ export const HomePage = ({ user, userObservatory }) => {
 
   const handleToDayDetailsClick = async () => {
     setLoadingIcon(true);
-    //const rows = sanitizedShorthand;
-    //const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
-    //const observationsToSend = loopThroughObservations(rows, user.id);
-    setDisabled(true);
+    //setDisabled(true); TODO Own state for toDayDetails. 
+    //May be good idea to disable also save button.
     let data = {
       day: formatDate(day),
       comment: comment,
@@ -274,27 +272,15 @@ export const HomePage = ({ user, userObservatory }) => {
 
     try {
       const response = await sendDay(data);
-      console.log(response);
+      setLoadingIcon(false);
+      //setDisabled(false);
       if(response.status === 200) {
         history.push(`/daydetails/${day.toJSON().slice(0,10).split("-").reverse().join(".")}`);
-        //const ddmmyyyy = day.toJSON().slice(0,10).split("-").reverse().join(".");
-        //console.log("/daydetails/" + day.toJSON().slice(0,10).split("-").reverse().join("."));
-        //return(
-        //  <Redirect to={"/#/daydetails/" + day.toJSON().slice(0,10).split("-").reverse().join(".")}/>
-        //);
       }
-      //setFormSent(true);
-      //handleDateClick(s);
-      //emptyAllFields();
-      //dispatch(retrieveDays());
-      //getLatestDays(userObservatory)
-      //  .then(daysJson => setLatestDays(daysJson));
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
     }
-    //setLoadingIcon(false);
-    //setDisabled(false);
   };
 
 
