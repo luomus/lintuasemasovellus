@@ -110,6 +110,7 @@ const resources = {
       "modify": "Muokkaa",
       "save": "Tallenna",
       "loading": "Ladataan...",
+      "toDayDetails": "Siirry koontinäkymään",
 
       // notifications & errors
       "invalidDate": "Virheellinen päivämäärä",

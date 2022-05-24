@@ -25,7 +25,7 @@ import {
   loopThroughObservationPeriods,
   loopThroughObservations,
 } from "../../shorthand/parseShorthandField";
-import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../services";
+import { searchDayInfo, getLatestDays, getCatches, sendEverything, sendDay } from "../../services";
 import { retrieveDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   sendButton: {
     marginBottom: "40px",
+    marginRight: "10px",
     position: "static",
   },
   addRemoveCatchTypesButton: {
@@ -255,6 +256,45 @@ export const HomePage = ({ user, userObservatory }) => {
     }
     setLoadingIcon(false);
     setDisabled(false);
+  };
+
+  const handleToDayDetailsClick = async () => {
+    setLoadingIcon(true);
+    //const rows = sanitizedShorthand;
+    //const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
+    //const observationsToSend = loopThroughObservations(rows, user.id);
+    setDisabled(true);
+    let data = {
+      day: formatDate(day),
+      comment: comment,
+      observers: observers,
+      observatory: userObservatory,
+      selectedactions: readyDailyActions(),
+    };
+
+    try {
+      const response = await sendDay(data);
+      console.log(response);
+      if(response.status === 200) {
+        history.push(`/daydetails/${day.toJSON().slice(0,10).split("-").reverse().join(".")}`);
+        //const ddmmyyyy = day.toJSON().slice(0,10).split("-").reverse().join(".");
+        //console.log("/daydetails/" + day.toJSON().slice(0,10).split("-").reverse().join("."));
+        //return(
+        //  <Redirect to={"/#/daydetails/" + day.toJSON().slice(0,10).split("-").reverse().join(".")}/>
+        //);
+      }
+      //setFormSent(true);
+      //handleDateClick(s);
+      //emptyAllFields();
+      //dispatch(retrieveDays());
+      //getLatestDays(userObservatory)
+      //  .then(daysJson => setLatestDays(daysJson));
+    } catch (error) {
+      console.error(error.message);
+      setErrorHappened(true);
+    }
+    //setLoadingIcon(false);
+    //setDisabled(false);
   };
 
 
@@ -594,6 +634,17 @@ export const HomePage = ({ user, userObservatory }) => {
 
               <Grid item xs={12}>
                 <br />
+                <Button
+                  id="toDayDetails"
+                  className={classes.sendButton}
+                  onClick={handleToDayDetailsClick}
+                  disabled={false}
+                  color="primary"
+                  variant="contained"
+                >
+                  {t("toDayDetails")}
+                </Button>
+
                 <Button
                   id="saveButton"
                   className={classes.sendButton}
