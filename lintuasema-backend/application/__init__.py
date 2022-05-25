@@ -69,7 +69,7 @@ def init_app(database, print_db_echo):
     cors = CORS(app)
 
     #kirjautuminen
-    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=3)
     app.config["SESSION_REFRESH_EACH_REQUEST"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     login_manager = LoginManager()
