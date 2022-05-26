@@ -275,7 +275,7 @@ export const HomePage = ({ user, userObservatory }) => {
       setLoadingIcon(false);
       //setDisabled(false);
       if(response.status === 200) {
-        history.push(`/daydetails/${day.toJSON().slice(0,10).split("-").reverse().join(".")}`);
+        history.push(`/daydetails/${formatDate(day)}`);
       }
     } catch (error) {
       console.error(error.message);
