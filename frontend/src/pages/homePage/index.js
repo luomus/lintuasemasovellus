@@ -25,8 +25,8 @@ import {
   loopThroughObservationPeriods,
   loopThroughObservations,
 } from "../../shorthand/parseShorthandField";
-import { searchDayInfo, getLatestDays, getCatches, sendEverything, sendDay } from "../../services";
-import { retrieveDays } from "../../reducers/daysReducer";
+import { searchDayInfo, getLatestDays, getCatches, sendEverything, sendDay, getDays } from "../../services";
+import { retrieveDays, setDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import DailyActions from "../../globalComponents/dayComponents/dailyActions";
@@ -271,12 +271,12 @@ export const HomePage = ({ user, userObservatory }) => {
     };
 
     try {
-      const response = await sendDay(data);
-      setLoadingIcon(false);
+      await sendDay(data);
+      const days = await getDays();
       //setDisabled(false);
-      if(response.status === 200) {
-        history.push(`/daydetails/${formatDate(day)}`);
-      }
+      dispatch(setDays(days));
+      setLoadingIcon(false);
+      history.push(`/daydetails/${formatDate(day)}`);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
