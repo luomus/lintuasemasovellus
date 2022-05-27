@@ -48,7 +48,7 @@ describe("ShorthandModificationPerObservationPeriod", function () {
     cy.contains(date).click();
     cy.contains('Jaksot').click();
     cy.get("#editObsPeriod").click();
-    cy.get("#selectTypeInModification").click().get("#Hajahavainto").click();
+    cy.get("#selectTypeInModification").click().get("#Yömuutto").click();
     cy.get("#selectLocationInModification").click().get("#Piha").click();
     cy.wait(2000);
     cy.get(".CodeMirror")
@@ -61,7 +61,7 @@ describe("ShorthandModificationPerObservationPeriod", function () {
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
     cy.wait(5000);
-    cy.contains("Hajahavainto");
+    cy.contains("Yömuutto");
     cy.contains("Piha");
     cy.contains('Lajit').click();
     cy.contains("GRUGRU");
