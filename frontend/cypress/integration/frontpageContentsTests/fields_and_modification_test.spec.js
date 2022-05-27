@@ -30,6 +30,7 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Sijainti");
     cy.contains("Rengastusvakio");
     cy.contains("Liitteitä");
+    cy.contains("Siirry koontinäkymään");
     cy.contains("Tallenna");
   });
 
