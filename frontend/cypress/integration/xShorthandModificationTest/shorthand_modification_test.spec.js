@@ -30,7 +30,7 @@ describe("ShorthandModification", function () {
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
-    cy.contains("Tallenna").click({ force: true });
+    cy.contains("Tallenna muuttohavainnot").click({ force: true });
     cy.wait(1000);
     cy.contains(date);
 
@@ -39,7 +39,7 @@ describe("ShorthandModification", function () {
   it("Shorthand modification window can be clicked", function () {
     cy.contains(date).click();
     cy.contains("Muokkaa").click();
-    cy.contains("Tallenna");
+    cy.contains("Tallenna muuttohavainnot");
     cy.contains("Peruuta");
     cy.contains("Poista");
 
@@ -70,7 +70,7 @@ describe("ShorthandModification", function () {
     cy.wait(2000);  
     cy.get(".CodeMirror textarea").type(shorthandModified, { force: true });
     cy.wait(1000);
-    cy.contains("Tallenna").click({ force: true });
+    cy.contains("Tallenna muuttohavainnot").click({ force: true });
     cy.wait(5000);
     cy.contains("GRUGRU");
   });
