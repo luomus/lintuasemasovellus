@@ -108,7 +108,7 @@ const resources = {
       "addRowByClicking": "Lisää pyydys painamalla '+'.",
       "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Poista'.",
       "modify": "Muokkaa",
-      "save": "Tallenna",
+      "save": "Tallenna muuttohavainnot",
       "loading": "Ladataan...",
       "toDayDetails": "Siirry koontinäkymään",
 
