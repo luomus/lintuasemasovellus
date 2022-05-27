@@ -74,3 +74,8 @@ export const sendEditedShorthand = async (periods, observations, dayId, userID) 
   const res = await axios.post("/api/saveEditedObservations", data);
   return res;
 };
+
+export const sendDay = async (dayData) => {
+  const res = await axios.post("/api/addDay", dayData);
+  return res;
+};
