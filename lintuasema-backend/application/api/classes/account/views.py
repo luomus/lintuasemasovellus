@@ -66,7 +66,11 @@ def logoutCleanup():
 
 @bp.route('/get/token', methods=['GET', 'POST'])
 def getSessionToken():
-    return jsonify(token=session['token'], auth_token=AUTH_TOKEN)
+    return jsonify(token=session['token'])
+
+@bp.route('/api/getPerson', methods=['GET'])
+def getPersonFromLaji():
+    return requests.get('https://apitest.laji.fi/v0/person/' + session['token'] + '?access_token=' + AUTH_TOKEN).json()
 
 @bp.route('/loginRedirect', methods=['POST', 'GET'])
 def login():
