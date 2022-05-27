@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
+import LocalInput from "./LocalInput";
 
 const ObsPeriodTable = (props) => {
 
@@ -149,10 +150,12 @@ const ObsPeriodTable = (props) => {
                         {s.totalLocal}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {s.localOther}
+                        {/* {s.localOther} */}
+                        <LocalInput/>
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {s.localGåu}
+                        {/* {s.localGåu} */}
+                        <LocalInput/>
                       </StyledTableCell>
                     </TableRow>
                   )

@@ -109,3 +109,25 @@ def deleteObservations(shorthand_id):
     for observation in observations_to_delete:
         observation.is_deleted = 1
     db.session.commit()
+
+def updateObservation(shorthand_id):
+    observation_old=Observation.query.get(shorthand_id)
+    observation_new=Observation(adultUnknownCount=observation_old.adultUnknownCount, adultFemaleCount=observation_old.adultFemaleCount,
+    adultMaleCount=observation_old.adultMaleCount, juvenileUnknownCount=observation_old.juvenileUnkownCount,
+    juvenileFemaleCount=observation_old.juvenileFemaleCount, juvenileMaleCount=observation_old.juvenileMaleCount, 
+    subadultUnknownCount=observation_old.subadultUnknownCount, subadultFemaleCount=observation_old.subadultFemaleCount,
+    subadultMaleCount=observation_old.subadultMaleCount, unknownUnknownCount=observation_old.unknownUnknownCount,
+    unknownFemaleCount=observation_old.unknownFemaleCount, unknownMaleCount=observation_old.unknownMaleCount,
+    total_count=observation_old.total_count, direction=observation_old.direction, bypassSide=observation_old.bypassSide,
+    notes = observation_old.notes, observationperiod_id=observation_old.observationperiod_id,
+    shorthand_id = observation_old.shorthand_id, account_id=observation_old.account_id)
+
+    return update_edited_observation(observation_new, observation_old)
+
+def update_edited_observation(observation_new, observation_old):
+    observation_old.is_deleted = 1
+    db.session().add(observation_new)
+    db.session.commit()
+
+    return {"id" : observation_new.id}
+

@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask_login import login_required
 
 from application.api.classes.observation.models import Observation
-from application.api.classes.observation.services import parseCountString, getDaySummary, getAllObservations, getObservationByPeriod, deleteObservations
+from application.api.classes.observation.services import updateObservation, parseCountString, getDaySummary, getAllObservations, getObservationByPeriod, deleteObservations
 
 from application.api import bp
 from application.db import db
@@ -40,3 +40,8 @@ def getSummary(day_id):
   
     return jsonify(ret)
   
+@bp.route("/api/updateObservation/<sorthand_id>", methods=["POST"])
+@login_required
+def updateObservationBySorthandId(shorthand_id):
+    ret = updateObservation(shorthand_id)
+    return jsonify(ret)
