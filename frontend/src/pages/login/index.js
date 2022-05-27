@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Paper, makeStyles, Button, Grid, Box, Typography
 } from "@material-ui/core/";
@@ -50,13 +50,17 @@ export const Login = () => {
     haukkaLogo: {
       align: "center",
       height: "20px",
-
-
+    },
+    messageBox: {
+      marginTop: "1vh",
+      color: "red",
+      padding: "1em",
     },
   });
 
   const classes = useStyles();
   const { t } = useTranslation();
+  const [message, setMessage] = useState("");
 
   const user = useSelector(state => state.user);
   const userIsSet = Boolean(user.id);
@@ -66,6 +70,13 @@ export const Login = () => {
       <Redirect to="/" />
     );
   }
+
+  useEffect(() => {
+    let messageCookie = document?.cookie?.split("; ")?.find(r => r.startsWith("showUserMessage"))?.split("=")[1].replace(/['"]+/g, "");
+    if (messageCookie !== undefined) {
+      setMessage(messageCookie);
+    }
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -83,6 +94,16 @@ export const Login = () => {
               width="100"
               alt="haukka"></img>
           </Box>
+          {message && (
+            <Grid container alignItems="center" justify="center" item>
+              <Box className="box">
+                <Paper variant="outlined" className={ classes.messageBox }>
+                  <Typography>{t(message)}</Typography>
+                  {message === "noRequiredRoles" && (<a href="mailto:halias@halias.fi?cc=helpdesk@laji.fi&subject=Haukka käyttöoikeuspyyntö">halias@halias.fi, cc: helpdesk@laji.fi</a>)}
+                </Paper>
+              </Box>
+            </Grid>
+          )}
           <Grid container alignItems="center" justify="center" item xs={12}>
 
             <Box className="box">

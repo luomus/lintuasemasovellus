@@ -160,6 +160,8 @@ const resources = {
       "noObservationsDuringEmptyPeriod": "Tyhjällä jaksolla ei voi olla havaintoja.",
       "noObservations": "Jaksolle ei ole kirjattu havaintoja.",
       "mustEndWithTime": "Havaintojen on päätyttävä kellonaikaan.",
+
+      "noRequiredRoles": "Jos tarvitset pääsyn sovellukseen, voit pyytää sitä sähköpostilla.",
     },
   },
 };
