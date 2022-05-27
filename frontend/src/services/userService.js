@@ -13,9 +13,8 @@ export const getLogout = async () => {
   return await axios.get("/logout");
 };
 
-export const getAuth = async (token, auth_token) => {
-  const auth = await axios.get(`https://apitest.laji.fi/v0/person/${token}/?access_token=${auth_token}`);
-  return auth;
+export const getPerson = async () => {
+  return await axios.get("/api/getPerson");
 };
 
 export const getCurrentUser = async () => {

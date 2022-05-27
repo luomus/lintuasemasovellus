@@ -636,7 +636,7 @@ export const HomePage = ({ user, userObservatory }) => {
                   color="primary"
                   variant="contained"
                 >
-                  {disabled ? t("loading") : t("save")}
+                  {disabled ? t("loading") : t("saveMigrant")}
                 </Button>
                 { (loadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>

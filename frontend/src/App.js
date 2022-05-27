@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HomePage, UserManual, DayList, DayDetails, Login } from "./pages";
 import NavBar from "./globalComponents/NavBar";
 import Footer from "./globalComponents/Footer";
-import { getAuth, getCurrentUser, getToken } from "./services";
+import { getPerson, getCurrentUser } from "./services";
 import { setUser } from "./reducers/userReducer";
 import { setUserObservatory } from "./reducers/userObservatoryReducer";
 import { retrieveDays } from "./reducers/daysReducer";
@@ -22,13 +22,14 @@ const App = () => {
     dispatch(initializeStations());
     dispatch(retrieveDays());
     if (user.id) return;
-    getToken()
+    /*getToken()
       .then(resp => resp.data)
       .then(tokenJson => getAuth(tokenJson.token, tokenJson.auth_token)
         .then(resp => resp.data)
         .then(res => dispatch(setUser(res)))
         .catch(() => console.error("user not set"))
-      ).catch(() => console.error("token not set"));
+      ).catch(() => console.error("token not set"));*/
+    getPerson().then(response => response.data).then(response => dispatch(setUser(response))).catch((error) => console.error("getPerson error", error));
   }, [dispatch, user]);
 
   useEffect(() => {
