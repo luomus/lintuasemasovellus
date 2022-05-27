@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "40px",
     marginRight: "10px",
     position: "static",
+    verticalAlign: "top",
   },
   addRemoveCatchTypesButton: {
     marginLeft: theme.spacing(1),
@@ -260,8 +261,6 @@ export const HomePage = ({ user, userObservatory }) => {
 
   const handleToDayDetailsClick = async () => {
     setLoadingIcon(true);
-    //setDisabled(true);
-    //TODO Own state for toDayDetails. May be good idea to disable also save button.
     let data = {
       day: formatDate(day),
       comment: comment,
@@ -269,11 +268,9 @@ export const HomePage = ({ user, userObservatory }) => {
       observatory: userObservatory,
       selectedactions: readyDailyActions(),
     };
-
     try {
       await sendDay(data);
       const days = await getDays();
-      //setDisabled(false);
       dispatch(setDays(days));
       setLoadingIcon(false);
       history.push(`/daydetails/${formatDate(day)}`);
