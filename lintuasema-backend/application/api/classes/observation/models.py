@@ -56,6 +56,7 @@ class Observation(Base):
         self.observationperiod_id = observationperiod_id
         self.shorthand_id = shorthand_id
         self.account_id = account_id
+        #lisää local ja localgåu 
 
         @staticmethod
         def summaryOfBirdsPerDay():

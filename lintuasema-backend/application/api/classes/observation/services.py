@@ -112,6 +112,7 @@ def deleteObservations(shorthand_id):
 
 def updateObservation(shorthand_id):
     observation_old=Observation.query.get(shorthand_id)
+# tämä vain kopio vanhan. Lisättävä local ja localGåu
     observation_new=Observation(adultUnknownCount=observation_old.adultUnknownCount, adultFemaleCount=observation_old.adultFemaleCount,
     adultMaleCount=observation_old.adultMaleCount, juvenileUnknownCount=observation_old.juvenileUnkownCount,
     juvenileFemaleCount=observation_old.juvenileFemaleCount, juvenileMaleCount=observation_old.juvenileMaleCount, 
