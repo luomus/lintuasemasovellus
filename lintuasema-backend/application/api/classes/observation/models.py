@@ -24,8 +24,8 @@ class Observation(Base):
     direction = db.Column(db.String(144), nullable = True)
     bypassSide = db.Column(db.String(144), nullable = True)
     notes = db.Column(db.String(1000), nullable = True)
-    localObservationsCount = db.Column(db.Integer, nullable = True)
-    localObservationsGåuCount = db.Column(db.Integer, nullable = True)
+    #localObservationsCount = db.Column(db.Integer, nullable = True)
+    #localObservationsGåuCount = db.Column(db.Integer, nullable = True)
 
     observationperiod_id = db.Column(db.Integer, db.ForeignKey(Base.the_prefix + 'observationperiod.id'), nullable=False)
 
@@ -37,8 +37,7 @@ class Observation(Base):
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
         unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, 
-        bypassSide, notes, observationperiod_id, shorthand_id, account_id, localObservationsCount,
-        localObservationsGåuCount):
+        bypassSide, notes, observationperiod_id, shorthand_id, account_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
         self.adultFemaleCount = adultFemaleCount
@@ -59,8 +58,8 @@ class Observation(Base):
         self.observationperiod_id = observationperiod_id
         self.shorthand_id = shorthand_id
         self.account_id = account_id
-        self.localObservationsCount = localObservationsCount
-        self.localObservationsGåuCount = localObservationsGåuCount
+        #self.localObservationsCount = localObservationsCount
+        #self.localObservationsGåuCount = localObservationsGåuCount
         #lisää local ja localgåu 
 
         @staticmethod
