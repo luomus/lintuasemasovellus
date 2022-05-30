@@ -30,6 +30,7 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Sijainti");
     cy.contains("Rengastusvakio");
     cy.contains("Liitteitä");
+    cy.contains("Siirry koontinäkymään");
     cy.contains("Tallenna");
   });
 
@@ -73,14 +74,14 @@ describe("FirstpageFieldsAndModification", function () {
     cy.get('ul').children()
       .should('contain','Vakio')
       .and('contain','Muu muutto')
-      .and('contain','Yömuutto')
-      .and('contain','Hajahavainto');
+      .and('contain','Yömuutto');
   });
 
   it("Type dropdown menu does not contain type 'Paikallinen'", function () {
     cy.get("#selectType").click();
     cy.get('ul').children()
-      .should('not.contain','Paikallinen');
+      .should('not.contain','Paikallinen')
+      .and("not.contain", "Hajahavainto");
   });
 
 });

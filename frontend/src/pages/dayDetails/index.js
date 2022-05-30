@@ -290,7 +290,7 @@ export const DayDetails = ({ userObservatory }) => {
 
         <Grid container alignItems="flex-end" spacing={3}>
           <Grid item xs={6}>
-            <Typography variant="h5" component="h2" >
+            <Typography id="dayAndObservatory" variant="h5" component="h2" >
               {day} {" "}
               {userObservatory.replace("_", " ")}
             </Typography>
@@ -300,7 +300,7 @@ export const DayDetails = ({ userObservatory }) => {
               display: "flex",
               alignItems: "left"
             }}>
-              <Typography variant="h6" component="h2" className={classes.obsAndComment}>
+              <Typography id="observers" variant="h6" component="h2" className={classes.obsAndComment}>
                 {t("observers")}{": "}{observers}{" "}
               </Typography>
               {observersForm === false ? (
@@ -329,7 +329,7 @@ export const DayDetails = ({ userObservatory }) => {
               display: "flex",
               alignItems: "left"
             }}>
-              <Typography variant="h6" component="h2" className={classes.obsAndComment}>
+              <Typography id="comment" variant="h6" component="h2" className={classes.obsAndComment}>
                 {t("comment")}{": "}{comment}{" "}
               </Typography>
               {commentForm === false ? (
@@ -357,7 +357,7 @@ export const DayDetails = ({ userObservatory }) => {
           </Grid>
 
           {/* DAILY ACTIONS */}
-          <Grid item xs={12} fullwidth="true">
+          <Grid id="dailyActions" item xs={12} fullwidth="true">
             <Typography variant="h6" component="h2" >
               {t("ObservationActivity")}
             </Typography>

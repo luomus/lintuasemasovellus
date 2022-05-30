@@ -16,6 +16,7 @@ from flask_login import login_user, logout_user , current_user, login_required
 
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 TARGET = os.getenv('TARGET')
+allowedRoles = os.getenv('ALLOWED_ROLES', 'MA.haukkaUser,MA.admin').split(',')
 
 
 @bp.route('/login', methods=['POST', 'GET'])
@@ -31,6 +32,12 @@ def loginconfirm():
     userId = req['id']
     name = req['fullName']
     email = req['emailAddress']
+    hasRole = any(x in req['role'] for x in allowedRoles)
+
+    if not hasRole and allowedRoles != ['']:
+        response = make_response(redirect('/'))
+        response.set_cookie('showUserMessage', 'noRequiredRoles', max_age=120)
+        return response
 
     user = Account.query.filter_by(userId=userId).first()
     if not user:
@@ -59,7 +66,11 @@ def logoutCleanup():
 
 @bp.route('/get/token', methods=['GET', 'POST'])
 def getSessionToken():
-    return jsonify(token=session['token'], auth_token=AUTH_TOKEN)
+    return jsonify(token=session['token'])
+
+@bp.route('/api/getPerson', methods=['GET'])
+def getPersonFromLaji():
+    return requests.get('https://apitest.laji.fi/v0/person/' + session['token'] + '?access_token=' + AUTH_TOKEN).json()
 
 @bp.route('/loginRedirect', methods=['POST', 'GET'])
 def login():

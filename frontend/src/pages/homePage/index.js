@@ -25,8 +25,8 @@ import {
   loopThroughObservationPeriods,
   loopThroughObservations,
 } from "../../shorthand/parseShorthandField";
-import { searchDayInfo, getLatestDays, getCatches, sendEverything } from "../../services";
-import { retrieveDays } from "../../reducers/daysReducer";
+import { searchDayInfo, getLatestDays, getCatches, sendEverything, sendDay, getDays } from "../../services";
+import { retrieveDays, setDays } from "../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../reducers/dailyActionsReducer";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import DailyActions from "../../globalComponents/dayComponents/dailyActions";
@@ -61,7 +61,9 @@ const useStyles = makeStyles((theme) => ({
   },
   sendButton: {
     marginBottom: "40px",
+    marginRight: "10px",
     position: "static",
+    verticalAlign: "top",
   },
   addRemoveCatchTypesButton: {
     marginLeft: theme.spacing(1),
@@ -255,6 +257,27 @@ export const HomePage = ({ user, userObservatory }) => {
     }
     setLoadingIcon(false);
     setDisabled(false);
+  };
+
+  const handleToDayDetailsClick = async () => {
+    setLoadingIcon(true);
+    let data = {
+      day: formatDate(day),
+      comment: comment,
+      observers: observers,
+      observatory: userObservatory,
+      selectedactions: readyDailyActions(),
+    };
+    try {
+      await sendDay(data);
+      const days = await getDays();
+      dispatch(setDays(days));
+      setLoadingIcon(false);
+      history.push(`/daydetails/${formatDate(day)}`);
+    } catch (error) {
+      console.error(error.message);
+      setErrorHappened(true);
+    }
   };
 
 
@@ -595,6 +618,17 @@ export const HomePage = ({ user, userObservatory }) => {
               <Grid item xs={12}>
                 <br />
                 <Button
+                  id="toDayDetails"
+                  className={classes.sendButton}
+                  onClick={handleToDayDetailsClick}
+                  disabled={false}
+                  color="primary"
+                  variant="contained"
+                >
+                  {t("toDayDetails")}
+                </Button>
+
+                <Button
                   id="saveButton"
                   className={classes.sendButton}
                   onClick={sendData}
@@ -602,7 +636,7 @@ export const HomePage = ({ user, userObservatory }) => {
                   color="primary"
                   variant="contained"
                 >
-                  {disabled ? t("loading") : t("save")}
+                  {disabled ? t("loading") : t("saveMigrant")}
                 </Button>
                 { (loadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>

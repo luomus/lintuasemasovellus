@@ -109,7 +109,9 @@ const resources = {
       "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Poista'.",
       "modify": "Muokkaa",
       "save": "Tallenna",
+      "saveMigrant": "Tallenna muuttohavainnot",
       "loading": "Ladataan...",
+      "toDayDetails": "Siirry koontinäkymään",
 
       // notifications & errors
       "invalidDate": "Virheellinen päivämäärä",
@@ -160,6 +162,8 @@ const resources = {
       "noObservationsDuringEmptyPeriod": "Tyhjällä jaksolla ei voi olla havaintoja.",
       "noObservations": "Jaksolle ei ole kirjattu havaintoja.",
       "mustEndWithTime": "Havaintojen on päätyttävä kellonaikaan.",
+
+      "noRequiredRoles": "Jos tarvitset pääsyn sovellukseen, voit pyytää sitä sähköpostilla.",
     },
   },
 };
