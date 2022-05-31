@@ -4,6 +4,8 @@ import {
   getErrors
 } from "../shorthand/validations";
 
+import { loopThroughCheckForErrors as newLoopThroughCheckForErrors } from "../shorthand/newValidations";
+
 import {
   withValidSubObservation,
   makeValidMultiline
@@ -69,12 +71,6 @@ describe("basic higher order validations", () => {
   test("two time blocks", () => {
     const text = "9.00\nK 1/2 W\n12.00\n13.00\nV 2 E ++\n13.30";
     loopThroughCheckForErrors(text);
-    expect(getErrors()).toEqual([]);//we'll expect no errors
-  });
-
-  test("start and end time must be different", () => {
-    const line = "12:00\nkt 22\n12:00";
-    loopThroughCheckForErrors(line);
     expect(getErrors()).toEqual([]);//we'll expect no errors
   });
 
