@@ -114,6 +114,7 @@ const resources = {
       "toDayDetails": "Siirry koontinäkymään",
 
       // notifications & errors
+      "periodsTimesMustBeDifferent": "Aloitus- ja lopetusajan on oltava eri",
       "invalidDate": "Virheellinen päivämäärä",
       "maxDateError": "Päivämäärä on liian suuri",
       "minDateError": "Päivämäärä on liian pieni",
