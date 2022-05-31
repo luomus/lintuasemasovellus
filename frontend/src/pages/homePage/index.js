@@ -60,10 +60,11 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   sendButton: {
-    marginBottom: "40px",
+    marginBottom: "20px",
     marginRight: "10px",
+    marginTop: "20px",
     position: "static",
-    verticalAlign: "top",
+    verticalAlign: "top"
   },
   addRemoveCatchTypesButton: {
     marginLeft: theme.spacing(1),
@@ -96,7 +97,8 @@ const useStyles = makeStyles((theme) => ({
   },
   loadingIcon: {
     padding: "0px 5px 0px 0px",
-    margin: "0px 0px 10px 10px"
+    margin: "10px",
+    verticalAlign: "top"
   }
 }
 ));
@@ -144,9 +146,11 @@ export const HomePage = ({ user, userObservatory }) => {
   const [comment, setComment] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const [disabled, setDisabled] = useState(false);
+  const [saveDisabled, setSaveDisabled] = useState(false);
+  const [toDayDetailsDisabled, setToDayDetailsDisabled] = useState(false);
   const [formSent, setFormSent] = useState(false);
-  const [loadingIcon, setLoadingIcon] = useState(false);
+  const [saveLoadingIcon, setSaveLoadingIcon] = useState(false);
+  const [toDayDetailsLoadingIcon, setToDayDetailsLoadingIcon] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
   const [latestDays, setLatestDays] = useState([]);
   const [shorthand, setShorthand] = useState("");
@@ -227,11 +231,11 @@ export const HomePage = ({ user, userObservatory }) => {
   }, [stations, userObservatory]);
 
   const sendData = async () => {
-    setLoadingIcon(true);
+    setSaveLoadingIcon(true);
     const rows = sanitizedShorthand;
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
     const observationsToSend = loopThroughObservations(rows, user.id);
-    setDisabled(true);
+    setSaveDisabled(true);
     let data = {
       day: formatDate(day),
       comment: comment,
@@ -255,31 +259,38 @@ export const HomePage = ({ user, userObservatory }) => {
       console.error(error.message);
       setErrorHappened(true);
     }
-    setLoadingIcon(false);
-    setDisabled(false);
+    setSaveLoadingIcon(false);
+    setSaveDisabled(false);
   };
 
   const handleToDayDetailsClick = async () => {
-    setLoadingIcon(true);
-    let data = {
-      day: formatDate(day),
-      comment: comment,
-      observers: observers,
-      observatory: userObservatory,
-      selectedactions: readyDailyActions(),
-    };
+    setToDayDetailsLoadingIcon(true);
+    setToDayDetailsDisabled(true);
+    const defaultActions = JSON.stringify(dispatch(setDefaultActions(userObservatory)).data.dailyActions);
     try {
-      await sendDay(data);
-      const days = await getDays();
-      dispatch(setDays(days));
-      setLoadingIcon(false);
+      const searchResult = await searchDayInfo(formatDate(day), userObservatory);
+      //Update if observers is changed
+      if (searchResult[0].observers !== observers) {
+        const data = {
+          day: formatDate(day),
+          observers: observers,
+          observatory: userObservatory,
+          comment: searchResult[0].comment.toString(),
+          selectedactions: searchResult[0].selectedactions === "" ?
+            defaultActions : searchResult[0].selectedactions
+        };
+        await sendDay(data);
+        const days = await getDays();
+        dispatch(setDays(days));
+      }
       history.push(`/daydetails/${formatDate(day)}`);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
     }
+    setToDayDetailsLoadingIcon(false);
+    setToDayDetailsDisabled(false);
   };
-
 
   const addCatchRow = () => {
     dispatch(addOneCatchRow());
@@ -294,6 +305,13 @@ export const HomePage = ({ user, userObservatory }) => {
 
   const saveButtonDisabled = () => {
     if (observers === "" || observers.trim() === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
+      return true;
+    else
+      return false;
+  };
+
+  const toDayDetailsButtonDisabled = () => {
+    if (observers === "" || observers.trim() === "")
       return true;
     else
       return false;
@@ -443,7 +461,22 @@ export const HomePage = ({ user, userObservatory }) => {
                   value={observers}
                 />
               </Grid>
-
+              <Grid>
+                <Button
+                  id="toDayDetails"
+                  className={classes.sendButton}
+                  onClick={handleToDayDetailsClick}
+                  disabled={toDayDetailsButtonDisabled() || toDayDetailsDisabled}
+                  color="primary"
+                  variant="contained"
+                  title="Siirry valitun päivän koontinäkymään"
+                >
+                  {t("toDayDetails")}
+                </Button>
+                { (toDayDetailsLoadingIcon) &&
+                  <CircularProgress className={classes.loadingIcon} color="primary"/>
+                }
+              </Grid>
               <div className={classes.accordionRoot}>
                 <br />
                 <Accordion>
@@ -616,29 +649,17 @@ export const HomePage = ({ user, userObservatory }) => {
               </div>
 
               <Grid item xs={12}>
-                <br />
-                <Button
-                  id="toDayDetails"
-                  className={classes.sendButton}
-                  onClick={handleToDayDetailsClick}
-                  disabled={false}
-                  color="primary"
-                  variant="contained"
-                >
-                  {t("toDayDetails")}
-                </Button>
-
                 <Button
                   id="saveButton"
                   className={classes.sendButton}
                   onClick={sendData}
-                  disabled={saveButtonDisabled() || disabled}
+                  disabled={saveButtonDisabled() || saveDisabled}
                   color="primary"
                   variant="contained"
                 >
-                  {disabled ? t("loading") : t("saveMigrant")}
+                  {saveDisabled ? t("loading") : t("save")}
                 </Button>
-                { (loadingIcon) &&
+                { (saveLoadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>
                 }
               </Grid>
