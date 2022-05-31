@@ -4,8 +4,6 @@ import {
   getErrors
 } from "../shorthand/validations";
 
-import { loopThroughCheckForErrors as newLoopThroughCheckForErrors } from "../shorthand/newValidations";
-
 import {
   withValidSubObservation,
   makeValidMultiline
