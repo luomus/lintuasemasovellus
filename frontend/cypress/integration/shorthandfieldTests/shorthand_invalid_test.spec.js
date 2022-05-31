@@ -32,6 +32,7 @@ const invalidShorthand22 = "10:00\n-\ntauko\n12:00"; //tyhjä ja tauko samassa
 const invalidShorthand23 = "10:00\nsommol 1W/\n10:30"; //ilmansuunta ennen lukumäärän loppua
 const invalidShorthand24 = "10:00\ngrugru 100-200SW+-\n10:30"; //ohituspuoli välissä ilman pilkkua
 const invalidShorthand25 = "10:00\ngrugru 100SW ,,, ,200S\n10:30"; //liikaa pilkkuja
+const invalidShorthand26 = "10:00\nsommol 1W/\n10:00"; // alku ja loppuaika on sama
 
 const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand2, invalidShorthand3, invalidShorthand4, invalidShorthand5,
@@ -39,7 +40,7 @@ const shorthands = [invalidShorthand0, invalidShorthand1,
   invalidShorthand10, invalidShorthand11, invalidShorthand12, invalidShorthand13,
   invalidShorthand14, invalidShorthand15, invalidShorthand16, invalidShorthand17,
   invalidShorthand18, invalidShorthand19, invalidShorthand20, invalidShorthand21,
-  invalidShorthand22, invalidShorthand23, invalidShorthand24, invalidShorthand25];
+  invalidShorthand22, invalidShorthand23, invalidShorthand24, invalidShorthand25, invalidShorthand26];
 
 describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
   beforeEach(function () {
