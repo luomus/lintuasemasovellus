@@ -72,6 +72,12 @@ describe("basic higher order validations", () => {
     expect(getErrors()).toEqual([]);//we'll expect no errors
   });
 
+  test("start and end time must be different", () => {
+    const line = "12:00\nkt 22\n12:00";
+    loopThroughCheckForErrors(line);
+    expect(getErrors()).toEqual([]);//we'll expect no errors
+  });
+
   test("long example shorthand from file", () => {
     const file = path.join(__dirname, "./", "longShorthandExample.txt");
     // eslint-disable-next-line security/detect-non-literal-fs-filename
