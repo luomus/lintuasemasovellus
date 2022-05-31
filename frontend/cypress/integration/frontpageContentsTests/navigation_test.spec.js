@@ -7,7 +7,7 @@ describe("NavigatingFromFirstPageTest", function () {
 
   it("ToDayDetails Button navigates to chosen day's details", function() {
     const day = "27.05.2022";
-    cy.get("#date-picker-inline").type(day);
+    cy.get("#date-picker-inline").clear().type(day);
     cy.get("#toDayDetails").click();
     cy.url().should("include", "/#/daydetails/" + day);
     cy.contains("h2", day);
