@@ -99,7 +99,7 @@ def getObservationPeriodsByDayId(observatoryday_id):
             'observationType': row.typename,
             'location': row.locationname,
             'day_id': row.day_id,
-            'speciesCount': row.speciescount
+            'speciesCount': row.speciescount,
         })
   
     return jsonify(response)

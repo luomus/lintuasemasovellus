@@ -128,7 +128,13 @@ const ObsPeriodTable = (props) => {
                   .map((s, i) =>
                     <TableRow hover key={i}>
                       <StyledTableCell component="th" scope="row">
-                        {s.species}
+                        {s.notes ? <details>
+                          <summary>{s.species}</summary>
+                          <p>
+                            {s.notes}
+                          </p>
+                        </details>
+                          : <>{s.species}</>}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {s.allMigration}

@@ -8,7 +8,7 @@ def getObservationByPeriod(observationperiod_id):
     ret = []
     for observation in observations:
         countString = parseCountString(observation)
-        ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide})
+        ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide, 'notes': observation.notes})
     
     return ret
 
@@ -35,7 +35,8 @@ def getDaySummary(day_id):
                 " SUM(CASE WHEN " + prefix + "Type.name = :scatter THEN total_count ELSE 0 END) AS scatter_obs,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :local THEN total_count ELSE 0 END) AS total_local,"
                 " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
-                " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou"
+                " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou,"
+                " group_concat(" + prefix + "Observation.notes, ', ') AS notes"
                 " FROM " + prefix + "Observation"
                 " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
                 " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
@@ -63,7 +64,8 @@ def getDaySummary(day_id):
             "scatterObs":row.scatter_obs,
             "totalLocal":row.total_local,
             "localOther":row.local_other,
-            "localGåu":row.local_gou
+            "localGåu":row.local_gou,
+            "notes":row.notes,
             })
   
     return response

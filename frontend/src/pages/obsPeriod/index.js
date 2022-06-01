@@ -87,6 +87,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                 <TableCell >{t("count")}</TableCell>
                 <TableCell >{t("direction")}</TableCell>
                 <TableCell >{t("bypassSide")}</TableCell>
+                <TableCell >{t("notes")}</TableCell>
               </TableRow>
             </TableHead>
 
@@ -107,6 +108,9 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
                       </TableCell>
                       <TableCell>
                         {(globals.inverseBypass.get(s.bypassSide))}
+                      </TableCell>
+                      <TableCell>
+                        {s.notes}
                       </TableCell>
                     </TableRow>
                   )
