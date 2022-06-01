@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -58,13 +58,21 @@ def add_everything():
         catches_with_dayId = catches
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
-
-
+        
+    if not checkPeriod(dayId):
+        locId = 1
+        obsp2 = Observationperiod(
+            start_time=datetime(1900,1,1,0,0,0),
+            end_time=datetime(1900,1,1,0,0,0),
+            type_id=4,
+            location_id=locId, observatoryday_id=dayId)
+        db.session().add(obsp2)
+       
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
         obsp = Observationperiod(
-            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
+            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),          
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
             type_id=getTypeIdByName(obsperiod['observationType']),
             location_id=locId, observatoryday_id=dayId)
@@ -182,3 +190,16 @@ def get_latest_days(observatory):
         res = getLatestDays(observatory_id)
 
     return jsonify(res)
+
+@bp.route('/api/updateLocal/<obsday_id>/<species>', methods=['POST'])
+@login_required
+def update_local(obsday_id, species):
+    locId = 11362
+    obsp = obsp = Observationperiod(
+        start_time='0:00',
+        end_time='0:00',
+        type_id=11371,
+        location_id=locId, observatoryday_id=obsday_id)
+    db.session().add(obsp)
+    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
+    

@@ -33,6 +33,16 @@ def addDay(obsday):
         set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
 
+def checkPeriod(dayId):
+    d=Observationperiod.query.filter_by(start_time='0:00', is_deleted=0, observatoryday_id=dayId).first()
+   
+    if d:
+        print("True")
+        
+        return True
+    else:
+        print("False")
+        return False
 
 def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
     obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
