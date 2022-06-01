@@ -31,7 +31,7 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Rengastusvakio");
     cy.contains("Liitteitä");
     cy.contains("Siirry koontinäkymään");
-    cy.contains("Tallenna");
+    cy.contains("Tallenna muuttohavainnot");
   });
 
   it("Observatory can be modified", function () {

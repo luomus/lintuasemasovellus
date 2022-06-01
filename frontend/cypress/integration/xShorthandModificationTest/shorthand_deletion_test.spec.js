@@ -29,7 +29,7 @@ describe("ShorthandDeletion", function () {
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
-    cy.contains("Tallenna").click({ force: true });
+    cy.contains("Tallenna muuttohavainnot").click({ force: true });
     cy.wait(1000);
     cy.contains(date);
   });

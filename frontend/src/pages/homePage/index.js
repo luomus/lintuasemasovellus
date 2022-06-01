@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   obsPaper: {
     background: "white",
     padding: "20px 30px",
-    margin: "10px 10px 10px 10px",
+    margin: "10px 10px 60px 10px",
   },
   infoGrid: {
     padding: "10px",
@@ -275,7 +275,7 @@ export const HomePage = ({ user, userObservatory }) => {
           day: formatDate(day),
           observers: observers,
           observatory: userObservatory,
-          comment: searchResult[0].comment.toString(),
+          comment: searchResult[0].comment,
           selectedactions: searchResult[0].selectedactions === "" ?
             defaultActions : searchResult[0].selectedactions
         };
@@ -657,7 +657,7 @@ export const HomePage = ({ user, userObservatory }) => {
                   color="primary"
                   variant="contained"
                 >
-                  {saveDisabled ? t("loading") : t("save")}
+                  {saveDisabled ? t("loading") : t("saveMigrant")}
                 </Button>
                 { (saveLoadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>
