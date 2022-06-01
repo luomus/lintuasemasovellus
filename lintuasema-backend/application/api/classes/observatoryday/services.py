@@ -68,7 +68,7 @@ def get_day_without_id(day, observatory):
     if not obsday:
         res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
     else:
-        res.append({ 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})    
+        res.append({ 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
     return res
 
 def getDayId(day, observatory_id):
