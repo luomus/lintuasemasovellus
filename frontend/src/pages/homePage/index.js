@@ -34,6 +34,7 @@ import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "../../globalComponents/dayComponents/catchType";
 import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
+import Help from "../../globalComponents/Help";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -63,8 +64,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
     marginRight: "10px",
     marginTop: "20px",
-    position: "static",
-    verticalAlign: "top"
+    position: "static"
   },
   addRemoveCatchTypesButton: {
     marginLeft: theme.spacing(1),
@@ -97,8 +97,11 @@ const useStyles = makeStyles((theme) => ({
   },
   loadingIcon: {
     padding: "0px 5px 0px 0px",
-    margin: "10px",
-    verticalAlign: "top"
+    margin: "10px"
+  },
+  buttonAndIconsContainer: {
+    display: "flex",
+    alignItems: "center"
   }
 }
 ));
@@ -461,7 +464,7 @@ export const HomePage = ({ user, userObservatory }) => {
                   value={observers}
                 />
               </Grid>
-              <Grid>
+              <Grid className={classes.buttonAndIconsContainer}>
                 <Button
                   id="toDayDetails"
                   className={classes.sendButton}
@@ -473,6 +476,7 @@ export const HomePage = ({ user, userObservatory }) => {
                 >
                   {t("toDayDetails")}
                 </Button>
+                <Help title={t("helpForToDayDetailsButton")}/>
                 { (toDayDetailsLoadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>
                 }

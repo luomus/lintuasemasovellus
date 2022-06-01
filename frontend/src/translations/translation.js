@@ -112,6 +112,7 @@ const resources = {
       "saveMigrant": "Tallenna muuttohavainnot",
       "loading": "Ladataan...",
       "toDayDetails": "Siirry koontinäkymään",
+      "helpForToDayDetailsButton": "Siirry valitun päivän koontinäkymään. Syötäthän havainnoitsijan, jos kenttä on tyhjä, jotta painike aktivoituu.",
 
       // notifications & errors
       "periodsTimesMustBeDifferent": "Aloitus- ja lopetusajan on oltava eri",
