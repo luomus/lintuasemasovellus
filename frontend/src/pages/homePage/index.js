@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   obsPaper: {
     background: "white",
     padding: "20px 30px",
-    margin: "10px 10px 10px 10px",
+    margin: "10px 10px 60px 10px",
   },
   infoGrid: {
     padding: "10px",
