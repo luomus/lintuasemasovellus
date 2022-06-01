@@ -45,6 +45,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
         endsWithTime = false;
       }
 
+
       if (periodStartTime && periodContainsLines && (parseTimeForComparison(periodStartTime) === parseTimeForComparison(parsedTime))) {
         errors.push([rowNumber, "periodsTimesMustBeDifferent"]);
       }
