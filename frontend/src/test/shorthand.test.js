@@ -642,5 +642,17 @@ describe("Bugfixes", () => {
     }).toThrow("emptyObservation");
   });
 
+  test("observation notes are parsed ok-ish", () => {
+    let noteStr = "23, testi, hauki on kala";
+    let noteStr2 = "testi 34, jee";
+    let line = "sommol 321 (" + noteStr + "), 555 E (" + noteStr2 + ")";
+    let result = parse(line);
+    expect(result.species).toBe("sommol");
+    expect(result.osahavainnot[0].unknownUnknownCount).toBe("321");
+    expect(result.osahavainnot[0].notes).toBe(noteStr);
+    expect(result.osahavainnot[1].unknownUnknownCount).toBe("555");
+    expect(result.osahavainnot[1].direction).toBe("e");
+    expect(result.osahavainnot[1].notes).toBe(noteStr2);
+  });
 
 });
