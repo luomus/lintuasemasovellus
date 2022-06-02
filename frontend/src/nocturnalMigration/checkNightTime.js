@@ -17,7 +17,8 @@ const isNightJurmo = async (currentTime) => {
   }
 };
 
-export const checkNightTime = (observatory ) => {
+
+export const isNightTime = (observatory ) => {
 
   const currentTime = new Date();
 
