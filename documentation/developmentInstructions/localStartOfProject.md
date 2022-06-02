@@ -42,6 +42,6 @@ Edellä kuvatulla epämääräisellä porttikikkailulla saadaan aikaan se, että
 
 # Mahdollisten ongelmien ratkaisuja
 
-Komennot `npm install` ja `npm install @mui/material @emotion/react @emotion/styled` pitää ehkä joskus ajaa ensin, esim projektin kloonaamisen jälkeen. 
+Komento `npm install` pitää ehkä joskus ajaa ensin, esim projektin kloonaamisen jälkeen. 
 
 Jos tietokanta ei näytä toimivan, muista vpn-yhteys. Lisäksi backendin juurikansiossa pitää olla tiedosto .env joka sisältää oraclen tunnistetietoja yms. Jos sovelluksen haluaa käynnistää paikallisesti sqlite-tietokannalla, niin tämän voi säätää backendin juurikansiossa lintuasemasovellus.py-tiedostossa. .env-tiedoston pitää silti sisältää kirjautumiseen tarvittavia tietoja.
