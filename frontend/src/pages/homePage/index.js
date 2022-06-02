@@ -472,11 +472,10 @@ export const HomePage = ({ user, userObservatory }) => {
                   disabled={toDayDetailsButtonDisabled() || toDayDetailsDisabled}
                   color="primary"
                   variant="contained"
-                  title="Siirry valitun päivän koontinäkymään"
                 >
                   {t("toDayDetails")}
                 </Button>
-                <Help title={t("helpForToDayDetailsButton")}/>
+                <Help title={t("helpForToDayDetailsButton")} placement="right"/>
                 { (toDayDetailsLoadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>
                 }
@@ -652,7 +651,7 @@ export const HomePage = ({ user, userObservatory }) => {
 
               </div>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} className={classes.buttonAndIconsContainer}>
                 <Button
                   id="saveButton"
                   className={classes.sendButton}
@@ -663,6 +662,7 @@ export const HomePage = ({ user, userObservatory }) => {
                 >
                   {saveDisabled ? t("loading") : t("saveMigrant")}
                 </Button>
+                <Help title={t("helpForSaveMigrantButton")} placement="right"/>
                 { (saveLoadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>
                 }

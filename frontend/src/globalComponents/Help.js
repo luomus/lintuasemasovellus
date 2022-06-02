@@ -1,19 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
-import helpIcon from "../resources/helpIcon.svg";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 
 const Help = (props) => {
   return(
-    <img src={helpIcon}
-      height="25"
-      alt="helpIcon.svg"
-      title={props.title}
-    />
+    <div>
+      <Tooltip title={props.title}
+        placement={props.placement}
+        arrow
+      >
+        <IconButton disableRipple>
+          <QuestionMarkRoundedIcon color="primary"/>
+        </IconButton>
+      </Tooltip>
+    </div>
   );
 };
 
 Help.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  placement: PropTypes.string
 };
 
 export default Help;
