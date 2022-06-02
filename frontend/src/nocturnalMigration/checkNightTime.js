@@ -21,10 +21,13 @@ const isNightJurmo = async (currentTime) => {
 export const isNightTime = (observatory ) => {
 
   const currentTime = new Date();
+  // let currentTime = new Date("June 2, 2022 03:24:00");
+  // console.log("current time: ", currentTime);
+  // console.log("observatory: ", observatory);
 
-  if (observatory === "Hanko" && isNightHanko(currentTime)) {
+  if (observatory === "Hangon_Lintuasema" && isNightHanko(currentTime)) {
     return true;
-  } else if (observatory ==="Jurmo" && isNightJurmo(currentTime)) {
+  } else if (observatory ==="Jurmon_Lintuasema" && isNightJurmo(currentTime)) {
     return true;
   } else {
     return false;
