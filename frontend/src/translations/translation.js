@@ -91,6 +91,7 @@ const resources = {
       "mammals": "Nisäkkäät yms. laskettu",
       "attachments": "Liitteitä",
       "pcs": "kpl",
+      "notes": "Lisätiedot",
 
       // buttons & confirmation
       "cancel": "Peruuta",
