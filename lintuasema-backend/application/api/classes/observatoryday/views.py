@@ -58,8 +58,10 @@ def add_everything():
         catches_with_dayId = catches
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
-        
+    print(req['observationPeriods'])
+    print(type(req['observationPeriods']))
     if not checkPeriod(dayId):
+        print("!")
         locId = 1
         obsp2 = Observationperiod(
             start_time=datetime(1900,1,1,0,0,0),
@@ -67,20 +69,26 @@ def add_everything():
             type_id=4,
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp2)
-       
+        checkPeriod(dayId)
+        obsp2Id=getObsPerId(obsp2.start_time, obsp2.end_time, obsp2.type_id, obsp2.location_id, obsp2.observatoryday_id)
+        sh=Shorthand(shorthandblock='', observationperiod_id=obsp2Id)
+        db.session().add(sh)
+
+        db.session.commit()
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
         obsp = Observationperiod(
-            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),          
+            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),        
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
             type_id=getTypeIdByName(obsperiod['observationType']),
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
+        
 
         # observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
-
+        print(obsperiod['shorthandBlock'])
         # Save original shorthand block of observation period
         shorthand = Shorthand(shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId)
         db.session().add(shorthand)

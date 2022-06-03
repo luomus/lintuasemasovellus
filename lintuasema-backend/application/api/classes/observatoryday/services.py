@@ -33,12 +33,13 @@ def addDay(obsday):
         set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
 
+#Check if a period has already been added for the day
 def checkPeriod(dayId):
-    d=Observationperiod.query.filter_by(start_time='0:00', is_deleted=0, observatoryday_id=dayId).first()
-   
-    if d:
+    d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId).first()
+    #print(d)
+    print(dayId)
+    if d is not None:
         print("True")
-        
         return True
     else:
         print("False")
