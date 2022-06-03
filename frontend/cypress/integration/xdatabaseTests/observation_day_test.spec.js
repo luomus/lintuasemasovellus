@@ -271,7 +271,7 @@ describe("AddObservationDay", function () {
     cy.get("#periodsButton").click();
     cy.wait(600);
     cy.contains("Bunkkeri").click();
-    cy.wait(1000);
-    cy.get(".makeStyles-paper-170 > table").should("contain", "note, 123");
+    cy.wait(1600);
+    cy.get("table").should("contain", "note, 123");
   });
 });
