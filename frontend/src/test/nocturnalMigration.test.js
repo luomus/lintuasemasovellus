@@ -28,14 +28,14 @@ describe("calculate sunset/sunrise tests", () => {
     const date = new Date();
     const hankoLatitude = "59.832394";
     const hankoLongitude = "22.970695";
-    console.log("Get sunrise hanko: ", getSunrise(hankoLatitude, hankoLongitude, date));
+    expect(getSunrise(hankoLatitude,hankoLongitude,date)).not.toBeUndefined();
   });
 
   test("test getting sunset from hanko", () => {
     const date = new Date();
     const hankoLatitude = "59.832394";
     const hankoLongitude = "22.970695";
-    console.log("Get sunset hanko: ", getSunset(hankoLatitude, hankoLongitude, date));
+    expect(getSunset(hankoLatitude,hankoLongitude,date)).not.toBeUndefined();
   });
 
 });
