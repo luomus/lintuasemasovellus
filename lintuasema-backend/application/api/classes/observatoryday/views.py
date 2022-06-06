@@ -58,10 +58,10 @@ def add_everything():
         catches_with_dayId = catches
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
-    print(req['observationPeriods'])
-    print(type(req['observationPeriods']))
+    #print(req['observationPeriods'])
+    #print(type(req['observationPeriods']))
     if not checkPeriod(dayId):
-        print("!")
+        #print("!")
         locId = 1
         obsp2 = Observationperiod(
             start_time=datetime(1900,1,1,0,0,0),
@@ -72,9 +72,16 @@ def add_everything():
         checkPeriod(dayId)
         obsp2Id=getObsPerId(obsp2.start_time, obsp2.end_time, obsp2.type_id, obsp2.location_id, obsp2.observatoryday_id)
         sh=Shorthand(shorthandblock='', observationperiod_id=obsp2Id)
+        shorthand_id = Shorthand.query.filter_by(
+            shorthandblock='', observationperiod_id=obsp2Id, is_deleted=0).first()
+        print(shorthand_id)
         db.session().add(sh)
-
-        db.session.commit()
+        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
+        juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
+        subadultMaleCount= 0, unknownUnknownCount= 0, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+        bypassSide= '', notes= '', species= 'FRICOE', account_id= req['userID'], observationperiod_id=obsp2Id,total_count=0, shorthand_id=shorthand_id)
+        db.session().add(subobs)
+        db.session().commit()
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
@@ -88,7 +95,7 @@ def add_everything():
 
         # observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
-        print(obsperiod['shorthandBlock'])
+        #print(obsperiod['shorthandBlock'])
         # Save original shorthand block of observation period
         shorthand = Shorthand(shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId)
         db.session().add(shorthand)
@@ -106,7 +113,6 @@ def add_everything():
                     + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
                     + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
                     + subObservation['unknownMaleCount']
-                    
                     sub_observation = Observation(species=subObservation['species'],
                         adultUnknownCount=subObservation['adultUnknownCount'],
                         adultFemaleCount=subObservation['adultFemaleCount'],
@@ -126,7 +132,7 @@ def add_everything():
                         notes=subObservation['notes'],
                         observationperiod_id=obspId,
                         shorthand_id=shorthand_id,
-                        account_id=req['userID'])
+                        account_id=req['userID'])   
 
                     db.session().add(sub_observation)
 
