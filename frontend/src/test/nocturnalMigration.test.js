@@ -1,23 +1,32 @@
 import { isNightTime } from "../nocturnalMigration/checkNightTime.js";
 import { getSunrise, getSunset } from "../nocturnalMigration/calculateSunsetAndSunrise.js";
 
-describe.skip("is night time tests", () => {
+describe("is night time tests", () => {
 
-  test("test checkNightTime method if day", () => {
-    console.log("is night time: ", isNightTime("Hangon_Lintuasema"));
-    expect(isNightTime("Hangon_Lintuasema")).toBe(false);
+  test("test checkNightTime Hanko method if day", () => {
+    const currentTime = new Date("June 3, 2022 15:00");
+    console.log("currentTime: ", currentTime);
+    expect(isNightTime("Hangon_Lintuasema", currentTime)).toBe(false);
   });
 
-  test.skip("test checkNightTime method if night", () => {
-    expect(isNightTime("Hangon_Lintuasema")).toBe(true);
+  test("test checkNightTime Hanko method if night", () => {
+    const currentTime = new Date("June 3, 2022 03:00:00");
+    expect(isNightTime("Hangon_Lintuasema", currentTime)).toBe(true);
   });
 
-  test.skip("test checkNightTime method if day", () => {
-    expect(isNightTime("Jurmon_Lintuasema")).toBe(false);
+  test("test checkNightTime Jurmo method if day", () => {
+    const currentTime = new Date("June 3, 2022 15:24:00");
+    expect(isNightTime("Jurmon_Lintuasema", currentTime)).toBe(false);
   });
 
-  test.skip("test checkNightTime method if night", () => {
-    expect(isNightTime("Jurmon_Lintuasema")).toBe(true);
+  test("test checkNightTime Jurmo method if night", () => {
+    const currentTime = new Date("June 3, 2022 02:30:00");
+    expect(isNightTime("Jurmon_Lintuasema", currentTime)).toBe(true);
+  });
+
+  test("test checkNightTime Hanko if current time", () => {
+    const currentTime = new Date();
+    expect(isNightTime("Hangon_Lintuasema", currentTime)).toBe(false);
   });
 
 });
@@ -36,6 +45,20 @@ describe("calculate sunset/sunrise tests", () => {
     const hankoLatitude = "59.832394";
     const hankoLongitude = "22.970695";
     expect(getSunset(hankoLatitude,hankoLongitude,date)).not.toBeUndefined();
+  });
+
+  test("test getting sunrise from jurmo", () => {
+    const date = new Date();
+    const jurmoLatitude = "59.8249967";
+    const jurmoLongitude = "21.5999976";
+    expect(getSunrise(jurmoLatitude,jurmoLongitude,date)).not.toBeUndefined();
+  });
+
+  test("test getting sunset from jurmo", () => {
+    const date = new Date();
+    const jurmoLatitude = "59.8249967";
+    const jurmoLongitude = "21.5999976";
+    expect(getSunset(jurmoLatitude,jurmoLongitude,date)).not.toBeUndefined();
   });
 
 });

@@ -40,6 +40,9 @@
     "cypress:open": "cypress open",
     "cypress:cmd": "cypress run"
   },
+  "jest": {
+    "globalSetup": "./global-setup.js"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },

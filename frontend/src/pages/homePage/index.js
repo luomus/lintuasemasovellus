@@ -315,7 +315,8 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   const typeDisabled = (type) => {
-    if (!isNightTime(userObservatory) && type === t("nightMigration")) {
+    const currentTime = new Date();
+    if (!isNightTime(userObservatory, currentTime) && type === t("nightMigration")) {
       return true;
     } else {
       return false;
