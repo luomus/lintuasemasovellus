@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, editLocalObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -60,6 +60,9 @@ def add_everything():
         create_catches(catches_with_dayId)
     #print(req['observationPeriods'])
     #print(type(req['observationPeriods']))
+
+    #This section creates an empty observationperiod when a day is created. The empty observationperiod will function as a dummy for the
+    #sake of adding local observations. checkPeriod is a function that returns true if a day has already been created for this date
     if not checkPeriod(dayId):
         #print("!")
         locId = 1
@@ -69,19 +72,19 @@ def add_everything():
             type_id=4,
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp2)
-        checkPeriod(dayId)
         obsp2Id=getObsPerId(obsp2.start_time, obsp2.end_time, obsp2.type_id, obsp2.location_id, obsp2.observatoryday_id)
         sh=Shorthand(shorthandblock='', observationperiod_id=obsp2Id)
         shorthand_id = Shorthand.query.filter_by(
             shorthandblock='', observationperiod_id=obsp2Id, is_deleted=0).first()
-        print(shorthand_id)
         db.session().add(sh)
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
         juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-        subadultMaleCount= 0, unknownUnknownCount= 0, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+        subadultMaleCount= 0, unknownUnknownCount= 0    , unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
         bypassSide= '', notes= '', species= 'FRICOE', account_id= req['userID'], observationperiod_id=obsp2Id,total_count=0, shorthand_id=shorthand_id)
         db.session().add(subobs)
+
         db.session().commit()
+        editLocalObs(dayId)
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
