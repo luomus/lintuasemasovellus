@@ -21,39 +21,49 @@ This is so because it requires setting up the DB before executing the actual tes
 DB could be mocked to limit the scope of the tests but so far not done.
 '''
 
-# Setup
+# Support functions
 '''
-These are set up based on locations.json
-IDs are needed for find checks. Another approach is to hard code IDs 
+Observatory, location and observation type are by default set up based on locations.json
+IDs are needed for find tests of added periods. Another approach is to hard code IDs 
 based on order defined in locations.json if necessary to isolate get functions.
 '''
-def setupObservatoryLocationAndType():
-    observatory_name = 'Hangon_Lintuasema'
-    observatory_id = getObservatoryId(observatory_name)
-    location = 'Bunkkeri'
-    observation_type = 'Vakio'
+def setupDefaultFields():
+    fields = {}
 
-    return {
-        'observatory': observatory_name,
-        'observatory_id': observatory_id,
-        'location': location,
-        'location_id': getLocationId(location, observatory_id),
-        'observation_type': observation_type,
-        'type_id': getTypeIdByName(observation_type)
-    }
+    #Observatory
+    fields['observatory'] = 'Hangon_Lintuasema'
+    fields['observatory_id'] = getObservatoryId(fields['observatory'])
+
+    #Day details
+    fields['day'] = '07.06.2022'
+    fields['observers'] = 'Hannu Hanhi ja Aku Ankka'
+    fields['comment'] = 'Normipäivä'
+    fields['selectedactions'] = "{\"standardObs\":true}"
+
+    #Observation details
+    fields['location'] = 'Bunkkeri'
+    fields['observationType'] = 'Vakio'
+
+    #Data for observation period
+    fields['observatoryday_id'] = addDayFromReq(fields)['id']
+    fields['type_id'] = getTypeIdByName(fields['observationType'])
+    fields['location_id'] = getLocationId(fields['location'], fields['observatory_id'])
+    fields['startTime'] = '00:00'
+    fields['endTime'] = '23:59'
+
+    return fields
 
 
-def setupDay(observatory):
-    req = {
-        'observatory': observatory,
-        'day': '07.06.2022',
-        'observers': 'Hannu Hanhi ja Aku Ankka',
-        'comment': 'Normipäivä',
-        'selectedactions': "{\"standardObs\":true}"
-    }
-    return addDayFromReq(req)
+'''
+Overwrite default fields and/or add additional fields.
+'''
+def setupFields(**kwargs):
+    fields = setupDefaultFields()
+    for k,v in kwargs.items():
+         fields[k] = v
+    return fields
 
-# Run during tests
+
 def observationPeriodFound(fields):
     obsperiods = getObservationperiods()
     found = False
@@ -71,13 +81,17 @@ def observationPeriodFound(fields):
 
 
 def addAndFindPeriod(fields):
-    addObservationperiod(
-        startTime=fields['startTime'],
-        endTime=fields['endTime'],
-        observationType=fields['observationType'],
-        location=fields['location'],
-        day_id=fields['observatoryday_id']
-    )
+    try:
+      addObservationperiod(
+          startTime=fields['startTime'],
+          endTime=fields['endTime'],
+          observationType=fields['observationType'],
+          location=fields['location'],
+          day_id=fields['observatoryday_id']
+      )
+    except:
+      return False
+ 
     return observationPeriodFound(fields)
 
 
@@ -115,29 +129,41 @@ def test_addedObservationperiodGoesToDbUsingAddObservationFunction(app):
 
 
 def test_addedObservationperiodGoesToDb(app):
-    setup = setupObservatoryLocationAndType()
-    observationPeriod = {
-        'startTime': '00:00',
-        'endTime': '23:59',
-        'observationType': setup['observation_type'],
-        'type_id': setup['type_id'],  # needed for checks
-        'location': setup['location'],
-        'location_id': setup['location_id'],  # needed for checks
-        'observatoryday_id': setupDay(setup['observatory'])['id']
-    }
-    found = addAndFindPeriod(observationPeriod)
-    assert found == True
+    fields = setupFields(
+        startTime = '00:01',
+        endTime = '23:59'
+    )
+    assert addAndFindPeriod(fields) == True
 
 def test_addedObservationperiodGoesToDb2(app):
-    setup = setupObservatoryLocationAndType()
-    observationPeriod = {
-        'startTime': '10:40',
-        'endTime': '12:00',
-        'observationType': setup['observation_type'],
-        'type_id': setup['type_id'],  # needed for checks
-        'location': setup['location'],
-        'location_id': setup['location_id'],  # needed for checks
-        'observatoryday_id': setupDay(setup['observatory'])['id']
-    }
-    found = addAndFindPeriod(observationPeriod)
-    assert found == True
+    fields = setupFields(
+        startTime = '12:59', 
+        endTime = '16:00'
+    )
+    assert addAndFindPeriod(fields) == True
+
+def test_addedObservationperiodGoesToDb3(app):
+    fields = setupFields()
+    assert addAndFindPeriod(fields) == True
+
+def test_tryingToAddObsPeriodWithNonExistingLocationFails(app):
+    fields = setupFields(
+        startTime = '12:59', 
+        endTime = '15:00', 
+        location = 'Location that does not exist'
+    )
+    assert addAndFindPeriod(fields) == False
+
+def test_tryingToAddObsPeriodWithNonExistingDayFails(app):
+    fields = setupFields(
+        startTime = '00:59', 
+        endTime = '04:00', 
+        observatoryday_id = -1
+    )
+    assert addAndFindPeriod(fields) == False
+
+def test_tryingToAddObsPeriodWithNonExistingDayFails(app):
+    fields = setupFields(
+        observationType = 'Type that does not exist'
+    )
+    assert addAndFindPeriod(fields) == False
