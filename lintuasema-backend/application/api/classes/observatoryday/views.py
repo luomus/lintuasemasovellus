@@ -64,7 +64,6 @@ def add_everything():
     #This section creates an empty observationperiod when a day is created. The empty observationperiod will function as a dummy for the
     #sake of adding local observations. checkPeriod is a function that returns true if a day has already been created for this date
     if not checkPeriod(dayId):
-        #print("!")
         locId = 1
         obsp2 = Observationperiod(
             start_time=datetime(1900,1,1,0,0,0),
@@ -72,6 +71,7 @@ def add_everything():
             type_id=4,
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp2)
+        #Creating dummy observation and shorthand to legitimize the empty obsperiod, not sure if this is really needed
         obsp2Id=getObsPerId(obsp2.start_time, obsp2.end_time, obsp2.type_id, obsp2.location_id, obsp2.observatoryday_id)
         sh=Shorthand(shorthandblock='', observationperiod_id=obsp2Id)
         shorthand_id = Shorthand.query.filter_by(
@@ -79,12 +79,11 @@ def add_everything():
         db.session().add(sh)
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
         juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-        subadultMaleCount= 0, unknownUnknownCount= 0    , unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+        subadultMaleCount= 0, unknownUnknownCount= 0, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
         bypassSide= '', notes= '', species= 'FRICOE', account_id= req['userID'], observationperiod_id=obsp2Id,total_count=0, shorthand_id=shorthand_id)
         db.session().add(subobs)
-
         db.session().commit()
-        editLocalObs(dayId)
+        editLocalObs(dayId, 'KT', 7, req['userID'])
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)

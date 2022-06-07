@@ -1,6 +1,7 @@
 from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observation.models import Observation
+from application.api.classes.shorthand.models import Shorthand
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
@@ -45,20 +46,31 @@ def checkPeriod(dayId):
     else:
         print("checkperiod with dayId:",dayId, ": False")
         return False
-#Add a "new" observation to local obsperiod
-def editLocalObs(obsday_id, species, count):
+#Add a "new" observation to local obsperiod, or edit an old one if this species has already been observed locally:
+def editLocalObs(obsday_id, species, count, userid):
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4).first()
-    obs=Observation.query.filter_by(observationperiod_id=per.id).first()
-    print(obs.species)
-    '''
-    subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-        juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-        subadultMaleCount= 0, unknownUnknownCount= count    , unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-        bypassSide= '', notes= '', species= 'FRICOE', account_id= req['userID'], observationperiod_id=obsp2Id,total_count=0, shorthand_id=shorthand_id)
-    for p in per:
-        print("----")
-        print(p.start_time)
-    '''
+    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
+    if obs: #observation already exists (=local observation for this species has already been edited)
+        print(obs.total_count)
+        print("doesex")
+        obs.total_count=count
+        db.session().commit()
+    else: #observation does not exist, create observation
+        print("doesnotex")
+        '''
+        sh=Shorthand(shorthandblock='', observationperiod_id=per.id) #this is for creating the observation, could probably use a static number
+        db.session().add(sh)
+        shorthand_id = Shorthand.query.filter_by(
+            shorthandblock='', observationperiod_id=per.id, is_deleted=0).first()
+        print(shorthand_id)
+        '''
+        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
+            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
+            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+            bypassSide= '', notes= '', species= species, account_id= userid, observationperiod_id=per.id,total_count=count, shorthand_id=0)
+        db.session().add(subobs)
+        db.session().commit()
+    
 
 def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
     obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
