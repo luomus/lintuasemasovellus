@@ -24,6 +24,11 @@ describe("is night time tests", () => {
     expect(isNightTime("Jurmon_Lintuasema", currentTime)).toBe(true);
   });
 
+  test("test checkNightTime Jurmo method if night", () => {
+    const currentTime = new Date("June 3, 2022 23:00:00");
+    expect(isNightTime("Jurmon_Lintuasema", currentTime)).toBe(true);
+  });
+
   test("test checkNightTime Hanko if current time", () => {
     const currentTime = new Date();
     expect(isNightTime("Hangon_Lintuasema", currentTime)).toBe(false);

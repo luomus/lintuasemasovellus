@@ -35,8 +35,6 @@ import CatchType from "../../globalComponents/dayComponents/catchType";
 import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import Help from "../../globalComponents/Help";
-import { isNightTime } from "../../nocturnalMigration/checkNightTime";
-
 
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
@@ -312,15 +310,6 @@ export const HomePage = ({ user, userObservatory }) => {
       return true;
     else
       return false;
-  };
-
-  const typeDisabled = (type) => {
-    const currentTime = new Date();
-    if (!isNightTime(userObservatory, currentTime) && type === t("nightMigration")) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   const toDayDetailsButtonDisabled = () => {
@@ -616,7 +605,7 @@ export const HomePage = ({ user, userObservatory }) => {
                           >
                             {
                               types.map((type, i) =>
-                                <MenuItem id={type} disabled={typeDisabled(type)} value={type} key={i}>
+                                <MenuItem id={type} value={type} key={i}>
                                   {type}
                                 </MenuItem>
                               )

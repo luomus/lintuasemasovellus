@@ -12,6 +12,8 @@ import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import { setNotifications } from "../../reducers/notificationsReducer";
+import { useSelector } from "react-redux";
+import { isNightValidation } from "../../shorthand/isNightValidation";
 
 
 let timeout = null;
@@ -33,10 +35,13 @@ const CodeMirrorBlock = ({
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
+  const observatory = useSelector(state => state.userObservatory);
 
   const validate = (editor, data, value) => {
+    console.log("data: ", data);
     let toErrors = [];
-
+    let date = new Date();
+    isNightValidation(observatory, value, date);
     setSanitizedShorthand(loopThroughCheckForErrors(value));
     for (const marker of markers) {
       marker.clear();

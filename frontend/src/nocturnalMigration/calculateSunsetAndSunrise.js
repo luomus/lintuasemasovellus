@@ -59,7 +59,7 @@ export const calculate = (latitude, longitude, isSunrise, zenith, date) => {
   H = H /15;
   const T = H + RA - (0.06571 * approxTimeOfEventInDays) - 6.622;
   const UT = mod(T - (longitude / 15), 24);
-  const localT = Date.UTC(date.getFullYear(), date.getMonth(), isSunrise ? date.getDate() : date.getDate()-1);
+  const localT = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
   return new Date(localT + (UT * MSEC_IN_HOUR));
 };
 
