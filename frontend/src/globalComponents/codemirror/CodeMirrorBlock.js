@@ -38,10 +38,8 @@ const CodeMirrorBlock = ({
   const observatory = useSelector(state => state.userObservatory);
 
   const validate = (editor, data, value) => {
-    console.log("data: ", data);
     let toErrors = [];
-    let date = new Date();
-    isNightValidation(observatory, value, date);
+
     setSanitizedShorthand(loopThroughCheckForErrors(value));
     for (const marker of markers) {
       marker.clear();
@@ -72,6 +70,8 @@ const CodeMirrorBlock = ({
       markers.add(marker);
     }
     resetErrors();
+    isNightValidation(observatory, value);
+
     return toErrors;
   };
 
