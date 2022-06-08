@@ -96,7 +96,10 @@ def init_app(database, print_db_echo):
             print(e)
     else: 
         try:
-            app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
+            if (database == "persistent_sqlite") :
+                app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(os.getcwd(), 'app.db')
+            else:
+                app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
             app.config["SQLALCHEMY_ECHO"] = print_db_echo
             print('Testitietokantayhteys luotu.')
         except Exception as e:
@@ -109,7 +112,7 @@ def init_app(database, print_db_echo):
     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
         try:
             #Määritellään tyhjennetäänkö tietokanta sovelluksen alussa
-            if database == "oracle":
+            if database == "oracle" or database == "persistent_sqlite":
                 #db.reflect()
                 #db.drop_all()
                 db.create_all()
