@@ -30,17 +30,17 @@ based on order defined in locations.json if necessary to isolate get functions.
 def setupDefaultFields():
     fields = {}
 
-    #Observatory
+    #Observatory (ID needed for day and location)
     fields['observatory'] = 'Hangon_Lintuasema'
     fields['observatory_id'] = getObservatoryId(fields['observatory'])
 
-    #Day details
+    #Day details (used to create day which ID is needed for period)
     fields['day'] = '07.06.2022'
     fields['observers'] = 'Hannu Hanhi ja Aku Ankka'
     fields['comment'] = 'Normipäivä'
     fields['selectedactions'] = "{\"standardObs\":true}"
 
-    #Observation details
+    #Observation details (IDs of location and type are needed for period)
     fields['location'] = 'Bunkkeri'
     fields['observationType'] = 'Vakio'
 
@@ -64,49 +64,38 @@ def setupFields(**kwargs):
     return fields
 
 
+def addObservationPeriodFromFields(fields):
+	addObservationperiod(
+        startTime=fields['startTime'],
+        endTime=fields['endTime'],
+        observationType=fields['observationType'],
+        location=fields['location'],
+        day_id=fields['observatoryday_id']
+    )
+
+
 def observationPeriodFound(fields):
     obsperiods = getObservationperiods()
-    found = False
     for obsperiod in obsperiods:
         if (
-            obsperiod.start_time == datetime.strptime(
-                fields['startTime'], '%H:%M')
+            obsperiod.start_time == datetime.strptime(fields['startTime'], '%H:%M')
             and obsperiod.end_time == datetime.strptime(fields['endTime'], '%H:%M')
             and obsperiod.type_id == fields['type_id']
             and obsperiod.location_id == fields['location_id']
             and obsperiod.observatoryday_id == fields['observatoryday_id']
         ):
-            found = True
-    return found
+            return True
+    return False
 
 
-def addAndFindPeriod(fields):
+def addAndFindObservationPeriod(fields):
     try:
-      addObservationperiod(
-          startTime=fields['startTime'],
-          endTime=fields['endTime'],
-          observationType=fields['observationType'],
-          location=fields['location'],
-          day_id=fields['observatoryday_id']
-      )
-    except:
-      return False
- 
-    return observationPeriodFound(fields)
+      addObservationPeriodFromFields(fields)
+    finally:
+      return observationPeriodFound(fields)
 
-
-def addAndFindObservation(fields):
-    periodToAdd = Observationperiod(
-        start_time=datetime.strptime(fields['startTime'], '%H:%M'),
-        end_time=datetime.strptime(fields['endTime'], '%H:%M'),
-        type_id=fields['type_id'],
-        location_id=fields['location_id'],
-        observatoryday_id=fields['observatoryday_id'])
-    addObservation(periodToAdd)
-    return observationPeriodFound(fields)
 
 # Tests
-
 
 '''
 This test is older version, created prior to summer 2022.
@@ -124,27 +113,49 @@ def test_addedObservationperiodGoesToDbUsingAddObservationFunction(app):
         'location_id': 1,
         'observatoryday_id': 1
     }
-    found = addAndFindObservation(observationPeriod)
-    assert found == True
+    periodToAdd = Observationperiod(
+        start_time=datetime.strptime(observationPeriod['startTime'], '%H:%M'),
+        end_time=datetime.strptime(observationPeriod['endTime'], '%H:%M'),
+        type_id=observationPeriod['type_id'],
+        location_id=observationPeriod['location_id'],
+        observatoryday_id=observationPeriod['observatoryday_id'])
+    addObservation(periodToAdd)
+    return observationPeriodFound(observationPeriod)
 
+'''
+Tests below expect to have dictionary 'fields' initialized. 
+It includes following fields by default:
+observatory, observatory_id, 
+day, observatoryday_id, observers, comment, selectedactions
+location, location_id
+observationType, type_id
+startTime, endTime
 
+Tests can be varied by changing these fields:
+call setupFields and give chosen key, value pair to be changed 
+from default values. Defaults are set in setupDefaultFields.
+Remember to change the assertion accordingly.
+'''
 def test_addedObservationperiodGoesToDb(app):
     fields = setupFields(
         startTime = '00:01',
         endTime = '23:59'
     )
-    assert addAndFindPeriod(fields) == True
+    assert addAndFindObservationPeriod(fields) == True
+
 
 def test_addedObservationperiodGoesToDb2(app):
     fields = setupFields(
         startTime = '12:59', 
         endTime = '16:00'
     )
-    assert addAndFindPeriod(fields) == True
+    assert addAndFindObservationPeriod(fields) == True
+
 
 def test_addedObservationperiodGoesToDb3(app):
     fields = setupFields()
-    assert addAndFindPeriod(fields) == True
+    assert addAndFindObservationPeriod(fields) == True
+
 
 def test_tryingToAddObsPeriodWithNonExistingLocationFails(app):
     fields = setupFields(
@@ -152,7 +163,8 @@ def test_tryingToAddObsPeriodWithNonExistingLocationFails(app):
         endTime = '15:00', 
         location = 'Location that does not exist'
     )
-    assert addAndFindPeriod(fields) == False
+    assert addAndFindObservationPeriod(fields) == False
+
 
 def test_tryingToAddObsPeriodWithNonExistingDayFails(app):
     fields = setupFields(
@@ -160,10 +172,18 @@ def test_tryingToAddObsPeriodWithNonExistingDayFails(app):
         endTime = '04:00', 
         observatoryday_id = -1
     )
-    assert addAndFindPeriod(fields) == False
+    assert addAndFindObservationPeriod(fields) == False
 
-def test_tryingToAddObsPeriodWithNonExistingDayFails(app):
+
+def test_tryingToAddObsPeriodWithNonExistingTypeFails(app):
     fields = setupFields(
         observationType = 'Type that does not exist'
     )
-    assert addAndFindPeriod(fields) == False
+    assert addAndFindObservationPeriod(fields) == False
+
+
+def test_tryingToAddObsPeriodWithInvalidStartTimeFails(app):
+    fields = setupFields(
+        startTime = 'invalid time'
+    )
+    assert addAndFindObservationPeriod(fields) == False
