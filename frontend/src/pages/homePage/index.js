@@ -278,7 +278,7 @@ export const HomePage = ({ user, userObservatory }) => {
           observers: observers,
           observatory: userObservatory,
           comment: searchResult[0].comment,
-          selectedactions: searchResult[0].selectedactions === "" 
+          selectedactions: searchResult[0].selectedactions === ""
             ? JSON.stringify(dispatch(setDefaultActions(userObservatory)).data.dailyActions)
             : searchResult[0].selectedactions
         };
