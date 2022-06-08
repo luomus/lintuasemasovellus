@@ -269,7 +269,6 @@ export const HomePage = ({ user, userObservatory }) => {
   const handleToDayDetailsClick = async () => {
     setToDayDetailsLoadingIcon(true);
     setToDayDetailsDisabled(true);
-    const defaultActions = JSON.stringify(dispatch(setDefaultActions(userObservatory)).data.dailyActions);
     try {
       const searchResult = await searchDayInfo(formatDate(day), userObservatory);
       //Update if observers is changed
@@ -279,8 +278,9 @@ export const HomePage = ({ user, userObservatory }) => {
           observers: observers,
           observatory: userObservatory,
           comment: searchResult[0].comment,
-          selectedactions: searchResult[0].selectedactions === "" ?
-            defaultActions : searchResult[0].selectedactions
+          selectedactions: searchResult[0].selectedactions === "" 
+            ? JSON.stringify(dispatch(setDefaultActions(userObservatory)).data.dailyActions)
+            : searchResult[0].selectedactions
         };
         await sendDay(data);
         const days = await getDays();
