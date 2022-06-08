@@ -1,3 +1,4 @@
+from venv import create
 from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observation.models import Observation
@@ -27,6 +28,10 @@ def addDay(obsday):
     if  not d and obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
         db.session().add(obsday)
         db.session().commit() 
+        dayId=getDayId(obsday.day, obsday.observatory_id)
+        if not checkPeriod(dayId):
+            createEmptyObsPeriod(dayId)
+            editLocalObs(dayId, 'KT', 44, 1)
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
       if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
@@ -35,17 +40,25 @@ def addDay(obsday):
         set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
 
-#Check if a period has already been added for the day
+#Check if a period for local observations has already been added today
 def checkPeriod(dayId):
-    d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId).first()
-    #print(d)
-    #print(dayId)
+    d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId, type_id=4).first()
     if d is not None:
         print("checkperiod with dayId:",dayId, ": True")
         return True
     else:
         print("checkperiod with dayId:",dayId, ": False")
         return False
+
+def createEmptyObsPeriod(dayId):
+    obsp2 = Observationperiod(
+       start_time=datetime(1900,1,1,0,0,0),
+        end_time=datetime(1900,1,1,23,59,0),
+        type_id=4,
+        location_id=1, observatoryday_id=dayId)
+    db.session().add(obsp2)
+    db.session().commit()
+
 #Add a "new" observation to local obsperiod, or edit an old one if this species has already been observed locally:
 def editLocalObs(obsday_id, species, count, userid):
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4).first()
@@ -55,15 +68,8 @@ def editLocalObs(obsday_id, species, count, userid):
         print("doesex")
         obs.total_count=count
         db.session().commit()
-    else: #observation does not exist, create observation
+    else: #observation does not exist, so we create it
         print("doesnotex")
-        '''
-        sh=Shorthand(shorthandblock='', observationperiod_id=per.id) #this is for creating the observation, could probably use a static number
-        db.session().add(sh)
-        shorthand_id = Shorthand.query.filter_by(
-            shorthandblock='', observationperiod_id=per.id, is_deleted=0).first()
-        print(shorthand_id)
-        '''
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',

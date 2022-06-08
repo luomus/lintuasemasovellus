@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, editLocalObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriod, editLocalObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -61,29 +61,9 @@ def add_everything():
     #print(req['observationPeriods'])
     #print(type(req['observationPeriods']))
 
-    #This section creates an empty observationperiod when a day is created. The empty observationperiod will function as a dummy for the
-    #sake of adding local observations. checkPeriod is a function that returns true if a day has already been created for this date
-    if not checkPeriod(dayId):
-        locId = 1
-        obsp2 = Observationperiod(
-            start_time=datetime(1900,1,1,0,0,0),
-            end_time=datetime(1900,1,1,0,0,0),
-            type_id=4,
-            location_id=locId, observatoryday_id=dayId)
-        db.session().add(obsp2)
-        #Creating dummy observation and shorthand to legitimize the empty obsperiod, not sure if this is really needed
-        obsp2Id=getObsPerId(obsp2.start_time, obsp2.end_time, obsp2.type_id, obsp2.location_id, obsp2.observatoryday_id)
-        sh=Shorthand(shorthandblock='', observationperiod_id=obsp2Id)
-        shorthand_id = Shorthand.query.filter_by(
-            shorthandblock='', observationperiod_id=obsp2Id, is_deleted=0).first()
-        db.session().add(sh)
-        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-        juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-        subadultMaleCount= 0, unknownUnknownCount= 0, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-        bypassSide= '', notes= '', species= 'FRICOE', account_id= req['userID'], observationperiod_id=obsp2Id,total_count=0, shorthand_id=shorthand_id)
-        db.session().add(subobs)
-        db.session().commit()
-        editLocalObs(dayId, 'KT', 7, req['userID'])
+    #Create an empty obsperiod if one does not already exist
+    editLocalObs(dayId, 'FRICOE', 99, req['userID'])
+
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
@@ -141,6 +121,14 @@ def add_everything():
     db.session().commit()
 
     return jsonify(req)
+
+
+@bp.route('/api/updateLocalObservation/<obsday_id>/<species>/<count>', methods=['POST']) #Backend for editing the local-column for a species in day details.
+@login_required
+def update_local(obsday_id, species, count):
+    req=request.get_json()
+    editLocalObs(obsday_id, species, count, req['userID'])
+
 
 
 @bp.route('/api/addDay', methods=['POST'])
@@ -207,15 +195,5 @@ def get_latest_days(observatory):
 
     return jsonify(res)
 
-@bp.route('/api/updateLocal/<obsday_id>/<species>', methods=['POST'])
-@login_required
-def update_local(obsday_id, species):
-    locId = 11362
-    obsp = obsp = Observationperiod(
-        start_time='0:00',
-        end_time='0:00',
-        type_id=11371,
-        location_id=locId, observatoryday_id=obsday_id)
-    db.session().add(obsp)
-    obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
+
     

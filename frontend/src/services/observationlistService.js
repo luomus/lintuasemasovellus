@@ -25,3 +25,7 @@ export const deleteObservationperiods = async (idsToRemove) => {
 export const updateObservation = async (shorthand_id) => {
   return await axios.post("/api/updateObservation", shorthand_id );
 };
+
+export const updateLocalObservation = async (dayId, species, count, userID) => {
+  return await axios.post("/api/updateLocalObservation", dayId, species, count, userID);
+};
