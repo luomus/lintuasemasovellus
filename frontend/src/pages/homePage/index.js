@@ -721,6 +721,7 @@ export const HomePage = ({ user, userObservatory }) => {
               </Grid>
             </Paper>
             <Notification category="shorthand" />
+            <Notification category="nocturnalMigration" />
           </Grid>
         </Grid>
       </Grid>

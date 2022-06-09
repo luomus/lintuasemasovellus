@@ -11,7 +11,7 @@ import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import { setNotifications } from "../../reducers/notificationsReducer";
+import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
 import { useSelector } from "react-redux";
 import { isNightValidation } from "../../shorthand/isNightValidation";
 
@@ -41,7 +41,11 @@ const CodeMirrorBlock = ({
   const observatory = useSelector(state => state.userObservatory);
 
   const validateNight = (value) => {
-    type === t("nightMigration") && isNightValidation(observatory, value, date);
+    if (type === t("nightMigration") && isNightValidation(observatory, value, date)) {
+      dispatch(setNocturnalNotification(true));
+    } else {
+      dispatch(setNocturnalNotification(false));
+    }
   };
 
   const validate = (editor, data, value) => {

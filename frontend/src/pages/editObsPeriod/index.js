@@ -255,6 +255,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
             </Grid>
             <Grid item xs={12}>
               <Notification category="shorthand" />
+              <Notification category="nocturnalMigration" />
             </Grid>
             <Grid container item xs={12} alignItems="flex-end">
               <Box pr={2} pt={2}>

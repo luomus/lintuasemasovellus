@@ -13,7 +13,7 @@ export const isNightValidation = (observatory, value, date) => {
     ms && date.setHours(0,0,0,ms);
 
     if(!isNightTime(observatory,date)) {
-      console.log("Huomio EI yö kellon aika!");
+      return true;
     }
 
   }
