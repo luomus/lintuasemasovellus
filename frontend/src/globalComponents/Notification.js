@@ -20,6 +20,13 @@ const useStyles = makeStyles(() => ({
     maxHeight: "8vw",
     overflow: "auto",
   },
+  nocturnalPaper: {
+    background: "#9933ff",
+    padding: "20px 30px",
+    marginTop: "20px",
+    maxHeight: "8vw",
+    overflow: "auto",
+  },
   errorHeading: {
     display: "flex",
     alignItems: "center",
@@ -32,6 +39,7 @@ const Notification = ({ category="all" }) => {
   const { t } = useTranslation();
 
   let allNotifications = useSelector(state => state.notifications);
+  let nocturnalNotification = useSelector(state => state.notifications.isNight);
   let notificationsSet = new Set();
   let errorsSet = new Set();
 
@@ -68,6 +76,19 @@ const Notification = ({ category="all" }) => {
             </Grid>
           </Paper>
         }
+      </div>
+    );
+  } else if (category === "nocturnalMigration") {
+    return (
+      <div>
+        { nocturnalNotification && <Paper className={classes.nocturnalPaper} >
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h2" className={classes.errorHeading} >
+              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
+              Yömuutto
+            </Typography>
+          </Grid>
+        </Paper>}
       </div>
     );
   }

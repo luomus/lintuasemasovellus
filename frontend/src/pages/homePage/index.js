@@ -36,7 +36,6 @@ import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import Help from "../../globalComponents/Help";
 
-
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
     background: "white",
@@ -642,6 +641,8 @@ export const HomePage = ({ user, userObservatory }) => {
                           shorthand={shorthand}
                           setShorthand={setShorthand}
                           setSanitizedShorthand={setSanitizedShorthand}
+                          date={day}
+                          type={type}
                         />
                       </Grid>
                     </Grid>
@@ -720,6 +721,7 @@ export const HomePage = ({ user, userObservatory }) => {
               </Grid>
             </Paper>
             <Notification category="shorthand" />
+            <Notification category="nocturnalMigration" />
           </Grid>
         </Grid>
       </Grid>

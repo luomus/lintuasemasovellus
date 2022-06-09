@@ -11,7 +11,9 @@ import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import { setNotifications } from "../../reducers/notificationsReducer";
+import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
+import { useSelector } from "react-redux";
+import { isNightValidation } from "../../shorthand/isNightValidation";
 
 
 let timeout = null;
@@ -28,11 +30,23 @@ const CodeMirrorBlock = ({
   shorthand,
   setShorthand,
   setSanitizedShorthand,
+  date,
+  type
 }) => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
+
+  const observatory = useSelector(state => state.userObservatory);
+
+  const validateNight = (value) => {
+    if (type === t("nightMigration") && isNightValidation(observatory, value, date)) {
+      dispatch(setNocturnalNotification(true));
+    } else {
+      dispatch(setNocturnalNotification(false));
+    }
+  };
 
   const validate = (editor, data, value) => {
     let toErrors = [];
@@ -67,6 +81,7 @@ const CodeMirrorBlock = ({
       markers.add(marker);
     }
     resetErrors();
+
     return toErrors;
   };
 
@@ -78,10 +93,12 @@ const CodeMirrorBlock = ({
    * @param {string} value
    */
   const codemirrorOnchange = (editor, data, value) => {
+
     if (timeout) {
       clearTimeout(timeout);
     }
     timeout = setTimeout(() => {
+      validateNight(value);
       const result = validate(editor, data, value);
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
@@ -119,6 +136,8 @@ CodeMirrorBlock.propTypes = {
   shorthand: PropTypes.string.isRequired,
   setShorthand: PropTypes.func.isRequired,
   setSanitizedShorthand: PropTypes.func.isRequired,
+  date: PropTypes.instanceOf(Date),
+  type: PropTypes.string
 };
 
 export default CodeMirrorBlock;

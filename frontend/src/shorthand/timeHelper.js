@@ -27,3 +27,9 @@ export const parseTimeForComparison = (timeString) => {
   }
   return ret;
 };
+
+export const parseTimeForNightValidation = (timeString) => {
+  let t = timeString;
+  let ms = Number(t.split(/[.:]/)[0]) * 60 * 60 * 1000 + Number(t.split(/[.:]/)[1]) * 60 * 1000;
+  return ms;
+};
