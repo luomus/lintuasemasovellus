@@ -24,7 +24,6 @@ const isNightJurmo = (currentTime) => {
 
 
 export const isNightTime = (observatory, currentTime) => {
-
   if (observatory === "Hangon_Lintuasema" && isNightHanko(currentTime)) {
     return true;
   } else if (observatory === "Jurmon_Lintuasema" && isNightJurmo(currentTime)) {
