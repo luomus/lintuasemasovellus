@@ -268,6 +268,8 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
                 setSanitizedShorthand={setSanitizedShorthand}
                 setShorthand={setShorthand}
                 shorthand={shorthand}
+                date={new Date(date)}
+                type={type}
               />
             </Grid>
             <Grid item xs={12}>

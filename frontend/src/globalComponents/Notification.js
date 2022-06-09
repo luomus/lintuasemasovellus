@@ -70,6 +70,19 @@ const Notification = ({ category="all" }) => {
         }
       </div>
     );
+  } else if (category === "nocturnalMigration") {
+    return (
+      <div>
+        <Paper className={classes.errorPaper} >
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h2" className={classes.errorHeading} >
+              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
+              Huomio päivä ajat yöllä!
+            </Typography>
+          </Grid>
+        </Paper>
+      </div>
+    );
   }
 
   return (

@@ -30,12 +30,19 @@ const CodeMirrorBlock = ({
   shorthand,
   setShorthand,
   setSanitizedShorthand,
+  date,
+  type
 }) => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
+
   const observatory = useSelector(state => state.userObservatory);
+
+  const validateNight = (value) => {
+    type === t("nightMigration") && isNightValidation(observatory, value, date);
+  };
 
   const validate = (editor, data, value) => {
     let toErrors = [];
@@ -70,7 +77,6 @@ const CodeMirrorBlock = ({
       markers.add(marker);
     }
     resetErrors();
-    isNightValidation(observatory, value);
 
     return toErrors;
   };
@@ -83,10 +89,12 @@ const CodeMirrorBlock = ({
    * @param {string} value
    */
   const codemirrorOnchange = (editor, data, value) => {
+
     if (timeout) {
       clearTimeout(timeout);
     }
     timeout = setTimeout(() => {
+      validateNight(value);
       const result = validate(editor, data, value);
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
@@ -124,6 +132,8 @@ CodeMirrorBlock.propTypes = {
   shorthand: PropTypes.string.isRequired,
   setShorthand: PropTypes.func.isRequired,
   setSanitizedShorthand: PropTypes.func.isRequired,
+  date: PropTypes.instanceOf(Date),
+  type: PropTypes.string
 };
 
 export default CodeMirrorBlock;

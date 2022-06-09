@@ -642,6 +642,8 @@ export const HomePage = ({ user, userObservatory }) => {
                           shorthand={shorthand}
                           setShorthand={setShorthand}
                           setSanitizedShorthand={setSanitizedShorthand}
+                          date={day}
+                          type={type}
                         />
                       </Grid>
                     </Grid>
