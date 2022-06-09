@@ -1,9 +1,8 @@
 from attr import fields
 from sqlalchemy import null
 from application.api.classes.observationperiod.models import Observationperiod
-from application.api.classes.observationperiod.services import addObservation, addObservationperiod
-from application.api.classes.observationperiod.services import getObservationperiods
-from application.api.classes.observatoryday.services import addDay, addDayFromReq, getDays
+from application.api.classes.observationperiod.services import addObservation, addObservationperiod, getObservationperiods
+from application.api.classes.observatoryday.services import addDay, addDayFromReq, getDays, editLocalObs
 from application.api.classes.location.services import createLocation, getLocationId
 from application.api.classes.observatory.services import getObservatoryId
 from application.api.classes.type.services import getTypeIdByName
@@ -181,7 +180,15 @@ def test_obs_period_with_invalid_start_time_raises_value_error(app):
     with raises(ValueError):
         add_and_find_observation_period(fields) == False
 
+'''Tests for adding local observations'''
 def test_adding_empty_obsperiod_when_migrants_saved(app):
+    fields = setup_default_fields()
+    add_observation_period_from_fields(fields)
+    fields2=setup_fields(startTime = '00:00',
+                         type_id=4)
+    assert observation_period_found(fields2) == True
+
+def test_editing_local_observations(app):
     fields = setup_default_fields()
     add_observation_period_from_fields(fields)
     fields2=setup_fields(startTime = '00:00',

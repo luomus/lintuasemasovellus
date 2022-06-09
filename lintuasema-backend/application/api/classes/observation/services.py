@@ -12,6 +12,11 @@ def getObservationByPeriod(observationperiod_id):
     
     return ret
 
+def getObservationByPeriodAndSpecies(observationperiod_id, species):
+    observation = Observation.query.filter_by(observationperiod_id = observationperiod_id, species = species).first()
+    
+    return observation
+
 def getAllObservations():
     observations = Observation.query.all()
     ret = []
