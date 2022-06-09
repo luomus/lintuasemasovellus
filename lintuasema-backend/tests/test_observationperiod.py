@@ -12,6 +12,8 @@ from application.db import db
 
 from datetime import datetime
 
+from pytest import raises
+
 '''
 Comment from summer 2022 project:
 In practice, these are integration tests
@@ -174,8 +176,9 @@ def test_obs_period_with_invalid_obs_type_is_not_added_and_found(app):
     assert add_and_find_observation_period(fields) == False
 
 
-def test_obs_period_with_invalid_start_time_is_not_added_and_found(app):
+def test_obs_period_with_invalid_start_time_raises_value_error(app):
     fields = setup_fields(startTime = 'invalid time')
+<<<<<<< HEAD
     assert add_and_find_observation_period(fields) == False
 
 '''Tests for local observations:'''
@@ -186,3 +189,7 @@ def test_adding_empty_obsperiod_when_migrants_saved(app):
     fields2=setup_fields(startTime = '00:00',
                          type_id=4)
     assert observation_period_found(fields2) == True
+=======
+    with raises(ValueError):
+        add_and_find_observation_period(fields) == False
+>>>>>>> 180ed8b3cf37d966c5cd356708fb1a7f518854de
