@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, TableCell, withStyles, makeStyles, Typography,
-  IconButton
+  IconButton, FormControlLabel, Checkbox, TextField, Grid
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
+import globals from "../../globalConstants";
 
 const ObsPeriodTable = (props) => {
 
@@ -17,7 +18,7 @@ const ObsPeriodTable = (props) => {
 
   const { t } = useTranslation();
 
-  const useStyles = makeStyles({
+  const useStyles = makeStyles((theme) => ({
     paper: {
       background: "white",
       padding: "20px 30px",
@@ -28,7 +29,14 @@ const ObsPeriodTable = (props) => {
       textDecoration: "underline",
       color: "black",
     },
-  });
+    checkbox: {
+      color: theme.palette.primary.main
+    },
+    filterContainer: {
+      marginBottom: "5px",
+      justifyContent: "flex-start"
+    }
+  }));
 
   const classes = useStyles();
 
@@ -60,10 +68,12 @@ const ObsPeriodTable = (props) => {
   }))(TableRow);
 
   const [modalOpen, setModalOpen] = useState(false);
-
   const [editModalOpen, setEditModalOpen] = useState(false);
-
   const [obsPeriod, setObsPeriod] = useState({});
+  const [onlyBirdsWithObservations, setOnlyBirdsWithObservations] = useState(true);
+  const [textFilter, setTextFilter] = useState("");
+  const [filteredSummary, setFilteredSummary] = useState(summary);
+  const [summaryWithAll, setSummaryWithAll] = useState(summary);
 
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
@@ -106,6 +116,10 @@ const ObsPeriodTable = (props) => {
     setPage(0);
   };
 
+  useEffect(() => {
+    setPage(0);
+  }, [filteredSummary]);
+
   const handleClose = () => {
     setModalOpen(false);
     if (editModalOpen) {
@@ -117,12 +131,100 @@ const ObsPeriodTable = (props) => {
   const handleErrorSnackOpen = () => {
   };
 
+  const addSpeciesToSummary = () => {
+    setSummaryWithAll(
+      globals.uniqueBirds.reduce(
+        (previous, current) => {
+          const birdInSummary = summary.find(bird => bird.species === current);
+          if (birdInSummary) {
+            return previous.concat(birdInSummary);
+          }
+          return (
+            previous
+              .concat({
+                /* Notice that these are specific to Hangon_Lintuasema.
+                   These are hard coded to table rows. These attributes should
+                   be defined elsewhere in case full support for additional
+                   observatories is about to be implemented. */
+                allMigration: 0,
+                constMigration: 0,
+                localGåu: 0,
+                localOther: 0,
+                nightMigration: 0,
+                notes: "",
+                otherMigration: 0,
+                scatterObs: 0,
+                species: current,
+                totalLocal: 0
+              })
+          );
+        }, []
+      ).sort((a, b) => a.species.localeCompare(b.species))
+    );
+  };
+
+  const handleFilterChange = () => {
+    setOnlyBirdsWithObservations(!onlyBirdsWithObservations);
+  };
+
+  const handleTextFilterChange = (event) => {
+    setTextFilter(event.target.value);
+  };
+
+  useEffect(() => {
+    addSpeciesToSummary();
+  }, [summary]);
+
+  useEffect(() => {
+    filterSummary();
+  }, [textFilter, onlyBirdsWithObservations, summaryWithAll]);
+
+  const filterSummary = () => {
+    setFilteredSummary(
+      [...summaryWithAll]
+        .filter(s =>
+          (s.allMigration + s.totalLocal) > (onlyBirdsWithObservations ? 0 : -1)
+          && s.species.toLowerCase().includes(textFilter.toLowerCase())));
+  };
+
   if (mode === "speciesTable") {
     return (
       <div>
         <Typography variant="h6" >
           {t("summary")}
         </Typography>
+        <Grid container
+          spacing={2}
+          alignItems="flex-end"
+          className={classes.filterContainer}
+        >
+          <Grid item>
+            <TextField
+              rows={1}
+              multiline={false}
+              id="textFilter"
+              fullWidth={false}
+              label={t("speciesTextFilter")}
+              onChange={handleTextFilterChange}
+              value={textFilter}
+            />
+          </Grid>
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={onlyBirdsWithObservations}
+                  onChange={handleFilterChange}
+                  id="onlyObservationsFilter"
+                  color="primary"
+                  className={classes.checkbox}
+                />
+              }
+              label={t("showOnlyBirdsWithObservations")}
+              labelPlacement="end"
+            />
+          </Grid>
+        </Grid>
         <TableContainer>
           <Table className={classes.table} id="speciesTable">
             <TableHead>
@@ -139,46 +241,44 @@ const ObsPeriodTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                summary
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((s, i) =>
-                    <StyledTableRow hover key={i}>
-                      <StyledTableCell component="th" scope="row">
-                        {s.notes ? <details>
+              {filteredSummary
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((s, i) =>
+                  <TableRow hover key={i}>
+                    <StyledTableCell component="th" scope="row">
+                      {s.notes ?
+                        <details>
                           <summary>{s.species}</summary>
-                          <p>
-                            {s.notes}
-                          </p>
+                          <p> {s.notes} </p>
                         </details>
-                          : <>{s.species}</>}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.totalLocal}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.localOther}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.localGåu}
-                      </StyledTableCell>
-                      <StyledTableCell align="right" className="dotted">
-                        {s.allMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.constMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.otherMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.nightMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.scatterObs}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  )
+                        : <>{s.species}</>}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.allMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.constMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.otherMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.nightMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.scatterObs}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.totalLocal}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localOther}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localGåu}
+                    </StyledTableCell>
+                  </TableRow>
+                )
               }
             </TableBody>
             <ObservationPeriod
@@ -189,12 +289,13 @@ const ObsPeriodTable = (props) => {
             />
           </Table>
         </TableContainer>
-        <PeriodTablePagination list={summary} rowsPerPage={rowsPerPage}
+        <PeriodTablePagination
+          list={filteredSummary}
+          rowsPerPage={rowsPerPage}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           page={page}
         />
-
       </div>
     );
   }

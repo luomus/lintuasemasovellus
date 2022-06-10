@@ -168,7 +168,6 @@ export const DayDetails = ({ userObservatory }) => {
     return () => (fetching = true);
   }, [dayId]);
 
-
   const handleEditShorthandOpen = () => {
     setEditShorthandModalOpen(true);
   };
