@@ -11,6 +11,7 @@ export const getObservationPeriods = async () => {
 };
 
 export const getDaysObservationPeriods = async (dayId) => {
+  if (!dayId) return [];
   const res = await axios.get(`/api/getDaysObservationPeriods/${dayId}/`);
   return res.data;
 };
