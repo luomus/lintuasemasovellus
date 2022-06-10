@@ -188,9 +188,3 @@ def test_adding_empty_obsperiod_when_migrants_saved(app):
                          type_id=4)
     assert observation_period_found(fields2) == True
 
-def test_editing_local_observations(app):
-    fields = setup_default_fields()
-    add_observation_period_from_fields(fields)
-    fields2=setup_fields(startTime = '00:00',
-                         type_id=4)
-    assert observation_period_found(fields2) == True
