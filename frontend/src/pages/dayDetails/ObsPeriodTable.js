@@ -244,7 +244,7 @@ const ObsPeriodTable = (props) => {
               {filteredSummary
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
-                  <TableRow hover key={i}>
+                  <StyledTableRow hover key={i}>
                     <StyledTableCell component="th" scope="row">
                       {s.notes ?
                         <details>
@@ -277,7 +277,7 @@ const ObsPeriodTable = (props) => {
                     <StyledTableCell align="right">
                       {s.localGåu}
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 )
               }
             </TableBody>
