@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, TableCell, withStyles, makeStyles, Typography,
-  IconButton
+  IconButton, FormControlLabel, Checkbox, TextField, Grid
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ const ObsPeriodTable = (props) => {
 
   const { t } = useTranslation();
 
-  const useStyles = makeStyles({
+  const useStyles = makeStyles((theme) => ({
     paper: {
       background: "white",
       padding: "20px 30px",
@@ -28,7 +28,13 @@ const ObsPeriodTable = (props) => {
       textDecoration: "underline",
       color: "black",
     },
-  });
+    checkbox: {
+      color: theme.palette.primary.main
+    },
+    filterContainer: {
+      marginBottom: "5px"
+    }
+  }));
 
   const classes = useStyles();
 
@@ -43,10 +49,11 @@ const ObsPeriodTable = (props) => {
   }))(TableCell);
 
   const [modalOpen, setModalOpen] = useState(false);
-
   const [editModalOpen, setEditModalOpen] = useState(false);
-
   const [obsPeriod, setObsPeriod] = useState({});
+  const [onlyBirdsWithObservations, setOnlyBirdsWithObservations] = useState(false);
+  const [textFilter, setTextFilter] = useState("");
+  const [filteredSummary, setFilteredSummary] = useState(summary);
 
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
@@ -100,12 +107,67 @@ const ObsPeriodTable = (props) => {
   const handleErrorSnackOpen = () => {
   };
 
+  const handleFilterChange = () => {
+    setOnlyBirdsWithObservations(!onlyBirdsWithObservations);
+  };
+
+  const handleTextFilterChange = (event) => {
+    setTextFilter(event.target.value);
+  };
+
+  useEffect(() => {
+    filterSummary();
+  }, [textFilter, onlyBirdsWithObservations, summary]);
+
+  const filterSummary = () => {
+    setFilteredSummary(
+      [...summary]
+        .filter(s =>
+          (s.allMigration + s.totalLocal) > (onlyBirdsWithObservations ? 0 : -1)
+          && s.species.toLowerCase().includes(textFilter.toLowerCase())));
+  };
+
   if (mode === "speciesTable") {
     return (
       <div>
+        {console.log("summary", summary)}
+        {console.log(filteredSummary)}
         <Typography variant="h6" >
           {t("summary")}
         </Typography>
+        <Grid container
+          spacing={2}
+          justifyContent="flex-start"
+          alignItems="flex-end"
+          className={classes.filterContainer}
+        >
+          <Grid item>
+            <TextField
+              rows={1}
+              multiline={false}
+              id="textFilter"
+              fullWidth={false}
+              label={t("speciesTextFilter")}
+              onChange={handleTextFilterChange}
+              value={textFilter}
+            />
+          </Grid>
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={onlyBirdsWithObservations}
+                  onChange={handleFilterChange}
+                  id="onlyObservationsFilter"
+                  color="primary"
+                  className={classes.checkbox}
+                />
+              }
+              label={t("showOnlyBirdsWithObservations")}
+              labelPlacement="end"
+            />
+          </Grid>
+        </Grid>
         <TableContainer>
           <Table className={classes.table} id="speciesTable">
             <TableHead>
@@ -122,46 +184,45 @@ const ObsPeriodTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                summary
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((s, i) =>
-                    <TableRow hover key={i}>
-                      <StyledTableCell component="th" scope="row">
-                        {s.notes ? <details>
+              {filteredSummary
+                .sort((a, b) => a.species.localeCompare(b.species))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((s, i) =>
+                  <TableRow hover key={i}>
+                    <StyledTableCell component="th" scope="row">
+                      {s.notes ?
+                        <details>
                           <summary>{s.species}</summary>
-                          <p>
-                            {s.notes}
-                          </p>
+                          <p> {s.notes} </p>
                         </details>
-                          : <>{s.species}</>}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.allMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.constMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.otherMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.nightMigration}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.scatterObs}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.totalLocal}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.localOther}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.localGåu}
-                      </StyledTableCell>
-                    </TableRow>
-                  )
+                        : <>{s.species}</>}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.allMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.constMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.otherMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.nightMigration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.scatterObs}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.totalLocal}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localOther}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localGåu}
+                    </StyledTableCell>
+                  </TableRow>
+                )
               }
             </TableBody>
             <ObservationPeriod
@@ -172,12 +233,11 @@ const ObsPeriodTable = (props) => {
             />
           </Table>
         </TableContainer>
-        <PeriodTablePagination list={summary} rowsPerPage={rowsPerPage}
+        <PeriodTablePagination list={filteredSummary} rowsPerPage={rowsPerPage}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           page={page}
         />
-
       </div>
     );
   }
