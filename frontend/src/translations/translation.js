@@ -115,7 +115,7 @@ const resources = {
       "loading": "Ladataan...",
       "toDayDetails": "Siirry koontinäkymään",
       "helpForToDayDetailsButton": "Siirry valitun päivän koontinäkymään. Syötäthän havainnoitsijan, jos kenttä on tyhjä, jotta painike aktivoituu.",
-      "showOnlyBirdsWithObservations": "Näytä vain lajit, joilla on havaintoja",
+      "showOnlyBirdsWithObservations": "Näytä vain lajit, joista on havaintoja",
       "speciesTextFilter": "Lajihaku",
 
       // notifications & errors

@@ -285,7 +285,6 @@ export const DayDetails = ({ userObservatory }) => {
   return (
 
     <div>
-      {console.log(summary)}
       <Paper className={classes.paper}>
 
         <Grid container alignItems="flex-end" spacing={3}>

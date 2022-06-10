@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
+import globals from "../../globalConstants";
 
 const ObsPeriodTable = (props) => {
 
@@ -32,7 +33,8 @@ const ObsPeriodTable = (props) => {
       color: theme.palette.primary.main
     },
     filterContainer: {
-      marginBottom: "5px"
+      marginBottom: "5px",
+      justifyContent: "flex-start"
     }
   }));
 
@@ -51,9 +53,10 @@ const ObsPeriodTable = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [obsPeriod, setObsPeriod] = useState({});
-  const [onlyBirdsWithObservations, setOnlyBirdsWithObservations] = useState(false);
+  const [onlyBirdsWithObservations, setOnlyBirdsWithObservations] = useState(true);
   const [textFilter, setTextFilter] = useState("");
   const [filteredSummary, setFilteredSummary] = useState(summary);
+  const [summaryWithAll, setSummaryWithAll] = useState(summary);
 
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
@@ -96,6 +99,10 @@ const ObsPeriodTable = (props) => {
     setPage(0);
   };
 
+  useEffect(() => {
+    setPage(0);
+  }, [filteredSummary]);
+
   const handleClose = () => {
     setModalOpen(false);
     if (editModalOpen) {
@@ -107,6 +114,38 @@ const ObsPeriodTable = (props) => {
   const handleErrorSnackOpen = () => {
   };
 
+  const addSpeciesToSummary = () => {
+    setSummaryWithAll(
+      globals.uniqueBirds.reduce(
+        (previous, current) => {
+          const birdInSummary = summary.find(bird => bird.species === current);
+          if (birdInSummary) {
+            return previous.concat(birdInSummary);
+          }
+          return (
+            previous
+              .concat({
+                /* Notice that these are specific to Hangon_Lintuasema.
+                   These are hard coded to table rows. These attributes should
+                   be defined elsewhere in case full support for additional
+                   observatories is about to be implemented. */
+                allMigration: 0,
+                constMigration: 0,
+                localGåu: 0,
+                localOther: 0,
+                nightMigration: 0,
+                notes: "",
+                otherMigration: 0,
+                scatterObs: 0,
+                species: current,
+                totalLocal: 0
+              })
+          );
+        }, []
+      ).sort((a, b) => a.species.localeCompare(b.species))
+    );
+  };
+
   const handleFilterChange = () => {
     setOnlyBirdsWithObservations(!onlyBirdsWithObservations);
   };
@@ -116,12 +155,16 @@ const ObsPeriodTable = (props) => {
   };
 
   useEffect(() => {
+    addSpeciesToSummary();
+  }, [summary]);
+
+  useEffect(() => {
     filterSummary();
-  }, [textFilter, onlyBirdsWithObservations, summary]);
+  }, [textFilter, onlyBirdsWithObservations, summaryWithAll]);
 
   const filterSummary = () => {
     setFilteredSummary(
-      [...summary]
+      [...summaryWithAll]
         .filter(s =>
           (s.allMigration + s.totalLocal) > (onlyBirdsWithObservations ? 0 : -1)
           && s.species.toLowerCase().includes(textFilter.toLowerCase())));
@@ -130,14 +173,11 @@ const ObsPeriodTable = (props) => {
   if (mode === "speciesTable") {
     return (
       <div>
-        {console.log("summary", summary)}
-        {console.log(filteredSummary)}
         <Typography variant="h6" >
           {t("summary")}
         </Typography>
         <Grid container
           spacing={2}
-          justifyContent="flex-start"
           alignItems="flex-end"
           className={classes.filterContainer}
         >
@@ -185,7 +225,6 @@ const ObsPeriodTable = (props) => {
             </TableHead>
             <TableBody>
               {filteredSummary
-                .sort((a, b) => a.species.localeCompare(b.species))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
                   <TableRow hover key={i}>
@@ -233,7 +272,9 @@ const ObsPeriodTable = (props) => {
             />
           </Table>
         </TableContainer>
-        <PeriodTablePagination list={filteredSummary} rowsPerPage={rowsPerPage}
+        <PeriodTablePagination
+          list={filteredSummary}
+          rowsPerPage={rowsPerPage}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           page={page}
