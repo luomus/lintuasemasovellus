@@ -39,8 +39,25 @@ const ObsPeriodTable = (props) => {
     },
     body: {
       fontSize: 14,
+      "&:nth-child(1) summary": {
+        cursor: "pointer",
+      },
+      "&.dotted": {
+        borderLeft: "1px dotted",
+      }
     },
   }))(TableCell);
+
+  const StyledTableRow = withStyles(() => ({
+    root: {
+      "&:nth-child(even)": {
+        background: "#70cfff3d",
+        "&:hover": {
+          background: "#67cafd80",
+        },
+      },
+    },
+  }))(TableRow);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -111,14 +128,14 @@ const ObsPeriodTable = (props) => {
             <TableHead>
               <TableRow>
                 <StyledTableCell >{t("species")}</StyledTableCell>
+                <StyledTableCell align="right">{t("localTotal")}</StyledTableCell>
+                <StyledTableCell align="right">{t("localCount")}</StyledTableCell>
+                <StyledTableCell align="right">{t("localGau")}</StyledTableCell>
                 <StyledTableCell align="right">{t("totalCount")}</StyledTableCell>
                 <StyledTableCell align="right">{t("constantMigration")}</StyledTableCell>
                 <StyledTableCell align="right">{t("otherMigration")}</StyledTableCell>
                 <StyledTableCell align="right">{t("nightMigration")}</StyledTableCell>
                 <StyledTableCell align="right">{t("scatteredMigration")}</StyledTableCell>
-                <StyledTableCell align="right">{t("localTotal")}</StyledTableCell>
-                <StyledTableCell align="right">{t("localCount")}</StyledTableCell>
-                <StyledTableCell align="right">{t("localGau")}</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -126,7 +143,7 @@ const ObsPeriodTable = (props) => {
                 summary
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((s, i) =>
-                    <TableRow hover key={i}>
+                    <StyledTableRow hover key={i}>
                       <StyledTableCell component="th" scope="row">
                         {s.notes ? <details>
                           <summary>{s.species}</summary>
@@ -137,6 +154,15 @@ const ObsPeriodTable = (props) => {
                           : <>{s.species}</>}
                       </StyledTableCell>
                       <StyledTableCell align="right">
+                        {s.totalLocal}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.localOther}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {s.localGåu}
+                      </StyledTableCell>
+                      <StyledTableCell align="right" className="dotted">
                         {s.allMigration}
                       </StyledTableCell>
                       <StyledTableCell align="right">
@@ -151,16 +177,7 @@ const ObsPeriodTable = (props) => {
                       <StyledTableCell align="right">
                         {s.scatterObs}
                       </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.totalLocal}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.localOther}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {s.localGåu}
-                      </StyledTableCell>
-                    </TableRow>
+                    </StyledTableRow>
                   )
               }
             </TableBody>
@@ -206,7 +223,7 @@ const ObsPeriodTable = (props) => {
               obsPeriods
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
-                  <TableRow hover key={i} >
+                  <StyledTableRow hover key={i} >
                     <StyledTableCell component="th" scope="row" className={classes.linkImitator} onClick={() => handleOpen(s)}>
                       {s.location}
                     </StyledTableCell>
@@ -230,7 +247,7 @@ const ObsPeriodTable = (props) => {
                         <EditIcon fontSize="small" id="editObsPeriod" />
                       </IconButton>
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 )
             }
           </TableBody>

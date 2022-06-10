@@ -264,14 +264,14 @@ describe("AddObservationDay", function () {
 
   it("Notes are shown", function () {
     cy.contains(date).click();
-    cy.wait(500);
+    cy.wait(2500);
     cy.contains("SOMMOL").click()
-    cy.wait(500);
+    cy.wait(1000);
     cy.get("#speciesTable").should("contain", "note, 123");
     cy.get("#periodsButton").click();
-    cy.wait(600);
+    cy.wait(1000);
     cy.contains("Bunkkeri").click();
-    cy.wait(1600);
+    cy.wait(1000);
     cy.get("table").should("contain", "note, 123");
   });
 });

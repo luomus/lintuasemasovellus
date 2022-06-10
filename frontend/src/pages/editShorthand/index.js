@@ -182,17 +182,13 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   useEffect(() => {
     if (userObservatory !== "") {
       setTypes(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .types
+        stations.find(s => s.observatory === userObservatory).types
       );
       setLocations(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .locations
+        stations.find(s => s.observatory === userObservatory).locations
       );
     }
-  });
+  }, [stations]);
 
   return (
     <Modal
