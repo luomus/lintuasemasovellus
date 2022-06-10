@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask_login import login_required
 
 from application.api.classes.observation.models import Observation
-from application.api.classes.observation.services import parseCountString, getDaySummary, getAllObservations, getObservationByPeriod, deleteObservations
+from application.api.classes.observation.services import parseCountString, getDaySummary, getDaySummaryWithAllSpecies, getAllObservations, getObservationByPeriod, deleteObservations
 
 from application.api import bp
 from application.db import db
@@ -37,6 +37,13 @@ def observations_delete():
 @login_required
 def getSummary(day_id):
     ret = getDaySummary(day_id)
+  
+    return jsonify(ret)
+
+@bp.route('/api/getObservationSummaryWithAllSpecies/<day_id>', methods=["GET"])
+@login_required
+def get_summary_with_all_species(day_id):
+    ret = getDaySummaryWithAllSpecies(day_id)
   
     return jsonify(ret)
   

@@ -68,7 +68,41 @@ def getDaySummary(day_id):
             "localGåu":row.local_gou,
             "notes":row.notes,
             })
+
+    for s in ["a", "b", "c"]:
+        response.append({
+            "species": s, 
+            "allMigration": 0,
+            "constMigration": 0, 
+            "otherMigration": 0,
+            "nightMigration": 0,
+            "scatterObs": 0,
+            "totalLocal": 0,
+            "localOther": 0,
+            "localGåu": 0,
+            "notes": "",
+            })
+    
+    #sorted_response = dict(sorted(response.items() ))
   
+    return response
+
+
+def getDaySummaryWithAllSpecies(day_id):
+    response = getDaySummary(day_id)
+    for s in ["a", "b", "c"]:
+        response.append({
+            "species": s, 
+            "allMigration": 0,
+            "constMigration": 0, 
+            "otherMigration": 0,
+            "nightMigration": 0,
+            "scatterObs": 0,
+            "totalLocal": 0,
+            "localOther": 0,
+            "localGåu": 0,
+            "notes": "",
+            })
     return response
 
 def parseCountString(obs):
