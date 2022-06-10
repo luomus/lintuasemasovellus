@@ -254,6 +254,15 @@ const ObsPeriodTable = (props) => {
                         : <>{s.species}</>}
                     </StyledTableCell>
                     <StyledTableCell align="right">
+                      {s.totalLocal}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localOther}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {s.localGåu}
+                    </StyledTableCell>
+                    <StyledTableCell align="right" className="dotted">
                       {s.allMigration}
                     </StyledTableCell>
                     <StyledTableCell align="right">
@@ -267,15 +276,6 @@ const ObsPeriodTable = (props) => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {s.scatterObs}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.totalLocal}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.localOther}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.localGåu}
                     </StyledTableCell>
                   </StyledTableRow>
                 )
