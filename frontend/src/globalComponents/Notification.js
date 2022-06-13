@@ -3,10 +3,12 @@ import {
   Typography, Grid, Paper, List, ListItem
 } from "@material-ui/core/";
 import WarningIcon from "@material-ui/icons/Warning";
+import NightsStay from "@material-ui/icons/NightsStay";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles(() => ({
     overflow: "auto",
   },
   nocturnalPaper: {
-    background: "#9933ff",
+    background: "#402158",
     padding: "20px 30px",
     marginTop: "20px",
     maxHeight: "8vw",
@@ -32,7 +34,18 @@ const useStyles = makeStyles(() => ({
     alignItems: "center",
     flexWrap: "wrap",
   },
+  nocturnalErrorBottom: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: "10px"
+  },
 }));
+
+const YellowTextTypography = withStyles({
+  root: {
+    color: "#ffff00"
+  }
+})(Typography);
 
 const Notification = ({ category="all" }) => {
   const classes = useStyles();
@@ -83,10 +96,13 @@ const Notification = ({ category="all" }) => {
       <div>
         { nocturnalNotification && <Paper className={classes.nocturnalPaper} >
           <Grid item xs={12}>
-            <Typography variant="h5" component="h2" className={classes.errorHeading} >
-              <WarningIcon fontSize="inherit" />&nbsp;&nbsp;
-              Yömuutto
-            </Typography>
+            <YellowTextTypography variant="h5" component="div" className={classes.errorHeading} >
+              <NightsStay fontsize="inherit" />&nbsp;&nbsp;
+                Yömuutto
+            </YellowTextTypography>
+            <YellowTextTypography variant="body1" component="div" className={classes.nocturnalErrorBottom} >
+                Päivä kellonaika yömuuton aikana!
+            </YellowTextTypography>
           </Grid>
         </Paper>}
       </div>

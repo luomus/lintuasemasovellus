@@ -66,6 +66,7 @@ export const getShorthandByObsPeriod = async (obsPeriodId) => {
 };
 
 export const sendEverything = async (everything) => {
+  console.log("everything: ", everything);
   const res = await axios.post("/api/addEverything", everything);
   return res;
 };
@@ -77,6 +78,7 @@ export const sendEditedShorthand = async (periods, observations, dayId, userID) 
 };
 
 export const sendDay = async (dayData) => {
+  console.log("day data: ", dayData);
   const res = await axios.post("/api/addDay", dayData);
   return res;
 };
