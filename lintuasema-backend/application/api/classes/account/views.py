@@ -32,9 +32,13 @@ def loginconfirm():
     userId = req['id']
     name = req['fullName']
     email = req['emailAddress']
-    hasRole = any(x in req['role'] for x in allowedRoles)
+    hasRole = any(x in req['role'] for x in allowedRoles) if "role" in req else False
 
     if not hasRole and allowedRoles != ['']:
+        try:
+            requests.delete('https://apitest.laji.fi/v0/person-token/' + personToken + '?access_token=' + AUTH_TOKEN)
+        except:
+            print("Error while logging out without roles")
         response = make_response(redirect('/'))
         response.set_cookie('showUserMessage', 'noRequiredRoles', max_age=120)
         return response
