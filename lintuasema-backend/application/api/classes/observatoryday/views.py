@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriod, editLocalObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, editLocalGau, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -128,7 +128,7 @@ def add_everything():
 def update_local(obsday_id, species, count):
     req=request.get_json()
     editLocalObs(obsday_id, species, count, req['userID'])
-
+    
 
 
 @bp.route('/api/addDay', methods=['POST'])

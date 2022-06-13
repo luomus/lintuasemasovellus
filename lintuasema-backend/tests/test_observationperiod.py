@@ -2,7 +2,7 @@ from attr import fields
 from sqlalchemy import null
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observationperiod.services import addObservation, addObservationperiod, getObservationperiods
-from application.api.classes.observatoryday.services import addDay, addDayFromReq, getDays, editLocalObs
+from application.api.classes.observatoryday.services import addDay, addDayFromReq, getDays, editLocalObs, editLocalGau
 from application.api.classes.location.services import createLocation, getLocationId
 from application.api.classes.observatory.services import getObservatoryId
 from application.api.classes.type.services import getTypeIdByName
@@ -185,6 +185,12 @@ def test_adding_empty_obsperiod_when_migrants_saved(app):
     fields = setup_default_fields()
     add_observation_period_from_fields(fields)
     fields2=setup_fields(startTime = '00:00',
-                         type_id=4)
+                         type_id=4,
+                         location_id=1)
     assert observation_period_found(fields2) == True
+    
+    fields3 = setup_fields(startTime = '0:00',
+                           type_id=4,
+                           location_id=5)
+    assert observation_period_found(fields3) == True
 

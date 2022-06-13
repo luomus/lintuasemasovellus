@@ -30,8 +30,9 @@ def addDay(obsday):
         db.session().commit() 
         dayId=getDayId(obsday.day, obsday.observatory_id)
         if not checkPeriod(dayId):
-            createEmptyObsPeriod(dayId)
+            createEmptyObsPeriods(dayId)
             editLocalObs(dayId, 'KT', 44, 1)
+            editLocalGau(dayId, 'FC', 14, 1)
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
       if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
@@ -50,13 +51,19 @@ def checkPeriod(dayId):
         print("checkperiod with dayId:",dayId, ": False")
         return False
 
-def createEmptyObsPeriod(dayId):
+def createEmptyObsPeriods(dayId):
     obsp2 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
         end_time=datetime(1900,1,1,23,59,0),
         type_id=4,
         location_id=1, observatoryday_id=dayId)
     db.session().add(obsp2)
+    obsp3 = Observationperiod(
+       start_time=datetime(1900,1,1,0,0,0),
+        end_time=datetime(1900,1,1,23,59,0),
+        type_id=4,
+        location_id=5, observatoryday_id=dayId)
+    db.session().add(obsp3)
     db.session().commit()
 
 #Add a "new" observation to local obsperiod, or edit an old one if this species has already been observed locally:
@@ -76,7 +83,24 @@ def editLocalObs(obsday_id, species, count, userid):
             bypassSide= '', notes= '', species= species, account_id= userid, observationperiod_id=per.id,total_count=count, shorthand_id=0)
         db.session().add(subobs)
         db.session().commit()
-    
+
+#Function for editing local Gau observations, similar to above
+def editLocalGau(obsday_id, species, count, userid):
+    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4, location_id=5).first()
+    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
+    if obs: #observation already exists (=local observation for this species has already been edited)
+        print(obs.total_count)
+        print("doesex")
+        obs.total_count=count
+        db.session().commit()
+    else: #observation does not exist, so we create it
+        print("doesnotex")
+        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
+            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
+            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+            bypassSide= '', notes= '', species= species, account_id= userid, observationperiod_id=per.id,total_count=count, shorthand_id=0)
+        db.session().add(subobs)
+        db.session().commit()
 
 def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
     obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()

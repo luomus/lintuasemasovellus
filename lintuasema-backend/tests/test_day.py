@@ -1,5 +1,5 @@
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs, editLocalGau
 from application.api.classes.observatoryday.views import add_day
 from application.api.classes.observationperiod.services import getObsPerId
 from application.api.classes.observation.services import getObservationByPeriod, getObservationByPeriodAndSpecies
@@ -82,6 +82,13 @@ def test_editLocalObs(app):
     addDay(dayToAdd)
     editLocalObs(1, 'SOMMOL', 37, 1)
     obs=getObservationByPeriodAndSpecies(1, 'SOMMOL')
+    assert obs.species=='SOMMOL' and obs.total_count==37
+
+def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by the addDay function
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
+    addDay(dayToAdd)
+    editLocalGau(1, 'SOMMOL', 37, 1)
+    obs=getObservationByPeriodAndSpecies(2, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 
 def addAndFind(fields):
