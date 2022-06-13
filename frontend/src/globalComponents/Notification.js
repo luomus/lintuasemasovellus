@@ -97,11 +97,11 @@ const Notification = ({ category="all" }) => {
         { nocturnalNotification && <Paper className={classes.nocturnalPaper} >
           <Grid item xs={12}>
             <YellowTextTypography variant="h5" component="div" className={classes.errorHeading} >
-              <NightsStay fontsize="inherit" />&nbsp;&nbsp;
+              <NightsStay fontSize="inherit" />&nbsp;&nbsp;
                 Yömuutto
             </YellowTextTypography>
             <YellowTextTypography variant="body1" component="div" className={classes.nocturnalErrorBottom} >
-                Päivä kellonaika yömuuton aikana!
+                Päiväkellonaika yömuuton aikana!
             </YellowTextTypography>
           </Grid>
         </Paper>}

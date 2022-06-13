@@ -41,7 +41,9 @@ const CodeMirrorBlock = ({
   const observatory = useSelector(state => state.userObservatory);
 
   const validateNight = (value) => {
-    if (type === t("nightMigration") && isNightValidation(observatory, value, date)) {
+    if (value === "") {
+      dispatch(setNocturnalNotification(false));
+    } else if (type === t("nightMigration") && isNightValidation(observatory, value, date)) {
       dispatch(setNocturnalNotification(true));
     } else {
       dispatch(setNocturnalNotification(false));
@@ -93,6 +95,8 @@ const CodeMirrorBlock = ({
    * @param {string} value
    */
   const codemirrorOnchange = (editor, data, value) => {
+
+    console.log("value: ", value);
 
     if (timeout) {
       clearTimeout(timeout);
