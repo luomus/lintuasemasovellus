@@ -6,10 +6,10 @@ import {
   Paper, Grid, Modal, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
   Typography, TextField, Button, Checkbox, FormControlLabel,
   FormControl, InputLabel, Select, MenuItem, Snackbar, CircularProgress,
-  Table, TableRow, TableBody, TableCell, withStyles, Accordion,
+  Table, TableRow, TableBody, TableHead, TableCell, withStyles, Accordion,
   AccordionSummary, AccordionDetails, IconButton
 } from "@material-ui/core/";
-import { Add, ExpandMore, Event, FileCopy } from "@material-ui/icons";
+import { Add, ExpandMore, Event, FileCopy, Bookmarks } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -35,6 +35,8 @@ import CatchType from "../../globalComponents/dayComponents/catchType";
 import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import Help from "../../globalComponents/Help";
+import { useLiveQuery } from "dexie-react-hooks";
+import { DraftDB, addDraft, deleteDraft } from "../../services/draftService";
 
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
@@ -141,6 +143,15 @@ export const HomePage = ({ user, userObservatory }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const drafts = useLiveQuery(async () => {
+    return await DraftDB.drafts
+      .where("userID")
+      .equals(user.id)
+      .filter(e => e.observatory === userObservatory)
+      .reverse()
+      .toArray();
+  });
+
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
   const [day, setDay] = useState(dateNow);
@@ -159,6 +170,8 @@ export const HomePage = ({ user, userObservatory }) => {
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
   const [openCopy, setOpenCopy] = useState(false);
+  const [draftID, setDraftID] = useState();
+  const [draftsOpen, setDraftsOpen] = useState(false);
   const [toCopy, setToCopy] = useState({
     "observers": false, "comment": false,
     "observationActivity": false, "catches": false
@@ -406,6 +419,26 @@ export const HomePage = ({ user, userObservatory }) => {
     }
   };
 
+  useEffect(async () => {
+    let data = {
+      day: formatDate(day),
+      comment,
+      observers,
+      observatory: userObservatory,
+      selectedactions: readyDailyActions(),
+      userID: user.id,
+      type,
+      location,
+      shorthand: shorthand,
+    };
+    if (draftID === undefined) {
+      let r = await addDraft(data);
+      setDraftID(r);
+    } else {
+      addDraft({ ...data, id: draftID });
+    }
+  }, [day, shorthand, type, location, comment, observers]);
+
 
   return (
     <div>
@@ -424,6 +457,9 @@ export const HomePage = ({ user, userObservatory }) => {
                 <br />
               </Grid>
               <Grid container item xs={1} justify="flex-end">
+                <IconButton id="open-copy-button" size="small" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
+                  <Bookmarks fontSize="default" />
+                </IconButton>
                 <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
                   <FileCopy fontSize="default" />
                 </IconButton>
@@ -771,6 +807,62 @@ export const HomePage = ({ user, userObservatory }) => {
               {t("confirm")}
             </Button>
             <Button id="cancel-copy-button" onClick={handleCopyClose} color="secondary" variant="contained" autoFocus>
+              {t("cancel")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Modal>
+      <Modal
+        open={draftsOpen}
+        onClose={() => setDraftsOpen(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Dialog
+          open={draftsOpen}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">DRAFTS</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("chooseCopy")} <br />
+              {t("overwrite")}
+            </DialogContentText>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Päivä</StyledTableCell>
+                  <StyledTableCell>Havainnot</StyledTableCell>
+                  <StyledTableCell>Copy</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {
+                  drafts?.map(e =>
+                    <TableRow key={e.id} hover>
+                      <TableCell>
+                        { e.id === draftID && ">"} {e.day} { e.type } { e.location}
+                      </TableCell>
+                      <TableCell>
+                        {e.shorthand}
+                      </TableCell>
+                      <TableCell>
+                        <Button id="confirm-copy-button" onClick={handleCopyConfirm} color="primary" variant="contained">
+                          Kopioi
+                        </Button>
+                        <Button id="confirm-copy-button" onClick={() => deleteDraft(e.id)} variant="contained">
+                          X
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                }
+              </TableBody>
+            </Table>
+          </DialogContent>
+          <DialogActions>
+            <Button id="cancel-copy-button" onClick={() => setDraftsOpen(false)} color="secondary" variant="contained" autoFocus>
               {t("cancel")}
             </Button>
           </DialogActions>
