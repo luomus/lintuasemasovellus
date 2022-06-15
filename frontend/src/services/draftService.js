@@ -21,8 +21,10 @@ const clean = async () => {
     .delete();
 };
 
+const clearAll = async () => DraftDB.drafts.clear();
+
 const deleteDraft = async (id) => {
   return DraftDB.drafts.delete(id);
 };
 
-export { DraftDB, addDraft, deleteDraft, clean };
+export { DraftDB, addDraft, deleteDraft, clean, clearAll };

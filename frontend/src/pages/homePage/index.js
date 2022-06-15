@@ -36,7 +36,7 @@ import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import Help from "../../globalComponents/Help";
 import { useLiveQuery } from "dexie-react-hooks";
-import { DraftDB, addDraft, deleteDraft } from "../../services/draftService";
+import { DraftDB, addDraft, deleteDraft, clearAll } from "../../services/draftService";
 
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
@@ -866,10 +866,10 @@ export const HomePage = ({ user, userObservatory }) => {
                         {e.shorthand}
                       </TableCell>
                       <TableCell>
-                        <Button id="confirm-copy-button" onClick={() => handleDraftConfirm(e.id)} color="primary" variant="contained">
+                        <Button id="confirm-draft-button" onClick={() => handleDraftConfirm(e.id)} color="primary" variant="contained">
                           {t("edit")}
                         </Button>
-                        <Button id="confirm-copy-button" onClick={() => deleteDraft(e.id)} variant="contained">
+                        <Button id="delete-draft-button" onClick={() => deleteDraft(e.id)} variant="contained">
                           {t("remove")}
                         </Button>
                       </TableCell>
@@ -880,6 +880,9 @@ export const HomePage = ({ user, userObservatory }) => {
             </Table>
           </DialogContent>
           <DialogActions>
+            <Button id="delete-all-button" onClick={() => confirm(`${t("remove")} ${t("all")} ?!?`.toUpperCase()) && clearAll()} color="secondary" variant="contained" autoFocus>
+              {t("remove")} {t("all")}
+            </Button>
             <Button id="cancel-copy-button" onClick={() => setDraftsOpen(false)} color="secondary" variant="contained" autoFocus>
               {t("cancel")}
             </Button>
