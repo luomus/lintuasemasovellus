@@ -7,7 +7,7 @@ import {
   Typography, TextField, Button, Checkbox, FormControlLabel,
   FormControl, InputLabel, Select, MenuItem, Snackbar, CircularProgress,
   Table, TableRow, TableBody, TableHead, TableCell, withStyles, Accordion,
-  AccordionSummary, AccordionDetails, IconButton
+  AccordionSummary, AccordionDetails, IconButton, Tooltip
 } from "@material-ui/core/";
 import { Add, ExpandMore, Event, FileCopy, Bookmarks } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
@@ -419,7 +419,20 @@ export const HomePage = ({ user, userObservatory }) => {
     }
   };
 
+  const handleDraftConfirm = (e) => {
+    setDraftID(undefined);
+    let el = drafts.find(d => d.id === e);
+    setType(el.type);
+    setLocation(el.location);
+    setShorthand(el.shorthand);
+    setComment(el.comment);
+    setActions(el.selectedactions);
+    setObservers(el.observers);
+    dispatch(setCatches(JSON.parse(el.catchRows)));
+  };
+
   useEffect(async () => {
+    if (!type && !location && !shorthand) return;
     let data = {
       day: formatDate(day),
       comment,
@@ -430,6 +443,7 @@ export const HomePage = ({ user, userObservatory }) => {
       type,
       location,
       shorthand: shorthand,
+      catchRows: JSON.stringify(catchRows),
     };
     if (draftID === undefined) {
       let r = await addDraft(data);
@@ -437,7 +451,7 @@ export const HomePage = ({ user, userObservatory }) => {
     } else {
       addDraft({ ...data, id: draftID });
     }
-  }, [day, shorthand, type, location, comment, observers]);
+  }, [day, shorthand, type, location, comment, observers, catchRows]);
 
 
   return (
@@ -457,12 +471,16 @@ export const HomePage = ({ user, userObservatory }) => {
                 <br />
               </Grid>
               <Grid container item xs={1} justify="flex-end">
-                <IconButton id="open-copy-button" size="small" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
-                  <Bookmarks fontSize="default" />
-                </IconButton>
-                <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
-                  <FileCopy fontSize="default" />
-                </IconButton>
+                <Tooltip title={t("drafts")}>
+                  <IconButton id="open-draft-button" size="small" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
+                    <Bookmarks fontSize="default" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={t("copy")}>
+                  <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                    <FileCopy fontSize="default" />
+                  </IconButton>
+                </Tooltip>
               </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
@@ -823,18 +841,18 @@ export const HomePage = ({ user, userObservatory }) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">DRAFTS</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("drafts")}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {t("chooseCopy")} <br />
+              {t("draftInfoText")} <br />
               {t("overwrite")}
             </DialogContentText>
             <Table>
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Päivä</StyledTableCell>
-                  <StyledTableCell>Havainnot</StyledTableCell>
-                  <StyledTableCell>Copy</StyledTableCell>
+                  <StyledTableCell>{t("date")}</StyledTableCell>
+                  <StyledTableCell>{t("migrantObservations")}</StyledTableCell>
+                  <StyledTableCell>{t("edit")}</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -848,11 +866,11 @@ export const HomePage = ({ user, userObservatory }) => {
                         {e.shorthand}
                       </TableCell>
                       <TableCell>
-                        <Button id="confirm-copy-button" onClick={handleCopyConfirm} color="primary" variant="contained">
-                          Kopioi
+                        <Button id="confirm-copy-button" onClick={() => handleDraftConfirm(e.id)} color="primary" variant="contained">
+                          {t("edit")}
                         </Button>
                         <Button id="confirm-copy-button" onClick={() => deleteDraft(e.id)} variant="contained">
-                          X
+                          {t("remove")}
                         </Button>
                       </TableCell>
                     </TableRow>

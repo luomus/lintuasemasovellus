@@ -46,6 +46,7 @@ const resources = {
       "catchCount": "Lukumäärä",
       "copy": "Kopioi edellinen päivä",
       "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
+      "draftInfoText": "Valitse palautettava luonnos.",
       "overwrite": "Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
@@ -92,6 +93,7 @@ const resources = {
       "attachments": "Liitteitä",
       "pcs": "kpl",
       "notes": "Lisätiedot",
+      "drafts": "Luonnokset",
 
       // buttons & confirmation
       "cancel": "Peruuta",

@@ -6,10 +6,8 @@ DraftDB.version(1).stores({
 });
 
 const addDraft = async (data) => {
-  console.log(data);
   return DraftDB.drafts.put(data)
     .then(res => {
-      console.log("[DEXIE RES] ", res);
       return res;
     }).catch(err => {
       console.error(err);
