@@ -45,6 +45,8 @@ export const DayList = ({ userObservatory }) => {
 
   const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
 
+  console.log("list: ", list);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -79,6 +81,8 @@ export const DayList = ({ userObservatory }) => {
   const handleDateClick = (s) => {
     history.push(`/daydetails/${s.day}`);
   };
+
+  console.log("list: ", list);
 
   return (
     <div>

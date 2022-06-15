@@ -14,6 +14,7 @@ import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
 import { useSelector } from "react-redux";
 import { isNightValidation } from "../../shorthand/isNightValidation";
+import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 
 
 let timeout = null;
@@ -39,6 +40,16 @@ const CodeMirrorBlock = ({
   const classes = useStyles();
 
   const observatory = useSelector(state => state.userObservatory);
+  const dayList = useSelector(state => state.days);
+
+  const validateObservationOnTop = (value) => {
+
+    const findDay = dayList.find(d => d.day === "15.06.2022" && d.observatory === observatory);
+
+    observationsOnTop(findDay.id,value);
+
+  };
+
 
   const validateNight = (value) => {
     if (value === "") {
@@ -96,13 +107,12 @@ const CodeMirrorBlock = ({
    */
   const codemirrorOnchange = (editor, data, value) => {
 
-    console.log("value: ", value);
-
     if (timeout) {
       clearTimeout(timeout);
     }
     timeout = setTimeout(() => {
       validateNight(value);
+      validateObservationOnTop(value);
       const result = validate(editor, data, value);
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
