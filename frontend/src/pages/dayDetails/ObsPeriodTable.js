@@ -11,6 +11,7 @@ import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import LocalInput from "./LocalInput";
+import LocalGauInput from "./LocalGauInput";
 
 const ObsPeriodTable = (props) => {
 
@@ -102,6 +103,7 @@ const ObsPeriodTable = (props) => {
   };
 
   if (mode === "speciesTable") {
+    console.log(summary);
     return (
       <div>
         <Typography variant="h6" >
@@ -151,11 +153,11 @@ const ObsPeriodTable = (props) => {
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {/* {s.localOther} */}
-                        <LocalInput/>
+                        <LocalInput count={s.localOther} species={s.species}/>
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {/* {s.localGåu} */}
-                        <LocalInput/>
+                        <LocalGauInput count={s.localGåu} species={s.species}/>
                       </StyledTableCell>
                     </TableRow>
                   )

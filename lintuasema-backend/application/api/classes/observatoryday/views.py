@@ -123,13 +123,21 @@ def add_everything():
     return jsonify(req)
 
 
-@bp.route('/api/updateLocalObservation/<obsday_id>/<species>/<count>', methods=['POST']) #Backend for editing the local-column for a species in day details.
+@bp.route('/api/updateLocalObservation', methods=['POST']) #Backend for editing the local-column for a species in day details.
 @login_required
-def update_local(obsday_id, species, count):
+def update_local():
     req=request.get_json()
-    editLocalObs(obsday_id, species, count, req['userID'])
+    print(req)
+    editLocalObs(req['obsday_id'], req['species'], req['count'], 1)
+    return req['count']
     
-
+@bp.route('/api/updateLocalGauObservation', methods=['POST']) #Backend for editing the local-column for a species in day details.
+@login_required
+def update_local_gau():
+    req=request.get_json()
+    print(req)
+    editLocalGau(req['obsday_id'], req['species'], req['count'], 1)
+    return req['count']
 
 @bp.route('/api/addDay', methods=['POST'])
 @login_required

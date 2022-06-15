@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField, makeStyles } from "@material-ui/core";
-import { updateLocalObservation } from "../../services";
+import { updateLocalGauObservation } from "../../services";
 // import { editTotalCount, editLocalCount, editLocalGåuCount, getTotalCount, getLocalCount, getLocalGåuCount } from "../../services";
 import PropTypes from "prop-types";
 const useStyles = makeStyles({
@@ -27,10 +27,10 @@ const LocalInput = (props) => {
 
   const handleInput = (event) => {
     setValue(event.target.value);
-    console.log("NOTGAU");
+    console.log("GAU");
     console.log(species);
     console.log("wwwwwwww");
-    updateLocalObservation("1", species, event.target.value);
+    updateLocalGauObservation("1", species, event.target.value);
     // editTotalCount(totalCount).then(totalCountJson => setTotalCount(totalCountJson.data.totalCount));)
     // editLocalCount(localCount).then(localCountJson => setLocalCount(localCountJson.data.localCount));
     // editLocalGåuCount(localGåuCount).then(localGåuCountJson => setLocalGåuCount(localGåuCountJson.data.localGåuCount));
