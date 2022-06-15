@@ -16,7 +16,7 @@ const LocalInput = (props) => {
     // setLocalGåuCount(getLocalGåuCount)
     // setTotalCount(getLocalTotalCount)
   },[]);
-
+  const [obsday_id] = useState(props.obsday_id);
   const [value, setValue] = useState(props.count);
   const [species] = useState(props.species);
   // const [totalCount, setTotalCount] = useState(0);
@@ -28,9 +28,9 @@ const LocalInput = (props) => {
   const handleInput = (event) => {
     setValue(event.target.value);
     console.log("NOTGAU");
-    console.log(species);
+    console.log(obsday_id);
     console.log("wwwwwwww");
-    updateLocalObservation("1", species, event.target.value);
+    updateLocalObservation(obsday_id, species, event.target.value);
     // editTotalCount(totalCount).then(totalCountJson => setTotalCount(totalCountJson.data.totalCount));)
     // editLocalCount(localCount).then(localCountJson => setLocalCount(localCountJson.data.localCount));
     // editLocalGåuCount(localGåuCount).then(localGåuCountJson => setLocalGåuCount(localGåuCountJson.data.localGåuCount));

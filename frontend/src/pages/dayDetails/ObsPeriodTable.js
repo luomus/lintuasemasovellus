@@ -153,11 +153,11 @@ const ObsPeriodTable = (props) => {
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {/* {s.localOther} */}
-                        <LocalInput count={s.localOther} species={s.species}/>
+                        <LocalInput obsday_id={s.dayId} count={s.localOther} species={s.species}/>
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {/* {s.localGåu} */}
-                        <LocalGauInput count={s.localGåu} species={s.species}/>
+                        <LocalGauInput obsday_id={s.dayId} count={s.localGåu} species={s.species}/>
                       </StyledTableCell>
                     </TableRow>
                   )
