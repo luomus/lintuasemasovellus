@@ -11,6 +11,8 @@ export const observationsOnTop = async (dayId,value) => {
 
   const lines = value.trim().split(/\n/);
 
+  let rowNumber = 1;
+
   for (const line of lines) {
 
     let parsedTime = isTime(line) && parseTime(line);
@@ -25,13 +27,13 @@ export const observationsOnTop = async (dayId,value) => {
       if (periodEndTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.startTime ||
         periodEndTime >= obsPeriod.startTime && periodEndTime <= obsPeriod.endTime ||
           periodStartTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.endTime) {
-        return true;
+        return rowNumber;
       }
     }
 
     periodEndTime = periodEndTime && null;
     periodStartTime = null;
     periodEndTime = null;
-
+    rowNumber++;
   }
 };
