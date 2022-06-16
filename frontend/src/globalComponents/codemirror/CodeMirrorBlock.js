@@ -42,11 +42,25 @@ const CodeMirrorBlock = ({
   const observatory = useSelector(state => state.userObservatory);
   const dayList = useSelector(state => state.days);
 
-  const validateObservationOnTop = (value) => {
+  const validateObservationOnTop = async (value) => {
 
-    const findDay = dayList.find(d => d.day === "15.06.2022" && d.observatory === observatory);
+    const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
 
-    observationsOnTop(findDay.id,value);
+    let month = "0";
+    let year = y;
+    let day = d;
+
+    Number(m) < 10 ? month = month.concat(m) : month === m;
+
+    let newDate = day+"."+ month +"."+ year ;
+
+    const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
+
+    if (findDay && await observationsOnTop(findDay.id,value)) {
+      return true;
+    } else {
+      return false;
+    }
 
   };
 
@@ -110,10 +124,12 @@ const CodeMirrorBlock = ({
     if (timeout) {
       clearTimeout(timeout);
     }
-    timeout = setTimeout(() => {
+    timeout = setTimeout(async () => {
       validateNight(value);
-      validateObservationOnTop(value);
       const result = validate(editor, data, value);
+      await validateObservationOnTop(value) && result.push("Ei päällekkäisiä aikoja!");
+      const isPushed = result.some(r => r === "Ei päällekkäisiä aikoja!");
+      isPushed && await !validateObservationOnTop(value) && result.pop();
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);

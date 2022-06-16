@@ -3,8 +3,6 @@ import { isTime, parseTime } from "./timeHelper.js";
 
 export const observationsOnTop = async (dayId,value) => {
 
-  console.log("value: ", value);
-
   let periodStartTime = null;
   let periodEndTime = null;
   let nextTimeEndTime = false;
@@ -22,15 +20,11 @@ export const observationsOnTop = async (dayId,value) => {
 
     periodEndTime = nextTimeEndTime && parsedTime;
 
-    console.log("periodStartTime: ", periodStartTime);
-    console.log("periodEndTime: ", periodEndTime);
-
     for (const obsPeriod of observationPeriods) {
 
-      if (periodEndTime >= obsPeriod.startTime && periodEndTime <= obsPeriod.endTime ||
+      if (periodEndTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.startTime ||
+        periodEndTime >= obsPeriod.startTime && periodEndTime <= obsPeriod.endTime ||
           periodStartTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.endTime) {
-        console.log("obsPeriod: ", obsPeriod);
-        console.log("is true");
         return true;
       }
     }
@@ -39,7 +33,5 @@ export const observationsOnTop = async (dayId,value) => {
     periodStartTime = null;
     periodEndTime = null;
 
-
   }
-  console.log("is false");
 };
