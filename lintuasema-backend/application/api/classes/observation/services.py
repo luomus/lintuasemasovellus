@@ -37,7 +37,9 @@ def getDaySummary(day_id):
                 " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
                 " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou,"
                 " " + ("GROUP_CONCAT" if "sqlite" in str(db.engine) else "LISTAGG") +
-                "(" + prefix + "Observation.notes, ', ') " + ("WITHIN GROUP (ORDER BY " + prefix + "Observation.notes)" if "sqlite" not in str(db.engine) else "") + "AS notes"
+                "(CASE WHEN " + prefix + "Observation.notes IS '' THEN null ELSE " + prefix + "Observation.notes END, ', ') " +
+                ("WITHIN GROUP (ORDER BY " + prefix +
+                 "Observation.notes)" if "sqlite" not in str(db.engine) else "") + "AS notes"
                 " FROM " + prefix + "Observation"
                 " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
                 " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
