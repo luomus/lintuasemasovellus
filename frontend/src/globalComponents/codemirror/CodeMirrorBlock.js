@@ -14,6 +14,7 @@ import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
 import { useSelector } from "react-redux";
 import { isNightValidation } from "../../shorthand/isNightValidation";
+import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 
 
 let timeout = null;
@@ -39,6 +40,30 @@ const CodeMirrorBlock = ({
   const classes = useStyles();
 
   const observatory = useSelector(state => state.userObservatory);
+  const dayList = useSelector(state => state.days);
+
+  const validateObservationOnTop = async (value) => {
+
+    const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
+
+    let month = "0";
+    let year = y;
+    let day = d;
+
+    Number(m) < 10 ? month = month.concat(m) : month === m;
+
+    let newDate = day+"."+ month +"."+ year ;
+
+    const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
+
+    if (findDay && await observationsOnTop(findDay.id,value)) {
+      return true;
+    } else {
+      return false;
+    }
+
+  };
+
 
   const validateNight = (value) => {
     if (value === "") {
@@ -96,14 +121,15 @@ const CodeMirrorBlock = ({
    */
   const codemirrorOnchange = (editor, data, value) => {
 
-    console.log("value: ", value);
-
     if (timeout) {
       clearTimeout(timeout);
     }
-    timeout = setTimeout(() => {
+    timeout = setTimeout(async () => {
       validateNight(value);
       const result = validate(editor, data, value);
+      await validateObservationOnTop(value) && result.push("Ei päällekkäisiä aikoja!");
+      const isPushed = result.some(r => r === "Ei päällekkäisiä aikoja!");
+      isPushed && await !validateObservationOnTop(value) && result.pop();
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);
