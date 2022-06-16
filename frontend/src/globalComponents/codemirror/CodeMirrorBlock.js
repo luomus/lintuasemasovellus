@@ -56,8 +56,10 @@ const CodeMirrorBlock = ({
 
     const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
 
-    if (findDay && await observationsOnTop(findDay.id,value)) {
-      return true;
+    const getRowNumbers = await observationsOnTop(findDay.id,value);
+
+    if (findDay && getRowNumbers.length > 0) {
+      return getRowNumbers;
     } else {
       return false;
     }
@@ -127,9 +129,10 @@ const CodeMirrorBlock = ({
     timeout = setTimeout(async () => {
       validateNight(value);
       const result = validate(editor, data, value);
-      await validateObservationOnTop(value) && result.push("Ei päällekkäisiä aikoja!");
-      const isPushed = result.some(r => r === "Ei päällekkäisiä aikoja!");
-      isPushed && await !validateObservationOnTop(value) && result.pop();
+      const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+      for (const row of rowNumbers) {
+        rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
+      }
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);
