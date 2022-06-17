@@ -456,6 +456,7 @@ export const HomePage = ({ user, userObservatory }) => {
 
   return (
     <div>
+      222
       <Grid container
         alignItems="flex-start"
       >

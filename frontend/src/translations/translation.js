@@ -117,7 +117,7 @@ const resources = {
       "saveMigrant": "Tallenna muuttohavainnot",
       "helpForSaveMigrantButton": "Tallenna syötetyt muuttohavainnot valitulla havaintotyypillä ja -sijainnilla. Syötäthän lisäksi havainnoitsijan tiedot sille osoitettuun kenttään ennen tallentamista. Myös muiden kenttien tiedot (kommentit, aktiivisuus, pyydykset) tallennetaan.",
       "loading": "Ladataan...",
-      "toDayDetails": "Siirry 1koontinäkymään",
+      "toDayDetails": "Siirry koontinäkymään",
       "helpForToDayDetailsButton": "Siirry valitun päivän koontinäkymään. Syötäthän havainnoitsijan, jos kenttä on tyhjä, jotta painike aktivoituu.",
       "showOnlyBirdsWithObservations": "Näytä vain lajit, joista on havaintoja",
       "speciesTextFilter": "Lajihaku",
