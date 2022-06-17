@@ -33,6 +33,7 @@ const resources = {
 
       // form texts
       "date": "Päivämäärä",
+      "year": "Vuosi",
       "observers": "Havainnoija(t)",
       "observations": "Havainnot",
       "migrantObservations": "Muuttohavainnot",
@@ -93,6 +94,7 @@ const resources = {
       "attachments": "Liitteitä",
       "pcs": "kpl",
       "notes": "Lisätiedot",
+      "filter": "Suodata",
       "drafts": "Luonnokset",
 
       // buttons & confirmation
