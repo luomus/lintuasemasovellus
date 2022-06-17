@@ -3,6 +3,7 @@ from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observation.models import Observation
 from application.api.classes.shorthand.models import Shorthand
+from application.api.classes.location.services import getLocationId
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
@@ -51,24 +52,28 @@ def checkPeriod(dayId):
         return False
 
 def createEmptyObsPeriods(dayId):
+    loc1=getLocationId("Bunkkeri", 11361)
+    loc2=getLocationId("Luoto Gåu", 11361)
     obsp2 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
         end_time=datetime(1900,1,1,23,59,0),
         type_id=4,
-        location_id=1, observatoryday_id=dayId)
+        location_id=loc1, observatoryday_id=dayId)
     db.session().add(obsp2)
     obsp3 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
         end_time=datetime(1900,1,1,23,59,0),
         type_id=4,
-        location_id=5, observatoryday_id=dayId)
+        location_id=loc2, observatoryday_id=dayId)
     db.session().add(obsp3)
     db.session().commit()
 
 #Add a "new" observation to local obsperiod, or edit an old one if this species has already been observed locally:
 def editLocalObs(obsday_id, species, count, userid):
     userid=1
-    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4).first()
+    loc1=getLocationId("Bunkkeri", 11361)
+    
+    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=4).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
     if obs: #observation already exists (=local observation for this species has already been edited)
         print(obs.total_count)
@@ -86,7 +91,8 @@ def editLocalObs(obsday_id, species, count, userid):
 
 #Function for editing local Gau observations, similar to above
 def editLocalGau(obsday_id, species, count, userid):
-    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4, location_id=5).first()
+    loc2=getLocationId("Luoto Gåu", 11361)
+    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4, location_id=loc2).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
     if obs: #observation already exists (=local observation for this species has already been edited)
         print(obs.total_count)
