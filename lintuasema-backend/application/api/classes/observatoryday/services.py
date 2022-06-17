@@ -52,8 +52,9 @@ def checkPeriod(dayId):
         return False
 
 def createEmptyObsPeriods(dayId):
-    loc1=getLocationId("Bunkkeri", 11361)
-    loc2=getLocationId("Luoto Gåu", 11361)
+    obserid=getObservatoryId("Hangon_Lintuasema")
+    loc1=getLocationId("Bunkkeri", obserid)
+    loc2=getLocationId("Luoto GÃ¥u", obserid)
     obsp2 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
         end_time=datetime(1900,1,1,23,59,0),
@@ -71,7 +72,8 @@ def createEmptyObsPeriods(dayId):
 #Add a "new" observation to local obsperiod, or edit an old one if this species has already been observed locally:
 def editLocalObs(obsday_id, species, count, userid):
     userid=1
-    loc1=getLocationId("Bunkkeri", 11361)
+    obserid=getObservatoryId("Hangon_Lintuasema")
+    loc1=getLocationId("Bunkkeri", obserid)
     
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=4).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
@@ -91,7 +93,8 @@ def editLocalObs(obsday_id, species, count, userid):
 
 #Function for editing local Gau observations, similar to above
 def editLocalGau(obsday_id, species, count, userid):
-    loc2=getLocationId("Luoto Gåu", 11361)
+    obserid=getObservatoryId("Hangon_Lintuasema")
+    loc2=getLocationId("Luoto GÃ¥u", obserid)
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=4, location_id=loc2).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
     if obs: #observation already exists (=local observation for this species has already been edited)
