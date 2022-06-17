@@ -58,7 +58,7 @@ def checkPeriod(dayId):
 def createEmptyObsPeriods(dayId):
     obserid=getObservatoryId("Hangon_Lintuasema")
     loc1=getLocationId("Bunkkeri", obserid)
-    loc2=getLocationId("Luoto GÃ¥u", obserid)
+    loc2=getLocationId("Luoto Gåu", obserid)
     typid=getTypeIdByName("Paikallinen")
     obsp2 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
@@ -110,7 +110,7 @@ def editLocalGau(obsday_id, species, count, userid):
         if not u:
             u="MA.4658"
     obserid=getObservatoryId("Hangon_Lintuasema")
-    loc2=getLocationId("Luoto GÃ¥u", obserid)
+    loc2=getLocationId("Luoto Gåu", obserid)
     typid=getTypeIdByName("Paikallinen")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=typid, location_id=loc2).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
