@@ -18,7 +18,6 @@ def addDayFromReq(req):
     new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
 
     addDay(new_obsday)
-    
     addedId = getDayId(new_obsday.day, new_obsday.observatory_id)
     
     return { 'id': addedId }
@@ -31,8 +30,8 @@ def addDay(obsday):
         dayId=getDayId(obsday.day, obsday.observatory_id)
         if not checkPeriod(dayId):
             createEmptyObsPeriods(dayId)
-            editLocalObs(dayId, 'KT', 44, 1)
-            editLocalGau(dayId, 'FC', 14, 1)
+            #editLocalObs(dayId, 'KT', 0, 1)
+            #editLocalGau(dayId, 'FRICOE', 14, 1)
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
       if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
@@ -137,7 +136,7 @@ def get_day_without_id(day, observatory):
     if not obsday:
         res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
     else:
-        res.append({ 'id': obsday.id, 'comment': obsday.comment, 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
+        res.append({ 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
     return res
 
 def getDayId(day, observatory_id):

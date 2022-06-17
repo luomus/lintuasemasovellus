@@ -50,6 +50,7 @@ export const getLatestDays = async (observatory) => {
 };
 
 export const getSummary = async (dayId) => {
+  if (!dayId) return [];
   const summary = await axios.get(`/api/getObservationSummary/${dayId}`);
   return summary.data;
 };

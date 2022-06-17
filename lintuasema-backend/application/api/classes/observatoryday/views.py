@@ -62,7 +62,7 @@ def add_everything():
     #print(type(req['observationPeriods']))
 
     #Create an empty obsperiod if one does not already exist
-    editLocalObs(dayId, 'FRICOE', 99, req['userID'])
+    #editLocalObs(dayId, 'FRICOE', 99, req['userID'])
 
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
@@ -128,7 +128,9 @@ def add_everything():
 def update_local():
     req=request.get_json()
     print(req)
-    editLocalObs(req['obsday_id'], req['species'], req['count'], 1)
+    day=datetime.strptime(req['date'], '%d.%m.%Y')
+    obsday_id=getDayId(day, 1)
+    editLocalObs(obsday_id, req['species'], req['count'], 1)
     return req['count']
     
 @bp.route('/api/updateLocalGauObservation', methods=['POST']) #Backend for editing the local-column for a species in day details.
@@ -136,7 +138,9 @@ def update_local():
 def update_local_gau():
     req=request.get_json()
     print(req)
-    editLocalGau(req['obsday_id'], req['species'], req['count'], 1)
+    day=datetime.strptime(req['date'], '%d.%m.%Y')
+    obsday_id=getDayId(day, 1)
+    editLocalGau(obsday_id, req['species'], req['count'], 1)
     return req['count']
 
 @bp.route('/api/addDay', methods=['POST'])
