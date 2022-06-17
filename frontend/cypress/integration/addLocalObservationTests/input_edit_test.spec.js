@@ -10,5 +10,8 @@ describe.skip("Input of local observations and gåu observations", function () {
     cy.get("input:gåu").get("kt").type("2");
     cy.get("total").get("kt").should("contain", "7");
   });
+  it('hello there', function() {
+    expect(true).toBe(true);
+  });
 
 });
