@@ -129,7 +129,7 @@ def update_local():
     req=request.get_json()
     print(req)
     day=datetime.strptime(req['date'], '%d.%m.%Y')
-    obsday_id=getDayId(day, 1)
+    obsday_id=getDayId(day, 11361)
     editLocalObs(obsday_id, req['species'], req['count'], 1)
     return req['count']
     
