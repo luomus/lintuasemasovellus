@@ -94,10 +94,7 @@ const resources = {
       "attachments": "Liitteitä",
       "pcs": "kpl",
       "notes": "Lisätiedot",
-<<<<<<< HEAD
       "filter": "Suodata",
-=======
->>>>>>> phlisaaminen
       "drafts": "Luonnokset",
 
       // buttons & confirmation
