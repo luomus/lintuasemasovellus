@@ -56,7 +56,7 @@ def getDaySummary(day_id):
                 " AND " + prefix + "Location.is_deleted = 0"
                 " GROUP BY species").params(day_id = day_id, 
                     const = "Vakio", other = "Muu muutto", night = "Yömuutto", scatter = "Hajahavainto",
-                    local = "Paikallinen", gou = "Luoto GÃ¥u")
+                    local = "Paikallinen", gou = "Luoto Gåu")
     #GÃ¥u
     res = db.engine.execute(stmt)
 
