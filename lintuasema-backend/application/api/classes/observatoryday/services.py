@@ -10,6 +10,8 @@ from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
 from application.api.classes.observatory.services import getObservatoryId, getObservatoryName
 from flask import jsonify
+from flask_login import current_user
+from application.api.classes.account.models import Account
 
 from datetime import datetime, date
 
@@ -56,7 +58,7 @@ def checkPeriod(dayId):
 def createEmptyObsPeriods(dayId):
     obserid=getObservatoryId("Hangon_Lintuasema")
     loc1=getLocationId("Bunkkeri", obserid)
-    loc2=getLocationId("Luoto Gåu", obserid)
+    loc2=getLocationId("Luoto GÃ¥u", obserid)
     typid=getTypeIdByName("Paikallinen")
     obsp2 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
@@ -74,7 +76,12 @@ def createEmptyObsPeriods(dayId):
 
 #Add a "new" observation to local obsperiod, or edit an old one if this species has already been observed locally:
 def editLocalObs(obsday_id, species, count, userid):
-    userid=1
+    if not current_user:
+        u="MA.4658"
+    else:
+        u = current_user.get_id()
+        if not u:
+            u="MA.4658"
     obserid=getObservatoryId("Hangon_Lintuasema")
     loc1=getLocationId("Bunkkeri", obserid)
     typid=getTypeIdByName("Paikallinen")
@@ -90,14 +97,20 @@ def editLocalObs(obsday_id, species, count, userid):
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= userid, observationperiod_id=per.id,total_count=count, shorthand_id=0)
+            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11385)
         db.session().add(subobs)
         db.session().commit()
 
 #Function for editing local Gau observations, similar to above
 def editLocalGau(obsday_id, species, count, userid):
+    if not current_user:
+        u="MA.4658"
+    else:
+        u = current_user.get_id()
+        if not u:
+            u="MA.4658"
     obserid=getObservatoryId("Hangon_Lintuasema")
-    loc2=getLocationId("Luoto Gåu", obserid)
+    loc2=getLocationId("Luoto GÃ¥u", obserid)
     typid=getTypeIdByName("Paikallinen")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, type_id=typid, location_id=loc2).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
@@ -111,7 +124,7 @@ def editLocalGau(obsday_id, species, count, userid):
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= userid, observationperiod_id=per.id,total_count=count, shorthand_id=0)
+            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11385)
         db.session().add(subobs)
         db.session().commit()
 
