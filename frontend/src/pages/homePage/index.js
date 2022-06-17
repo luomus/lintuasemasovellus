@@ -6,10 +6,10 @@ import {
   Paper, Grid, Modal, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
   Typography, TextField, Button, Checkbox, FormControlLabel,
   FormControl, InputLabel, Select, MenuItem, Snackbar, CircularProgress,
-  Table, TableRow, TableBody, TableCell, withStyles, Accordion,
-  AccordionSummary, AccordionDetails, IconButton
+  Table, TableRow, TableBody, TableHead, TableCell, withStyles, Accordion,
+  AccordionSummary, AccordionDetails, IconButton, Tooltip
 } from "@material-ui/core/";
-import { Add, ExpandMore, Event, FileCopy } from "@material-ui/icons";
+import { Add, ExpandMore, Event, FileCopy, Bookmarks } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -34,13 +34,15 @@ import { addOneCatchRow, setCatches } from "../../reducers/catchRowsReducer";
 import CatchType from "../../globalComponents/dayComponents/catchType";
 import Notification from "../../globalComponents/Notification";
 import { resetNotifications } from "../../reducers/notificationsReducer";
-
+import Help from "../../globalComponents/Help";
+import { useLiveQuery } from "dexie-react-hooks";
+import { DraftDB, addDraft, deleteDraft, clearAll } from "../../services/draftService";
 
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
     background: "white",
     padding: "20px 30px",
-    margin: "10px 10px 10px 10px",
+    margin: "10px 10px 60px 10px",
   },
   infoGrid: {
     padding: "10px",
@@ -60,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   sendButton: {
-    marginBottom: "40px",
+    marginBottom: "20px",
     marginRight: "10px",
-    position: "static",
-    verticalAlign: "top",
+    marginTop: "20px",
+    position: "static"
   },
   addRemoveCatchTypesButton: {
     marginLeft: theme.spacing(1),
@@ -96,7 +98,11 @@ const useStyles = makeStyles((theme) => ({
   },
   loadingIcon: {
     padding: "0px 5px 0px 0px",
-    margin: "0px 0px 10px 10px"
+    margin: "10px"
+  },
+  buttonAndIconsContainer: {
+    display: "flex",
+    alignItems: "center"
   }
 }
 ));
@@ -137,6 +143,15 @@ export const HomePage = ({ user, userObservatory }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const drafts = useLiveQuery(async () => {
+    return await DraftDB.drafts
+      .where("userID")
+      .equals(user.id)
+      .filter(e => e.observatory === userObservatory)
+      .reverse()
+      .toArray();
+  });
+
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
   const [day, setDay] = useState(dateNow);
@@ -144,15 +159,19 @@ export const HomePage = ({ user, userObservatory }) => {
   const [comment, setComment] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const [disabled, setDisabled] = useState(false);
+  const [saveDisabled, setSaveDisabled] = useState(false);
+  const [toDayDetailsDisabled, setToDayDetailsDisabled] = useState(false);
   const [formSent, setFormSent] = useState(false);
-  const [loadingIcon, setLoadingIcon] = useState(false);
+  const [saveLoadingIcon, setSaveLoadingIcon] = useState(false);
+  const [toDayDetailsLoadingIcon, setToDayDetailsLoadingIcon] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
   const [latestDays, setLatestDays] = useState([]);
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
   const [openCopy, setOpenCopy] = useState(false);
+  const [draftID, setDraftID] = useState();
+  const [draftsOpen, setDraftsOpen] = useState(false);
   const [toCopy, setToCopy] = useState({
     "observers": false, "comment": false,
     "observationActivity": false, "catches": false
@@ -227,11 +246,11 @@ export const HomePage = ({ user, userObservatory }) => {
   }, [stations, userObservatory]);
 
   const sendData = async () => {
-    setLoadingIcon(true);
+    setSaveLoadingIcon(true);
     const rows = sanitizedShorthand;
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
     const observationsToSend = loopThroughObservations(rows, user.id);
-    setDisabled(true);
+    setSaveDisabled(true);
     let data = {
       day: formatDate(day),
       comment: comment,
@@ -255,31 +274,38 @@ export const HomePage = ({ user, userObservatory }) => {
       console.error(error.message);
       setErrorHappened(true);
     }
-    setLoadingIcon(false);
-    setDisabled(false);
+    setSaveLoadingIcon(false);
+    setSaveDisabled(false);
   };
 
   const handleToDayDetailsClick = async () => {
-    setLoadingIcon(true);
-    let data = {
-      day: formatDate(day),
-      comment: comment,
-      observers: observers,
-      observatory: userObservatory,
-      selectedactions: readyDailyActions(),
-    };
+    setToDayDetailsLoadingIcon(true);
+    setToDayDetailsDisabled(true);
     try {
-      await sendDay(data);
-      const days = await getDays();
-      dispatch(setDays(days));
-      setLoadingIcon(false);
+      const searchResult = await searchDayInfo(formatDate(day), userObservatory);
+      //Update if observers is changed
+      if (searchResult[0].observers !== observers) {
+        const data = {
+          day: formatDate(day),
+          observers: observers,
+          observatory: userObservatory,
+          comment: searchResult[0].comment,
+          selectedactions: searchResult[0].selectedactions === ""
+            ? JSON.stringify(dispatch(setDefaultActions(userObservatory)).data.dailyActions)
+            : searchResult[0].selectedactions
+        };
+        await sendDay(data);
+        const days = await getDays();
+        dispatch(setDays(days));
+      }
       history.push(`/daydetails/${formatDate(day)}`);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
     }
+    setToDayDetailsLoadingIcon(false);
+    setToDayDetailsDisabled(false);
   };
-
 
   const addCatchRow = () => {
     dispatch(addOneCatchRow());
@@ -294,6 +320,13 @@ export const HomePage = ({ user, userObservatory }) => {
 
   const saveButtonDisabled = () => {
     if (observers === "" || observers.trim() === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
+      return true;
+    else
+      return false;
+  };
+
+  const toDayDetailsButtonDisabled = () => {
+    if (observers === "" || observers.trim() === "")
       return true;
     else
       return false;
@@ -386,6 +419,40 @@ export const HomePage = ({ user, userObservatory }) => {
     }
   };
 
+  const handleDraftConfirm = (e) => {
+    setDraftID(undefined);
+    let el = drafts.find(d => d.id === e);
+    setType(el.type);
+    setLocation(el.location);
+    setShorthand(el.shorthand);
+    setComment(el.comment);
+    setActions(el.selectedactions);
+    setObservers(el.observers);
+    dispatch(setCatches(JSON.parse(el.catchRows)));
+  };
+
+  useEffect(async () => {
+    if (!type && !location && !shorthand) return;
+    let data = {
+      day: formatDate(day),
+      comment,
+      observers,
+      observatory: userObservatory,
+      selectedactions: readyDailyActions(),
+      userID: user.id,
+      type,
+      location,
+      shorthand: shorthand,
+      catchRows: JSON.stringify(catchRows),
+    };
+    if (draftID === undefined) {
+      let r = await addDraft(data);
+      setDraftID(r);
+    } else {
+      addDraft({ ...data, id: draftID });
+    }
+  }, [day, shorthand, type, location, comment, observers, catchRows]);
+
 
   return (
     <div>
@@ -404,9 +471,16 @@ export const HomePage = ({ user, userObservatory }) => {
                 <br />
               </Grid>
               <Grid container item xs={1} justify="flex-end">
-                <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
-                  <FileCopy fontSize="default" />
-                </IconButton>
+                <Tooltip title={t("drafts")}>
+                  <IconButton id="open-draft-button" size="small" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
+                    <Bookmarks fontSize="default" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={t("copy")}>
+                  <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                    <FileCopy fontSize="default" />
+                  </IconButton>
+                </Tooltip>
               </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
@@ -443,7 +517,22 @@ export const HomePage = ({ user, userObservatory }) => {
                   value={observers}
                 />
               </Grid>
-
+              <Grid className={classes.buttonAndIconsContainer}>
+                <Button
+                  id="toDayDetails"
+                  className={classes.sendButton}
+                  onClick={handleToDayDetailsClick}
+                  disabled={toDayDetailsButtonDisabled() || toDayDetailsDisabled}
+                  color="primary"
+                  variant="contained"
+                >
+                  {t("toDayDetails")}
+                </Button>
+                <Help title={t("helpForToDayDetailsButton")} placement="right"/>
+                { (toDayDetailsLoadingIcon) &&
+                  <CircularProgress className={classes.loadingIcon} color="primary"/>
+                }
+              </Grid>
               <div className={classes.accordionRoot}>
                 <br />
                 <Accordion>
@@ -606,6 +695,8 @@ export const HomePage = ({ user, userObservatory }) => {
                           shorthand={shorthand}
                           setShorthand={setShorthand}
                           setSanitizedShorthand={setSanitizedShorthand}
+                          date={day}
+                          type={type}
                         />
                       </Grid>
                     </Grid>
@@ -615,30 +706,19 @@ export const HomePage = ({ user, userObservatory }) => {
 
               </div>
 
-              <Grid item xs={12}>
-                <br />
-                <Button
-                  id="toDayDetails"
-                  className={classes.sendButton}
-                  onClick={handleToDayDetailsClick}
-                  disabled={false}
-                  color="primary"
-                  variant="contained"
-                >
-                  {t("toDayDetails")}
-                </Button>
-
+              <Grid item xs={12} className={classes.buttonAndIconsContainer}>
                 <Button
                   id="saveButton"
                   className={classes.sendButton}
                   onClick={sendData}
-                  disabled={saveButtonDisabled() || disabled}
+                  disabled={saveButtonDisabled() || saveDisabled}
                   color="primary"
                   variant="contained"
                 >
-                  {disabled ? t("loading") : t("saveMigrant")}
+                  {saveDisabled ? t("loading") : t("saveMigrant")}
                 </Button>
-                { (loadingIcon) &&
+                <Help title={t("helpForSaveMigrantButton")} placement="right"/>
+                { (saveLoadingIcon) &&
                   <CircularProgress className={classes.loadingIcon} color="primary"/>
                 }
               </Grid>
@@ -695,6 +775,7 @@ export const HomePage = ({ user, userObservatory }) => {
               </Grid>
             </Paper>
             <Notification category="shorthand" />
+            <Notification category="nocturnalMigration" />
           </Grid>
         </Grid>
       </Grid>
@@ -744,6 +825,65 @@ export const HomePage = ({ user, userObservatory }) => {
               {t("confirm")}
             </Button>
             <Button id="cancel-copy-button" onClick={handleCopyClose} color="secondary" variant="contained" autoFocus>
+              {t("cancel")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Modal>
+      <Modal
+        open={draftsOpen}
+        onClose={() => setDraftsOpen(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Dialog
+          open={draftsOpen}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("drafts")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("draftInfoText")} <br />
+              {t("overwrite")}
+            </DialogContentText>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>{t("date")}</StyledTableCell>
+                  <StyledTableCell>{t("migrantObservations")}</StyledTableCell>
+                  <StyledTableCell>{t("edit")}</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {
+                  drafts?.map(e =>
+                    <TableRow key={e.id} hover>
+                      <TableCell>
+                        { e.id === draftID && ">"} {e.day} { e.type } { e.location}
+                      </TableCell>
+                      <TableCell>
+                        {e.shorthand}
+                      </TableCell>
+                      <TableCell>
+                        <Button id="confirm-draft-button" onClick={() => handleDraftConfirm(e.id)} color="primary" variant="contained">
+                          {t("edit")}
+                        </Button>
+                        <Button id="delete-draft-button" onClick={() => deleteDraft(e.id)} variant="contained">
+                          {t("remove")}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                }
+              </TableBody>
+            </Table>
+          </DialogContent>
+          <DialogActions>
+            <Button id="delete-all-button" onClick={() => confirm(`${t("remove")} ${t("all")} ?!?`.toUpperCase()) && clearAll()} color="secondary" variant="contained" autoFocus>
+              {t("remove")} {t("all")}
+            </Button>
+            <Button id="cancel-copy-button" onClick={() => setDraftsOpen(false)} color="secondary" variant="contained" autoFocus>
               {t("cancel")}
             </Button>
           </DialogActions>
