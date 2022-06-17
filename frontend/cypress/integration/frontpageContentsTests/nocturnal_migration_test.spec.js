@@ -9,7 +9,7 @@ describe.skip("When nightmigration", function () {
     myBeforeEach();
   });
 
-  it("Tallenna button is not active if it is not night time", function () {
+  it.skip("Tallenna button is not active if it is not night time", function () {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
