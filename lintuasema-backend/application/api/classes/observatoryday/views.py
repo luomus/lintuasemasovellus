@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, editLocalGau, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -58,21 +58,26 @@ def add_everything():
         catches_with_dayId = catches
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
+    #print(req['observationPeriods'])
+    #print(type(req['observationPeriods']))
 
+    #Create an empty obsperiod if one does not already exist
+    #editLocalObs(dayId, 'FRICOE', 99, req['userID'])
 
     #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
         obsp = Observationperiod(
-            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
+            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),        
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
             type_id=getTypeIdByName(obsperiod['observationType']),
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
+        
 
         # observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
-
+        #print(obsperiod['shorthandBlock'])
         # Save original shorthand block of observation period
         shorthand = Shorthand(shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId)
         db.session().add(shorthand)
@@ -90,7 +95,6 @@ def add_everything():
                     + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
                     + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
                     + subObservation['unknownMaleCount']
-                    
                     sub_observation = Observation(species=subObservation['species'],
                         adultUnknownCount=subObservation['adultUnknownCount'],
                         adultFemaleCount=subObservation['adultFemaleCount'],
@@ -110,7 +114,7 @@ def add_everything():
                         notes=subObservation['notes'],
                         observationperiod_id=obspId,
                         shorthand_id=shorthand_id,
-                        account_id=req['userID'])
+                        account_id=req['userID'])   
 
                     db.session().add(sub_observation)
 
@@ -118,6 +122,26 @@ def add_everything():
 
     return jsonify(req)
 
+
+@bp.route('/api/updateLocalObservation', methods=['POST']) #Backend for editing the local-column for a species in day details.
+@login_required
+def update_local():
+    req=request.get_json()
+    print(req)
+    day=datetime.strptime(req['date'], '%d.%m.%Y')
+    obsday_id=getDayId(day, 1)
+    editLocalObs(obsday_id, req['species'], req['count'], 1)
+    return req['count']
+    
+@bp.route('/api/updateLocalGauObservation', methods=['POST']) #Backend for editing the local-column for a species in day details.
+@login_required
+def update_local_gau():
+    req=request.get_json()
+    print(req)
+    day=datetime.strptime(req['date'], '%d.%m.%Y')
+    obsday_id=getDayId(day, 1)
+    editLocalGau(obsday_id, req['species'], req['count'], 1)
+    return req['count']
 
 @bp.route('/api/addDay', methods=['POST'])
 @login_required
@@ -182,3 +206,6 @@ def get_latest_days(observatory):
         res = getLatestDays(observatory_id)
 
     return jsonify(res)
+
+
+    

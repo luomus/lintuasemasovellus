@@ -1,6 +1,6 @@
 name: CI/CD pipeline
 
-# NOTE: Pipeline contains notifications sent to Discord on succesful/unsuccesful tests and deployment.
+# NOTE: Pipeline contains notifications sent to Discord on succesful/unsuccesful tests and deployment.
 # Notifications have been commented out. To enable notifications, you must create webhook for your
 # Discord channel and add it as secret in GitHub.
 

@@ -40,6 +40,8 @@
         "Länsireitti"
       ],
       "types": [
+        "Paikallinen",
+        "Hajahavainto",
         "Vakio",
         "Esimerkki1",
         "Esimerkki2",

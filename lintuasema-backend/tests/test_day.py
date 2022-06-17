@@ -1,6 +1,9 @@
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs, editLocalGau
 from application.api.classes.observatoryday.views import add_day
+from application.api.classes.observationperiod.services import getObsPerId
+from application.api.classes.observation.services import getObservationByPeriod, getObservationByPeriodAndSpecies
+from tests.test_observationperiod import setup_default_fields, setup_fields, observation_period_found
 from flask import json
 import tempfile
 import pytest
@@ -65,7 +68,28 @@ def test_addDayRoute(app):
     data = response.get_json()
     assert response.status_code == 200
     assert data['id'] == 1
+#Testing if the empty observationperiod is added when a day is created
+def test_emptyDayAddedWithDayCreation(app):
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
+    addDay(dayToAdd)
+    fields2=setup_fields(startTime = '00:00',
+                         type_id=4)
+    assert observation_period_found(fields2) == True
 
+#Test editing local observations
+def test_editLocalObs(app):
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
+    addDay(dayToAdd)
+    editLocalObs(1, 'SOMMOL', 37, 1)
+    obs=getObservationByPeriodAndSpecies(1, 'SOMMOL')
+    assert obs.species=='SOMMOL' and obs.total_count==37
+
+def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by the addDay function
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
+    addDay(dayToAdd)
+    editLocalGau(1, 'SOMMOL', 37, 1)
+    obs=getObservationByPeriodAndSpecies(2, 'SOMMOL')
+    assert obs.species=='SOMMOL' and obs.total_count==37
 
 def addAndFind(fields):
     dayToAdd = Observatoryday(day=fields['day'], comment=fields['comment'], selectedactions=fields['selectedactions'], observers=fields['observers'], observatory_id=fields['observatory_id'])
