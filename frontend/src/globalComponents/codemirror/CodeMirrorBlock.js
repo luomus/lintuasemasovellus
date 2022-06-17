@@ -50,13 +50,16 @@ const CodeMirrorBlock = ({
     let year = y;
     let day = "0";
 
-    Number(m) < 10 ? month = month.concat(m) : month === m;
-    Number(d) < 10 ? day = day.concat(d) : day === d;
+    console.log("d: ", d);
 
-    let newDate = day+"."+ month +"."+ year ;
+    Number(m) < 10 ? month = month.concat(m) : month = m;
+    Number(d) < 10 ? day = day.concat(d) : day = d;
+
+    let newDate = day+"."+ month +"."+ year;
+    console.log("newDate: ", newDate);
 
     const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
-
+    console.log("findDay: ", findDay);
     const getRowNumbers = findDay && await observationsOnTop(findDay.id,value);
 
     if (findDay && getRowNumbers.length > 0) {
@@ -124,8 +127,6 @@ const CodeMirrorBlock = ({
    */
   const codemirrorOnchange = (editor, data, value) => {
 
-    console.log("value: ", value);
-
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -133,10 +134,12 @@ const CodeMirrorBlock = ({
       validateNight(value);
       const result = validate(editor, data, value);
       const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+
       for (const row of rowNumbers) {
+
         rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
       }
-      console.log("result: ", result);
+
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);
