@@ -9,10 +9,17 @@ const intitialState =
   shorthand: {
     0: { notifications: [], errors: [] },
   },
+  isNight: false
 };
 
 const notificationsReducer = (state = intitialState, action) => {
   switch (action.type) {
+    case "SET_NOCTURNAL_NOTIFICATION":
+      // console.log("action: ", action);
+      return {
+        ...state,
+        isNight: action.payload
+      };
     case "SET_DAILYACTION_NOTIFICATIONS":
       return {
         ...state,
@@ -44,7 +51,17 @@ const notificationsReducer = (state = intitialState, action) => {
   }
 };
 
+export const setNocturnalNotification = (value) => {
+
+  return ({
+    type: "SET_NOCTURNAL_NOTIFICATION",
+    payload: value
+  });
+};
+
+
 export const setNotifications = (validationResult, category, rowKey = -1) => {
+
   if (category === "dailyactions") {
     return {
       type: "SET_DAILYACTION_NOTIFICATIONS",

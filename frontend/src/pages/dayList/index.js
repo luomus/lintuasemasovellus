@@ -2,7 +2,15 @@ import {
   Paper, withStyles, makeStyles, Table, TableBody,
   TableCell, TableHead, TableRow,
   TableContainer,
-  Typography
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  Input,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  Chip
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -11,6 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { retrieveDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
+import parse from "date-fns/parse";
 
 const useStyles = makeStyles({
   paper: {
@@ -22,6 +31,18 @@ const useStyles = makeStyles({
     cursor: "pointer",
     textDecoration: "underline",
     color: "black",
+  },
+  formControl: {
+    margin: "2px",
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  chip: {
+    margin: 2,
   },
 });
 
@@ -45,7 +66,17 @@ export const DayList = ({ userObservatory }) => {
 
   const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
 
+  console.log("list: ", list);
+
   const dispatch = useDispatch();
+
+  const [selectedYears, setSelectedYears] = useState([]);
+  const [availableYears, setAvailableYears] = useState([]);
+
+  useEffect(() => {
+    if(availableYears.length < 1)
+      setAvailableYears([...new Set(list.map(i => parse(i.day, "dd.MM.yyyy", new Date()).getFullYear()))].sort());
+  }, [list]);
 
   useEffect(() => {
     dispatch(retrieveDays());
@@ -80,6 +111,8 @@ export const DayList = ({ userObservatory }) => {
     history.push(`/daydetails/${s.day}`);
   };
 
+  console.log("list: ", list);
+
   return (
     <div>
       <Paper className={classes.paper}>
@@ -88,6 +121,33 @@ export const DayList = ({ userObservatory }) => {
           {t("days")}
         </Typography>
         <br />
+        {t("filter")}
+        <br />
+        <FormControl className={classes.formControl}>
+          <InputLabel id="filter-year-label">{t("year")}</InputLabel>
+          <Select
+            labelId="filter-year-label"
+            id="filter-year"
+            multiple
+            input={<Input />}
+            value={selectedYears}
+            onChange={(e) => setSelectedYears(e.target.value)}
+            renderValue={(selected) => (
+              <div className={classes.chips}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} className={classes.chip} />
+                ))}
+              </div>
+            )}
+          >
+            {availableYears.map((y) => (
+              <MenuItem key={y} value={y}>
+                <Checkbox checked={selectedYears.indexOf(y) > -1} />
+                <ListItemText primary={y} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TableContainer>
           <Table className={classes.table}>
             <TableHead>
@@ -101,6 +161,7 @@ export const DayList = ({ userObservatory }) => {
             <TableBody>
               {
                 list
+                  .filter(el => selectedYears.includes(parse(el.day, "dd.MM.yyyy", new Date()).getFullYear()) || selectedYears.length === 0)
                   .sort(comparator)
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((s, i) =>

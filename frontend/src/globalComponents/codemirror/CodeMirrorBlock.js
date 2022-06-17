@@ -11,7 +11,10 @@ import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import { setNotifications } from "../../reducers/notificationsReducer";
+import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
+import { useSelector } from "react-redux";
+import { isNightValidation } from "../../shorthand/isNightValidation";
+// import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 
 
 let timeout = null;
@@ -28,11 +31,51 @@ const CodeMirrorBlock = ({
   shorthand,
   setShorthand,
   setSanitizedShorthand,
+  date,
+  type
 }) => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
+
+  const observatory = useSelector(state => state.userObservatory);
+  // const dayList = useSelector(state => state.days);
+
+  // const validateObservationOnTop = async (value) => {
+
+  //   const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
+
+  //   let month = "0";
+  //   let year = y;
+  //   let day = d;
+
+  //   Number(m) < 10 ? month = month.concat(m) : month === m;
+
+  //   let newDate = day+"."+ month +"."+ year ;
+
+  //   const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
+
+  //   const getRowNumbers = await observationsOnTop(findDay.id,value);
+
+  //   if (findDay && getRowNumbers.length > 0) {
+  //     return getRowNumbers;
+  //   } else {
+  //     return false;
+  //   }
+
+  // };
+
+
+  const validateNight = (value) => {
+    if (value === "") {
+      dispatch(setNocturnalNotification(false));
+    } else if (type === t("nightMigration") && isNightValidation(observatory, value, date)) {
+      dispatch(setNocturnalNotification(true));
+    } else {
+      dispatch(setNocturnalNotification(false));
+    }
+  };
 
   const validate = (editor, data, value) => {
     let toErrors = [];
@@ -67,6 +110,7 @@ const CodeMirrorBlock = ({
       markers.add(marker);
     }
     resetErrors();
+
     return toErrors;
   };
 
@@ -78,11 +122,17 @@ const CodeMirrorBlock = ({
    * @param {string} value
    */
   const codemirrorOnchange = (editor, data, value) => {
+
     if (timeout) {
       clearTimeout(timeout);
     }
-    timeout = setTimeout(() => {
+    timeout = setTimeout(async () => {
+      validateNight(value);
       const result = validate(editor, data, value);
+      // const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+      // for (const row of rowNumbers) {
+      //   rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
+      // }
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);
@@ -119,6 +169,8 @@ CodeMirrorBlock.propTypes = {
   shorthand: PropTypes.string.isRequired,
   setShorthand: PropTypes.func.isRequired,
   setSanitizedShorthand: PropTypes.func.isRequired,
+  date: PropTypes.instanceOf(Date),
+  type: PropTypes.string
 };
 
 export default CodeMirrorBlock;

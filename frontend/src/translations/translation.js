@@ -33,6 +33,7 @@ const resources = {
 
       // form texts
       "date": "Päivämäärä",
+      "year": "Vuosi",
       "observers": "Havainnoija(t)",
       "observations": "Havainnot",
       "migrantObservations": "Muuttohavainnot",
@@ -46,6 +47,7 @@ const resources = {
       "catchCount": "Lukumäärä",
       "copy": "Kopioi edellinen päivä",
       "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
+      "draftInfoText": "Valitse palautettava luonnos.",
       "overwrite": "Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
@@ -91,6 +93,9 @@ const resources = {
       "mammals": "Nisäkkäät yms. laskettu",
       "attachments": "Liitteitä",
       "pcs": "kpl",
+      "notes": "Lisätiedot",
+      "filter": "Suodata",
+      "drafts": "Luonnokset",
 
       // buttons & confirmation
       "cancel": "Peruuta",
@@ -110,10 +115,15 @@ const resources = {
       "modify": "Muokkaa",
       "save": "Tallenna",
       "saveMigrant": "Tallenna muuttohavainnot",
+      "helpForSaveMigrantButton": "Tallenna syötetyt muuttohavainnot valitulla havaintotyypillä ja -sijainnilla. Syötäthän lisäksi havainnoitsijan tiedot sille osoitettuun kenttään ennen tallentamista. Myös muiden kenttien tiedot (kommentit, aktiivisuus, pyydykset) tallennetaan.",
       "loading": "Ladataan...",
       "toDayDetails": "Siirry koontinäkymään",
+      "helpForToDayDetailsButton": "Siirry valitun päivän koontinäkymään. Syötäthän havainnoitsijan, jos kenttä on tyhjä, jotta painike aktivoituu.",
+      "showOnlyBirdsWithObservations": "Näytä vain lajit, joista on havaintoja",
+      "speciesTextFilter": "Lajihaku",
 
       // notifications & errors
+      "periodsTimesMustBeDifferent": "Aloitus- ja lopetusajan on oltava eri",
       "invalidDate": "Virheellinen päivämäärä",
       "maxDateError": "Päivämäärä on liian suuri",
       "minDateError": "Päivämäärä on liian pieni",

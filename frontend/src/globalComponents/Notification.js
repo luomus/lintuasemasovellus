@@ -3,10 +3,12 @@ import {
   Typography, Grid, Paper, List, ListItem
 } from "@material-ui/core/";
 import WarningIcon from "@material-ui/icons/Warning";
+import NightsStay from "@material-ui/icons/NightsStay";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -20,18 +22,37 @@ const useStyles = makeStyles(() => ({
     maxHeight: "8vw",
     overflow: "auto",
   },
+  nocturnalPaper: {
+    background: "#402158",
+    padding: "20px 30px",
+    marginTop: "20px",
+    maxHeight: "8vw",
+    overflow: "auto",
+  },
   errorHeading: {
     display: "flex",
     alignItems: "center",
     flexWrap: "wrap",
   },
+  nocturnalErrorBottom: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: "10px"
+  },
 }));
+
+const YellowTextTypography = withStyles({
+  root: {
+    color: "#ffff00"
+  }
+})(Typography);
 
 const Notification = ({ category="all" }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
   let allNotifications = useSelector(state => state.notifications);
+  let nocturnalNotification = useSelector(state => state.notifications.isNight);
   let notificationsSet = new Set();
   let errorsSet = new Set();
 
@@ -68,6 +89,22 @@ const Notification = ({ category="all" }) => {
             </Grid>
           </Paper>
         }
+      </div>
+    );
+  } else if (category === "nocturnalMigration") {
+    return (
+      <div>
+        { nocturnalNotification && <Paper className={classes.nocturnalPaper} >
+          <Grid item xs={12}>
+            <YellowTextTypography variant="h5" component="div" className={classes.errorHeading} >
+              <NightsStay fontSize="inherit" />&nbsp;&nbsp;
+                Yömuutto
+            </YellowTextTypography>
+            <YellowTextTypography variant="body1" component="div" className={classes.nocturnalErrorBottom} >
+                Päiväkellonaika yömuuton aikana!
+            </YellowTextTypography>
+          </Grid>
+        </Paper>}
       </div>
     );
   }

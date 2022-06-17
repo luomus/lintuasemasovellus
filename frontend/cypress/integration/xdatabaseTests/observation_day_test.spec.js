@@ -10,7 +10,7 @@ const comment = "Olipa kiva sää.";
 const comment1 = "Satoi aivan kaatamalla";
 const changedComment = "hihihi asdfsommol";
 const date2 = "06.02.2020";
-const shorthand = "10:00\nsommol 1/2 W\n12:00";
+const shorthand = "10:00\nsommol 1/2 W (note, 123)\n12:00";
 const opened = "06:00";
 const opened1 = "06:30";
 const closed = "07:00";
@@ -262,4 +262,16 @@ describe("AddObservationDay", function () {
     cy.get("[name=attachments]").should("have.value", " 2 kpl");
   });
 
+  it("Notes are shown", function () {
+    cy.contains(date).click();
+    cy.wait(2500);
+    cy.contains("SOMMOL").click()
+    cy.wait(1000);
+    cy.get("#speciesTable").should("contain", "note, 123");
+    cy.get("#periodsButton").click();
+    cy.wait(1000);
+    cy.contains("Bunkkeri").click();
+    cy.wait(1000);
+    cy.get("table").should("contain", "note, 123");
+  });
 });

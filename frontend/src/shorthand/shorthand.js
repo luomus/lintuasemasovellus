@@ -278,12 +278,20 @@ const handleDefaultAlpha = (char, line, index) => {
 };
 
 const handleSpaceySymbol = () => {
+  if (lisatietobucketIsOpen) {
+    lisatieto += " ";
+    return;
+  }
   firstSpaceOfLineBreakOrSomeSuchEncountered = true;
 };
 
 const handleNumeric = (char) => {
   if (lajinimiNotSet()) {
     throw new Error("missingSpaceAfterSpecies");
+  }
+  if (lisatietobucketIsOpen) {
+    lisatieto += char;
+    return;
   }
   ageCanBeSet = true;
   yksilomaara += char;
@@ -313,6 +321,10 @@ const handleComma = (line, index) => {
   }
   if (isTooManyCommasHeuristic(index, line)) {
     throw new Error("extraCommas");
+  }
+  if (lisatietobucketIsOpen) {
+    lisatieto += ",";
+    return;
   }
   constructOsahavainto();
 };

@@ -161,8 +161,10 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   };
 
   const retrieveShorthand = async (type, location) => {
+    console.log("type: ", type, "dayId: ", dayId);
     if(type && location){
       const res = await getShorthandText(dayId, type, location);
+      console.log("res: ", res);
       setDefaultShorthand(res);
       initializeDefaultShorthand(res);
     }
@@ -182,17 +184,13 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   useEffect(() => {
     if (userObservatory !== "") {
       setTypes(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .types
+        stations.find(s => s.observatory === userObservatory).types
       );
       setLocations(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .locations
+        stations.find(s => s.observatory === userObservatory).locations
       );
     }
-  });
+  }, [stations]);
 
   return (
     <Modal
@@ -268,10 +266,13 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
                 setSanitizedShorthand={setSanitizedShorthand}
                 setShorthand={setShorthand}
                 shorthand={shorthand}
+                date={new Date(date)}
+                type={type}
               />
             </Grid>
             <Grid item xs={12}>
               <Notification category="shorthand" />
+              <Notification category="nocturnalMigration" />
             </Grid>
             <Grid container item xs={12} alignItems="flex-end">
               <Box pr={2} pt={2}>
