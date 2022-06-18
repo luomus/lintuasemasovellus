@@ -80,7 +80,10 @@ def editLocalObs(obsday_id, species, count, userid):
         u="MA.4658"
     else:
         u = current_user.get_id()
-        if not u:
+        user = Account.query.filter_by(id=u).first()
+        if user:
+            u=user.userId
+        else:
             u="MA.4658"
     obserid=getObservatoryId("Hangon_Lintuasema")
     loc1=getLocationId("Bunkkeri", obserid)
@@ -97,7 +100,7 @@ def editLocalObs(obsday_id, species, count, userid):
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11385)
+            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
         db.session().add(subobs)
         db.session().commit()
 
@@ -107,7 +110,10 @@ def editLocalGau(obsday_id, species, count, userid):
         u="MA.4658"
     else:
         u = current_user.get_id()
-        if not u:
+        user = Account.query.filter_by(id=u).first()
+        if user:
+            u=user.userId
+        else:
             u="MA.4658"
     obserid=getObservatoryId("Hangon_Lintuasema")
     loc2=getLocationId("Luoto Gåu", obserid)
@@ -124,7 +130,7 @@ def editLocalGau(obsday_id, species, count, userid):
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11385)
+            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
         db.session().add(subobs)
         db.session().commit()
 
