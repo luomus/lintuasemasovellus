@@ -60,7 +60,7 @@ const CodeMirrorBlock = ({
 
     const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
     console.log("findDay: ", findDay);
-    const getRowNumbers = findDay && await observationsOnTop(findDay.id,value);
+    const getRowNumbers = findDay ? await observationsOnTop(findDay.id,value) : [];
 
     if (findDay && getRowNumbers.length > 0) {
       return getRowNumbers;
