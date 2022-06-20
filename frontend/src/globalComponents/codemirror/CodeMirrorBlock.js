@@ -70,6 +70,27 @@ const CodeMirrorBlock = ({
 
   };
 
+  const setMarker = (editor, rowNum, rowMessage, background) => {
+    console.log("row number: ", rowNum);
+    console.log("editor: ", editor);
+    const marker = editor.getDoc().markText({
+      line: rowNum,
+      ch: 0
+    }, {
+      line: rowNum,
+      ch: rowMessage.length
+    }, {
+      css: `background-color: ${background};`,
+      clearOnEnter: true,
+      inclusiveRight: true
+    });
+    const icon = document.createElement("img");
+    icon.setAttribute("src", errorImg);
+    icon.className = "lint-error-icon";
+    editor.setGutterMarker(rowNum, "note-gutter", icon);
+    markers.add(marker);
+  };
+
 
   const validateNight = (value) => {
     if (value === "") {
@@ -96,22 +117,8 @@ const CodeMirrorBlock = ({
       (rowMessage.includes("unknownCharacter")) ?
         toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
         : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
-      const marker = editor.getDoc().markText({
-        line: rowNum,
-        ch: 0
-      }, {
-        line: rowNum,
-        ch: rowMessage.length - 1
-      }, {
-        css: "background-color: #f5f890;",
-        clearOnEnter: true,
-        inclusiveRight: true
-      });
-      const icon = document.createElement("img");
-      icon.setAttribute("src", errorImg);
-      icon.className = "lint-error-icon";
-      editor.setGutterMarker(rowNum, "note-gutter", icon);
-      markers.add(marker);
+
+      setMarker(editor,rowNum,rowMessage,"#f5f890");
     }
     resetErrors();
 
@@ -135,9 +142,13 @@ const CodeMirrorBlock = ({
       const result = validate(editor, data, value);
       const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
 
-      for (const row of rowNumbers) {
+      const valuesToArray = value.split("\n");
+      console.log("values to Array: ", valuesToArray);
 
+
+      for (const row of rowNumbers) {
         rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
+        setMarker(editor, row-1, valuesToArray[row-1], "#f5f890");
       }
 
       dispatch(setNotifications([[], result], "shorthand", 0));
