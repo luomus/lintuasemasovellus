@@ -22,8 +22,6 @@ describe("Drafts", function () {
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.wait(1000);
-    cy.contains("Tallenna").click({ force: true });
-    cy.wait(2000);
 
     cy.get("#open-draft-button").click();
     cy.wait(500);
@@ -60,7 +58,7 @@ describe("Drafts", function () {
   });
 
   it("Drafts can be deleted as whole", () => {
-    cy.on('window:confirm', () => true);
+    cy.on("window:confirm", () => true);
     cy.get("#open-draft-button").click();
     cy.wait(500);
     cy.get("[role=dialog]").find("table").find("tr").its("length").should("be.gte", 1);
