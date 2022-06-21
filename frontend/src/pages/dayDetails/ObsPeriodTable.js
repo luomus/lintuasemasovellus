@@ -12,7 +12,6 @@ import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import globals from "../../globalConstants";
 import LocalInput from "./LocalInput";
-import LocalGauInput from "./LocalGauInput";
 
 const ObsPeriodTable = (props) => {
 
@@ -263,11 +262,11 @@ const ObsPeriodTable = (props) => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* {s.localOther} */}
-                      <LocalInput date={date} count={s.localOther} species={s.species}/>
+                      <LocalInput date={date} count={s.localOther} species={s.species} gau={0}/>
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* {s.localGåu} */}
-                      <LocalGauInput date={date} count={s.localGåu} species={s.species}/>
+                      <LocalInput date={date} count={s.localGåu} species={s.species} gau={1}/>
                     </StyledTableCell>
                     <StyledTableCell align="right" className="dotted">
                       {s.allMigration}

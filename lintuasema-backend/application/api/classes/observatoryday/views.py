@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, editLocalGau, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -130,19 +130,8 @@ def update_local():
     print(req)
     day=datetime.strptime(req['date'], '%d.%m.%Y')
     obserid=getObservatoryId("Hangon_Lintuasema")
-    obsday_id=getDayId(day, obserid)
-    editLocalObs(obsday_id, req['species'], req['count'], 1)
-    return req['count']
-    
-@bp.route('/api/updateLocalGauObservation', methods=['POST']) #Backend for editing the local-column for a species in day details.
-@login_required
-def update_local_gau():
-    req=request.get_json()
-    print(req)
-    day=datetime.strptime(req['date'], '%d.%m.%Y')
-    obserid=getObservatoryId("Hangon_Lintuasema")
-    obsday_id=getDayId(day, obserid)
-    editLocalGau(obsday_id, req['species'], req['count'], 1)
+    obsday_id=getDayId(day, obserid)    
+    editLocalObs(obsday_id, req['species'], req['count'], req['gau'])
     return req['count']
 
 @bp.route('/api/addDay', methods=['POST'])

@@ -1,8 +1,9 @@
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs, editLocalGau
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs
 from application.api.classes.observatoryday.views import add_day
 from application.api.classes.observationperiod.services import getObsPerId
 from application.api.classes.observation.services import getObservationByPeriod, getObservationByPeriodAndSpecies
+from application.api.classes.observatory.services import getObservatoryId
 from tests.test_observationperiod import setup_default_fields, setup_fields, observation_period_found
 from flask import json
 import tempfile
@@ -78,16 +79,18 @@ def test_emptyDayAddedWithDayCreation(app):
 
 #Test editing local observations
 def test_editLocalObs(app):
-    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
+    obserid=getObservatoryId("Hangon_Lintuasema")
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editLocalObs(1, 'SOMMOL', 37, 1)
+    editLocalObs(1, 'SOMMOL', 37, 0)
     obs=getObservationByPeriodAndSpecies(1, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 
 def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by the addDay function
-    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
+    obserid=getObservatoryId("Hangon_Lintuasema")
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editLocalGau(1, 'SOMMOL', 37, 1)
+    editLocalObs(1, 'SOMMOL', 37, 1)
     obs=getObservationByPeriodAndSpecies(2, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 
