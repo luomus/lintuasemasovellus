@@ -28,6 +28,33 @@ describe("Drafts", function () {
     cy.get("[role=dialog]").find("table").find("tr").its("length").should("be.gte", 2);
   });
 
+  it("Draft is removed after successfully submitting it", () => {
+    let a;
+    cy.get("#date-picker-inline").clear();
+    cy.get("#date-picker-inline").type(date);
+    cy.get("#observers").clear();
+    cy.get("#observers").type(observer);
+    cy.get("#comment-header").click();
+    cy.get("#comment").clear();
+    cy.get("#comment").type(comment);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.wait(1000);
+    cy.get("#open-draft-button").click();
+    cy.wait(500);
+    cy.get("[role=dialog]").find("table").find("tr").its("length").then(a => {
+      cy.wait(500);
+      cy.contains("Peruuta").click({ force: true });
+      cy.wait(500);
+      cy.root().get("#saveButton").click({ force: true });
+      cy.wait(500);
+      cy.root().get("#open-draft-button").click();
+      cy.wait(500);
+      cy.get("[role=dialog]").find("table").find("tr").its("length").should("be.lt", a);
+    });
+  });
+
   it("Drafts can be applied", () => {
     cy.get("#open-draft-button").click();
     cy.wait(500);
