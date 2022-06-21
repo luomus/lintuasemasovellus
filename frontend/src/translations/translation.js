@@ -47,7 +47,7 @@ const resources = {
       "catchCount": "Lukumäärä",
       "copy": "Kopioi edellinen päivä",
       "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
-      "draftInfoText": "Valitse palautettava luonnos.",
+      "draftInfoText": "Valitse palautettava luonnos. \nLuonnokset ovat automaattisesti tallennettu paikallisesti selaimen välimuistiin. \nVanhat luonnokset siivotaan automaattisesti pois.",
       "overwrite": "Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",

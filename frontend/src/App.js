@@ -11,6 +11,7 @@ import { setUserObservatory } from "./reducers/userObservatoryReducer";
 import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import { makeStyles } from "@material-ui/core/";
+import { clean as DraftsClean } from "./services/draftService";
 
 const App = () => {
 
@@ -63,6 +64,7 @@ const App = () => {
     dispatch(retrieveDays());
     if (user.id) return;
     getPerson().then(response => response.data).then(response => { dispatch(setUser(response)); setLoading(false); }).catch((error) => { console.error("getPerson error", error); setLoading(false); });
+    DraftsClean();
   }, [dispatch, user]);
 
   useEffect(() => {

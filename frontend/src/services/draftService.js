@@ -6,7 +6,7 @@ DraftDB.version(1).stores({
 });
 
 const addDraft = async (data) => {
-  return DraftDB.drafts.put(data)
+  return DraftDB.drafts.put({ ...data, timestamp: Date.now() })
     .then(res => {
       return res;
     }).catch(err => {
@@ -17,11 +17,11 @@ const addDraft = async (data) => {
 const clean = async () => {
   DraftDB.drafts
     .where("timestamp")
-    .below(Date.now() - 1000 * 60 * 60 * 24 * 30)
+    .below(Date.now() - 1000 * 60 * 60 * 24 * 31)
     .delete();
 };
 
-const clearAll = async () => DraftDB.drafts.clear();
+const clearAll = async (id) => DraftDB.drafts.where("userID").equals(id).delete();
 
 const deleteDraft = async (id) => {
   return DraftDB.drafts.delete(id);
