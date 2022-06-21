@@ -50,16 +50,12 @@ const CodeMirrorBlock = ({
     let year = y;
     let day = "0";
 
-    console.log("d: ", d);
-
     Number(m) < 10 ? month = month.concat(m) : month = m;
     Number(d) < 10 ? day = day.concat(d) : day = d;
 
     let newDate = day+"."+ month +"."+ year;
-    console.log("newDate: ", newDate);
 
     const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
-    console.log("findDay: ", findDay);
     const getRowNumbers = findDay ? await observationsOnTop(findDay.id,value) : [];
 
     if (findDay && getRowNumbers.length > 0) {
@@ -145,7 +141,7 @@ const CodeMirrorBlock = ({
       const valuesToArray = value.split("\n");
       console.log("values to Array: ", valuesToArray);
 
-
+      //päällekkäisten aikojen validointi
       for (const row of rowNumbers) {
         rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
         setMarker(editor, row-1, valuesToArray[row-1], "#f5f890");
