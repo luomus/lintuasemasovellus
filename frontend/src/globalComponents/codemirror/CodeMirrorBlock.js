@@ -66,7 +66,8 @@ const CodeMirrorBlock = ({
 
   };
 
-  const setMarker = (editor, rowNum, rowMessage, background) => {
+  const setMarker = (editor, rowNum, rowMessage, background, textColor) => {
+
     const marker = editor.getDoc().markText({
       line: rowNum,
       ch: 0
@@ -74,7 +75,7 @@ const CodeMirrorBlock = ({
       line: rowNum,
       ch: rowMessage.length
     }, {
-      css: `background-color: ${background};`,
+      css: `background-color: ${background}; color: ${textColor}`,
       clearOnEnter: true,
       inclusiveRight: true
     });
@@ -86,14 +87,27 @@ const CodeMirrorBlock = ({
   };
 
 
-  const validateNight = (value) => {
-    if (value === "") {
-      dispatch(setNocturnalNotification(false));
-    } else if (type === t("nightMigration") && isNightValidation(observatory, value, date)) {
-      dispatch(setNocturnalNotification(true));
-    } else {
-      dispatch(setNocturnalNotification(false));
+  const setValidateNightNotification = (value,editor) => {
+    const valuesToArray = value.split("\n");
+    const nightRows = type === t("nightMigration") ? isNightValidation(observatory, value, date) : [];
+    nightRows.length === 0 && dispatch(setNocturnalNotification(false));
+    for (const row of nightRows) {
+      nightRows.length > 0 && dispatch(setNocturnalNotification(true));
+      setMarker(editor, row-1, valuesToArray[row-1], "#402158", "#ffff00");
     }
+  };
+
+  const setValidateObsOnTopNotification = async (value, editor, result) => {
+    const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+
+    const valuesToArray = value.split("\n");
+
+    for (const row of rowNumbers) {
+      rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
+      setMarker(editor, row-1, valuesToArray[row-1], "#f5f890", "#000000");
+    }
+
+    return result;
   };
 
   const validate = (editor, data, value) => {
@@ -112,7 +126,7 @@ const CodeMirrorBlock = ({
         toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
         : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
 
-      setMarker(editor,rowNum,rowMessage,"#f5f890");
+      setMarker(editor,rowNum,rowMessage,"#f5f890","#000000");
     }
     resetErrors();
 
@@ -132,19 +146,12 @@ const CodeMirrorBlock = ({
       clearTimeout(timeout);
     }
     timeout = setTimeout(async () => {
-      validateNight(value);
+
       const result = validate(editor, data, value);
-      const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+      setValidateNightNotification(value, editor);
+      const newResult = await setValidateObsOnTopNotification(value,editor,result);
 
-      const valuesToArray = value.split("\n");
-
-      //päällekkäisten aikojen validointi
-      for (const row of rowNumbers) {
-        rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
-        setMarker(editor, row-1, valuesToArray[row-1], "#f5f890");
-      }
-
-      dispatch(setNotifications([[], result], "shorthand", 0));
+      dispatch(setNotifications([[], newResult], "shorthand", 0));
       timeout = null;
     }, 700);
   };
