@@ -14,7 +14,7 @@ import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
 import { useSelector } from "react-redux";
 import { isNightValidation } from "../../shorthand/isNightValidation";
-// import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
+import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 
 
 let timeout = null;
@@ -40,31 +40,52 @@ const CodeMirrorBlock = ({
   const classes = useStyles();
 
   const observatory = useSelector(state => state.userObservatory);
-  // const dayList = useSelector(state => state.days);
+  const dayList = useSelector(state => state.days);
 
-  // const validateObservationOnTop = async (value) => {
+  const validateObservationOnTop = async (value) => {
 
-  //   const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
+    const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
 
-  //   let month = "0";
-  //   let year = y;
-  //   let day = d;
+    let month = "0";
+    let year = y;
+    let day = "0";
 
-  //   Number(m) < 10 ? month = month.concat(m) : month === m;
+    Number(m) < 10 ? month = month.concat(m) : month = m;
+    Number(d) < 10 ? day = day.concat(d) : day = d;
 
-  //   let newDate = day+"."+ month +"."+ year ;
+    let newDate = day+"."+ month +"."+ year;
 
-  //   const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
+    const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
+    const getRowNumbers = findDay ? await observationsOnTop(findDay.id,value) : [];
 
-  //   const getRowNumbers = await observationsOnTop(findDay.id,value);
+    if (findDay && getRowNumbers.length > 0) {
+      return getRowNumbers;
+    } else {
+      return false;
+    }
 
-  //   if (findDay && getRowNumbers.length > 0) {
-  //     return getRowNumbers;
-  //   } else {
-  //     return false;
-  //   }
+  };
 
-  // };
+  const setMarker = (editor, rowNum, rowMessage, background) => {
+    console.log("row number: ", rowNum);
+    console.log("editor: ", editor);
+    const marker = editor.getDoc().markText({
+      line: rowNum,
+      ch: 0
+    }, {
+      line: rowNum,
+      ch: rowMessage.length
+    }, {
+      css: `background-color: ${background};`,
+      clearOnEnter: true,
+      inclusiveRight: true
+    });
+    const icon = document.createElement("img");
+    icon.setAttribute("src", errorImg);
+    icon.className = "lint-error-icon";
+    editor.setGutterMarker(rowNum, "note-gutter", icon);
+    markers.add(marker);
+  };
 
 
   const validateNight = (value) => {
@@ -92,22 +113,8 @@ const CodeMirrorBlock = ({
       (rowMessage.includes("unknownCharacter")) ?
         toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
         : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
-      const marker = editor.getDoc().markText({
-        line: rowNum,
-        ch: 0
-      }, {
-        line: rowNum,
-        ch: rowMessage.length - 1
-      }, {
-        css: "background-color: #f5f890;",
-        clearOnEnter: true,
-        inclusiveRight: true
-      });
-      const icon = document.createElement("img");
-      icon.setAttribute("src", errorImg);
-      icon.className = "lint-error-icon";
-      editor.setGutterMarker(rowNum, "note-gutter", icon);
-      markers.add(marker);
+
+      setMarker(editor,rowNum,rowMessage,"#f5f890");
     }
     resetErrors();
 
@@ -129,10 +136,17 @@ const CodeMirrorBlock = ({
     timeout = setTimeout(async () => {
       validateNight(value);
       const result = validate(editor, data, value);
-      // const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
-      // for (const row of rowNumbers) {
-      //   rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
-      // }
+      const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+
+      const valuesToArray = value.split("\n");
+      console.log("values to Array: ", valuesToArray);
+
+      //päällekkäisten aikojen validointi
+      for (const row of rowNumbers) {
+        rowNumbers.length > 0 && result.push("Tarkista rivi " + row + ":" + " Ei päällekkäisiä aikoja!");
+        setMarker(editor, row-1, valuesToArray[row-1], "#f5f890");
+      }
+
       dispatch(setNotifications([[], result], "shorthand", 0));
       timeout = null;
     }, 700);

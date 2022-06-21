@@ -5,6 +5,7 @@ const date = "03.03.2021";
 const observer = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
+const shorthandNight = "01:00\ngrugru 1/2 W\n01:10";
 const shorthandModified = "10:00\ngrugru 1/2 W\n12:00";
 
 
@@ -57,7 +58,7 @@ describe("ShorthandModificationPerObservationPeriod", function () {
         editor[0].CodeMirror.setValue("", { force: true });
       });
     cy.wait(2000);  
-    cy.get(".CodeMirror textarea").type(shorthandModified, { force: true });
+    cy.get(".CodeMirror textarea").type(shorthandNight, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
     cy.wait(5000);
