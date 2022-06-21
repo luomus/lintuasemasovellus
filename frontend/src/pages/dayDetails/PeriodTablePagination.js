@@ -19,7 +19,7 @@ const PeriodTablePagination = ({
     <TableFooter>
       <TableRow>
         <TablePagination
-          rowsPerPageOptions={[10, 25, { label: t("all"), value: -1 }]}
+          rowsPerPageOptions={[10, 25, { label: t("all"), value: list.length }]}
           colSpan={3}
           labelRowsPerPage={t("rowsPerPage")}
           labelDisplayedRows={
