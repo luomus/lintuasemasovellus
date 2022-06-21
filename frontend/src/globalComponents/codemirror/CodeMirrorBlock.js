@@ -67,8 +67,6 @@ const CodeMirrorBlock = ({
   };
 
   const setMarker = (editor, rowNum, rowMessage, background) => {
-    console.log("row number: ", rowNum);
-    console.log("editor: ", editor);
     const marker = editor.getDoc().markText({
       line: rowNum,
       ch: 0
@@ -139,7 +137,6 @@ const CodeMirrorBlock = ({
       const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
 
       const valuesToArray = value.split("\n");
-      console.log("values to Array: ", valuesToArray);
 
       //päällekkäisten aikojen validointi
       for (const row of rowNumbers) {
