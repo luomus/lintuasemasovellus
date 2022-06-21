@@ -1,4 +1,5 @@
 import birds from "./birds.json";
+import defaultBirds from "./defaultBirds.json";
 
 const directions = new Map([
   ["N", "0"],
@@ -47,8 +48,12 @@ export default {
   directions,
   bypass,
   birdMap,
-  uniqueBirds,
   timeRegex,
   inverseDirections,
   inverseBypass,
+};
+
+export {
+  uniqueBirds,
+  defaultBirds
 };
