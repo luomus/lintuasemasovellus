@@ -12,6 +12,11 @@ def getObservationByPeriod(observationperiod_id):
     
     return ret
 
+def getObservationByPeriodAndSpecies(observationperiod_id, species):
+    observation = Observation.query.filter_by(observationperiod_id = observationperiod_id, species = species).first()
+    
+    return observation
+
 def getAllObservations():
     observations = Observation.query.all()
     ret = []
@@ -26,7 +31,9 @@ def getAllObservations():
     return ret
 
 
-def getDaySummary(day_id):
+def getDaySummary(day_id): 
+    #This SQL monster retrieves each observation and groups them in order to create a view that allows the user to see what kind of observations
+    #Each species has had for the day, as well as sums up the total amount of migration observations and local observations.
     stmt = text("SELECT " + prefix + "Observation.species AS species,"
                 " SUM(CASE WHEN (" + prefix + "Type.name = :const OR " + prefix + "Type.name = :other OR " + prefix + "Type.name = :night OR " + prefix + "Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :const THEN total_count ELSE 0 END) AS const_migration,"
@@ -50,12 +57,12 @@ def getDaySummary(day_id):
                 " GROUP BY species").params(day_id = day_id, 
                     const = "Vakio", other = "Muu muutto", night = "Yömuutto", scatter = "Hajahavainto",
                     local = "Paikallinen", gou = "Luoto Gåu")
-
+    #GÃ¥u
     res = db.engine.execute(stmt)
 
     response = []
-
     for row in res:
+        print(row)
         response.append({
             "species" :row.species, 
             "allMigration":row.all_migration,
@@ -63,10 +70,11 @@ def getDaySummary(day_id):
             "otherMigration":row.other_migration,
             "nightMigration":row.night_migration,
             "scatterObs":row.scatter_obs,
-            "totalLocal":row.total_local,
+            "totalLocal":row.local_other+row.local_gou,
             "localOther":row.local_other,
             "localGåu":row.local_gou,
             "notes":row.notes,
+            "dayId" :day_id
             })
   
     return response
@@ -112,3 +120,26 @@ def deleteObservations(shorthand_id):
     for observation in observations_to_delete:
         observation.is_deleted = 1
     db.session.commit()
+
+def updateObservation(shorthand_id):
+    observation_old=Observation.query.get(shorthand_id)
+# tämä vain kopio vanhan. Lisättävä local ja localGåu
+    observation_new=Observation(adultUnknownCount=observation_old.adultUnknownCount, adultFemaleCount=observation_old.adultFemaleCount,
+    adultMaleCount=observation_old.adultMaleCount, juvenileUnknownCount=observation_old.juvenileUnkownCount,
+    juvenileFemaleCount=observation_old.juvenileFemaleCount, juvenileMaleCount=observation_old.juvenileMaleCount, 
+    subadultUnknownCount=observation_old.subadultUnknownCount, subadultFemaleCount=observation_old.subadultFemaleCount,
+    subadultMaleCount=observation_old.subadultMaleCount, unknownUnknownCount=observation_old.unknownUnknownCount,
+    unknownFemaleCount=observation_old.unknownFemaleCount, unknownMaleCount=observation_old.unknownMaleCount,
+    total_count=observation_old.total_count, direction=observation_old.direction, bypassSide=observation_old.bypassSide,
+    notes = observation_old.notes, observationperiod_id=observation_old.observationperiod_id,
+    shorthand_id = observation_old.shorthand_id, account_id=observation_old.account_id)
+
+    return update_edited_observation(observation_new, observation_old)
+
+def update_edited_observation(observation_new, observation_old):
+    observation_old.is_deleted = 1
+    db.session().add(observation_new)
+    db.session.commit()
+
+    return {"id" : observation_new.id}
+

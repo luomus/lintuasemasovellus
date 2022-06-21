@@ -270,6 +270,8 @@ export const HomePage = ({ user, userObservatory }) => {
       dispatch(retrieveDays());
       getLatestDays(userObservatory)
         .then(daysJson => setLatestDays(daysJson));
+      deleteDraft(draftID);
+      setDraftID(undefined);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
@@ -456,6 +458,7 @@ export const HomePage = ({ user, userObservatory }) => {
 
   return (
     <div>
+      333
       <Grid container
         alignItems="flex-start"
       >
@@ -843,7 +846,7 @@ export const HomePage = ({ user, userObservatory }) => {
         >
           <DialogTitle id="alert-dialog-title">{t("drafts")}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="alert-dialog-description" style={{ whiteSpace: "pre-line" }}>
               {t("draftInfoText")} <br />
               {t("overwrite")}
             </DialogContentText>
@@ -880,7 +883,7 @@ export const HomePage = ({ user, userObservatory }) => {
             </Table>
           </DialogContent>
           <DialogActions>
-            <Button id="delete-all-button" onClick={() => confirm(`${t("remove")} ${t("all")} ?!?`.toUpperCase()) && clearAll()} color="secondary" variant="contained" autoFocus>
+            <Button id="delete-all-button" onClick={() => confirm(`${t("remove")} ${t("all")} ?!?`.toUpperCase()) && clearAll(user.id)} color="secondary" variant="contained" autoFocus>
               {t("remove")} {t("all")}
             </Button>
             <Button id="cancel-copy-button" onClick={() => setDraftsOpen(false)} color="secondary" variant="contained" autoFocus>

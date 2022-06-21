@@ -3,7 +3,7 @@ const resources = {
     translation: {
       // site-wide, headers
       "intro": "Tervetuloa lintuasemasovellus Haukkaan. Suomessa sijaitsee 16 lintuasemaa. Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii sisäänkirjautumisen.",
-      "footer": "Lintuasemasovellus Haukka | Luonnontieteellinen keskusmuseo LUOMUS",
+      "footer": "Lintuasemasovellus Haukka | Luonnontieteellinen keskusmuseo LUOMUS",
       "login": "Kirjaudu sisään",
       "logout": "Kirjaudu ulos",
       "User": "Käyttäjä",
@@ -47,7 +47,7 @@ const resources = {
       "catchCount": "Lukumäärä",
       "copy": "Kopioi edellinen päivä",
       "chooseCopy": "Valitse edelliseltä päivältä kopioitavat tiedot.",
-      "draftInfoText": "Valitse palautettava luonnos.",
+      "draftInfoText": "Valitse palautettava luonnos. \nLuonnokset ovat automaattisesti tallennettu paikallisesti selaimen välimuistiin. \nVanhat luonnokset siivotaan automaattisesti pois.",
       "overwrite": "Huom! Valitut tiedot ylikirjaavat mahdolliset kyseiseen kohtaan tälle päivälle tehdyt merkinnät.",
       "days": "Päivät",
       "observationStation": "Havainnointiasema",

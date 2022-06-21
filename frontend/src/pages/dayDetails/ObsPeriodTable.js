@@ -12,6 +12,7 @@ import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import { defaultBirds, uniqueBirds } from "../../globalConstants";
+import LocalInput from "./LocalInput";
 
 const ObsPeriodTable = (props) => {
 
@@ -206,6 +207,9 @@ const ObsPeriodTable = (props) => {
   };
 
   if (mode === "speciesTable") {
+    console.log(summary);
+    console.log(summary[0]);
+    console.log( { date } );
     return (
       <div>
         <Typography variant="h6" >
@@ -290,10 +294,12 @@ const ObsPeriodTable = (props) => {
                       {s.totalLocal}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.localOther}
+                      {/* {s.localOther} */}
+                      <LocalInput date={date} count={s.localOther} species={s.species} gau={0}/>
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.localGåu}
+                      {/* {s.localGåu} */}
+                      <LocalInput date={date} count={s.localGåu} species={s.species} gau={1}/>
                     </StyledTableCell>
                     <StyledTableCell align="right" className="dotted">
                       {s.allMigration}

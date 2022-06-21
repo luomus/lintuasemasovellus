@@ -4,12 +4,14 @@ const date = "1.6.2022";
 const observer = "Pekka Puupaa";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 
+
+
 describe.skip("When nightmigration", function () {
   beforeEach(function () {
     myBeforeEach();
   });
 
-  it("Tallenna button is not active if it is not night time", function () {
+  it.skip("Tallenna button is not active if it is not night time", function () {
 
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
@@ -19,6 +21,9 @@ describe.skip("When nightmigration", function () {
     cy.wait(1000);
 
     cy.get("#saveButton").should("be.disabled");
+  });
+  it('hello there', function() {
+    expect(true).toBe(true);
   });
 
 });

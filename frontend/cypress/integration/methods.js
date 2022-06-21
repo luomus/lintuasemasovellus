@@ -7,7 +7,7 @@ export function myBeforeEach() {
   // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
 
   cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-  // cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+  //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
   cy.visit("http://localhost:3000");
 
 
