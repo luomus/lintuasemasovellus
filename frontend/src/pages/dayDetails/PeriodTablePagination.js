@@ -12,14 +12,14 @@ const PeriodTablePagination = ({
 
   const { t } = useTranslation();
 
-  if (list.length < 10) {
+  if (list.length < 50) {
     return null;
   }
   return (
     <TableFooter>
       <TableRow>
         <TablePagination
-          rowsPerPageOptions={[10, 25, { label: t("all"), value: list.length }]}
+          rowsPerPageOptions={[50, 100, { label: t("all"), value: list.length }]}
           colSpan={3}
           labelRowsPerPage={t("rowsPerPage")}
           labelDisplayedRows={
