@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, TableCell, withStyles, makeStyles, Typography,
-  IconButton, FormControlLabel, Checkbox, TextField, Grid
+  IconButton, FormControlLabel, Checkbox, TextField, Grid,
+  FormControl, Select, MenuItem, InputLabel
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useTranslation } from "react-i18next";
@@ -10,11 +11,11 @@ import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
-import globals from "../../globalConstants";
+import { defaultBirds, uniqueBirds } from "../../globalConstants";
 
 const ObsPeriodTable = (props) => {
 
-  const { date, obsPeriods, summary, mode, refetchObservations } = props;
+  const { date, obsPeriods, summary, mode, refetchObservations, userObservatory } = props;
 
   const { t } = useTranslation();
 
@@ -70,10 +71,11 @@ const ObsPeriodTable = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [obsPeriod, setObsPeriod] = useState({});
-  const [onlyBirdsWithObservations, setOnlyBirdsWithObservations] = useState(true);
+  const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(true);
   const [textFilter, setTextFilter] = useState("");
+  const [speciesListType, setSpeciesListType] = useState("defaults");
   const [filteredSummary, setFilteredSummary] = useState(summary);
-  const [summaryWithAll, setSummaryWithAll] = useState(summary);
+  const [extendedSummary, setExtendedSummary] = useState(summary);
 
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
@@ -131,59 +133,75 @@ const ObsPeriodTable = (props) => {
   const handleErrorSnackOpen = () => {
   };
 
-  const addSpeciesToSummary = () => {
-    setSummaryWithAll(
-      globals.uniqueBirds.reduce(
-        (previous, current) => {
-          const birdInSummary = summary.find(bird => bird.species === current);
-          if (birdInSummary) {
-            return previous.concat(birdInSummary);
-          }
-          return (
-            previous
-              .concat({
-                /* Notice that these are specific to Hangon_Lintuasema.
-                   These are hard coded to table rows. These attributes should
-                   be defined elsewhere in case full support for additional
-                   observatories is about to be implemented. */
-                allMigration: 0,
-                constMigration: 0,
-                localGåu: 0,
-                localOther: 0,
-                nightMigration: 0,
-                notes: "",
-                otherMigration: 0,
-                scatterObs: 0,
-                species: current,
-                totalLocal: 0
-              })
-          );
-        }, []
-      ).sort((a, b) => a.species.localeCompare(b.species))
+  const generateExtendedSummary = (species) => {
+    return (
+      species.reduce((previous, current) => {
+        //Use observation data if exists
+        const birdInSummary = summary.find(bird => bird.species === current);
+        if (birdInSummary) {
+          return previous.concat(birdInSummary);
+        }
+        //Otherwise add empty row
+        return (
+          previous
+            .concat({
+              allMigration: 0,
+              constMigration: 0,
+              localGåu: 0, //At least this one is Hanko specific
+              localOther: 0,
+              nightMigration: 0,
+              notes: "",
+              otherMigration: 0,
+              scatterObs: 0,
+              species: current,
+              totalLocal: 0
+            })
+        );
+      }, []
+      )
     );
   };
 
   const handleFilterChange = () => {
-    setOnlyBirdsWithObservations(!onlyBirdsWithObservations);
+    setBirdsWithObsFilter(!birdsWithObsFilter);
   };
 
   const handleTextFilterChange = (event) => {
     setTextFilter(event.target.value);
   };
 
+  const handleSpeciesListChange = (event) => {
+    setSpeciesListType(event.target.value);
+  };
+
+  //updateExtendedSummary if changes to summary or speciesListType filter
   useEffect(() => {
-    addSpeciesToSummary();
-  }, [summary]);
+    let species;
+    switch (speciesListType) {
+      case "defaults":
+        species = defaultBirds[userObservatory.toString()];
+        break;
+      case "others":
+        species = uniqueBirds.filter(bird => !defaultBirds[userObservatory.toString()].includes(bird));
+        break;
+      case "all":
+        species = uniqueBirds;
+        break;
+    }
+    setExtendedSummary(
+      generateExtendedSummary(species)
+    );
+  }, [summary, speciesListType]);
 
   useEffect(() => {
     filterSummary();
-  }, [textFilter, onlyBirdsWithObservations, summaryWithAll]);
+  }, [extendedSummary, birdsWithObsFilter, textFilter]);
 
   const filterSummary = () => {
     setFilteredSummary(
-      [...summaryWithAll]
+      [...extendedSummary]
         .filter(s =>
-          (s.allMigration + s.totalLocal) > (onlyBirdsWithObservations ? 0 : -1)
+          (s.allMigration + s.totalLocal) > (birdsWithObsFilter ? 0 : -1)
           && s.species.toLowerCase().includes(textFilter.toLowerCase())));
   };
 
@@ -194,26 +212,41 @@ const ObsPeriodTable = (props) => {
           {t("summary")}
         </Typography>
         <Grid container
-          spacing={2}
+          spacing={3}
           alignItems="flex-end"
           className={classes.filterContainer}
         >
-          <Grid item>
+          <Grid item xs={2}>
             <TextField
               rows={1}
               multiline={false}
               id="textFilter"
-              fullWidth={false}
+              fullWidth={true}
               label={t("speciesTextFilter")}
               onChange={handleTextFilterChange}
               value={textFilter}
             />
           </Grid>
+          <Grid item xs={2}>
+            <FormControl fullWidth>
+              <InputLabel id="select-species-list-label">{t("shownSpecies")}</InputLabel>
+              <Select
+                labelId="select-species-list-label"
+                id="select-species-list"
+                value={speciesListType}
+                onChange={handleSpeciesListChange}
+              >
+                <MenuItem value="defaults">{t("observatoryDefaults")}</MenuItem>
+                <MenuItem value="others">{t("otherSpecies")}</MenuItem>
+                <MenuItem value="all">{t("allSpecies")}</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
           <Grid item>
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={onlyBirdsWithObservations}
+                  checked={birdsWithObsFilter}
                   onChange={handleFilterChange}
                   id="onlyObservationsFilter"
                   color="primary"
@@ -380,6 +413,7 @@ ObsPeriodTable.propTypes = {
   obsPeriods: PropTypes.array.isRequired,
   summary: PropTypes.array.isRequired,
   mode: PropTypes.string.isRequired,
+  userObservatory: PropTypes.string.isRequired,
   refetchObservations: PropTypes.func.isRequired
 };
 

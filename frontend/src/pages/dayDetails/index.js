@@ -161,7 +161,7 @@ export const DayDetails = ({ userObservatory }) => {
       });
     getSummary(dayId)
       .then(periodsJson => {
-        if(!fetching) {
+        if (!fetching) {
           setSummary(periodsJson);
         }
       });
@@ -520,17 +520,17 @@ export const DayDetails = ({ userObservatory }) => {
               </Box>
             </Grid>
 
-
             <Grid item xs={12}>
               <ObsPeriodTable
                 key={day}
                 date={day}
+                day={dayId}
                 obsPeriods={obsPeriods}
                 summary={summary}
                 mode={mode}
+                userObservatory={userObservatory}
                 refetchObservations={refetchObservations}
               />
-
             </Grid>
           </Grid>
           <EditShorthand
