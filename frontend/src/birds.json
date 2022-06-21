@@ -1,2099 +1,2684 @@
- {
-    "ALAARV" : {
-      "value": "ALAARV"
+{
+  "CYGOLO": {
+    "value": "CYGOLO"
   },
-    "ANTPRA" : {
-      "value": "ANTPRA"
+  "COLO": {
+    "value": "CYGOLO"
   },
-    "ANTTRI" : {
-      "value": "ANTTRI"
+  "CYGCOL": {
+    "value": "CYGCOL"
   },
-    "CARERY" : {
-      "value": "CARERY"
+  "CYGCYG": {
+    "value": "CYGCYG"
   },
-    "COLPAL" : {
-      "value": "COLPAL"
+  "CCYG": {
+    "value": "CYGCYG"
   },
-    "CARSPI" : {
-      "value": "CARSPI"
+  "CYGATR": {
+    "value": "CYGATR"
   },
-    "EMBCIT" : {
-      "value": "EMBCIT"
+  "CYGSP": {
+    "value": "CYGSP"
   },
-    "ERIRUB" : {
-      "value": "ERIRUB"
+  "ANSFAB": {
+    "value": "ANSFAB"
   },
-    "FRICOE" : {
-      "value": "FRICOE"
+  "AFAB": {
+    "value": "ANSFAB"
   },
-    "FICHYP" : {
-      "value": "FICHYP"
+  "ANSBRA": {
+    "value": "ANSBRA"
   },
-    "FRIMON" : {
-      "value": "FRIMON"
+  "ANSALB": {
+    "value": "ANSALB"
   },
-    "LUSLUS" : {
-      "value": "LUSLUS"
+  "ANSERY": {
+    "value": "ANSERY"
   },
-    "MOTALB" : {
-      "value": "MOTALB"
+  "AERY": {
+    "value": "ANSERY"
   },
-    "MUSSTR" : {
-      "value": "MUSSTR"
+  "ANSANS": {
+    "value": "ANSANS"
   },
-    "NUMARQ" : {
-      "value": "NUMARQ"
+  "AANS": {
+    "value": "ANSANS"
   },
-    "PASDOM" : {
-      "value": "PASDOM"
+  "ANSIND": {
+    "value": "ANSIND"
   },
-    "PHYSIB" : {
-      "value": "PHYSIB"
+  "ANSCAE": {
+    "value": "ANSCAE"
   },
-    "PHYLUS" : {
-      "value": "PHYLUS"
+  "ACAE": {
+    "value": "ANSCAE"
   },
-    "REGREG" : {
-      "value": "REGREG"
+  "ANSROS": {
+    "value": "ANSROS"
   },
-    "SYLBOR" : {
-      "value": "SYLBOR"
+  "ANSSP": {
+    "value": "ANSSP"
   },
-    "TRIGLA" : {
-      "value": "TRIGLA"
+  "BRACAN": {
+    "value": "BRACAN"
   },
-    "TURILI" : {
-      "value": "TURILI"
+  "BCAN": {
+    "value": "BRACAN"
   },
-    "TURMER" : {
-      "value": "TURMER"
+  "BRAHUT": {
+    "value": "BRAHUT"
   },
-    "TRIOCH" : {
-      "value": "TRIOCH"
+  "BRALEU": {
+    "value": "BRALEU"
   },
-    "TROTRO" : {
-      "value": "TROTRO"
+  "BLEU": {
+    "value": "BRALEU"
   },
-    "VANVAN" : {
-      "value": "VANVAN"
+  "BRABER": {
+    "value": "BRABER"
   },
-    "GAVSTE" : {
-      "value": "GAVSTE"
+  "BRARUF": {
+    "value": "BRARUF"
   },
-    "GAVARC" : {
-      "value": "GAVARC"
+  "BRASP": {
+    "value": "BRASP"
   },
-    "TACRUF" : {
-      "value": "TACRUF"
+  "ANS/BRA": {
+    "value": "ANS/BRA"
   },
-    "PODCRI" : {
-      "value": "PODCRI"
+  "TADFER": {
+    "value": "TADFER"
   },
-    "PODGRI" : {
-      "value": "PODGRI"
+  "TADTAD": {
+    "value": "TADTAD"
   },
-    "PODAUR" : {
-      "value": "PODAUR"
+  "TTAD": {
+    "value": "TADTAD"
   },
-    "PHACAR" : {
-      "value": "PHACAR"
+  "AIXGAL": {
+    "value": "AIXGAL"
   },
-    "BOTSTE" : {
-      "value": "BOTSTE"
+  "AIXSPO": {
+    "value": "AIXSPO"
   },
-    "ARDCIN" : {
-      "value": "ARDCIN"
+  "ANAPEN": {
+    "value": "ANAPEN"
   },
-    "CYGOLO" : {
-      "value": "CYGOLO"
+  "APEN": {
+    "value": "ANAPEN"
   },
-    "CYGCYG" : {
-      "value": "CYGCYG"
+  "ANAAME": {
+    "value": "ANAAME"
   },
-    "ANSFAB" : {
-      "value": "ANSFAB"
+  "ANASIB": {
+    "value": "ANASIB"
   },
-    "ANSERY" : {
-      "value": "ANSERY"
+  "ANAFAL": {
+    "value": "ANAFAL"
   },
-    "ANSANS" : {
-      "value": "ANSANS"
+  "ANASTR": {
+    "value": "ANASTR"
   },
-    "ANSCAE" : {
-      "value": "ANSCAE"
+  "ASTR": {
+    "value": "ANASTR"
   },
-    "BRACAN" : {
-      "value": "BRACAN"
+  "ANAFOR": {
+    "value": "ANAFOR"
   },
-    "BRALEU" : {
-      "value": "BRALEU"
+  "ANACRE": {
+    "value": "ANACRE"
   },
-    "TADTAD" : {
-      "value": "TADTAD"
+  "ACRE": {
+    "value": "ANACRE"
   },
-    "ANAPEN" : {
-      "value": "ANAPEN"
+  "ANACAR": {
+    "value": "ANACAR"
   },
-    "ANASTR" : {
-      "value": "ANASTR"
+  "ANACYA": {
+    "value": "ANACYA"
   },
-    "ANACRE" : {
-      "value": "ANACRE"
+  "ANAPLA": {
+    "value": "ANAPLA"
   },
-    "ANAPLA" : {
-      "value": "ANAPLA"
+  "APLA": {
+    "value": "ANAPLA"
   },
-    "ANAACU" : {
-      "value": "ANAACU"
+  "ANARUB": {
+    "value": "ANARUB"
   },
-    "ANAQUE" : {
-      "value": "ANAQUE"
+  "ANAACU": {
+    "value": "ANAACU"
   },
-    "ANACLY" : {
-      "value": "ANACLY"
+  "AACU": {
+    "value": "ANAACU"
   },
-    "AYTFER" : {
-      "value": "AYTFER"
+  "ANAQUE": {
+    "value": "ANAQUE"
   },
-    "AYTFUL" : {
-      "value": "AYTFUL"
+  "AQUE": {
+    "value": "ANAQUE"
   },
-    "AYTMAR" : {
-      "value": "AYTMAR"
+  "ANADIS": {
+    "value": "ANADIS"
   },
-    "SOMMOL" : {
-      "value": "SOMMOL"
+  "ANACLY": {
+    "value": "ANACLY"
   },
-    "CLAHYE" : {
-      "value": "CLAHYE"
+  "ACLY": {
+    "value": "ANACLY"
   },
-    "MELNIG" : {
-      "value": "MELNIG"
+  "ANASP": {
+    "value": "ANASP"
   },
-    "MELFUS" : {
-      "value": "MELFUS"
+  "NETRUF": {
+    "value": "NETRUF"
   },
-    "BUCCLA" : {
-      "value": "BUCCLA"
+  "AYTFER": {
+    "value": "AYTFER"
   },
-    "MERALB" : {
-      "value": "MERALB"
+  "AFER": {
+    "value": "AYTFER"
   },
-    "MERSER" : {
-      "value": "MERSER"
+  "AYTCOL": {
+    "value": "AYTCOL"
   },
-    "MERMER" : {
-      "value": "MERMER"
+  "AYTNYR": {
+    "value": "AYTNYR"
   },
-    "PERAPI" : {
-      "value": "PERAPI"
+  "AYTFUL": {
+    "value": "AYTFUL"
   },
-    "MILMIG" : {
-      "value": "MILMIG"
+  "AFUL": {
+    "value": "AYTFUL"
   },
-    "HALALB" : {
-      "value": "HALALB"
+  "AYTMAR": {
+    "value": "AYTMAR"
   },
-    "CIRAER" : {
-      "value": "CIRAER"
+  "AMAR": {
+    "value": "AYTMAR"
   },
-    "CIRCYA" : {
-      "value": "CIRCYA"
+  "AYTFUL/AYTMAR": {
+    "value": "AYTFUL/AYTMAR"
   },
-    "CIRPYG" : {
-      "value": "CIRPYG"
+  "AYTAFF": {
+    "value": "AYTAFF"
   },
-    "CIRMAC" : {
-      "value": "CIRMAC"
+  "SOMMOL": {
+    "value": "SOMMOL"
   },
-    "ACCGEN" : {
-      "value": "ACCGEN"
+  "SMOL": {
+    "value": "SOMMOL"
   },
-    "ACCNIS" : {
-      "value": "ACCNIS"
+  "SOMSPE": {
+    "value": "SOMSPE"
   },
-    "BUTBUT" : {
-      "value": "BUTBUT"
+  "POLSTE": {
+    "value": "POLSTE"
   },
-    "BUTLAG" : {
-      "value": "BUTLAG"
+  "HISHIS": {
+    "value": "HISHIS"
   },
-    "AQUCLA" : {
-      "value": "AQUCLA"
+  "CLAHYE": {
+    "value": "CLAHYE"
   },
-    "AQUCHR" : {
-      "value": "AQUCHR"
+  "CHYE": {
+    "value": "CLAHYE"
   },
-    "PANHAL" : {
-      "value": "PANHAL"
+  "MELNIG": {
+    "value": "MELNIG"
   },
-    "FALTIN" : {
-      "value": "FALTIN"
+  "MNIG": {
+    "value": "MELNIG"
   },
-    "FALVES" : {
-      "value": "FALVES"
+  "MELAME": {
+    "value": "MELAME"
   },
-    "FALCOL" : {
-      "value": "FALCOL"
+  "MELPER": {
+    "value": "MELPER"
   },
-    "FALSUB" : {
-      "value": "FALSUB"
+  "MELFUS": {
+    "value": "MELFUS"
   },
-    "FALRUS" : {
-      "value": "FALRUS"
+  "MFUS": {
+    "value": "MELFUS"
   },
-    "FALPER" : {
-      "value": "FALPER"
+  "MELDEG": {
+    "value": "MELDEG"
   },
-    "TETBON" : {
-      "value": "TETBON"
+  "MELSP": {
+    "value": "MELSP"
   },
-    "LAGLAG" : {
-      "value": "LAGLAG"
+  "BUCCLA": {
+    "value": "BUCCLA"
   },
-    "LAGMUT" : {
-      "value": "LAGMUT"
+  "BCLA": {
+    "value": "BUCCLA"
   },
-    "LYRTET" : {
-      "value": "LYRTET"
+  "BUCALB": {
+    "value": "BUCALB"
   },
-    "TETURO" : {
-      "value": "TETURO"
+  "MERALB": {
+    "value": "MERALB"
   },
-    "PERPER" : {
-      "value": "PERPER"
+  "MALBE": {
+    "value": "MERALB"
   },
-    "COTCOT" : {
-      "value": "COTCOT"
+  "MERCUC": {
+    "value": "MERCUC"
   },
-    "PHACOL" : {
-      "value": "PHACOL"
+  "MERSER": {
+    "value": "MERSER"
   },
-    "RALAQU" : {
-      "value": "RALAQU"
+  "MSER": {
+    "value": "MERSER"
   },
-    "PORPOR" : {
-      "value": "PORPOR"
+  "MERMER": {
+    "value": "MERMER"
   },
-    "PORPAR" : {
-      "value": "PORPAR"
+  "MMER": {
+    "value": "MERMER"
   },
-    "CRECRE" : {
-      "value": "CRECRE"
+  "MERSER/MERMER": {
+    "value": "MERSER/MERMER"
   },
-    "GALCHL" : {
-      "value": "GALCHL"
+  "OXYJAM": {
+    "value": "OXYJAM"
   },
-    "FULATR" : {
-      "value": "FULATR"
+  "IV": {
+    "value": "IV"
   },
-    "GRUGRU" : {
-      "value": "GRUGRU"
+  "PV": {
+    "value": "PV"
   },
-    "HAEOST" : {
-      "value": "HAEOST"
+  "V": {
+    "value": "V"
   },
-    "CHADUB" : {
-      "value": "CHADUB"
+  "COTCOT": {
+    "value": "COTCOT"
   },
-    "CHAHIA" : {
-      "value": "CHAHIA"
+  "CCOT": {
+    "value": "COTCOT"
   },
-    "CHAMOR" : {
-      "value": "CHAMOR"
+  "TETBON": {
+    "value": "TETBON"
   },
-    "PLUAPR" : {
-      "value": "PLUAPR"
+  "TBON": {
+    "value": "TETBON"
   },
-    "CALUTA" : {
-      "value": "CALUTA"
+  "LAGLAG": {
+    "value": "LAGLAG"
   },
-    "CALTEM" : {
-      "value": "CALTEM"
+  "LLAG": {
+    "value": "LAGLAG"
   },
-    "CALMAR" : {
-      "value": "CALMAR"
+  "LAGMUT": {
+    "value": "LAGMUT"
   },
-    "CALALP" : {
-      "value": "CALALP"
+  "LMUT": {
+    "value": "LAGMUT"
   },
-    "LIMFAL" : {
-      "value": "LIMFAL"
+  "TETRIX": {
+    "value": "TETRIX"
   },
-    "PHIPUG" : {
-      "value": "PHIPUG"
+  "TETURO": {
+    "value": "TETURO"
   },
-    "LYMMIN" : {
-      "value": "LYMMIN"
+  "TURO": {
+    "value": "TETURO"
   },
-    "GALGAL" : {
-      "value": "GALGAL"
+  "PERPER": {
+    "value": "PERPER"
   },
-    "GALMED" : {
-      "value": "GALMED"
+  "PPER": {
+    "value": "PERPER"
   },
-    "SCORUS" : {
-      "value": "SCORUS"
+  "PHACOL": {
+    "value": "PHACOL"
   },
-    "LIMLIM" : {
-      "value": "LIMLIM"
+  "PCOLC": {
+    "value": "PHACOL"
   },
-    "LIMLAP" : {
-      "value": "LIMLAP"
+  "GAVSTE": {
+    "value": "GAVSTE"
   },
-    "NUMPHA" : {
-      "value": "NUMPHA"
+  "GSTE": {
+    "value": "GAVSTE"
   },
-    "TRIERY" : {
-      "value": "TRIERY"
+  "GAVARC": {
+    "value": "GAVARC"
   },
-    "TRITOT" : {
-      "value": "TRITOT"
+  "GARC": {
+    "value": "GAVARC"
   },
-    "TRISTA" : {
-      "value": "TRISTA"
+  "GAVPAC": {
+    "value": "GAVPAC"
   },
-    "TRINEB" : {
-      "value": "TRINEB"
+  "GAVIMM": {
+    "value": "GAVIMM"
   },
-    "XENCIN" : {
-      "value": "XENCIN"
+  "GAVADA": {
+    "value": "GAVADA"
   },
-    "ACTHYP" : {
-      "value": "ACTHYP"
+  "GAVIMM/GAVADA": {
+    "value": "GAVIMM/GAVADA"
   },
-    "AREINT" : {
-      "value": "AREINT"
+  "GAVSP": {
+    "value": "GAVSP"
   },
-    "PHALOB" : {
-      "value": "PHALOB"
+  "TACRUF": {
+    "value": "TACRUF"
   },
-    "STECUS" : {
-      "value": "STECUS"
+  "TRUF": {
+    "value": "TACRUF"
   },
-    "STELON" : {
-      "value": "STELON"
+  "PODCRI": {
+    "value": "PODCRI"
   },
-    "LARMIN" : {
-      "value": "LARMIN"
+  "POCRI": {
+    "value": "PODCRI"
   },
-    "LARRID" : {
-      "value": "LARRID"
+  "PODGRI": {
+    "value": "PODGRI"
   },
-    "LARCAN" : {
-      "value": "LARCAN"
+  "PGRI": {
+    "value": "PODGRI"
   },
-    "LARFUS" : {
-      "value": "LARFUS"
+  "PODCRI/PODGRI": {
+    "value": "PODCRI/PODGRI"
   },
-    "LARARG" : {
-      "value": "LARARG"
+  "PODAUR": {
+    "value": "PODAUR"
   },
-    "LARMAR" : {
-      "value": "LARMAR"
+  "PAUR": {
+    "value": "PODAUR"
   },
-    "STECAS" : {
-      "value": "STECAS"
+  "PODNIG": {
+    "value": "PODNIG"
   },
-    "STEHIR" : {
-      "value": "STEHIR"
+  "PODAUR/PODNIG": {
+    "value": "PODAUR/PODNIG"
   },
-    "STEAEA" : {
-      "value": "STEAEA"
+  "PODSP": {
+    "value": "PODSP"
   },
-    "STEALB" : {
-      "value": "STEALB"
+  "FULGLA": {
+    "value": "FULGLA"
   },
-    "CHLNIG" : {
-      "value": "CHLNIG"
+  "PUFGRI": {
+    "value": "PUFGRI"
   },
-    "URIAAL" : {
-      "value": "URIAAL"
+  "PUFPUF": {
+    "value": "PUFPUF"
   },
-    "ALCTOR" : {
-      "value": "ALCTOR"
+  "PUFSP": {
+    "value": "PUFSP"
   },
-    "CEPGRY" : {
-      "value": "CEPGRY"
+  "HYDPEL": {
+    "value": "HYDPEL"
   },
-    "COLLIV" : {
-      "value": "COLLIV"
+  "OCELEU": {
+    "value": "OCELEU"
   },
-    "COLOEN" : {
-      "value": "COLOEN"
+  "OCECAS": {
+    "value": "OCECAS"
   },
-    "STRDEC" : {
-      "value": "STRDEC"
+  "OCESP": {
+    "value": "OCESP"
   },
-    "STRTUR" : {
-      "value": "STRTUR"
+  "MORBAS": {
+    "value": "MORBAS"
   },
-    "CUCCAN" : {
-      "value": "CUCCAN"
+  "PHACAR": {
+    "value": "PHACAR"
   },
-    "BUBBUB" : {
-      "value": "BUBBUB"
+  "PCAR": {
+    "value": "PHACAR"
   },
-    "NYCSCA" : {
-      "value": "NYCSCA"
+  "PHAARI": {
+    "value": "PHAARI"
   },
-    "SURULU" : {
-      "value": "SURULU"
+  "PHAAXSP": {
+    "value": "PHAAXSP"
   },
-    "GLAPAS" : {
-      "value": "GLAPAS"
+  "ANS/BRA/PHA": {
+    "value": "ANS/BRA/PHA"
   },
-    "STRALU" : {
-      "value": "STRALU"
+  "PELONO": {
+    "value": "PELONO"
   },
-    "STRURA" : {
-      "value": "STRURA"
+  "BOTSTE": {
+    "value": "BOTSTE"
   },
-    "STRNEB" : {
-      "value": "STRNEB"
+  "BSTE": {
+    "value": "BOTSTE"
   },
-    "ASIOTU" : {
-      "value": "ASIOTU"
+  "IXOMIN": {
+    "value": "IXOMIN"
   },
-    "ASIFLA" : {
-      "value": "ASIFLA"
+  "NYCNYC": {
+    "value": "NYCNYC"
   },
-    "AEGFUN" : {
-      "value": "AEGFUN"
+  "ARDRAL": {
+    "value": "ARDRAL"
   },
-    "CAPEUR" : {
-      "value": "CAPEUR"
+  "ARDBAC": {
+    "value": "ARDBAC"
   },
-    "APUAPU" : {
-      "value": "APUAPU"
+  "ARDGRA": {
+    "value": "ARDGRA"
   },
-    "ALCATT" : {
-      "value": "ALCATT"
+  "ARDEOLA": {
+    "value": "ARDEOLA"
   },
-    "JYNTOR" : {
-      "value": "JYNTOR"
+  "BUBIBI": {
+    "value": "BUBIBI"
   },
-    "PICCAN" : {
-      "value": "PICCAN"
+  "EGRGAR": {
+    "value": "EGRGAR"
   },
-    "DRYMAR" : {
-      "value": "DRYMAR"
+  "EGRALB": {
+    "value": "EGRALB"
   },
-    "DENMAJ" : {
-      "value": "DENMAJ"
+  "ARDCIN": {
+    "value": "ARDCIN"
   },
-    "DENLEU" : {
-      "value": "DENLEU"
+  "ACIN": {
+    "value": "ARDCIN"
   },
-    "DENMIN" : {
-      "value": "DENMIN"
+  "ARDPUR": {
+    "value": "ARDPUR"
   },
-    "PICTRI" : {
-      "value": "PICTRI"
+  "CICNIG": {
+    "value": "CICNIG"
   },
-    "LULARB" : {
-      "value": "LULARB"
+  "CICCIC": {
+    "value": "CICCIC"
   },
-    "EREALP" : {
-      "value": "EREALP"
+  "PHOROS": {
+    "value": "PHOROS"
   },
-    "RIPRIP" : {
-      "value": "RIPRIP"
+  "PHOMIN": {
+    "value": "PHOMIN"
   },
-    "HIRRUS" : {
-      "value": "HIRRUS"
+  "PLEFAL": {
+    "value": "PLEFAL"
   },
-    "DELURB" : {
-      "value": "DELURB"
+  "PLALEU": {
+    "value": "PLALEU"
   },
-    "ANTCAM" : {
-      "value": "ANTCAM"
+  "PERAPI": {
+    "value": "PERAPI"
   },
-    "ANTCER" : {
-      "value": "ANTCER"
+  "PAPI": {
+    "value": "PERAPI"
   },
-    "ANTPET" : {
-      "value": "ANTPET"
+  "MILMIG": {
+    "value": "MILMIG"
   },
-    "MOTFLA" : {
-      "value": "MOTFLA"
+  "MMIG": {
+    "value": "MILMIG"
   },
-    "MOTCIT" : {
-      "value": "MOTCIT"
+  "MILMIL": {
+    "value": "MILMIL"
   },
-    "MOTCIN" : {
-      "value": "MOTCIN"
+  "MILSP": {
+    "value": "MILSP"
   },
-    "BOMGAR" : {
-      "value": "BOMGAR"
+  "HALLEU": {
+    "value": "HALLEU"
   },
-    "CINCIN" : {
-      "value": "CINCIN"
+  "HALALB": {
+    "value": "HALALB"
   },
-    "PRUMOD" : {
-      "value": "PRUMOD"
+  "HALB": {
+    "value": "HALALB"
   },
-    "LUSSVE" : {
-      "value": "LUSSVE"
+  "NEOPER": {
+    "value": "NEOPER"
   },
-    "LUSCYA" : {
-      "value": "LUSCYA"
+  "GYPFUL": {
+    "value": "GYPFUL"
   },
-    "PHOOCH" : {
-      "value": "PHOOCH"
+  "AEGMON": {
+    "value": "AEGMON"
   },
-    "PHOPHO" : {
-      "value": "PHOPHO"
+  "CIRGAL": {
+    "value": "CIRGAL"
   },
-    "SAXRUB" : {
-      "value": "SAXRUB"
+  "CIRAER": {
+    "value": "CIRAER"
   },
-    "SAXTOR" : {
-      "value": "SAXTOR"
+  "CAER": {
+    "value": "CIRAER"
   },
-    "OENOEN" : {
-      "value": "OENOEN"
+  "CIRCYA": {
+    "value": "CIRCYA"
   },
-    "TURTOR" : {
-      "value": "TURTOR"
+  "CCYA": {
+    "value": "CIRCYA"
   },
-    "TURPIL" : {
-      "value": "TURPIL"
+  "CIRMAC": {
+    "value": "CIRMAC"
   },
-    "TURPHI" : {
-      "value": "TURPHI"
+  "CMAC": {
+    "value": "CIRMAC"
   },
-    "TURVIS" : {
-      "value": "TURVIS"
+  "CIRPYG": {
+    "value": "CIRPYG"
   },
-    "LOCNAE" : {
-      "value": "LOCNAE"
+  "CPYG": {
+    "value": "CIRPYG"
   },
-    "LOCFLU" : {
-      "value": "LOCFLU"
+  "CIRMAC/CIRPYG": {
+    "value": "CIRMAC/CIRPYG"
   },
-    "LOCLUS" : {
-      "value": "LOCLUS"
+  "CIRCYA/CIRMAC/CIRPYG": {
+    "value": "CIRCYA/CIRMAC/CIRPYG"
   },
-    "ACRSCH" : {
-      "value": "ACRSCH"
+  "CIRSP": {
+    "value": "CIRSP"
   },
-    "ACRDUM" : {
-      "value": "ACRDUM"
+  "ACCGEN": {
+    "value": "ACCGEN"
   },
-    "ACRRIS" : {
-      "value": "ACRRIS"
+  "AGEN": {
+    "value": "ACCGEN"
   },
-    "ACRSCI" : {
-      "value": "ACRSCI"
+  "ACCNIS": {
+    "value": "ACCNIS"
   },
-    "ACRARU" : {
-      "value": "ACRARU"
+  "ANIS": {
+    "value": "ACCNIS"
   },
-    "IDUCAL" : {
-      "value": "IDUCAL"
+  "ACCSP": {
+    "value": "ACCSP"
   },
-    "HIPICT" : {
-      "value": "HIPICT"
+  "BUTBUT": {
+    "value": "BUTBUT"
   },
-    "SYLNIS" : {
-      "value": "SYLNIS"
+  "BBUT": {
+    "value": "BUTBUT"
   },
-    "SYLCUR" : {
-      "value": "SYLCUR"
+  "BUTRUF": {
+    "value": "BUTRUF"
   },
-    "SYLCOM" : {
-      "value": "SYLCOM"
+  "BUTLAG": {
+    "value": "BUTLAG"
   },
-    "SYLATR" : {
-      "value": "SYLATR"
+  "BLAG": {
+    "value": "BUTLAG"
   },
-    "PHYDES" : {
-      "value": "PHYDES"
+  "BUTSP": {
+    "value": "BUTSP"
   },
-    "PHYBOR" : {
-      "value": "PHYBOR"
+  "PER/BUT": {
+    "value": "PER/BUT"
   },
-    "PHYCOL" : {
-      "value": "PHYCOL"
+  "AQUCLA": {
+    "value": "AQUCLA"
   },
-    "FICPAR" : {
-      "value": "FICPAR"
+  "ACLA": {
+    "value": "AQUCLA"
   },
-    "PANBIA" : {
-      "value": "PANBIA"
+  "AQUPOM": {
+    "value": "AQUPOM"
   },
-    "AEGCAU" : {
-      "value": "AEGCAU"
+  "AQUCLA/AQUPOM": {
+    "value": "AQUCLA/AQUPOM"
   },
-    "PARMON" : {
-      "value": "PARMON"
+  "AQUCLA/AQUPOM/AQUNIP": {
+    "value": "AQUCLA/AQUPOM/AQUNIP"
   },
-    "PARCIN" : {
-      "value": "PARCIN"
+  "AQUCHR": {
+    "value": "AQUCHR"
   },
-    "PARCRI" : {
-      "value": "PARCRI"
+  "ACHR": {
+    "value": "AQUCHR"
   },
-    "PARATE" : {
-      "value": "PARATE"
+  "AQUNIP": {
+    "value": "AQUNIP"
   },
-    "PARCAE" : {
-      "value": "PARCAE"
+  "AQUHEL": {
+    "value": "AQUHEL"
   },
-    "PARCYA" : {
-      "value": "PARCYA"
+  "AQUPEN": {
+    "value": "AQUPEN"
   },
-    "PARMAJ" : {
-      "value": "PARMAJ"
+  "AQUSP": {
+    "value": "AQUSP"
   },
-    "SITEUR" : {
-      "value": "SITEUR"
+  "HAL/AQU": {
+    "value": "HAL/AQU"
   },
-    "CERFAM" : {
-      "value": "CERFAM"
+  "PANHAL": {
+    "value": "PANHAL"
   },
-    "REMPEN" : {
-      "value": "REMPEN"
+  "PHAL": {
+    "value": "PANHAL"
   },
-    "ORIORI" : {
-      "value": "ORIORI"
+  "FALNAU": {
+    "value": "FALNAU"
   },
-    "LANCOL" : {
-      "value": "LANCOL"
+  "FALTIN": {
+    "value": "FALTIN"
   },
-    "LANEXC" : {
-      "value": "LANEXC"
+  "FTIN": {
+    "value": "FALTIN"
   },
-    "GARGLA" : {
-      "value": "GARGLA"
+  "FALVES": {
+    "value": "FALVES"
   },
-    "PERINF" : {
-      "value": "PERINF"
+  "FVES": {
+    "value": "FALVES"
   },
-    "PICPIC" : {
-      "value": "PICPIC"
+  "FALCOL": {
+    "value": "FALCOL"
   },
-    "NUCCAR" : {
-      "value": "NUCCAR"
+  "FCOL": {
+    "value": "FALCOL"
   },
-    "CORMON" : {
-      "value": "CORMON"
+  "FALSUB": {
+    "value": "FALSUB"
   },
-    "CORFRU" : {
-      "value": "CORFRU"
+  "FSUB": {
+    "value": "FALSUB"
   },
-    "CORNIX" : {
-      "value": "CORNIX"
+  "FALELE": {
+    "value": "FALELE"
   },
-    "CORRAX" : {
-      "value": "CORRAX"
+  "FALCHE": {
+    "value": "FALCHE"
   },
-    "STUVUL" : {
-      "value": "STUVUL"
+  "FALRUS": {
+    "value": "FALRUS"
   },
-    "PASMON" : {
-      "value": "PASMON"
+  "FRUS": {
+    "value": "FALRUS"
   },
-    "SERSER" : {
-      "value": "SERSER"
+  "FALPER": {
+    "value": "FALPER"
   },
-    "CARCHL" : {
-      "value": "CARCHL"
+  "FPER": {
+    "value": "FALPER"
   },
-    "CARCAR" : {
-      "value": "CARCAR"
+  "FALSP": {
+    "value": "FALSP"
   },
-    "CARCAN" : {
-      "value": "CARCAN"
+  "IFAL": {
+    "value": "IFAL"
   },
-    "CARRIS" : {
-      "value": "CARRIS"
+  "PFAL": {
+    "value": "PFAL"
   },
-    "CARMEA" : {
-      "value": "CARMEA"
+  "IP": {
+    "value": "IP"
   },
-    "CARHOR" : {
-      "value": "CARHOR"
+  "PP": {
+    "value": "PP"
   },
-    "LOXLEU" : {
-      "value": "LOXLEU"
+  "RALAQU": {
+    "value": "RALAQU"
   },
-    "LOXCUR" : {
-      "value": "LOXCUR"
+  "RAQU": {
+    "value": "RALAQU"
   },
-    "LOXPYT" : {
-      "value": "LOXPYT"
+  "PORPOR": {
+    "value": "PORPOR"
   },
-    "PINENU" : {
-      "value": "PINENU"
+  "PPOR": {
+    "value": "PORPOR"
   },
-    "PYRPYR" : {
-      "value": "PYRPYR"
+  "PORPAR": {
+    "value": "PORPAR"
   },
-    "COCCOC" : {
-      "value": "COCCOC"
+  "PPAR": {
+    "value": "PORPAR"
   },
-    "CALLAP" : {
-      "value": "CALLAP"
+  "PORPUS": {
+    "value": "PORPUS"
   },
-    "PLENIV" : {
-      "value": "PLENIV"
+  "CRECRE": {
+    "value": "CRECRE"
   },
-    "EMBHOR" : {
-      "value": "EMBHOR"
+  "CCRE": {
+    "value": "CRECRE"
   },
-    "EMBRUS" : {
-      "value": "EMBRUS"
+  "GALCHL": {
+    "value": "GALCHL"
   },
-    "EMBPUS" : {
-      "value": "EMBPUS"
+  "GCHL": {
+    "value": "GALCHL"
   },
-    "EMBAUR" : {
-      "value": "EMBAUR"
+  "PORALL": {
+    "value": "PORALL"
   },
-    "EMBSCH" : {
-      "value": "EMBSCH"
+  "FULATR": {
+    "value": "FULATR"
   },
-    "AA" : {
-      "value": "ALAARV"
+  "FATR": {
+    "value": "FULATR"
   },
-    "AP" : {
-      "value": "ANTPRA"
+  "GRUVIR": {
+    "value": "GRUVIR"
   },
-    "AT" : {
-      "value": "ANTTRI"
+  "GRUCAN": {
+    "value": "GRUCAN"
   },
-    "CE" : {
-      "value": "CARERY"
+  "GRUGRU": {
+    "value": "GRUGRU"
   },
-    "CP" : {
-      "value": "COLPAL"
+  "GGRU": {
+    "value": "GRUGRU"
   },
-    "CS" : {
-      "value": "CARSPI"
+  "TETRAX": {
+    "value": "TETRAX"
   },
-    "EC" : {
-      "value": "EMBCIT"
+  "CHLMAC": {
+    "value": "CHLMAC"
   },
-    "ER" : {
-      "value": "ERIRUB"
+  "OTITAR": {
+    "value": "OTITAR"
   },
-    "FC" : {
-      "value": "FRICOE"
+  "BUROED": {
+    "value": "BUROED"
   },
-    "FH" : {
-      "value": "FICHYP"
+  "HIMHIM": {
+    "value": "HIMHIM"
   },
-    "FM" : {
-      "value": "FRIMON"
+  "RECAVO": {
+    "value": "RECAVO"
   },
-    "LL" : {
-      "value": "LUSLUS"
+  "HAEOST": {
+    "value": "HAEOST"
   },
-    "MA" : {
-      "value": "MOTALB"
+  "HOST": {
+    "value": "HAEOST"
   },
-    "MS" : {
-      "value": "MUSSTR"
+  "PLUFUL": {
+    "value": "PLUFUL"
   },
-    "NA" : {
-      "value": "NUMARQ"
+  "PLUDOM": {
+    "value": "PLUDOM"
   },
-    "PD" : {
-      "value": "PASDOM"
+  "PLUFUL/PLUDOM": {
+    "value": "PLUFUL/PLUDOM"
   },
-    "PS" : {
-      "value": "PHYSIB"
+  "PLUAPR": {
+    "value": "PLUAPR"
   },
-    "PT" : {
-      "value": "PHYLUS"
+  "PAPR": {
+    "value": "PLUAPR"
   },
-    "RR" : {
-      "value": "REGREG"
+  "PLUSQU": {
+    "value": "PLUSQU"
   },
-    "SB" : {
-      "value": "SYLBOR"
+  "PLUSP": {
+    "value": "PLUSP"
   },
-    "TG" : {
-      "value": "TRIGLA"
+  "VANGRE": {
+    "value": "VANGRE"
   },
-    "TI" : {
-      "value": "TURILI"
+  "VANLEU": {
+    "value": "VANLEU"
   },
-    "TM" : {
-      "value": "TURMER"
+  "VANVAN": {
+    "value": "VANVAN"
   },
-    "TO" : {
-      "value": "TRIOCH"
+  "VV": {
+    "value": "VANVAN"
   },
-    "TT" : {
-      "value": "TROTRO"
+  "VVAN": {
+    "value": "VANVAN"
   },
-    "VV" : {
-      "value": "VANVAN"
+  "CHADUB": {
+    "value": "CHADUB"
   },
-    "GSTE" : {
-      "value": "GAVSTE"
+  "CDUB": {
+    "value": "CHADUB"
   },
-    "GARC" : {
-      "value": "GAVARC"
+  "CHAHIA": {
+    "value": "CHAHIA"
   },
-    "TRUF" : {
-      "value": "TACRUF"
+  "CHIA": {
+    "value": "CHAHIA"
   },
-    "POCRI" : {
-      "value": "PODCRI"
+  "CHAALE": {
+    "value": "CHAALE"
   },
-    "PGRI" : {
-      "value": "PODGRI"
+  "CHAMON": {
+    "value": "CHAMON"
   },
-    "PAUR" : {
-      "value": "PODAUR"
+  "CHALES": {
+    "value": "CHALES"
   },
-    "PCAR" : {
-      "value": "PHACAR"
+  "CHAMON/CHALES": {
+    "value": "CHAMON/CHALES"
   },
-    "BSTE" : {
-      "value": "BOTSTE"
+  "CHAASI": {
+    "value": "CHAASI"
   },
-    "ACIN" : {
-      "value": "ARDCIN"
+  "CHAVER": {
+    "value": "CHAVER"
   },
-    "COLO" : {
-      "value": "CYGOLO"
+  "CHAMOR": {
+    "value": "CHAMOR"
   },
-    "CCYG" : {
-      "value": "CYGCYG"
+  "CMOR": {
+    "value": "CHAMOR"
   },
-    "AFAB" : {
-      "value": "ANSFAB"
+  "CHASP": {
+    "value": "CHASP"
   },
-    "AERY" : {
-      "value": "ANSERY"
+  "BARLON": {
+    "value": "BARLON"
   },
-    "AANS" : {
-      "value": "ANSANS"
+  "NUMMIN": {
+    "value": "NUMMIN"
   },
-    "ACAE" : {
-      "value": "ANSCAE"
+  "NUMPHA": {
+    "value": "NUMPHA"
   },
-    "BCAN" : {
-      "value": "BRACAN"
+  "NPHA": {
+    "value": "NUMPHA"
   },
-    "BLEU" : {
-      "value": "BRALEU"
+  "NUMARQ": {
+    "value": "NUMARQ"
   },
-    "TTAD" : {
-      "value": "TADTAD"
+  "NA": {
+    "value": "NUMARQ"
   },
-    "APEN" : {
-      "value": "ANAPEN"
+  "NARQ": {
+    "value": "NUMARQ"
   },
-    "ASTR" : {
-      "value": "ANASTR"
+  "NUMSP": {
+    "value": "NUMSP"
   },
-    "ACRE" : {
-      "value": "ANACRE"
+  "LIMLIM": {
+    "value": "LIMLIM"
   },
-    "APLA" : {
-      "value": "ANAPLA"
+  "LLIM": {
+    "value": "LIMLIM"
   },
-    "AACU" : {
-      "value": "ANAACU"
+  "LIMLAP": {
+    "value": "LIMLAP"
   },
-    "AQUE" : {
-      "value": "ANAQUE"
+  "LLAP": {
+    "value": "LIMLAP"
   },
-    "ACLY" : {
-      "value": "ANACLY"
+  "AREINT": {
+    "value": "AREINT"
   },
-    "AFER" : {
-      "value": "AYTFER"
+  "AINT": {
+    "value": "AREINT"
   },
-    "AFUL" : {
-      "value": "AYTFUL"
+  "CALCAN": {
+    "value": "CALCAN"
   },
-    "AMAR" : {
-      "value": "AYTMAR"
+  "CALPUG": {
+    "value": "CALPUG"
   },
-    "SMOL" : {
-      "value": "SOMMOL"
+  "CALACU": {
+    "value": "CALACU"
   },
-    "CHYE" : {
-      "value": "CLAHYE"
+  "CALFAL": {
+    "value": "CALFAL"
   },
-    "MNIG" : {
-      "value": "MELNIG"
+  "CALFER": {
+    "value": "CALFER"
   },
-    "MFUS" : {
-      "value": "MELFUS"
+  "CALHIM": {
+    "value": "CALHIM"
   },
-    "BCLA" : {
-      "value": "BUCCLA"
+  "CALRCO": {
+    "value": "CALRCO"
   },
-    "MALBE" : {
-      "value": "MERALB"
+  "CALSMI": {
+    "value": "CALSMI"
   },
-    "MSER" : {
-      "value": "MERSER"
+  "CALTEM": {
+    "value": "CALTEM"
   },
-    "MMER" : {
-      "value": "MERMER"
+  "CTEM": {
+    "value": "CALTEM"
   },
-    "PAPI" : {
-      "value": "PERAPI"
+  "CALALB": {
+    "value": "CALALB"
   },
-    "MMIG" : {
-      "value": "MILMIG"
+  "CALALP": {
+    "value": "CALALP"
   },
-    "HALB" : {
-      "value": "HALALB"
+  "CALP": {
+    "value": "CALALP"
   },
-    "CAER" : {
-      "value": "CIRAER"
+  "CALMAR": {
+    "value": "CALMAR"
   },
-    "CCYA" : {
-      "value": "CIRCYA"
+  "CMAR": {
+    "value": "CALMAR"
   },
-    "CPYG" : {
-      "value": "CIRPYG"
+  "CALBAI": {
+    "value": "CALBAI"
   },
-    "CMAC" : {
-      "value": "CIRMAC"
+  "CALUTA": {
+    "value": "CALUTA"
   },
-    "AGEN" : {
-      "value": "ACCGEN"
+  "CMIN": {
+    "value": "CALUTA"
   },
-    "ANIS" : {
-      "value": "ACCNIS"
+  "CALFUS": {
+    "value": "CALFUS"
   },
-    "BBUT" : {
-      "value": "BUTBUT"
+  "CALLLA": {
+    "value": "CALLLA"
   },
-    "BLAG" : {
-      "value": "BUTLAG"
+  "CALSRU": {
+    "value": "CALSRU"
   },
-    "ACLA" : {
-      "value": "AQUCLA"
+  "CALMEL": {
+    "value": "CALMEL"
   },
-    "ACHR" : {
-      "value": "AQUCHR"
+  "CALSP": {
+    "value": "CALSP"
   },
-    "PHAL" : {
-      "value": "PANHAL"
+  "PHATRI": {
+    "value": "PHATRI"
   },
-    "FTIN" : {
-      "value": "FALTIN"
+  "PHALOB": {
+    "value": "PHALOB"
   },
-    "FVES" : {
-      "value": "FALVES"
+  "PLOB": {
+    "value": "PHALOB"
   },
-    "FCOL" : {
-      "value": "FALCOL"
+  "PHAFUL": {
+    "value": "PHAFUL"
   },
-    "FSUB" : {
-      "value": "FALSUB"
+  "XENCIN": {
+    "value": "XENCIN"
   },
-    "FRUS" : {
-      "value": "FALRUS"
+  "XCIN": {
+    "value": "XENCIN"
   },
-    "FPER" : {
-      "value": "FALPER"
+  "ACTHYP": {
+    "value": "ACTHYP"
   },
-    "TBON" : {
-      "value": "TETBON"
+  "AHYP": {
+    "value": "ACTHYP"
   },
-    "LLAG" : {
-      "value": "LAGLAG"
+  "ACTMAC": {
+    "value": "ACTMAC"
   },
-    "LMUT" : {
-      "value": "LAGMUT"
+  "TRIOCH": {
+    "value": "TRIOCH"
   },
-    "TTET" : {
-      "value": "LYRTET"
+  "TO": {
+    "value": "TRIOCH"
   },
-    "TURO" : {
-      "value": "TETURO"
+  "TOCH": {
+    "value": "TRIOCH"
   },
-    "PPER" : {
-      "value": "PERPER"
+  "TRIERY": {
+    "value": "TRIERY"
   },
-    "CCOT" : {
-      "value": "COTCOT"
+  "TERY": {
+    "value": "TRIERY"
   },
-    "PCOLC" : {
-      "value": "PHACOL"
+  "TRINEB": {
+    "value": "TRINEB"
   },
-    "RAQU" : {
-      "value": "RALAQU"
+  "TNEB": {
+    "value": "TRINEB"
   },
-    "PPOR" : {
-      "value": "PORPOR"
+  "TRIFLA": {
+    "value": "TRIFLA"
   },
-    "PPAR" : {
-      "value": "PORPAR"
+  "TRISEM": {
+    "value": "TRISEM"
   },
-    "CCRE" : {
-      "value": "CRECRE"
+  "TRISTA": {
+    "value": "TRISTA"
   },
-    "GCHL" : {
-      "value": "GALCHL"
+  "TSTA": {
+    "value": "TRISTA"
   },
-    "FATR" : {
-      "value": "FULATR"
+  "TRIGLA": {
+    "value": "TRIGLA"
   },
-    "GGRU" : {
-      "value": "GRUGRU"
+  "TG": {
+    "value": "TRIGLA"
   },
-    "HOST" : {
-      "value": "HAEOST"
+  "TGLA": {
+    "value": "TRIGLA"
   },
-    "CDUB" : {
-      "value": "CHADUB"
+  "TRITOT": {
+    "value": "TRITOT"
   },
-    "CHIA" : {
-      "value": "CHAHIA"
+  "TTOT": {
+    "value": "TRITOT"
   },
-    "CMOR" : {
-      "value": "CHAMOR"
+  "LYMMIN": {
+    "value": "LYMMIN"
   },
-    "PAPR" : {
-      "value": "PLUAPR"
+  "LMINI": {
+    "value": "LYMMIN"
   },
-    "VVAN" : {
-      "value": "VANVAN"
+  "LIMSCO": {
+    "value": "LIMSCO"
   },
-    "CMIN" : {
-      "value": "CALUTA"
+  "SCORUS": {
+    "value": "SCORUS"
   },
-    "CTEM" : {
-      "value": "CALTEM"
+  "SRUS": {
+    "value": "SCORUS"
   },
-    "CMAR" : {
-      "value": "CALMAR"
+  "GALGAL": {
+    "value": "GALGAL"
   },
-    "CALP" : {
-      "value": "CALALP"
+  "GGAL": {
+    "value": "GALGAL"
   },
-    "LFAL" : {
-      "value": "LIMFAL"
+  "GALDEL": {
+    "value": "GALDEL"
   },
-    "PPUG" : {
-      "value": "PHIPUG"
+  "GALMED": {
+    "value": "GALMED"
   },
-    "LMINI" : {
-      "value": "LYMMIN"
+  "GMED": {
+    "value": "GALMED"
   },
-    "GGAL" : {
-      "value": "GALGAL"
+  "GALMEG": {
+    "value": "GALMEG"
   },
-    "GMED" : {
-      "value": "GALMED"
+  "GALSP": {
+    "value": "GALSP"
   },
-    "SRUS" : {
-      "value": "SCORUS"
+  "GLAPRA": {
+    "value": "GLAPRA"
   },
-    "LLIM" : {
-      "value": "LIMLIM"
+  "GLAMAL": {
+    "value": "GLAMAL"
   },
-    "LLAP" : {
-      "value": "LIMLAP"
+  "GLANOR": {
+    "value": "GLANOR"
   },
-    "NPHA" : {
-      "value": "NUMPHA"
+  "GLAPRA/GLAMAL/GLANOR": {
+    "value": "GLAPRA/GLAMAL/GLANOR"
   },
-    "NARQ" : {
-      "value": "NUMARQ"
+  "CURCUR": {
+    "value": "CURCUR"
   },
-    "TERY" : {
-      "value": "TRIERY"
+  "IK": {
+    "value": "IK"
   },
-    "TTOT" : {
-      "value": "TRITOT"
+  "KK": {
+    "value": "KK"
   },
-    "TSTA" : {
-      "value": "TRISTA"
+  "PK": {
+    "value": "PK"
   },
-    "TNEB" : {
-      "value": "TRINEB"
+  "K": {
+    "value": "K"
   },
-    "TOCH" : {
-      "value": "TRIOCH"
+  "V/K": {
+    "value": "V/K"
   },
-    "TGLA" : {
-      "value": "TRIGLA"
+  "STEPOM": {
+    "value": "STEPOM"
   },
-    "XCIN" : {
-      "value": "XENCIN"
+  "STECUS": {
+    "value": "STECUS"
   },
-    "AHYP" : {
-      "value": "ACTHYP"
+  "SCUS": {
+    "value": "STECUS"
   },
-    "AINT" : {
-      "value": "AREINT"
+  "STELON": {
+    "value": "STELON"
   },
-    "PLOB" : {
-      "value": "PHALOB"
+  "SLON": {
+    "value": "STELON"
   },
-    "SCUS" : {
-      "value": "STECUS"
+  "STESKU": {
+    "value": "STESKU"
   },
-    "SLON" : {
-      "value": "STELON"
+  "STERCSP": {
+    "value": "STERCSP"
   },
-    "LMINU" : {
-      "value": "LARMIN"
+  "FRAARC": {
+    "value": "FRAARC"
   },
-    "LRID" : {
-      "value": "LARRID"
+  "CEPGRY": {
+    "value": "CEPGRY"
   },
-    "LCAN" : {
-      "value": "LARCAN"
+  "CGRY": {
+    "value": "CEPGRY"
   },
-    "LFUS" : {
-      "value": "LARFUS"
+  "ALCTOR": {
+    "value": "ALCTOR"
   },
-    "LARG" : {
-      "value": "LARARG"
+  "ATOR": {
+    "value": "ALCTOR"
   },
-    "LMAR" : {
-      "value": "LARMAR"
+  "ALLALL": {
+    "value": "ALLALL"
   },
-    "SCAS" : {
-      "value": "STECAS"
+  "URIAAL": {
+    "value": "URIAAL"
   },
-    "SHIR" : {
-      "value": "STEHIR"
+  "UAAL": {
+    "value": "URIAAL"
   },
-    "SAEA" : {
-      "value": "STEAEA"
+  "URILOM": {
+    "value": "URILOM"
   },
-    "SALB" : {
-      "value": "STEALB"
+  "ALC/URI": {
+    "value": "ALC/URI"
   },
-    "CNIG" : {
-      "value": "CHLNIG"
+  "STEALB": {
+    "value": "STEALB"
   },
-    "UAAL" : {
-      "value": "URIAAL"
+  "SALB": {
+    "value": "STEALB"
   },
-    "ATOR" : {
-      "value": "ALCTOR"
+  "GELNIL": {
+    "value": "GELNIL"
   },
-    "CGRY" : {
-      "value": "CEPGRY"
+  "HYDCAS": {
+    "value": "HYDCAS"
   },
-    "CLIV" : {
-      "value": "COLLIV"
+  "CHLHYB": {
+    "value": "CHLHYB"
   },
-    "COEN" : {
-      "value": "COLOEN"
+  "CHLNIG": {
+    "value": "CHLNIG"
   },
-    "CPAL" : {
-      "value": "COLPAL"
+  "CNIG": {
+    "value": "CHLNIG"
   },
-    "SDEC" : {
-      "value": "STRDEC"
+  "CHLLEU": {
+    "value": "CHLLEU"
   },
-    "STUR" : {
-      "value": "STRTUR"
+  "STESAN": {
+    "value": "STESAN"
   },
-    "CCANO" : {
-      "value": "CUCCAN"
+  "GELNIL/STESAN": {
+    "value": "GELNIL/STESAN"
   },
-    "BBUB" : {
-      "value": "BUBBUB"
+  "STEHIR": {
+    "value": "STEHIR"
   },
-    "NSCA" : {
-      "value": "NYCSCA"
+  "SHIR": {
+    "value": "STEHIR"
   },
-    "SULU" : {
-      "value": "SURULU"
+  "STEAEA": {
+    "value": "STEAEA"
   },
-    "GPAS" : {
-      "value": "GLAPAS"
+  "SAEA": {
+    "value": "STEAEA"
   },
-    "SALU" : {
-      "value": "STRALU"
+  "STEHIR/STEAEA": {
+    "value": "STEHIR/STEAEA"
   },
-    "SURA" : {
-      "value": "STRURA"
+  "STERNSP": {
+    "value": "STERNSP"
   },
-    "SNEB" : {
-      "value": "STRNEB"
+  "HYDMIN": {
+    "value": "HYDMIN"
   },
-    "AOTU" : {
-      "value": "ASIOTU"
+  "RHOROS": {
+    "value": "RHOROS"
   },
-    "AFLA" : {
-      "value": "ASIFLA"
+  "PAGEBU": {
+    "value": "PAGEBU"
   },
-    "AFUN" : {
-      "value": "AEGFUN"
+  "XEMSAB": {
+    "value": "XEMSAB"
   },
-    "CEUR" : {
-      "value": "CAPEUR"
+  "RISTRI": {
+    "value": "RISTRI"
   },
-    "AAPU" : {
-      "value": "APUAPU"
+  "LARGEN": {
+    "value": "LARGEN"
   },
-    "AATT" : {
-      "value": "ALCATT"
+  "LARRID": {
+    "value": "LARRID"
   },
-    "JTOR" : {
-      "value": "JYNTOR"
+  "LRID": {
+    "value": "LARRID"
   },
-    "PCAN" : {
-      "value": "PICCAN"
+  "LARATR": {
+    "value": "LARATR"
   },
-    "DMAR" : {
-      "value": "DRYMAR"
+  "LARPIP": {
+    "value": "LARPIP"
   },
-    "DMAJ" : {
-      "value": "DENMAJ"
+  "LARAUD": {
+    "value": "LARAUD"
   },
-    "DLEU" : {
-      "value": "DENLEU"
+  "LARMEL": {
+    "value": "LARMEL"
   },
-    "DMIN" : {
-      "value": "DENMIN"
+  "LARCAN": {
+    "value": "LARCAN"
   },
-    "PTRI" : {
-      "value": "PICTRI"
+  "LCAN": {
+    "value": "LARCAN"
   },
-    "LARB" : {
-      "value": "LULARB"
+  "LARFUS": {
+    "value": "LARFUS"
   },
-    "AARV" : {
-      "value": "ALAARV"
+  "LFUS": {
+    "value": "LARFUS"
   },
-    "EALP" : {
-      "value": "EREALP"
+  "LARARG": {
+    "value": "LARARG"
   },
-    "RRIP" : {
-      "value": "RIPRIP"
+  "LARG": {
+    "value": "LARARG"
   },
-    "HRUS" : {
-      "value": "HIRRUS"
+  "LARCAC": {
+    "value": "LARCAC"
   },
-    "DURB" : {
-      "value": "DELURB"
+  "LARMIC": {
+    "value": "LARMIC"
   },
-    "ACAM" : {
-      "value": "ANTCAM"
+  "LARSCH": {
+    "value": "LARSCH"
   },
-    "ATRI" : {
-      "value": "ANTTRI"
+  "LARGLA": {
+    "value": "LARGLA"
   },
-    "APRA" : {
-      "value": "ANTPRA"
+  "LARHYP": {
+    "value": "LARHYP"
   },
-    "ACER" : {
-      "value": "ANTCER"
+  "LARGLA/LARHYP": {
+    "value": "LARGLA/LARHYP"
   },
-    "APET" : {
-      "value": "ANTPET"
+  "LARMAR": {
+    "value": "LARMAR"
   },
-    "MFLA" : {
-      "value": "MOTFLA"
+  "LMAR": {
+    "value": "LARMAR"
   },
-    "MCIT" : {
-      "value": "MOTCIT"
+  "LARSP": {
+    "value": "LARSP"
   },
-    "MCIN" : {
-      "value": "MOTCIN"
+  "ILAR": {
+    "value": "ILAR"
   },
-    "MALBA" : {
-      "value": "MOTALB"
+  "PLAR": {
+    "value": "PLAR"
   },
-    "BGAR" : {
-      "value": "BOMGAR"
+  "SYRPAR": {
+    "value": "SYRPAR"
   },
-    "CCIN" : {
-      "value": "CINCIN"
+  "COLLIV": {
+    "value": "COLLIV"
   },
-    "TTRO" : {
-      "value": "TROTRO"
+  "CLIV": {
+    "value": "COLLIV"
   },
-    "PMOD" : {
-      "value": "PRUMOD"
+  "COLOEN": {
+    "value": "COLOEN"
   },
-    "ERUB" : {
-      "value": "ERIRUB"
+  "COEN": {
+    "value": "COLOEN"
   },
-    "LULUS" : {
-      "value": "LUSLUS"
+  "COLPAL": {
+    "value": "COLPAL"
   },
-    "LSVE" : {
-      "value": "LUSSVE"
+  "CP": {
+    "value": "COLPAL"
   },
-    "LCYA" : {
-      "value": "LUSCYA"
+  "CPAL": {
+    "value": "COLPAL"
   },
-    "POCH" : {
-      "value": "PHOOCH"
+  "COLSP": {
+    "value": "COLSP"
   },
-    "PPHO" : {
-      "value": "PHOPHO"
+  "STRDEC": {
+    "value": "STRDEC"
   },
-    "SRUB" : {
-      "value": "SAXRUB"
+  "SDEC": {
+    "value": "STRDEC"
   },
-    "STOR" : {
-      "value": "SAXTOR"
+  "STRTUR": {
+    "value": "STRTUR"
   },
-    "OOEN" : {
-      "value": "OENOEN"
+  "STUR": {
+    "value": "STRTUR"
   },
-    "TTOR" : {
-      "value": "TURTOR"
+  "STRORI": {
+    "value": "STRORI"
   },
-    "TMER" : {
-      "value": "TURMER"
+  "STRSEN": {
+    "value": "STRSEN"
   },
-    "TPIL" : {
-      "value": "TURPIL"
+  "STREPSP": {
+    "value": "STREPSP"
   },
-    "TPHI" : {
-      "value": "TURPHI"
+  "CLAGLA": {
+    "value": "CLAGLA"
   },
-    "TILI" : {
-      "value": "TURILI"
+  "CUCCAN": {
+    "value": "CUCCAN"
   },
-    "TVIS" : {
-      "value": "TURVIS"
+  "CCANO": {
+    "value": "CUCCAN"
   },
-    "LNAE" : {
-      "value": "LOCNAE"
+  "CUCSAT": {
+    "value": "CUCSAT"
   },
-    "LFLU" : {
-      "value": "LOCFLU"
+  "TYTALB": {
+    "value": "TYTALB"
   },
-    "LOLUS" : {
-      "value": "LOCLUS"
+  "OTUSCO": {
+    "value": "OTUSCO"
   },
-    "ASCH" : {
-      "value": "ACRSCH"
+  "BUBBUB": {
+    "value": "BUBBUB"
   },
-    "ADUM" : {
-      "value": "ACRDUM"
+  "BBUB": {
+    "value": "BUBBUB"
   },
-    "APAL" : {
-      "value": "ACRRIS"
+  "BUBSCA": {
+    "value": "BUBSCA"
   },
-    "ASCI" : {
-      "value": "ACRSCI"
+  "SURULU": {
+    "value": "SURULU"
   },
-    "AARU" : {
-      "value": "ACRARU"
+  "SULU": {
+    "value": "SURULU"
   },
-    "ICAL" : {
-      "value": "IDUCAL"
+  "GLAPAS": {
+    "value": "GLAPAS"
   },
-    "HICT" : {
-      "value": "HIPICT"
+  "GPAS": {
+    "value": "GLAPAS"
   },
-    "SNIS" : {
-      "value": "SYLNIS"
+  "ATHNOC": {
+    "value": "ATHNOC"
   },
-    "SCUR" : {
-      "value": "SYLCUR"
+  "STRALU": {
+    "value": "STRALU"
   },
-    "SCOM" : {
-      "value": "SYLCOM"
+  "SALU": {
+    "value": "STRALU"
   },
-    "SBOR" : {
-      "value": "SYLBOR"
+  "STRURA": {
+    "value": "STRURA"
   },
-    "SATR" : {
-      "value": "SYLATR"
+  "SURA": {
+    "value": "STRURA"
   },
-    "PDES" : {
-      "value": "PHYDES"
+  "STRNEB": {
+    "value": "STRNEB"
   },
-    "PBOR" : {
-      "value": "PHYBOR"
+  "SNEB": {
+    "value": "STRNEB"
   },
-    "PSIB" : {
-      "value": "PHYSIB"
+  "ASIOTU": {
+    "value": "ASIOTU"
   },
-    "PCOLL" : {
-      "value": "PHYCOL"
+  "AOTU": {
+    "value": "ASIOTU"
   },
-    "PLUS" : {
-      "value": "PHYLUS"
+  "ASIFLA": {
+    "value": "ASIFLA"
   },
-    "RREG" : {
-      "value": "REGREG"
+  "AFLA": {
+    "value": "ASIFLA"
   },
-    "MSTR" : {
-      "value": "MUSSTR"
+  "ASISP": {
+    "value": "ASISP"
   },
-    "FPAR" : {
-      "value": "FICPAR"
+  "AEGFUN": {
+    "value": "AEGFUN"
   },
-    "FHYP" : {
-      "value": "FICHYP"
+  "AFUN": {
+    "value": "AEGFUN"
   },
-    "PBIA" : {
-      "value": "PANBIA"
+  "CAPEUR": {
+    "value": "CAPEUR"
   },
-    "ACAU" : {
-      "value": "AEGCAU"
+  "CEUR": {
+    "value": "CAPEUR"
   },
-    "PRMON" : {
-      "value": "PARMON"
+  "HIRCAU": {
+    "value": "HIRCAU"
   },
-    "PCIN" : {
-      "value": "PARCIN"
+  "APUAPU": {
+    "value": "APUAPU"
   },
-    "PARCRI" : {
-      "value": "PARCRI"
+  "AAPU": {
+    "value": "APUAPU"
   },
-    "PATE" : {
-      "value": "PARATE"
+  "APUPAL": {
+    "value": "APUPAL"
   },
-    "PCAE" : {
-      "value": "PARCAE"
+  "APUMEL": {
+    "value": "APUMEL"
   },
-    "PCYA" : {
-      "value": "PARCYA"
+  "APUCAF": {
+    "value": "APUCAF"
   },
-    "PMAJ" : {
-      "value": "PARMAJ"
+  "ALCATT": {
+    "value": "ALCATT"
   },
-    "SEUR" : {
-      "value": "SITEUR"
+  "AATT": {
+    "value": "ALCATT"
   },
-    "CFAM" : {
-      "value": "CERFAM"
+  "MERAPI": {
+    "value": "MERAPI"
   },
-    "RPEN" : {
-      "value": "REMPEN"
+  "MERPER": {
+    "value": "MERPER"
   },
-    "OORI" : {
-      "value": "ORIORI"
+  "CORGAR": {
+    "value": "CORGAR"
   },
-    "LCOL" : {
-      "value": "LANCOL"
+  "UPUEPO": {
+    "value": "UPUEPO"
   },
-    "LEXC" : {
-      "value": "LANEXC"
+  "JYNTOR": {
+    "value": "JYNTOR"
   },
-    "GGLA" : {
-      "value": "GARGLA"
+  "JTOR": {
+    "value": "JYNTOR"
   },
-    "PINF" : {
-      "value": "PERINF"
+  "PICCAN": {
+    "value": "PICCAN"
   },
-    "PPIC" : {
-      "value": "PICPIC"
+  "PCAN": {
+    "value": "PICCAN"
   },
-    "NCAR" : {
-      "value": "NUCCAR"
+  "PICVIR": {
+    "value": "PICVIR"
   },
-    "CMON" : {
-      "value": "CORMON"
+  "DRYMAR": {
+    "value": "DRYMAR"
   },
-    "CFRU" : {
-      "value": "CORFRU"
+  "DMAR": {
+    "value": "DRYMAR"
   },
-    "CONE" : {
-      "value": "CORNIX"
+  "DENMAJ": {
+    "value": "DENMAJ"
   },
-    "CNIX" : {
-      "value": "CORRAX"
+  "DMAJ": {
+    "value": "DENMAJ"
   },
-    "SVUL" : {
-      "value": "STUVUL"
+  "DENMED": {
+    "value": "DENMED"
   },
-    "PDOM" : {
-      "value": "PASDOM"
+  "DENLEU": {
+    "value": "DENLEU"
   },
-    "PSMON" : {
-      "value": "PASMON"
+  "DLEU": {
+    "value": "DENLEU"
   },
-    "FCOE" : {
-      "value": "FRICOE"
+  "DENMIN": {
+    "value": "DENMIN"
   },
-    "FMON" : {
-      "value": "FRIMON"
+  "DMIN": {
+    "value": "DENMIN"
   },
-    "SSER" : {
-      "value": "SERSER"
+  "PICTRI": {
+    "value": "PICTRI"
   },
-    "CCHL" : {
-      "value": "CARCHL"
+  "PTRI": {
+    "value": "PICTRI"
   },
-    "CCAR" : {
-      "value": "CARCAR"
+  "KT": {
+    "value": "KT"
   },
-    "CSPI" : {
-      "value": "CARSPI"
+  "MELCAL": {
+    "value": "MELCAL"
   },
-    "CCANN" : {
-      "value": "CARCAN"
+  "MELBIM": {
+    "value": "MELBIM"
   },
-    "CRIS" : {
-      "value": "CARRIS"
+  "MELLEU": {
+    "value": "MELLEU"
   },
-    "CMEA" : {
-      "value": "CARMEA"
+  "MELYEL": {
+    "value": "MELYEL"
   },
-    "CHOR" : {
-      "value": "CARHOR"
+  "CALBRA": {
+    "value": "CALBRA"
   },
-    "LLEU" : {
-      "value": "LOXLEU"
+  "CALENS": {
+    "value": "CALENS"
   },
-    "LCUR" : {
-      "value": "LOXCUR"
+  "GALCRI": {
+    "value": "GALCRI"
   },
-    "LPYT" : {
-      "value": "LOXPYT"
+  "LULARB": {
+    "value": "LULARB"
   },
-    "CERY" : {
-      "value": "CARERY"
+  "LARB": {
+    "value": "LULARB"
   },
-    "PENU" : {
-      "value": "PINENU"
+  "ALAARV": {
+    "value": "ALAARV"
   },
-    "PPYR" : {
-      "value": "PYRPYR"
+  "AA": {
+    "value": "ALAARV"
   },
-    "CCOC" : {
-      "value": "COCCOC"
+  "AARV": {
+    "value": "ALAARV"
   },
-    "CLAP" : {
-      "value": "CALLAP"
+  "EREALP": {
+    "value": "EREALP"
   },
-    "PNIV" : {
-      "value": "PLENIV"
+  "EALP": {
+    "value": "EREALP"
   },
-    "ECIT" : {
-      "value": "EMBCIT"
+  "RIPRIP": {
+    "value": "RIPRIP"
   },
-    "EHOR" : {
-      "value": "EMBHOR"
+  "RRIP": {
+    "value": "RIPRIP"
   },
-    "ERUS" : {
-      "value": "EMBRUS"
+  "PTYRUP": {
+    "value": "PTYRUP"
   },
-    "EPUS" : {
-      "value": "EMBPUS"
+  "HIRRUS": {
+    "value": "HIRRUS"
   },
-    "EAUR" : {
-      "value": "EMBAUR"
+  "HRUS": {
+    "value": "HIRRUS"
   },
-    "ESCH" : {
-      "value": "EMBSCH"
+  "DELURB": {
+    "value": "DELURB"
   },
-    "CYGSP" : {
-      "value": "CYGSP"
+  "DURB": {
+    "value": "DELURB"
   },
-    "ANSSP" : {
-      "value": "ANSSP"
+  "HIRRUSXDELURB": {
+    "value": "HIRRUSXDELURB"
   },
-    "ANS/BRA" : {
-      "value": "ANS/BRA"
+  "CECDAU": {
+    "value": "CECDAU"
   },
-    "ANASP" : {
-      "value": "ANASP"
+  "RIP/HIR/DEL": {
+    "value": "RIP/HIR/DEL"
   },
-    "AYTFUL/AYTMAR" : {
-      "value": "AYTFUL/AYTMAR"
+  "ANTRIC": {
+    "value": "ANTRIC"
   },
-    "MELSP" : {
-      "value": "MELSP"
+  "ANTGOD": {
+    "value": "ANTGOD"
   },
-    "MERSER/MERMER" : {
-      "value": "MERSER/MERMER"
+  "ANTRIC/ANTGOD": {
+    "value": "ANTRIC/ANTGOD"
   },
-    "IV" : {
-      "value": "IV"
+  "ANTCAM": {
+    "value": "ANTCAM"
   },
-    "PV" : {
-      "value": "PV"
+  "ACAM": {
+    "value": "ANTCAM"
   },
-    "V" : {
-      "value": "V"
+  "ANTRIC/ANTGOD/ANTCAM": {
+    "value": "ANTRIC/ANTGOD/ANTCAM"
   },
-    "GAVIMM/GAVADA" : {
-      "value": "GAVIMM/GAVADA"
+  "ANTHOD": {
+    "value": "ANTHOD"
   },
-    "GAVSP" : {
-      "value": "GAVSP"
+  "ANTTRI": {
+    "value": "ANTTRI"
   },
-    "PODCRI/PODGRI" : {
-      "value": "PODCRI/PODGRI"
+  "AT": {
+    "value": "ANTTRI"
   },
-    "PODAUR/PODNIG" : {
-      "value": "PODAUR/PODNIG"
+  "ATRI": {
+    "value": "ANTTRI"
   },
-    "PODSP" : {
-      "value": "PODSP"
+  "ANTGUS": {
+    "value": "ANTGUS"
   },
-    "PHAAXSP" : {
-      "value": "PHAAXSP"
+  "ANTPRA": {
+    "value": "ANTPRA"
   },
-    "ANS/BRA/PHA" : {
-      "value": "ANS/BRA/PHA"
+  "AP": {
+    "value": "ANTPRA"
   },
-    "CIRMAC/CIRPYG" : {
-      "value": "CIRMAC/CIRPYG"
+  "APRA": {
+    "value": "ANTPRA"
   },
-    "CIRCYA/CIRMAC/CIRPYG" : {
-      "value": "CIRCYA/CIRMAC/CIRPYG"
+  "ANTCER": {
+    "value": "ANTCER"
   },
-    "CIRSP" : {
-      "value": "CIRSP"
+  "ACER": {
+    "value": "ANTCER"
   },
-    "ACCSP" : {
-      "value": "ACCSP"
+  "ANTPET": {
+    "value": "ANTPET"
   },
-    "BUTSP" : {
-      "value": "BUTSP"
+  "APET": {
+    "value": "ANTPET"
   },
-    "PER/BUT" : {
-      "value": "PER/BUT"
+  "ANTSP": {
+    "value": "ANTSP"
   },
-    "AQUCLA/AQUPOM" : {
-      "value": "AQUCLA/AQUPOM"
+  "MOTFLA": {
+    "value": "MOTFLA"
   },
-    "AQUCLA/AQUPOM/AQUNIP" : {
-      "value": "AQUCLA/AQUPOM/AQUNIP"
+  "MFLA": {
+    "value": "MOTFLA"
   },
-    "AQUSP" : {
-      "value": "AQUSP"
+  "MOTCIT": {
+    "value": "MOTCIT"
   },
-    "HAL/AQU" : {
-      "value": "HAL/AQU"
+  "MCIT": {
+    "value": "MOTCIT"
   },
-    "FALSP" : {
-      "value": "FALSP"
+  "MOTCIN": {
+    "value": "MOTCIN"
   },
-    "IFAL" : {
-      "value": "IFAL"
+  "MCIN": {
+    "value": "MOTCIN"
   },
-    "PFAL" : {
-      "value": "PFAL"
+  "MOTALB": {
+    "value": "MOTALB"
   },
-    "IP" : {
-      "value": "IP"
+  "MA": {
+    "value": "MOTALB"
   },
-    "PP" : {
-      "value": "PP"
+  "MALBA": {
+    "value": "MOTALB"
   },
-    "PLUSP" : {
-      "value": "PLUSP"
+  "MOTSP": {
+    "value": "MOTSP"
   },
-    "CHASP" : {
-      "value": "CHASP"
+  "BOMGAR": {
+    "value": "BOMGAR"
   },
-    "NUMSP" : {
-      "value": "NUMSP"
+  "BGAR": {
+    "value": "BOMGAR"
   },
-    "CALSP" : {
-      "value": "CALSP"
+  "CINCIN": {
+    "value": "CINCIN"
   },
-    "GALSP" : {
-      "value": "GALSP"
+  "CCIN": {
+    "value": "CINCIN"
   },
-    "IK" : {
-      "value": "IK"
+  "TROTRO": {
+    "value": "TROTRO"
   },
-    "KK" : {
-      "value": "KK"
+  "TT": {
+    "value": "TROTRO"
   },
-    "PK" : {
-      "value": "PK"
+  "TTRO": {
+    "value": "TROTRO"
   },
-    "K" : {
-      "value": "K"
+  "PRUMOD": {
+    "value": "PRUMOD"
   },
-    "V/K" : {
-      "value": "V/K"
+  "PMOD": {
+    "value": "PRUMOD"
   },
-    "STERCSP" : {
-      "value": "STERCSP"
+  "PRUMON": {
+    "value": "PRUMON"
   },
-    "ALC/URI" : {
-      "value": "ALC/URI"
+  "PRUATR": {
+    "value": "PRUATR"
   },
-    "GELNIL/STESAN" : {
-      "value": "GELNIL/STESAN"
+  "PRUCOL": {
+    "value": "PRUCOL"
   },
-    "STEHIR/STEAEA" : {
-      "value": "STEHIR/STEAEA"
+  "CERGAL": {
+    "value": "CERGAL"
   },
-    "STERNSP" : {
-      "value": "STERNSP"
+  "ERIRUB": {
+    "value": "ERIRUB"
   },
-    "LARGLA/LARHYP" : {
-      "value": "LARGLA/LARHYP"
+  "ER": {
+    "value": "ERIRUB"
   },
-    "LARSP" : {
-      "value": "LARSP"
+  "ERUB": {
+    "value": "ERIRUB"
   },
-    "ILAR" : {
-      "value": "ILAR"
+  "LUSLUS": {
+    "value": "LUSLUS"
   },
-    "PLAR" : {
-      "value": "PLAR"
+  "LL": {
+    "value": "LUSLUS"
   },
-    "COLSP" : {
-      "value": "COLSP"
+  "LULUS": {
+    "value": "LUSLUS"
   },
-    "STREPSP" : {
-      "value": "STREPSP"
+  "LUSMEG": {
+    "value": "LUSMEG"
   },
-    "ASISP" : {
-      "value": "ASISP"
+  "LUSSVE": {
+    "value": "LUSSVE"
   },
-    "KT" : {
-      "value": "KT"
+  "LSVE": {
+    "value": "LUSSVE"
   },
-    "HIRRUSXDELURB" : {
-      "value": "HIRRUSXDELURB"
+  "CALCAL": {
+    "value": "CALCAL"
   },
-    "RIP/HIR/DEL" : {
-      "value": "RIP/HIR/DEL"
+  "TARCYA": {
+    "value": "TARCYA"
   },
-    "ANTRIC/ANTGOD" : {
-      "value": "ANTRIC/ANTGOD"
+  "IRAGUT": {
+    "value": "IRAGUT"
   },
-    "ANTRIC/ANTGOD/ANTCAM" : {
-      "value": "ANTRIC/ANTGOD/ANTCAM"
+  "PHOOCH": {
+    "value": "PHOOCH"
   },
-    "ANTSP" : {
-      "value": "ANTSP"
+  "POCH": {
+    "value": "PHOOCH"
   },
-    "MOTSP" : {
-      "value": "MOTSP"
+  "PHOPHO": {
+    "value": "PHOPHO"
   },
-    "OENSP" : {
-      "value": "OENSP"
+  "PPHO": {
+    "value": "PHOPHO"
   },
-    "TURSP" : {
-      "value": "TURSP"
+  "PHORUS": {
+    "value": "PHORUS"
   },
-    "ITUR" : {
-      "value": "ITUR"
+  "SAXTRA": {
+    "value": "SAXTRA"
   },
-    "PTUR" : {
-      "value": "PTUR"
+  "SAXCAP": {
+    "value": "SAXCAP"
   },
-    "ACRDUM/ACRRIS/ACRSCI" : {
-      "value": "ACRDUM/ACRRIS/ACRSCI"
+  "SAXMAU": {
+    "value": "SAXMAU"
   },
-    "ACRSP" : {
-      "value": "ACRSP"
+  "SAXMAU/SAXOLA": {
+    "value": "SAXMAU/SAXOLA"
   },
-    "PHYSP" : {
-      "value": "PHYSP"
+  "SAXOLA": {
+    "value": "SAXOLA"
   },
-    "FICSP" : {
-      "value": "FICSP"
+  "OENISA": {
+    "value": "OENISA"
   },
-    "PERATEXPOEMON" : {
-      "value": "PERATEXPOEMON"
+  "OENOEN": {
+    "value": "OENOEN"
   },
-    "POEMONXPOECIN" : {
-      "value": "POEMONXPOECIN"
+  "OOEN": {
+    "value": "OENOEN"
   },
-    "CYA/PAR/PER/LOP/POE" : {
-      "value": "CYA/PAR/PER/LOP/POE"
+  "OENPLE": {
+    "value": "OENPLE"
   },
-    "CORONEONE" : {
-      "value": "CORONEONE"
+  "OENHIS": {
+    "value": "OENHIS"
   },
-    "CORSP" : {
-      "value": "CORSP"
+  "OENDES": {
+    "value": "OENDES"
   },
-    "ICOR" : {
-      "value": "ICOR"
+  "OENSP": {
+    "value": "OENSP"
   },
-    "BOM/STU" : {
-      "value": "BOM/STU"
+  "MONSAX": {
+    "value": "MONSAX"
   },
-    "FRISP" : {
-      "value": "FRISP"
+  "MONSOL": {
+    "value": "MONSOL"
   },
-    "CARSP" : {
-      "value": "CARSP"
+  "ZOODAU": {
+    "value": "ZOODAU"
   },
-    "LOXCUR/LOXPYT" : {
-      "value": "LOXCUR/LOXPYT"
+  "CATUST": {
+    "value": "CATUST"
   },
-    "LOXSP" : {
-      "value": "LOXSP"
+  "TURTOR": {
+    "value": "TURTOR"
   },
-    "EMBRUS/EMBPUS/EMBAUR" : {
-      "value": "EMBRUS/EMBPUS/EMBAUR"
+  "TTOR": {
+    "value": "TURTOR"
   },
-    "IPL" : {
-      "value": "IPL"
+  "TURMER": {
+    "value": "TURMER"
   },
-    "KPL" : {
-      "value": "KPL"
+  "TM": {
+    "value": "TURMER"
   },
-    "PPL" : {
-      "value": "PPL"
+  "TMER": {
+    "value": "TURMER"
   },
-    "PL" : {
-      "value": "PL"
+  "TUROBS": {
+    "value": "TUROBS"
   },
-    "IL" : {
-      "value": "IL"
+  "TURNAU": {
+    "value": "TURNAU"
   },
-    "CYGCOL" : {
-      "value": "CYGCOL"
+  "TUREUN": {
+    "value": "TUREUN"
   },
-    "ANSBRA" : {
-      "value": "ANSBRA"
+  "TURATR": {
+    "value": "TURATR"
   },
-    "ANSALB" : {
-      "value": "ANSALB"
+  "TURPIL": {
+    "value": "TURPIL"
   },
-    "BRABER" : {
-      "value": "BRABER"
+  "TPIL": {
+    "value": "TURPIL"
   },
-    "BRARUF" : {
-      "value": "BRARUF"
+  "TURPHI": {
+    "value": "TURPHI"
   },
-    "TADFER" : {
-      "value": "TADFER"
+  "TPHI": {
+    "value": "TURPHI"
   },
-    "AIXGAL" : {
-      "value": "AIXGAL"
+  "TURILI": {
+    "value": "TURILI"
   },
-    "NETRUF" : {
-      "value": "NETRUF"
+  "TI": {
+    "value": "TURILI"
   },
-    "AYTCOL" : {
-      "value": "AYTCOL"
+  "TILI": {
+    "value": "TURILI"
   },
-    "SOMSPE" : {
-      "value": "SOMSPE"
+  "TURVIS": {
+    "value": "TURVIS"
   },
-    "POLSTE" : {
-      "value": "POLSTE"
+  "TVIS": {
+    "value": "TURVIS"
   },
-    "MELPER" : {
-      "value": "MELPER"
+  "TURSP": {
+    "value": "TURSP"
   },
-    "MELDEG" : {
-      "value": "MELDEG"
+  "ITUR": {
+    "value": "ITUR"
   },
-    "TETRIX" : {
-      "value": "TETRIX"
+  "PTUR": {
+    "value": "PTUR"
   },
-    "GAVIMM" : {
-      "value": "GAVIMM"
+  "LOCCER": {
+    "value": "LOCCER"
   },
-    "GAVADA" : {
-      "value": "GAVADA"
+  "LOCLAN": {
+    "value": "LOCLAN"
   },
-    "EGRALB" : {
-      "value": "EGRALB"
+  "LOCNAE": {
+    "value": "LOCNAE"
   },
-    "CICNIG" : {
-      "value": "CICNIG"
+  "LNAE": {
+    "value": "LOCNAE"
   },
-    "CICCIC" : {
-      "value": "CICCIC"
+  "LOCFLU": {
+    "value": "LOCFLU"
   },
-    "PLEFAL" : {
-      "value": "PLEFAL"
+  "LFLU": {
+    "value": "LOCFLU"
   },
-    "MILMIL" : {
-      "value": "MILMIL"
+  "LOCLUS": {
+    "value": "LOCLUS"
   },
-    "CIRGAL" : {
-      "value": "CIRGAL"
+  "LOLUS": {
+    "value": "LOCLUS"
   },
-    "BUTRUF" : {
-      "value": "BUTRUF"
+  "IDUAED": {
+    "value": "IDUAED"
   },
-    "AQUPOM" : {
-      "value": "AQUPOM"
+  "IDUCAL": {
+    "value": "IDUCAL"
   },
-    "AQUNIP" : {
-      "value": "AQUNIP"
+  "ICAL": {
+    "value": "IDUCAL"
   },
-    "RECAVO" : {
-      "value": "RECAVO"
+  "IDURAM": {
+    "value": "IDURAM"
   },
-    "PLUSQU" : {
-      "value": "PLUSQU"
+  "IDUPAL": {
+    "value": "IDUPAL"
   },
-    "CALCAN" : {
-      "value": "CALCAN"
+  "HIPICT": {
+    "value": "HIPICT"
   },
-    "CALPUG" : {
-      "value": "CALPUG"
+  "HICT": {
+    "value": "HIPICT"
   },
-    "CALFAL" : {
-      "value": "CALFAL"
+  "ACROLA": {
+    "value": "ACROLA"
   },
-    "CALFER" : {
-      "value": "CALFER"
+  "ACRSCH": {
+    "value": "ACRSCH"
   },
-    "CALALB" : {
-      "value": "CALALB"
+  "ASCH": {
+    "value": "ACRSCH"
   },
-    "PHAFUL" : {
-      "value": "PHAFUL"
+  "ACRAGR": {
+    "value": "ACRAGR"
   },
-    "STEPOM" : {
-      "value": "STEPOM"
+  "ACRDUM": {
+    "value": "ACRDUM"
   },
-    "STESKU" : {
-      "value": "STESKU"
+  "ADUM": {
+    "value": "ACRDUM"
   },
-    "ALLALL" : {
-      "value": "ALLALL"
+  "ACRRIS": {
+    "value": "ACRRIS"
   },
-    "HYDCAS" : {
-      "value": "HYDCAS"
+  "APAL": {
+    "value": "ACRRIS"
   },
-    "STESAN" : {
-      "value": "STESAN"
+  "ACRSCI": {
+    "value": "ACRSCI"
   },
-    "HYDMIN" : {
-      "value": "HYDMIN"
+  "ASCI": {
+    "value": "ACRSCI"
   },
-    "RISTRI" : {
-      "value": "RISTRI"
+  "ACRDUM/ACRRIS/ACRSCI": {
+    "value": "ACRDUM/ACRRIS/ACRSCI"
   },
-    "LARCAC" : {
-      "value": "LARCAC"
+  "ACRARU": {
+    "value": "ACRARU"
   },
-    "LARHYP" : {
-      "value": "LARHYP"
+  "AARU": {
+    "value": "ACRARU"
   },
-    "CLAGLA" : {
-      "value": "CLAGLA"
+  "ACRSP": {
+    "value": "ACRSP"
   },
-    "BUBSCA" : {
-      "value": "BUBSCA"
+  "SYLUND": {
+    "value": "SYLUND"
   },
-    "APUPAL" : {
-      "value": "APUPAL"
+  "SYLCAN": {
+    "value": "SYLCAN"
   },
-    "MERAPI" : {
-      "value": "MERAPI"
+  "SYLMEL": {
+    "value": "SYLMEL"
   },
-    "UPUEPO" : {
-      "value": "UPUEPO"
+  "SYLRUP": {
+    "value": "SYLRUP"
   },
-    "CALBRA" : {
-      "value": "CALBRA"
+  "SYLNAN": {
+    "value": "SYLNAN"
   },
-    "CECDAU" : {
-      "value": "CECDAU"
+  "SYLNIS": {
+    "value": "SYLNIS"
   },
-    "ANTRIC" : {
-      "value": "ANTRIC"
+  "SNIS": {
+    "value": "SYLNIS"
   },
-    "ANTHOD" : {
-      "value": "ANTHOD"
+  "SYLCUR": {
+    "value": "SYLCUR"
   },
-    "PRUMON" : {
-      "value": "PRUMON"
+  "SCUR": {
+    "value": "SYLCUR"
   },
-    "PRUATR" : {
-      "value": "PRUATR"
+  "SYLCOM": {
+    "value": "SYLCOM"
   },
-    "LUSMEG" : {
-      "value": "LUSMEG"
+  "SCOM": {
+    "value": "SYLCOM"
   },
-    "TARCYA" : {
-      "value": "TARCYA"
+  "SYLBOR": {
+    "value": "SYLBOR"
   },
-    "SAXTRA" : {
-      "value": "SAXTRA"
+  "SB": {
+    "value": "SYLBOR"
   },
-    "SAXMAU" : {
-      "value": "SAXMAU"
+  "SBOR": {
+    "value": "SYLBOR"
   },
-    "SAXOLA" : {
-      "value": "SAXOLA"
+  "SYLATR": {
+    "value": "SYLATR"
   },
-    "OENPLE" : {
-      "value": "OENPLE"
+  "SATR": {
+    "value": "SYLATR"
   },
-    "TUREUN" : {
-      "value": "TUREUN"
+  "PHYCOR": {
+    "value": "PHYCOR"
   },
-    "TURATR" : {
-      "value": "TURATR"
+  "PHYNIT": {
+    "value": "PHYNIT"
   },
-    "ACRAGR" : {
-      "value": "ACRAGR"
+  "PHYPLU": {
+    "value": "PHYPLU"
   },
-    "SYLCAN" : {
-      "value": "SYLCAN"
+  "PHYDES": {
+    "value": "PHYDES"
   },
-    "SYLNAN" : {
-      "value": "SYLNAN"
+  "PDES": {
+    "value": "PHYDES"
   },
-    "PHYPRO" : {
-      "value": "PHYPRO"
+  "PHYEXA": {
+    "value": "PHYEXA"
   },
-    "PHYINO" : {
-      "value": "PHYINO"
+  "PHYBOR": {
+    "value": "PHYBOR"
   },
-    "PHYHUM" : {
-      "value": "PHYHUM"
+  "PBOR": {
+    "value": "PHYBOR"
   },
-    "PHYSCH" : {
-      "value": "PHYSCH"
+  "PHYPRO": {
+    "value": "PHYPRO"
   },
-    "PHYFUS" : {
-      "value": "PHYFUS"
+  "PHYINO": {
+    "value": "PHYINO"
   },
-    "PHYBON" : {
-      "value": "PHYBON"
+  "PHYHUM": {
+    "value": "PHYHUM"
   },
-    "REGIGN" : {
-      "value": "REGIGN"
+  "PHYSCH": {
+    "value": "PHYSCH"
   },
-    "FICALB" : {
-      "value": "FICALB"
+  "PHYFUS": {
+    "value": "PHYFUS"
   },
-    "CYACAE" : {
-      "value": "CYACAE"
+  "PHYBON": {
+    "value": "PHYBON"
   },
-    "PERATE" : {
-      "value": "PERATE"
+  "PHYORI": {
+    "value": "PHYORI"
   },
-    "LOPCRI" : {
-      "value": "LOPCRI"
+  "PHYSIB": {
+    "value": "PHYSIB"
   },
-    "POEPAL" : {
-      "value": "POEPAL"
+  "PS": {
+    "value": "PHYSIB"
   },
-    "POEMON" : {
-      "value": "POEMON"
+  "PSIB": {
+    "value": "PHYSIB"
   },
-    "POECIN" : {
-      "value": "POECIN"
+  "PHYCOL": {
+    "value": "PHYCOL"
   },
-    "LANMIN" : {
-      "value": "LANMIN"
+  "PCOLL": {
+    "value": "PHYCOL"
   },
-    "LANSEN" : {
-      "value": "LANSEN"
+  "PHYIBE": {
+    "value": "PHYIBE"
   },
-    "PASROS" : {
-      "value": "PASROS"
+  "PHYLUS": {
+    "value": "PHYLUS"
   },
-    "EMBCAL" : {
-      "value": "EMBCAL"
+  "PT": {
+    "value": "PHYLUS"
   },
-    "EMBELE" : {
-      "value": "EMBELE"
+  "PLUS": {
+    "value": "PHYLUS"
+  },
+  "PHYSP": {
+    "value": "PHYSP"
+  },
+  "REGREG": {
+    "value": "REGREG"
+  },
+  "RR": {
+    "value": "REGREG"
+  },
+  "RREG": {
+    "value": "REGREG"
+  },
+  "REGIGN": {
+    "value": "REGIGN"
+  },
+  "MUSSTR": {
+    "value": "MUSSTR"
+  },
+  "MS": {
+    "value": "MUSSTR"
+  },
+  "MSTR": {
+    "value": "MUSSTR"
+  },
+  "FICPAR": {
+    "value": "FICPAR"
+  },
+  "FPAR": {
+    "value": "FICPAR"
+  },
+  "FICLLA": {
+    "value": "FICLLA"
+  },
+  "FICALB": {
+    "value": "FICALB"
+  },
+  "FICHYP": {
+    "value": "FICHYP"
+  },
+  "FH": {
+    "value": "FICHYP"
+  },
+  "FHYP": {
+    "value": "FICHYP"
+  },
+  "FICSP": {
+    "value": "FICSP"
+  },
+  "PANBIA": {
+    "value": "PANBIA"
+  },
+  "PBIA": {
+    "value": "PANBIA"
+  },
+  "AEGCAU": {
+    "value": "AEGCAU"
+  },
+  "ACAU": {
+    "value": "AEGCAU"
+  },
+  "CYACYA": {
+    "value": "CYACYA"
+  },
+  "CYACAE": {
+    "value": "CYACAE"
+  },
+  "PARMAJ": {
+    "value": "PARMAJ"
+  },
+  "PMAJ": {
+    "value": "PARMAJ"
+  },
+  "PERATE": {
+    "value": "PERATE"
+  },
+  "PERATEXPOEMON": {
+    "value": "PERATEXPOEMON"
+  },
+  "LOPCRI": {
+    "value": "LOPCRI"
+  },
+  "POEPAL": {
+    "value": "POEPAL"
+  },
+  "POEMON": {
+    "value": "POEMON"
+  },
+  "POEMONXPOECIN": {
+    "value": "POEMONXPOECIN"
+  },
+  "POECIN": {
+    "value": "POECIN"
+  },
+  "CYA/PAR/PER/LOP/POE": {
+    "value": "CYA/PAR/PER/LOP/POE"
+  },
+  "SITEUR": {
+    "value": "SITEUR"
+  },
+  "SEUR": {
+    "value": "SITEUR"
+  },
+  "CERFAM": {
+    "value": "CERFAM"
+  },
+  "CFAM": {
+    "value": "CERFAM"
+  },
+  "REMPEN": {
+    "value": "REMPEN"
+  },
+  "RPEN": {
+    "value": "REMPEN"
+  },
+  "ORIORI": {
+    "value": "ORIORI"
+  },
+  "OORI": {
+    "value": "ORIORI"
+  },
+  "LANCRI": {
+    "value": "LANCRI"
+  },
+  "LANISA": {
+    "value": "LANISA"
+  },
+  "LANCOL": {
+    "value": "LANCOL"
+  },
+  "LCOL": {
+    "value": "LANCOL"
+  },
+  "LANMIN": {
+    "value": "LANMIN"
+  },
+  "LANEXC": {
+    "value": "LANEXC"
+  },
+  "LEXC": {
+    "value": "LANEXC"
+  },
+  "LANMER": {
+    "value": "LANMER"
+  },
+  "LANSEN": {
+    "value": "LANSEN"
+  },
+  "LANNUB": {
+    "value": "LANNUB"
+  },
+  "GARGLA": {
+    "value": "GARGLA"
+  },
+  "GGLA": {
+    "value": "GARGLA"
+  },
+  "PERINF": {
+    "value": "PERINF"
+  },
+  "PINF": {
+    "value": "PERINF"
+  },
+  "PICPIC": {
+    "value": "PICPIC"
+  },
+  "PPIC": {
+    "value": "PICPIC"
+  },
+  "NUCCAR": {
+    "value": "NUCCAR"
+  },
+  "NCAR": {
+    "value": "NUCCAR"
+  },
+  "CORMON": {
+    "value": "CORMON"
+  },
+  "CMON": {
+    "value": "CORMON"
+  },
+  "CORDAU": {
+    "value": "CORDAU"
+  },
+  "CORFRU": {
+    "value": "CORFRU"
+  },
+  "CFRU": {
+    "value": "CORFRU"
+  },
+  "CORNIX": {
+    "value": "CORNIX"
+  },
+  "CONE": {
+    "value": "CORNIX"
+  },
+  "CORONEONE": {
+    "value": "CORONEONE"
+  },
+  "CORRAX": {
+    "value": "CORRAX"
+  },
+  "CNIX": {
+    "value": "CORRAX"
+  },
+  "CORSP": {
+    "value": "CORSP"
+  },
+  "ICOR": {
+    "value": "ICOR"
+  },
+  "STUVUL": {
+    "value": "STUVUL"
+  },
+  "SVUL": {
+    "value": "STUVUL"
+  },
+  "BOM/STU": {
+    "value": "BOM/STU"
+  },
+  "PASROS": {
+    "value": "PASROS"
+  },
+  "ACRTRI": {
+    "value": "ACRTRI"
+  },
+  "PASDOM": {
+    "value": "PASDOM"
+  },
+  "PD": {
+    "value": "PASDOM"
+  },
+  "PDOM": {
+    "value": "PASDOM"
+  },
+  "PASHIS": {
+    "value": "PASHIS"
+  },
+  "PASMON": {
+    "value": "PASMON"
+  },
+  "PSMON": {
+    "value": "PASMON"
+  },
+  "FRICOE": {
+    "value": "FRICOE"
+  },
+  "FC": {
+    "value": "FRICOE"
+  },
+  "FCOE": {
+    "value": "FRICOE"
+  },
+  "FRIMON": {
+    "value": "FRIMON"
+  },
+  "FM": {
+    "value": "FRIMON"
+  },
+  "FMON": {
+    "value": "FRIMON"
+  },
+  "FRISP": {
+    "value": "FRISP"
+  },
+  "SERSER": {
+    "value": "SERSER"
+  },
+  "SSER": {
+    "value": "SERSER"
+  },
+  "SERCIT": {
+    "value": "SERCIT"
+  },
+  "CARCHL": {
+    "value": "CARCHL"
+  },
+  "CCHL": {
+    "value": "CARCHL"
+  },
+  "CARCAR": {
+    "value": "CARCAR"
+  },
+  "CCAR": {
+    "value": "CARCAR"
+  },
+  "CARSPI": {
+    "value": "CARSPI"
+  },
+  "CS": {
+    "value": "CARSPI"
+  },
+  "CSPI": {
+    "value": "CARSPI"
+  },
+  "CARCAN": {
+    "value": "CARCAN"
+  },
+  "CCANN": {
+    "value": "CARCAN"
+  },
+  "CARRIS": {
+    "value": "CARRIS"
+  },
+  "CRIS": {
+    "value": "CARRIS"
+  },
+  "CARMEA": {
+    "value": "CARMEA"
+  },
+  "CMEA": {
+    "value": "CARMEA"
+  },
+  "CARHOR": {
+    "value": "CARHOR"
+  },
+  "CHOR": {
+    "value": "CARHOR"
+  },
+  "CARSP": {
+    "value": "CARSP"
+  },
+  "LOXLEU": {
+    "value": "LOXLEU"
+  },
+  "LLEU": {
+    "value": "LOXLEU"
+  },
+  "LOXCUR": {
+    "value": "LOXCUR"
+  },
+  "LCUR": {
+    "value": "LOXCUR"
+  },
+  "LOXPYT": {
+    "value": "LOXPYT"
+  },
+  "LPYT": {
+    "value": "LOXPYT"
+  },
+  "LOXCUR/LOXPYT": {
+    "value": "LOXCUR/LOXPYT"
+  },
+  "BUCGIT": {
+    "value": "BUCGIT"
+  },
+  "LOXSP": {
+    "value": "LOXSP"
+  },
+  "CARERY": {
+    "value": "CARERY"
+  },
+  "CE": {
+    "value": "CARERY"
+  },
+  "CERY": {
+    "value": "CARERY"
+  },
+  "URASIB": {
+    "value": "URASIB"
+  },
+  "PINENU": {
+    "value": "PINENU"
+  },
+  "PENU": {
+    "value": "PINENU"
+  },
+  "PYRPYR": {
+    "value": "PYRPYR"
+  },
+  "PPYR": {
+    "value": "PYRPYR"
+  },
+  "COCCOC": {
+    "value": "COCCOC"
+  },
+  "CCOC": {
+    "value": "COCCOC"
+  },
+  "DENSTR": {
+    "value": "DENSTR"
+  },
+  "PASILI": {
+    "value": "PASILI"
+  },
+  "ZONALB": {
+    "value": "ZONALB"
+  },
+  "CALLAP": {
+    "value": "CALLAP"
+  },
+  "CLAP": {
+    "value": "CALLAP"
+  },
+  "PLENIV": {
+    "value": "PLENIV"
+  },
+  "PNIV": {
+    "value": "PLENIV"
+  },
+  "EMBSPO": {
+    "value": "EMBSPO"
+  },
+  "EMBLEU": {
+    "value": "EMBLEU"
+  },
+  "EMBCIT": {
+    "value": "EMBCIT"
+  },
+  "EC": {
+    "value": "EMBCIT"
+  },
+  "ECIT": {
+    "value": "EMBCIT"
+  },
+  "EMBHOR": {
+    "value": "EMBHOR"
+  },
+  "EHOR": {
+    "value": "EMBHOR"
+  },
+  "EMBBUC": {
+    "value": "EMBBUC"
+  },
+  "EMBCAE": {
+    "value": "EMBCAE"
+  },
+  "EMBRUS": {
+    "value": "EMBRUS"
+  },
+  "ERUS": {
+    "value": "EMBRUS"
+  },
+  "EMBPUS": {
+    "value": "EMBPUS"
+  },
+  "EPUS": {
+    "value": "EMBPUS"
+  },
+  "EMBRUT": {
+    "value": "EMBRUT"
+  },
+  "EMBAUR": {
+    "value": "EMBAUR"
+  },
+  "EAUR": {
+    "value": "EMBAUR"
+  },
+  "EMBRUS/EMBPUS/EMBAUR": {
+    "value": "EMBRUS/EMBPUS/EMBAUR"
+  },
+  "EMBSCH": {
+    "value": "EMBSCH"
+  },
+  "ESCH": {
+    "value": "EMBSCH"
+  },
+  "EMBPAL": {
+    "value": "EMBPAL"
+  },
+  "EMBBRU": {
+    "value": "EMBBRU"
+  },
+  "EMBMEL": {
+    "value": "EMBMEL"
+  },
+  "EMBCAL": {
+    "value": "EMBCAL"
+  },
+  "EMBCIO": {
+    "value": "EMBCIO"
+  },
+  "EMBELE": {
+    "value": "EMBELE"
+  },
+  "PASCYA": {
+    "value": "PASCYA"
+  },
+  "PASAMO": {
+    "value": "PASAMO"
+  },
+  "PASCIR": {
+    "value": "PASCIR"
+  },
+  "IPL": {
+    "value": "IPL"
+  },
+  "KPL": {
+    "value": "KPL"
+  },
+  "PPL": {
+    "value": "PPL"
+  },
+  "PL": {
+    "value": "PL"
+  },
+  "IL": {
+    "value": "IL"
+  },
+  "LYRTET": {
+    "value": "LYRTET"
+  },
+  "LIMFAL": {
+    "value": "LIMFAL"
+  },
+  "PHIPUG": {
+    "value": "PHIPUG"
+  },
+  "LARMIN": {
+    "value": "LARMIN"
+  },
+  "STECAS": {
+    "value": "STECAS"
+  },
+  "NYCSCA": {
+    "value": "NYCSCA"
+  },
+  "LUSCYA": {
+    "value": "LUSCYA"
+  },
+  "SAXRUB": {
+    "value": "SAXRUB"
+  },
+  "SAXTOR": {
+    "value": "SAXTOR"
+  },
+  "PARMON": {
+    "value": "PARMON"
+  },
+  "PARCIN": {
+    "value": "PARCIN"
+  },
+  "PARCRI": {
+    "value": "PARCRI"
+  },
+  "PARATE": {
+    "value": "PARATE"
+  },
+  "PARCAE": {
+    "value": "PARCAE"
+  },
+  "PARCYA": {
+    "value": "PARCYA"
+  },
+  "TTET": {
+    "value": "LYRTET"
+  },
+  "LFAL": {
+    "value": "LIMFAL"
+  },
+  "PPUG": {
+    "value": "PHIPUG"
+  },
+  "LMINU": {
+    "value": "LARMIN"
+  },
+  "SCAS": {
+    "value": "STECAS"
+  },
+  "NSCA": {
+    "value": "NYCSCA"
+  },
+  "LCYA": {
+    "value": "LUSCYA"
+  },
+  "SRUB": {
+    "value": "SAXRUB"
+  },
+  "STOR": {
+    "value": "SAXTOR"
+  },
+  "PRMON": {
+    "value": "PARMON"
+  },
+  "PCIN": {
+    "value": "PARCIN"
+  },
+  "PATE": {
+    "value": "PARATE"
+  },
+  "PCAE": {
+    "value": "PARCAE"
+  },
+  "PCYA": {
+    "value": "PARCYA"
   }
 }
