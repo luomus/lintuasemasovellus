@@ -29,6 +29,7 @@ const LocalInput = (props) => {
 
   const handleInput = (event) => {
     setValue(event.target.value);
+    props.onChange();
     updateLocalObservation(date, observatory, species, event.target.value, gau);
     // editTotalCount(totalCount).then(totalCountJson => setTotalCount(totalCountJson.data.totalCount));)
     // editLocalCount(localCount).then(localCountJson => setLocalCount(localCountJson.data.localCount));
@@ -53,4 +54,5 @@ LocalInput.propTypes = {
   count: PropTypes.any,
   species: PropTypes.any,
   gau: PropTypes.any,
+  onChange: PropTypes.any
 };
