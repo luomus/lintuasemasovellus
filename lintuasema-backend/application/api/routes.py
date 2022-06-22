@@ -1,6 +1,6 @@
 from flask import make_response
 from application.api import bp
-from application.db import db
+from application.api.classes.observatory.models import Observatory
 
 @bp.route('/api', methods=['GET'])
 def hello_world():
@@ -11,7 +11,7 @@ def hello_world():
 @bp.route('/api/healthz', methods=['GET'])
 def healthz():
     try:
-        db.session.execute("SELECT 1")
+        Observatory.query.all()
     except Exception as e:
         print(e)
         return make_response("Database is not OK", 500)
