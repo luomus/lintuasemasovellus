@@ -5,6 +5,10 @@ export const isNightValidation = (observatory, value, date) => {
 
   const lines = value.trim().split(/\n/);
 
+  let rowNumbers = [];
+
+  let rowNumber = 1;
+
   for (const line of lines) {
     let parsedTime = isTime(line) && parseTime(line);
 
@@ -12,11 +16,16 @@ export const isNightValidation = (observatory, value, date) => {
 
     ms && date.setHours(0,0,0,ms);
 
-    if(!isNightTime(observatory,date)) {
-      return true;
+
+    if(!isNightTime(observatory,date) && isTime(line)) {
+      rowNumbers.push(rowNumber);
     }
 
+    rowNumber++;
+
   }
+
+  return rowNumbers;
 
 
 };
