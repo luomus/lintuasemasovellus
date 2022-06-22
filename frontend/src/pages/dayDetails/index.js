@@ -524,7 +524,6 @@ export const DayDetails = ({ userObservatory }) => {
               <ObsPeriodTable
                 key={day}
                 date={day}
-                day={dayId}
                 obsPeriods={obsPeriods}
                 summary={summary}
                 mode={mode}

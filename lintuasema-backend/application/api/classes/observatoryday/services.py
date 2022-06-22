@@ -73,7 +73,7 @@ def createEmptyObsPeriods(dayId):
     db.session().commit()
 
 #Add a new observation to local obsperiod, or edit an old one if this species has already been observed locally:
-def editLocalObs(obsday_id, species, count, gau):
+def editLocalObs(obsday_id, obserid, species, count, gau):
     if not current_user:
         u="MA.4658" #This is my (Ville) userId, to be used if the user's own id is not found.
     else:
@@ -83,7 +83,6 @@ def editLocalObs(obsday_id, species, count, gau):
             u=user.userId
         else:
             u="MA.4658"
-    obserid=getObservatoryId("Hangon_Lintuasema")
     if gau==1:
         loc1=getLocationId("Luoto Gåu", obserid)
     else:

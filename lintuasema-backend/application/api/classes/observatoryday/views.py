@@ -129,9 +129,9 @@ def update_local():
     req=request.get_json()
     print(req)
     day=datetime.strptime(req['date'], '%d.%m.%Y')
-    obserid=getObservatoryId("Hangon_Lintuasema")
-    obsday_id=getDayId(day, obserid)    
-    editLocalObs(obsday_id, req['species'], req['count'], req['gau'])
+    obserid=getObservatoryId(req['observatory'])
+    obsday_id=getDayId(day, obserid)
+    editLocalObs(obsday_id, obserid, req['species'], req['count'], req['gau'])
     return req['count']
 
 @bp.route('/api/addDay', methods=['POST'])

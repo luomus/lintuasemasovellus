@@ -82,7 +82,7 @@ def test_editLocalObs(app):
     obserid=getObservatoryId("Hangon_Lintuasema")
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editLocalObs(1, 'SOMMOL', 37, 0)
+    editLocalObs(1, obserid, 'SOMMOL', 37, 0)
     obs=getObservationByPeriodAndSpecies(1, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 
@@ -90,7 +90,7 @@ def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by
     obserid=getObservatoryId("Hangon_Lintuasema")
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editLocalObs(1, 'SOMMOL', 37, 1)
+    editLocalObs(1, obserid, 'SOMMOL', 37, 1)
     obs=getObservationByPeriodAndSpecies(2, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 

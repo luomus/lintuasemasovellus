@@ -17,6 +17,7 @@ const LocalInput = (props) => {
     // setTotalCount(getLocalTotalCount)
   },[]);
   const [date] = useState(props.date);
+  const [observatory] = useState(props.observatory);
   const [value, setValue] = useState(props.count);
   const [species] = useState(props.species);
   const [gau] = useState(props.gau);
@@ -28,10 +29,7 @@ const LocalInput = (props) => {
 
   const handleInput = (event) => {
     setValue(event.target.value);
-    console.log("NOTGAU");
-    console.log(gau);
-    console.log("wwwwwwww");
-    updateLocalObservation(date, species, event.target.value, gau);
+    updateLocalObservation(date, observatory, species, event.target.value, gau);
     // editTotalCount(totalCount).then(totalCountJson => setTotalCount(totalCountJson.data.totalCount));)
     // editLocalCount(localCount).then(localCountJson => setLocalCount(localCountJson.data.localCount));
     // editLocalGåuCount(localGåuCount).then(localGåuCountJson => setLocalGåuCount(localGåuCountJson.data.localGåuCount));
@@ -51,6 +49,7 @@ export default LocalInput;
 
 LocalInput.propTypes = {
   date: PropTypes.any,
+  observatory: PropTypes.string,
   count: PropTypes.any,
   species: PropTypes.any,
   gau: PropTypes.any,

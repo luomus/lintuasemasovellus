@@ -26,6 +26,6 @@ export const updateObservation = async (shorthand_id) => {
   return await axios.post("/api/updateObservation", shorthand_id );
 };
 
-export const updateLocalObservation = async (date, species, count, gau) => {
-  return await axios.post("/api/updateLocalObservation", { "date": date, "species": species, "count": count, "gau": gau });
+export const updateLocalObservation = async (date, observatory, species, count, gau) => {
+  return await axios.post("/api/updateLocalObservation", { "date": date, "observatory": observatory, "species": species, "count": count, "gau": gau });
 };
