@@ -7,7 +7,7 @@ export const observationsOnTop = async (dayId,value) => {
   let periodEndTime = null;
   let nextTimeEndTime = false;
 
-  const observationPeriods = await getDaysObservationPeriods(dayId);
+  let observationPeriods = await getDaysObservationPeriods(dayId);
 
   const lines = value.trim().split(/\n/);
 
@@ -26,9 +26,10 @@ export const observationsOnTop = async (dayId,value) => {
 
     for (const obsPeriod of observationPeriods) {
 
-      if (periodEndTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.startTime ||
-        periodEndTime >= obsPeriod.startTime && periodEndTime <= obsPeriod.endTime ||
-          periodStartTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.endTime) {
+      if (periodEndTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.startTime && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
+        periodEndTime >= obsPeriod.startTime && periodEndTime <= obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
+          periodStartTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ) {
+        console.log("obsPeriod: ", obsPeriod);
         rowNumbers.push(rowNumber);
       }
     }
