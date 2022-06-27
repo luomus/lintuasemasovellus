@@ -56,6 +56,7 @@ describe("Species table with filters contains species as expected", function () 
 
   afterEach(function () {
     cy.get('[alt="haukka"]').click();
+    cy.wait(1000);
   })
 
   it(`Basic species table 
