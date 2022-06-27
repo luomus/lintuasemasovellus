@@ -34,6 +34,7 @@ def addDay(obsday):
         dayId=getDayId(obsday.day, obsday.observatory_id)
         if not checkPeriod(dayId):
             createEmptyObsPeriods(dayId)
+            
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
       if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
@@ -58,6 +59,7 @@ def createEmptyObsPeriods(dayId):
     loc1id=getLocationId("Bunkkeri", obserid)
     loc2id=getLocationId("Luoto Gåu", obserid)
     typid=getTypeIdByName("Paikallinen")
+    typid2=getTypeIdByName("Hajahavainto")
     obsp2 = Observationperiod(
        start_time=datetime(1900,1,1,0,0,0),
         end_time=datetime(1900,1,1,23,59,0),
@@ -70,6 +72,12 @@ def createEmptyObsPeriods(dayId):
         type_id=typid,
         location_id=loc2id, observatoryday_id=dayId)
     db.session().add(obsp3)
+    obsp4 = Observationperiod(
+       start_time=datetime(1900,1,1,0,0,0),
+        end_time=datetime(1900,1,1,23,59,0),
+        type_id=typid2,
+        location_id=loc1id, observatoryday_id=dayId)
+    db.session().add(obsp4)
     db.session().commit()
 
 #Add a new observation to local obsperiod, or edit an old one if this species has already been observed locally:
@@ -88,6 +96,34 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
     else:
         loc1=getLocationId("Bunkkeri", obserid)
     typid=getTypeIdByName("Paikallinen")
+    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
+    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
+    if obs: #observation already exists (=local observation for this species has already been edited)
+        print(obs.total_count)
+        print("doesex")
+        obs.total_count=count
+        db.session().commit()
+    else: #observation does not exist, so we create it
+        print("doesnotex")
+        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
+            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
+            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
+        db.session().add(subobs)
+        db.session().commit()
+
+def editScatterObs(obsday_id, obserid, species, count):
+    if not current_user:
+        u="MA.4658" #This is my (Ville) userId, to be used if the user's own id is not found.
+    else:
+        u = current_user.get_id()
+        user = Account.query.filter_by(id=u).first()
+        if user:
+            u=user.userId
+        else:
+            u="MA.4658"
+    loc1=getLocationId("Bunkkeri", obserid)
+    typid=getTypeIdByName("Hajahavainto")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
     if obs: #observation already exists (=local observation for this species has already been edited)

@@ -13,6 +13,7 @@ import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import { defaultBirds, uniqueBirds } from "../../globalConstants";
 import LocalInput from "./LocalInput";
+import ScatterInput from "./ScatterInput";
 
 const ObsPeriodTable = (props) => {
 
@@ -206,6 +207,27 @@ const ObsPeriodTable = (props) => {
           && s.species.toLowerCase().includes(textFilter.toLowerCase())));
   };
 
+  useEffect(() => {
+    let elements = document.querySelectorAll("#standard-basic");
+    elements.forEach(element => {
+      element.addEventListener("keydown", handleKeyDownEvent);
+    });
+    return () => {
+      elements.forEach(element => {
+        element.removeEventListener("keydown", handleKeyDownEvent);
+      });
+    };
+  }, [filteredSummary, rowsPerPage, page]);
+
+  const handleKeyDownEvent = e => {
+    let elements = document.querySelectorAll("#standard-basic");
+    if(e.key === "Enter") {
+      let index = Array.from(elements).findIndex(a => a === e.target);
+      let nextIndex = index + 2; // Change to number of elements that are editable per row
+      elements.item(nextIndex)?.focus();
+    }
+  };
+
   if (mode === "speciesTable") {
     return (
       <div>
@@ -282,7 +304,7 @@ const ObsPeriodTable = (props) => {
                     <StyledTableCell component="th" scope="row">
                       {s.notes ?
                         <details>
-                          <summary>{s.species}</summary>
+                          <summary tabIndex={999}>{s.species}</summary>
                           <p> {s.notes} </p>
                         </details>
                         : <>{s.species}</>}
@@ -311,7 +333,8 @@ const ObsPeriodTable = (props) => {
                       {s.nightMigration}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {s.scatterObs}
+                      {/* s.scatterObs */}
+                      <ScatterInput onChange={refetchObservations} date={date} observatory={userObservatory} count={s.scatterObs} species={s.species}/>
                     </StyledTableCell>
                   </StyledTableRow>
                 )
