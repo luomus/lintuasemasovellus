@@ -54,7 +54,7 @@ describe("Species table with filters contains species as expected", function () 
       .parent()
       .contains(date)
       .click();
-    cy.wait(1000);
+    cy.wait(4000);
   })
 
   afterEach(function () {
