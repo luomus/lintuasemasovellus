@@ -17,7 +17,7 @@ const addObsrvations = () => {
   cy.get("#selectType").click().get("#Vakio").click();
   cy.get("#selectLocation").click().get("#Bunkkeri").click();
   cy.get(".CodeMirror textarea").type(shorthand, { force: true });
-
+  cy.wait(1000);
   cy.contains("Tallenna").click({ force: true });
   cy.wait(5000);
 }
