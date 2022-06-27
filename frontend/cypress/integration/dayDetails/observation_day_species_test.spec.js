@@ -54,7 +54,7 @@ describe("Species table with filters contains species as expected", function () 
       .parent()
       .contains(date)
       .click();
-    cy.wait(4000);
+    cy.wait(1000);
   })
 
   afterEach(function () {
@@ -73,7 +73,7 @@ describe("Species table with filters contains species as expected", function () 
         .should("contain", basic1)
         .and("not.contain", basic2);
     });
-
+  /*
   it(`Other species table
       with only observations filter enabled
       contains added other observation 
@@ -177,4 +177,5 @@ describe("Species table with filters contains species as expected", function () 
 
       assertThatSpeciesTableBodyHasNumberOfRows(617);
     });
+  */
 });
