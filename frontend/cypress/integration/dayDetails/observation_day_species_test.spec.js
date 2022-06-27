@@ -27,10 +27,12 @@ const chooseSpeciesType = (type) => {
     .click()
     .get(`[data-value="${type}"]`)
     .click();
+  cy.wait(1000);
 }
 
 const selectAllRows = () => {
   cy.get('[aria-label="rows per page"]').select("Kaikki");
+  cy.wait(1000);
 }
 
 const assertThatSpeciesTableBodyHasNumberOfRows = (value) => {
