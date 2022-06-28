@@ -13,7 +13,6 @@ import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import { defaultBirds, uniqueBirds } from "../../globalConstants";
 import LocalInput from "./LocalInput";
-import ScatterInput from "./ScatterInput";
 
 const ObsPeriodTable = (props) => {
 
@@ -309,18 +308,18 @@ const ObsPeriodTable = (props) => {
                         </details>
                         : <>{s.species}</>}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell name="localTotal" align="right">
                       {s.totalLocal}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* {s.localOther} */}
-                      <LocalInput onChange={refetchObservations} date={date} observatory={userObservatory} count={s.localOther} species={s.species} gau={0}/>
+                      <LocalInput onChange={refetchObservations} date={date} dataType="localOther" observatory={userObservatory} count={s.localOther} species={s.species}/>
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* {s.localGåu} */}
-                      <LocalInput onChange={refetchObservations} date={date} observatory={userObservatory} count={s.localGåu} species={s.species} gau={1}/>
+                      <LocalInput onChange={refetchObservations} date={date} dataType="localGau" observatory={userObservatory} count={s.localGåu} species={s.species}/>
                     </StyledTableCell>
-                    <StyledTableCell align="right" className="dotted">
+                    <StyledTableCell align="right" name="migrantTotal" className="dotted">
                       {s.allMigration}
                     </StyledTableCell>
                     <StyledTableCell align="right">
@@ -334,7 +333,7 @@ const ObsPeriodTable = (props) => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* s.scatterObs */}
-                      <ScatterInput onChange={refetchObservations} date={date} observatory={userObservatory} count={s.scatterObs} species={s.species}/>
+                      <LocalInput onChange={refetchObservations} date={date} dataType="scatter" observatory={userObservatory} count={s.scatterObs} species={s.species}/>
                     </StyledTableCell>
                   </StyledTableRow>
                 )
