@@ -50,17 +50,13 @@ describe("Species table with filters contains species as expected", function () 
   });
 
   beforeEach(function () {
+    myBeforeEach(); //Logs in, chooses station
     cy.contains("Viimeisimmät päivät")
       .parent()
       .contains(date)
       .click();
     cy.wait(1000);
-  })
-
-  afterEach(function () {
-    cy.get('[alt="haukka"]').click();
-    cy.wait(1000);
-  })
+  });
 
   it(`Basic species table 
       with only observations filter enabled 
@@ -73,7 +69,7 @@ describe("Species table with filters contains species as expected", function () 
         .should("contain", basic1)
         .and("not.contain", basic2);
     });
-  /*
+
   it(`Other species table
       with only observations filter enabled
       contains added other observation 
@@ -177,5 +173,5 @@ describe("Species table with filters contains species as expected", function () 
 
       assertThatSpeciesTableBodyHasNumberOfRows(617);
     });
-  */
+
 });
