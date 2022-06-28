@@ -278,6 +278,15 @@ export const DayDetails = ({ userObservatory }) => {
     setSummary(res2);
   };
 
+  useEffect(() => {
+    refetchObservations();
+  }, [mode]);
+
+  const refetchSummary = async () => {
+    const res2 = await getSummary(dayId);
+    setSummary(res2);
+  };
+
   const handleEditShorthandClose = () => {
     setEditShorthandModalOpen(false);
     refetchObservations();
@@ -529,6 +538,7 @@ export const DayDetails = ({ userObservatory }) => {
                 mode={mode}
                 userObservatory={userObservatory}
                 refetchObservations={refetchObservations}
+                refetchSummary={refetchSummary}
               />
             </Grid>
           </Grid>

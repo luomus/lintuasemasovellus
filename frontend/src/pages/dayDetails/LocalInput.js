@@ -8,6 +8,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between"
+    //justifyContent: "right"
   },
   textInput: {
     width: "50px",
@@ -17,17 +18,19 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ date, observatory, count, species, dataType }) => {
+const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
 
-  const [value, setValue] = useState(count);
+  //const [value, setValue] = useState(count);
   const [showCircularProgress, setShowCircularProgress] = useState(false);
 
   const classes = useStyles();
 
   const handleInput = async (event) => {
     setShowCircularProgress(true);
-    setValue(event.target.value);
-    //onChange();
+    //const newValue = parseInt(event.taget.value);
+    onChange(parseInt(event.target.value));
+    //setValue(event.target.value);
+    //onChange(total+(newValue-oldValue));
     try {
       if (dataType.includes("local")) {
         await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
@@ -42,15 +45,15 @@ const LocalInput = ({ date, observatory, count, species, dataType }) => {
     setShowCircularProgress(false);
   };
 
-  return(
+  return (
     <div className={classes.container}>
       {showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />}
       <TextField id="standard-basic" name={dataType} className={classes.textInput}
-        variant="standard" type="number" size="small" value={value} species={species} onChange={(event) => handleInput(event)} InputProps={{
+        variant="standard" type="number" size="small" value={count} species={species} onChange={(event) => handleInput(event)} InputProps={{
           inputProps: {
             min: 0
           }
-        }}/>
+        }} />
     </div>
   );
 };
@@ -63,5 +66,6 @@ LocalInput.propTypes = {
   count: PropTypes.number,
   species: PropTypes.string,
   dataType: PropTypes.string,
-  onChange: PropTypes.any
+  onChange: PropTypes.any,
+  total: PropTypes.number
 };

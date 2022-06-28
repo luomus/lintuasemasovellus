@@ -12,7 +12,7 @@ import ObservationPeriod from "../obsPeriod";
 import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import { defaultBirds, uniqueBirds } from "../../globalConstants";
-import LocalInput from "./LocalInput";
+import Row from "./Row";
 
 const ObsPeriodTable = (props) => {
 
@@ -220,7 +220,7 @@ const ObsPeriodTable = (props) => {
 
   const handleKeyDownEvent = e => {
     let elements = document.querySelectorAll("#standard-basic");
-    if(e.key === "Enter") {
+    if (e.key === "Enter") {
       let index = Array.from(elements).findIndex(a => a === e.target);
       let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
       elements.item(nextIndex)?.focus();
@@ -301,41 +301,7 @@ const ObsPeriodTable = (props) => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
                   <StyledTableRow hover key={i}>
-                    <StyledTableCell component="th" scope="row">
-                      {s.notes ?
-                        <details>
-                          <summary tabIndex={999}>{s.species}</summary>
-                          <p> {s.notes} </p>
-                        </details>
-                        : <>{s.species}</>}
-                    </StyledTableCell>
-                    <StyledTableCell name="localTotal" align="right">
-                      {s.totalLocal}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {/* {s.localOther} */}
-                      <LocalInput onChange={refetchObservations} date={date} dataType="localOther" observatory={userObservatory} count={s.localOther} species={s.species}/>
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {/* {s.localGåu} */}
-                      <LocalInput onChange={refetchObservations} date={date} dataType="localGau" observatory={userObservatory} count={s.localGåu} species={s.species}/>
-                    </StyledTableCell>
-                    <StyledTableCell align="right" name="migrantTotal" className="dotted">
-                      {s.allMigration}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.constMigration}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.otherMigration}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {s.nightMigration}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {/* s.scatterObs */}
-                      <LocalInput onChange={refetchObservations} date={date} dataType="scatter" observatory={userObservatory} count={s.scatterObs} species={s.species}/>
-                    </StyledTableCell>
+                    <Row s={s} key={i} date={date} userObservatory={userObservatory} />
                   </StyledTableRow>
                 )
               }
