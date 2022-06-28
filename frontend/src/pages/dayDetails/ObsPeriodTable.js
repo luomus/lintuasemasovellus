@@ -217,13 +217,13 @@ const ObsPeriodTable = (props) => {
         element.removeEventListener("keydown", handleKeyDownEvent);
       });
     };
-  }, [filteredSummary, rowsPerPage, page]);
+  }, [filteredSummary, rowsPerPage, page, speciesListType]);
 
   const handleKeyDownEvent = e => {
     let elements = document.querySelectorAll("#standard-basic");
     if(e.key === "Enter") {
       let index = Array.from(elements).findIndex(a => a === e.target);
-      let nextIndex = index + 2; // Change to number of elements that are editable per row
+      let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
       elements.item(nextIndex)?.focus();
     }
   };
