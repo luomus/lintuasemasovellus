@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ date, observatory, count, species, dataType }) => {
+const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
 
   const [value, setValue] = useState(count);
   const [showCircularProgress, setShowCircularProgress] = useState(false);
@@ -27,7 +27,7 @@ const LocalInput = ({ date, observatory, count, species, dataType }) => {
   const handleInput = async (event) => {
     setShowCircularProgress(true);
     setValue(event.target.value);
-    //onChange();
+    onChange();
     try {
       if (dataType.includes("local")) {
         await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
