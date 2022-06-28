@@ -1,45 +1,57 @@
 import React, { useState } from "react";
-import { TextField, makeStyles } from "@material-ui/core";
+import { TextField, makeStyles, CircularProgress } from "@material-ui/core";
 import { updateLocalObservation, updateScatterObservation } from "../../services";
 import PropTypes from "prop-types";
+
 const useStyles = makeStyles({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
   textInput: {
     width: "50px",
+  },
+  loadingCircle: {
+    marginRight: "10px"
   }
 });
 
-const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
+const LocalInput = ({ date, observatory, count, species, dataType }) => {
 
-  /*
-  const [date] = useState(date);
-  const [observatory] = useState(observatory);
-  */
   const [value, setValue] = useState(count);
-  /*
-  const [species] = useState(species);
-  const [gau] = useState(dataType === "localGau" ? 1 : 0);
-  */
+  const [showCircularProgress, setShowCircularProgress] = useState(false);
 
   const classes = useStyles();
 
-  const handleInput = (event) => {
+  const handleInput = async (event) => {
+    setShowCircularProgress(true);
     setValue(event.target.value);
-    onChange();
-    if (dataType === "localOther" || dataType === "localGau") {
-      updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
+    //onChange();
+    try {
+      if (dataType.includes("local")) {
+        await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
+      }
+      if (dataType === "scatter") {
+        await updateScatterObservation(date, observatory, species, event.target.value);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      alert("Tallennus epäonnistui!");
     }
-    if (dataType === "scatter") {
-      updateScatterObservation(date, observatory, species, event.target.value);
-    }
+    setShowCircularProgress(false);
   };
 
-  return (
-    <TextField id="standard-basic" name={dataType} className={classes.textInput}
-      variant="standard" type="number" size="small" value={value} species={species} onChange={(event) => handleInput(event)} InputProps={{
-        inputProps: {
-          min: 0
-        }
-      }} />
+  return(
+    <div className={classes.container}>
+      {showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />}
+      <TextField id="standard-basic" name={dataType} className={classes.textInput}
+        variant="standard" type="number" size="small" value={value} species={species} onChange={(event) => handleInput(event)} InputProps={{
+          inputProps: {
+            min: 0
+          }
+        }}/>
+    </div>
   );
 };
 
