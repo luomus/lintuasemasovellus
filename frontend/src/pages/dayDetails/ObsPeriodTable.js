@@ -225,6 +225,7 @@ const ObsPeriodTable = (props) => {
       let index = Array.from(elements).findIndex(a => a === e.target);
       let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
       elements.item(nextIndex)?.focus();
+      elements.item(nextIndex)?.scrollIntoView();
     }
   };
 
