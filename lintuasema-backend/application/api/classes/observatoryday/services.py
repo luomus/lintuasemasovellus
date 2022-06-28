@@ -34,7 +34,6 @@ def addDay(obsday):
         dayId=getDayId(obsday.day, obsday.observatory_id)
         if not checkPeriod(dayId):
             createEmptyObsPeriods(dayId)
-            
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
       if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
