@@ -28,16 +28,19 @@ const LocalInput = (props) => {
   const classes = useStyles();
 
   const handleInput = async (event) => {
+    console.log("event: ", event);
     setShowCircularProgress(true);
     setValue(event.target.value);
-    // props.onChange();
     try {
       await updateLocalObservation(date, observatory, species, event.target.value, gau);
     } catch (error) {
       console.log("error: ", error);
       alert("Tallennus epäonnistui!");
     }
-    setShowCircularProgress(false);
+    setTimeout(() => {
+      props.onChange();
+      setShowCircularProgress(false);
+    }, 700);
   };
 
   return(
