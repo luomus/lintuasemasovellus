@@ -153,11 +153,11 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.contains("Kenttä ei saa olla tyhjä");
     cy.get("#attachments").type("0");
     cy.contains("Gåulla käynti").click();
-    cy.get("#activity-header").contains("Havaintoaktiivisuus kirjattu");
+    cy.get("#activity-header").contains("Havainnointiaktiivisuus kirjattu");
     cy.contains("Gåulla käynti").click();
-    cy.get("#activity-header").contains("Ei havaintoaktiivisuusmerkintöjä");
+    cy.get("#activity-header").contains("Ei havainnointiaktiivisuusmerkintöjä");
     cy.get("#attachments").type("1");
-    cy.get("#activity-header").contains("Havaintoaktiivisuus kirjattu");
+    cy.get("#activity-header").contains("Havainnointiaktiivisuus kirjattu");
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
@@ -217,7 +217,7 @@ describe("FieldsAndAuthenticationTest", function () {
     cy.get("#observers").clear();
     cy.get("#activity-header").click();
     cy.contains("Rengastusvakio").click();
-    cy.get("#activity-header").contains("Havaintoaktiivisuus kirjattu");
+    cy.get("#activity-header").contains("Havainnointiaktiivisuus kirjattu");
     cy.get("#catches-header").contains("Virheitä pyydyksissä");
     cy.get("#catches-header").click();
     cy.contains("Lisää ainakin yksi vakioverkko.");
