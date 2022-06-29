@@ -7,13 +7,13 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "flex-end",
   },
   textInput: {
     width: "50px",
   },
   loadingCircle: {
-    marginRight: "10px"
+    marginRight: "20px"
   }
 });
 
@@ -26,8 +26,11 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
 
   const handleInput = async (event) => {
     event.preventDefault();
-    setShowCircularProgress(true);
     setValue(event.target.value);
+    setTimeout(() => {
+      setShowCircularProgress(true);
+    }, 1500);
+
     try {
       if (dataType.includes("local")) {
         await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
@@ -44,7 +47,7 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
     setTimeout(() => {
       setShowCircularProgress(false);
       onChange();
-    }, 2000);
+    }, 3000);
   };
 
   return(
