@@ -28,7 +28,6 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
     event.preventDefault();
     setShowCircularProgress(true);
     setValue(event.target.value);
-    onChange();
     try {
       if (dataType.includes("local")) {
         await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
