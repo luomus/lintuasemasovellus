@@ -49,9 +49,10 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
     <div className={classes.container}>
       {showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />}
       <TextField id="standard-basic" name={dataType} className={classes.textInput}
-        variant="standard" type="number" size="small" value={count} species={species} onChange={(event) => handleInput(event)} InputProps={{
+        variant="standard" type="number" size="small" species={species} onBlur={(event) => handleInput(event)} InputProps={{
           inputProps: {
-            min: 0
+            min: 0,
+            defaultValue: count
           }
         }} />
     </div>
