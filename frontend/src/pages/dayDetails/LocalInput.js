@@ -7,30 +7,29 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between"
-    //justifyContent: "right"
+    justifyContent: "flex-end",
   },
   textInput: {
     width: "50px",
   },
   loadingCircle: {
-    marginRight: "10px"
+    marginRight: "20px"
   }
 });
 
 const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
 
-  //const [value, setValue] = useState(count);
   const [showCircularProgress, setShowCircularProgress] = useState(false);
 
   const classes = useStyles();
 
   const handleInput = async (event) => {
-    setShowCircularProgress(true);
-    //const newValue = parseInt(event.taget.value);
+    event.preventDefault();
     onChange(parseInt(event.target.value));
-    //setValue(event.target.value);
-    //onChange(total+(newValue-oldValue));
+    setTimeout(() => {
+      setShowCircularProgress(true);
+    }, 1500);
+
     try {
       if (dataType.includes("local")) {
         await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
@@ -39,10 +38,15 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
         await updateScatterObservation(date, observatory, species, event.target.value);
       }
     } catch (error) {
-      console.log("error: ", error);
-      alert("Tallennus epäonnistui!");
+      setTimeout(() => {
+        console.log("error: ", error);
+        alert("Tallennus epäonnistui!");
+      }, 1000);
     }
-    setShowCircularProgress(false);
+    setTimeout(() => {
+      setShowCircularProgress(false);
+      onChange();
+    }, 3000);
   };
 
   return (

@@ -18,6 +18,14 @@ const ObsPeriodTable = (props) => {
 
   const { date, obsPeriods, summary, mode, refetchObservations, userObservatory } = props;
 
+  // console.log("date: ", date);
+  // console.log("obsPeriods: ", obsPeriods);
+  // console.log("summary: ", summary);
+  // console.log("mode: ", mode);
+  // console.log("refetech", refetchObservations);
+  // console.log("userObservatory:", userObservatory);
+
+
   const { t } = useTranslation();
 
   const useStyles = makeStyles((theme) => ({
@@ -77,6 +85,17 @@ const ObsPeriodTable = (props) => {
   const [speciesListType, setSpeciesListType] = useState("defaults");
   const [filteredSummary, setFilteredSummary] = useState(summary);
   const [extendedSummary, setExtendedSummary] = useState(summary);
+
+  // console.log("modal open", modalOpen);
+  // console.log("edit modal open", editModalOpen);
+  // console.log("obsPeriod",  obsPeriod);
+  // console.log("birdsWithObsFilter", birdsWithObsFilter);
+  // console.log("textFilter", textFilter);
+  // console.log("speciesListTYpe", speciesListType);
+  // console.log("filteredSUmmary", filteredSummary);
+  // console.log("extendedSummary", extendedSummary);
+
+  //obsperiodtable renderöidään 2x
 
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
@@ -351,6 +370,7 @@ const ObsPeriodTable = (props) => {
           <TableBody>
             {
               obsPeriods
+                .filter(i => i.observationType !== "Paikallinen" && i.observationType !== "Hajahavainto")
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
                   <StyledTableRow hover key={i} >
