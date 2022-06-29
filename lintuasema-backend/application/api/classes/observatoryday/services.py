@@ -32,8 +32,7 @@ def addDay(obsday):
         db.session().add(obsday)
         db.session().commit() 
         dayId=getDayId(obsday.day, obsday.observatory_id)
-        if not checkPeriod(dayId):
-            createEmptyObsPeriods(dayId)
+        createEmptyObsPeriods(dayId)
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None:
       if obsday.observatory_id != d.observatory_id or obsday.day != d.day or obsday.observers != d.observers or obsday.comment != d.comment or obsday.selectedactions != d.selectedactions:
         d.is_deleted = 1
@@ -43,9 +42,15 @@ def addDay(obsday):
         set_catch_day_id(d.id, obsday.id)
 
 #Check if a period for local observations has already been added today
-def checkPeriod(dayId):
-    typid=getTypeIdByName("Paikallinen")
-    d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId, type_id=typid).first()
+def checkPeriod(dayId, type, gau):
+    typid=getTypeIdByName(type)
+    if not gau:
+        d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId, type_id=typid).first()
+    else:
+        obserid=getObservatoryId("Hangon_Lintuasema")
+        loc2id=getLocationId("Luoto Gåu", obserid)
+        d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId, location_id=loc2id, type_id=typid).first()
+
     if d is not None:
         print("checkperiod with dayId:",dayId, ": True")
         return True
@@ -59,25 +64,33 @@ def createEmptyObsPeriods(dayId):
     loc2id=getLocationId("Luoto Gåu", obserid)
     typid=getTypeIdByName("Paikallinen")
     typid2=getTypeIdByName("Hajahavainto")
-    obsp2 = Observationperiod(
-       start_time=datetime(1900,1,1,0,0,0),
-        end_time=datetime(1900,1,1,23,59,0),
-        type_id=typid,
-        location_id=loc1id, observatoryday_id=dayId)
-    db.session().add(obsp2)
-    obsp3 = Observationperiod(
-       start_time=datetime(1900,1,1,0,0,0),
-        end_time=datetime(1900,1,1,23,59,0),
-        type_id=typid,
-        location_id=loc2id, observatoryday_id=dayId)
-    db.session().add(obsp3)
-    obsp4 = Observationperiod(
-       start_time=datetime(1900,1,1,0,0,0),
-        end_time=datetime(1900,1,1,23,59,0),
-        type_id=typid2,
-        location_id=loc1id, observatoryday_id=dayId)
-    db.session().add(obsp4)
-    db.session().commit()
+    added=False
+    if not checkPeriod(dayId, "Paikallinen", 0):
+        obsp2 = Observationperiod(
+        start_time=datetime(1900,1,1,0,0,0),
+            end_time=datetime(1900,1,1,23,59,0),
+            type_id=typid,
+            location_id=loc1id, observatoryday_id=dayId)
+        db.session().add(obsp2)
+        added=True
+    if not checkPeriod(dayId, "Paikallinen", 1):
+        obsp3 = Observationperiod(
+        start_time=datetime(1900,1,1,0,0,0),
+            end_time=datetime(1900,1,1,23,59,0),
+            type_id=typid,
+            location_id=loc2id, observatoryday_id=dayId)
+        db.session().add(obsp3)
+        added=True
+    if not checkPeriod(dayId, "Hajahavainto", 0):
+        obsp4 = Observationperiod(
+        start_time=datetime(1900,1,1,0,0,0),
+            end_time=datetime(1900,1,1,23,59,0),
+            type_id=typid2,
+            location_id=loc1id, observatoryday_id=dayId)
+        db.session().add(obsp4)
+        added=True
+    if added:
+        db.session().commit()
 
 #Add a new observation to local obsperiod, or edit an old one if this species has already been observed locally:
 def editLocalObs(obsday_id, obserid, species, count, gau):
@@ -96,6 +109,8 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
         loc1=getLocationId("Bunkkeri", obserid)
     typid=getTypeIdByName("Paikallinen")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
+    if not per:
+        createEmptyObsPeriods(obsday_id)
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
     if obs: #observation already exists (=local observation for this species has already been edited)
         print(obs.total_count)
@@ -124,6 +139,8 @@ def editScatterObs(obsday_id, obserid, species, count):
     loc1=getLocationId("Bunkkeri", obserid)
     typid=getTypeIdByName("Hajahavainto")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
+    if not per:
+        createEmptyObsPeriods(obsday_id)
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
     if obs: #observation already exists (=local observation for this species has already been edited)
         print(obs.total_count)
