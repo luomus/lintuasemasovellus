@@ -38,7 +38,9 @@ describe("ShorthandModificationPerObservationPeriod", function () {
 
   it("Shorthand modification window can be clicked", function () {
     cy.contains(date).click();
+    cy.wait(1000);
     cy.contains('Jaksot').click();
+    cy.wait(1000);
     cy.get("#editObsPeriod").click();
     cy.contains("Tallenna");
     cy.contains("Peruuta");
@@ -47,7 +49,9 @@ describe("ShorthandModificationPerObservationPeriod", function () {
 
   it("In shorthand modification type, location and shorthand can be modified and saved", function () {
     cy.contains(date).click();
+    cy.wait(1000);
     cy.contains('Jaksot').click();
+    cy.wait(1000);
     cy.get("#editObsPeriod").click();
     cy.get("#selectTypeInModification").click().get("#Yömuutto").click();
     cy.get("#selectLocationInModification").click().get("#Piha").click();

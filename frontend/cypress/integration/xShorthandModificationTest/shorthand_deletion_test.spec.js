@@ -36,7 +36,9 @@ describe("ShorthandDeletion", function () {
 
   it("Individual observation period can be deleted", function () {
     cy.contains(date).click();
+    cy.wait(1000);
     cy.contains('Jaksot').click();
+    cy.wait(1000);
     cy.get("#editObsPeriod").click();
     cy.wait(1000);
     cy.contains("Poista").click({ force: true });

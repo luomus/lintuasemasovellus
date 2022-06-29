@@ -30,7 +30,8 @@ Cypress.Commands.add('getRowWithNote', (species) => {
 const updateBird = (species, dataType, count) => {
   cy.getRowWithNote(bird)
     .find(`[name="${dataType}"]`)
-    .type(`{selectAll}${count}`);
+    .type(`{selectAll}${count}`)
+    .blur();
 
   cy.wait(3000);
 }
