@@ -329,12 +329,14 @@ const ObsPeriodTable = (props) => {
                 )
               }
             </TableBody>
+            {/*
             <ObservationPeriod
               obsPeriod={obsPeriod}
               open={modalOpen}
               handleClose={handleClose}
               handleErrorSnackOpen={handleErrorSnackOpen}
             />
+            */}
           </Table>
         </TableContainer>
         <PeriodTablePagination
