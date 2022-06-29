@@ -36,13 +36,15 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
         await updateScatterObservation(date, observatory, species, event.target.value);
       }
     } catch (error) {
-      console.log("error: ", error);
-      alert("Tallennus epäonnistui!");
+      setTimeout(() => {
+        console.log("error: ", error);
+        alert("Tallennus epäonnistui!");
+      }, 1000);
     }
     setTimeout(() => {
       setShowCircularProgress(false);
       onChange();
-    }, 700);
+    }, 2000);
   };
 
   return(
