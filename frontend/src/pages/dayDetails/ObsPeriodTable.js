@@ -322,9 +322,9 @@ const ObsPeriodTable = (props) => {
             <TableBody>
               {filteredSummary
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((s, i) =>
-                  <StyledTableRow hover key={i}>
-                    <Row s={s} key={i} date={date} userObservatory={userObservatory} />
+                .map((s) =>
+                  <StyledTableRow hover key={s.species}>
+                    <Row s={s} key={s.species} date={date} userObservatory={userObservatory} />
                   </StyledTableRow>
                 )
               }
