@@ -3,9 +3,11 @@ import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, TableCell, withStyles, makeStyles, Typography,
   IconButton, FormControlLabel, Checkbox, TextField, Grid,
-  FormControl, Select, MenuItem, InputLabel
+  FormControl, Select, MenuItem, InputLabel, InputAdornment
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import SearchIcon from "@material-ui/icons/Search";
+import BackspaceIcon from "@material-ui/icons/Backspace";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
@@ -82,6 +84,7 @@ const ObsPeriodTable = (props) => {
   const [obsPeriod, setObsPeriod] = useState({});
   const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(true);
   const [textFilter, setTextFilter] = useState("");
+  const [searchField, setSearchField] = useState("");
   const [speciesListType, setSpeciesListType] = useState("defaults");
   const [filteredSummary, setFilteredSummary] = useState(summary);
   const [extendedSummary, setExtendedSummary] = useState(summary);
@@ -187,7 +190,14 @@ const ObsPeriodTable = (props) => {
   };
 
   const handleTextFilterChange = (event) => {
-    setTextFilter(event.target.value);
+    if (event.key === "Enter") {
+      setTextFilter(searchField);
+    }
+  };
+
+  const handleClearTextFilterButtonPress = () => {
+    setSearchField("");
+    setTextFilter("");
   };
 
   const handleSpeciesListChange = (event) => {
@@ -269,8 +279,21 @@ const ObsPeriodTable = (props) => {
               id="textFilter"
               fullWidth={true}
               label={t("speciesTextFilter")}
-              onChange={handleTextFilterChange}
-              value={textFilter}
+              onKeyDown={handleTextFilterChange}
+              onChange={(event) => setSearchField(event.target.value)}
+              value={searchField}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton id="searchButton" size="small" onClick={() => setTextFilter(searchField)} variant="contained" color="primary">
+                      <SearchIcon />
+                    </IconButton>
+                    <IconButton id="clearSearchButton" size="small" onClick={handleClearTextFilterButtonPress} variant="contained" color="primary">
+                      <BackspaceIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Grid>
           <Grid item xs={2}>
