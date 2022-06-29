@@ -400,6 +400,7 @@ const ObsPeriodTable = (props) => {
           <TableBody>
             {
               obsPeriods
+                .filter(i => i.observationType !== "Paikallinen" && i.observationType !== "Hajahavainto")
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((s, i) =>
                   <StyledTableRow hover key={i} >
