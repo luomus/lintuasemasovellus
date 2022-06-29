@@ -13,11 +13,18 @@ import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import { defaultBirds, uniqueBirds } from "../../globalConstants";
 import LocalInput from "./LocalInput";
-import ScatterInput from "./ScatterInput";
 
 const ObsPeriodTable = (props) => {
 
   const { date, obsPeriods, summary, mode, refetchObservations, userObservatory } = props;
+
+  // console.log("date: ", date);
+  // console.log("obsPeriods: ", obsPeriods);
+  // console.log("summary: ", summary);
+  // console.log("mode: ", mode);
+  // console.log("refetech", refetchObservations);
+  // console.log("userObservatory:", userObservatory);
+
 
   const { t } = useTranslation();
 
@@ -78,6 +85,17 @@ const ObsPeriodTable = (props) => {
   const [speciesListType, setSpeciesListType] = useState("defaults");
   const [filteredSummary, setFilteredSummary] = useState(summary);
   const [extendedSummary, setExtendedSummary] = useState(summary);
+
+  // console.log("modal open", modalOpen);
+  // console.log("edit modal open", editModalOpen);
+  // console.log("obsPeriod",  obsPeriod);
+  // console.log("birdsWithObsFilter", birdsWithObsFilter);
+  // console.log("textFilter", textFilter);
+  // console.log("speciesListTYpe", speciesListType);
+  // console.log("filteredSUmmary", filteredSummary);
+  // console.log("extendedSummary", extendedSummary);
+
+  //obsperiodtable renderöidään 2x
 
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
@@ -225,6 +243,7 @@ const ObsPeriodTable = (props) => {
       let index = Array.from(elements).findIndex(a => a === e.target);
       let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
       elements.item(nextIndex)?.focus();
+      elements.item(nextIndex)?.scrollIntoView();
     }
   };
 
@@ -309,18 +328,18 @@ const ObsPeriodTable = (props) => {
                         </details>
                         : <>{s.species}</>}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell name="localTotal" align="right">
                       {s.totalLocal}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* {s.localOther} */}
-                      <LocalInput onChange={() => handleClose()} date={date} observatory={userObservatory} count={s.localOther} species={s.species} gau={0}/>
+                      <LocalInput onChange={() => refetchObservations()} date={date} dataType="localOther" observatory={userObservatory} count={s.localOther} species={s.species}/>
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* {s.localGåu} */}
-                      <LocalInput onChange={() => handleClose()} date={date} observatory={userObservatory} count={s.localGåu} species={s.species} gau={1}/>
+                      <LocalInput onChange={() => refetchObservations()} date={date} dataType="localGau" observatory={userObservatory} count={s.localGåu} species={s.species}/>
                     </StyledTableCell>
-                    <StyledTableCell align="right" className="dotted">
+                    <StyledTableCell align="right" name="migrantTotal" className="dotted">
                       {s.allMigration}
                     </StyledTableCell>
                     <StyledTableCell align="right">
@@ -334,7 +353,7 @@ const ObsPeriodTable = (props) => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {/* s.scatterObs */}
-                      <ScatterInput onChange={refetchObservations} date={date} observatory={userObservatory} count={s.scatterObs} species={s.species}/>
+                      <LocalInput onChange={refetchObservations} date={date} dataType="scatter" observatory={userObservatory} count={s.scatterObs} species={s.species}/>
                     </StyledTableCell>
                   </StyledTableRow>
                 )

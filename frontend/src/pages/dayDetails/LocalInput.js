@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { TextField, makeStyles, CircularProgress } from "@material-ui/core";
-import { updateLocalObservation } from "../../services";
+import { updateLocalObservation, updateScatterObservation } from "../../services";
 import PropTypes from "prop-types";
+
 const useStyles = makeStyles({
   container: {
     display: "flex",
@@ -16,37 +17,39 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = (props) => {
+const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
 
-  const [date] = useState(props.date);
-  const [observatory] = useState(props.observatory);
-  const [value, setValue] = useState(props.count);
-  const [species] = useState(props.species);
-  const [gau] = useState(props.gau);
+  const [value, setValue] = useState(count);
   const [showCircularProgress, setShowCircularProgress] = useState(false);
 
   const classes = useStyles();
 
   const handleInput = async (event) => {
-    console.log("event: ", event);
+    event.preventDefault();
     setShowCircularProgress(true);
     setValue(event.target.value);
+    //onChange();
     try {
-      await updateLocalObservation(date, observatory, species, event.target.value, gau);
+      if (dataType.includes("local")) {
+        await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
+      }
+      if (dataType === "scatter") {
+        await updateScatterObservation(date, observatory, species, event.target.value);
+      }
     } catch (error) {
       console.log("error: ", error);
       alert("Tallennus epäonnistui!");
     }
     setTimeout(() => {
-      props.onChange();
       setShowCircularProgress(false);
+      onChange();
     }, 700);
   };
 
   return(
     <div className={classes.container}>
       {showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />}
-      <TextField id="standard-basic" className={classes.textInput}
+      <TextField id="standard-basic" name={dataType} className={classes.textInput}
         variant="standard" type="number" size="small" value={value} species={species} onChange={(event) => handleInput(event)} InputProps={{
           inputProps: {
             min: 0
@@ -59,10 +62,10 @@ const LocalInput = (props) => {
 export default LocalInput;
 
 LocalInput.propTypes = {
-  date: PropTypes.any,
+  date: PropTypes.string,
   observatory: PropTypes.string,
-  count: PropTypes.any,
-  species: PropTypes.any,
-  gau: PropTypes.any,
+  count: PropTypes.number,
+  species: PropTypes.string,
+  dataType: PropTypes.string,
   onChange: PropTypes.any
 };

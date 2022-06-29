@@ -12,10 +12,10 @@ describe("FirstpageFieldsAndModification", function () {
     cy.contains("Havainnoija(t)");
     cy.get("#catches-header").contains("Ei pyydyksiä");
     cy.get("#comment-header").contains("Ei kommentteja");
-    cy.get("#activity-header").contains("Ei havaintoaktiivisuusmerkintöjä");
+    cy.get("#activity-header").contains("Ei havainnointiaktiivisuusmerkintöjä");
 
     cy.get("#comment-header").click();
-    cy.contains("Havainto- ja pyydyskommentit");
+    cy.contains("Havainnointi- ja pyydyskommentit");
     cy.get("#activity-header").click();
     cy.contains("Vakiohavainnointi");
     cy.contains("Gåulla käynti");
