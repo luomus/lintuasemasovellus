@@ -192,11 +192,15 @@ const ObsPeriodTable = (props) => {
     setExtendedSummary(
       generateExtendedSummary(species)
     );
-  }, [summary, speciesListType]);
+  }, [summary]);
 
   useEffect(() => {
     filterSummary();
-  }, [extendedSummary, birdsWithObsFilter, textFilter]);
+  }, [extendedSummary]);
+
+  useEffect(() => {
+    refetchObservations();
+  }, [birdsWithObsFilter, textFilter, speciesListType]);
 
   const filterSummary = () => {
     setFilteredSummary(
