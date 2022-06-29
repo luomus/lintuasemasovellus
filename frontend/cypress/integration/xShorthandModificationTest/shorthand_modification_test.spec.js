@@ -7,6 +7,11 @@ const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 const shorthandModified = "10:00\ngrugru 1/2 W\n12:00";
 
+const navigateToDay = (day) => {
+  cy.get("#navigationbar").click();
+  cy.get("#showdays").click();
+  cy.contains(date).click();
+}
 
 describe("ShorthandModification", function () {
 
@@ -32,12 +37,13 @@ describe("ShorthandModification", function () {
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
     cy.wait(1000);
+    cy.get("#navigationbar").click();
+    cy.get("#showdays").click();
     cy.contains(date);
-
   });
 
   it("Shorthand modification window can be clicked", function () {
-    cy.contains(date).click();
+    navigateToDay(date);
     cy.contains("Muokkaa").click();
     cy.contains("Tallenna");
     cy.contains("Peruuta");
@@ -47,7 +53,7 @@ describe("ShorthandModification", function () {
   });
 
   it("Shorthand modification windows selections for type and location can be made", function () {
-    cy.contains(date).click();
+    navigateToDay(date);
     cy.contains("Muokkaa").click();
     cy.get("#selectLocationInModification").click().get("#Bunkkeri").click();
     cy.get("#selectTypeInModification").click().get("#Vakio").click();
@@ -57,7 +63,8 @@ describe("ShorthandModification", function () {
   });
 
   it("In shorthand modification shorthand can be modified and saved", function () {
-    cy.contains(date).click();
+    navigateToDay(date);
+
     cy.contains("Muokkaa").click();
     cy.get("#selectTypeInModification").click().get("#Vakio").click();
     cy.get("#selectLocationInModification").click().get("#Bunkkeri").click();
