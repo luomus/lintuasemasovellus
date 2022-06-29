@@ -22,8 +22,9 @@ const Row = ({ s, date, userObservatory }) => {
     },
   }))(TableCell);
 
-  const [local1, setLocal1] = useState(s.localOther);
-  const [local2, setLocal2] = useState(s.localGåu);
+  const [localOther, setLocalOther] = useState(s.localOther);
+  const [localGau, setLocalGau] = useState(s.localGåu);
+  const [scatterObs, setScatterObs] = useState(s.scatterObs);
 
   return (
     <>
@@ -36,19 +37,19 @@ const Row = ({ s, date, userObservatory }) => {
           : <>{s.species}</>}
       </StyledTableCell>
       <StyledTableCell name="localTotal" align="right">
-        {local1+local2}
+        {localOther+localGau}
         {/*s.totalLocal*/}
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localOther} */}
-        <LocalInput onChange={setLocal1} date={date} dataType="localOther" observatory={userObservatory} count={local1} species={s.species} />
+        <LocalInput onChange={setLocalOther} date={date} dataType="localOther" observatory={userObservatory} count={localOther} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localGåu} */}
-        <LocalInput onChange={setLocal2} date={date} dataType="localGau" observatory={userObservatory} count={local2} species={s.species} />
+        <LocalInput onChange={setLocalGau} date={date} dataType="localGau" observatory={userObservatory} count={localGau} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right" name="migrantTotal" className="dotted">
-        {s.allMigration}
+        {s.constMigration + s.nightMigration + s.otherMigration + scatterObs}
       </StyledTableCell>
       <StyledTableCell align="right">
         {s.constMigration}
@@ -61,7 +62,7 @@ const Row = ({ s, date, userObservatory }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* s.scatterObs */}
-        <LocalInput onChange={setLocal1} date={date} dataType="scatter" observatory={userObservatory} count={s.scatterObs} species={s.species} />
+        <LocalInput onChange={setScatterObs} date={date} dataType="scatter" observatory={userObservatory} count={scatterObs} species={s.species} />
       </StyledTableCell>
     </>
   );
