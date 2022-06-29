@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { TextField, makeStyles, CircularProgress } from "@material-ui/core";
+import React/*, { useState }*/ from "react";
+import { TextField, makeStyles/*, CircularProgress*/ } from "@material-ui/core";
 import { updateLocalObservation, updateScatterObservation } from "../../services";
 import PropTypes from "prop-types";
 
@@ -19,39 +19,39 @@ const useStyles = makeStyles({
 
 const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
 
-  const [showCircularProgress, setShowCircularProgress] = useState(false);
+  //const [showCircularProgress, setShowCircularProgress] = useState(false);
 
   const classes = useStyles();
 
   const handleInput = async (event) => {
     event.preventDefault();
-    onChange(parseInt(event.target.value));
-    setTimeout(() => {
-      setShowCircularProgress(true);
-    }, 1500);
-
-    try {
-      if (dataType.includes("local")) {
-        await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
+    if (parseInt(event.target.value) !== count) {
+      onChange(parseInt(event.target.value));
+      //setTimeout(() => {
+      // setShowCircularProgress(true);
+      //}, 1500);
+      try {
+        if (dataType.includes("local")) {
+          await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
+        }
+        if (dataType === "scatter") {
+          await updateScatterObservation(date, observatory, species, event.target.value);
+        }
+      } catch (error) {
+        setTimeout(() => {
+          console.log("error: ", error);
+          alert("Tallennus epäonnistui!");
+        }, 1000);
       }
-      if (dataType === "scatter") {
-        await updateScatterObservation(date, observatory, species, event.target.value);
-      }
-    } catch (error) {
-      setTimeout(() => {
-        console.log("error: ", error);
-        alert("Tallennus epäonnistui!");
-      }, 1000);
+      //setTimeout(() => {
+      //  setShowCircularProgress(false);
+      //}, 2000);
     }
-    setTimeout(() => {
-      setShowCircularProgress(false);
-      onChange();
-    }, 3000);
   };
 
   return (
     <div className={classes.container}>
-      {showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />}
+      {/*showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />*/}
       <TextField id="standard-basic" name={dataType} className={classes.textInput}
         variant="standard" type="number" size="small" species={species} onBlur={(event) => handleInput(event)} InputProps={{
           inputProps: {

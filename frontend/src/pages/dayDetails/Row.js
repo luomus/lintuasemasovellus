@@ -22,8 +22,8 @@ const Row = ({ s, date, userObservatory }) => {
     },
   }))(TableCell);
 
-  const [localOther, setLocalOther] = useState(s.localOther);
-  const [localGau, setLocalGau] = useState(s.localGåu);
+  const [localOther, setLocalOther] = useState(parseInt(s.localOther));
+  const [localGau, setLocalGau] = useState(parseInt(s.localGåu));
   const [scatterObs, setScatterObs] = useState(s.scatterObs);
 
   return (
@@ -37,7 +37,7 @@ const Row = ({ s, date, userObservatory }) => {
           : <>{s.species}</>}
       </StyledTableCell>
       <StyledTableCell name="localTotal" align="right">
-        {localOther+localGau}
+        {localOther + localGau}
         {/*s.totalLocal*/}
       </StyledTableCell>
       <StyledTableCell align="right">
