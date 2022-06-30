@@ -16,7 +16,7 @@ const AntTabs = withStyles({
 
 const AntTab = withStyles((theme) => ({
   root: {
-    textTransform: "none",
+    textTransform: "uppercase",
     minWidth: 72,
     fontWeight: theme.typography.fontWeightRegular,
     fontFamily: [
