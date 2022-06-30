@@ -11,6 +11,8 @@ Käynnistääksesi sovelluksen siten, että samalla asentuu tarvittavat ohjelman
 
 `. install-start.sh`
 
+HUOM: Voi olla helpompaa tehdä install-start.sh:n komennot itse komentorivillä yksi kerrallaan. Jos käytät condan ympäristöä, muista aktivoida se pythonin oman ympäristön sijasta. Scriptiä pääsee katsomaan lähempää vaikka sovelluksen github-sivulla.
+
 Jos koneellasi on jo asennettuna kaikki tarpeellinen, käynnistyy sovellus komennolla
 `. start.sh`
 
@@ -32,6 +34,7 @@ Jotta frontendissä tehdyt muutokset näkyisivät suoraan, tulee frontend ja bac
 
 Backendin voi käynnistää frontend-kansiosta käsin komennolla
 `npm run start-api`. Tämä käynnistää sen porttiin 5000. Frontendin voi sitten käynnistää frontend-kansiossa porttiin 3000 komennolla `npm start`.
+Jos `npm run start-api` ei toimi, saman asian voi ajaa avaamalla lisää terminaaleja ja käynnistämällä backend omassa kansiossaan.
 
 Backendin ja frontendin täytyy olla samanaikaisesti päällä, eli ne tulee käynnistää komentorivillä eri välilehdille. Nyt kun frontendiin tekee muutoksia, ne heijastuvat heti portissa 3000.
 
