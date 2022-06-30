@@ -17,6 +17,7 @@ import { setDefaultActions, setDailyActions } from "../../reducers/dailyActionsR
 import { setCatches, addOneCatchRow, setNewCatchRow } from "../../reducers/catchRowsReducer";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import Notification from "../../globalComponents/Notification";
+import AntTabs from "./AntTabs";
 
 import {
   getDaysObservationPeriods,
@@ -509,24 +510,19 @@ export const DayDetails = ({ userObservatory }) => {
                   </Typography>
               }
             </Grid>
-
-
-            <Grid item xs={6}>
-              <Box display="flex" justifyContent="flex-start">
-                <Button id="speciesButton" className={classes.button} color="primary" variant="contained" disabled={mode === "speciesTable"} onClick={() => setMode("speciesTable")}>
-                  {t("summary")}
-                </Button>
-                <Button id="periodsButton" className={classes.button} color="primary" variant="contained" disabled={mode === "obsPeriodTable"} onClick={() => setMode("obsPeriodTable")}>
-                  {t("obsPeriods")}
-                </Button>
-              </Box>
-            </Grid>
-            <Grid item xs={6}>
-              <Box display="flex" justifyContent="flex-end">
-                <Button variant="contained" color="primary" onClick={() => handleEditShorthandOpen()}>
-                  {t("editObservations")}
-                </Button>{" "}
-              </Box>
+            <Grid container style={{ justifyContent: "space-between" }}>
+              <Grid item xs={1}>
+                <Box display="flex" justifyContent="flex-start">
+                  <AntTabs setMode={setMode}/>
+                </Box>
+              </Grid>
+              <Grid item xs={5}>
+                <Box display="flex" justifyContent="flex-end">
+                  <Button variant="contained" color="primary" onClick={() => handleEditShorthandOpen()}>
+                    {t("editObservations")}
+                  </Button>{" "}
+                </Box>
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>

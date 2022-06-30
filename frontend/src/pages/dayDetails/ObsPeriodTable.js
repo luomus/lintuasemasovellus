@@ -46,7 +46,7 @@ const ObsPeriodTable = (props) => {
     filterContainer: {
       marginBottom: "5px",
       justifyContent: "flex-start"
-    }
+    },
   }));
 
   const classes = useStyles();
