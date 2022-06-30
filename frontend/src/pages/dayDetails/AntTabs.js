@@ -16,9 +16,10 @@ const AntTabs = withStyles({
 
 const AntTab = withStyles((theme) => ({
   root: {
+    color: "black",
     textTransform: "uppercase",
     minWidth: 72,
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: 700,
     fontFamily: [
       "-apple-system",
       "BlinkMacSystemFont",
