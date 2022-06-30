@@ -246,7 +246,7 @@ const ObsPeriodTable = (props) => {
       let index = Array.from(elements).findIndex(a => a === e.target);
       let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
       elements.item(nextIndex)?.focus();
-      elements.item(nextIndex)?.scrollIntoView();
+      elements.item(nextIndex)?.select();
     }
   };
 
@@ -298,8 +298,8 @@ const ObsPeriodTable = (props) => {
             />
           </Grid>
         </Grid>
-        <TableContainer>
-          <Table className={classes.table} id="speciesTable">
+        <TableContainer style={{ maxHeight: "80vh" }}>
+          <Table className={classes.table} id="speciesTable" stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell >{t("species")}</StyledTableCell>
