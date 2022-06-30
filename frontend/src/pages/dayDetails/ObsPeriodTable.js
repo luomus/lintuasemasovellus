@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, TableCell, withStyles, makeStyles, Typography,
-  IconButton, FormControlLabel, Checkbox, TextField, Grid,
-  FormControl, Select, MenuItem, InputLabel, InputAdornment
+  IconButton, FormControlLabel, Checkbox, Grid,
+  FormControl, Select, MenuItem, InputLabel
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
-import SearchIcon from "@material-ui/icons/Search";
-import BackspaceIcon from "@material-ui/icons/Backspace";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";
@@ -15,6 +13,7 @@ import EditObsPeriod from "../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
 import { defaultBirds, uniqueBirds } from "../../globalConstants";
 import Row from "./Row";
+import SearchBar from "../../globalComponents/SearchBar";
 
 const ObsPeriodTable = (props) => {
 
@@ -84,7 +83,6 @@ const ObsPeriodTable = (props) => {
   const [obsPeriod, setObsPeriod] = useState({});
   const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(true);
   const [textFilter, setTextFilter] = useState("");
-  const [searchField, setSearchField] = useState("");
   const [speciesListType, setSpeciesListType] = useState("defaults");
   const [filteredSummary, setFilteredSummary] = useState(summary);
   const [extendedSummary, setExtendedSummary] = useState(summary);
@@ -189,17 +187,6 @@ const ObsPeriodTable = (props) => {
     setBirdsWithObsFilter(!birdsWithObsFilter);
   };
 
-  const handleTextFilterChange = (event) => {
-    if (event.key === "Enter") {
-      setTextFilter(searchField);
-    }
-  };
-
-  const handleClearTextFilterButtonPress = () => {
-    setSearchField("");
-    setTextFilter("");
-  };
-
   const handleSpeciesListChange = (event) => {
     setSpeciesListType(event.target.value);
   };
@@ -236,7 +223,9 @@ const ObsPeriodTable = (props) => {
       [...extendedSummary]
         .filter(s =>
           (s.allMigration + s.totalLocal) > (birdsWithObsFilter ? 0 : -1)
-          && s.species.toLowerCase().includes(textFilter.toLowerCase())));
+          && s.species.toLowerCase().includes(textFilter.toLowerCase())
+        )
+    );
   };
 
   useEffect(() => {
@@ -273,27 +262,9 @@ const ObsPeriodTable = (props) => {
           className={classes.filterContainer}
         >
           <Grid item xs={2}>
-            <TextField
-              rows={1}
-              multiline={false}
-              id="textFilter"
-              fullWidth={true}
-              label={t("speciesTextFilter")}
-              onKeyDown={handleTextFilterChange}
-              onChange={(event) => setSearchField(event.target.value)}
-              value={searchField}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton id="searchButton" size="small" onClick={() => setTextFilter(searchField)} variant="contained" color="primary">
-                      <SearchIcon />
-                    </IconButton>
-                    <IconButton id="clearSearchButton" size="small" onClick={handleClearTextFilterButtonPress} variant="contained" color="primary">
-                      <BackspaceIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
+            <SearchBar
+              setTextFilter={setTextFilter}
+              defaultValue={textFilter}
             />
           </Grid>
           <Grid item xs={2}>
@@ -352,7 +323,7 @@ const ObsPeriodTable = (props) => {
                 )
               }
             </TableBody>
-            {/*
+            {/* This part looks unnecessary, result of copy-paste from below?
             <ObservationPeriod
               obsPeriod={obsPeriod}
               open={modalOpen}
