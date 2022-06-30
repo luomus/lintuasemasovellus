@@ -48,7 +48,7 @@ def checkPeriod(dayId, type, gau):
     #We try to find an obsperiod with the given parameters and return True if it is found, False otherwise
     if not gau:
         obserid=getObservatoryId("Hangon_Lintuasema")
-        loc1id=getLocationId("Paikallinen", obserid)
+        loc1id=getLocationId("Bunkkeri", obserid)
         d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId, location_id=loc1id, type_id=typid).first()
     else:
         obserid=getObservatoryId("Hangon_Lintuasema")
