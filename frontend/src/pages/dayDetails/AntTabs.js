@@ -74,8 +74,8 @@ export default function CustomizedTabs({ setMode }) {
     <div className={classes.root}>
       <div className={classes.demo1}>
         <AntTabs value={value} onChange={handleChange} aria-label="ant-tab">
-          <AntTab label="LAJIT" />
-          <AntTab label="JAKSOT" />
+          <AntTab id="speciesButton" label="LAJIT" />
+          <AntTab id="periodsButton" label="JAKSOT" />
         </AntTabs>
         <Typography className={classes.padding} />
       </div>
