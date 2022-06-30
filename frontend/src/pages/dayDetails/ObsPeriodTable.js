@@ -46,7 +46,7 @@ const ObsPeriodTable = (props) => {
     filterContainer: {
       marginBottom: "5px",
       justifyContent: "flex-start"
-    }
+    },
   }));
 
   const classes = useStyles();
@@ -245,8 +245,12 @@ const ObsPeriodTable = (props) => {
     if (e.key === "Enter") {
       let index = Array.from(elements).findIndex(a => a === e.target);
       let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
-      elements.item(nextIndex)?.focus();
-      elements.item(nextIndex)?.scrollIntoView();
+      let el = elements.item(nextIndex);
+      if(!el) return;
+      el.focus();
+      window.scrollTo({
+        top: el.getBoundingClientRect().top + window.pageYOffset - 150,
+      });
     }
   };
 
