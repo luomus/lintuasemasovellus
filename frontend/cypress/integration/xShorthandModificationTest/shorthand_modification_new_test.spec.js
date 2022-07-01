@@ -69,6 +69,9 @@ describe("ShorthandModificationPerObservationPeriod", function () {
     cy.contains("Yömuutto");
     cy.contains("Piha");
     cy.contains('Lajit').click();
+    cy.wait(1000);
+    cy.get("#onlyObservationsFilter").check();
+    cy.wait(1000);
     cy.contains("GRUGRU");
   });
 });

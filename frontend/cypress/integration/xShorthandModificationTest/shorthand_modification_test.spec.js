@@ -79,6 +79,8 @@ describe("ShorthandModification", function () {
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
     cy.wait(5000);
+    cy.get("#onlyObservationsFilter").check();
+    cy.wait(1000);
     cy.contains("GRUGRU");
   });
 });
