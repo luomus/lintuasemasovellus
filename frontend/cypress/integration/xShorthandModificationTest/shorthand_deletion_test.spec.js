@@ -46,6 +46,9 @@ describe("ShorthandDeletion", function () {
     cy.get("#confirmButton").click({ force: true });
     cy.wait(5000);
     cy.contains('Lajit').click();
+    cy.wait(1000);
+    cy.get("#onlyObservationsFilter").check();
+    cy.wait(1000);
     cy.get("#speciesTable").should("not.contain", "SOMMOL");
     cy.contains("GRUGRU");
     cy.contains("ANACRE");
@@ -62,6 +65,8 @@ describe("ShorthandDeletion", function () {
     cy.wait(1000);
     cy.get("#confirmButton").click({ force: true });
     cy.wait(5000);
+    cy.get("#onlyObservationsFilter").check();
+    cy.wait(1000);
     cy.get("#speciesTable").should("not.contain", "GRUGRU");
     cy.get("#speciesTable").should("not.contain", "ANACRE");
   });
