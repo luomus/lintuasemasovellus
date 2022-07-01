@@ -29,6 +29,7 @@ from datetime import datetime
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
+  # This is used for taking the given shorthand and turning it into an observatory day, observation periods and observations. 
   # ARRIVING DATA:
   # {
   #    day, comment, observers, observatory, selectedactions, userID,
@@ -58,13 +59,8 @@ def add_everything():
         catches_with_dayId = catches
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
-    #print(req['observationPeriods'])
-    #print(type(req['observationPeriods']))
 
-    #Create an empty obsperiod if one does not already exist
-    #editLocalObs(dayId, 'FRICOE', 99, req['userID'])
-
-    #Save observation periods
+    #Save observation periods 
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
         obsp = Observationperiod(
@@ -77,7 +73,6 @@ def add_everything():
 
         # observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
-        #print(obsperiod['shorthandBlock'])
         # Save original shorthand block of observation period
         shorthand = Shorthand(shorthandblock=obsperiod['shorthandBlock'], observationperiod_id=obspId)
         db.session().add(shorthand)
@@ -127,8 +122,7 @@ def add_everything():
 @login_required
 def update_local():
     req=request.get_json()
-    print(req)
-    day=datetime.strptime(req['date'], '%d.%m.%Y')
+    day=datetime.strptime(req['date'], '%d.%m.%Y') #The frontend returns us the date which we use with the observatory name to get the observatoryday id
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
     editLocalObs(obsday_id, obserid, req['species'], req['count'], req['gau'])
@@ -137,9 +131,9 @@ def update_local():
 @bp.route('/api/updateScatterObservation', methods=['POST']) #Scatter observation = hajahavainto, a more accurate English term would be miscellaneous observation
 @login_required
 def update_scatter():
+    #This is almost exactly the same as above
     req=request.get_json()
-    print(req)
-    day=datetime.strptime(req['date'], '%d.%m.%Y')
+    day=datetime.strptime(req['date'], '%d.%m.%Y') 
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
     editScatterObs(obsday_id, obserid, req['species'], req['count'])

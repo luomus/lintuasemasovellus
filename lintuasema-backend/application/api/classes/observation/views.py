@@ -39,9 +39,4 @@ def getSummary(day_id):
     ret = getDaySummary(day_id)
   
     return jsonify(ret)
-  
-@bp.route("/api/updateObservation/<shorthand_id>", methods=["POST"])
-@login_required
-def updateObservationBySorthandId(shorthand_id):
-    ret = updateObservation(shorthand_id)
-    return jsonify(ret)
+

@@ -55,10 +55,8 @@ def checkPeriod(dayId, type, gau):
         loc2id=getLocationId("Luoto Gåu", obserid)
         d=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=dayId, location_id=loc2id, type_id=typid).first()
     if d is not None:
-        print("checkperiod with dayId:",dayId, ": True")#print statements are just for clarity during development
         return True
     else:
-        print("checkperiod with dayId:",dayId, ": False")
         return False
 
 def createEmptyObsPeriods(dayId):
