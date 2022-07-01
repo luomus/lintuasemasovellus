@@ -3,8 +3,8 @@
 _Huomioita kesältä 2022._
 
 Sovellus käyttää kahta frontendiin määriteltyä tiedostoa, jonka perusteella päätellään käytettävissä olevat lintulajit: 
-1. [birds.json](../frontend/src/birds.json) ja
-2. [defaultBirds.json](../frontend/src/defaultBirds.json).
+1. [birds.json](../../frontend/src/birds.json) ja
+2. [defaultBirds.json](../../frontend/src/defaultBirds.json).
 
 Molemmissa tiedostoissa sekä itse sovelluksessa käytetään lajien tunnisteina näiden kuusikirjaimisia lyhenteitä. Esimerkiksi kyhmyjoutsenta vastaava tunniste on "CYGOLO", joka tulee tämän tieteellisestä nimestä "Cygnus olor". Tämä vastaa Luomuksen käytössä olevien asemakohtaisten lajilistojen (esim. _Halias_sp_v1.6.csv_) kentän `Species_Abb` tietoa. 
 ![image](https://user-images.githubusercontent.com/47885648/176842971-6c828b67-75c6-481c-a552-2c27b8d1f482.png)
@@ -92,7 +92,7 @@ Tiedot on poimittu lähdemateriaalista kentän `Peruslaji` avulla suodattamalla 
 ![image](https://user-images.githubusercontent.com/47885648/176873860-f0d330bf-3950-4c1e-8ca3-95ed2f3bbdfc.png)
 Huomaa, että jokaista käytettävissä olevaa asemaa vastaavalle tunnisteelle on löydyttävä vähintään tyhjä lista kuten nyt Jurmon tapauksessa on (`"Jurmon_asema: []"`).
 
-Tiedoston sisältö luetaan tiedostossa [globalConstans.js](../frontend/src/globalConstants.js) ja välitetään muun sovelluksen osien käytettäväksi. Listaa tarvitaan päiväkohtaisen näkymän lajilistauksen suodattamisessa, mikäli käyttäjä haluaa nähdä vain aseman peruslajit tai muut kuin peruslajit.
+Tiedoston sisältö luetaan tiedostossa [globalConstans.js](../../frontend/src/globalConstants.js) ja välitetään muun sovelluksen osien käytettäväksi. Listaa tarvitaan päiväkohtaisen näkymän lajilistauksen suodattamisessa, mikäli käyttäjä haluaa nähdä vain aseman peruslajit tai muut kuin peruslajit.
 
 ## Huomioita
 
@@ -110,7 +110,7 @@ Tällä hetkellä sovelluksessa on siis kaksi erillistä lajit määrittelevää
 ```
 Tosin nykyisellään ainakin peruslajit on suhteellisen helppo päivittää, kun ylimääräisiä kenttiä ei ole tässä mukana.
 
-Toisaalta, lajilista voisi yhtä hyvin olla sovelluksen backendin vastuulla, sillä siellä määritellään muut asemakohtaiset tiedot kuten havainnointipaikat ja -tyypit (kts. [locations.json](lintuasema-backend/application/locations.json)). Tiedot voisi yhtä hyvin olla myös tietokannassa omana taulunaan, jolloin se mahdollistaisi konfiguroinnin sovelluksesta käsin (edellyttäen toki tuen tähän rajapintaan sekä käyttöliittymään).
+Toisaalta, lajilista voisi yhtä hyvin olla sovelluksen backendin vastuulla, sillä siellä määritellään muut asemakohtaiset tiedot kuten havainnointipaikat ja -tyypit (kts. [locations.json](../../lintuasema-backend/application/locations.json)). Tiedot voisi yhtä hyvin olla myös tietokannassa omana taulunaan, jolloin se mahdollistaisi konfiguroinnin sovelluksesta käsin (edellyttäen toki tuen tähän rajapintaan sekä käyttöliittymään).
 
 ### Sisällöstä
 
