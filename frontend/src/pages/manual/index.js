@@ -97,6 +97,7 @@ export const UserManual = () => {
         <br />
         Paikallisia havaintoja ja hajahavaintoja voi muokata lajikohtaisesti syöttämällä lajin rivillä oleviin kenttiin halutut arvot. Arvot tallentuvat tietokantaan, kun käyttäjä klikkaa pois kentästä.
         <br />
+        <br />
         <Typography variant="h6" component="h2" >
           Päivän ja havaintojen tietojen muokkaaminen
         </Typography>
