@@ -61,4 +61,6 @@ Syksyllä 2020 toteutettiin tietokanta ja käyttöliittymä tietojen kirjaamisee
 
 [Jatkuva käyttöönotto - CI/CD Pipeline](/documentation/developmentInstructions/continuousDeployment.md)
 
-[Lajien määrittelystä](/documentation/developmentInstructions/aboutDefinedSpecies.md)
+### Asema- ja lajikohtaisesta määrittelystä
+
+[Tietoa lajien määrittelystä](/documentation/developmentInstructions/aboutDefinedSpecies.md)
