@@ -62,4 +62,4 @@ yhteydessä, jolloin yksi ensimmäisistä keinoista olisi taulun indeksoinnin ta
 Me uskomme kuitenkin että huomattavaa hidastumista tuskin tulisi, sillä monet raskaimmista backendin kutsuita on toteutettu melkein täysin
  SQL komentoina, mikä nopeuttaa tiedon hakemista. 
 
-Lajimäärittelyyn liittyen on listattu huomoita sitä käsittelevässä [dokumentissa](/developmentInstructions/aboutDefinedSpecies.md##huomioita).
+Lajimäärittelyyn liittyen on listattu huomoita (konfiguroinnin kehittäminen, nisäkkäiden puute) sitä käsittelevässä [dokumentissa](./developmentInstructions/aboutDefinedSpecies.md#huomioita).
