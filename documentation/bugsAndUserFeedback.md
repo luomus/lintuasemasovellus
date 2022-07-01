@@ -46,7 +46,7 @@ Nämä löytyvät Github-repositorion Issues-välilehdeltä.
 
 > -Vakiota voi staijata kahdessa eri paikassa samaan aikaan. Pitäisi saada tehdä vakiota vain yhdessä paikassa.
 
-##Kesän 2022 ryhmän keskeneräisyydet ja kehitysehdotukset
+## Kesän 2022 ryhmän keskeneräisyydet ja kehitysehdotukset
 
 Kesän 2022 ryhmän ylläpitämä backlog löytyy [Trellosta](https://trello.com/b/8FSrc8SY/backlog). Kohdassa "Product Backlog" on listattu kortit kullekin avoimeksi jääneelle kehitysidealle tai puutteelle. Nämä on koostettu arkistojen (edellisen ryhmän backlog, Github issuet), asiakkaan välittämän palautteen ja projektin aikana tehtyjen havaintojen pohjalta.
 
