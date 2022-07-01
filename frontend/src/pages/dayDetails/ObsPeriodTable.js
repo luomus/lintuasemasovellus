@@ -228,27 +228,6 @@ const ObsPeriodTable = (props) => {
     );
   };
 
-  useEffect(() => {
-    let elements = document.querySelectorAll("#standard-basic");
-    elements.forEach(element => {
-      element.addEventListener("keydown", handleKeyDownEvent);
-    });
-    return () => {
-      elements.forEach(element => {
-        element.removeEventListener("keydown", handleKeyDownEvent);
-      });
-    };
-  }, [filteredSummary, rowsPerPage, page, speciesListType]);
-
-  const handleKeyDownEvent = e => {
-    let elements = document.querySelectorAll("#standard-basic");
-    if (e.key === "Enter") {
-      let index = Array.from(elements).findIndex(a => a === e.target);
-      let nextIndex = e.shiftKey ? index - 3 : index + 3; // Change to number of elements that are editable per row
-      elements.item(nextIndex)?.focus();
-      elements.item(nextIndex)?.select();
-    }
-  };
 
   if (mode === "speciesTable") {
     return (

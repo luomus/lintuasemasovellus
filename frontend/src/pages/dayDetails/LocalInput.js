@@ -1,4 +1,4 @@
-import React/*, { useState }*/ from "react";
+import React /*, { useState }*/ from "react";
 import { TextField, makeStyles/*, CircularProgress*/ } from "@material-ui/core";
 import { updateLocalObservation, updateScatterObservation } from "../../services";
 import PropTypes from "prop-types";
@@ -10,14 +10,14 @@ const useStyles = makeStyles({
     justifyContent: "flex-end",
   },
   textInput: {
-    width: "50px",
+    width: "75px",
   },
   loadingCircle: {
     marginRight: "20px"
   }
 });
 
-const LocalInput = ({ date, observatory, count, species, dataType, onChange }) => {
+const LocalInput = ({ date, observatory, count, species, dataType, onChange, inputRef }) => {
 
   //const [showCircularProgress, setShowCircularProgress] = useState(false);
 
@@ -25,7 +25,7 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
 
   const handleInput = async (event) => {
     event.preventDefault();
-    if (parseInt(event.target.value) !== count) {
+    if (parseInt(event.target.value) !== count && Number.isInteger(parseInt(event.target.value))) {
       onChange(parseInt(event.target.value));
       //setTimeout(() => {
       // setShowCircularProgress(true);
@@ -38,10 +38,8 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
           await updateScatterObservation(date, observatory, species, event.target.value);
         }
       } catch (error) {
-        setTimeout(() => {
-          console.log("error: ", error);
-          alert("Tallennus epäonnistui!");
-        }, 1000);
+        console.log("error: ", error);
+        alert("Tallennus epäonnistui!");
       }
       //setTimeout(() => {
       //  setShowCircularProgress(false);
@@ -52,11 +50,11 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange }) =
   return (
     <div className={classes.container}>
       {/*showCircularProgress && <CircularProgress className={classes.loadingCircle} size={30} />*/}
-      <TextField id="standard-basic" name={dataType} className={classes.textInput}
-        variant="standard" type="number" size="small" species={species} onBlur={(event) => handleInput(event)} InputProps={{
+      <TextField id="standard-basic" name={dataType} className={classes.textInput} ref={inputRef}
+        variant="standard" type="number" size="small" species={species} onBlur={handleInput} InputProps={{
           inputProps: {
             min: 0,
-            defaultValue: count
+            defaultValue: count,
           }
         }} />
     </div>
@@ -72,5 +70,6 @@ LocalInput.propTypes = {
   species: PropTypes.string,
   dataType: PropTypes.string,
   onChange: PropTypes.any,
-  total: PropTypes.number
+  total: PropTypes.number,
+  inputRef: PropTypes.any,
 };
