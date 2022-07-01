@@ -79,6 +79,7 @@ export const UserManual = () => {
           <br /><br />
           Jos pikakirjoituslomakkeessa on virheitä, sovellus ilmoittaa tästä keltaisella varoitusikkunalla ja pyytää tarkistamaan pikakirjoituksen oikeellisuuden. Varoitusikkunassa kerrotaan, millaisen virheen
           sovellus pikakirjoituksessa havaitsi. Muiden kenttien virheistä ilmoitetaan kyseisen kentän yhteydessä punaisella varoitusvärillä. Tallenna-nappi aktivoituu painettavaksi, kun havaintolomakkeessa ei ole virheitä ja vaaditut kentät on täytetty. Napin painalluksen myötä päivä ja siihen liittyvät tiedot tallentuvat tietokantaan.
+          Tällä hetkellä (01.07.2022) sovellus antaa vääränlaisen virheilmoituksen, jos havainnointijaksoa aloittavan kellonajan perään laitetaan välilyöntejä tai muuta tyhjää tilaa. Jos pikakirjoitus tuntuu olevan oikein ja sovellus herjaa kuitenkin, varmista, että kellonaikojen perässä ei ole välilyöntejä ja poista backspacella tyhjät merkit.
           <br /><br />
         </div>
         <Typography variant="h6" component="h2" >
@@ -90,7 +91,12 @@ export const UserManual = () => {
         <br /> <br />Lajit-taulukossa näkyvät kaikki kyseisenä päivänä havaitut lajit kultakin havaintojaksotyypiltä. Jaksot-taulukossa taas näkyvät kunkin jakson tiedot kyseiseltä päivältä. Jaksoa klikkaamalla aukeaa ikkuna, jossa on yhteenveto jakson aikana tehdyistä havainnoista. Ikkuna sulkeutuu klikkaamalla sen ulkopuolelle. Jaksorivin lopussa on myös kynäikoni, josta kyseistä havaintojaksoa pääsee muokkaamaan.
         <br />
         <br />
-
+        <Typography variant="h6" component="h2" >
+          Paikallisten ja hajahavaintojen muokkaaminen
+        </Typography>
+        <br />
+        Paikallisia havaintoja ja hajahavaintoja voi muokata lajikohtaisesti syöttämällä lajin rivillä oleviin kenttiin halutut arvot. Arvot tallentuvat tietokantaan, kun käyttäjä klikkaa pois kentästä.
+        <br />
         <Typography variant="h6" component="h2" >
           Päivän ja havaintojen tietojen muokkaaminen
         </Typography>

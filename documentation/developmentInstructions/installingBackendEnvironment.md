@@ -30,3 +30,10 @@ Jonka jälkeen virtuaaliympäristön voi avata komennolla conda activate <nimi>
 
 Jos käytät condan ympäristöä, mene ympäristöön ja suorita pip install -r requirements.txt, jolloin saat kaikki tarvittavat pip-paketit. Älä käytä install.sh-skriptiä, jos käytät condan ympäristöä.
 Muista, että paketit on nyt asennettu conda-ympäristöösi, eli jos sovellus herjaa pakettien puuttumisesta, paketit on todennäköisesti asennettu väärään ympäristöön tai et ole suorituksen aikana oikeassa ympäristössä.
+
+Jos tietokanta ei tunnu toimivan, muuta lintuasemasovellus.py:ssä oleva rivi db_type = os.environ.get("DB_TYPE", "oracle") => db_type = os.environ.get("oracle"),
+jos Oracle on asennettu. Muussa tapauksessa muuta get-kutsu mihin tahansa muuhun, jolloin se kutsuu itsestään sqliteä. Jos tietokannan pitäisi toimia, mutta kirjautuessa
+sovellus ohjaa takaisin kirjautumissivulle, mene osoiteriviin ja muuta sieltä localhostin jälkeinen portti 3000 -> 5000. Tämä virhe tapahtuu onneksi vain lokaalisti.
+
+HUOM: sovellukseen pääsee vain valtuutetut henkilöt, joten uusien devaajien täytyy hankkia valtuudet esimerkiksi sovelluksen kirjautuessa antamien ohjeiden avulla. 
+Helpointa on varmaankin kysyä Eskolta apua.
