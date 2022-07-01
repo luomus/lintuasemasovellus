@@ -80,11 +80,13 @@ def test_emptyDayAddedWithDayCreation(app):
 #Test editing local observations
 def test_editLocalObs(app):
     obserid=getObservatoryId("Hangon_Lintuasema")
-    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
-    addDay(dayToAdd)
-    editLocalObs(1, obserid, 'SOMMOL', 37, 0)
-    obs=getObservationByPeriodAndSpecies(1, 'SOMMOL')
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid) 
+    addDay(dayToAdd)#new day is added which creates the observationperiods for local and scatter observations
+    editLocalObs(1, obserid, 'SOMMOL', 37, 0) #local observation count for SOMMOL is edited to 37, obsday_id always starts at 1 here so we can hardcode it
+    obs=getObservationByPeriodAndSpecies(1, 'SOMMOL') #find observation based on obsperiod id and species name
     assert obs.species=='SOMMOL' and obs.total_count==37
+
+'''The 2 tests below work with the same principle as the one above.'''
 
 def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by the addDay function
     obserid=getObservatoryId("Hangon_Lintuasema")

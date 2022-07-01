@@ -12,7 +12,7 @@ def getObservationByPeriod(observationperiod_id):
     
     return ret
 
-def getObservationByPeriodAndSpecies(observationperiod_id, species):
+def getObservationByPeriodAndSpecies(observationperiod_id, species): #This function is used only to make testing easier
     observation = Observation.query.filter_by(observationperiod_id = observationperiod_id, species = species).first()
     
     return observation

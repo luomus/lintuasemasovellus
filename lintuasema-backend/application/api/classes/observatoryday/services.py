@@ -65,13 +65,13 @@ def createEmptyObsPeriods(dayId):
     be added into. The location (Gåu or not Gåu) and type (Local or Scatter) are also defined by the observation period that the observation
     goes into, which is why three periods must be created. The periods are created when a new day is made, and are hidden from the observation
     periods list on the daydetails page.'''
-    obserid=getObservatoryId("Hangon_Lintuasema")
+    obserid=getObservatoryId("Hangon_Lintuasema") #foreign keys are generally ids, so we need to grab them with the get-functions
     loc1id=getLocationId("Bunkkeri", obserid)
     loc2id=getLocationId("Luoto Gåu", obserid)
     typid=getTypeIdByName("Paikallinen")
     typid2=getTypeIdByName("Hajahavainto")
     added=False
-    if not checkPeriod(dayId, "Paikallinen", 0):
+    if not checkPeriod(dayId, "Paikallinen", 0): #checkPeriod to see if a day has this empty obsperiod. Needed mostly to create them for days that were made before the updates to addDay.
         obsp2 = Observationperiod(
         start_time=datetime(1900,1,1,0,0,0),
             end_time=datetime(1900,1,1,23,59,0),
@@ -119,12 +119,9 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
         createEmptyObsPeriods(obsday_id)#this tries to create empty obsperiods if one isn't found. acts as a backup and "shouldn't" ever be needed, because these periods should have already been made
     obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first() #find observations for this species in this specific obsperiod
     if obs: #observation already exists (=local observation for this species has already been edited)
-        print(obs.total_count)
-        print("doesex")
         obs.total_count=count #easy way to modify table entry
         db.session().commit()
     else: #observation does not exist, so we create it
-        print("doesnotex")
         #the different counts are intended for migrant observations and are not needed for local observations, so we just mark them all as unknown
         #the shorthand id is hardcoded and refers to an empty one in the database. I think it doesn't matter even if this id doesn't refer to a real
         #shorthand id, but might be worth checking if the app is not adding local observations
@@ -132,6 +129,7 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
             bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
+            #Note! account_id is actually referring to the userid column in the account table (this is not my fault).
         db.session().add(subobs)
         db.session().commit()
 
@@ -188,10 +186,10 @@ def getDays(): #Finds all days in the table
     dayObjects = Observatoryday.query.filter_by(is_deleted=0).all()
     return dayObjects
 
-def getDay(obsday_id): #Gets an entire Day object with id
+def getDay(obsday_id): #Gets an entire Day object using its id
     return Observatoryday.query.get(obsday_id)
 
-def get_day_without_id(day, observatory): #Tries to find a day without knowing the id,
+def get_day_without_id(day, observatory): #Tries to find a day without knowing the id
     if not isinstance(day, date) and not day == '0NaN.0NaN.NaN':
         day = datetime.strptime(day, '%d.%m.%Y')
     obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()

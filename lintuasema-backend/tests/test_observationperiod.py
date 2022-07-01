@@ -182,9 +182,11 @@ def test_obs_period_with_invalid_start_time_raises_value_error(app):
 
 '''Tests for adding local observations'''
 def test_adding_empty_obsperiod_when_migrants_saved(app):
+    '''Tests for checking if the requisite empty observation periods are added to the database upon day creation'''
     fields = setup_default_fields()
     add_observation_period_from_fields(fields)
     typid=getTypeIdByName("Paikallinen")
+    typid2=getTypeIdByName("Hajahavainto")
     obserid=getObservatoryId("Hangon_Lintuasema")
     loc1=getLocationId("Bunkkeri", obserid)
     loc2=getLocationId("Luoto Gåu", obserid) #GÃ¥u
@@ -196,5 +198,9 @@ def test_adding_empty_obsperiod_when_migrants_saved(app):
     fields3 = setup_fields(startTime = '0:00',
                            type_id=typid,
                            location_id=loc2)
+    assert observation_period_found(fields3) == True
+    fields3 = setup_fields(startTime = '0:00',
+                           type_id=typid2,
+                           location_id=loc1)
     assert observation_period_found(fields3) == True
 
