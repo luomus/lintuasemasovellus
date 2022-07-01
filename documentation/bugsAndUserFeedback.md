@@ -46,10 +46,9 @@ Nämä löytyvät Github-repositorion Issues-välilehdeltä.
 
 > -Vakiota voi staijata kahdessa eri paikassa samaan aikaan. Pitäisi saada tehdä vakiota vain yhdessä paikassa.
 
-
 ##Kesän 2022 ryhmän keskeneräisyydet ja kehitysehdotukset
 
-Backlog trellossa: https://trello.com/b/8FSrc8SY/backlog
+Kesän 2022 ryhmän ylläpitämä backlog löytyy [Trellosta](https://trello.com/b/8FSrc8SY/backlog). Kohdassa "Product Backlog" on listattu kortit kullekin avoimeksi jääneelle kehitysidealle tai puutteelle. Nämä on koostettu arkistojen (edellisen ryhmän backlog, Github issuet), asiakkaan välittämän palautteen ja projektin aikana tehtyjen havaintojen pohjalta.
 
 Sovellus toimii tällä hetkellä vain Hangon lintuasemalle. Ainakin locations.json - tiedostoa ja joitain backendin funktioita pitää muuttaa,
 jotta sovellus toimisi samalla tavalla esimerkiksi Jurmon asemalle. Paikallisen havainnon lisäämistä hoitavat funktiot hakevat aina 
@@ -62,3 +61,5 @@ sovelluksen tulisi toimia nopeasti myös muutaman miljoonan rivin taululla. Jos 
 yhteydessä, jolloin yksi ensimmäisistä keinoista olisi taulun indeksoinnin tarkistaminen. Etenkin observationperiod_id - kolumnin voisi indeksoida.
 Me uskomme kuitenkin että huomattavaa hidastumista tuskin tulisi, sillä monet raskaimmista backendin kutsuita on toteutettu melkein täysin
  SQL komentoina, mikä nopeuttaa tiedon hakemista. 
+
+Lajimäärittelyyn liittyen on listattu huomoita sitä käsittelevässä [dokumentissa](/developmentInstructions/aboutDefinedSpecies.md##huomioita).
