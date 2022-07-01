@@ -1,6 +1,6 @@
 # Sovelluksen käyttämistä lintulajeista
 
-_Huomioita kesältä 2022._
+_Merkintöjä kesältä 2022._
 
 Sovellus käyttää kahta frontendiin määriteltyä tiedostoa, jonka perusteella päätellään käytettävissä olevat lintulajit: 
 1. [birds.json](../../frontend/src/birds.json) ja
@@ -103,8 +103,9 @@ Tällä hetkellä sovelluksessa on siis kaksi erillistä lajit määrittelevää
 "species": {
   "abb": "CYGOLO",
   "code": "2",
-  "synonyms": "COLO",
+  "synonyms":  "COLO",
   "fin_name": "kyhmyjoutsen",
+  "default_in": "Hangon_Lintuasema",
   "..."
 }
 ```
