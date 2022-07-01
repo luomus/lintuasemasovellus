@@ -105,7 +105,8 @@ Päivää klikkaamalla päästään tarkastelemaan kyseiseen päivään liittyv�
 
 ## Paikallisten ja hajahavaintojen muokkaaminen
 
-Paikallisia havaintoja ja hajahavaintoja voi muokata lajikohtaisesti syöttämällä lajin rivillä oleviin kenttiin halutut arvot. Arvot tallentuvat tietokantaan, kun käyttäjä klikkaa pois kentästä.
+Paikallisia havaintoja ja hajahavaintoja voi muokata lajikohtaisesti syöttämällä lajin rivillä oleviin kenttiin halutut arvot. Arvot tallentuvat tietokantaan, kun kentästä poistutaan (esim. klikkaamalla pois).
+Rivien välillä voidaan siirtyä alas <kbd>Enter</kbd>-näppäimellä, tai ylös <kbd>Shift</kbd> + <kbd>Enter</kbd>.
 
 ## Päivän ja havaintojen tietojen muokkaaminen
 
