@@ -46,3 +46,19 @@ Nämä löytyvät Github-repositorion Issues-välilehdeltä.
 
 > -Vakiota voi staijata kahdessa eri paikassa samaan aikaan. Pitäisi saada tehdä vakiota vain yhdessä paikassa.
 
+
+##Kesän 2022 ryhmän keskeneräisyydet ja kehitysehdotukset
+
+Backlog trellossa: https://trello.com/b/8FSrc8SY/backlog
+
+Sovellus toimii tällä hetkellä vain Hangon lintuasemalle. Ainakin locations.json - tiedostoa ja joitain backendin funktioita pitää muuttaa,
+jotta sovellus toimisi samalla tavalla esimerkiksi Jurmon asemalle. Paikallisen havainnon lisäämistä hoitavat funktiot hakevat aina 
+Hangon lintuaseman id:n, ja paikallisten havaintojen sijainniksi tulee nyt aina Bunkkeri, mikä ei välttämättä ole olemassa muilla asemilla.
+Näiden kutsujen tulisi siis pyytää lintuaseman nimi frontendistä ja keksiä sijainniksi jokin lintuaseman omista paikoista. 
+
+Toinen tärkeä asia on sovelluksen skaalaaminen. Emme ehtineet simuloida suurta määrää dataa tai tuoda vanhaa dataa, joten emme päässeet käytännössä
+kokeilemaan sovelluksen toimivuutta satojen tuhansien tai jopa miljoonien havaintojen kanssa. Havaintoja tulee siis noin 100,000 vuodessa, eli
+sovelluksen tulisi toimia nopeasti myös muutaman miljoonan rivin taululla. Jos hidastumista tapahtuu, se tapahtuu käytännössä observations-taulun
+yhteydessä, jolloin yksi ensimmäisistä keinoista olisi taulun indeksoinnin tarkistaminen. Etenkin observationperiod_id - kolumnin voisi indeksoida.
+Me uskomme kuitenkin että huomattavaa hidastumista tuskin tulisi, sillä monet raskaimmista backendin kutsuita on toteutettu melkein täysin
+ SQL komentoina, mikä nopeuttaa tiedon hakemista. 

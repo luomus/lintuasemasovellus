@@ -16,4 +16,6 @@ Yliopiston vpn-yhteys täytyy olla päällä, tai muuten tietokantayhteys ei toi
 
 [Ohjeita VPN-yhteyden muodostamiseen](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/verkkoyhteydet/yhteydet-yliopiston-ulkopuolelta)
 
+Windowsilla ladataan myös Oraclen Basic Light Package ja lisätään se PATHiin. Tarkemma ohjeet kannattaa etsiä Oraclen omilta sivuilta.
+
 On suositeltavaa käyttää esimerkiksi Oracle SQL Developeria tietokantojen tutkimiseen.
