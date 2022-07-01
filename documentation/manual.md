@@ -103,6 +103,10 @@ Viimeisimmät viisi päivää näkyvät sivupalkissa sovelluksen etusivulla, ja 
 
 Päivää klikkaamalla päästään tarkastelemaan kyseiseen päivään liittyvää yhteenvetoa. Yhteenvetosivulla näkyy päivän havainnoijat sekä kommentti. Sivulta löytyy myös kaksi yhteenvetotaulukkoa (lajit ja jaksot), joiden välillä liikutaan nappia painamalla. Lajit-taulukossa näkyvät kaikki kyseisenä päivänä havaitut lajit kultakin havaintojaksotyypiltä. Jaksot-taulukossa taas näkyvät kunkin jakson tiedot kyseiseltä päivältä. Jaksoa klikkaamalla aukeaa ikkuna, jossa on yhteenveto jakson aikana tehdyistä havainnoista. Ikkuna sulkeutuu klikkaamalla sen ulkopuolelle.
 
+## Paikallisten ja hajahavaintojen muokkaaminen
+
+Paikallisia havaintoja ja hajahavaintoja voi muokata lajikohtaisesti syöttämällä lajin rivillä oleviin kenttiin halutut arvot. Arvot tallentuvat tietokantaan, kun käyttäjä klikkaa pois kentästä.
+
 ## Päivän ja havaintojen tietojen muokkaaminen
 
 Päivän tietojen muokkaaminen tapahtuu päivän yhteenvetosivulta. Muita tietoja kuin havaintoja voidaan muokata kunkin kentän vierestä löytyviä kynäikoneja painamalla. Muokkausta varten aukeaa oma muokkausnäkymänsä, joiden avulla tietoja voidaan päivittää. Jos päivälle halutaan lisätä vain yksittäisiä pyydystietoja ilman havaintoja, voidaan se tehdä tästä näkymästä painamalla pyydystietojen kohdalta '+'-nappia.

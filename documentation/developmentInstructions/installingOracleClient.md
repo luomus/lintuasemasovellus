@@ -15,3 +15,5 @@ Oraclen asentaminen macOS -käyttöjärjestelmällä saattaa olla hieman hankala
 Yliopiston vpn-yhteys täytyy olla päällä, tai muuten tietokantayhteys ei toimi. Lisäksi backend-kansiossa täytyy olla tiedosto `.env`, jossa määritellään erikseen asiakkaalta/edelliseltä ryhmältä/ohjaajalta pyydettävät Oraclen tarvitsemat tunnistetiedot.
 
 [Ohjeita VPN-yhteyden muodostamiseen](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/verkkoyhteydet/yhteydet-yliopiston-ulkopuolelta)
+
+On suositeltavaa käyttää esimerkiksi Oracle SQL Developeria tietokantojen tutkimiseen.
