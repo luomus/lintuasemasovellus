@@ -1,10 +1,10 @@
-Rajapinnat: 
+# Rajapinnat: 
 
-(requests)
+## (requests)
 
-observationStationService.js
+### observationStationService.js
 
-/api/getLocations	
+#### /api/getLocations	
         -actions:
 		-actions
 		-type
@@ -13,13 +13,13 @@ observationStationService.js
 	-locations
 	-observatory
 	-types
-api/getObservationPeriods
+#### api/getObservationPeriods
 	-day_id
 	-endTime: ( year off )
 	-id
 	-startTime
 	-type_id
-api/getDaysObservationPeriods/dayId
+#### api/getDaysObservationPeriods/dayId
 	-day_id
 	-endTime: ( only hours )
 	-id
@@ -32,25 +32,25 @@ api/getDaysObservationPeriods/dayId
 … /getObservationLocations/stationId not working
 
 
-dayService.js:
+### dayService.js:
 
-api/listDays
+#### api/listDays
 	- comment
 	- day
 	- id
 	- observatory
 	- observers
 	- selectedactions
-api/getLocationsAndTypes/observatory_id
+#### api/getLocationsAndTypes/observatory_id
 	-actions
 	-types
-api/searchDayInfo/date/observatory
+#### api/searchDayInfo/date/observatory
 	-comment
 	-id
 	-observers
 	-selectedactions
 
-api/getCatchDetails/dayId
+#### api/getCatchDetails/dayId
 	[
     {
         "alku": time,
@@ -64,10 +64,10 @@ api/getCatchDetails/dayId
     }
 ]
 
-api/getLatestDays/observatory
+#### api/getLatestDays/observatory
 	- day
 	- speaciesCount
-api/getObservationsSummary/dayId
+#### api/getObservationsSummary/dayId
 	-allMigration
 	-constMigration
 	-localGåu
@@ -78,7 +78,7 @@ api/getObservationsSummary/dayId
 	-scatterObs
 	-species
 	-totalLocal
-api/getShorthandText/dayId/Type/Location
+#### api/getShorthandText/dayId/Type/Location
 	- endTime
 	- obsPeriodId
 	- shorthands
@@ -95,13 +95,13 @@ api/getShorthandText/dayId/Type/Location
 		-shorthand_id
 		-shorthand_text
 	-startTime
-/api/getShorthandByObsPeriod/obsPeriodId
+#### /api/getShorthandByObsPeriod/obsPeriodId
 	-id
 	-shorthandBlock
 
 
-observationlistService.js
-/api/getObservations/obsPeriodId
+### observationlistService.js
+#### /api/getObservations/obsPeriodId
 	- bypassSide
 	- count
 	- direction
