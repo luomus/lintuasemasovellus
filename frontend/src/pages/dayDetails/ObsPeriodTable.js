@@ -81,7 +81,7 @@ const ObsPeriodTable = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [obsPeriod, setObsPeriod] = useState({});
-  const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(true);
+  const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(false);
   const [textFilter, setTextFilter] = useState("");
   const [speciesListType, setSpeciesListType] = useState("defaults");
   const [filteredSummary, setFilteredSummary] = useState(summary);
@@ -302,14 +302,6 @@ const ObsPeriodTable = (props) => {
                 )
               }
             </TableBody>
-            {/* This part looks unnecessary, result of copy-paste from below?
-            <ObservationPeriod
-              obsPeriod={obsPeriod}
-              open={modalOpen}
-              handleClose={handleClose}
-              handleErrorSnackOpen={handleErrorSnackOpen}
-            />
-            */}
           </Table>
         </TableContainer>
         <PeriodTablePagination
