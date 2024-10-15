@@ -1,0 +1,123 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+parameters:
+  - name: APP
+    required: true
+    value: bird-station-app
+  - name: BRANCH
+    required: true
+    value: dev
+  - name: AUTH_TOKEN
+    required: true
+  - name: TARGET
+    required: true
+  - name: USERNAME
+    required: true
+  - name: PASSWORD
+    required: true
+  - name: HOSTNAME
+    required: true
+  - name: SERVICEID
+    required: true
+metadata:
+  name: ${APP}-${BRANCH}
+objects:
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${APP}-${BRANCH}
+      labels:
+        app: ${APP}-${BRANCH}
+    data:
+      AUTH_TOKEN: ${AUTH_TOKEN}
+      TARGET: ${TARGET}
+      USERNAME: ${USERNAME}
+      PASSWORD: ${PASSWORD}
+      HOSTNAME: ${HOSTNAME}
+      SERVICEID: ${SERVICEID}
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: ${APP}-${BRANCH}
+      labels:
+        app: ${APP}-${BRANCH}
+    spec:
+      selector:
+        matchLabels:
+          app: ${APP}-${BRANCH}
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            app: ${APP}-${BRANCH}
+        spec:
+          containers:
+            - name: ${APP}-${BRANCH}
+              env:
+                - name: AUTH_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: AUTH_TOKEN
+                - name: TARGET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: TARGET
+                - name: USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: USERNAME
+                - name: PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: PASSWORD
+                - name: HOSTNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: HOSTNAME
+                - name: SERVICEID
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: SERVICEID
+              ports:
+                - containerPort: 3000
+                  protocol: TCP
+              imagePullPolicy: Always
+              image: ghcr.io/luomus/lintuasemasovellus:${BRANCH}
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${APP}-${BRANCH}
+      labels:
+        app: ${APP}-${BRANCH}
+    spec:
+      ports:
+        - name: "8080"
+          protocol: TCP
+          port: 8080
+          targetPort: 3000
+      selector:
+        app: ${APP}-${BRANCH}
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      name: ${APP}-${BRANCH}
+      labels:
+        app: ${APP}-${BRANCH}
+    spec:
+      host: "lintuasema-dev.2.rahtiapp.fi"
+      to:
+        kind: Service
+        name: ${APP}-${BRANCH}
+        weight: 100
+      port:
+        targetPort: 8080
+      tls:
+        termination: edge
+      wildcardPolicy: None
