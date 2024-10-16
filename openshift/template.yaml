@@ -19,6 +19,12 @@ parameters:
     required: true
   - name: SERVICEID
     required: true
+  - name: CPU_LIMIT
+    requred: true
+    value: "50m"
+  - name: MEMORY_LIMIT
+    requred: true
+    value: "250Mi"
 metadata:
   name: ${APP}-${BRANCH}
 objects:
@@ -41,6 +47,17 @@ objects:
       name: ${APP}-${BRANCH}
       labels:
         app: ${APP}-${BRANCH}
+      annotations:
+        image.openshift.io/triggers: |-
+          [
+            {
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "ghcr.io/luomus/lintuasemasovellus:${BRANCH}"
+              },
+              "fieldPath": "spec.template.spec.containers[0].image"
+            }
+          ]
     spec:
       selector:
         matchLabels:
@@ -54,6 +71,10 @@ objects:
         spec:
           containers:
             - name: ${APP}-${BRANCH}
+              resources:
+                limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
               env:
                 - name: AUTH_TOKEN
                   valueFrom:
@@ -85,6 +106,8 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
                       key: SERVICEID
+                - name: BEHIND_PROXY
+                  value: True
               ports:
                 - containerPort: 3000
                   protocol: TCP
