@@ -2,14 +2,67 @@ name: Publish Docker Image
 
 on:
   push:
-    branches: [ "master", "dev" ]
+    branches: [ "dev" ]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.6'
+    - name: Install backend dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      working-directory: ./lintuasema-backend
+    - name: Test backend with pytest
+      run: |
+        python3 -m pytest
+      working-directory: ./lintuasema-backend
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '12.x'
+    - name: Install frontend packages
+      run: npm install
+      working-directory: ./frontend
+    - name: Run frontend tests
+      run: npm test
+      working-directory: ./frontend
+    - name: Build & copy frontend to backend
+      run: npm run build-copy
+      working-directory: ./frontend
+    - name: Run backend
+      run: flask run --port=3000 &
+      working-directory: ./lintuasema-backend
+    - name: Run Cypress tests
+      run: |
+        sleep 10
+        npm run cypress:cmd
+      working-directory: ./frontend
+
+    - name: Save Cypress screenshots if fails
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: frontend/cypress/screenshots/
+    - name: Save Cypress videos if fails
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: cypress-videos
+        path: frontend/cypress/videos/
+
   build:
+    needs: [tests]
     runs-on: ubuntu-latest
     permissions:
       contents: read
