@@ -1,6 +1,6 @@
 import os
 
-username = os.getenv('USERNAME')
+username = os.getenv('LINTUASEMA_USERNAME')
 password = os.getenv('PASSWORD')
 hostname = os.getenv('HOSTNAME')
 serviceid  = os.getenv('SERVICEID')

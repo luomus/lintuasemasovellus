@@ -105,31 +105,3 @@ def setUserObservatory():
     ret = []
     ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email, 'observatory':user.observatory })
     return jsonify(ret)
-
-# tarvitaan cypress testejä varten
-@bp.route('/testlogin', methods=['POST', 'GET'])
-def testloginconfirm():
-
-    personToken = request.args.get('token')
-
-    if personToken != "MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw":
-        return redirect('/')
-
-    userId = 'asdf'
-    name = 'Lintu Asema'
-    email = 'lintuasema@lintuasema.com'
-
-    user = Account.query.filter_by(userId=userId).first()
-    if not user:
-        user = Account(userId=userId, fullName=name, email=email)
-        db.session().add(user)
-        db.session().commit()
-
-    login_user(user)
-
-    session.permanent = True
-
-    session['token'] = personToken
-    
-    return redirect('/')
-

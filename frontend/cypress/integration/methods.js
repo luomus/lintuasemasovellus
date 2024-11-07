@@ -4,10 +4,10 @@ export function myBeforeEach() {
   cy.wait(1000);
   cy.visit("http://localhost:3000");
 
-  // Github actionsissa täytyy olla localhost:3000 (eli kun pushaat, valitse 3000)
+  const loginPort = Cypress.env('login_port') || 3000;
+  const personToken = Cypress.env('person_token');
 
-  cy.visit("http://localhost:3000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
-  //cy.request("http://localhost:5000/testlogin?token=MzJkNTVkMjAtZTFjZS00NzEzLTlkM2MtMmRjZGI1ODYyNGUw");
+  cy.request(`http://localhost:${loginPort}/login?token=${personToken}`);
   cy.visit("http://localhost:3000");
 
 

@@ -46,6 +46,8 @@ jobs:
       run: flask run --port=3000 &
       working-directory: ./lintuasema-backend
     - name: Run Cypress tests
+      env:
+        cypress_person_token: ${{ secrets.CYPRESS_PERSON_TOKEN }}
       run: |
         sleep 10
         npm run cypress:cmd
