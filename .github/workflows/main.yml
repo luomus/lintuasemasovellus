@@ -43,6 +43,9 @@ jobs:
       run: npm run build-copy
       working-directory: ./frontend
     - name: Run backend
+      env:
+        AUTH_TOKEN: ${{ secrets.TEST_CONFIG_AUTH_TOKEN }}
+        TARGET: ${{ secrets.TEST_CONFIG_TARGET }}
       run: flask run --port=3000 &
       working-directory: ./lintuasema-backend
     - name: Run Cypress tests
