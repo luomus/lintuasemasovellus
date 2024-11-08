@@ -59,23 +59,31 @@ const App = () => {
   const userObservatory = useSelector(state => state.userObservatory);
 
   useEffect(() => {
-    console.log(user.id);
-    dispatch(initializeStations());
-    dispatch(retrieveDays());
-    if (user.id) return;
-    getPerson().then(response => response.data).then(response => { dispatch(setUser(response)); setLoading(false); }).catch((error) => { console.error("getPerson error", error); setLoading(false); });
-    DraftsClean();
-  }, [dispatch, user]);
+    getPerson()
+      .then(response => response.data)
+      .then(response => {
+        dispatch(setUser(response));
+        getCurrentUser()
+          .then(currentUser => {
+            const observatory = currentUser.data[0].observatory;
+            if (observatory) {
+              dispatch(setUserObservatory(observatory));
+            }
+            setLoading(false);
+          });
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, [dispatch]);
 
   useEffect(() => {
-    getCurrentUser()
-      .then(currentUser => {
-        const observatory = currentUser.data[0].observatory;
-        if (observatory) {
-          dispatch(setUserObservatory(observatory));
-        }
-      });
-  }, [user]);
+    if (!user.id) return;
+
+    dispatch(initializeStations());
+    dispatch(retrieveDays());
+    DraftsClean();
+  }, [dispatch, user]);
 
   if (loading) {
     return (

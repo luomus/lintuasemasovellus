@@ -73,6 +73,7 @@ def getSessionToken():
     return jsonify(token=session['token'])
 
 @bp.route('/api/getPerson', methods=['GET'])
+@login_required
 def getPersonFromLaji():
     return requests.get('https://apitest.laji.fi/v0/person/' + session['token'] + '?access_token=' + AUTH_TOKEN).json()
 
