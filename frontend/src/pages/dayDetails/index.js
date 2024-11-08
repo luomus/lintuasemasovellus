@@ -130,8 +130,10 @@ export const DayDetails = ({ userObservatory }) => {
   }, [thisDay]);
 
   useEffect(() => {
-    getCatches(dayId)
-      .then(res => setDayCatches(res));
+    if (dayId !== undefined && dayId !== null) {
+      getCatches(dayId)
+        .then(res => setDayCatches(res));
+    }
   }, [dayId]);
 
   const observersOnSubmit = (event) => {

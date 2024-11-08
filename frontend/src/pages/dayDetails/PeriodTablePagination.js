@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  TablePagination, TableFooter, TableRow
+  TablePagination, Table, TableRow, TableFooter
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
@@ -16,29 +16,31 @@ const PeriodTablePagination = ({
     return null;
   }
   return (
-    <TableFooter>
-      <TableRow>
-        <TablePagination
-          rowsPerPageOptions={[50, 100, { label: t("all"), value: list.length }]}
-          colSpan={3}
-          labelRowsPerPage={t("rowsPerPage")}
-          labelDisplayedRows={
-            ({ from, to, count }) => {
-              return "" + from + " - " + to + t("to") + count;
+    <Table>
+      <TableFooter>
+        <TableRow>
+          <TablePagination
+            rowsPerPageOptions={[50, 100, { label: t("all"), value: list.length }]}
+            colSpan={3}
+            labelRowsPerPage={t("rowsPerPage")}
+            labelDisplayedRows={
+              ({ from, to, count }) => {
+                return "" + from + " - " + to + t("to") + count;
+              }
             }
-          }
-          count={list.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          SelectProps={{
-            inputProps: { "aria-label": "rows per page" },
-            native: true,
-          }}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </TableRow>
-    </TableFooter>
+            count={list.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            SelectProps={{
+              inputProps: { "aria-label": "rows per page" },
+              native: true,
+            }}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </TableRow>
+      </TableFooter>
+    </Table>
   );
 };
 
