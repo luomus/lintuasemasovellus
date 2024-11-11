@@ -1,8 +1,8 @@
 import React from "react";
 import {
   Grid, FormControlLabel, Checkbox, FormGroup, InputAdornment, TextField
-} from "@material-ui/core/";
-import { makeStyles } from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDailyActions } from "../../reducers/dailyActionsReducer";

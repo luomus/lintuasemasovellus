@@ -1,11 +1,12 @@
 import {
-  Backdrop, Fade, makeStyles, Modal, Table, TableBody, TableCell, TableHead, TableRow
-} from "@material-ui/core";
+  Backdrop, Fade, Modal, Table, TableBody, TableCell, TableHead, TableRow
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import globals from "../../globalConstants";
 
@@ -54,7 +55,7 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
   if (!userIsSet) {
     return (
-      <Redirect to="/login" />
+      <Navigate to="/login" />
     );
   }
 

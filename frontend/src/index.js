@@ -1,22 +1,23 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";
 import { HashRouter as Router } from "react-router-dom";
 import "./i18n";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/themeSettings";
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root"));
+
+root.render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
       <Router>
         <App />
       </Router>
     </Provider>
-  </ThemeProvider>,
-  document.getElementById("root")
+  </ThemeProvider>
 );
 
 if (window.Cypress) {

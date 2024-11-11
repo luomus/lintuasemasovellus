@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  Button, Box, IconButton, makeStyles, Paper, Grid, Typography, TextField,
-  FormGroup, FormControlLabel, withStyles,
+  Button, Box, IconButton, Paper, Grid, Typography, TextField,
+  FormGroup, FormControlLabel,
   Table, TableBody, TableCell, TableHead, TableRow
-} from "@material-ui/core";
-import { Edit, Add, CheckCircle, RemoveCircleOutlineRounded } from "@material-ui/icons";
+} from "@mui/material";
+import { makeStyles, withStyles } from "@mui/styles";
+import { Edit, Add, CheckCircle, RemoveCircleOutlineRounded } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
@@ -154,7 +155,7 @@ export const DayDetails = ({ userObservatory }) => {
     setCommentForm(false);
   };
 
-  useEffect(async () => {
+  useEffect( () => {
     let fetching = false;
     getDaysObservationPeriods(dayId)
       .then(periodsJson => {

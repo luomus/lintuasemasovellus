@@ -1,12 +1,12 @@
 import React from "react";
-import { HighlightOff } from "@material-ui/icons";
+import { HighlightOff } from "@mui/icons-material";
 import {
   TextField, InputLabel, Select, MenuItem, FormControl,
   FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
-} from "@material-ui/core/";
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
 import { setNotifications } from "../../reducers/notificationsReducer";

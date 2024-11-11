@@ -1,8 +1,9 @@
 import {
-  Backdrop, Fade, makeStyles, Modal, Grid, Button,
+  Backdrop, Fade, Modal, Grid, Button,
   FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
   DialogContent, DialogContentText, DialogTitle,
-} from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -177,8 +178,8 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
     handleCloseModal();
   };
 
-  useEffect(async () => {
-    await retrieveShorthand();
+  useEffect(() => {
+    retrieveShorthand();
   }, [dayId]);
 
   useEffect(() => {

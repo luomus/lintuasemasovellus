@@ -3,7 +3,7 @@ import { myBeforeEach } from "../methods.js";
 const date = "01.01.2020";
 const largeDate = "01.01.5020";
 const smallDate = "01.01.1020";
-const invalidDate = "01.01.020";
+const invalidDate = "01.01.0";
 const observer = "Hilla Havainnoitsija";
 const comment = "Olipa kiva sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";

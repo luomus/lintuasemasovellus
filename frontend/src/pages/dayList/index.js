@@ -1,5 +1,5 @@
 import {
-  Paper, withStyles, makeStyles, Table, TableBody,
+  Paper, Table, TableBody,
   TableCell, TableHead, TableRow,
   TableContainer,
   Typography,
@@ -11,9 +11,10 @@ import {
   Checkbox,
   ListItemText,
   Chip
-} from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles, withStyles } from "@mui/styles";
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
@@ -60,7 +61,7 @@ export const DayList = ({ userObservatory }) => {
 
   const { t } = useTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const classes = useStyles();
 
@@ -108,7 +109,7 @@ export const DayList = ({ userObservatory }) => {
   };
 
   const handleDateClick = (s) => {
-    history.push(`/daydetails/${s.day}`);
+    navigate(`/daydetails/${s.day}`);
   };
 
   console.log("list: ", list);

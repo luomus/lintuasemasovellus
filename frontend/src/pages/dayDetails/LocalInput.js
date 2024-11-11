@@ -1,5 +1,6 @@
 import React from "react";
-import { TextField, makeStyles } from "@material-ui/core";
+import { TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../services";
 import PropTypes from "prop-types";
 

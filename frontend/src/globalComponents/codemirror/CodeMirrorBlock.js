@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import {

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
   TablePagination, TableFooter, TableRow
-} from "@material-ui/core";
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const DayPagination = ({
@@ -34,8 +34,8 @@ const DayPagination = ({
             inputProps: { "aria-label": "rows per page" },
             native: true,
           }}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableRow>
     </TableFooter>

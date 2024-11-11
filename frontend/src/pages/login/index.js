@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Paper, makeStyles, Button, Grid, Box, Typography
-} from "@material-ui/core/";
+  Paper, Button, Grid, Box, Typography
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { loginUrl } from "../../services";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import banner from "../../resources/banner.png";
 import luomuslogo from "../../resources/luomuslogo.png";
@@ -67,7 +68,7 @@ export const Login = () => {
 
   if (userIsSet) {
     return (
-      <Redirect to="/" />
+      <Navigate to="/" />
     );
   }
 
@@ -95,7 +96,7 @@ export const Login = () => {
               alt="haukka"></img>
           </Box>
           {message && (
-            <Grid container alignItems="center" justify="center" item>
+            <Grid container alignItems="center" justifyContent="center" item>
               <Box className="box">
                 <Paper variant="outlined" className={ classes.messageBox }>
                   <Typography>{t(message)}</Typography>
@@ -104,11 +105,12 @@ export const Login = () => {
               </Box>
             </Grid>
           )}
-          <Grid container alignItems="center" justify="center" item xs={12}>
+          <Grid container alignItems="center" justifyContent="center" item xs={12}>
 
             <Box className="box">
               <br />
               <Button
+                size={"large"}
                 variant="contained"
                 className={classes.userButton}
                 id="login-link"
@@ -128,7 +130,7 @@ export const Login = () => {
             </Box>
           </Grid>
 
-          <Grid container alignItems="center" justify="center" item xs={12}>
+          <Grid container alignItems="center" justifyContent="center" item xs={12}>
             <Box className="box" p={2}>
               <br />
               <br />

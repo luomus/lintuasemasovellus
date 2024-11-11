@@ -1,8 +1,9 @@
 import {
-  Backdrop, Fade, makeStyles, Modal, Grid, Button,
+  Backdrop, Fade, Modal, Grid, Button,
   FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
   DialogContent, DialogContentText, DialogTitle,
-} from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -148,12 +149,13 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   };
 
 
-  useEffect(async () => {
+  useEffect(() => {
     if (obsPeriod.id) {
       setType(obsPeriod.observationType);
       setLocation(obsPeriod.location);
-      const shorthand = await getShorthandByObsPeriod(obsPeriod.id);
-      initializeDefaultShorthand(shorthand);
+      getShorthandByObsPeriod(obsPeriod.id).then(shorthand => {
+        initializeDefaultShorthand(shorthand);
+      });
     }
   }, [obsPeriod]);
 

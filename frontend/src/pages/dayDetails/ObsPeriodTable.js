@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
-  TableBody, TableCell, withStyles, makeStyles, Typography,
+  TableBody, TableCell, Typography,
   IconButton, FormControlLabel, Checkbox, Grid,
   FormControl, Select, MenuItem, InputLabel
-} from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
+} from "@mui/material";
+import { makeStyles, withStyles } from "@mui/styles";
+import EditIcon from "@mui/icons-material/Edit";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import ObservationPeriod from "../obsPeriod";

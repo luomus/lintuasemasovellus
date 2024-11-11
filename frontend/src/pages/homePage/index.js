@@ -6,17 +6,17 @@ import {
   Paper, Grid, Modal, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
   Typography, TextField, Button, Checkbox, FormControlLabel,
   FormControl, InputLabel, Select, MenuItem, Snackbar, CircularProgress,
-  Table, TableRow, TableBody, TableHead, TableCell, withStyles, Accordion,
+  Table, TableRow, TableBody, TableHead, TableCell, Accordion,
   AccordionSummary, AccordionDetails, IconButton, Tooltip
-} from "@material-ui/core/";
-import { Add, ExpandMore, Event, FileCopy, Bookmarks } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+} from "@mui/material";
+import { Add, ExpandMore, FileCopy, Bookmarks } from "@mui/icons-material";
+import { makeStyles, withStyles } from "@mui/styles";
+import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Alert from "../../globalComponents/Alert";
 import "codemirror/lib/codemirror.css";
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(0),
-    minWidth: 120,
+    minWidth: [120, "!important"],
   },
   sendButton: {
     marginBottom: "20px",
@@ -140,7 +140,7 @@ export const HomePage = ({ user, userObservatory }) => {
   const stations = useSelector(state => state.stations);
   const notifications = useSelector(state => state.notifications);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const drafts = useLiveQuery(async () => {
@@ -176,6 +176,7 @@ export const HomePage = ({ user, userObservatory }) => {
     "observers": false, "comment": false,
     "observationActivity": false, "catches": false
   });
+  const [datePickerErrorMessage, setDatePickerErrorMessage] = useState("");
 
   useEffect(() => {
     getLatestDays(userObservatory)
@@ -300,7 +301,7 @@ export const HomePage = ({ user, userObservatory }) => {
         const days = await getDays();
         dispatch(setDays(days));
       }
-      history.push(`/daydetails/${formatDate(day)}`);
+      navigate(`/daydetails/${formatDate(day)}`);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
@@ -349,7 +350,7 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   const handleDateClick = (s) => {
-    history.push(`/daydetails/${s.day}`);
+    navigate(`/daydetails/${s.day}`);
   };
 
   const handleCopyConfirm = () => {
@@ -395,6 +396,26 @@ export const HomePage = ({ user, userObservatory }) => {
     setToCopy({ ...toCopy, [name]: !toCopy[String(name)] });
   };
 
+  const handleDatePickerChange = (date, context) => {
+    if (!context.validationError) {
+      handleDateChange(date);
+    }
+  };
+
+  const handleDatePickerError = (error) => {
+    let errorMsg = "";
+
+    if (error === "invalidDate") {
+      errorMsg = t("invalidDate");
+    } else if (error === "minDate") {
+      errorMsg = t("minDateError");
+    } else if (error === "maxDate") {
+      errorMsg = t("maxDateError");
+    }
+
+    setDatePickerErrorMessage(errorMsg);
+  };
+
   const handleDateChange = (date) => {
     if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
       const newDate = date;
@@ -433,7 +454,7 @@ export const HomePage = ({ user, userObservatory }) => {
     dispatch(setCatches(JSON.parse(el.catchRows)));
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!type && !location && !shorthand) return;
     let data = {
       day: formatDate(day),
@@ -448,8 +469,9 @@ export const HomePage = ({ user, userObservatory }) => {
       catchRows: JSON.stringify(catchRows),
     };
     if (draftID === undefined) {
-      let r = await addDraft(data);
-      setDraftID(r);
+      addDraft(data).then(r => {
+        setDraftID(r);
+      });
     } else {
       addDraft({ ...data, id: draftID });
     }
@@ -485,29 +507,28 @@ export const HomePage = ({ user, userObservatory }) => {
                 </Tooltip>
               </Grid>
               <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeFI}>
-                  <KeyboardDatePicker
+                <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={localeFI}>
+                  <DesktopDatePicker
                     className={classes.datePicker}
-                    required
-                    disableToolbar
-                    invalidDateMessage={t("invalidDate")}
-                    minDateMessage={t("minDateError")}
-                    maxDateMessage={t("maxDateError")}
                     variant="inline"
                     format="dd.MM.yyyy"
-                    id="date-picker-inline"
                     label={t("date")}
                     value={day}
-                    onChange={(date) => {
-                      handleDateChange(date);
+                    onChange={(date, context) => {
+                      handleDatePickerChange(date, context);
                     }}
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
+                    onError={(newError) => handleDatePickerError(newError)}
+                    slotProps={{
+                      textField: {
+                        required: true,
+                        id: "date-picker-inline",
+                        "aria-label": "change date",
+                        helperText: datePickerErrorMessage,
+                      },
                     }}
-                    keyboardIcon={<Event color="primary" />}
                   />
 
-                </MuiPickersUtilsProvider>
+                </LocalizationProvider>
               </Grid>
 
               <Grid item xs={9}>

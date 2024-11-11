@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
-import { TableCell, withStyles } from "@material-ui/core";
+import { TableCell } from "@mui/material";
+import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import LocalInput from "./LocalInput";
 

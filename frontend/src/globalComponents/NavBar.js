@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core/styles";
+import Drawer from "@mui/material/Drawer";
+import { makeStyles } from "@mui/styles";
 import { AppBar, Toolbar, IconButton, Typography, Box, Button,
   Dialog, DialogTitle, DialogContent, DialogActions,
   FormControl, InputLabel, Select, MenuItem, SvgIcon
-} from "@material-ui/core";
-import { Dehaze, Replay } from "@material-ui/icons";
+} from "@mui/material";
+import { Dehaze, Replay } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { getLogout, postUserObservatory } from "../services";

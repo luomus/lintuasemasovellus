@@ -1,14 +1,13 @@
 import React from "react";//
 import {
   Typography, Grid, Paper, List, ListItem
-} from "@material-ui/core/";
-import WarningIcon from "@material-ui/icons/Warning";
-import NightsStay from "@material-ui/icons/NightsStay";
+} from "@mui/material";
+import WarningIcon from "@mui/icons-material/Warning";
+import NightsStay from "@mui/icons-material/NightsStay";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
   container: {

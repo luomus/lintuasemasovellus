@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { Switch, Route } from "react-router-dom";
+import CssBaseline from "@mui/material/CssBaseline";
+import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { HomePage, UserManual, DayList, DayDetails, Login } from "./pages";
 import NavBar from "./globalComponents/NavBar";
@@ -10,7 +10,7 @@ import { setUser } from "./reducers/userReducer";
 import { setUserObservatory } from "./reducers/userObservatoryReducer";
 import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
-import { makeStyles } from "@material-ui/core/";
+import { makeStyles } from "@mui/styles";
 import { clean as DraftsClean } from "./services/draftService";
 
 const App = () => {
@@ -106,20 +106,12 @@ const App = () => {
       <CssBaseline>
         <div>
           <NavBar user={user} />
-          <Switch>
-            <Route path="/listdays">
-              <DayList userObservatory={userObservatory} />
-            </Route>
-            <Route path="/daydetails/:day">
-              <DayDetails userObservatory={userObservatory} />
-            </Route>
-            <Route path="/manual">
-              <UserManual />
-            </Route>
-            <Route path="/">
-              <HomePage user={user} userObservatory={userObservatory} />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/listdays" element={<DayList userObservatory={userObservatory} />} />
+            <Route path="/daydetails/:day" element={<DayDetails userObservatory={userObservatory} />} />
+            <Route path="/manual" element={<UserManual />} />
+            <Route path="/" element={<HomePage user={user} userObservatory={userObservatory} />} />
+          </Routes>
           <Footer />
         </div>
       </CssBaseline>
