@@ -8,7 +8,7 @@ from application.db import db
 
 import os
 import requests
-from flask import (Flask, render_template, 
+from flask import (Flask, render_template,
     request, redirect, session, url_for,
     make_response, jsonify)
 from flask_login import login_user, logout_user , current_user, login_required
@@ -17,6 +17,8 @@ from flask_login import login_user, logout_user , current_user, login_required
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 TARGET = os.getenv('TARGET')
 allowedRoles = os.getenv('ALLOWED_ROLES', 'MA.haukkaUser,MA.admin').split(',')
+LAJI_AUTH_URL = os.getenv('LAJI_AUTH_URL')
+LAJI_API_URL = os.getenv('LAJI_API_URL')
 
 
 @bp.route('/login', methods=['POST', 'GET'])
@@ -27,8 +29,7 @@ def loginconfirm():
     if personToken is None:
         return redirect('/')
 
-    req = requests.get('https://apitest.laji.fi/v0/person/' + personToken + '?access_token=' + AUTH_TOKEN).json()
-
+    req = requests.get('{}person/{}'.format(LAJI_API_URL, personToken), params={ 'access_token': AUTH_TOKEN }).json()
     userId = req['id']
     name = req['fullName']
     email = req['emailAddress']
@@ -36,7 +37,7 @@ def loginconfirm():
 
     if not hasRole and allowedRoles != ['']:
         try:
-            requests.delete('https://apitest.laji.fi/v0/person-token/' + personToken + '?access_token=' + AUTH_TOKEN)
+            requests.delete('{}person-token/{}'.format(LAJI_API_URL, personToken), params={ 'access_token': AUTH_TOKEN })
         except:
             print("Error while logging out without roles")
         response = make_response(redirect('/'))
@@ -54,14 +55,14 @@ def loginconfirm():
     session.permanent = True
 
     session['token'] = personToken
-    
+
     return redirect('/')
 
 
 @bp.route('/logout', methods=['POST', 'GET'])
 def logoutCleanup():
 
-    req = requests.delete('https://apitest.laji.fi/v0/person-token/' + session['token'] + '?access_token=' + AUTH_TOKEN)
+    req = requests.delete('{}person-token/{}'.format(LAJI_API_URL, session['token']), params={ 'access_token': AUTH_TOKEN })
 
     session.clear()
     session.pop('token', None)
@@ -74,11 +75,11 @@ def getSessionToken():
 
 @bp.route('/api/getPerson', methods=['GET'])
 def getPersonFromLaji():
-    return requests.get('https://apitest.laji.fi/v0/person/' + session['token'] + '?access_token=' + AUTH_TOKEN).json()
+    return requests.get('{}person/{}'.format(LAJI_API_URL, session['token']), params={ 'access_token': AUTH_TOKEN }).json()
 
 @bp.route('/loginRedirect', methods=['POST', 'GET'])
 def login():
-    return redirect('https://fmnh-ws-test.it.helsinki.fi/laji-auth/login?target=%s&redirectMethod=GET&next=' % (TARGET))
+    return redirect('{}login?target={}&redirectMethod=GET&next='.format(LAJI_AUTH_URL, TARGET))
 
 @bp.route('/api/getUser', methods=['GET'])
 def getcurrentUser():
