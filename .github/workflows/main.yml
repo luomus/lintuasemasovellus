@@ -46,6 +46,8 @@ jobs:
       env:
         AUTH_TOKEN: ${{ secrets.TEST_CONFIG_AUTH_TOKEN }}
         TARGET: ${{ secrets.TEST_CONFIG_TARGET }}
+        LAJI_AUTH_URL: ${{ secrets.TEST_CONFIG_LAJI_AUTH_URL }}
+        LAJI_API_URL: ${{ secrets.TEST_CONFIG_LAJI_API_URL }}
       run: flask run --port=3000 &
       working-directory: ./lintuasema-backend
     - name: Run Cypress tests
@@ -76,7 +78,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
