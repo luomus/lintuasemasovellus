@@ -87,6 +87,13 @@ const NavBar = ({ user }) => {
     setState({ ...state, [slider]: open });
   };
 
+  const handleDialogClose = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    handleSelectorClose();
+  };
+
   const handleSelectorClose = () => {
     setSelectorOpen(false);
   };
@@ -112,7 +119,7 @@ const NavBar = ({ user }) => {
 
 
   const observatorySelector =
-    <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={selectorOpen} onClose={handleSelectorClose}>
+    <Dialog id="observatory-dialog" disableEscapeKeyDown open={selectorOpen} onClose={handleDialogClose}>
       <DialogTitle>{t("chooseObservatory")}</DialogTitle>
       <DialogContent>
         <form id="observatorySelect" onSubmit={selectUserObservatory} className={classes.container}>
