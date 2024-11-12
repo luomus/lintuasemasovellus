@@ -198,7 +198,7 @@ const CatchType = ({ cr }) => {
             <InputLabel id="Pyydys">{t("catchType")}</InputLabel>
             <Select
               required
-              labelId="catchType"
+              label="catchType"
               id="selectCatchType"
               name="pyydys"
               value={cr.pyydys}
@@ -219,7 +219,7 @@ const CatchType = ({ cr }) => {
             <InputLabel id="Pyyntialue">{t("catchArea")}</InputLabel>
             <Select
               required
-              labelId="catchArea"
+              label="catchArea"
               id="selectCatchArea"
               name="pyyntialue"
               value={cr.pyyntialue}

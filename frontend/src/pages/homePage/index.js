@@ -673,7 +673,7 @@ export const HomePage = ({ user, userObservatory }) => {
                         <FormControl className={classes.formControl}>
                           <InputLabel id="Tyyppi">{t("type")}</InputLabel>
                           <Select required
-                            labelId="type"
+                            label="type"
                             fullWidth={true}
                             id="selectType"
                             value={type}
@@ -694,7 +694,7 @@ export const HomePage = ({ user, userObservatory }) => {
                         <FormControl className={classes.formControl}>
                           <InputLabel id="Location">{t("location")}</InputLabel>
                           <Select required
-                            labelId="location"
+                            label="location"
                             id="selectLocation"
                             value={location}
                             onChange={(event) => setLocation(event.target.value)}

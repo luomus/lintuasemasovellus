@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    width: `calc(100% - ${theme.spacing(2)})`
   },
   submit: {
     minWidth: 120,
@@ -127,7 +128,7 @@ const NavBar = ({ user }) => {
             <InputLabel id="Lintuasema">{t("observatory")}</InputLabel>
             <Select
               autoWidth={true}
-              labelId="observatory"
+              label="observatory"
               id="select-observatory"
               value={observatory}
               onChange={(event) => setObservatory(event.target.value)}

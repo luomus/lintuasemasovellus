@@ -127,7 +127,7 @@ export const DayList = ({ userObservatory }) => {
         <FormControl className={classes.formControl}>
           <InputLabel id="filter-year-label">{t("year")}</InputLabel>
           <Select
-            labelId="filter-year-label"
+            label="filter-year-label"
             id="filter-year"
             multiple
             input={<Input />}

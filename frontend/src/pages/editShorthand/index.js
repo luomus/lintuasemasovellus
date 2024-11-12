@@ -221,7 +221,7 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
               <FormControl className={classes.formControl}>
                 <InputLabel id="Tyyppi">{t("type")}</InputLabel>
                 <Select required
-                  labelId="type"
+                  label="type"
                   fullWidth={true}
                   id="selectTypeInModification"
                   value={type}
@@ -244,7 +244,7 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
               <FormControl className={classes.formControl}>
                 <InputLabel id="Location">{t("location")}</InputLabel>
                 <Select required
-                  labelId="location"
+                  label="location"
                   id="selectLocationInModification"
                   value={location}
                   onChange={(event) => {

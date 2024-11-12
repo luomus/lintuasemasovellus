@@ -251,7 +251,7 @@ const ObsPeriodTable = (props) => {
             <FormControl fullWidth>
               <InputLabel id="select-species-list-label">{t("shownSpecies")}</InputLabel>
               <Select
-                labelId="select-species-list-label"
+                label="select-species-list-label"
                 id="select-species-list"
                 value={speciesListType}
                 onChange={handleSpeciesListChange}
