@@ -6,17 +6,20 @@ import store from "./store";
 import { HashRouter as Router } from "react-router-dom";
 import "./i18n";
 import { ThemeProvider } from "@mui/material/styles";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import theme from "./theme/themeSettings";
 
 const root = createRoot(document.getElementById("root"));
 
 root.render(
   <ThemeProvider theme={theme}>
-    <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
-    </Provider>
+    <StyledEngineProvider injectFirst>
+      <Provider store={store}>
+        <Router>
+          <App />
+        </Router>
+      </Provider>
+    </StyledEngineProvider>
   </ThemeProvider>
 );
 
