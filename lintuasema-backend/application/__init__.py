@@ -4,7 +4,7 @@ import json
 from datetime import timedelta
 
 
-from flask import (Flask, render_template, 
+from flask import (Flask, render_template,
     request, redirect, session, url_for,
     make_response, jsonify, json)
 from flask_login import (
@@ -16,6 +16,7 @@ from flask_login import (
 )
 from flask_sqlalchemy import SQLAlchemy
 
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from sqlalchemy.engine import create_engine
 
@@ -66,6 +67,8 @@ def init_app(database, print_db_echo):
 
     #määritä app
     app = Flask(__name__, static_folder='../build', static_url_path='/')
+    if os.getenv('BEHIND_PROXY') == 'True':
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     cors = CORS(app)
 
     #kirjautuminen
@@ -94,7 +97,7 @@ def init_app(database, print_db_echo):
             print('Tietokantayhteys luotu.')
         except Exception as e:
             print(e)
-    else: 
+    else:
         try:
             if (database == "persistent_sqlite") :
                 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(os.getcwd(), 'app.db')
@@ -104,11 +107,11 @@ def init_app(database, print_db_echo):
             print('Testitietokantayhteys luotu.')
         except Exception as e:
             print(e)
-    
+
     #Tietokannan luonti
     app.register_blueprint(api_blueprint)
     db.init_app(app) #db siirretty omaksi luokaksi, että se näkyy kaikille, jostain syystä init_app() systeemillä tehtäessä se ei näy. kaikkiin models.py tiedostoihin from application.db import db
-  
+
     with app.app_context(): #appioliota käyttäen luodaan tietokantataulut, tämä googlesta
         try:
             #Määritellään tyhjennetäänkö tietokanta sovelluksen alussa
@@ -141,4 +144,3 @@ def init_app(database, print_db_echo):
             print(e)
 
     return app
-

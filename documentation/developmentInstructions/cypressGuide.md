@@ -1,7 +1,13 @@
 # Ohjeet Cypress-testaukseen
 ## Käyttöönotto
 
-Huomio: Cypress-testit ajaaksesi sinun täytyy vaihtaa Cypress-kansiosta integrations/methods.js tiedostosta käytettävä portti ennen testien ajoa. Ota siis käyttöön poiskommentoitu rivi ```cy.request("http://localhost:5000/...``` ennen testien ajoa.
+Luo cypress.env.json niminen tiedosto frontend-kansion juureen ja laita sinne seuraavat muuttujat:
+```
+{
+  "person_token": <test user's person token>,
+  "login_port": 5000
+}
+```
 
 Asenna uusimmat riippuvuudet (frontendissa komennolla npm install, backendissa komennolla . install.sh)
 Käynnistä backend ja frontend erikseen. Backend käynnistetään frontend-kansiosta ja kirjoittamalla
