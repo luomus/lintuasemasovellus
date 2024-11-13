@@ -18,19 +18,19 @@ from datetime import datetime, date
 def addDayFromReq(req):
     observatory_id = getObservatoryId(req['observatory'])
     day=datetime.strptime(req['day'], '%d.%m.%Y')
-    
-    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
+
+    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id)
 
     addDay(new_obsday) #Calls function to add new observatoryday to database
     addedId = getDayId(new_obsday.day, new_obsday.observatory_id) #Gets the id of the newly added day which is then returned
-    
+
     return { 'id': addedId }
 
 def addDay(obsday): #Function for adding a new observatoryday into the database
     d = Observatoryday.query.filter_by(day = obsday.day, observatory_id = obsday.observatory_id, is_deleted = 0).first()
     if  not d and obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None: #Day doesn't exist and mandatory fields are filled
         db.session().add(obsday)
-        db.session().commit() 
+        db.session().commit()
         dayId=getDayId(obsday.day, obsday.observatory_id)
         createEmptyObsPeriods(dayId)#Auxiliary observation periods are added upon day creation
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None: #Day already exists
@@ -60,7 +60,7 @@ def checkPeriod(dayId, type, gau):
         return False
 
 def createEmptyObsPeriods(dayId):
-    '''Local and scatter (miscellaneous) observations are added via updating input fields on the daydetails page. 
+    '''Local and scatter (miscellaneous) observations are added via updating input fields on the daydetails page.
     This function creates 3 observation periods for the given day. In order to add observations, they must have an observation period to
     be added into. The location (Gåu or not Gåu) and type (Local or Scatter) are also defined by the observation period that the observation
     goes into, which is why three periods must be created. The periods are created when a new day is made, and are hidden from the observation
@@ -125,7 +125,7 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
         #the different counts are intended for migrant observations and are not needed for local observations, so we just mark them all as unknown
         #the shorthand id is hardcoded and refers to an empty one in the database. I think it doesn't matter even if this id doesn't refer to a real
         #shorthand id, but might be worth checking if the app is not adding local observations
-        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0, 
+        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
             juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
             subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
             bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
@@ -175,11 +175,11 @@ def listDays():
     ret = []
     for obsday in dayObjects:
         dayDatetime = obsday.day
-        if not isinstance(dayDatetime, datetime): 
+        if not isinstance(dayDatetime, datetime):
             dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
         dayString = dayDatetime.strftime('%d.%m.%Y')
         ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedactions': obsday.selectedactions, 'observatory': getObservatoryName(obsday.observatory_id) })
-    
+
     return ret
 
 def getDays(): #Finds all days in the table
@@ -215,7 +215,8 @@ def getLatestDays(observatory_id): #Finds the date and total amount of observati
                 " GROUP BY day"
                 " ORDER BY day DESC").params(observatory_id = observatory_id)
 
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     response = []
     i = 0
@@ -226,31 +227,31 @@ def getLatestDays(observatory_id): #Finds the date and total amount of observati
         dayDatetime = row[0]
         if not isinstance(dayDatetime, datetime):
             dayDatetime = datetime.strptime(dayDatetime, '%Y-%m-%d %H:%M:%S.%f')
-        dayString = dayDatetime.strftime('%d.%m.%Y')   
+        dayString = dayDatetime.strftime('%d.%m.%Y')
         response.append({
             "day": dayString,
             "speciesCount": row.species_count
             })
-      
+
     return response
 
 #These functions are for editing parts of observatorydays
 def update_comment(obsday_id, comment):
     day_old=Observatoryday.query.get(obsday_id)
     day_new = Observatoryday(day = day_old.day, comment = comment, observers = day_old.observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
-    
+
     return update_edited_day(day_new, day_old)
 
 def update_observers(obsday_id, observers):
     day_old=Observatoryday.query.get(obsday_id)
     day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
-    
+
     return update_edited_day(day_new, day_old)
 
 def update_actions(obsday_id, actions):
     day_old=Observatoryday.query.get(obsday_id)
     day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = day_old.observers, selectedactions = actions, observatory_id = day_old.observatory_id)
-    
+
     return update_edited_day(day_new, day_old)
 
 def update_edited_day(day_new, day_old): #This function is called at the end of other update-functions. It deletes the original entry in the database and adds the new, edited one

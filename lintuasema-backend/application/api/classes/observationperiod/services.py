@@ -28,9 +28,9 @@ def addObservationperiod(day_id, location, observationType, startTime, endTime):
         location_id=locId, observatoryday_id=day_id)#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
     db.session().commit()
-    
+
     obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
-    
+
     return { 'id': obspId }
 
 
@@ -44,7 +44,7 @@ def setObservationId(observationperiod_id_old, observationperiod_id_new):
         x.observationperiod_id = observationperiod_id_new
     db.session().commit()
 
-def getObservationPeriodsByDayId(observatoryday_id):     
+def getObservationPeriodsByDayId(observatoryday_id):
     stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
                 " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time,"
                 " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname,"
@@ -65,12 +65,13 @@ def getObservationPeriodsByDayId(observatoryday_id):
                 " " + prefix + "Observationperiod.end_time, " + prefix + "Type.name, " + prefix + "Location.name, " + prefix + "Observatoryday.id"
                 " ORDER BY " + prefix + "Observationperiod.start_time").params(dayId = observatoryday_id)
 
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     response = []
 
     for row in res:
-        
+
         starthours = ""
         startminutes = ""
         endhours = ""
@@ -101,7 +102,7 @@ def getObservationPeriodsByDayId(observatoryday_id):
             'day_id': row.day_id,
             'speciesCount': row.speciescount,
         })
-  
+
     return jsonify(response)
 
 def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
@@ -110,7 +111,7 @@ def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
 
 def getObservationperiodList():
     observationPeriods = Observationperiod.query.filter_by(is_deleted=0).all()
-    
+
     ret = []
 
     for obsPeriod in observationPeriods:
@@ -138,4 +139,4 @@ def deleteObservationperiod(obsperiod_id):
 def delete_observationperiods(req):
     for observationperiod_id in req:
         deleteObservationperiod(observationperiod_id)
-    
+

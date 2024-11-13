@@ -14,7 +14,7 @@ def get_shorthands_by_obsperiod(obsperiod_id):
     ret = []
     if (shorthandblock):
         ret.append({ 'id': shorthandblock.id, 'shorthandBlock': shorthandblock.shorthandblock })
-    
+
     return ret
 
 def delete_shorthands_by_obsperiod(obsperiod_id):
@@ -50,7 +50,8 @@ def get_shorthands_for_editing(obsday_id, type_name, location_name):
                 " AND " + prefix + "Observatoryday.is_deleted = 0"
                 " ORDER BY " + prefix + "Observationperiod.id, shorthand_id").params(dayId=obsday_id, type=type_name, location=location_name)
 
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     obsPeriodList = createObsperiodList(res)
 

@@ -36,7 +36,7 @@ class Observation(Base):
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
-        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, 
+        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction,
         bypassSide, notes, observationperiod_id, shorthand_id, account_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
@@ -60,16 +60,16 @@ class Observation(Base):
         self.account_id = account_id
         #self.localObservationsCount = localObservationsCount
         #self.localObservationsGåuCount = localObservationsGåuCount
-        #lisää local ja localgåu 
+        #lisää local ja localgåu
 
         @staticmethod
         def summaryOfBirdsPerDay():
             stmt = text("SELECT Observation.species FROM Observation")
-            res = db.engine.execute(stmt)
+            with db.engine.connect() as conn:
+                res = conn.execute(stmt)
             response = []
             for row in res:
                 response.append({"species": row[0]})
-  
+
             return response
 
-        

@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM python:3.6
+FROM python:3.12
 
 RUN mkdir -p /opt/oracle
 

@@ -9,12 +9,12 @@ def getObservationByPeriod(observationperiod_id):
     for observation in observations:
         countString = parseCountString(observation)
         ret.append({ 'species': observation.species, 'count': countString, 'direction': observation.direction, 'bypassSide': observation.bypassSide, 'notes': observation.notes})
-    
+
     return ret
 
 def getObservationByPeriodAndSpecies(observationperiod_id, species): #This function is used only to make testing easier
     observation = Observation.query.filter_by(observationperiod_id = observationperiod_id, species = species).first()
-    
+
     return observation
 
 def getAllObservations():
@@ -25,13 +25,13 @@ def getAllObservations():
             'juvenileUnknownCount': obs.juvenileUnknownCount, 'juvenileFemaleCount': obs.juvenileFemaleCount, 'juvenileMaleCount': obs.juvenileMaleCount,
             'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
             'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 'total_count' :obs.total_count,
-            'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes, 
+            'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes,
             'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id, 'account_id': obs.account_id})
 
     return ret
 
 
-def getDaySummary(day_id): 
+def getDaySummary(day_id):
     #This SQL monster retrieves each observation and groups them in order to create a view that allows the user to see what kind of observations
     #Each species has had for the day, as well as sums up the total amount of migration observations and local observations.
     #This creates the view for the DayDetails page.
@@ -55,19 +55,20 @@ def getDaySummary(day_id):
                 " AND " + prefix + "Observationperiod.is_deleted = 0"
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
-                " GROUP BY species").params(day_id = day_id, 
+                " GROUP BY species").params(day_id = day_id,
                     const = "Vakio", other = "Muu muutto", night = "Yömuutto", scatter = "Hajahavainto",
                     local = "Paikallinen", gou = "Luoto Gåu")
     #GÃ¥u
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     response = []
     for row in res:
         print(row)
         response.append({
-            "species" :row.species, 
+            "species" :row.species,
             "allMigration":row.all_migration,
-            "constMigration":row.const_migration, 
+            "constMigration":row.const_migration,
             "otherMigration":row.other_migration,
             "nightMigration":row.night_migration,
             "scatterObs":row.scatter_obs,
@@ -77,12 +78,12 @@ def getDaySummary(day_id):
             "notes":row.notes,
             "dayId" :day_id
             })
-  
+
     return response
 
 def parseCountString(obs):
     countString = ""
-    
+
     if obs.adultUnknownCount != 0:
         countString = countString + str(obs.adultUnknownCount) + " tunt. sukupuolta (aikuinen), "
     if obs.adultFemaleCount != 0:
@@ -110,7 +111,7 @@ def parseCountString(obs):
     countString = countString[0:(len(countString) - 2)]
 
     return countString
-    
+
 
 def deleteObservation(shorthand_id):
     observation = Observation.query.filter_by(shorthand_id).first()
