@@ -53,6 +53,7 @@ from application.api.classes.type.services import createType
 
 
 from application.db import db
+from application.custom_json_provider import CustomJSONProvider
 
 from os import urandom
 
@@ -70,6 +71,8 @@ def init_app(database, print_db_echo):
     if os.getenv('BEHIND_PROXY') == 'True':
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     cors = CORS(app)
+
+    app.json = CustomJSONProvider(app)
 
     #kirjautuminen
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=3)
