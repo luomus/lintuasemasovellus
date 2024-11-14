@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   attachmentField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 75,
+    width: 90,
   },
   checkbox: {
     color: theme.palette.primary.main,

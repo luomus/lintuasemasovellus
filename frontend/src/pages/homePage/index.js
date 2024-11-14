@@ -489,24 +489,24 @@ export const HomePage = ({ user, userObservatory }) => {
               alignItems="flex-start"
               spacing={1}>
               <Grid item xs={11} >
-                <Typography variant="h5" component="h2" >
+                <Typography variant="h4" component="h2" >
                   {t("addObservations")} - {userObservatory.replace("_", " ")}
                 </Typography>
                 <br />
               </Grid>
-              <Grid container item xs={1} justify="flex-end">
+              <Grid container item xs={1} justifyContent="flex-end">
                 <Tooltip title={t("drafts")}>
-                  <IconButton id="open-draft-button" size="small" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
+                  <IconButton id="open-draft-button" size="medium" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
                     <Bookmarks fontSize="default" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t("copy")}>
-                  <IconButton id="open-copy-button" size="small" onClick={handleOpenCopy} variant="contained" color="primary">
+                  <IconButton id="open-copy-button" size="medium" onClick={handleOpenCopy} variant="contained" color="primary">
                     <FileCopy fontSize="default" />
                   </IconButton>
                 </Tooltip>
               </Grid>
-              <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px" }}>
+              <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px", paddingLeft: 0 }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={localeFI}>
                   <DesktopDatePicker
                     className={classes.datePicker}
@@ -531,7 +531,7 @@ export const HomePage = ({ user, userObservatory }) => {
                 </LocalizationProvider>
               </Grid>
 
-              <Grid item xs={9}>
+              <Grid item xs={9} style={{ paddingLeft: 0 }}>
                 <TextField required
                   fullWidth={true}
                   id="observers"
@@ -600,6 +600,7 @@ export const HomePage = ({ user, userObservatory }) => {
                     <Grid container
                       alignItems="flex-start"
                       spacing={1}
+                      style={{ marginLeft: 0 }}
                     >
                       <DailyActions />
                     </Grid>
@@ -643,7 +644,7 @@ export const HomePage = ({ user, userObservatory }) => {
                       ))}
 
                       <Grid item xs={12}>
-                        <IconButton id="plus-catch-row-button" size="small" onClick={addCatchRow} variant="contained" color="primary">
+                        <IconButton id="plus-catch-row-button" size="medium" onClick={addCatchRow} variant="contained" color="primary">
                           <Add fontSize="default" />
                         </IconButton>
                         &nbsp; {(catchRows.length === 0) ? t("addRowByClicking") : ""}

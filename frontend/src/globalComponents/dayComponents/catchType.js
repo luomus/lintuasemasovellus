@@ -14,20 +14,18 @@ import { setNotifications } from "../../reducers/notificationsReducer";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 95,
+    minWidth: 105,
   },
   formControlLabel: {
-    padding: "0px 15px 0px 0px",
+    padding: "0px 10px 0px 0px",
     margin: theme.spacing(1),
   },
   formControlLabel2: {
-    padding: "0px 15px 0px 0px",
-    margin: theme.spacing(1),
-    marginTop: theme.spacing(3),
+    padding: "0px 10px 0px 0px",
+    margin: theme.spacing(1)
   },
   formControlLabel3: {
-    margin: theme.spacing(1),
-    marginTop: theme.spacing(3),
+    margin: theme.spacing(1)
   },
   netCodes: {
     width: 110,
@@ -35,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   numberField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 75
+    width: 90
   },
   netCodesField: {
     marginLeft: theme.spacing(1),
@@ -291,6 +289,7 @@ const CatchType = ({ cr }) => {
                 type="number"
                 value={cr.lukumaara}
                 onChange={(event) => handleChange(event.target)}
+                hiddenLabel={true}
                 InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
               />
             } />
@@ -332,7 +331,7 @@ const CatchType = ({ cr }) => {
               } />
         }
 
-        <IconButton id="removeButton" size="small" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
+        <IconButton id="removeButton" size="medium" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
           <HighlightOff fontSize="default" color="error" />
         </IconButton>
       </FormGroup>
