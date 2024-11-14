@@ -81,7 +81,7 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
                       key: TARGET
-                - name: USERNAME
+                - name: LINTUASEMA_USERNAME
                   valueFrom:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
@@ -111,8 +111,10 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
                       key: LAJI_AUTH_URL
+                - name: DB_TYPE
+                  value: oracle
                 - name: BEHIND_PROXY
-                  value: "True"
+                  value: True
               ports:
                 - containerPort: 3000
                   protocol: TCP
