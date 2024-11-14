@@ -30,7 +30,7 @@ export const UserManual = () => {
     <div>
 
       <Paper className={classes.paper}>
-        <Typography variant="h5" component="h2" >
+        <Typography variant="h4" component="h2" >
           {t("manualTitle")}
         </Typography>
         <br />

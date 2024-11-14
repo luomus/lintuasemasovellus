@@ -20,7 +20,7 @@ const DayPagination = ({
       <TableRow>
         <TablePagination
           rowsPerPageOptions={[10, 25, { label: t("all"), value: -1 }]}
-          colSpan={3}
+          colSpan={4}
           labelRowsPerPage={t("rowsPerPage")}
           labelDisplayedRows={
             ({ from, to, count }) => {

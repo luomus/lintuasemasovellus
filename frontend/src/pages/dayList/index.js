@@ -3,20 +3,17 @@ import {
   TableCell, TableHead, TableRow,
   TableContainer,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  Input,
   MenuItem,
   Checkbox,
   ListItemText,
-  Chip
+  Chip, TextField
 } from "@mui/material";
 import { makeStyles, withStyles } from "@mui/styles";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
 import PropTypes from "prop-types";
 import { retrieveDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
@@ -57,17 +54,19 @@ const StyledTableCell = withStyles(() => ({
   },
 }))(TableCell);
 
-export const DayList = ({ userObservatory }) => {
+const selectDays = state => state.days;
+
+const getSelectList = (userObservatory) => createSelector([selectDays], (days) => (
+  days.filter((day) => day.observatory === userObservatory)
+));
+
+const DayListComponent = ({ list }) => {
 
   const { t } = useTranslation();
 
   const navigate = useNavigate();
 
   const classes = useStyles();
-
-  const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
-
-  console.log("list: ", list);
 
   const dispatch = useDispatch();
 
@@ -112,43 +111,42 @@ export const DayList = ({ userObservatory }) => {
     navigate(`/daydetails/${s.day}`);
   };
 
-  console.log("list: ", list);
-
   return (
     <div>
       <Paper className={classes.paper}>
 
-        <Typography variant="h5" component="h2" >
+        <Typography variant="h4" component="h2" >
           {t("days")}
         </Typography>
-        <br />
-        {t("filter")}
-        <br />
-        <FormControl className={classes.formControl}>
-          <InputLabel id="filter-year-label">{t("year")}</InputLabel>
-          <Select
-            label="filter-year-label"
-            id="filter-year"
-            multiple
-            input={<Input />}
-            value={selectedYears}
-            onChange={(e) => setSelectedYears(e.target.value)}
-            renderValue={(selected) => (
+        <br/>
+        <Typography variant="subtitle1">
+          {t("filter")}
+        </Typography>
+        <TextField
+          className={classes.formControl}
+          label={t("year")}
+          id="filter-year"
+          select
+          SelectProps={{
+            multiple: true,
+            value: selectedYears,
+            onChange: (e) => setSelectedYears(e.target.value),
+            renderValue: (selected) => (
               <div className={classes.chips}>
                 {selected.map((value) => (
                   <Chip key={value} label={value} className={classes.chip} />
                 ))}
               </div>
-            )}
-          >
-            {availableYears.map((y) => (
-              <MenuItem key={y} value={y}>
-                <Checkbox checked={selectedYears.indexOf(y) > -1} />
-                <ListItemText primary={y} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            )
+          }}
+        >
+          {availableYears.map((y) => (
+            <MenuItem key={y} value={y}>
+              <Checkbox checked={selectedYears.indexOf(y) > -1} />
+              <ListItemText primary={y} />
+            </MenuItem>
+          ))}
+        </TextField>
         <TableContainer>
           <Table className={classes.table}>
             <TableHead>
@@ -203,6 +201,18 @@ export const DayList = ({ userObservatory }) => {
     </div>
   );
 };
+
+DayListComponent.propTypes = {
+  list: PropTypes.array.isRequired
+};
+
+export const DayList = connect((state, { userObservatory }) => {
+  const getList = getSelectList(userObservatory);
+
+  return {
+    list: getList(state)
+  };
+})(DayListComponent);
 
 DayList.propTypes = {
   userObservatory: PropTypes.string.isRequired
