@@ -127,17 +127,19 @@ const DayListComponent = ({ list }) => {
           label={t("year")}
           id="filter-year"
           select
-          SelectProps={{
-            multiple: true,
-            value: selectedYears,
-            onChange: (e) => setSelectedYears(e.target.value),
-            renderValue: (selected) => (
-              <div className={classes.chips}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} className={classes.chip} />
-                ))}
-              </div>
-            )
+          slotProps={{
+            select: {
+              multiple: true,
+              value: selectedYears,
+              onChange: (e) => setSelectedYears(e.target.value),
+              renderValue: (selected) => (
+                <div className={classes.chips}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} className={classes.chip}/>
+                  ))}
+                </div>
+              )
+            }
           }}
         >
           {availableYears.map((y) => (

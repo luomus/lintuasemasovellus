@@ -4,6 +4,16 @@ import { grey } from "@mui/material/colors";
 
 const theme = createTheme({
   components: {
+    MuiTextField: {
+      defaultProps: {
+        variant: "standard"
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        variant: "standard"
+      },
+    },
     MuiButton: {
       defaultProps: {
         color: "grey",

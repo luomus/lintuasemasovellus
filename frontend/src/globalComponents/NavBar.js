@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Drawer from "@mui/material/Drawer";
 import { makeStyles } from "@mui/styles";
-import { AppBar, Toolbar, IconButton, Typography, Box, Button,
+import {
+  AppBar, Toolbar, IconButton, Typography, Box, Button,
   Dialog, DialogTitle, DialogContent, DialogActions,
-  FormControl, InputLabel, Select, MenuItem, SvgIcon
+  MenuItem, SvgIcon, TextField
 } from "@mui/material";
 import { Dehaze, Replay } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
@@ -124,24 +125,27 @@ const NavBar = ({ user }) => {
       <DialogTitle>{t("chooseObservatory")}</DialogTitle>
       <DialogContent>
         <form id="observatorySelect" onSubmit={selectUserObservatory} className={classes.container}>
-          <FormControl required className={classes.formControl}>
-            <InputLabel id="Lintuasema">{t("observatory")}</InputLabel>
-            <Select
-              autoWidth={true}
-              label="observatory"
-              id="select-observatory"
-              value={observatory}
-              onChange={(event) => setObservatory(event.target.value)}
-            >
-              {
-                stations.map((station, i) =>
-                  <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
-                    {station.observatory.replace("_", " ")}
-                  </MenuItem>
-                )
+          <TextField
+            required
+            className={classes.formControl}
+            select
+            label={t("observatory")}
+            id="select-observatory"
+            slotProps={{
+              select: {
+                value: observatory,
+                onChange: (event) => setObservatory(event.target.value)
               }
-            </Select>
-          </FormControl>
+            }}
+          >
+            {
+              stations.map((station, i) =>
+                <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
+                  {station.observatory.replace("_", " ")}
+                </MenuItem>
+              )
+            }
+          </TextField>
         </form>
       </DialogContent>
       <DialogActions>

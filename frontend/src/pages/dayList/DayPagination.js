@@ -30,9 +30,11 @@ const DayPagination = ({
           count={list.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          SelectProps={{
-            inputProps: { "aria-label": "rows per page" },
-            native: true,
+          slotProps={{
+            select: {
+              inputProps: { "aria-label": "rows per page" },
+              native: true
+            }
           }}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
