@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import {
   Button, Box, IconButton, Paper, Grid, Typography, TextField,
@@ -25,12 +25,7 @@ import {
   editComment, editObservers, editActions, getSummary, getCatches, editCatchRow, deleteCatchRow
 } from "../../services";
 
-
-export const DayDetails = ({ userObservatory }) => {
-
-  const { day } = useParams();
-
-  const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
       background: "white",
       padding: "20px 30px",
@@ -75,7 +70,20 @@ export const DayDetails = ({ userObservatory }) => {
       },
     },
   })
-  );
+);
+
+const DisabledTextField = withStyles({
+  root: {
+    "& .MuiInputBase-root .Mui-disabled": {
+      color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
+      "-webkit-text-fill-color":  "rgba(0, 0, 0, 1)"
+    }
+  }
+})(TextField);
+
+export const DayDetails = ({ userObservatory }) => {
+
+  const { day } = useParams();
 
   const classes = useStyles();
   const { t } = useTranslation();
@@ -104,6 +112,8 @@ export const DayDetails = ({ userObservatory }) => {
   const [comment, setComment] = useState();
   const [selectedActions, setSelectedActions] = useState();
   const [thisDay, setThisDay] = useState(null);
+  const [errorsInCatches, setErrorsInCacthes] = useState(false);
+  const [errorsInActions, setErrorsInActions] = useState(false);
 
   useEffect(() => {
     setThisDay(dayList.find(d => d.day === day && d.observatory === userObservatory) || null);
@@ -137,7 +147,32 @@ export const DayDetails = ({ userObservatory }) => {
     }
   }, [dayId]);
 
-  const observersOnSubmit = (event) => {
+  useEffect(() => {
+    let value = false;
+    Object.keys(notifications["catches"]).map(row => {
+      if (notifications["catches"][String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    Object.keys(editedCatches).map(row => {
+      if (editedCatches[String(row)].lukumaara === 0) {
+        value = true;
+      }
+    });
+    setErrorsInCacthes(value);
+  }, [notifications, editedCatches]);
+
+  useEffect(() => {
+    let value = false;
+    Object.keys(notifications["dailyactions"]).map(row => {
+      if (notifications["dailyactions"][String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    setErrorsInActions(value);
+  }, [notifications]);
+
+  const observersOnSubmit = useCallback((event) => {
     event.preventDefault();
     if (editedObservers.length !== 0) {
       setObservers(editedObservers);
@@ -145,15 +180,15 @@ export const DayDetails = ({ userObservatory }) => {
         .then(dayJson => setDayId(dayJson.data.id));
     }
     setObserversForm(false);
-  };
+  }, [dayId, editedObservers]);
 
-  const commentOnSubmit = (event) => {
+  const commentOnSubmit = useCallback((event) => {
     event.preventDefault();
     setComment(editedComment);
     editComment(dayId, editedComment)
       .then(dayJson => setDayId(dayJson.data.id));
     setCommentForm(false);
-  };
+  }, [dayId, editedComment]);
 
   useEffect( () => {
     let fetching = false;
@@ -172,31 +207,21 @@ export const DayDetails = ({ userObservatory }) => {
     return () => (fetching = true);
   }, [dayId]);
 
-  const handleEditShorthandOpen = () => {
+  const handleEditShorthandOpen = useCallback(() => {
     setEditShorthandModalOpen(true);
-  };
+  }, []);
 
-  const handleActionsEditOpen = () => {
+  const handleActionsEditOpen = useCallback(() => {
     dispatch(setDailyActions(selectedActions));
     setActionsEditMode(!actionsEditMode);
-  };
+  }, [selectedActions, actionsEditMode]);
 
-  const handleActionsEditCancel = () => {
+  const handleActionsEditCancel = useCallback(() => {
     dispatch(setDefaultActions(userObservatory));
     setActionsEditMode(!actionsEditMode);
-  };
+  }, [userObservatory, actionsEditMode]);
 
-  const errorsInActions = () => {
-    let value = false;
-    Object.keys(notifications["dailyactions"]).map(row => {
-      if (notifications["dailyactions"][String(row)].errors.length > 0) {
-        value = true;
-      }
-    });
-    return value;
-  };
-
-  const handleActionsEditSave = () => {
+  const handleActionsEditSave = useCallback(() => {
     let actionsToSave = editedActions;
     if ("attachments" in actionsToSave) {
       if (actionsToSave.attachments === "" || actionsToSave.attachments < 0) {
@@ -208,26 +233,28 @@ export const DayDetails = ({ userObservatory }) => {
     setSelectedActions(actionsToSave);
     setActionsEditMode(!actionsEditMode);
     dispatch(setDefaultActions(userObservatory));
-  };
+  }, [dayId, editedActions, actionsEditMode, userObservatory]);
 
-  const handleCatchesEditOpen = (key) => {
+  const handleCatchesEditOpen = useCallback((event) => {
+    const c = event.target.getAttribute('data-cache');
+    const key = catches[c].key;
     // send info to reducer
     dispatch(resetNotifications());
     const row = catches.filter(c => c.key === key);
     setCatchRowToEdit(row[0]);
     dispatch(setCatches(row));
     setCatchesEditMode(!actionsEditMode);
-  };
+  }, [catches, actionsEditMode]);
 
-  const handleCatchesEditCancel = () => {
+  const handleCatchesEditCancel = useCallback(() => {
     setCatchRowToEdit({});
     dispatch(setCatches([]));
     dispatch(resetNotifications());
     setCatchesEditMode(false);
     setAddingNewRowMode(false);
-  };
+  }, []);
 
-  const handleAddNewCatch = () => {
+  const handleAddNewCatch = useCallback(() => {
     setAddingNewRowMode(true);
     if (catches.length === 0) {
       dispatch(setNewCatchRow());
@@ -237,12 +264,14 @@ export const DayDetails = ({ userObservatory }) => {
     }
     dispatch(resetNotifications());
     setCatchesEditMode(true);
-  };
+  }, [catches]);
 
-  const handleCatchesEditSave = () => {
+  const handleCatchesEditSave = useCallback(() => {
     if (editedCatches.length === 0) {
-      deleteCatchRow(dayId, catchRowToEdit);
-      setDayCatches(catches.filter(row => row.key !== catchRowToEdit.key));
+      if (catchRowToEdit.key) {
+        deleteCatchRow(dayId, catchRowToEdit);
+        setDayCatches(catches.filter(row => row.key !== catchRowToEdit.key));
+      }
     } else {
       editCatchRow(dayId, editedCatches);
       if (addingNewRowMode) {
@@ -258,22 +287,19 @@ export const DayDetails = ({ userObservatory }) => {
     dispatch(resetNotifications());
     setCatchesEditMode(false);
     setAddingNewRowMode(false);
-  };
+  }, [dayId, editedCatches, catches, catchRowToEdit, addingNewRowMode]);
 
-  const errorsInCatches = () => {
-    let value = false;
-    Object.keys(notifications["catches"]).map(row => {
-      if (notifications["catches"][String(row)].errors.length > 0) {
-        value = true;
-      }
-    });
-    Object.keys(editedCatches).map(row => {
-      if (editedCatches[String(row)].lukumaara === 0) {
-        value = true;
-      }
-    });
-    return value;
-  };
+  const observerButtonClick = useCallback(() => setObserversForm(true), []);
+
+  const observerChange = useCallback((event) => setEditedObservers(event.target.value), []);
+
+  const observerCancelButtonClick = useCallback(() => setObserversForm(false), []);
+
+  const commentButtonClick = useCallback(() => setCommentForm(true), []);
+
+  const commentChange = useCallback((event) => setEditedComment(event.target.value), []);
+
+  const commentCancelButtonClick = useCallback(() => setCommentForm(false), []);
 
   const refetchObservations = async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -296,18 +322,10 @@ export const DayDetails = ({ userObservatory }) => {
     refetchObservations();
   };
 
-  const DisabledTextField = withStyles({
-    root: {
-      "& .MuiInputBase-root.Mui-disabled": {
-        color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
-      }
-    }
-  })(TextField);
-
   if (!dayId) {
     return (<>
       <Paper className={classes.paper}>
-        <Typography variant="h5" component="h2" >
+        <Typography variant="h4" component="h2" >
           {day} {" "}
           {userObservatory.replace("_", " ")}
         </Typography>
@@ -322,7 +340,7 @@ export const DayDetails = ({ userObservatory }) => {
         <Paper className={classes.paper}>
           <Grid container alignItems="flex-end" spacing={3}>
             <Grid item xs={6}>
-              <Typography id="dayAndObservatory" variant="h5" component="h2" >
+              <Typography id="dayAndObservatory" variant="h4" component="h2" >
                 {day} {" "}
                 {userObservatory.replace("_", " ")}
               </Typography>
@@ -336,7 +354,7 @@ export const DayDetails = ({ userObservatory }) => {
                   {t("observers")}{": "}{observers}{" "}
                 </Typography>
                 {observersForm === false ? (
-                  <IconButton id="observerButton" size="small" onClick={() => setObserversForm(true)} variant="contained" color="primary">
+                  <IconButton id="observerButton" size="small" onClick={observerButtonClick} variant="contained" color="primary">
                     <Edit fontSize="small" />
                   </IconButton>
                 ) : (
@@ -346,12 +364,12 @@ export const DayDetails = ({ userObservatory }) => {
                       id="observerField"
                       variant="outlined"
                       defaultValue={observers}
-                      onChange={(event) => setEditedObservers(event.target.value)}
+                      onChange={observerChange}
                     />
                     <Button id="observerSubmit" className={classes.button} type="submit" variant="contained" color="primary">
                       {t("save")}
                     </Button>
-                    <Button id="observerCancel" className={classes.button} variant="contained" onClick={() => setObserversForm(false)} color="secondary">
+                    <Button id="observerCancel" className={classes.button} variant="contained" onClick={observerCancelButtonClick} color="secondary">
                       {t("cancel")}
                     </Button>
                   </form>
@@ -365,7 +383,7 @@ export const DayDetails = ({ userObservatory }) => {
                   {t("comment")}{": "}{comment}{" "}
                 </Typography>
                 {commentForm === false ? (
-                  <IconButton id="commentButton" size="small" onClick={() => setCommentForm(true)} variant="contained" color="primary"  >
+                  <IconButton id="commentButton" size="small" onClick={commentButtonClick} variant="contained" color="primary"  >
                     <Edit fontSize="small" />
                   </IconButton>
                 ) : (
@@ -375,12 +393,12 @@ export const DayDetails = ({ userObservatory }) => {
                       id="commentField"
                       variant="outlined"
                       defaultValue={comment}
-                      onChange={(event) => setEditedComment(event.target.value)}
+                      onChange={commentChange}
                     />
                     <Button id="commentSubmit" className={classes.button} type="submit" variant="contained" color="primary">
                       {t("save")}
                     </Button>
-                    <Button id="commentCancel" className={classes.button} variant="contained" onClick={() => setCommentForm(false)} color="secondary">
+                    <Button id="commentCancel" className={classes.button} variant="contained" onClick={commentCancelButtonClick} color="secondary">
                       {t("cancel")}
                     </Button>
                   </form>
@@ -412,7 +430,7 @@ export const DayDetails = ({ userObservatory }) => {
                     label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
 
                   <Box>
-                    <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={() => handleActionsEditOpen()} variant="contained" color="primary"  >
+                    <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={handleActionsEditOpen} variant="contained" color="primary"  >
                       <Edit fontSize="default" />
                     </IconButton>
                   </Box>
@@ -422,10 +440,10 @@ export const DayDetails = ({ userObservatory }) => {
                   alignItems: "left"
                 }}>
                   <DailyActions />
-                  <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions()} onClick={() => handleActionsEditSave()} color="primary">
+                  <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions} onClick={handleActionsEditSave} color="primary">
                     {t("save")}
                   </Button>
-                  <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={() => handleActionsEditCancel()} color="secondary">
+                  <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={handleActionsEditCancel} color="secondary">
                     {t("cancel")}
                   </Button>
                 </div>
@@ -449,7 +467,7 @@ export const DayDetails = ({ userObservatory }) => {
                       <TableCell align="left">{t("netCodes")}</TableCell>
                       <TableCell align="left">{t("length")}</TableCell>
                       <TableCell align="left">
-                        <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary">
+                        <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary">
                           <Add fontSize="small" />
                         </IconButton>
                       </TableCell>
@@ -465,7 +483,7 @@ export const DayDetails = ({ userObservatory }) => {
                         <TableCell align="left" id="netCodes">{catches[String(c)].verkkokoodit ? catches[String(c)].verkkokoodit : "-"}</TableCell>
                         <TableCell align="left" id="netLength">{catches[String(c)].verkonPituus > 0 ? catches[String(c)].verkonPituus : "-"}</TableCell>
                         <TableCell align="left">
-                          <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleCatchesEditOpen(catches[String(c)].key)} variant="contained" color="primary">
+                          <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={handleCatchesEditOpen} variant="contained" color="primary">
                             <Edit fontSize="small" />
                           </IconButton>
                         </TableCell>
@@ -482,11 +500,11 @@ export const DayDetails = ({ userObservatory }) => {
                         <Notification category="catches" />
                         <CatchType cr={editedCatches[0]} />
                         <Button id="catchesEditSave" className={classes.button} variant="contained"
-                          onClick={() => handleCatchesEditSave()} color="primary"
-                          disabled={errorsInCatches()}>
+                          onClick={handleCatchesEditSave} color="primary"
+                          disabled={errorsInCatches}>
                           {t("save")}
                         </Button>
-                        <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
+                        <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary">
                           {t("cancel")}
                         </Button>
                       </div>
@@ -494,11 +512,11 @@ export const DayDetails = ({ userObservatory }) => {
                       <div>
                         <Typography variant="body1" color="error" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
                         <Button id="catchesEditSave" className={classes.deleteButton} variant="contained"
-                          onClick={() => handleCatchesEditSave()}
-                          disabled={errorsInCatches()}>
+                          onClick={handleCatchesEditSave}
+                          disabled={errorsInCatches}>
                           {t("remove")}
                         </Button>
-                        <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={() => handleCatchesEditCancel()} color="secondary">
+                        <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary">
                           {t("cancel")}
                         </Button>
                       </div>
@@ -507,7 +525,7 @@ export const DayDetails = ({ userObservatory }) => {
                   : /* NO CATCHES FOR THAT DAY*/
                   <Typography variant="body1"  >
                     {t("noCatchesDeclared")}
-                    <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={() => handleAddNewCatch()} variant="contained" color="primary"  >
+                    <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary"  >
                       <Add fontSize="small" />
                     </IconButton>
                   </Typography>
@@ -521,7 +539,7 @@ export const DayDetails = ({ userObservatory }) => {
               </Grid>
               <Grid item xs={5}>
                 <Box display="flex" justifyContent="flex-end">
-                  <Button variant="contained" color="primary" onClick={() => handleEditShorthandOpen()}>
+                  <Button variant="contained" color="primary" onClick={handleEditShorthandOpen}>
                     {t("editObservations")}
                   </Button>{" "}
                 </Box>
