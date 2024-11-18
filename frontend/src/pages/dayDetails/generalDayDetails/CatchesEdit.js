@@ -13,8 +13,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { Add, Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
-import Notification from "../../globalComponents/Notification";
-import CatchType from "../../globalComponents/dayComponents/catchType";
+import Notification from "../../../globalComponents/Notification";
+import CatchType from "../../../globalComponents/dayComponents/catchType";
 
 const useStyles = makeStyles(theme => ({
     button: {

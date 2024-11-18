@@ -6,7 +6,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Edit, RemoveCircleOutlineRounded } from "@mui/icons-material";
 import { makeStyles, withStyles } from "@mui/styles";
-import DailyActions from "../../globalComponents/dayComponents/dailyActions";
+import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
 
 const useStyles = makeStyles(theme => ({
     formControlLabel: {
