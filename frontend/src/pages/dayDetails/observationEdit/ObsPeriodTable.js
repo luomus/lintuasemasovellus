@@ -9,12 +9,12 @@ import { makeStyles, withStyles } from "@mui/styles";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import ObservationPeriod from "../obsPeriod";
-import EditObsPeriod from "../editObsPeriod";
+import ObservationPeriod from "../../obsPeriod";
+import EditObsPeriod from "../../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
-import { defaultBirds, uniqueBirds } from "../../globalConstants";
+import { defaultBirds, uniqueBirds } from "../../../globalConstants";
 import Row from "./Row";
-import SearchBar from "../../globalComponents/SearchBar";
+import SearchBar from "../../../globalComponents/SearchBar";
 
 const ObsPeriodTable = (props) => {
 

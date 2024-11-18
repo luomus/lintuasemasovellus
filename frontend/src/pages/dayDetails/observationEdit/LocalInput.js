@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { updateLocalObservation, updateScatterObservation } from "../../services";
+import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
