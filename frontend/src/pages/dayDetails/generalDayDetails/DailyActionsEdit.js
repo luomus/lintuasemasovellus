@@ -89,7 +89,7 @@ const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, o
 };
 
 DailyActionsEdit.propTypes = {
-  selectedActions: PropTypes.any.isRequired,
+  selectedActions: PropTypes.any,
   errorsInActions: PropTypes.bool.isRequired,
   actionsEditMode: PropTypes.bool.isRequired,
   onActionsEditOpen: PropTypes.func.isRequired,

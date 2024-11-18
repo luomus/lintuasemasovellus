@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  Button, Box, Paper, Grid, Typography
+  Box, Paper, Grid, Typography
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import ObsPeriodTable from "./ObsPeriodTable";
-import EditShorthand from "../editShorthand";
 import AntTabs from "./AntTabs";
 
 import {
@@ -16,8 +15,9 @@ import {
   getSummary
 } from "../../services";
 import { GeneralDayDetails } from "./generalDayDetails";
+import { ShorthandEdit } from "./shorthandEdit";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     paper: {
       background: "white",
       padding: "20px 30px",
@@ -37,7 +37,6 @@ export const DayDetails = ({ userObservatory }) => {
   const [obsPeriods, setObsperiods] = useState([]);
   const [summary, setSummary] = useState([]);
   const [mode, setMode] = useState("speciesTable");
-  const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
   const [thisDay, setThisDay] = useState(null);
   const [dayId, setDayId] = useState();
 
@@ -64,10 +63,6 @@ export const DayDetails = ({ userObservatory }) => {
     return () => (fetching = true);
   }, [dayId]);
 
-  const handleEditShorthandOpen = useCallback(() => {
-    setEditShorthandModalOpen(true);
-  }, []);
-
   const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
     setObsperiods(res);
@@ -84,10 +79,9 @@ export const DayDetails = ({ userObservatory }) => {
     setSummary(res2);
   }, [dayId]);
 
-  const handleEditShorthandClose = () => {
-    setEditShorthandModalOpen(false);
+  const handleEditShorthandClose = useCallback(() => {
     refetchObservations();
-  };
+  }, []);
 
   if (!dayId) {
     return (<>
@@ -122,11 +116,7 @@ export const DayDetails = ({ userObservatory }) => {
                 </Box>
               </Grid>
               <Grid item xs={5}>
-                <Box display="flex" justifyContent="flex-end">
-                  <Button variant="contained" color="primary" onClick={handleEditShorthandOpen}>
-                    {t("editObservations")}
-                  </Button>{" "}
-                </Box>
+                <ShorthandEdit day={day} dayId={dayId} onEditShorthandClose={handleEditShorthandClose}></ShorthandEdit>
               </Grid>
             </Grid>
 
@@ -143,12 +133,6 @@ export const DayDetails = ({ userObservatory }) => {
               />
             </Grid>
           </Grid>
-          <EditShorthand
-            date={day}
-            dayId={dayId}
-            open={editShorthandModalOpen}
-            handleCloseModal={handleEditShorthandClose}
-          />
         </Paper>
       </>
     );

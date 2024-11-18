@@ -1,7 +1,7 @@
 import {
   Backdrop, Fade, Modal, Grid, Button,
   FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle,
+  DialogContent, DialogContentText, DialogTitle, backdropClasses,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
@@ -202,10 +202,6 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
       onClose={handleClose}
       disableAutoFocus={true}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
     >
       <Fade in={open}>
         <div className={classes.paper}>
@@ -214,7 +210,6 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
           <h3> {t("chooseTypeAndLocation")}</h3>
           <Grid
             container
-            height="100%"
             alignItems="flex-start"
             spacing={1}>
             <Grid item xs={2}>
