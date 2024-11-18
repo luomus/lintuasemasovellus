@@ -24,6 +24,7 @@ import {
   getDaysObservationPeriods,
   editComment, editObservers, editActions, getSummary, getCatches, editCatchRow, deleteCatchRow
 } from "../../services";
+import TextEdit from "./TextEdit";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -96,10 +97,6 @@ export const DayDetails = ({ userObservatory }) => {
 
   const [obsPeriods, setObsperiods] = useState([]);
   const [summary, setSummary] = useState([]);
-  const [observersForm, setObserversForm] = useState(false);
-  const [commentForm, setCommentForm] = useState(false);
-  const [editedComment, setEditedComment] = useState("");
-  const [editedObservers, setEditedObservers] = useState("");
   const [mode, setMode] = useState("speciesTable");
   const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
   const [actionsEditMode, setActionsEditMode] = useState(false);
@@ -172,23 +169,19 @@ export const DayDetails = ({ userObservatory }) => {
     setErrorsInActions(value);
   }, [notifications]);
 
-  const observersOnSubmit = useCallback((event) => {
-    event.preventDefault();
-    if (editedObservers.length !== 0) {
-      setObservers(editedObservers);
-      editObservers(dayId, editedObservers)
+  const observersOnSave = useCallback((newObservers) => {
+    if (newObservers.length !== 0) {
+      setObservers(newObservers);
+      editObservers(dayId, newObservers)
         .then(dayJson => setDayId(dayJson.data.id));
     }
-    setObserversForm(false);
-  }, [dayId, editedObservers]);
+  }, [dayId]);
 
-  const commentOnSubmit = useCallback((event) => {
-    event.preventDefault();
-    setComment(editedComment);
-    editComment(dayId, editedComment)
+  const commentOnSave = useCallback((newComment) => {
+    setComment(newComment);
+    editComment(dayId, newComment)
       .then(dayJson => setDayId(dayJson.data.id));
-    setCommentForm(false);
-  }, [dayId, editedComment]);
+  }, [dayId]);
 
   useEffect( () => {
     let fetching = false;
@@ -289,33 +282,21 @@ export const DayDetails = ({ userObservatory }) => {
     setAddingNewRowMode(false);
   }, [dayId, editedCatches, catches, catchRowToEdit, addingNewRowMode]);
 
-  const observerButtonClick = useCallback(() => setObserversForm(true), []);
-
-  const observerChange = useCallback((event) => setEditedObservers(event.target.value), []);
-
-  const observerCancelButtonClick = useCallback(() => setObserversForm(false), []);
-
-  const commentButtonClick = useCallback(() => setCommentForm(true), []);
-
-  const commentChange = useCallback((event) => setEditedComment(event.target.value), []);
-
-  const commentCancelButtonClick = useCallback(() => setCommentForm(false), []);
-
-  const refetchObservations = async () => {
+  const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
     setObsperiods(res);
     const res2 = await getSummary(dayId);
     setSummary(res2);
-  };
+  }, [dayId]);
 
   useEffect(() => {
     refetchObservations();
   }, [mode]);
 
-  const refetchSummary = async () => {
+  const refetchSummary = useCallback(async () => {
     const res2 = await getSummary(dayId);
     setSummary(res2);
-  };
+  }, [dayId]);
 
   const handleEditShorthandClose = () => {
     setEditShorthandModalOpen(false);
@@ -346,64 +327,8 @@ export const DayDetails = ({ userObservatory }) => {
               </Typography>
             </Grid>
             <Grid item xs={12} fullwidth="true">
-              <div style={{
-                display: "flex",
-                alignItems: "left"
-              }}>
-                <Typography id="observers" variant="h6" component="h2" className={classes.obsAndComment}>
-                  {t("observers")}{": "}{observers}{" "}
-                </Typography>
-                {observersForm === false ? (
-                  <IconButton id="observerButton" size="small" onClick={observerButtonClick} variant="contained" color="primary">
-                    <Edit fontSize="small" />
-                  </IconButton>
-                ) : (
-                  <form onSubmit={observersOnSubmit}>
-                    <TextField
-                      className={classes.obsAndComment}
-                      id="observerField"
-                      variant="outlined"
-                      defaultValue={observers}
-                      onChange={observerChange}
-                    />
-                    <Button id="observerSubmit" className={classes.button} type="submit" variant="contained" color="primary">
-                      {t("save")}
-                    </Button>
-                    <Button id="observerCancel" className={classes.button} variant="contained" onClick={observerCancelButtonClick} color="secondary">
-                      {t("cancel")}
-                    </Button>
-                  </form>
-                )}
-              </div>
-              <div style={{
-                display: "flex",
-                alignItems: "left"
-              }}>
-                <Typography id="comment" variant="h6" component="h2" className={classes.obsAndComment}>
-                  {t("comment")}{": "}{comment}{" "}
-                </Typography>
-                {commentForm === false ? (
-                  <IconButton id="commentButton" size="small" onClick={commentButtonClick} variant="contained" color="primary"  >
-                    <Edit fontSize="small" />
-                  </IconButton>
-                ) : (
-                  <form onSubmit={commentOnSubmit}>
-                    <TextField
-                      className={classes.obsAndComment}
-                      id="commentField"
-                      variant="outlined"
-                      defaultValue={comment}
-                      onChange={commentChange}
-                    />
-                    <Button id="commentSubmit" className={classes.button} type="submit" variant="contained" color="primary">
-                      {t("save")}
-                    </Button>
-                    <Button id="commentCancel" className={classes.button} variant="contained" onClick={commentCancelButtonClick} color="secondary">
-                      {t("cancel")}
-                    </Button>
-                  </form>
-                )}
-              </div>
+              <TextEdit label={t("observers")} defaultValue={observers} onSave={observersOnSave} data-cy="observers"></TextEdit>
+              <TextEdit label={t("comment")} defaultValue={comment} onSave={commentOnSave} data-cy="comment"></TextEdit>
             </Grid>
 
             {/* DAILY ACTIONS */}

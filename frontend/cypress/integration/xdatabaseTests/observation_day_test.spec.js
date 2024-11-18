@@ -90,10 +90,10 @@ describe("AddObservationDay", function () {
   it("Comment and observer can be edited", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
-    cy.get("#commentButton").click();
-    cy.get("#commentField").clear();
-    cy.get("#commentField").type(changedComment);
-    cy.get("#commentSubmit").click();
+    cy.get('[data-cy="comment"] [data-cy="edit"]').click();
+    cy.get('[data-cy="comment"] [data-cy="text-field"]').clear();
+    cy.get('[data-cy="comment"] [data-cy="text-field"]').type(changedComment);
+    cy.get('[data-cy="comment"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
@@ -101,19 +101,19 @@ describe("AddObservationDay", function () {
     cy.contains(comment).should("not.exist");
 
     // change comment to be empty
-    cy.get("#commentButton").click();
-    cy.get("#commentField").clear();
-    cy.get("#commentSubmit").click();
+    cy.get('[data-cy="comment"] [data-cy="edit"]').click();
+    cy.get('[data-cy="comment"] [data-cy="text-field"]').clear();
+    cy.get('[data-cy="comment"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.contains(changedComment).should("not.exist");
 
     // change comment back to original
-    cy.get("#commentButton").click();
-    cy.get("#commentField").clear();
-    cy.get("#commentField").type(comment);
-    cy.get("#commentSubmit").click();
+    cy.get('[data-cy="comment"] [data-cy="edit"]').click();
+    cy.get('[data-cy="comment"] [data-cy="text-field"]').clear();
+    cy.get('[data-cy="comment"] [data-cy="text-field"]').type(comment);
+    cy.get('[data-cy="comment"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
@@ -121,10 +121,10 @@ describe("AddObservationDay", function () {
     cy.contains(changedComment).should("not.exist");
 
     // change name of observer
-    cy.get("#observerButton").click();
-    cy.get("#observerField").clear();
-    cy.get("#observerField").type(changedObserver);
-    cy.get("#observerSubmit").click();
+    cy.get('[data-cy="observers"] [data-cy="edit"]').click();
+    cy.get('[data-cy="observers"] [data-cy="text-field"]').clear();
+    cy.get('[data-cy="observers"] [data-cy="text-field"]').type(changedObserver);
+    cy.get('[data-cy="observers"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
     cy.contains("Aarni Apulaishavainnoitsija").click();
@@ -132,10 +132,10 @@ describe("AddObservationDay", function () {
     cy.contains(observer).should("not.exist");
 
     // change observer back to original
-    cy.get("#observerButton").click();
-    cy.get("#observerField").clear();
-    cy.get("#observerField").type(observer);
-    cy.get("#observerSubmit").click();
+    cy.get('[data-cy="observers"] [data-cy="edit"]').click();
+    cy.get('[data-cy="observers"] [data-cy="text-field"]').clear();
+    cy.get('[data-cy="observers"] [data-cy="text-field"]').type(observer);
+    cy.get('[data-cy="observers"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
@@ -197,7 +197,7 @@ describe("AddObservationDay", function () {
     cy.contains(date2);
 
   });
-  
+
 
   it("Day and period for non-Vakio has been added for observationlist", function () {
     cy.get("#observatorySelector").click();
