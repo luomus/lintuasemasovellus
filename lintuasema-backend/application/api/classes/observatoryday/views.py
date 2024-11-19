@@ -29,7 +29,7 @@ from datetime import datetime
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
-  # This is used for taking the given shorthand and turning it into an observatory day, observation periods and observations. 
+  # This is used for taking the given shorthand and turning it into an observatory day, observation periods and observations.
   # ARRIVING DATA:
   # {
   #    day, comment, observers, observatory, selectedactions, userID,
@@ -40,7 +40,7 @@ def add_everything():
 
     req = request.get_json()
 
-    # Save observatoryDay 
+    # Save observatoryDay
     observatory_id = getObservatoryId(req['observatory'])
     day = datetime.strptime(req['day'], '%d.%m.%Y')
 
@@ -60,16 +60,16 @@ def add_everything():
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
 
-    #Save observation periods 
+    #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
         obsp = Observationperiod(
-            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),        
+            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
             type_id=getTypeIdByName(obsperiod['observationType']),
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
-        
+
 
         # observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
@@ -109,7 +109,7 @@ def add_everything():
                         notes=subObservation['notes'],
                         observationperiod_id=obspId,
                         shorthand_id=shorthand_id,
-                        account_id=req['userID'])   
+                        account_id=req['userID'])
 
                     db.session().add(sub_observation)
 
@@ -126,24 +126,24 @@ def update_local():
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
     editLocalObs(obsday_id, obserid, req['species'], req['count'], req['gau'])
-    return req['count']
+    return jsonify(req)
 
 @bp.route('/api/updateScatterObservation', methods=['POST']) #Scatter observation = hajahavainto, a more accurate English term would be miscellaneous observation
 @login_required
 def update_scatter():
     #This is almost exactly the same as above
     req=request.get_json()
-    day=datetime.strptime(req['date'], '%d.%m.%Y') 
+    day=datetime.strptime(req['date'], '%d.%m.%Y')
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
     editScatterObs(obsday_id, obserid, req['species'], req['count'])
-    return req['count']
+    return jsonify(req)
 
 @bp.route('/api/addDay', methods=['POST'])
 @login_required
 def add_day():
     req = request.get_json()
-  
+
     ret = addDayFromReq(req)
 
     return jsonify(ret)
@@ -181,7 +181,7 @@ def edit_observers(obsday_id, observers):
 @login_required
 def edit_actions(obsday_id, actions):
     ret = update_actions(obsday_id, actions)
-    
+
     return jsonify(ret)
 
 @bp.route('/api/searchDayInfo/<day>/<observatory>', methods=['GET'])
@@ -198,10 +198,9 @@ def get_latest_days(observatory):
     #Jos lintuasemaa ei ole valittu, frontista tulee merkkijono '[object Object]' ja kysely menee rikki
     if observatory != '[object Object]':
         observatory_id = getObservatoryId(observatory)
-        
+
         res = getLatestDays(observatory_id)
 
     return jsonify(res)
 
 
-    

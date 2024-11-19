@@ -1,35 +1,23 @@
-import React, { useState, useLayoutEffect } from "react";
-import { TableCell } from "@mui/material";
-import { withStyles } from "@mui/styles";
+import React, {useState, useLayoutEffect, useEffect} from "react";
 import PropTypes from "prop-types";
 import LocalInput from "./LocalInput";
+import { StyledTableCell } from "./common";
 
 
 const Row = ({ s, date, userObservatory }) => {
-
-  const StyledTableCell = withStyles(() => ({
-    head: {
-      backgroundColor: "grey",
-      color: "white",
-    },
-    body: {
-      fontSize: 14,
-      "&:nth-child(1) summary": {
-        cursor: "pointer",
-      },
-      "&.dotted": {
-        borderLeft: "1px dotted",
-      }
-    },
-  }))(TableCell);
-
-  const [localOther, setLocalOther] = useState(parseInt(s.localOther));
-  const [localGau, setLocalGau] = useState(parseInt(s.localGåu));
-  const [scatterObs, setScatterObs] = useState(s.scatterObs);
+  const [localOther, setLocalOther] = useState(0);
+  const [localGau, setLocalGau] = useState(0);
+  const [scatterObs, setScatterObs] = useState(0);
 
   const input1Ref = React.createRef();
   const input2Ref = React.createRef();
   const input3Ref = React.createRef();
+
+  useEffect(() => {
+    setLocalOther(s.localOther);
+    setLocalGau(s.localGåu);
+    setScatterObs(s.scatterObs);
+  }, [s]);
 
   useLayoutEffect(() => {
     const handleKeyDownEvent = e => {

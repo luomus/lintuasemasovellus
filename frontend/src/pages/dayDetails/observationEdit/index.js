@@ -37,7 +37,7 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
         }
       });
     return () => (fetching = true);
-  }, [dayId]);
+  }, [dayId, mode]);
 
   const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -51,7 +51,6 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
       date={day}
       summary={summary}
       userObservatory={userObservatory}
-      refetchObservations={refetchObservations}
     ></SpeciesTable>
   ) : (
     <PeriodTable

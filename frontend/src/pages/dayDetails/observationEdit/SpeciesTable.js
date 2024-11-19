@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
     Table, TableHead, TableRow, TableContainer,
     TableBody, Typography,
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SpeciesTable = (props) => {
 
-    const { date, summary, refetchObservations, userObservatory } = props;
+    const { date, summary, userObservatory } = props;
 
     const { t } = useTranslation();
     const classes = useStyles();
@@ -50,14 +50,14 @@ const SpeciesTable = (props) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(50);
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
-    };
+    }, []);
 
-    const handleChangeRowsPerPage = (event) => {
+    const handleChangeRowsPerPage = useCallback((event) => {
         setRowsPerPage(Number(event.target.value));
         setPage(0);
-    };
+    }, []);
 
     useEffect(() => {
         setPage(0);
@@ -92,13 +92,13 @@ const SpeciesTable = (props) => {
         );
     };
 
-    const handleFilterChange = () => {
-        setBirdsWithObsFilter(!birdsWithObsFilter);
-    };
+    const handleFilterChange = useCallback((event) => {
+        setBirdsWithObsFilter(event.target.checked);
+    }, []);
 
-    const handleSpeciesListChange = (event) => {
+    const handleSpeciesListChange = useCallback((event) => {
         setSpeciesListType(event.target.value);
-    };
+    }, []);
 
     //updateExtendedSummary if changes to summary or speciesListType filter
     useEffect(() => {
@@ -117,25 +117,17 @@ const SpeciesTable = (props) => {
         setExtendedSummary(
             generateExtendedSummary(species)
         );
-    }, [summary]);
+    }, [summary, speciesListType, userObservatory]);
 
     useEffect(() => {
-        filterSummary();
-    }, [extendedSummary]);
-
-    useEffect(() => {
-        refetchObservations();
-    }, [birdsWithObsFilter, textFilter, speciesListType]);
-
-    const filterSummary = () => {
-        setFilteredSummary(
-            [...extendedSummary]
-                .filter(s =>
-                    (s.allMigration + s.totalLocal) > (birdsWithObsFilter ? 0 : -1)
-                    && s.species.toLowerCase().includes(textFilter.toLowerCase())
-                )
-        );
-    };
+      setFilteredSummary(
+        [...extendedSummary]
+          .filter(s =>
+            (s.allMigration + s.totalLocal) > (birdsWithObsFilter ? 0 : -1)
+            && s.species.toLowerCase().includes(textFilter.toLowerCase())
+          )
+      );
+    }, [extendedSummary, birdsWithObsFilter, textFilter]);
 
     return (
         <div>
@@ -225,8 +217,7 @@ const SpeciesTable = (props) => {
 SpeciesTable.propTypes = {
     date: PropTypes.string.isRequired,
     summary: PropTypes.array.isRequired,
-    userObservatory: PropTypes.string.isRequired,
-    refetchObservations: PropTypes.func.isRequired
+    userObservatory: PropTypes.string.isRequired
 };
 
 export default SpeciesTable;

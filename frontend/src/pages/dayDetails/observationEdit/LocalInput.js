@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
@@ -22,16 +22,32 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange, inp
 
   const classes = useStyles();
 
-  const handleInput = async (event) => {
-    event.preventDefault();
-    if (parseInt(event.target.value) !== count && Number.isInteger(parseInt(event.target.value))) {
-      onChange(parseInt(event.target.value));
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    setInputValue(count);
+  }, [count]);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => saveValue(), 500);
+    return () => clearTimeout(timeOutId);
+  }, [inputValue]);
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  }
+
+  const saveValue = async () => {
+    const newValue = parseInt(inputValue, 10);
+
+    if (newValue !== count && Number.isInteger(newValue)) {
+      onChange(newValue);
       try {
         if (dataType.includes("local")) {
-          await updateLocalObservation(date, observatory, species, event.target.value, dataType === "localGau" ? 1 : 0);
+          await updateLocalObservation(date, observatory, species, newValue, dataType === "localGau" ? 1 : 0);
         }
         if (dataType === "scatter") {
-          await updateScatterObservation(date, observatory, species, event.target.value);
+          await updateScatterObservation(date, observatory, species, newValue);
         }
       } catch (error) {
         console.log("error: ", error);
@@ -42,13 +58,23 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange, inp
 
   return (
     <div className={classes.container}>
-      <TextField id="standard-basic" name={dataType} className={classes.textInput} ref={inputRef}
-        variant="standard" type="number" size="small" species={species} onBlur={handleInput} InputProps={{
-          inputProps: {
+      <TextField
+        id="standard-basic"
+        name={dataType}
+        className={classes.textInput}
+        ref={inputRef}
+        variant="standard"
+        type="number"
+        size="small"
+        onChange={handleChange}
+        slotProps={{
+          input: {
             min: 0,
-            defaultValue: count,
+            value: inputValue,
+            disableInjectingGlobalStyles: true
           }
-        }} />
+        }}
+      ></TextField>
     </div>
   );
 };

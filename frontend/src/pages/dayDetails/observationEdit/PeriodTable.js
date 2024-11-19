@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useCallback, useState} from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, Typography,
@@ -77,14 +77,14 @@ const PeriodTable = (props) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage);
-  };
+  }, []);
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = useCallback((event) => {
     setRowsPerPage(Number(event.target.value));
     setPage(0);
-  };
+  }, []);
 
   const handleClose = () => {
     setModalOpen(false);
