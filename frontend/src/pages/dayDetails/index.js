@@ -62,7 +62,9 @@ export const DayDetails = ({ userObservatory }) => {
             <Grid item xs={12}>
               <GeneralDayDetails userObservatory={userObservatory} thisDay={thisDay}></GeneralDayDetails>
             </Grid>
-            <ObservationEdit userObservatory={userObservatory} dayId={dayId}></ObservationEdit>
+            <Grid item xs={12}>
+              <ObservationEdit userObservatory={userObservatory} dayId={dayId}></ObservationEdit>
+            </Grid>
           </Grid>
         </Paper>
       </>

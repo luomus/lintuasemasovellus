@@ -4,7 +4,6 @@ import {
   Box, Grid
 } from "@mui/material";
 import PropTypes from "prop-types";
-import ObsPeriodTable from "./ObsPeriodTable";
 import AntTabs from "./AntTabs";
 
 import {
@@ -12,6 +11,8 @@ import {
   getSummary
 } from "../../../services";
 import { ShorthandEdit } from "./ShorthandEdit";
+import SpeciesTable from "./SpeciesTable";
+import PeriodTable from "./PeriodTable";
 
 
 export const ObservationEdit = ({ userObservatory, dayId }) => {
@@ -45,41 +46,35 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
     setSummary(res2);
   }, [dayId]);
 
-  const refetchSummary = useCallback(async () => {
-    const res2 = await getSummary(dayId);
-    setSummary(res2);
-  }, [dayId]);
-
-  const handleEditShorthandClose = useCallback(() => {
-    refetchObservations();
-  }, []);
+  const table = mode === "speciesTable" ? (
+    <SpeciesTable
+      date={day}
+      summary={summary}
+      userObservatory={userObservatory}
+      refetchObservations={refetchObservations}
+    ></SpeciesTable>
+  ) : (
+    <PeriodTable
+      date={day}
+      obsPeriods={obsPeriods}
+      refetchObservations={refetchObservations}
+    ></PeriodTable>
+  );
 
   return (
-    <>
-      <Grid container style={{ justifyContent: "space-between" }}>
-        <Grid item xs={1}>
-          <Box display="flex" justifyContent="flex-start">
-            <AntTabs setMode={setMode}/>
-          </Box>
-        </Grid>
-        <Grid item xs={5}>
-          <ShorthandEdit day={day} dayId={dayId} onEditShorthandClose={handleEditShorthandClose}></ShorthandEdit>
-        </Grid>
+    <Grid container style={{ justifyContent: "space-between" }}>
+      <Grid item xs={1}>
+        <Box display="flex" justifyContent="flex-start">
+          <AntTabs setMode={setMode}/>
+        </Box>
       </Grid>
-
+      <Grid item xs={5}>
+        <ShorthandEdit day={day} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
+      </Grid>
       <Grid item xs={12}>
-        <ObsPeriodTable
-          key={day}
-          date={day}
-          obsPeriods={obsPeriods}
-          summary={summary}
-          mode={mode}
-          userObservatory={userObservatory}
-          refetchObservations={refetchObservations}
-          refetchSummary={refetchSummary}
-        />
+        {table}
       </Grid>
-    </>
+    </Grid>
   );
 };
 

@@ -189,10 +189,6 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
       onClose={handleClose}
       disableAutoFocus={true}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
     >
       <Fade in={open}>
         <div className={classes.paper}>
@@ -200,7 +196,6 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
           <h3> {t("obsPeriod")} {date} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
           <Grid
             container
-            height="100%"
             alignItems="flex-start"
             spacing={1}>
             <Grid item xs={2}>
