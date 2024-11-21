@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
   formControlLabel2: {
     padding: "0px 10px 0px 0px",
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
+    marginTop: theme.spacing(3)
   },
   formControlLabel3: {
     margin: theme.spacing(1)
