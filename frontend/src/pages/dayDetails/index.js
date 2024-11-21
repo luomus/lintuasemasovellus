@@ -11,12 +11,12 @@ import { GeneralDayDetails } from "./generalDayDetails";
 import { ObservationEdit } from "./observationEdit";
 
 const useStyles = makeStyles(() => ({
-    paper: {
-      background: "white",
-      padding: "20px 30px",
-      margin: "0px 0px 50px 0px",
-    }
-  })
+  paper: {
+    background: "white",
+    padding: "20px 30px",
+    margin: "0px 0px 50px 0px",
+  }
+})
 );
 
 export const DayDetails = ({ userObservatory }) => {

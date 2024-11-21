@@ -123,7 +123,7 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
   }, [dayId, editedActions, actionsEditMode, userObservatory]);
 
   const handleCatchesEditOpen = useCallback((event) => {
-    const c = event.currentTarget.getAttribute('data-cache');
+    const c = event.currentTarget.getAttribute("data-cache");
     const key = catches[c].key;
     // send info to reducer
     dispatch(resetNotifications());

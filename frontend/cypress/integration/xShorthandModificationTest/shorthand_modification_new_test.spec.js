@@ -6,7 +6,6 @@ const observer = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 const shorthandNight = "01:00\ngrugru 1/2 W\n01:10";
-const shorthandModified = "10:00\ngrugru 1/2 W\n12:00";
 
 
 describe("ShorthandModificationPerObservationPeriod", function () {
@@ -39,7 +38,7 @@ describe("ShorthandModificationPerObservationPeriod", function () {
   it("Shorthand modification window can be clicked", function () {
     cy.contains(date).click();
     cy.wait(1000);
-    cy.contains('Jaksot').click();
+    cy.contains("Jaksot").click();
     cy.wait(1000);
     cy.get("#editObsPeriod").click();
     cy.contains("Tallenna");
@@ -50,7 +49,7 @@ describe("ShorthandModificationPerObservationPeriod", function () {
   it("In shorthand modification type, location and shorthand can be modified and saved", function () {
     cy.contains(date).click();
     cy.wait(1000);
-    cy.contains('Jaksot').click();
+    cy.contains("Jaksot").click();
     cy.wait(1000);
     cy.get("#editObsPeriod").click();
     cy.get("#selectTypeInModification").click().get("#Yömuutto").click();
@@ -61,14 +60,14 @@ describe("ShorthandModificationPerObservationPeriod", function () {
       .then((editor) => {
         editor[0].CodeMirror.setValue("", { force: true });
       });
-    cy.wait(2000);  
+    cy.wait(2000);
     cy.get(".CodeMirror textarea").type(shorthandNight, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
     cy.wait(5000);
     cy.contains("Yömuutto");
     cy.contains("Piha");
-    cy.contains('Lajit').click();
+    cy.contains("Lajit").click();
     cy.wait(1000);
     cy.get("#onlyObservationsFilter").check();
     cy.wait(1000);

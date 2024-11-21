@@ -22,7 +22,7 @@ describe.skip("When nightmigration", function () {
 
     cy.get("#saveButton").should("be.disabled");
   });
-  it('hello there', function() {
+  it("hello there", function() {
     expect(true).toBe(true);
   });
 

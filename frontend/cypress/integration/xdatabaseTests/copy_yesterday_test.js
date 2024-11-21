@@ -68,4 +68,4 @@ describe("CopyYesterdaysData", function () {
 
   });
 
-})
+});

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, Typography,
@@ -66,28 +66,28 @@ const SpeciesTable = (props) => {
   const generateExtendedSummary = (species) => {
     return (
       species.reduce((previous, current) => {
-          //Use observation data if exists
-          const birdInSummary = summary.find(bird => bird.species === current);
-          if (birdInSummary) {
-            return previous.concat(birdInSummary);
-          }
-          //Otherwise add empty row
-          return (
-            previous
-              .concat({
-                allMigration: 0,
-                constMigration: 0,
-                localGåu: 0, //At least this one is Hanko specific
-                localOther: 0,
-                nightMigration: 0,
-                notes: "",
-                otherMigration: 0,
-                scatterObs: 0,
-                species: current,
-                totalLocal: 0
-              })
-          );
-        }, []
+        //Use observation data if exists
+        const birdInSummary = summary.find(bird => bird.species === current);
+        if (birdInSummary) {
+          return previous.concat(birdInSummary);
+        }
+        //Otherwise add empty row
+        return (
+          previous
+            .concat({
+              allMigration: 0,
+              constMigration: 0,
+              localGåu: 0, //At least this one is Hanko specific
+              localOther: 0,
+              nightMigration: 0,
+              notes: "",
+              otherMigration: 0,
+              scatterObs: 0,
+              species: current,
+              totalLocal: 0
+            })
+        );
+      }, []
       )
     );
   };
@@ -135,9 +135,9 @@ const SpeciesTable = (props) => {
         {t("summary")}
       </Typography>
       <Grid container
-            spacing={3}
-            alignItems="flex-end"
-            className={classes.filterContainer}
+        spacing={3}
+        alignItems="flex-end"
+        className={classes.filterContainer}
       >
         <Grid item xs={2}>
           <SearchBar

@@ -20,7 +20,7 @@ const addObsrvations = () => {
   cy.wait(1000);
   cy.contains("Tallenna").click({ force: true });
   cy.wait(5000);
-}
+};
 
 const chooseSpeciesType = (type) => {
   cy.get("#select-species-list")
@@ -28,19 +28,19 @@ const chooseSpeciesType = (type) => {
     .get(`[data-value="${type}"]`)
     .click();
   cy.wait(1000);
-}
+};
 
 const selectAllRows = () => {
-  cy.get('[aria-label="rows per page"]').select("Kaikki");
+  cy.get("[aria-label=\"rows per page\"]").select("Kaikki");
   cy.wait(1000);
-}
+};
 
 const assertThatSpeciesTableBodyHasNumberOfRows = (value) => {
   cy.get("#speciesTable")
     .get("tbody")
     .find("tr")
     .should("have.length", value);
-}
+};
 
 describe("Species table with filters contains species as expected", function () {
   before(function () {
@@ -62,27 +62,27 @@ describe("Species table with filters contains species as expected", function () 
       with only observations filter enabled 
       contains added basic observation 
       but not one that has no observations`,
-    function () {
-      cy.get("#onlyObservationsFilter").check();
+  function () {
+    cy.get("#onlyObservationsFilter").check();
 
-      cy.get("#speciesTable")
-        .should("contain", basic1)
-        .and("not.contain", basic2);
-    });
+    cy.get("#speciesTable")
+      .should("contain", basic1)
+      .and("not.contain", basic2);
+  });
 
   it(`Other species table
       with only observations filter enabled
       contains added other observation 
       but not one that has no observations`,
-    function () {
-      chooseSpeciesType("others");
+  function () {
+    chooseSpeciesType("others");
 
-      cy.get("#onlyObservationsFilter").check();
+    cy.get("#onlyObservationsFilter").check();
 
-      cy.get("#speciesTable")
-        .should("contain", other1)
-        .and("not.contain", other2);
-    });
+    cy.get("#speciesTable")
+      .should("contain", other1)
+      .and("not.contain", other2);
+  });
 
   it(`Basic species table 
       with only observations filter disabled
@@ -90,15 +90,15 @@ describe("Species table with filters contains species as expected", function () 
       contains added basic observation 
       and one that has no observations
       but no chosen others`,
-    function () {
-      cy.get("#onlyObservationsFilter").uncheck();
+  function () {
+    cy.get("#onlyObservationsFilter").uncheck();
 
-      selectAllRows();
+    selectAllRows();
 
-      cy.get("#speciesTable")
-        .should("contain", basic1, basic2)
-        .and("not.contain", other1, other2);
-    });
+    cy.get("#speciesTable")
+      .should("contain", basic1, basic2)
+      .and("not.contain", other1, other2);
+  });
 
   it(`Other species table 
       with only observations filter disabled
@@ -106,72 +106,72 @@ describe("Species table with filters contains species as expected", function () 
       contains added other observation 
       and one that has no observations
       but no chosen basics`,
-    function () {
-      chooseSpeciesType("others");
+  function () {
+    chooseSpeciesType("others");
 
-      cy.get("#onlyObservationsFilter").uncheck();
+    cy.get("#onlyObservationsFilter").uncheck();
 
-      selectAllRows();
+    selectAllRows();
 
-      cy.get("#speciesTable")
-        .should("not.contain", basic1, basic2)
-        .and("contain", other1, other2);
-    });
+    cy.get("#speciesTable")
+      .should("not.contain", basic1, basic2)
+      .and("contain", other1, other2);
+  });
 
   it(`All species table 
       with only observations filter disabled
       and with all rows selected
       contains added basic and other observations
       and the ones that have no observations`,
-    function () {
-      chooseSpeciesType("all");
+  function () {
+    chooseSpeciesType("all");
 
-      cy.get("#onlyObservationsFilter").uncheck();
+    cy.get("#onlyObservationsFilter").uncheck();
 
-      selectAllRows();
+    selectAllRows();
 
-      cy.get("#speciesTable")
-        .should("contain", basic1, basic2, other1, other2);
-    });
+    cy.get("#speciesTable")
+      .should("contain", basic1, basic2, other1, other2);
+  });
 
   it(`Basic species table 
       with only observations filter disabled
       and with all rows selected
       contains 236 rows`,
-    function () {
-      cy.get("#onlyObservationsFilter").uncheck();
+  function () {
+    cy.get("#onlyObservationsFilter").uncheck();
 
-      selectAllRows();
+    selectAllRows();
 
-      assertThatSpeciesTableBodyHasNumberOfRows(236);
-    });
+    assertThatSpeciesTableBodyHasNumberOfRows(236);
+  });
 
   it(`Other species table 
       with only observations filter disabled
       and with all rows selected
       contains 381 rows`,
-    function () {
-      chooseSpeciesType("others");
+  function () {
+    chooseSpeciesType("others");
 
-      cy.get("#onlyObservationsFilter").uncheck();
+    cy.get("#onlyObservationsFilter").uncheck();
 
-      selectAllRows();
+    selectAllRows();
 
-      assertThatSpeciesTableBodyHasNumberOfRows(381);
-    });
+    assertThatSpeciesTableBodyHasNumberOfRows(381);
+  });
 
   it(`All species table 
       with only observations filter disabled
       and with all rows selected
       contains 617 rows`,
-    function () {
-      chooseSpeciesType("all");
+  function () {
+    chooseSpeciesType("all");
 
-      cy.get("#onlyObservationsFilter").uncheck();
+    cy.get("#onlyObservationsFilter").uncheck();
 
-      selectAllRows();
+    selectAllRows();
 
-      assertThatSpeciesTableBodyHasNumberOfRows(617);
-    });
+    assertThatSpeciesTableBodyHasNumberOfRows(617);
+  });
 
 });

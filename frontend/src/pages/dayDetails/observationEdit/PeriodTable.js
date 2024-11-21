@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, Typography,
@@ -164,9 +164,9 @@ const PeriodTable = (props) => {
         </Table>
       </TableContainer>
       <PeriodTablePagination list={obsPeriods} rowsPerPage={rowsPerPage}
-                             handleChangePage={handleChangePage}
-                             handleChangeRowsPerPage={handleChangeRowsPerPage}
-                             page={page}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        page={page}
       />
     </div>
   );

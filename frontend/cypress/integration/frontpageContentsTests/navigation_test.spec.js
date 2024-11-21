@@ -27,7 +27,7 @@ describe("NavigatingFromFirstPageTest", function () {
   it("ToDayDetails button saves values of modified observators field but not comment and actions fields, then navigates to details of the chosen day", function() {
     const day = "21.12.1998";
     const observers = "Liisa Lintubongari, Paavo Peippo";
-    const comment = "Kolme yötä jouluun on. Laskin aivan itse eilen, kun näin talitintin."
+    const comment = "Kolme yötä jouluun on. Laskin aivan itse eilen, kun näin talitintin.";
 
     cy.get("#date-picker-inline").clear().type(day);
     cy.get("#observers").clear().type(observers);
@@ -37,10 +37,10 @@ describe("NavigatingFromFirstPageTest", function () {
 
     cy.get("#activity-header").click();
     //Need to use the force when (un)checking boxes as there seems to be some overflow with some of the elements.
-    cy.get('#activity-content').get('[type="checkBox"]').uncheck({force: true});
-    cy.get('#activity-content').get('input[name="standardObs"]').check();
-    cy.get('#activity-content').get('input[name="gåu"]').check();
-    cy.get('#activity-content').get('input[name="owlStandard"]').check({force: true});
+    cy.get("#activity-content").get("[type=\"checkBox\"]").uncheck({ force: true });
+    cy.get("#activity-content").get("input[name=\"standardObs\"]").check();
+    cy.get("#activity-content").get("input[name=\"gåu\"]").check();
+    cy.get("#activity-content").get("input[name=\"owlStandard\"]").check({ force: true });
 
     cy.get("#toDayDetails").click();
     cy.url().should("include", "/#/daydetails/" + day);

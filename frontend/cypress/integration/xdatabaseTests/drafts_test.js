@@ -29,7 +29,6 @@ describe("Drafts", function () {
   });
 
   it("Draft is removed after successfully submitting it", () => {
-    let a;
     cy.get("#date-picker-inline").clear();
     cy.get("#date-picker-inline").type(date);
     cy.get("#observers").clear();
@@ -74,7 +73,6 @@ describe("Drafts", function () {
   });
 
   it("Drafts can be deleted invidually", () => {
-    let a;
     cy.get("#open-draft-button").click();
     cy.wait(500);
     cy.get("[role=dialog]").find("table").find("tr").its("length").then(a => {

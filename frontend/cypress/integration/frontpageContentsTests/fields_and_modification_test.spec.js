@@ -57,8 +57,8 @@ describe("FirstpageFieldsAndModification", function () {
   it("Catch rows can be added and removed", function () {
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
-    cy.get("#0").contains("Pyydys")
-    cy.get("#0").contains("Pyyntialue")
+    cy.get("#0").contains("Pyydys");
+    cy.get("#0").contains("Pyyntialue");
     cy.get("#plus-catch-row-button").click();
     cy.get("#0 #removeButton").click();
     cy.get("#1").should("not.exist");
@@ -71,16 +71,16 @@ describe("FirstpageFieldsAndModification", function () {
 
   it("Type dropdown menu contains types 'Vakio', 'Muu muutto', 'Yömuutto' and 'Hajahavainto'", function () {
     cy.get("#selectType").click();
-    cy.get('ul').children()
-      .should('contain','Vakio')
-      .and('contain','Muu muutto')
-      .and('contain','Yömuutto');
+    cy.get("ul").children()
+      .should("contain","Vakio")
+      .and("contain","Muu muutto")
+      .and("contain","Yömuutto");
   });
 
   it("Type dropdown menu does not contain type 'Paikallinen'", function () {
     cy.get("#selectType").click();
-    cy.get('ul').children()
-      .should('not.contain','Paikallinen')
+    cy.get("ul").children()
+      .should("not.contain","Paikallinen")
       .and("not.contain", "Hajahavainto");
   });
 

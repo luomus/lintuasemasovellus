@@ -90,53 +90,53 @@ describe("AddObservationDay", function () {
   it("Comment and observer can be edited", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
-    cy.get('[data-cy="comment"] [data-cy="edit"]').click();
-    cy.get('[data-cy="comment"] input').clear();
-    cy.get('[data-cy="comment"] input').type(changedComment);
-    cy.get('[data-cy="comment"] [data-cy="submit"]').click();
-    cy.get('[alt="haukka"]').click();
+    cy.get("[data-cy=\"comment\"] [data-cy=\"edit\"]").click();
+    cy.get("[data-cy=\"comment\"] input").clear();
+    cy.get("[data-cy=\"comment\"] input").type(changedComment);
+    cy.get("[data-cy=\"comment\"] [data-cy=\"submit\"]").click();
+    cy.get("[alt=\"haukka\"]").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.contains(changedComment);
     cy.contains(comment).should("not.exist");
 
     // change comment to be empty
-    cy.get('[data-cy="comment"] [data-cy="edit"]').click();
-    cy.get('[data-cy="comment"] input').clear();
-    cy.get('[data-cy="comment"] [data-cy="submit"]').click();
-    cy.get('[alt="haukka"]').click();
+    cy.get("[data-cy=\"comment\"] [data-cy=\"edit\"]").click();
+    cy.get("[data-cy=\"comment\"] input").clear();
+    cy.get("[data-cy=\"comment\"] [data-cy=\"submit\"]").click();
+    cy.get("[alt=\"haukka\"]").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.contains(changedComment).should("not.exist");
 
     // change comment back to original
-    cy.get('[data-cy="comment"] [data-cy="edit"]').click();
-    cy.get('[data-cy="comment"] input').clear();
-    cy.get('[data-cy="comment"] input').type(comment);
-    cy.get('[data-cy="comment"] [data-cy="submit"]').click();
-    cy.get('[alt="haukka"]').click();
+    cy.get("[data-cy=\"comment\"] [data-cy=\"edit\"]").click();
+    cy.get("[data-cy=\"comment\"] input").clear();
+    cy.get("[data-cy=\"comment\"] input").type(comment);
+    cy.get("[data-cy=\"comment\"] [data-cy=\"submit\"]").click();
+    cy.get("[alt=\"haukka\"]").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.contains(comment);
     cy.contains(changedComment).should("not.exist");
 
     // change name of observer
-    cy.get('[data-cy="observers"] [data-cy="edit"]').click();
-    cy.get('[data-cy="observers"] input').clear();
-    cy.get('[data-cy="observers"] input').type(changedObserver);
-    cy.get('[data-cy="observers"] [data-cy="submit"]').click();
-    cy.get('[alt="haukka"]').click();
+    cy.get("[data-cy=\"observers\"] [data-cy=\"edit\"]").click();
+    cy.get("[data-cy=\"observers\"] input").clear();
+    cy.get("[data-cy=\"observers\"] input").type(changedObserver);
+    cy.get("[data-cy=\"observers\"] [data-cy=\"submit\"]").click();
+    cy.get("[alt=\"haukka\"]").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Aarni Apulaishavainnoitsija").click();
     cy.contains(changedObserver);
     cy.contains(observer).should("not.exist");
 
     // change observer back to original
-    cy.get('[data-cy="observers"] [data-cy="edit"]').click();
-    cy.get('[data-cy="observers"] input').clear();
-    cy.get('[data-cy="observers"] input').type(observer);
-    cy.get('[data-cy="observers"] [data-cy="submit"]').click();
-    cy.get('[alt="haukka"]').click();
+    cy.get("[data-cy=\"observers\"] [data-cy=\"edit\"]").click();
+    cy.get("[data-cy=\"observers\"] input").clear();
+    cy.get("[data-cy=\"observers\"] input").type(observer);
+    cy.get("[data-cy=\"observers\"] [data-cy=\"submit\"]").click();
+    cy.get("[alt=\"haukka\"]").click();
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.contains(observer);
@@ -267,7 +267,7 @@ describe("AddObservationDay", function () {
   it("Notes are shown", function () {
     cy.contains(date).click();
     cy.wait(2500);
-    cy.contains("SOMMOL").click()
+    cy.contains("SOMMOL").click();
     cy.wait(1000);
     cy.get("#speciesTable").should("contain", "note, 123");
     cy.get("#periodsButton").click();

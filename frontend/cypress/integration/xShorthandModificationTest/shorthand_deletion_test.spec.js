@@ -37,7 +37,7 @@ describe("ShorthandDeletion", function () {
   it("Individual observation period can be deleted", function () {
     cy.contains(date).click();
     cy.wait(1000);
-    cy.contains('Jaksot').click();
+    cy.contains("Jaksot").click();
     cy.wait(1000);
     cy.get("#editObsPeriod").click();
     cy.wait(1000);
@@ -45,7 +45,7 @@ describe("ShorthandDeletion", function () {
     cy.wait(1000);
     cy.get("#confirmButton").click({ force: true });
     cy.wait(5000);
-    cy.contains('Lajit').click();
+    cy.contains("Lajit").click();
     cy.wait(1000);
     cy.get("#onlyObservationsFilter").check();
     cy.wait(1000);
@@ -56,7 +56,7 @@ describe("ShorthandDeletion", function () {
 
   it("All observations for type and location can be deleted", function () {
     cy.contains(date).click();
-    cy.contains('Muokkaa').click();
+    cy.contains("Muokkaa").click();
     cy.wait(2000);
     cy.get("#selectTypeInModification").click().get("#Vakio").click();
     cy.get("#selectLocationInModification").click().get("#Bunkkeri").click();

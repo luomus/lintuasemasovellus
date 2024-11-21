@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
@@ -22,7 +22,7 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange, inp
 
   const classes = useStyles();
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     setInputValue(count);
@@ -35,7 +35,7 @@ const LocalInput = ({ date, observatory, count, species, dataType, onChange, inp
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
-  }
+  };
 
   const saveValue = async () => {
     const newValue = parseInt(inputValue, 10);

@@ -9,24 +9,24 @@ import { makeStyles, withStyles } from "@mui/styles";
 import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
 
 const useStyles = makeStyles(theme => ({
-    formControlLabel: {
-      padding: "0px 100px 0px 0px",
-    },
-    checkedDailyAction: {
-      margin: "11px",
-    },
-    uncheckedDailyAction: {
-      margin: "11px",
-    },
-    button: {
-      marginLeft: "5px",
-    },
-    attachment: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 75,
-    }
-  })
+  formControlLabel: {
+    padding: "0px 100px 0px 0px",
+  },
+  checkedDailyAction: {
+    margin: "11px",
+  },
+  uncheckedDailyAction: {
+    margin: "11px",
+  },
+  button: {
+    marginLeft: "5px",
+  },
+  attachment: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 75,
+  }
+})
 );
 
 const DisabledTextField = withStyles({
@@ -52,18 +52,18 @@ const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, o
           {
             Object.entries(selectedActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
               <FormControlLabel className={classes.formControlLabel}
-                                control={value
-                                  ? <CheckCircle name="check" fontSize="small" className={classes.checkedDailyAction} />
-                                  : <RemoveCircleOutlineRounded fontSize="small" className={classes.uncheckedDailyAction} />
-                                }
-                                label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
+                control={value
+                  ? <CheckCircle name="check" fontSize="small" className={classes.checkedDailyAction} />
+                  : <RemoveCircleOutlineRounded fontSize="small" className={classes.uncheckedDailyAction} />
+                }
+                label={t(action)} labelPlacement="end" key={i} style={{ cursor: "default" }}
               />
             )
           }
           <FormControlLabel className={classes.FormControlLabel}
-                            control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.attachments + " " + t("pcs")}
-                                                        disabled InputProps={{ disableUnderline: true }} />}
-                            label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
+            control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.attachments + " " + t("pcs")}
+              disabled InputProps={{ disableUnderline: true }} />}
+            label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
 
           <Box>
             <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={onActionsEditOpen} variant="contained" color="primary"  >

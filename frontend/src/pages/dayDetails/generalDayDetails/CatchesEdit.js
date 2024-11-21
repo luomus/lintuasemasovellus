@@ -17,21 +17,21 @@ import Notification from "../../../globalComponents/Notification";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
 
 const useStyles = makeStyles(theme => ({
-    button: {
-      marginLeft: "5px",
+  button: {
+    marginLeft: "5px",
+  },
+  catchTable: {
+    maxWidth: "65%",
+  },
+  deleteButton: {
+    marginLeft: "5px",
+    color: "white",
+    backgroundColor: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
     },
-    catchTable: {
-      maxWidth: "65%",
-    },
-    deleteButton: {
-      marginLeft: "5px",
-      color: "white",
-      backgroundColor: theme.palette.error.main,
-      "&:hover": {
-        backgroundColor: theme.palette.error.dark,
-      },
-    }
-  })
+  }
+})
 );
 
 const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEditMode, onAddNewCatch, onCatchesEditOpen, onCatchesEditSave, onCatchesEditCancel }) => {
@@ -88,8 +88,8 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
                 <Notification category="catches" />
                 <CatchType cr={editedCatches[0]} />
                 <Button id="catchesEditSave" className={classes.button} variant="contained"
-                        onClick={onCatchesEditSave} color="primary"
-                        disabled={errorsInCatches}>
+                  onClick={onCatchesEditSave} color="primary"
+                  disabled={errorsInCatches}>
                   {t("save")}
                 </Button>
                 <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={onCatchesEditCancel} color="secondary">
@@ -100,8 +100,8 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
               <div>
                 <Typography variant="body1" color="error" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
                 <Button id="catchesEditSave" className={classes.deleteButton} variant="contained"
-                        onClick={onCatchesEditSave}
-                        disabled={errorsInCatches}>
+                  onClick={onCatchesEditSave}
+                  disabled={errorsInCatches}>
                   {t("remove")}
                 </Button>
                 <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={onCatchesEditCancel} color="secondary">
@@ -129,6 +129,7 @@ DailyActionsEdit.propTypes = {
   catchesEditMode: PropTypes.bool.isRequired,
   onAddNewCatch: PropTypes.func.isRequired,
   onCatchesEditOpen: PropTypes.func.isRequired,
+  onCatchesEditSave: PropTypes.func.isRequired,
   onCatchesEditCancel: PropTypes.func.isRequired,
 };
 

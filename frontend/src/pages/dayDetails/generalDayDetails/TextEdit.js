@@ -8,14 +8,14 @@ import { Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
-    textField: {
-      marginRight: "5px",
-      marginBottom: "5px",
-    },
-    button: {
-      marginLeft: "5px",
-    }
-  })
+  textField: {
+    marginRight: "5px",
+    marginBottom: "5px",
+  },
+  button: {
+    marginLeft: "5px",
+  }
+})
 );
 
 const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
@@ -56,11 +56,11 @@ const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
             onChange={valueChange}
           />
           <Button className={classes.button} type="submit" variant="contained" color="primary"
-                  data-cy="submit">
+            data-cy="submit">
             {t("save")}
           </Button>
           <Button className={classes.button} variant="contained" onClick={cancelClick} color="secondary"
-                  data-cy="cancel">
+            data-cy="cancel">
             {t("cancel")}
           </Button>
         </form>

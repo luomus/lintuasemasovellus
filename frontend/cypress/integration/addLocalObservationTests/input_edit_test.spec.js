@@ -19,13 +19,13 @@ const showAllBirdsWithObservations = () => {
   chooseSpeciesType("all");
 };
 
-Cypress.Commands.add('getRowWithNote', (species) => {
+Cypress.Commands.add("getRowWithNote", (species) => {
   cy.get("#speciesTable")
     .contains(species.toUpperCase())
     .parent()
     .parent()
-    .siblings()
-})
+    .siblings();
+});
 
 const updateBird = (species, dataType, count) => {
   cy.getRowWithNote(bird)
@@ -34,7 +34,7 @@ const updateBird = (species, dataType, count) => {
     .blur();
 
   cy.wait(3000);
-}
+};
 
 
 const verifyTotalCount = (species, type, count) => {
@@ -44,7 +44,7 @@ const verifyTotalCount = (species, type, count) => {
     .parent()
     .find(`[name="${type}"]`)
     .should("contain", count);
-}
+};
 
 const setup = () => {
   myBeforeEach();
@@ -58,7 +58,7 @@ const setup = () => {
   cy.wait(1000);
   cy.contains("Tallenna").click({ force: true });
   cy.wait(3000);
-}
+};
 
 const navigateToDayDetails = (day) => {
   cy.contains("Viimeisimmät päivät")
@@ -66,7 +66,7 @@ const navigateToDayDetails = (day) => {
     .contains(day)
     .click();
   cy.wait(1000);
-}
+};
 
 describe("Input of local observations and gåu observations", function () {
   before(function () {

@@ -7,11 +7,11 @@ const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
 const shorthandModified = "10:00\ngrugru 1/2 W\n12:00";
 
-const navigateToDay = (day) => {
+const navigateToDay = () => {
   cy.get("#navigationbar").click();
   cy.get("#showdays").click();
   cy.contains(date).click();
-}
+};
 
 describe("ShorthandModification", function () {
 
@@ -74,7 +74,7 @@ describe("ShorthandModification", function () {
       .then((editor) => {
         editor[0].CodeMirror.setValue("", { force: true });
       });
-    cy.wait(2000);  
+    cy.wait(2000);
     cy.get(".CodeMirror textarea").type(shorthandModified, { force: true });
     cy.wait(1000);
     cy.contains("Tallenna").click({ force: true });
