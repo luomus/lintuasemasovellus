@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   })
 );
 
-const TextEdit = ({ label, defaultValue, onSave }) => {
+const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -36,7 +36,7 @@ const TextEdit = ({ label, defaultValue, onSave }) => {
   };
 
   return (
-    <div style={{
+    <div data-cy={dataCy} style={{
       display: "flex",
       alignItems: "left"
     }}>
@@ -54,7 +54,6 @@ const TextEdit = ({ label, defaultValue, onSave }) => {
             variant="outlined"
             defaultValue={defaultValue}
             onChange={valueChange}
-            data-cy="text-field"
           />
           <Button className={classes.button} type="submit" variant="contained" color="primary"
                   data-cy="submit">
@@ -73,7 +72,8 @@ const TextEdit = ({ label, defaultValue, onSave }) => {
 TextEdit.propTypes = {
   label: PropTypes.string.isRequired,
   defaultValue: PropTypes.string,
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  dataCy: PropTypes.string
 };
 
 export default TextEdit;

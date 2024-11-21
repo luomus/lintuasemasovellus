@@ -179,8 +179,8 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
   return (
     <Grid container alignItems="flex-end" spacing={3}>
       <Grid item xs={12} fullwidth="true">
-        <TextEdit label={t("observers")} defaultValue={observers} onSave={observersOnSave} data-cy="observers"></TextEdit>
-        <TextEdit label={t("comment")} defaultValue={comment} onSave={commentOnSave} data-cy="comment"></TextEdit>
+        <TextEdit label={t("observers")} defaultValue={observers} onSave={observersOnSave} dataCy="observers"></TextEdit>
+        <TextEdit label={t("comment")} defaultValue={comment} onSave={commentOnSave} dataCy="comment"></TextEdit>
       </Grid>
 
       {/* DAILY ACTIONS */}

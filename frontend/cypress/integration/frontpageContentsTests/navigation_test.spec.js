@@ -41,12 +41,12 @@ describe("NavigatingFromFirstPageTest", function () {
     cy.get('#activity-content').get('input[name="standardObs"]').check();
     cy.get('#activity-content').get('input[name="gåu"]').check();
     cy.get('#activity-content').get('input[name="owlStandard"]').check({force: true});
-    
+
     cy.get("#toDayDetails").click();
     cy.url().should("include", "/#/daydetails/" + day);
     cy.get("[id=dayAndObservatory]").contains(day);
-    cy.get("[id=observers").contains(observers);
-    cy.get("[id=comment]").should("not.contain", comment);
+    cy.get("[data-cy=observers").contains(observers);
+    cy.get("[data-cy=comment]").should("not.contain", comment);
     cy.get("[id=dailyActions]").get("svg[name=check]").should("have.length", 0);
   });
 });

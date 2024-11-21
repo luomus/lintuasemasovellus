@@ -91,8 +91,8 @@ describe("AddObservationDay", function () {
     cy.contains("Näytä päivät").click();
     cy.contains("Helmi Havainnoitsija").click();
     cy.get('[data-cy="comment"] [data-cy="edit"]').click();
-    cy.get('[data-cy="comment"] [data-cy="text-field"]').clear();
-    cy.get('[data-cy="comment"] [data-cy="text-field"]').type(changedComment);
+    cy.get('[data-cy="comment"] input').clear();
+    cy.get('[data-cy="comment"] input').type(changedComment);
     cy.get('[data-cy="comment"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
@@ -102,7 +102,7 @@ describe("AddObservationDay", function () {
 
     // change comment to be empty
     cy.get('[data-cy="comment"] [data-cy="edit"]').click();
-    cy.get('[data-cy="comment"] [data-cy="text-field"]').clear();
+    cy.get('[data-cy="comment"] input').clear();
     cy.get('[data-cy="comment"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
@@ -111,8 +111,8 @@ describe("AddObservationDay", function () {
 
     // change comment back to original
     cy.get('[data-cy="comment"] [data-cy="edit"]').click();
-    cy.get('[data-cy="comment"] [data-cy="text-field"]').clear();
-    cy.get('[data-cy="comment"] [data-cy="text-field"]').type(comment);
+    cy.get('[data-cy="comment"] input').clear();
+    cy.get('[data-cy="comment"] input').type(comment);
     cy.get('[data-cy="comment"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
@@ -122,8 +122,8 @@ describe("AddObservationDay", function () {
 
     // change name of observer
     cy.get('[data-cy="observers"] [data-cy="edit"]').click();
-    cy.get('[data-cy="observers"] [data-cy="text-field"]').clear();
-    cy.get('[data-cy="observers"] [data-cy="text-field"]').type(changedObserver);
+    cy.get('[data-cy="observers"] input').clear();
+    cy.get('[data-cy="observers"] input').type(changedObserver);
     cy.get('[data-cy="observers"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
@@ -133,8 +133,8 @@ describe("AddObservationDay", function () {
 
     // change observer back to original
     cy.get('[data-cy="observers"] [data-cy="edit"]').click();
-    cy.get('[data-cy="observers"] [data-cy="text-field"]').clear();
-    cy.get('[data-cy="observers"] [data-cy="text-field"]').type(observer);
+    cy.get('[data-cy="observers"] input').clear();
+    cy.get('[data-cy="observers"] input').type(observer);
     cy.get('[data-cy="observers"] [data-cy="submit"]').click();
     cy.get('[alt="haukka"]').click();
     cy.contains("Näytä päivät").click();
