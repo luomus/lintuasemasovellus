@@ -41,6 +41,7 @@
     "test": "react-scripts test  --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
     "eject": "react-scripts eject",
     "start-api": "cd ../lintuasema-backend && . venv/bin/activate && pip3 install -r requirements.txt && flask run",
+    "start-api:test": "DB_TYPE=sqlite npm run start-api",
     "build-copy": "npm run build && cp build ../lintuasema-backend/ -r",
     "lint": "eslint './{src,cypress}/**/*.{js,jsx}'",
     "lint:fix": "eslint './{src,cypress}/**/*.{js,jsx}' --fix",
