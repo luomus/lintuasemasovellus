@@ -671,44 +671,53 @@ export const HomePage = ({ user, userObservatory }) => {
                     >
 
                       <Grid item xs={3}>
-                        <FormControl className={classes.formControl}>
-                          <InputLabel id="Tyyppi">{t("type")}</InputLabel>
-                          <Select required
-                            label="type"
-                            fullWidth={true}
-                            id="selectType"
-                            value={type}
-                            onChange={(event) => setType(event.target.value)}
-                          >
-                            {
-                              types.map((type, i) =>
-                                <MenuItem id={type} value={type} key={i}>
-                                  {type}
-                                </MenuItem>
-                              )
+                        <TextField
+                          className={classes.formControl}
+                          select
+                          required
+                          fullWidth
+                          label={t("type")}
+                          id="selectType"
+                          slotProps={{
+                            select: {
+                              value: type,
+                              onChange: (event) => setType(event.target.value)
                             }
-                          </Select>
-                        </FormControl>
+                          }}
+                        >
+                          {
+                            types.map((type, i) =>
+                              <MenuItem id={type} value={type} key={i}>
+                                {type}
+                              </MenuItem>
+                            )
+                          }
+                        </TextField>
                       </Grid>
 
                       <Grid item xs={3}>
-                        <FormControl className={classes.formControl}>
-                          <InputLabel id="Location">{t("location")}</InputLabel>
-                          <Select required
-                            label="location"
-                            id="selectLocation"
-                            value={location}
-                            onChange={(event) => setLocation(event.target.value)}
-                          >
-                            {
-                              locations.map((location, i) =>
-                                <MenuItem id={location} value={location} key={i}>
-                                  {location}
-                                </MenuItem>
-                              )
+                        <TextField
+                          className={classes.formControl}
+                          select
+                          required
+                          fullWidth
+                          label={t("location")}
+                          id="selectLocation"
+                          slotProps={{
+                            select: {
+                              value: location,
+                              onChange: (event) => setLocation(event.target.value)
                             }
-                          </Select>
-                        </FormControl>
+                          }}
+                        >
+                          {
+                            locations.map((location, i) =>
+                              <MenuItem id={location} value={location} key={i}>
+                                {location}
+                              </MenuItem>
+                            )
+                          }
+                        </TextField>
                       </Grid>
 
                       <Grid item xs={6}>

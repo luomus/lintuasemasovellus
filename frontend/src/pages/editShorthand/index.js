@@ -1,7 +1,7 @@
 import {
   Backdrop, Fade, Modal, Grid, Button,
   FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle, backdropClasses,
+  DialogContent, DialogContentText, DialogTitle, backdropClasses, TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
@@ -213,49 +213,58 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
             alignItems="flex-start"
             spacing={1}>
             <Grid item xs={2}>
-              <FormControl className={classes.formControl}>
-                <InputLabel id="Tyyppi">{t("type")}</InputLabel>
-                <Select required
-                  label="type"
-                  fullWidth={true}
-                  id="selectTypeInModification"
-                  value={type}
-                  onChange={(event) => {
-                    setType(event.target.value);
-                    retrieveShorthand(event.target.value, location);
-                  }}
-                >
-                  {
-                    types.map((type, i) =>
-                      <MenuItem id={type} value={type} key={i}>
-                        {type}
-                      </MenuItem>
-                    )
+              <TextField
+                className={classes.formControl}
+                select
+                required
+                fullWidth
+                label={t("type")}
+                id="selectTypeInModification"
+                slotProps={{
+                  select: {
+                    value: type,
+                    onChange: (event) => {
+                      setType(event.target.value);
+                      retrieveShorthand(event.target.value, location);
+                    }
                   }
-                </Select>
-              </FormControl>
+                }}
+              >
+                {
+                  types.map((type, i) =>
+                    <MenuItem id={type} value={type} key={i}>
+                      {type}
+                    </MenuItem>
+                  )
+                }
+              </TextField>
             </Grid>
             <Grid item xs={2}>
-              <FormControl className={classes.formControl}>
-                <InputLabel id="Location">{t("location")}</InputLabel>
-                <Select required
-                  label="location"
-                  id="selectLocationInModification"
-                  value={location}
-                  onChange={(event) => {
-                    setLocation(event.target.value);
-                    retrieveShorthand(type, event.target.value);
-                  }}
-                >
-                  {
-                    locations.map((location, i) =>
-                      <MenuItem id={location} value={location} key={i}>
-                        {location}
-                      </MenuItem>
-                    )
+              <TextField
+                className={classes.formControl}
+                select
+                required
+                fullWidth
+                label={t("location")}
+                id="selectLocationInModification"
+                slotProps={{
+                  select: {
+                    value: location,
+                    onChange: (event) => {
+                      setLocation(event.target.value);
+                      retrieveShorthand(type, event.target.value);
+                    }
                   }
-                </Select>
-              </FormControl>
+                }}
+              >
+                {
+                  locations.map((location, i) =>
+                    <MenuItem id={location} value={location} key={i}>
+                      {location}
+                    </MenuItem>
+                  )
+                }
+              </TextField>
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock

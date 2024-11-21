@@ -15,6 +15,8 @@ import { setNotifications } from "../../reducers/notificationsReducer";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: 105,
+    padding: "0px 10px 0px 0px",
+    margin: theme.spacing(1),
   },
   formControlLabel: {
     padding: "0px 10px 0px 0px",
@@ -191,47 +193,50 @@ const CatchType = ({ cr }) => {
   return (
     <Grid item xs={12}>
       <FormGroup row className={classes.formGroup}>
-        <FormControlLabel className={classes.formControlLabel}
-          control={<FormControl className={classes.formControl}>
-            <InputLabel id="Pyydys">{t("catchType")}</InputLabel>
-            <Select
-              required
-              label="catchType"
-              id="selectCatchType"
-              name="pyydys"
-              value={cr.pyydys}
-              onChange={(event) => handleChange(event.target)}
-            >
-              {
-                catchTypes.map((catchType, i) =>
-                  <MenuItem id={catchType} value={catchType} key={i}>
-                    {catchType}
-                  </MenuItem>
-                )
-              }</Select>
-          </FormControl>
-          } />
-
-        <FormControlLabel className={classes.formControlLabel}
-          control={<FormControl className={classes.formControl}>
-            <InputLabel id="Pyyntialue">{t("catchArea")}</InputLabel>
-            <Select
-              required
-              label="catchArea"
-              id="selectCatchArea"
-              name="pyyntialue"
-              value={cr.pyyntialue}
-              onChange={(event) => handleChange(event.target)}
-            >
-              {
-                catchAreas[String(cr.pyydys)].map((cArea, i) =>
-                  <MenuItem id={cArea} value={cArea} key={i}>
-                    {cArea}
-                  </MenuItem>
-                )
-              }</Select>
-          </FormControl>} />
-
+        <TextField
+          required
+          select
+          className={classes.formControl}
+          label={t("catchType")}
+          id="selectCatchType"
+          name="pyydys"
+          slotProps={{
+            select: {
+              value: cr.pyydys,
+              onChange: (event) => handleChange(event.target)
+            }
+          }}
+        >
+          {
+            catchTypes.map((catchType, i) =>
+              <MenuItem id={catchType} value={catchType} key={i}>
+                {catchType}
+              </MenuItem>
+            )
+          }
+        </TextField>
+        <TextField
+          required
+          select
+          className={classes.formControl}
+          label={t("catchArea")}
+          id="selectCatchArea"
+          name="pyyntialue"
+          slotProps={{
+            select: {
+              value: cr.pyyntialue,
+              onChange: (event) => handleChange(event.target)
+            }
+          }}
+        >
+          {
+            catchAreas[String(cr.pyydys)].map((cArea, i) =>
+              <MenuItem id={cArea} value={cArea} key={i}>
+                {cArea}
+              </MenuItem>
+            )
+          }
+        </TextField>
 
         {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
           ? <div></div>
