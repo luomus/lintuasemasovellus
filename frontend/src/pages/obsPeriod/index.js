@@ -69,10 +69,6 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
       open={open}
       onClose={handleClose}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
     >
       <Fade in={open}>
         <div className={classes.paper}>
