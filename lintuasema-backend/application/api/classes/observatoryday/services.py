@@ -99,9 +99,7 @@ def createEmptyObsPeriods(dayId):
         db.session().commit()
 
 #Add a new observation to local obsperiod for local observations, or edit an old one if this species has already been observed locally:
-def editLocalObs(obsday_id, obserid, species, count, gau):
-    u = current_user.user_id
-
+def editLocalObs(user_id, obsday_id, obserid, species, count, gau):
     if gau==1:
         loc1=getLocationId("Luoto Gåu", obserid) #find location Id to use for finding the right obsperiod
     else:
@@ -119,16 +117,14 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
         #the shorthand id is hardcoded and refers to an empty one in the database. I think it doesn't matter even if this id doesn't refer to a real
         #shorthand id, but might be worth checking if the app is not adding local observations
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
+                           juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
+                           subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+                           bypassSide= '', notes= '', species= species, account_id= user_id, observationperiod_id=per.id, total_count=count, shorthand_id=11387)
             #Note! account_id is actually referring to the userid column in the account table (this is not my fault).
         db.session().add(subobs)
         db.session().commit()
 
-def editScatterObs(obsday_id, obserid, species, count): #This is functionally the same as editLocalObs but just does it for scatter observations
-    u = current_user.user_id
-
+def editScatterObs(user_id, obsday_id, obserid, species, count): #This is functionally the same as editLocalObs but just does it for scatter observations
     loc1=getLocationId("Bunkkeri", obserid)
     typid=getTypeIdByName("Hajahavainto")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
@@ -143,9 +139,9 @@ def editScatterObs(obsday_id, obserid, species, count): #This is functionally th
     else: #observation does not exist, so we create it
         print("doesnotex")
         subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
+                           juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
+                           subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
+                           bypassSide= '', notes= '', species= species, account_id= user_id, observationperiod_id=per.id, total_count=count, shorthand_id=11387)
         db.session().add(subobs)
         db.session().commit()
 

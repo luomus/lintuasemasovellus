@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for,\
     jsonify
 
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from application.api.classes.observatoryday.models import Observatoryday
 from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, editScatterObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
@@ -125,7 +125,7 @@ def update_local():
     day=datetime.strptime(req['date'], '%d.%m.%Y') #The frontend returns us the date which we use with the observatory name to get the observatoryday id
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
-    editLocalObs(obsday_id, obserid, req['species'], req['count'], req['gau'])
+    editLocalObs(current_user.user_id, obsday_id, obserid, req['species'], req['count'], req['gau'])
     return jsonify(req)
 
 @bp.route('/api/updateScatterObservation', methods=['POST']) #Scatter observation = hajahavainto, a more accurate English term would be miscellaneous observation
@@ -136,7 +136,7 @@ def update_scatter():
     day=datetime.strptime(req['date'], '%d.%m.%Y')
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
-    editScatterObs(obsday_id, obserid, req['species'], req['count'])
+    editScatterObs(current_user.user_id, obsday_id, obserid, req['species'], req['count'])
     return jsonify(req)
 
 @bp.route('/api/addDay', methods=['POST'])

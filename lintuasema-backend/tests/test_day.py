@@ -1,5 +1,6 @@
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs, editScatterObs
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs, editScatterObs, \
+    addDayFromReq
 from application.api.classes.observatoryday.views import add_day
 from application.api.classes.observationperiod.services import getObsPerId
 from application.api.classes.observation.services import getObservationByPeriod, getObservationByPeriodAndSpecies
@@ -61,14 +62,11 @@ def test_sameObservatoryDifferentDay(app):
     found = addAndFind(dayProperties)
     assert found == True
 
-def test_addDayRoute(app):
-    response = app.test_client().post(
-        '/api/addDay',
-        data=json.dumps({'day': '01.03.2020', 'observers': 'Teppo Testaaja', 'selectedactions': 'Vakkari', 'comment': 'Kaunis ilma.', 'observatory': 'Hangon_Lintuasema'}),
-        content_type='application/json',)
-    data = response.get_json()
-    assert response.status_code == 200
-    assert data['id'] == 1
+def test_addDayFromReq(app):
+    data = {'day': '01.03.2020', 'observers': 'Teppo Testaaja', 'selectedactions': 'Vakkari', 'comment': 'Kaunis ilma.', 'observatory': 'Hangon_Lintuasema'}
+    result = addDayFromReq(data)
+    assert result['id'] == 1
+
 #Testing if the empty observationperiod is added when a day is created
 def test_emptyDayAddedWithDayCreation(app):
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=1)
@@ -80,9 +78,9 @@ def test_emptyDayAddedWithDayCreation(app):
 #Test editing local observations
 def test_editLocalObs(app):
     obserid=getObservatoryId("Hangon_Lintuasema")
-    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid) 
+    dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)#new day is added which creates the observationperiods for local and scatter observations
-    editLocalObs(1, obserid, 'SOMMOL', 37, 0) #local observation count for SOMMOL is edited to 37, obsday_id always starts at 1 here so we can hardcode it
+    editLocalObs('MA.1', 1, obserid, 'SOMMOL', 37, 0) #local observation count for SOMMOL is edited to 37, obsday_id always starts at 1 here so we can hardcode it
     obs=getObservationByPeriodAndSpecies(1, 'SOMMOL') #find observation based on obsperiod id and species name
     assert obs.species=='SOMMOL' and obs.total_count==37
 
@@ -92,7 +90,7 @@ def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by
     obserid=getObservatoryId("Hangon_Lintuasema")
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editLocalObs(1, obserid, 'SOMMOL', 37, 1)
+    editLocalObs('MA.1', 1, obserid, 'SOMMOL', 37, 1)
     obs=getObservationByPeriodAndSpecies(2, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 
@@ -100,7 +98,7 @@ def test_editScatterObs(app):
     obserid=getObservatoryId("Hangon_Lintuasema")
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editScatterObs(1, obserid, 'FRICOE', 44)
+    editScatterObs('MA.1', 1, obserid, 'FRICOE', 44)
     obs=getObservationByPeriodAndSpecies(3, 'FRICOE')
     assert obs.species=='FRICOE' and obs.total_count==44
 
