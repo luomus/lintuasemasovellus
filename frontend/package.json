@@ -37,9 +37,9 @@
   },
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test  --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
-    "eject": "react-scripts eject",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+    "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test  --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
+    "eject": "DISABLE_ESLINT_PLUGIN=true react-scripts eject",
     "start-api": "cd ../lintuasema-backend && . venv/bin/activate && pip3 install -r requirements.txt && flask run",
     "start-api:test": "DB_TYPE=sqlite npm run start-api",
     "build-copy": "npm run build && cp build ../lintuasema-backend/ -r",
@@ -50,9 +50,6 @@
   },
   "jest": {
     "globalSetup": "./global-setup.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
