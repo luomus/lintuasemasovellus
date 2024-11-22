@@ -1,17 +1,15 @@
 from application.api.classes.account.models import Account
-from application.api.classes.observatory.models import Observatory
-
-from application.api.classes.observatory.services import getObservatoryName
+from application.api.classes.account.classes import LoggedInUser
 
 from application.api import bp
 from application.db import db
 
 import os
 import requests
-from flask import (Flask, render_template,
-    request, redirect, session, url_for,
+from flask import (
+    request, redirect,
     make_response, jsonify)
-from flask_login import login_user, logout_user , current_user, login_required
+from flask_login import login_user, logout_user, current_user, login_required, user_logged_in
 
 
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
@@ -44,39 +42,33 @@ def loginconfirm():
         response.set_cookie('showUserMessage', 'noRequiredRoles', max_age=120)
         return response
 
-    user = Account.query.filter_by(userId=userId).first()
-    if not user:
-        user = Account(userId=userId, fullName=name, email=email)
-        db.session().add(user)
+    user_account = Account.query.filter_by(userId=userId).first()
+    if not user_account:
+        user_account = Account(userId=userId, fullName=name, email=email)
+        db.session().add(user_account)
         db.session().commit()
 
+    user = LoggedInUser(personToken, userId)
     login_user(user)
-
-    session.permanent = True
-
-    session['token'] = personToken
 
     return redirect('/')
 
 
 @bp.route('/logout', methods=['POST', 'GET'])
 def logoutCleanup():
-
-    req = requests.delete('{}person-token/{}'.format(LAJI_API_URL, session['token']), params={ 'access_token': AUTH_TOKEN })
-
-    session.clear()
-    session.pop('token', None)
+    req = requests.delete('{}person-token/{}'.format(LAJI_API_URL, current_user.person_token), params={ 'access_token': AUTH_TOKEN })
     logout_user()
     return redirect('/')
 
 @bp.route('/get/token', methods=['GET', 'POST'])
+@login_required
 def getSessionToken():
-    return jsonify(token=session['token'])
+    return jsonify(token=current_user.person_token)
 
 @bp.route('/api/getPerson', methods=['GET'])
 @login_required
 def getPersonFromLaji():
-    return requests.get('{}person/{}'.format(LAJI_API_URL, session['token']), params={ 'access_token': AUTH_TOKEN }).json()
+    return requests.get('{}person/{}'.format(LAJI_API_URL, current_user.person_token), params={ 'access_token': AUTH_TOKEN }).json()
 
 @bp.route('/loginRedirect', methods=['POST', 'GET'])
 def login():
@@ -84,10 +76,9 @@ def login():
 
 @bp.route('/api/getUser', methods=['GET'])
 def getcurrentUser():
-    u = current_user.get_id()
-    if not u:
+    if not current_user.is_authenticated:
         return jsonify('no user')
-    user = Account.query.filter_by(id=u).first()
+    user = Account.query.filter_by(userId=current_user.user_id).first()
     ret = []
     ret.append({'id': user.userId, 'name': user.fullName, 'email':user.email, 'observatory':user.observatory })
     return jsonify(ret)
@@ -96,10 +87,7 @@ def getcurrentUser():
 @login_required
 def setUserObservatory():
     req = request.get_json()
-    u = current_user.get_id()
-    if not u:
-        return jsonify('no user')
-    user = Account.query.filter_by(id=u).first()
+    user = Account.query.filter_by(userId=current_user.user_id).first()
     user.observatory = req['observatory']
 
     db.session().commit()

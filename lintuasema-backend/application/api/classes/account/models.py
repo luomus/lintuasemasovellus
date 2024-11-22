@@ -18,26 +18,5 @@ class Account(Base):
           self.email=email
           self.observatory=None
 
-     def get_id(self):
-          return self.id
-
      def get_userId(self):
           return self.userId
-
-     def is_active(self):
-          return True
-
-     def is_anonymous(self):
-          return False
-
-     def is_authenticated(self):
-          return True
-
-     def getRole(self):
-         return self.role
-
-
-
-    
-
-   

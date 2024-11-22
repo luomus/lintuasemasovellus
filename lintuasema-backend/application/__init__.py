@@ -8,11 +8,7 @@ from flask import (Flask, render_template,
     request, redirect, session, url_for,
     make_response, jsonify, json)
 from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
+    LoginManager
 )
 from flask_sqlalchemy import SQLAlchemy
 
@@ -21,6 +17,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy.engine import create_engine
 
 from application.api import bp as api_blueprint
+from application.api.classes.account.classes import LoggedInUser, get_logged_in_user
 
 from application.api.classes.observatory import models
 from application.api.classes.account import models
@@ -80,15 +77,20 @@ def init_app(database, print_db_echo):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     login_manager = LoginManager()
     login_manager.init_app(app)
-    app.config["SECRET_KEY"] = urandom(32)
-    if database == "oracle":
-        app.config['LOGIN_DISABLED'] = False
-    else:
-        app.config['LOGIN_DISABLED'] = True
+    app.config["SECRET_KEY"] = os.environ['SECRET_KEY']
+    app.config['LOGIN_DISABLED'] = False
 
     @login_manager.user_loader
-    def load_user(account_id):
-        return Account.query.get(account_id)
+    def load_user(user_data):
+        user = get_logged_in_user(user_data)
+
+        # check if the account exists if using a non-persistent database
+        if database != 'oracle' and user is not None:
+            account = Account.query.filter_by(userId=user.user_id).first()
+            if account is None:
+                return None
+
+        return user
 
     #määrittele tietokantayhteys
     if database == "oracle":

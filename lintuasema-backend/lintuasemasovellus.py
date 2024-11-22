@@ -20,9 +20,6 @@ app = init_app(db_type, print_db_echo)
 
 port = int(os.environ.get("PORT", 3000))
 
-
-app.secret_key = 'supersecret'
-
 @app.route('/')
 def index():
     return app.send_static_file('index.html')

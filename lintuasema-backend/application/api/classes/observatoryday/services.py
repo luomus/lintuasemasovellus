@@ -100,15 +100,8 @@ def createEmptyObsPeriods(dayId):
 
 #Add a new observation to local obsperiod for local observations, or edit an old one if this species has already been observed locally:
 def editLocalObs(obsday_id, obserid, species, count, gau):
-    if not current_user: #First we find the current user's userId (userId on the account - table)
-        u="MA.4658" #This is my (Ville) userId, to be used if the user's own id is not found.
-    else:
-        u = current_user.get_id()
-        user = Account.query.filter_by(id=u).first()
-        if user:
-            u=user.userId
-        else:
-            u="MA.4658"
+    u = current_user.user_id
+
     if gau==1:
         loc1=getLocationId("Luoto Gåu", obserid) #find location Id to use for finding the right obsperiod
     else:
@@ -134,15 +127,8 @@ def editLocalObs(obsday_id, obserid, species, count, gau):
         db.session().commit()
 
 def editScatterObs(obsday_id, obserid, species, count): #This is functionally the same as editLocalObs but just does it for scatter observations
-    if not current_user:
-        u="MA.4658" #This is my (Ville) userId, to be used if the user's own id is not found.
-    else:
-        u = current_user.get_id()
-        user = Account.query.filter_by(id=u).first()
-        if user:
-            u=user.userId
-        else:
-            u="MA.4658"
+    u = current_user.user_id
+
     loc1=getLocationId("Bunkkeri", obserid)
     typid=getTypeIdByName("Hajahavainto")
     per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()

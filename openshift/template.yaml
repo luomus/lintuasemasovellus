@@ -23,6 +23,8 @@ parameters:
     required: true
   - name: LAJI_AUTH_URL
     required: true
+  - name: SECRET_KEY
+    required: true
   - name: CPU_LIMIT
     required: true
     value: "100m"
@@ -47,6 +49,7 @@ objects:
       SERVICEID: ${SERVICEID}
       LAJI_AUTH_URL: ${LAJI_AUTH_URL}
       LAJI_API_URL: ${LAJI_API_URL}
+      SECRET_KEY: ${SECRET_KEY}
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -111,6 +114,11 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
                       key: LAJI_AUTH_URL
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: SECRET_KEY
                 - name: DB_TYPE
                   value: oracle
                 - name: BEHIND_PROXY
