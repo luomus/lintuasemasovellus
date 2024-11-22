@@ -7,9 +7,9 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.6",
+    "@mui/lab": "^6.0.0-beta.14",
     "@mui/material": "^6.1.6",
     "@mui/styles": "^6.1.6",
-    "@mui/lab": "^6.0.0-beta.14",
     "@mui/x-date-pickers": "^7.22.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
@@ -21,6 +21,7 @@
     "dexie": "^4.0.9",
     "dexie-react-hooks": "^1.1.7",
     "fontsource-roboto": "^4.0.0",
+    "http-proxy-middleware": "^3.0.3",
     "i18next": "^23.16.5",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
@@ -63,13 +64,12 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://127.0.0.1:5000",
   "devDependencies": {
     "cypress": "^13.16.0",
     "deep-freeze": "^0.0.1",
-    "globals": "^15.12.0",
     "eslint-plugin-cypress": "^4.1.0",
     "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-security": "^3.0.1"
+    "eslint-plugin-security": "^3.0.1",
+    "globals": "^15.12.0"
   }
 }

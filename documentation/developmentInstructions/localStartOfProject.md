@@ -38,11 +38,6 @@ Jos `npm run start-api` ei toimi, saman asian voi ajaa avaamalla lisää termina
 
 Backendin ja frontendin täytyy olla samanaikaisesti päällä, eli ne tulee käynnistää komentorivillä eri välilehdille. Nyt kun frontendiin tekee muutoksia, ne heijastuvat heti portissa 3000.
 
-Kirjautuminen voi olla ongelmallista tällä käynnistämisellä. Kun olet kirjautunut sisään laji.fi tunnuksilla, niin sinut uudelleenohjataan takaisin sisäänkirjautumissivulle. Osoiterivi on nyt muotoa ´ localhost:3000/login?token=123 ´, korjaa portti 3000 osoiterivillä porttiin 5000 ja kirjautumisen pitäisi onnistua. Tämän jälkeen muokkaa osoiterivillä portti 5000 takaisin porttiin 3000. Nyt kirjautumistiedot pysyvät välimuistissa.
-
-Edellä kuvatulla epämääräisellä porttikikkailulla saadaan aikaan se, että authtoken lähetetään backendiin.
-
-
 # Mahdollisten ongelmien ratkaisuja
 
 Komento `npm install` pitää ehkä joskus ajaa ensin, esim projektin kloonaamisen jälkeen. 

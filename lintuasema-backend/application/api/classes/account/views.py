@@ -19,7 +19,7 @@ LAJI_AUTH_URL = os.getenv('LAJI_AUTH_URL')
 LAJI_API_URL = os.getenv('LAJI_API_URL')
 
 
-@bp.route('/login', methods=['POST', 'GET'])
+@bp.route('/api/login', methods=['POST', 'GET'])
 def loginconfirm():
 
     personToken = request.args.get('token')
@@ -54,23 +54,18 @@ def loginconfirm():
     return redirect('/')
 
 
-@bp.route('/logout', methods=['POST', 'GET'])
+@bp.route('/api/logout', methods=['POST', 'GET'])
 def logoutCleanup():
     req = requests.delete('{}person-token/{}'.format(LAJI_API_URL, current_user.person_token), params={ 'access_token': AUTH_TOKEN })
     logout_user()
     return redirect('/')
-
-@bp.route('/get/token', methods=['GET', 'POST'])
-@login_required
-def getSessionToken():
-    return jsonify(token=current_user.person_token)
 
 @bp.route('/api/getPerson', methods=['GET'])
 @login_required
 def getPersonFromLaji():
     return requests.get('{}person/{}'.format(LAJI_API_URL, current_user.person_token), params={ 'access_token': AUTH_TOKEN }).json()
 
-@bp.route('/loginRedirect', methods=['POST', 'GET'])
+@bp.route('/api/loginRedirect', methods=['POST', 'GET'])
 def login():
     return redirect('{}login?target={}&redirectMethod=GET&next='.format(LAJI_AUTH_URL, TARGET))
 

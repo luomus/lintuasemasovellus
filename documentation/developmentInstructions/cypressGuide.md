@@ -4,8 +4,7 @@
 Luo cypress.env.json niminen tiedosto frontend-kansion juureen ja laita sinne seuraavat muuttujat:
 ```
 {
-  "person_token": <test user's person token>,
-  "login_port": 5000
+  "person_token": <test user's person token>
 }
 ```
 

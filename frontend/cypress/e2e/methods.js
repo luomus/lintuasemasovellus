@@ -4,9 +4,8 @@ export function myBeforeEach() {
   cy.wait(1000);
   cy.visit("http://localhost:3000");
 
-  const loginPort = Cypress.env("login_port") || 3000;
   const personToken = Cypress.env("person_token");
-  const loginUrl = `http://localhost:${loginPort}/login?token=${personToken}`;
+  const loginUrl = `http://localhost:3000/api/login?token=${personToken}`;
 
   if (loginPort === 3000) {
     cy.visit(loginUrl);
