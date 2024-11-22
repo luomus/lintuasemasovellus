@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect, useEffect} from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import PropTypes from "prop-types";
 import LocalInput from "./LocalInput";
 import { StyledTableCell } from "./common";

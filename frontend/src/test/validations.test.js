@@ -74,7 +74,7 @@ describe("basic higher order validations", () => {
 
   test("long example shorthand from file", () => {
     const file = path.join(__dirname, "./", "longShorthandExample.txt");
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+
     const text = fs.readFileSync(file, "utf8", "r", (err, data) => data);
     loopThroughCheckForErrors(text);
     expect(getErrors()).toEqual([]);//we'll expect no errors

@@ -58,9 +58,9 @@ describe("Species table with filters contains species as expected", function () 
     cy.wait(1000);
   });
 
-  it(`Basic species table 
-      with only observations filter enabled 
-      contains added basic observation 
+  it(`Basic species table
+      with only observations filter enabled
+      contains added basic observation
       but not one that has no observations`,
   function () {
     cy.get("#onlyObservationsFilter").check();
@@ -72,7 +72,7 @@ describe("Species table with filters contains species as expected", function () 
 
   it(`Other species table
       with only observations filter enabled
-      contains added other observation 
+      contains added other observation
       but not one that has no observations`,
   function () {
     chooseSpeciesType("others");
@@ -84,10 +84,10 @@ describe("Species table with filters contains species as expected", function () 
       .and("not.contain", other2);
   });
 
-  it(`Basic species table 
+  it(`Basic species table
       with only observations filter disabled
       and with all rows selected
-      contains added basic observation 
+      contains added basic observation
       and one that has no observations
       but no chosen others`,
   function () {
@@ -100,10 +100,10 @@ describe("Species table with filters contains species as expected", function () 
       .and("not.contain", other1, other2);
   });
 
-  it(`Other species table 
+  it(`Other species table
       with only observations filter disabled
       and with all rows selected
-      contains added other observation 
+      contains added other observation
       and one that has no observations
       but no chosen basics`,
   function () {
@@ -118,7 +118,7 @@ describe("Species table with filters contains species as expected", function () 
       .and("contain", other1, other2);
   });
 
-  it(`All species table 
+  it(`All species table
       with only observations filter disabled
       and with all rows selected
       contains added basic and other observations
@@ -134,7 +134,7 @@ describe("Species table with filters contains species as expected", function () 
       .should("contain", basic1, basic2, other1, other2);
   });
 
-  it(`Basic species table 
+  it(`Basic species table
       with only observations filter disabled
       and with all rows selected
       contains 236 rows`,
@@ -146,7 +146,7 @@ describe("Species table with filters contains species as expected", function () 
     assertThatSpeciesTableBodyHasNumberOfRows(236);
   });
 
-  it(`Other species table 
+  it(`Other species table
       with only observations filter disabled
       and with all rows selected
       contains 381 rows`,
@@ -160,7 +160,7 @@ describe("Species table with filters contains species as expected", function () 
     assertThatSpeciesTableBodyHasNumberOfRows(381);
   });
 
-  it(`All species table 
+  it(`All species table
       with only observations filter disabled
       and with all rows selected
       contains 617 rows`,
