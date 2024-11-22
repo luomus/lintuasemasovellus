@@ -26,6 +26,8 @@ jobs:
         pip install -r requirements.txt
       working-directory: ./lintuasema-backend
     - name: Test backend with pytest
+      env:
+        SECRET_KEY: 'secretkey'
       run: |
         python3 -m pytest
       working-directory: ./lintuasema-backend
@@ -48,6 +50,7 @@ jobs:
         TARGET: ${{ secrets.TEST_CONFIG_TARGET }}
         LAJI_AUTH_URL: ${{ secrets.TEST_CONFIG_LAJI_AUTH_URL }}
         LAJI_API_URL:  ${{ secrets.TEST_CONFIG_LAJI_API_URL }}
+        SECRET_KEY: 'secretkey'
       run: flask run --port=3000 &
       working-directory: ./lintuasema-backend
     - name: Run Cypress tests
