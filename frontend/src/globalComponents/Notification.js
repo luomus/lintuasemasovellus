@@ -18,14 +18,14 @@ const useStyles = makeStyles(() => ({
     background: "#f5f890",
     padding: "20px 30px",
     marginTop: "20px",
-    maxHeight: "8vw",
+    maxHeight: "200px",
     overflow: "auto",
   },
   nocturnalPaper: {
     background: "#402158",
     padding: "20px 30px",
     marginTop: "20px",
-    maxHeight: "8vw",
+    maxHeight: "200px",
     overflow: "auto",
   },
   errorHeading: {
