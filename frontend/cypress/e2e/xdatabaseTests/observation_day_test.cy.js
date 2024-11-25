@@ -2,14 +2,14 @@ import { myBeforeEach } from "../methods.js";
 
 
 const observStation = "Hangon Lintuasema";
-const date = "05.01.2020";
+const date = "05.01.2023";
 const observer = "Helmi Havainnoitsija";
 const observer1 = "Otso Observoija";
 const changedObserver = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa kiva sää.";
 const comment1 = "Satoi aivan kaatamalla";
 const changedComment = "hihihi asdfsommol";
-const date2 = "06.02.2020";
+const date2 = "06.02.2023";
 const shorthand = "10:00\nsommol 1/2 W (note, 123)\n12:00";
 const opened = "06:00";
 const opened1 = "06:30";
