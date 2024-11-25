@@ -120,9 +120,9 @@ objects:
                       name: ${APP}-${BRANCH}
                       key: SECRET_KEY
                 - name: DB_TYPE
-                  value: oracle
+                  value: "oracle"
                 - name: BEHIND_PROXY
-                  value: True
+                  value: "True"
               ports:
                 - containerPort: 3000
                   protocol: TCP
@@ -149,7 +149,7 @@ objects:
       labels:
         app: ${APP}-${BRANCH}
     spec:
-      host: "lintuasema-dev.2.rahtiapp.fi"
+      host: "lintuasema-dev-new.2.rahtiapp.fi"
       to:
         kind: Service
         name: ${APP}-${BRANCH}
