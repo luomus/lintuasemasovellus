@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
   infoPaper: {
     background: "white",
     padding: "20px 30px",
-    maxHeight: "34vw",
     overflow: "auto",
   },
   card: {
@@ -204,8 +203,12 @@ export const HomePage = ({ user, userObservatory }) => {
 
 
   const setCatchRows = (dayId) => {
-    getCatches(dayId)
-      .then(res => dispatch(setCatches(res)));
+    if (dayId !== undefined && dayId !== null) {
+      getCatches(dayId)
+        .then(res => dispatch(setCatches(res)));
+    } else {
+      dispatch(setCatches([]));
+    }
   };
 
   const readyDailyActions = () => {
@@ -417,28 +420,35 @@ export const HomePage = ({ user, userObservatory }) => {
   };
 
   const handleDateChange = (date) => {
+    const setFields = (dayData) => {
+      setObservers(dayData["observers"] || "");
+      setComment(dayData["comment"] || "");
+      setActions(dayData["selectedactions"]);
+      setCatchRows(dayData["id"]);
+      dispatch(resetNotifications());
+    };
+
     if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
       const newDate = date;
-      setDay(newDate);
-      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-        setObservers(dayJson[0]["observers"]);
-        dayJson[0]["comment"] === null ? setComment("") :
-          setComment(dayJson[0]["comment"]);
-        setActions(dayJson[0]["selectedactions"]);
-        setCatchRows(dayJson[0]["id"]);
-        dispatch(resetNotifications());
-      });
+      setDay(date);
+
+      if (newDate) {
+        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+          setFields(dayJson[0]);
+        });
+      } else {
+        setFields({});
+      }
     } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
       confirmDate();
       setDay(date);
-      searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
-        setObservers(dayJson[0]["observers"]);
-        dayJson[0]["comment"] === null ? setComment("") :
-          setComment(dayJson[0]["comment"]);
-        setActions(dayJson[0]["selectedactions"]);
-        setCatchRows(dayJson[0]["id"]);
-        dispatch(resetNotifications());
-      });
+      if (date) {
+        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+          setFields(dayJson[0]);
+        });
+      } else {
+        setFields({});
+      }
     }
   };
 
@@ -488,13 +498,13 @@ export const HomePage = ({ user, userObservatory }) => {
             <Grid container
               alignItems="flex-start"
               spacing={1}>
-              <Grid item xs={11} >
+              <Grid item xs={10} >
                 <Typography variant="h4" component="h2" >
                   {t("addObservations")} - {userObservatory.replace("_", " ")}
                 </Typography>
                 <br />
               </Grid>
-              <Grid container item xs={1} justifyContent="flex-end">
+              <Grid container item xs={2} justifyContent="flex-end">
                 <Tooltip title={t("drafts")}>
                   <IconButton id="open-draft-button" size="medium" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
                     <Bookmarks fontSize="default" />
@@ -506,7 +516,7 @@ export const HomePage = ({ user, userObservatory }) => {
                   </IconButton>
                 </Tooltip>
               </Grid>
-              <Grid item xs={3} background-color={"red"} style={{ minWidth: "150px", paddingLeft: 0 }}>
+              <Grid item sm={3} background-color={"red"} style={{ minWidth: "150px" }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={localeFI}>
                   <DesktopDatePicker
                     className={classes.datePicker}
@@ -523,15 +533,18 @@ export const HomePage = ({ user, userObservatory }) => {
                         required: true,
                         id: "date-picker-inline",
                         "aria-label": "change date",
-                        helperText: datePickerErrorMessage,
+                        helperText: datePickerErrorMessage
                       },
+                      field: {
+                        clearable: true
+                      }
                     }}
                   />
 
                 </LocalizationProvider>
               </Grid>
 
-              <Grid item xs={9} style={{ paddingLeft: 0 }}>
+              <Grid item sm={9}>
                 <TextField required
                   fullWidth={true}
                   id="observers"
@@ -540,7 +553,7 @@ export const HomePage = ({ user, userObservatory }) => {
                   value={observers}
                 />
               </Grid>
-              <Grid className={classes.buttonAndIconsContainer}>
+              <Grid item className={classes.buttonAndIconsContainer}>
                 <Button
                   id="toDayDetails"
                   className={classes.sendButton}
