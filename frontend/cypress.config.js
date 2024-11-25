@@ -2,11 +2,18 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
-    excludeSpecPattern: process.env.CI ? ['cypress/e2e/all.cy.js'] : [],
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
-    },
+      const legacyConfig = require('./cypress/plugins/index.js')(on, config);
+
+      if (config.isTextTerminal) {
+        // skip the all.cy.js spec in "cypress run" mode
+        return {
+          ...legacyConfig,
+          excludeSpecPattern: ['cypress/e2e/all.cy.js'],
+        }
+      }
+      
+      return legacyConfig;
+    }
   },
 })
