@@ -55,8 +55,8 @@ describe("ShorthandModification", function () {
   it("Shorthand modification windows selections for type and location can be made", function () {
     navigateToDay(date);
     cy.contains("Muokkaa").click();
-    cy.get("#selectLocationInModification").click().get("#Bunkkeri").click();
     cy.get("#selectTypeInModification").click().get("#Vakio").click();
+    cy.get("#selectLocationInModification").click().get("#Bunkkeri").click();
     cy.contains("Vakio");
     cy.contains("Bunkkeri");
     cy.contains("sommol 1/2 W");
