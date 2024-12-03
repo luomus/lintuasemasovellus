@@ -12,7 +12,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import {
   getShorthandText,
-  sendEditedShorthand,deleteObservationperiods
+  sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
@@ -79,13 +79,57 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   const [location, setLocation] = useState("");
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [selectTypes, setSelectTypes] = useState([]);
+  const [selectLocations, setSelectLocations] = useState([]);
   const [warning, setWarning] = useState(false);
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+  const [observationPeriodCounts, setObservationPeriodCounts] = useState([]);
 
   const userID = useSelector(state => state.user.id);
   const userObservatory = useSelector(state => state.userObservatory);
   const stations = useSelector(state => state.stations);
   const notifications = useSelector(state => state.notifications);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    getDaysObservationPeriodCounts(dayId).then(counts => {
+      setObservationPeriodCounts(counts);
+    });
+  }, [dayId, open]);
+
+  useEffect(() => {
+    const locationCountByType = {};
+
+    types.forEach(type => {
+      locationCountByType[type] = 0;
+    });
+
+    observationPeriodCounts.forEach(({ observationType }) => {
+      locationCountByType[observationType] += 1;
+    });
+
+    const selectTypes = types.map(type => ({ type, locationCount: locationCountByType[type] }));
+    setSelectTypes(selectTypes);
+  }, [types, observationPeriodCounts]);
+
+  useEffect(() => {
+    const obsPeriodCountByLocation = {};
+
+    locations.forEach(location => {
+      obsPeriodCountByLocation[location] = 0;
+    });
+
+    observationPeriodCounts.forEach(({ observationType, location, observationPeriodCount }) => {
+      if (type === observationType) {
+        obsPeriodCountByLocation[location] += observationPeriodCount;
+      }
+    });
+
+    const selectLocations = locations.map(location => ({ location, observationPeriodCount: obsPeriodCountByLocation[location] }));
+    setSelectLocations(selectLocations);
+  }, [type, locations, observationPeriodCounts]);
 
   const initializeDefaultShorthand = (defaultShorthand) => {
     let text = "";
@@ -162,10 +206,8 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
   };
 
   const retrieveShorthand = async (type, location) => {
-    console.log("type: ", type, "dayId: ", dayId);
-    if(type && location){
+    if (type && location){
       const res = await getShorthandText(dayId, type, location);
-      console.log("res: ", res);
       setDefaultShorthand(res);
       initializeDefaultShorthand(res);
     }
@@ -177,10 +219,6 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
     setShorthand("");
     handleCloseModal();
   };
-
-  useEffect(() => {
-    retrieveShorthand();
-  }, [dayId]);
 
   useEffect(() => {
     if (userObservatory !== "") {
@@ -231,9 +269,9 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
                 }}
               >
                 {
-                  types.map((type, i) =>
+                  selectTypes.map(({ type, locationCount }, i) =>
                     <MenuItem id={type} value={type} key={i}>
-                      {type}
+                      {type} ({t("locationCount", { count: locationCount })})
                     </MenuItem>
                   )
                 }
@@ -247,6 +285,7 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
                 fullWidth
                 label={t("location")}
                 id="selectLocationInModification"
+                disabled={!type}
                 slotProps={{
                   select: {
                     value: location,
@@ -258,9 +297,9 @@ const EditShorthand = ({ date, dayId, open, handleCloseModal }) => {
                 }}
               >
                 {
-                  locations.map((location, i) =>
+                  selectLocations.map(({ location, observationPeriodCount }, i) =>
                     <MenuItem id={location} value={location} key={i}>
-                      {location}
+                      {location} ({t("observationPeriodCount", { count: observationPeriodCount })})
                     </MenuItem>
                   )
                 }

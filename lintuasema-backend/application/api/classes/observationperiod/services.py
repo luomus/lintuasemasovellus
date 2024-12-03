@@ -44,6 +44,38 @@ def setObservationId(observationperiod_id_old, observationperiod_id_new):
         x.observationperiod_id = observationperiod_id_new
     db.session().commit()
 
+def getObservationPeriodCountsByDayId(observatoryday_id):
+    stmt = text(
+        " SELECT " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname,"
+        " COUNT(DISTINCT " + prefix + "Observationperiod.id) AS obsperiod_count"
+        " FROM " + prefix + "Observationperiod"
+        " JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
+        " JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
+        " WHERE " + prefix + "Observationperiod.observatoryday_id = :dayId"
+        " AND " + prefix + "Type.name NOT IN ('Paikallinen', 'Hajahavainto')"
+        " AND " + prefix + "Observationperiod.is_deleted = 0"
+        " AND " + prefix + "Type.is_deleted = 0"
+        " AND " + prefix + "Location.is_deleted = 0"
+        " GROUP BY " + prefix + "Type.id, " + prefix + "Location.id, " + prefix + "Type.name, " + prefix + "Location.name"
+        " ORDER BY " + prefix + "Type.id, " + prefix + "Location.id"
+    ).params(
+        dayId = observatoryday_id
+    )
+
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
+
+    response = []
+
+    for row in res:
+        response.append({
+            'observationType': row.typename,
+            'location': row.locationname,
+            'observationPeriodCount': row.obsperiod_count
+        })
+
+    return jsonify(response)
+
 def getObservationPeriodsByDayId(observatoryday_id):
     stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
                 " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time,"

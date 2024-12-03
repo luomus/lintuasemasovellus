@@ -796,7 +796,7 @@ export const HomePage = ({ user, userObservatory }) => {
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
                               <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
-                                {s.speciesCount} {t("multipleSpecies")}
+                                {t("speciesCount", { count: s.speciesCount })}
                               </Link>
                             </StyledTableCell>
                           </TableRow>

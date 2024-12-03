@@ -6,7 +6,9 @@ from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observatoryday.services import getDay
 from application.api.classes.location.services import getLocationId
 from application.api.classes.type.services import getTypeIdByName
-from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, getObservationperiodList, addObservationperiod, deleteObservationperiod, delete_observationperiods
+from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, \
+    getObservationperiodList, addObservationperiod, deleteObservationperiod, delete_observationperiods, \
+    getObservationPeriodCountsByDayId
 
 from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.observation.models import Observation
@@ -21,7 +23,7 @@ from datetime import datetime
 @login_required
 def addObservationPeriod():
     req = request.get_json()
-    
+
     ret = addObservationperiod(req['day_id'], req['location'], req['observationType'], req['startTime'], req['endTime'])
 
     return jsonify(ret)
@@ -34,19 +36,28 @@ def getObservationPeriods():
     return jsonify(ret)
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"]) 
+@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"])
 @login_required
 def getDaysObservationPeriods(day_id):
     ret = getObservationPeriodsByDayId(day_id)
-    
+
     return ret
+
+
+@bp.route('/api/getDaysObservationPeriodCounts/<day_id>/', methods=["GET"])
+@login_required
+def getDaysObservationPeriodCounts(day_id):
+    ret = getObservationPeriodCountsByDayId(day_id)
+
+    return ret
+
 
 @bp.route("/api/deleteObservationperiods", methods=["POST"])
 @login_required
 def delete_all():
     req = request.get_json()
     delete_observationperiods(req)
-    
+
     return jsonify(req)
 
 
@@ -54,9 +65,9 @@ def delete_all():
 @login_required
 def observationperiod_delete():
     req = request.get_json()
-    
+
     deleteObservationperiod(req['obsperiod_id'])
-    
+
     return jsonify(req)
 
 
@@ -101,7 +112,7 @@ def save_edited_observationperiods():
                     + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
                     + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
                     + subObservation['unknownMaleCount']
-                    
+
                     sub_observation = Observation(species=subObservation['species'],
                         adultUnknownCount=subObservation['adultUnknownCount'],
                         adultFemaleCount=subObservation['adultFemaleCount'],
