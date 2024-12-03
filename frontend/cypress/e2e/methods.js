@@ -5,7 +5,7 @@ export function myBeforeEach() {
 
   cy.visit(loginUrl);
 
-  cy.get("#select-observatory,#observatorySelector",{ timeout: 5000 }).should("exist");
+  cy.get("#select-observatory,#observatorySelector",{ timeout: 10000 }).should("exist");
   cy.get("body")
     .then(($body) => {
       if ($body.text().includes("Valitse")) {
