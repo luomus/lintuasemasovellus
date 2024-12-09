@@ -102,11 +102,12 @@ def createObsperiodList(res):
         endTime = formatTime(row.end_time)
         shorthandText = row.shorthandblock
 
-    addToShorthandList(shorthandList, shorthandId, shorthandText, observationList)
-    observationList.clear()
+    if index > 0:
+        addToShorthandList(shorthandList, shorthandId, shorthandText, observationList)
+        observationList.clear()
 
-    addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
-    shorthandList.clear()
+        addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
+        shorthandList.clear()
 
     return obsPeriodList
 
