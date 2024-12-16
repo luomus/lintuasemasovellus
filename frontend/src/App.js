@@ -8,10 +8,10 @@ import Footer from "./globalComponents/Footer";
 import { getPerson, getCurrentUser } from "./services";
 import { setUser } from "./reducers/userReducer";
 import { setUserObservatory } from "./reducers/userObservatoryReducer";
-import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
 import { makeStyles } from "@mui/styles";
 import { clean as DraftsClean } from "./services/draftService";
+import { initializeSpecies } from "./reducers/speciesReducer";
 
 const App = () => {
 
@@ -53,10 +53,13 @@ const App = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
+  const [initialDataLoading, setInitialDataLoading] = useState(false);
 
   const user = useSelector(state => state.user);
   const userObservatory = useSelector(state => state.userObservatory);
+  const stations = useSelector(state => state.stations);
+  const speciesData = useSelector(state => state.speciesData);
 
   useEffect(() => {
     getPerson()
@@ -69,30 +72,35 @@ const App = () => {
             if (observatory) {
               dispatch(setUserObservatory(observatory));
             }
-            setLoading(false);
+
+            setInitialDataLoading(true);
+            dispatch(initializeStations());
+            dispatch(initializeSpecies());
+
+            DraftsClean();
+
+            setUserLoading(false);
           });
       })
       .catch(() => {
-        setLoading(false);
+        setUserLoading(false);
       });
   }, [dispatch]);
 
   useEffect(() => {
-    if (!user.id) return;
+    if (stations && speciesData) {
+      setInitialDataLoading(false);
+    }
+  }, [stations, speciesData]);
 
-    dispatch(initializeStations());
-    dispatch(retrieveDays());
-    DraftsClean();
-  }, [dispatch, user]);
-
-  if (loading) {
+  if (userLoading || initialDataLoading) {
     return (
       <div className={classes.flexi}>
         <div className={classes.spinner}>
         </div>
       </div>
     );
-  } else if (!user.id && !loading) {
+  } else if (!user.id) {
     return (
       <CssBaseline>
         <div>

@@ -9,10 +9,11 @@ import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import PeriodTablePagination from "./PeriodTablePagination";
-import { defaultBirds, uniqueBirds } from "../../../globalConstants";
+import { defaultBirds } from "../../../globalConstants";
 import Row from "./Row";
 import SearchBar from "../../../globalComponents/SearchBar";
 import { StyledTableCell, StyledTableRow } from "./common";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,6 +41,8 @@ const SpeciesTable = (props) => {
 
   const { t } = useTranslation();
   const classes = useStyles();
+
+  const speciesData = useSelector(state => state.speciesData);
 
   const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(false);
   const [textFilter, setTextFilter] = useState("");
@@ -108,10 +111,10 @@ const SpeciesTable = (props) => {
         species = defaultBirds[userObservatory.toString()];
         break;
       case "others":
-        species = uniqueBirds.filter(bird => !defaultBirds[userObservatory.toString()].includes(bird));
+        species = speciesData.uniqueSpecies.filter(bird => !defaultBirds[userObservatory.toString()].includes(bird));
         break;
       case "all":
-        species = uniqueBirds;
+        species = speciesData.uniqueSpecies;
         break;
     }
     setExtendedSummary(

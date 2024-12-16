@@ -22,7 +22,7 @@
 }
 ```
 
-2. Add the default species list for the observatory to the file [defaultBirds.json](../../frontend/src/defaultBirds.json). See [aboutDefinedSpecies.md](./aboutDefinedSpecies.md) for more information about the species.
+2. Add the default species list for the observatory to the file [defaultBirds.json](../../lintuasema-backend/application/defaultBirds.json). See [aboutDefinedSpecies.md](./aboutDefinedSpecies.md) for more information about the species.
 
 3. Currently the daily actions and catches are hard-coded so if you need to change them you need to make changes at least to these files: [dailyActions.js](../../frontend/src/globalComponents/dayComponents/dailyActions.js), [catchType.js](../../frontend/src/globalComponents/dayComponents/catchType.js).
 

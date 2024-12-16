@@ -1,4 +1,5 @@
 import globals from "../globalConstants";
+import store from "../store";
 
 // Buckets:
 
@@ -47,8 +48,6 @@ let taysiHavainto = {};
 // End of buckets
 
 // Sets of acceptable substrings
-
-const birds = globals.birdMap;
 
 const possibleDirections = globals.directions;
 
@@ -143,7 +142,8 @@ const ikaConstructed = () => {
 };
 
 export const constructTaysiHavainto = (startKello, endKello) => {
-  if (!birds.has(lajinimi.toUpperCase())) {
+  const species = store.getState().speciesData.speciesMap;
+  if (!species.has(lajinimi.toUpperCase())) {
     throw new Error("unknownSpeciesError");
   }
   constructOsahavainto();

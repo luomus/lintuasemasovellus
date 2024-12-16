@@ -1,4 +1,3 @@
-import birds from "./birds.json";
 import defaultBirds from "./defaultBirds.json";
 
 const directions = new Map([
@@ -38,22 +37,16 @@ const inverseDirections = new Map(Array.from(directions, d => d.reverse()));
 
 const inverseBypass = new Map(Array.from(bypass, b => b.reverse()));
 
-const birdMap = new Map(Object.entries(birds));
-
-const uniqueBirds = [...new Set(Object.values(birds).map(bird => bird.value))];
-
 const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
 
 export default {
   directions,
   bypass,
-  birdMap,
   timeRegex,
   inverseDirections,
   inverseBypass,
 };
 
 export {
-  uniqueBirds,
   defaultBirds
 };

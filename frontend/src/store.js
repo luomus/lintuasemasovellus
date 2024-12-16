@@ -7,6 +7,7 @@ import dailyActionsReducer from "./reducers/dailyActionsReducer";
 import catchRowsReducer from "./reducers/catchRowsReducer";
 import userReducer from "./reducers/userReducer";
 import notificationsReducer from "./reducers/notificationsReducer";
+import speciesReducer from "./reducers/speciesReducer";
 
 
 const reducer = combineReducers({
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   dailyActions: dailyActionsReducer,
   catchRows: catchRowsReducer,
   notifications: notificationsReducer,
+  speciesData: speciesReducer
 });
 
 const store = createStore(
