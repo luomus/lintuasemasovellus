@@ -9,7 +9,6 @@ import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import PeriodTablePagination from "./PeriodTablePagination";
-import { defaultBirds } from "../../../globalConstants";
 import Row from "./Row";
 import SearchBar from "../../../globalComponents/SearchBar";
 import { StyledTableCell, StyledTableRow } from "./common";
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SpeciesTable = (props) => {
 
-  const { date, summary, userObservatory } = props;
+  const { date, summary, userObservatory, defaultSpecies } = props;
 
   const { t } = useTranslation();
   const classes = useStyles();
@@ -108,10 +107,10 @@ const SpeciesTable = (props) => {
     let species;
     switch (speciesListType) {
       case "defaults":
-        species = defaultBirds[userObservatory.toString()];
+        species = defaultSpecies;
         break;
       case "others":
-        species = speciesData.uniqueSpecies.filter(bird => !defaultBirds[userObservatory.toString()].includes(bird));
+        species = speciesData.uniqueSpecies.filter(bird => !defaultSpecies.includes(bird));
         break;
       case "all":
         species = speciesData.uniqueSpecies;
@@ -120,7 +119,7 @@ const SpeciesTable = (props) => {
     setExtendedSummary(
       generateExtendedSummary(species)
     );
-  }, [summary, speciesListType, userObservatory]);
+  }, [summary, speciesListType, userObservatory, defaultSpecies]);
 
   useEffect(() => {
     setFilteredSummary(
@@ -223,7 +222,8 @@ const SpeciesTable = (props) => {
 SpeciesTable.propTypes = {
   date: PropTypes.string.isRequired,
   summary: PropTypes.array.isRequired,
-  userObservatory: PropTypes.string.isRequired
+  userObservatory: PropTypes.string.isRequired,
+  defaultSpecies: PropTypes.array.isRequired
 };
 
 export default SpeciesTable;

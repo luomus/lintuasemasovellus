@@ -1,5 +1,3 @@
-import defaultBirds from "./defaultBirds.json";
-
 const directions = new Map([
   ["N", "0"],
   ["NNE", "22,5"],
@@ -45,8 +43,4 @@ export default {
   timeRegex,
   inverseDirections,
   inverseBypass,
-};
-
-export {
-  defaultBirds
 };

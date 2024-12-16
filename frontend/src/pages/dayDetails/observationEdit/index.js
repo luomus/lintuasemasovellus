@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import AntTabs from "./AntTabs";
 
 import {
-  getDaysObservationPeriods,
+  getDaysObservationPeriods, getDefaultSpecies,
   getSummary
 } from "../../../services";
 import { ShorthandEdit } from "./ShorthandEdit";
@@ -18,12 +18,19 @@ import PeriodTable from "./PeriodTable";
 export const ObservationEdit = ({ userObservatory, dayId }) => {
   const { day } = useParams();
 
+  const [defaultSpecies, setDefaultSpecies] = useState([]);
   const [obsPeriods, setObsperiods] = useState([]);
   const [summary, setSummary] = useState([]);
   const [mode, setMode] = useState("speciesTable");
 
   useEffect( () => {
     let fetching = false;
+    getDefaultSpecies(userObservatory)
+      .then(defaultSpeciesJson => {
+        if (!fetching) {
+          setDefaultSpecies(defaultSpeciesJson);
+        }
+      });
     getDaysObservationPeriods(dayId)
       .then(periodsJson => {
         if (!fetching) {
@@ -37,7 +44,7 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
         }
       });
     return () => (fetching = true);
-  }, [dayId, mode]);
+  }, [userObservatory, dayId, mode]);
 
   const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -51,6 +58,7 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
       date={day}
       summary={summary}
       userObservatory={userObservatory}
+      defaultSpecies={defaultSpecies}
     ></SpeciesTable>
   ) : (
     <PeriodTable
