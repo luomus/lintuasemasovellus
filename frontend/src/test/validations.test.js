@@ -6,13 +6,18 @@ import {
 
 import {
   withValidSubObservation,
-  makeValidMultiline
+  makeValidMultiline, speciesData
 } from "./testHelpers";
 
 import fs from "fs";
 import path from "path";
+import store from "../store";
+import { setSpecies } from "../reducers/speciesReducer";
 
 describe("basic higher order validations", () => {
+  beforeAll(() => {
+    store.dispatch(setSpecies(speciesData));
+  });
 
   beforeEach(() => {
     resetErrors();

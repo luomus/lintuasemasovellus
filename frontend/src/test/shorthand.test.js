@@ -1,6 +1,6 @@
 import {
   parse,
-  resetAll
+  resetAll,
 } from "../shorthand/shorthand";
 
 
@@ -8,11 +8,16 @@ import {
   makeValidLine,
   withValidSubObservation,
   withBypassSideWrong,
-  withDirectionWrong
+  withDirectionWrong,
+  speciesData
 } from "./testHelpers";
-
+import { setSpecies } from "../reducers/speciesReducer";
+import store from "../store";
 
 describe("Test algorithm with all the cases mentioned in the customer's docs", () => {
+  beforeAll(() => {
+    store.dispatch(setSpecies(speciesData));
+  });
 
   beforeEach(() => {
     resetAll();
