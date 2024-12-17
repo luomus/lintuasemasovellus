@@ -5,10 +5,12 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { GeneralDayDetails } from "./generalDayDetails";
 import { ObservationEdit } from "./observationEdit";
+import { retrieveDays } from "../../reducers/daysReducer";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -24,19 +26,35 @@ export const DayDetails = ({ userObservatory }) => {
 
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const dayList = useSelector(state => state.days);
 
   const [thisDay, setThisDay] = useState(null);
   const [dayId, setDayId] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!dayList) {
+      dispatch(retrieveDays());
+    }
+  }, [dayList]);
+
+  useEffect(() => {
+    if (!dayList) {
+      return;
+    }
     const thisDay = dayList.find(d => d.day === day && d.observatory === userObservatory) || null;
     setThisDay(thisDay);
     setDayId(thisDay ? thisDay.id : null);
+    setLoading(false);
   }, [dayList, day, userObservatory]);
 
-  if (!dayId) {
+  if (loading) {
+    return (
+      <LoadingSpinner/>
+    );
+  } else if (!dayId) {
     return (<>
       <Paper className={classes.paper}>
         <Typography variant="h4" component="h2" >

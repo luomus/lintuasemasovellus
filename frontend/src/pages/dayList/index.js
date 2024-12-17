@@ -18,6 +18,7 @@ import PropTypes from "prop-types";
 import { retrieveDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
 import parse from "date-fns/parse";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 const useStyles = makeStyles({
   paper: {
@@ -57,7 +58,7 @@ const StyledTableCell = withStyles(() => ({
 const selectDays = state => state.days;
 
 const getSelectList = (userObservatory) => createSelector([selectDays], (days) => (
-  days.filter((day) => day.observatory === userObservatory)
+  days?.filter((day) => day.observatory === userObservatory)
 ));
 
 const DayListComponent = ({ list }) => {
@@ -74,15 +75,14 @@ const DayListComponent = ({ list }) => {
   const [availableYears, setAvailableYears] = useState([]);
 
   useEffect(() => {
+    if (!list) {
+      dispatch(retrieveDays());
+      return;
+    }
+
     if(availableYears.length < 1)
       setAvailableYears([...new Set(list.map(i => parse(i.day, "dd.MM.yyyy", new Date()).getFullYear()))].sort());
   }, [list]);
-
-  useEffect(() => {
-    dispatch(retrieveDays());
-  }, [dispatch]);
-
-  if (!list) return null;
 
   const comparator = (a, b) => {
     const day1 = a.day.split(".");
@@ -110,6 +110,10 @@ const DayListComponent = ({ list }) => {
   const handleDateClick = (s) => {
     navigate(`/daydetails/${s.day}`);
   };
+
+  if (!list) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div>

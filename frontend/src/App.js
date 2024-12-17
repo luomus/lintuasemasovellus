@@ -9,47 +9,26 @@ import { getPerson, getCurrentUser } from "./services";
 import { setUser } from "./reducers/userReducer";
 import { setUserObservatory } from "./reducers/userObservatoryReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
-import { makeStyles } from "@mui/styles";
 import { clean as DraftsClean } from "./services/draftService";
 import { initializeSpecies } from "./reducers/speciesReducer";
+import LoadingSpinner from "./globalComponents/LoadingSpinner";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  mainContainer: {
+    height: "calc(100% - 50px)",
+    display: "flex",
+    flexDirection: "column"
+  },
+  container: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column"
+  },
+
+});
 
 const App = () => {
-
-  const useStyles = makeStyles({
-    flexi: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "column",
-      height: "95vh",
-      width:"98vw",
-    },
-    spinner: {
-      padding: "0px",
-      margin: "60px 60px",
-      fontSize: "10px",
-      position: "relative",
-      borderTop: "1.1em solid lightgrey",
-      borderRight: "1.1em solid lightgrey",
-      borderBottom: "1.1em solid lightgrey",
-      borderLeft: "1.1em solid #2691d9",
-      animation: "$spin 1.1s infinite linear",
-      "&, :after": {
-        borderRadius: "50%",
-        width: "10em",
-        height: "10em",
-      },
-    },
-    "@keyframes spin": {
-      "0%": {
-        transform: "rotate(0deg)",
-      },
-      "100%": {
-        transform: "rotate(360deg)",
-      },
-    },
-  });
-
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -95,15 +74,12 @@ const App = () => {
 
   if (userLoading || initialDataLoading) {
     return (
-      <div className={classes.flexi}>
-        <div className={classes.spinner}>
-        </div>
-      </div>
+      <LoadingSpinner/>
     );
   } else if (!user.id) {
     return (
       <CssBaseline>
-        <div>
+        <div className={classes.mainContainer}>
           <Login />
           <Footer />
         </div>
@@ -112,15 +88,15 @@ const App = () => {
   } else if (userObservatory !== "") {
     return (
       <CssBaseline>
-        <div>
-          <NavBar user={user} />
+        <div className={classes.mainContainer}>
+          <NavBar user={user}/>
           <Routes>
-            <Route path="/listdays" element={<DayList userObservatory={userObservatory} />} />
-            <Route path="/daydetails/:day" element={<DayDetails userObservatory={userObservatory} />} />
-            <Route path="/manual" element={<UserManual />} />
-            <Route path="/" element={<HomePage user={user} userObservatory={userObservatory} />} />
+            <Route path="/listdays" element={<DayList userObservatory={userObservatory}/>}/>
+            <Route className={classes.container} path="/daydetails/:day" element={<DayDetails userObservatory={userObservatory}/>}/>
+            <Route path="/manual" element={<UserManual/>}/>
+            <Route path="/" element={<HomePage user={user} userObservatory={userObservatory}/>}/>
           </Routes>
-          <Footer />
+          <Footer/>
         </div>
       </CssBaseline>
     );

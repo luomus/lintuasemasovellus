@@ -16,7 +16,7 @@ export const setSpecies = (species) => {
   };
 };
 
-const speciesReducer = (state = [], action) => {
+const speciesReducer = (state = {}, action) => {
   switch (action.type) {
     case "SET_SPECIES":
       return {

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  TextField, Button, IconButton, Typography, FormGroup, FormControlLabel, Box
+  TextField, Button, IconButton, Typography, FormGroup, FormControlLabel
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Edit, RemoveCircleOutlineRounded } from "@mui/icons-material";
@@ -65,11 +65,9 @@ const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, o
               disabled InputProps={{ disableUnderline: true }} />}
             label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
 
-          <Box>
-            <IconButton id="actionsButton" size="small" style={{ left: "100px", alignItems: "left" }} onClick={onActionsEditOpen} variant="contained" color="primary"  >
-              <Edit fontSize="default" />
-            </IconButton>
-          </Box>
+          <IconButton id="actionsButton" size="small" onClick={onActionsEditOpen} variant="contained" color="primary"  >
+            <Edit fontSize="default" />
+          </IconButton>
         </FormGroup>
         : <div style={{
           display: "flex",

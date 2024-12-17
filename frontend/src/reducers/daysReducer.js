@@ -16,7 +16,7 @@ export const setDays = (days) => {
   };
 };
 
-const daysReducer = (state = [], action) => {
+const daysReducer = (state = null, action) => {
   switch (action.type) {
     case "SET_DAYS":
       return action.data.days;
