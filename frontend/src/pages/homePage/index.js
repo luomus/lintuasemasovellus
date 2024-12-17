@@ -37,6 +37,7 @@ import { resetNotifications } from "../../reducers/notificationsReducer";
 import Help from "../../globalComponents/Help";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DraftDB, addDraft, deleteDraft, clearAll } from "../../services/draftService";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 const useStyles = makeStyles((theme) => ({
   obsPaper: {
@@ -164,7 +165,7 @@ export const HomePage = ({ user, userObservatory }) => {
   const [saveLoadingIcon, setSaveLoadingIcon] = useState(false);
   const [toDayDetailsLoadingIcon, setToDayDetailsLoadingIcon] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
-  const [latestDays, setLatestDays] = useState([]);
+  const [latestDays, setLatestDays] = useState(null);
   const [shorthand, setShorthand] = useState("");
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
@@ -785,7 +786,7 @@ export const HomePage = ({ user, userObservatory }) => {
                 <Table>
                   <TableBody>
                     {
-                      latestDays
+                      latestDays ? latestDays
                         .map((s, i) =>
                           <TableRow id="latestDaysRow" key={i} hover
                             onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
@@ -800,7 +801,7 @@ export const HomePage = ({ user, userObservatory }) => {
                               </Link>
                             </StyledTableCell>
                           </TableRow>
-                        )
+                        ) : <LoadingSpinner size="small" />
                     }
                   </TableBody>
                 </Table>

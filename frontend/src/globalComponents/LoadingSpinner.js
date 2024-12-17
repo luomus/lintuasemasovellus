@@ -1,5 +1,7 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import PropTypes from "prop-types";
+import NavBar from "./NavBar";
 
 const useStyles = makeStyles({
   spinnerContainer: {
@@ -32,18 +34,29 @@ const useStyles = makeStyles({
     "100%": {
       transform: "rotate(360deg)",
     },
+  },
+  smallSpinner: {
+    margin: "30px 30px",
+    "&, :after": {
+      width: "5em",
+      height: "5em",
+    }
   }
 });
 
-const LoadingSpinner = () => {
+const LoadingSpinner = ({ size }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.spinnerContainer}>
-      <div className={classes.spinner}>
+      <div className={classes.spinner + ' ' + (size === 'small' ? classes.smallSpinner : '')}>
       </div>
     </div>
   );
 };
 
 export default LoadingSpinner;
+
+NavBar.propTypes = {
+  size: PropTypes.string
+};
