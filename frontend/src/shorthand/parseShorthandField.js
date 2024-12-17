@@ -1,5 +1,6 @@
 import { parse, resetAll } from "./shorthand";
 import globals from "../globalConstants";
+import store from "../store";
 
 let day = {
   day: "",
@@ -56,7 +57,8 @@ const parseTime = (timeString) => {
 };
 
 const readyObservation = (observation, userID) => {
-  observation["species"] = Object.values(globals.birdMap.get(observation["species"].toUpperCase()))[0];
+  const speciesMap = store.getState().speciesData.speciesMap;
+  observation["species"] = Object.values(speciesMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);
   observation["account_id"] = userID;
