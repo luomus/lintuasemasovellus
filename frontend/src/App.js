@@ -16,9 +16,11 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   mainContainer: {
-    height: "calc(100% - 50px)",
+    height: "100%",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    paddingBottom: "50px",
+    overflowY: "auto"
   },
   container: {
     height: "100%",
