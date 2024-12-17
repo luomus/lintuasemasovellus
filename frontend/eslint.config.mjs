@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import reactPlugin from "eslint-plugin-react";
 import securityPlugin from "eslint-plugin-security";
 import cypressPlugin from "eslint-plugin-cypress/flat";
+import jestPlugin from "eslint-plugin-jest";
 import globals from "globals";
 
 export default [
@@ -14,12 +15,14 @@ export default [
             reactPlugin,
             pluginSecurity: securityPlugin,
             cypress: cypressPlugin,
+            jest: jestPlugin
         },
 
         languageOptions: {
             globals: {
                 ...globals.node,
                 ...globals.browser,
+                ...jestPlugin.environments.globals.globals,
                 Atomics: "readonly",
                 SharedArrayBuffer: "readonly",
             },
