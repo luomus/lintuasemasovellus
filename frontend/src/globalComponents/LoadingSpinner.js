@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
-import NavBar from "./NavBar";
 
 const useStyles = makeStyles({
   spinnerContainer: {
@@ -49,7 +48,7 @@ const LoadingSpinner = ({ size }) => {
 
   return (
     <div className={classes.spinnerContainer}>
-      <div className={classes.spinner + ' ' + (size === 'small' ? classes.smallSpinner : '')}>
+      <div className={classes.spinner + " " + (size === "small" ? classes.smallSpinner : "")}>
       </div>
     </div>
   );
@@ -57,6 +56,6 @@ const LoadingSpinner = ({ size }) => {
 
 export default LoadingSpinner;
 
-NavBar.propTypes = {
+LoadingSpinner.propTypes = {
   size: PropTypes.string
 };

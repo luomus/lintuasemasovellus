@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import PeriodTablePagination from "./PeriodTablePagination";
 import Row from "./Row";
 import SearchBar from "../../../globalComponents/SearchBar";
-import { StyledTableCell, StyledTableRow } from "./common";
+import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({

@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import ObservationPeriod from "../../obsPeriod";
 import EditObsPeriod from "../../editObsPeriod";
 import PeriodTablePagination from "./PeriodTablePagination";
-import { StyledTableCell, StyledTableRow } from "./common";
+import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
