@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
@@ -12,9 +12,10 @@ import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
-import { useSelector } from "react-redux";
 import { isNightValidation } from "../../shorthand/isNightValidation";
 import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
+import LoadingSpinner from "../LoadingSpinner";
+import { AppContext } from "../../AppContext";
 
 
 let timeout = null;
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
 });
 
 const CodeMirrorBlock = ({
+  dayList,
   shorthand,
   setShorthand,
   setSanitizedShorthand,
@@ -38,9 +40,7 @@ const CodeMirrorBlock = ({
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
-
-  const observatory = useSelector(state => state.userObservatory);
-  const dayList = useSelector(state => state.days);
+  const { observatory } = useContext(AppContext);
 
   const validateObservationOnTop = async (value) => {
 
@@ -156,6 +156,9 @@ const CodeMirrorBlock = ({
     }, 700);
   };
 
+  if (!dayList) {
+    return <LoadingSpinner size="small" />;
+  }
 
   return (
     <CodeMirror
@@ -184,6 +187,7 @@ const CodeMirrorBlock = ({
 };
 
 CodeMirrorBlock.propTypes = {
+  dayList: PropTypes.array,
   shorthand: PropTypes.string.isRequired,
   setShorthand: PropTypes.func.isRequired,
   setSanitizedShorthand: PropTypes.func.isRequired,

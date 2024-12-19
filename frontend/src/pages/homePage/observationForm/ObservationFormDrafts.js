@@ -1,4 +1,5 @@
 import React, {
+  useContext,
   useState
 } from "react";
 import {
@@ -13,15 +14,18 @@ import PropTypes from "prop-types";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DraftDB, deleteDraft, clearAll } from "../../../services/draftService";
 import { StyledTableCell } from "../../../globalComponents/common";
+import { AppContext } from "../../../AppContext";
 
-export const ObservationFormDrafts = ({ user, userObservatory, draftID, onDraftSelect }) => {
+export const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
   const { t } = useTranslation();
+
+  const { user, observatory } = useContext(AppContext);
 
   const drafts = useLiveQuery(async () => {
     return await DraftDB.drafts
       .where("userID")
       .equals(user.id)
-      .filter(e => e.observatory === userObservatory)
+      .filter(e => e.observatory === observatory)
       .reverse()
       .toArray();
   });
@@ -104,8 +108,6 @@ export const ObservationFormDrafts = ({ user, userObservatory, draftID, onDraftS
 };
 
 ObservationFormDrafts.propTypes = {
-  user: PropTypes.object.isRequired,
-  userObservatory: PropTypes.string.isRequired,
-  draftID: PropTypes.number.isRequired,
+  draftID: PropTypes.number,
   onDraftSelect: PropTypes.func.isRequired
 };

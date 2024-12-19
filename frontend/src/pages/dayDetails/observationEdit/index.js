@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box, Grid
@@ -13,10 +13,12 @@ import {
 import { ShorthandEdit } from "./ShorthandEdit";
 import SpeciesTable from "./SpeciesTable";
 import PeriodTable from "./PeriodTable";
+import { AppContext } from "../../../AppContext";
 
 
-export const ObservationEdit = ({ userObservatory, dayId }) => {
+export const ObservationEdit = ({ dayList, dayId }) => {
   const { day } = useParams();
+  const { observatory } = useContext(AppContext);
 
   const [defaultSpecies, setDefaultSpecies] = useState([]);
   const [obsPeriods, setObsperiods] = useState([]);
@@ -25,7 +27,7 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
 
   useEffect( () => {
     let fetching = false;
-    getDefaultSpecies(userObservatory)
+    getDefaultSpecies(observatory)
       .then(defaultSpeciesJson => {
         if (!fetching) {
           setDefaultSpecies(defaultSpeciesJson);
@@ -44,7 +46,7 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
         }
       });
     return () => (fetching = true);
-  }, [userObservatory, dayId, mode]);
+  }, [observatory, dayId, mode]);
 
   const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -57,11 +59,11 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
     <SpeciesTable
       date={day}
       summary={summary}
-      userObservatory={userObservatory}
       defaultSpecies={defaultSpecies}
     ></SpeciesTable>
   ) : (
     <PeriodTable
+      dayList={dayList}
       date={day}
       obsPeriods={obsPeriods}
       refetchObservations={refetchObservations}
@@ -76,7 +78,7 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
         </Box>
       </Grid>
       <Grid item xs={5}>
-        <ShorthandEdit day={day} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
+        <ShorthandEdit dayList={dayList} day={day} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
       </Grid>
       <Grid item xs={12}>
         {table}
@@ -86,6 +88,6 @@ export const ObservationEdit = ({ userObservatory, dayId }) => {
 };
 
 ObservationEdit.propTypes = {
-  userObservatory: PropTypes.string.isRequired,
+  dayList: PropTypes.array,
   dayId: PropTypes.number.isRequired
 };

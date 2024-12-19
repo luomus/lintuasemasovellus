@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import { makeStyles } from "@mui/styles";
 import {
-  AppBar, Toolbar, IconButton, Typography, Box, Button,
-  Dialog, DialogTitle, DialogContent, DialogActions,
-  MenuItem, SvgIcon, TextField
+  AppBar,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  SvgIcon,
+  TextField,
+  Toolbar,
+  Typography
 } from "@mui/material";
 import { Dehaze, Replay } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { getLogout, postUserObservatory } from "../services";
 import { setUserObservatory } from "../reducers/userObservatoryReducer";
@@ -60,8 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const NavBar = ({ user }) => {
-
+const NavBar = ({ user, observatory, stations }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -69,13 +78,10 @@ const NavBar = ({ user }) => {
   const [state, setState] = useState({
     right: false
   });
-  const [observatory, setObservatory] = useState("");
+  const [selectedObservatory, setSelectedObservatory] = useState("");
   const [selectorOpen, setSelectorOpen] = useState(false);
 
-  const userObservatory = useSelector(state => state.userObservatory);
-  const stations = useSelector(state => state.stations);
-
-  const observatoryIsSelected = Boolean(userObservatory !== "");
+  const observatoryIsSelected = Boolean(observatory !== "");
 
   useEffect(() => {
     if (observatoryIsSelected) {
@@ -83,7 +89,7 @@ const NavBar = ({ user }) => {
     } else {
       setSelectorOpen(true);
     }
-  }, [userObservatory]);
+  }, [observatory]);
 
   const toggleMenu = (slider, open) => () => {
     setState({ ...state, [slider]: open });
@@ -107,8 +113,8 @@ const NavBar = ({ user }) => {
 
   const selectUserObservatory = (event) => {
     event.preventDefault();
-    postUserObservatory({ observatory:observatory });
-    store.dispatch(setUserObservatory(observatory));
+    postUserObservatory({ observatory:selectedObservatory });
+    store.dispatch(setUserObservatory(selectedObservatory));
   };
 
   const handleLogout = () => {
@@ -133,8 +139,8 @@ const NavBar = ({ user }) => {
             id="select-observatory"
             slotProps={{
               select: {
-                value: observatory,
-                onChange: (event) => setObservatory(event.target.value)
+                value: selectedObservatory,
+                onChange: (event) => setSelectedObservatory(event.target.value)
               }
             }}
           >
@@ -149,17 +155,17 @@ const NavBar = ({ user }) => {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button id="submit" disabled={!observatory} form="observatorySelect" onClick={handleSelectorClose} color="primary" type="submit">
+        <Button id="submit" disabled={!selectedObservatory} form="observatorySelect" onClick={handleSelectorClose} color="primary" type="submit">
           {t("save")}
         </Button>
       </DialogActions>
     </Dialog>;
 
   const observatoryAndUserInfo = () => {
-    if (userObservatory !== "") {
+    if (observatory !== "") {
       return (
         <Typography className={classes.title}>
-          {userObservatory.replace("_", " ")} / {t("User")}: {user.fullName}
+          {observatory.replace("_", " ")} / {t("User")}: {user.fullName}
         </Typography>
       );
     }
@@ -224,5 +230,7 @@ const NavBar = ({ user }) => {
 export default NavBar;
 
 NavBar.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  observatory: PropTypes.string,
+  stations: PropTypes.array.isRequired
 };

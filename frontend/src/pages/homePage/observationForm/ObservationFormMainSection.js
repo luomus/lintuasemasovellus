@@ -1,6 +1,5 @@
 import React, {
-  useEffect,
-  useState
+  useContext,
 } from "react";
 import {
   Grid,
@@ -20,6 +19,7 @@ import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
 import { addOneCatchRow, } from "../../../reducers/catchRowsReducer";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
 import Notification from "../../../globalComponents/Notification";
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -48,34 +48,16 @@ const useStyles = makeStyles((theme) => ({
 ));
 
 
-export const ObservationFormMainSection = ({ userObservatory, day, errorsInInput, comment, setComment, type, setType, location, setLocation, shorthand, setShorthand, onSanitizedShorthandChange }) => {
+export const ObservationFormMainSection = ({ dayList, day, errorsInInput, comment, setComment, type, setType, location, setLocation, shorthand, setShorthand, onSanitizedShorthandChange }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
+  const { station } = useContext(AppContext);
 
   const dailyActions = useSelector(state => state.dailyActions);
   const catchRows = useSelector(state => state.catchRows);
-  const stations = useSelector(state => state.stations);
 
   const dispatch = useDispatch();
-
-  const [types, setTypes] = useState([]);
-  const [locations, setLocations] = useState([]);
-
-  useEffect(() => {
-    if (stations.length > 0 && userObservatory !== "") {
-      setTypes(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .types
-      );
-      setLocations(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .locations
-      );
-    }
-  }, [stations, userObservatory]);
 
   const addCatchRow = () => {
     dispatch(addOneCatchRow());
@@ -212,7 +194,7 @@ export const ObservationFormMainSection = ({ userObservatory, day, errorsInInput
                 }}
               >
                 {
-                  types.map((type, i) =>
+                  station.types.map((type, i) =>
                     <MenuItem id={type} value={type} key={i}>
                       {type}
                     </MenuItem>
@@ -237,7 +219,7 @@ export const ObservationFormMainSection = ({ userObservatory, day, errorsInInput
                 }}
               >
                 {
-                  locations.map((location, i) =>
+                  station.locations.map((location, i) =>
                     <MenuItem id={location} value={location} key={i}>
                       {location}
                     </MenuItem>
@@ -251,6 +233,7 @@ export const ObservationFormMainSection = ({ userObservatory, day, errorsInInput
 
             <Grid item xs={12}>
               <CodeMirrorBlock
+                dayList={dayList}
                 shorthand={shorthand}
                 setShorthand={setShorthand}
                 setSanitizedShorthand={onSanitizedShorthandChange}
@@ -267,7 +250,7 @@ export const ObservationFormMainSection = ({ userObservatory, day, errorsInInput
 };
 
 ObservationFormMainSection.propTypes = {
-  userObservatory: PropTypes.string.isRequired,
+  dayList: PropTypes.array,
   day: PropTypes.instanceOf(Date).isRequired,
   errorsInInput: PropTypes.func.isRequired,
   comment: PropTypes.string.isRequired,

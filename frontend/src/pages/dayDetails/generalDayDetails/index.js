@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,11 +13,14 @@ import {
 import TextEdit from "./TextEdit";
 import DailyActionsEdit from "./DailyActionsEdit";
 import CatchesEdit from "./CatchesEdit";
+import { AppContext } from "../../../AppContext";
+import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
 
 
-export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
+export const GeneralDayDetails = ({ thisDay }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { observatory } = useContext(AppContext);
 
   const notifications = useSelector(state => state.notifications);
   const editedActions = useSelector(state => state.dailyActions);
@@ -49,6 +52,11 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
       setObservers(null);
       setComment(null);
       setSelectedActions(null);
+    }
+    if (selectedActions) {
+      dispatch(setDailyActions(selectedActions));
+    } else {
+      dispatch(setDefaultActions(observatory));
     }
   }, [thisDay]);
 
@@ -104,9 +112,9 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
   }, [selectedActions, actionsEditMode]);
 
   const handleActionsEditCancel = useCallback(() => {
-    dispatch(setDefaultActions(userObservatory));
+    dispatch(setDefaultActions(observatory));
     setActionsEditMode(!actionsEditMode);
-  }, [userObservatory, actionsEditMode]);
+  }, [observatory, actionsEditMode]);
 
   const handleActionsEditSave = useCallback(() => {
     let actionsToSave = editedActions;
@@ -119,8 +127,8 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
       .then(dayJson => setDayId(dayJson.data.id));
     setSelectedActions(actionsToSave);
     setActionsEditMode(!actionsEditMode);
-    dispatch(setDefaultActions(userObservatory));
-  }, [dayId, editedActions, actionsEditMode, userObservatory]);
+    dispatch(setDefaultActions(observatory));
+  }, [dayId, editedActions, actionsEditMode, observatory]);
 
   const handleCatchesEditOpen = useCallback((event) => {
     const c = event.currentTarget.getAttribute("data-cache");
@@ -185,14 +193,15 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
 
       {/* DAILY ACTIONS */}
       <Grid id="dailyActions" item xs={12} fullwidth="true">
-        <DailyActionsEdit
-          selectedActions={selectedActions}
-          errorsInActions={errorsInActions}
-          actionsEditMode={actionsEditMode}
-          onActionsEditOpen={handleActionsEditOpen}
-          onActionsEditSave={handleActionsEditSave}
-          onActionsEditCancel={handleActionsEditCancel}
-        ></DailyActionsEdit>
+        { editedActions ?
+          <DailyActionsEdit
+            selectedActions={selectedActions}
+            errorsInActions={errorsInActions}
+            actionsEditMode={actionsEditMode}
+            onActionsEditOpen={handleActionsEditOpen}
+            onActionsEditSave={handleActionsEditSave}
+            onActionsEditCancel={handleActionsEditCancel}
+          ></DailyActionsEdit> : <LoadingSpinner size="small" />}
       </Grid>
 
       {/* NET ACTIONS */}
@@ -213,6 +222,5 @@ export const GeneralDayDetails = ({ userObservatory, thisDay }) => {
 };
 
 GeneralDayDetails.propTypes = {
-  userObservatory: PropTypes.string.isRequired,
   thisDay: PropTypes.any.isRequired
 };

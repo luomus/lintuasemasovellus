@@ -13,6 +13,8 @@ import { clean as DraftsClean } from "./services/draftService";
 import { initializeSpecies } from "./reducers/speciesReducer";
 import LoadingSpinner from "./globalComponents/LoadingSpinner";
 import { makeStyles } from "@mui/styles";
+import { createSelector } from "reselect";
+import { AppContext } from "./AppContext";
 
 const useStyles = makeStyles({
   mainContainer: {
@@ -30,15 +32,23 @@ const useStyles = makeStyles({
 
 });
 
+const stationSelector = createSelector(
+  [state => state.stations, state => state.userObservatory],
+  (stations, userObservatory) => (
+    stations?.find(s => s.observatory === userObservatory) || null
+  )
+);
+
 const App = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [userLoading, setUserLoading] = useState(true);
-  const [initialDataLoading, setInitialDataLoading] = useState(false);
+  const [contextDataLoading, setContextDataLoading] = useState(false);
 
   const user = useSelector(state => state.user);
-  const userObservatory = useSelector(state => state.userObservatory);
+  const observatory = useSelector(state => state.userObservatory);
+  const station = useSelector(stationSelector);
   const stations = useSelector(state => state.stations);
   const speciesData = useSelector(state => state.speciesData);
 
@@ -54,7 +64,7 @@ const App = () => {
               dispatch(setUserObservatory(observatory));
             }
 
-            setInitialDataLoading(true);
+            setContextDataLoading(true);
             dispatch(initializeStations());
             dispatch(initializeSpecies());
 
@@ -66,15 +76,15 @@ const App = () => {
       .catch(() => {
         setUserLoading(false);
       });
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (stations && speciesData) {
-      setInitialDataLoading(false);
+      setContextDataLoading(false);
     }
   }, [stations, speciesData]);
 
-  if (userLoading || initialDataLoading) {
+  if (userLoading || contextDataLoading) {
     return (
       <LoadingSpinner/>
     );
@@ -87,32 +97,39 @@ const App = () => {
         </div>
       </CssBaseline>
     );
-  } else if (userObservatory !== "") {
+  } else {
+    let mainContent;
+    if (station) {
+      const context = {
+        user,
+        observatory,
+        station,
+        stations,
+        speciesData
+      };
+
+      mainContent = (
+        <AppContext.Provider value={context}>
+          <Routes>
+            <Route path="/listdays" element={<DayList />}/>
+            <Route className={classes.container} path="/daydetails/:day" element={<DayDetails />}/>
+            <Route path="/manual" element={<UserManual />}/>
+            <Route path="/" element={<HomePage />}/>
+          </Routes>
+        </AppContext.Provider>
+      );
+    }
+
     return (
       <CssBaseline>
         <div className={classes.mainContainer}>
-          <NavBar user={user}/>
-          <Routes>
-            <Route path="/listdays" element={<DayList userObservatory={userObservatory}/>}/>
-            <Route className={classes.container} path="/daydetails/:day" element={<DayDetails userObservatory={userObservatory}/>}/>
-            <Route path="/manual" element={<UserManual/>}/>
-            <Route path="/" element={<HomePage user={user} userObservatory={userObservatory}/>}/>
-          </Routes>
-          <Footer/>
-        </div>
-      </CssBaseline>
-    );
-  } else {
-    return (
-      <CssBaseline>
-        <div>
-          <NavBar user={user} />
+          <NavBar user={user} observatory={observatory} stations={stations} />
+          { mainContent }
           <Footer />
         </div>
       </CssBaseline>
     );
   }
-
 };
 
 export default App;

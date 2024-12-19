@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Button, CircularProgress, Grid, Snackbar, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
@@ -6,21 +6,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Alert from "../../../globalComponents/Alert";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/idea.css";
 import { loopThroughObservationPeriods, loopThroughObservations, } from "../../../shorthand/parseShorthandField";
-import { getCatches, getDays, searchDayInfo, sendDay, sendEverything } from "../../../services";
-import { retrieveDays, setDays } from "../../../reducers/daysReducer";
+import { getCatches, searchDayInfo, sendDay, sendEverything } from "../../../services";
+import { refreshDays } from "../../../reducers/daysReducer";
 import { setDailyActions, setDefaultActions } from "../../../reducers/dailyActionsReducer";
 import { setCatches } from "../../../reducers/catchRowsReducer";
 import { resetNotifications } from "../../../reducers/notificationsReducer";
 import Help from "../../../globalComponents/Help";
 import { addDraft, deleteDraft } from "../../../services/draftService";
-// import { useConfirmBrowserExit } from "../../../hooks/useConfirmBrowserExit";
 import { ObservationFormHeader } from "./ObservationFormHeader";
 import { ObservationFormMainSection } from "./ObservationFormMainSection";
 import { ObservationFormDrafts } from "./ObservationFormDrafts";
 import { ObservationFormCopy } from "./ObservationFormCopy";
+import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles(() => ({
   sendButton: {
@@ -49,14 +48,16 @@ const formatDate = (date) => {
   return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
 };
 
-export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
+export const ObservationForm = ({ onSaveSuccess }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
   // const confirmBrowserExit = useConfirmBrowserExit();
+  const { user, observatory } = useContext(AppContext);
 
   const dateNow = new Date();
 
+  const dayList = useSelector(state => state.days);
   const dailyActions = useSelector(state => state.dailyActions);
   const catchRows = useSelector(state => state.catchRows);
   const notifications = useSelector(state => state.notifications);
@@ -80,7 +81,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
   //const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    dispatch(retrieveDays());
+    dispatch(refreshDays());
     handleDateChange(dateNow);
   }, []);
 
@@ -98,7 +99,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
       day: formatDate(day),
       comment,
       observers,
-      observatory: userObservatory,
+      observatory: observatory,
       selectedactions: stringifyDailyActions(),
       userID: user.id,
       type,
@@ -125,7 +126,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
     if (selectedActions) {
       dispatch(setDailyActions(JSON.parse(selectedActions)));
     } else {
-      dispatch(setDefaultActions(userObservatory));
+      dispatch(setDefaultActions(observatory));
     }
   };
 
@@ -165,7 +166,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
       day: formatDate(day),
       comment: comment,
       observers: observers,
-      observatory: userObservatory,
+      observatory: observatory,
       selectedactions: stringifyDailyActions(),
       userID: user.id,
       catches: catchRows,
@@ -177,7 +178,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
       await sendEverything(data);
       setFormSent(true);
       emptyAllFields();
-      dispatch(retrieveDays());
+      dispatch(refreshDays());
       deleteDraft(draftID);
       setDraftID(undefined);
       onSaveSuccess();
@@ -191,21 +192,19 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
 
   const handleToDayDetails = async () => {
     try {
-      const searchResult = await searchDayInfo(formatDate(day), userObservatory);
+      const searchResult = await searchDayInfo(formatDate(day), observatory);
       //Update if observers is changed
       if (searchResult[0].observers !== observers) {
         const data = {
           day: formatDate(day),
           observers: observers,
-          observatory: userObservatory,
+          observatory: observatory,
           comment: searchResult[0].comment,
           selectedactions: searchResult[0].selectedactions === ""
-            ? JSON.stringify(dispatch(setDefaultActions(userObservatory)).data.dailyActions)
+            ? JSON.stringify(dispatch(setDefaultActions(observatory)).data.dailyActions)
             : searchResult[0].selectedactions
         };
         await sendDay(data);
-        const days = await getDays();
-        dispatch(setDays(days));
       }
       navigate(`/daydetails/${formatDate(day)}`);
     } catch (error) {
@@ -243,7 +242,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
   }, [notifications]);
 
   const handleCopyDay = (copyDay, toCopy) => {
-    searchDayInfo(formatDate(copyDay), userObservatory).then((dayJson) => {
+    searchDayInfo(formatDate(copyDay), observatory).then((dayJson) => {
       if (dayJson[0]["id"] !== 0) {
         if (toCopy.observers) {
           setObservers(dayJson[0]["observers"]);
@@ -276,7 +275,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
       setDay(date);
 
       if (newDate) {
-        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        searchDayInfo(formatDate(date), observatory).then((dayJson) => {
           setFields(dayJson[0]);
         });
       } else {
@@ -286,7 +285,7 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
       confirmDate();
       setDay(date);
       if (date) {
-        searchDayInfo(formatDate(date), userObservatory).then((dayJson) => {
+        searchDayInfo(formatDate(date), observatory).then((dayJson) => {
           setFields(dayJson[0]);
         });
       } else {
@@ -313,52 +312,55 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
         spacing={1}>
         <Grid item xs={10} >
           <Typography variant="h4" component="h2" >
-            {t("addObservations")} - {userObservatory.replace("_", " ")}
+            {t("addObservations")} - {observatory.replace("_", " ")}
           </Typography>
           <br />
         </Grid>
-        <Grid container item xs={2} justifyContent="flex-end">
-          <ObservationFormDrafts user={user} userObservatory={userObservatory} draftID={draftID} onDraftSelect={handleDraftSelect} />
-          <ObservationFormCopy day={day} onCopyDay={handleCopyDay} />
-        </Grid>
-        <ObservationFormHeader
-          day={day}
-          observers={observers}
-          onDayChange={handleDateChange}
-          onObserversChange={setObservers}
-          toDayDetails={handleToDayDetails}
-        />
-        <ObservationFormMainSection
-          userObservatory={userObservatory}
-          day={day}
-          errorsInInput={errorsInInput}
-          comment={comment}
-          setComment={setComment}
-          type={type}
-          setType={setType}
-          location={location}
-          setLocation={setLocation}
-          shorthand={shorthand}
-          setShorthand={setShorthand}
-          onSanitizedShorthandChange={setSanitizedShorthand}
-        />
+        { dailyActions ?
+          <>
+            <Grid container item xs={2} justifyContent="flex-end">
+              <ObservationFormDrafts draftID={draftID} onDraftSelect={handleDraftSelect} />
+              <ObservationFormCopy day={day} onCopyDay={handleCopyDay} />
+            </Grid>
+            <ObservationFormHeader
+              day={day}
+              observers={observers}
+              onDayChange={handleDateChange}
+              onObserversChange={setObservers}
+              toDayDetails={handleToDayDetails}
+            />
+            <ObservationFormMainSection
+              dayList={dayList}
+              day={day}
+              errorsInInput={errorsInInput}
+              comment={comment}
+              setComment={setComment}
+              type={type}
+              setType={setType}
+              location={location}
+              setLocation={setLocation}
+              shorthand={shorthand}
+              setShorthand={setShorthand}
+              onSanitizedShorthandChange={setSanitizedShorthand}
+            />
 
-        <Grid item xs={12} className={classes.buttonAndIconsContainer}>
-          <Button
-            id="saveButton"
-            className={classes.sendButton}
-            onClick={sendData}
-            disabled={saveButtonDisabled() || saveDisabled}
-            color="primary"
-            variant="contained"
-          >
-            {saveDisabled ? t("loading") : t("saveMigrant")}
-          </Button>
-          <Help title={t("helpForSaveMigrantButton")} placement="right"/>
-          { (saveLoadingIcon) &&
-            <CircularProgress className={classes.loadingIcon} color="primary"/>
-          }
-        </Grid>
+            <Grid item xs={12} className={classes.buttonAndIconsContainer}>
+              <Button
+                id="saveButton"
+                className={classes.sendButton}
+                onClick={sendData}
+                disabled={saveButtonDisabled() || saveDisabled}
+                color="primary"
+                variant="contained"
+              >
+                {saveDisabled ? t("loading") : t("saveMigrant")}
+              </Button>
+              <Help title={t("helpForSaveMigrantButton")} placement="right"/>
+              { (saveLoadingIcon) &&
+              <CircularProgress className={classes.loadingIcon} color="primary"/>
+              }
+            </Grid>
+          </> : <LoadingSpinner />}
       </Grid>
 
       <Snackbar open={formSent} autoHideDuration={5000} onClose={handleAlertClose}>
@@ -376,7 +378,5 @@ export const ObservationForm = ({ user, userObservatory, onSaveSuccess }) => {
 };
 
 ObservationForm.propTypes = {
-  user: PropTypes.object.isRequired,
-  userObservatory: PropTypes.string.isRequired,
   onSaveSuccess: PropTypes.func.isRequired
 };

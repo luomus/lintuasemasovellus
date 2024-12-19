@@ -16,7 +16,7 @@ export const setStations = (stations) => {
   };
 };
 
-const stationsReducer = (state = [], action) => {
+const stationsReducer = (state = null, action) => {
   switch (action.type) {
     case "SET_STATIONS":
       return action.data.stations;

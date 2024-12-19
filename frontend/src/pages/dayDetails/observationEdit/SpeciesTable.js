@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, Typography,
@@ -12,7 +12,7 @@ import PeriodTablePagination from "./PeriodTablePagination";
 import Row from "./Row";
 import SearchBar from "../../../globalComponents/SearchBar";
 import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
-import { useSelector } from "react-redux";
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,12 +36,11 @@ const useStyles = makeStyles((theme) => ({
 
 const SpeciesTable = (props) => {
 
-  const { date, summary, userObservatory, defaultSpecies } = props;
+  const { date, summary, defaultSpecies } = props;
 
   const { t } = useTranslation();
   const classes = useStyles();
-
-  const speciesData = useSelector(state => state.speciesData);
+  const { speciesData } = useContext(AppContext);
 
   const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(false);
   const [textFilter, setTextFilter] = useState("");
@@ -119,7 +118,7 @@ const SpeciesTable = (props) => {
     setExtendedSummary(
       generateExtendedSummary(species)
     );
-  }, [summary, speciesListType, userObservatory, defaultSpecies]);
+  }, [summary, speciesListType, defaultSpecies]);
 
   useEffect(() => {
     setFilteredSummary(
@@ -201,7 +200,7 @@ const SpeciesTable = (props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((s) =>
                 <StyledTableRow hover key={s.species}>
-                  <Row s={s} key={s.species} date={date} userObservatory={userObservatory} />
+                  <Row s={s} key={s.species} date={date} />
                 </StyledTableRow>
               )
             }
@@ -222,7 +221,6 @@ const SpeciesTable = (props) => {
 SpeciesTable.propTypes = {
   date: PropTypes.string.isRequired,
   summary: PropTypes.array.isRequired,
-  userObservatory: PropTypes.string.isRequired,
   defaultSpecies: PropTypes.array.isRequired
 };
 

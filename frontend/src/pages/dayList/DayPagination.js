@@ -6,13 +6,13 @@ import {
 import { useTranslation } from "react-i18next";
 
 const DayPagination = ({
-  list, rowsPerPage, handleChangePage, handleChangeRowsPerPage,
+  totalCount, rowsPerPage, handleChangePage, handleChangeRowsPerPage,
   page
 }) => {
 
   const { t } = useTranslation();
 
-  if (list.length < 10) {
+  if (totalCount < 10) {
     return null;
   }
   return (
@@ -27,7 +27,7 @@ const DayPagination = ({
               return "" + from + " - " + to + t("to") + count;
             }
           }
-          count={list.length}
+          count={totalCount}
           rowsPerPage={rowsPerPage}
           page={page}
           slotProps={{
@@ -45,7 +45,7 @@ const DayPagination = ({
 };
 
 DayPagination.propTypes = {
-  list: PropTypes.array.isRequired,
+  totalCount: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   handleChangePage: PropTypes.func.isRequired,
   handleChangeRowsPerPage: PropTypes.func.isRequired,

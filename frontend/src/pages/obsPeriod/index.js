@@ -1,13 +1,9 @@
-import {
-  Fade, Modal, Table, TableBody, TableCell, TableHead, TableRow
-} from "@mui/material";
+import { Fade, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import globals from "../../globalConstants";
 
 const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
@@ -38,7 +34,6 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
 
   const { t } = useTranslation();
-
   const classes = useStyles();
 
   const [observations, setObservations] = useState([]);
@@ -49,15 +44,6 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
         .then(observationsJson => setObservations(observationsJson));
     }
   }, [obsPeriod.id]);
-
-  const user = useSelector(state => state.user);
-  const userIsSet = Boolean(user.id);
-
-  if (!userIsSet) {
-    return (
-      <Navigate to="/login" />
-    );
-  }
 
   if (!obsPeriod) return <div>{t("observationPeriodNotDefined")}</div>;
 

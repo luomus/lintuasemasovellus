@@ -4,7 +4,7 @@ import LocalInput from "./LocalInput";
 import { StyledTableCell } from "../../../globalComponents/common";
 
 
-const Row = ({ s, date, userObservatory }) => {
+const Row = ({ s, date }) => {
   const [localOther, setLocalOther] = useState(0);
   const [localGau, setLocalGau] = useState(0);
   const [scatterObs, setScatterObs] = useState(0);
@@ -59,11 +59,11 @@ const Row = ({ s, date, userObservatory }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localOther} */}
-        <LocalInput inputRef={input1Ref} onChange={setLocalOther} date={date} dataType="localOther" observatory={userObservatory} count={localOther} species={s.species} />
+        <LocalInput inputRef={input1Ref} onChange={setLocalOther} date={date} dataType="localOther" count={localOther} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localGåu} */}
-        <LocalInput inputRef={input2Ref} onChange={setLocalGau} date={date} dataType="localGau" observatory={userObservatory} count={localGau} species={s.species} />
+        <LocalInput inputRef={input2Ref} onChange={setLocalGau} date={date} dataType="localGau" count={localGau} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right" name="migrantTotal" className="dotted">
         {s.constMigration + s.nightMigration + s.otherMigration + scatterObs}
@@ -79,7 +79,7 @@ const Row = ({ s, date, userObservatory }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* s.scatterObs */}
-        <LocalInput inputRef={input3Ref} onChange={setScatterObs} date={date} dataType="scatter" observatory={userObservatory} count={scatterObs} species={s.species} />
+        <LocalInput inputRef={input3Ref} onChange={setScatterObs} date={date} dataType="scatter" count={scatterObs} species={s.species} />
       </StyledTableCell>
     </>
   );
@@ -88,7 +88,6 @@ const Row = ({ s, date, userObservatory }) => {
 export default Row;
 
 Row.propTypes = {
-  s: PropTypes.any,
-  date: PropTypes.string,
-  userObservatory: PropTypes.string
+  s: PropTypes.object.isRequired,
+  date: PropTypes.string.isRequired
 };

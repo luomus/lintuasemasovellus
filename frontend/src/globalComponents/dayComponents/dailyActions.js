@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Grid, FormControlLabel, Checkbox, FormGroup, InputAdornment, TextField
 } from "@mui/material";
@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleDailyActions } from "../../reducers/dailyActionsReducer";
 import { setNotifications } from "../../reducers/notificationsReducer";
 import Notification from "../Notification";
+import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
 ));
 
 const DailyActions = () => {
-  const userObservatory = useSelector(state => state.userObservatory);
-  if (userObservatory === "Hangon_Lintuasema") {
+  const { observatory } = useContext(AppContext);
+  if (observatory === "Hangon_Lintuasema") {
     return (
       <HankoActions />
     );

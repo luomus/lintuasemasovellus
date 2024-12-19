@@ -1,24 +1,29 @@
 import {
-  Paper, Table, TableBody,
-  TableCell, TableHead, TableRow,
-  TableContainer,
-  Typography,
-  MenuItem,
   Checkbox,
+  Chip,
   ListItemText,
-  Chip, TextField
+  MenuItem,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
 } from "@mui/material";
-import { makeStyles, withStyles } from "@mui/styles";
-import React, { useState, useEffect } from "react";
+import { makeStyles } from "@mui/styles";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { connect, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import PropTypes from "prop-types";
-import { retrieveDays } from "../../reducers/daysReducer";
+import { refreshDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
 import parse from "date-fns/parse";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
+import { StyledTableCell } from "../../globalComponents/common";
+import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles({
   paper: {
@@ -44,38 +49,31 @@ const useStyles = makeStyles({
   },
 });
 
-const StyledTableCell = withStyles(() => ({
-  head: {
-    backgroundColor: "grey",
-    color: "white",
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
+const getSelectList = (observatory) => createSelector(
+  [state => state.days],
+  (days) => (
+    days?.filter((day) => day.observatory === observatory)
+  )
+);
 
-const selectDays = state => state.days;
-
-const getSelectList = (userObservatory) => createSelector([selectDays], (days) => (
-  days?.filter((day) => day.observatory === userObservatory)
-));
-
-const DayListComponent = ({ list }) => {
-
+export const DayList = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
-
   const classes = useStyles();
-
   const dispatch = useDispatch();
+  const { observatory } = useContext(AppContext);
+
+  const list = useSelector(getSelectList(observatory));
 
   const [selectedYears, setSelectedYears] = useState([]);
   const [availableYears, setAvailableYears] = useState([]);
 
   useEffect(() => {
+    dispatch(refreshDays());
+  }, []);
+
+  useEffect(() => {
     if (!list) {
-      dispatch(retrieveDays());
       return;
     }
 
@@ -195,7 +193,7 @@ const DayListComponent = ({ list }) => {
                   )
               }
             </TableBody>
-            <DayPagination list={list} rowsPerPage={rowsPerPage}
+            <DayPagination totalCount={list.length} rowsPerPage={rowsPerPage}
               handleChangePage={handleChangePage}
               handleChangeRowsPerPage={handleChangeRowsPerPage}
               page={page}
@@ -205,20 +203,4 @@ const DayListComponent = ({ list }) => {
       </Paper>
     </div>
   );
-};
-
-DayListComponent.propTypes = {
-  list: PropTypes.array.isRequired
-};
-
-export const DayList = connect((state, { userObservatory }) => {
-  const getList = getSelectList(userObservatory);
-
-  return {
-    list: getList(state)
-  };
-})(DayListComponent);
-
-DayList.propTypes = {
-  userObservatory: PropTypes.string.isRequired
 };

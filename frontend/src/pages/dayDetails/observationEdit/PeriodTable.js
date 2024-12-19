@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PeriodTable = (props) => {
 
-  const { date, obsPeriods, refetchObservations } = props;
+  const { dayList, date, obsPeriods, refetchObservations } = props;
 
   const { t } = useTranslation();
 
@@ -156,6 +156,7 @@ const PeriodTable = (props) => {
             handleErrorSnackOpen={handleErrorSnackOpen}
           />
           <EditObsPeriod
+            dayList={dayList}
             date={date}
             obsPeriod={obsPeriod}
             open={editModalOpen}
@@ -173,6 +174,7 @@ const PeriodTable = (props) => {
 };
 
 PeriodTable.propTypes = {
+  dayList: PropTypes.array,
   date: PropTypes.string.isRequired,
   obsPeriods: PropTypes.array.isRequired,
   refetchObservations: PropTypes.func.isRequired

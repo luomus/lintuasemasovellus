@@ -1,4 +1,5 @@
 import React, {
+  useContext,
   useEffect,
   useState
 } from "react";
@@ -9,12 +10,12 @@ import {
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import { getLatestDays } from "../../services";
 import Notification from "../../globalComponents/Notification";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { StyledTableCell } from "../../globalComponents/common";
 import { ObservationForm } from "./observationForm";
+import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles(() => ({
   obsPaper: {
@@ -37,21 +38,22 @@ const useStyles = makeStyles(() => ({
 }
 ));
 
-export const HomePage = ({ user, userObservatory }) => {
+export const HomePage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { observatory } = useContext(AppContext);
 
   const [latestDays, setLatestDays] = useState(null);
 
   useEffect(() => {
-    getLatestDays(userObservatory)
+    getLatestDays(observatory)
       .then(daysJson => setLatestDays(daysJson));
-  }, [userObservatory]);
+  }, [observatory]);
 
   const handleSaveSuccess = () => {
     setLatestDays(null);
-    getLatestDays(userObservatory)
+    getLatestDays(observatory)
       .then(daysJson => setLatestDays(daysJson));
   };
 
@@ -66,7 +68,7 @@ export const HomePage = ({ user, userObservatory }) => {
       >
         <Grid item xs={9}>
           <Paper className={classes.obsPaper}>
-            <ObservationForm user={user} userObservatory={userObservatory} onSaveSuccess={handleSaveSuccess} />
+            <ObservationForm onSaveSuccess={handleSaveSuccess} />
           </Paper>
         </Grid>
 
@@ -79,28 +81,29 @@ export const HomePage = ({ user, userObservatory }) => {
                   {t("latestDays")}
                 </Typography>
                 <br />
-                <Table>
-                  <TableBody>
-                    {
-                      latestDays ? latestDays
-                        .map((s, i) =>
-                          <TableRow id="latestDaysRow" key={i} hover
-                            onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
-                            <StyledTableCell component="th" scope="row">
-                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
-                                {s.day}
-                              </Link>
-                            </StyledTableCell>
-                            <StyledTableCell component="th" scope="row">
-                              <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
-                                {t("speciesCount", { count: s.speciesCount })}
-                              </Link>
-                            </StyledTableCell>
-                          </TableRow>
-                        ) : <LoadingSpinner size="small" />
-                    }
-                  </TableBody>
-                </Table>
+                { latestDays ?
+                  <Table>
+                    <TableBody>
+                      {
+                        latestDays
+                          .map((s, i) =>
+                            <TableRow id="latestDaysRow" key={i} hover
+                              onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
+                              <StyledTableCell component="th" scope="row">
+                                <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
+                                  {s.day}
+                                </Link>
+                              </StyledTableCell>
+                              <StyledTableCell component="th" scope="row">
+                                <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
+                                  {t("speciesCount", { count: s.speciesCount })}
+                                </Link>
+                              </StyledTableCell>
+                            </TableRow>
+                          )
+                      }
+                    </TableBody>
+                  </Table> : <LoadingSpinner size="small" /> }
               </Grid>
               <br />
               <br />
@@ -124,9 +127,4 @@ export const HomePage = ({ user, userObservatory }) => {
       </Grid>
     </div>
   );
-};
-
-HomePage.propTypes = {
-  user: PropTypes.object.isRequired,
-  userObservatory: PropTypes.string.isRequired
 };

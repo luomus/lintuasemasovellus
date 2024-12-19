@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles({
   container: {
@@ -18,9 +19,10 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ date, observatory, count, species, dataType, onChange, inputRef }) => {
+const LocalInput = ({ date, count, species, dataType, onChange, inputRef }) => {
 
   const classes = useStyles();
+  const { observatory } = useContext(AppContext);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -83,7 +85,6 @@ export default LocalInput;
 
 LocalInput.propTypes = {
   date: PropTypes.string,
-  observatory: PropTypes.string,
   count: PropTypes.number,
   species: PropTypes.string,
   dataType: PropTypes.string,

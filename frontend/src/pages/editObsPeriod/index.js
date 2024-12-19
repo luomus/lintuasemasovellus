@@ -4,7 +4,7 @@ import {
   DialogContent, DialogContentText, DialogTitle, TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import {
 } from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
+import { AppContext } from "../../AppContext";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,22 +69,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
+const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const { user, station } = useContext(AppContext);
 
   const [shorthand, setShorthand] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const [types, setTypes] = useState([]);
-  const [locations, setLocations] = useState([]);
   const [warning, setWarning] = useState(false);
   const [sanitizedShorthand, setSanitizedShorthand] = useState("");
 
-  const userID = useSelector(state => state.user.id);
-
-  const userObservatory = useSelector(state => state.userObservatory);
-  const stations = useSelector(state => state.stations);
   const notifications = useSelector(state => state.notifications);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
@@ -142,9 +138,9 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
     setDayId(obsPeriod.day_id);
     const rows = sanitizedShorthand;
     const periods = loopThroughObservationPeriods(rows, type, location);
-    const observations = loopThroughObservations(rows, userID);
+    const observations = loopThroughObservations(rows, user.id);
 
-    await sendEditedShorthand(periods, observations, obsPeriod.day_id, userID);
+    await sendEditedShorthand(periods, observations, obsPeriod.day_id, user.id);
     handleClose();
   };
 
@@ -158,27 +154,6 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
       });
     }
   }, [obsPeriod]);
-
-
-  useEffect(() => {
-    if (userObservatory !== "") {
-      setTypes(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .types
-      );
-    }
-  });
-
-  useEffect(() => {
-    if (userObservatory !== "") {
-      setLocations(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .locations
-      );
-    }
-  });
 
   return (
     <Modal
@@ -216,7 +191,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
                 }}
               >
                 {
-                  types.map((type, i) =>
+                  station.types.map((type, i) =>
                     <MenuItem id={type} value={type} key={i}>
                       {type}
                     </MenuItem>
@@ -242,7 +217,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
                 }}
               >
                 {
-                  locations.map((location, i) =>
+                  station.locations.map((location, i) =>
                     <MenuItem id={location} value={location} key={i}>
                       {location}
                     </MenuItem>
@@ -252,6 +227,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock
+                dayList={dayList}
                 setSanitizedShorthand={setSanitizedShorthand}
                 setShorthand={setShorthand}
                 shorthand={shorthand}
@@ -322,6 +298,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
 };
 
 EditObsPeriod.propTypes = {
+  dayList: PropTypes.array,
   date: PropTypes.string.isRequired,
   obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,

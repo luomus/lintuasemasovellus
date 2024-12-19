@@ -2,7 +2,7 @@ const hankoInitialState = { standardObs: false, gåu: false, standardRing: false
 //used as default state to avoid issues with controlled vs uncontrolled state
 
 
-const dailyActionsReducer = (state = hankoInitialState, action) => {
+const dailyActionsReducer = (state = null, action) => {
   switch (action.type) {
     case "TOGGLE_ACTIONS":
       return { ...state, [action.data.changedAction]: action.data.value };
