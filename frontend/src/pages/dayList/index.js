@@ -24,7 +24,7 @@ import parse from "date-fns/parse";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { StyledTableCell } from "../../globalComponents/common";
 import { AppContext } from "../../AppContext";
-import {dayStringToDate} from "../../services";
+import { dayStringToDate } from "../../services";
 
 const useStyles = makeStyles({
   paper: {
