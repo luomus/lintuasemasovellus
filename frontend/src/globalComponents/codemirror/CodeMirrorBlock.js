@@ -43,7 +43,7 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
   const [editorInstance, setEditorInstance] = useState();
 
   useEffect(() => {
-    if (editorInstance && dayList) {
+    if (editorInstance && dayList && date) {
       if (timeout) {
         clearTimeout(timeout);
       }

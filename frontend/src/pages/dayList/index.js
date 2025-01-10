@@ -24,6 +24,7 @@ import parse from "date-fns/parse";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { StyledTableCell } from "../../globalComponents/common";
 import { AppContext } from "../../AppContext";
+import {dayStringToDate} from "../../services";
 
 const useStyles = makeStyles({
   paper: {
@@ -77,8 +78,9 @@ export const DayList = () => {
       return;
     }
 
-    if(availableYears.length < 1)
-      setAvailableYears([...new Set(list.map(i => parse(i.day, "dd.MM.yyyy", new Date()).getFullYear()))].sort());
+    if (availableYears.length < 1 && list.length > 0) {
+      setAvailableYears([...new Set(list.map(i => dayStringToDate(i.day).getFullYear()))].sort());
+    }
   }, [list]);
 
   const comparator = (a, b) => {
