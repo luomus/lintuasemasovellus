@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
-import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/catchRowsReducer";
+import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/formDataReducer/catchRowsReducer";
 import { setNotifications } from "../../reducers/notificationsReducer";
 
 
@@ -90,9 +90,9 @@ const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const dailyActions = useSelector(state => state.dailyActions);
-  const allCatchRows = useSelector(state => state.catchRows);
 
+  const dailyActions = useSelector(state => state.formData.dailyActions);
+  const allCatchRows = useSelector(state => state.formData.catchRows);
 
   const validate = (cr) => {
     let toNotifications = [];

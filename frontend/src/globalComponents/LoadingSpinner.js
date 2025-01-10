@@ -9,7 +9,8 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "column"
+    flexDirection: "column",
+    position: "relative"
   },
   spinner: {
     padding: "0px",
@@ -35,6 +36,10 @@ const useStyles = makeStyles({
       transform: "rotate(360deg)",
     },
   },
+  spinnerOverlay: {
+    position: "absolute",
+    zIndex: 2000
+  },
   smallSpinner: {
     margin: "30px 30px",
     "&, :after": {
@@ -44,13 +49,13 @@ const useStyles = makeStyles({
   }
 });
 
-const LoadingSpinner = ({ size }) => {
+const LoadingSpinner = ({ overlay = false, spinning = true, size, children }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.spinnerContainer}>
-      <div className={classes.spinner + " " + (size === "small" ? classes.smallSpinner : "")}>
-      </div>
+      {spinning && <div className={classes.spinner + " " + (overlay ? classes.spinnerOverlay : "") + " " + (size === "small" ? classes.smallSpinner : "")}></div>}
+      {children}
     </div>
   );
 };

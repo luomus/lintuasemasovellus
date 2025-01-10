@@ -15,8 +15,7 @@ describe("CopyYesterdaysData", function () {
   });
 
   it("Yesterdays's data can be copied to today", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
@@ -49,8 +48,7 @@ describe("CopyYesterdaysData", function () {
     cy.contains("Tallenna").click({ force: true });
     cy.wait(5000);
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(dateNext);
+    cy.inputDate(dateNext);
     cy.get("#open-copy-button").click();
     cy.get("#copy-observers-box").click();
     cy.get("#copy-comment-box").click();

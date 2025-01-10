@@ -10,8 +10,7 @@ const other2 = "PARCYA";
 const shorthand = `10:00\n${basic1} 1/2 W (note, 123)\n12:00\n13:30\n${other1} 4/3 N\n14:05`;
 
 const addObsrvations = () => {
-  cy.get("#date-picker-inline").clear();
-  cy.get("#date-picker-inline").type(date);
+  cy.inputDate(date);
   cy.get("#observers").clear();
   cy.get("#observers").type(observer);
   cy.get("#selectType").click().get("#Vakio").click();

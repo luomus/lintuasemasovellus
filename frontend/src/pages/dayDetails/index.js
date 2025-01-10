@@ -11,6 +11,7 @@ import { ObservationEdit } from "./observationEdit";
 import { refreshDays } from "../../reducers/daysReducer";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
+import {setInitialFormData} from "../../reducers/formDataReducer/formDataReducer";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -30,7 +31,6 @@ export const DayDetails = () => {
 
   const dayList = useSelector(state => state.days);
 
-  const [thisDay, setThisDay] = useState(null);
   const [dayId, setDayId] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -43,9 +43,14 @@ export const DayDetails = () => {
       return;
     }
     const thisDay = dayList.find(d => d.day === day && d.observatory === observatory) || null;
-    setThisDay(thisDay);
     setDayId(thisDay ? thisDay.id : null);
-    setLoading(false);
+    if (thisDay) {
+      dispatch(setInitialFormData(day, observatory, thisDay)).then(() => {
+        setLoading(false);
+      });
+    } else {
+      setLoading(false);
+    }
   }, [dayList, day, observatory]);
 
   if (loading) {
@@ -76,7 +81,7 @@ export const DayDetails = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <GeneralDayDetails thisDay={thisDay}></GeneralDayDetails>
+              <GeneralDayDetails dayId={dayId}></GeneralDayDetails>
             </Grid>
             <Grid item xs={12}>
               <ObservationEdit dayList={dayList} dayId={dayId}></ObservationEdit>

@@ -23,3 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("inputDate", (date) => {
+  cy.get("#date-picker-inline").should("be.enabled");
+  cy.get("#date-picker-inline").clear();
+  cy.get("#date-picker-inline").type(date).blur();
+  cy.wait(0);
+  cy.get("#date-picker-inline").should("be.enabled");
+});

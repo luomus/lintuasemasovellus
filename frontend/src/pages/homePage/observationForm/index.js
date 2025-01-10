@@ -1,27 +1,39 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Button, CircularProgress, Grid, Snackbar, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, {useCallback, useContext, useEffect, useState} from "react";
+import {Button, CircularProgress, Grid, Snackbar, Typography} from "@mui/material";
+import {makeStyles} from "@mui/styles";
+import {useTranslation} from "react-i18next";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 import Alert from "../../../globalComponents/Alert";
-import { loopThroughObservationPeriods, loopThroughObservations, } from "../../../shorthand/parseShorthandField";
-import { getCatches, searchDayInfo, sendDay, sendEverything } from "../../../services";
-import { refreshDays } from "../../../reducers/daysReducer";
-import { setDailyActions, setDefaultActions } from "../../../reducers/dailyActionsReducer";
-import { setCatches } from "../../../reducers/catchRowsReducer";
-import { resetNotifications } from "../../../reducers/notificationsReducer";
+import {loopThroughObservationPeriods, loopThroughObservations,} from "../../../shorthand/parseShorthandField";
+import {searchDayInfo, sendDay, sendEverything} from "../../../services";
+import {refreshDays} from "../../../reducers/daysReducer";
+import {setDailyActions, setDefaultActions} from "../../../reducers/formDataReducer/dailyActionsReducer";
+import {setCatches} from "../../../reducers/formDataReducer/catchRowsReducer";
+import {resetNotifications} from "../../../reducers/notificationsReducer";
 import Help from "../../../globalComponents/Help";
-import { addDraft, deleteDraft } from "../../../services/draftService";
-import { ObservationFormHeader } from "./ObservationFormHeader";
-import { ObservationFormMainSection } from "./ObservationFormMainSection";
-import { ObservationFormDrafts } from "./ObservationFormDrafts";
-import { ObservationFormCopy } from "./ObservationFormCopy";
+import {addDraft, deleteDraft} from "../../../services/draftService";
+import {ObservationFormHeader} from "./ObservationFormHeader";
+import {ObservationFormMainSection} from "./ObservationFormMainSection";
+import {ObservationFormDrafts} from "./ObservationFormDrafts";
+import {ObservationFormCopy} from "./ObservationFormCopy";
 import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
-import { AppContext } from "../../../AppContext";
+import {AppContext} from "../../../AppContext";
+import {
+  emptyShorthand,
+  setInitialFormData, updateFormDataWithDayData
+} from "../../../reducers/formDataReducer/formDataReducer";
+import {loopThroughCheckForErrors} from "../../../shorthand/newValidations";
+import {setBaseFormData} from "../../../reducers/formDataReducer/baseFormDataReducer";
+import {dateToDayString} from "../../../services";
 
 const useStyles = makeStyles(() => ({
+  fieldsContainer: {
+    border: "none",
+    padding: 0,
+    margin: 0
+  },
   sendButton: {
     marginBottom: "20px",
     marginRight: "10px",
@@ -39,15 +51,6 @@ const useStyles = makeStyles(() => ({
 }
 ));
 
-const formatDate = (date) => {
-  if (date === null) {
-    return;
-  }
-  const dd = date.getDate();
-  const mm = date.getMonth() + 1;
-  return `${dd > 9 ? "" : "0"}${dd}.${mm > 9 ? "" : "0"}${mm}.${date.getFullYear()}`;
-};
-
 export const ObservationForm = ({ onSaveSuccess }) => {
   const classes = useStyles();
 
@@ -55,35 +58,39 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   // const confirmBrowserExit = useConfirmBrowserExit();
   const { user, observatory } = useContext(AppContext);
 
-  const dateNow = new Date();
-
   const dayList = useSelector(state => state.days);
-  const dailyActions = useSelector(state => state.dailyActions);
-  const catchRows = useSelector(state => state.catchRows);
+  const formData = useSelector(state => state.formData);
   const notifications = useSelector(state => state.notifications);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [day, setDay] = useState(dateNow);
-  const [observers, setObservers] = useState("");
-  const [comment, setComment] = useState("");
-  const [type, setType] = useState("");
-  const [location, setLocation] = useState("");
-  const [shorthand, setShorthand] = useState("");
-  const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+  const [loading, setLoading] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(false);
   const [saveLoadingIcon, setSaveLoadingIcon] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
-  const [dateChangeConfirm, setDateChangeConfirm] = useState(false);
   const [draftID, setDraftID] = useState();
   //const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     dispatch(refreshDays());
-    handleDateChange(dateNow);
+    dispatch(resetNotifications());
+    initFormData(dateToDayString(new Date())).then(() => {
+      setLoading(false);
+    });
   }, []);
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    dispatch(resetNotifications());
+    updateFormDataDay(formData.baseData.day).then(() => {
+      setLoading(false);
+    });
+  }, [formData.baseData.day]);
 
   /*useEffect(() => {
     if (hasChanges) {
@@ -94,9 +101,11 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   }, [hasChanges]);*/
 
   useEffect(() => {
+    const { day, observers, comment, type, location, shorthand } = formData.baseData;
+
     if (!type && !location && !shorthand) return;
     let data = {
-      day: formatDate(day),
+      day,
       comment,
       observers,
       observatory: observatory,
@@ -105,7 +114,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       type,
       location,
       shorthand: shorthand,
-      catchRows: JSON.stringify(catchRows),
+      catchRows: JSON.stringify(formData.catchRows),
     };
     if (draftID === undefined) {
       addDraft(data).then(r => {
@@ -114,38 +123,29 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     } else {
       addDraft({ ...data, id: draftID });
     }
-  }, [day, shorthand, type, location, comment, observers, catchRows]);
+  }, [formData]);
 
-  const emptyAllFields = () => {
-    setType("");
-    setLocation("");
-    setShorthand("");
-  };
+  const initFormData = async (day) => {
+    const dayJson = await searchDayInfo(day, observatory);
+    await dispatch(setInitialFormData(day, observatory, dayJson[0]));
+  }
 
-  const setActions = (selectedActions) => {
-    if (selectedActions) {
-      dispatch(setDailyActions(JSON.parse(selectedActions)));
+  const updateFormDataDay = async (day) => {
+    if (day) {
+      const dayJson = await searchDayInfo(day, observatory);
+      await dispatch(updateFormDataWithDayData(day, observatory, dayJson[0]));
     } else {
-      dispatch(setDefaultActions(observatory));
+      await dispatch(updateFormDataWithDayData(day, observatory, {}));
     }
-  };
-
-  const setCatchRows = (dayId) => {
-    if (dayId !== undefined && dayId !== null) {
-      getCatches(dayId)
-        .then(res => dispatch(setCatches(res)));
-    } else {
-      dispatch(setCatches([]));
-    }
-  };
+  }
 
   const stringifyDailyActions = () => {
-    if ("attachments" in dailyActions) {
-      if (dailyActions.attachments === "" || dailyActions.attachments < 0) {
-        return JSON.stringify({ ...dailyActions, "attachments": 0 });
+    if ("attachments" in formData.dailyActions) {
+      if (formData.dailyActions.attachments === "" || formData.dailyActions.attachments < 0) {
+        return JSON.stringify({ ...formData.dailyActions, "attachments": 0 });
       }
     }
-    return JSON.stringify(dailyActions);
+    return JSON.stringify(formData.dailyActions);
   };
 
   const handleAlertClose = (event, reason) => {
@@ -157,19 +157,21 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   };
 
   const sendData = async () => {
+    const { day, observers, comment, type, location } = formData.baseData;
+
     setSaveLoadingIcon(true);
-    const rows = sanitizedShorthand;
+    const rows = loopThroughCheckForErrors(formData.baseData.shorthand);
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
     const observationsToSend = loopThroughObservations(rows, user.id);
     setSaveDisabled(true);
     let data = {
-      day: formatDate(day),
+      day,
       comment: comment,
       observers: observers,
       observatory: observatory,
       selectedactions: stringifyDailyActions(),
       userID: user.id,
-      catches: catchRows,
+      catches: formData.catchRows,
       observationPeriods: observationPeriodsToSend,
       observations: observationsToSend
     };
@@ -177,7 +179,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     try {
       await sendEverything(data);
       setFormSent(true);
-      emptyAllFields();
+      dispatch(emptyShorthand());
       dispatch(refreshDays());
       deleteDraft(draftID);
       setDraftID(undefined);
@@ -191,12 +193,14 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   };
 
   const handleToDayDetails = async () => {
+    const { day, observers } = formData.baseData;
+
     try {
-      const searchResult = await searchDayInfo(formatDate(day), observatory);
+      const searchResult = await searchDayInfo(day, observatory);
       //Update if observers is changed
       if (searchResult[0].observers !== observers) {
         const data = {
-          day: formatDate(day),
+          day,
           observers: observers,
           observatory: observatory,
           comment: searchResult[0].comment,
@@ -206,21 +210,15 @@ export const ObservationForm = ({ onSaveSuccess }) => {
         };
         await sendDay(data);
       }
-      navigate(`/daydetails/${formatDate(day)}`);
+      navigate(`/daydetails/${day}`);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);
     }
   };
 
-  const confirmDate = () => {
-    setDateChangeConfirm(true);
-    setTimeout(function () {
-      setDateChangeConfirm(false);
-    }, 10000);
-  };
-
   const saveButtonDisabled = () => {
+    const { observers, type, location, shorthand } = formData.baseData;
     if (observers === "" || observers.trim() === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInInput())
       return true;
     else
@@ -242,138 +240,93 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   }, [notifications]);
 
   const handleCopyDay = (copyDay, toCopy) => {
-    searchDayInfo(formatDate(copyDay), observatory).then((dayJson) => {
+    searchDayInfo(copyDay, observatory).then((dayJson) => {
       if (dayJson[0]["id"] !== 0) {
+        const copyData = {};
         if (toCopy.observers) {
-          setObservers(dayJson[0]["observers"]);
+          copyData["observers"] = dayJson[0]["observers"];
         }
         if (toCopy.comment) {
-          setComment(dayJson[0]["comment"]);
+          copyData["comment"] = dayJson[0]["comment"];
         }
         if (toCopy.observationActivity) {
-          setActions(dayJson[0]["selectedactions"]);
+          copyData["selectedactions"] = dayJson[0]["selectedactions"];
         }
         if (toCopy.catches) {
-          setCatchRows(dayJson[0]["id"]);
+          copyData["id"] = dayJson[0]["id"];
         }
+        setInitialFormData(formData.day, observatory, copyData);
         dispatch(resetNotifications());
       }
     });
   };
 
-  const handleDateChange = (date) => {
-    const setFields = (dayData) => {
-      setObservers(dayData["observers"] || "");
-      setComment(dayData["comment"] || "");
-      setActions(dayData["selectedactions"]);
-      setCatchRows(dayData["id"]);
-      dispatch(resetNotifications());
-    };
-
-    if ((catchRows.length === 0 && observers === "" && comment === "") || dateChangeConfirm) {
-      const newDate = date;
-      setDay(date);
-
-      if (newDate) {
-        searchDayInfo(formatDate(date), observatory).then((dayJson) => {
-          setFields(dayJson[0]);
-        });
-      } else {
-        setFields({});
-      }
-    } else if (confirm(t("changeDateWhenObservationsConfirm"))) {
-      confirmDate();
-      setDay(date);
-      if (date) {
-        searchDayInfo(formatDate(date), observatory).then((dayJson) => {
-          setFields(dayJson[0]);
-        });
-      } else {
-        setFields({});
-      }
-    }
-  };
-
   const handleDraftSelect = (el) => {
     setDraftID(undefined);
-    setType(el.type);
-    setLocation(el.location);
-    setShorthand(el.shorthand);
-    setComment(el.comment);
-    setActions(el.selectedactions);
-    setObservers(el.observers);
+    dispatch(setBaseFormData({...formData.baseData, ...el}));
+    if (el.selectedactions) {
+      dispatch(setDailyActions(JSON.parse(el.selectedactions)));
+    } else {
+      dispatch(setDefaultActions(observatory));
+    }
     dispatch(setCatches(JSON.parse(el.catchRows)));
   };
 
   return (
-    <>
-      <Grid container
-        alignItems="flex-start"
-        spacing={1}>
-        <Grid item xs={10} >
-          <Typography variant="h4" component="h2" >
-            {t("addObservations")} - {observatory.replace("_", " ")}
-          </Typography>
-          <br />
-        </Grid>
-        { dailyActions ?
-          <>
-            <Grid container item xs={2} justifyContent="flex-end">
-              <ObservationFormDrafts draftID={draftID} onDraftSelect={handleDraftSelect} />
-              <ObservationFormCopy day={day} onCopyDay={handleCopyDay} />
-            </Grid>
-            <ObservationFormHeader
-              day={day}
-              observers={observers}
-              onDayChange={handleDateChange}
-              onObserversChange={setObservers}
-              toDayDetails={handleToDayDetails}
-            />
-            <ObservationFormMainSection
-              dayList={dayList}
-              day={day}
-              errorsInInput={errorsInInput}
-              comment={comment}
-              setComment={setComment}
-              type={type}
-              setType={setType}
-              location={location}
-              setLocation={setLocation}
-              shorthand={shorthand}
-              setShorthand={setShorthand}
-              onSanitizedShorthandChange={setSanitizedShorthand}
-            />
+    <LoadingSpinner overlay={true} spinning={loading}>
+      <fieldset disabled={loading} className={classes.fieldsContainer}>
+        <Grid container
+          alignItems="flex-start"
+          spacing={1}>
+          <Grid item xs={10} >
+            <Typography variant="h4" component="h2" >
+              {t("addObservations")} - {observatory.replace("_", " ")}
+            </Typography>
+            <br />
+          </Grid>
+          <Grid container item xs={2} justifyContent="flex-end">
+            <ObservationFormDrafts draftID={draftID} onDraftSelect={handleDraftSelect} />
+            <ObservationFormCopy onCopyDay={handleCopyDay} />
+          </Grid>
+          <ObservationFormHeader
+            confirmDateChange={!(formData.catchRows.length === 0 && formData.baseData.observers === "" && formData.baseData.comment === "")}
+            toDayDetails={handleToDayDetails}
+          />
+          <ObservationFormMainSection
+            dayList={dayList}
+            errorsInInput={errorsInInput}
+          />
 
-            <Grid item xs={12} className={classes.buttonAndIconsContainer}>
-              <Button
-                id="saveButton"
-                className={classes.sendButton}
-                onClick={sendData}
-                disabled={saveButtonDisabled() || saveDisabled}
-                color="primary"
-                variant="contained"
-              >
-                {saveDisabled ? t("loading") : t("saveMigrant")}
-              </Button>
-              <Help title={t("helpForSaveMigrantButton")} placement="right"/>
-              { (saveLoadingIcon) &&
+          <Grid item xs={12} className={classes.buttonAndIconsContainer}>
+            <Button
+              id="saveButton"
+              className={classes.sendButton}
+              onClick={sendData}
+              disabled={saveButtonDisabled() || saveDisabled}
+              color="primary"
+              variant="contained"
+            >
+              {saveDisabled ? t("loading") : t("saveMigrant")}
+            </Button>
+            <Help title={t("helpForSaveMigrantButton")} placement="right"/>
+            { (saveLoadingIcon) &&
               <CircularProgress className={classes.loadingIcon} color="primary"/>
-              }
-            </Grid>
-          </> : <LoadingSpinner />}
-      </Grid>
+            }
+          </Grid>
+        </Grid>
 
-      <Snackbar open={formSent} autoHideDuration={5000} onClose={handleAlertClose}>
-        <Alert onClose={handleAlertClose} severity="success">
-          {t("formSent")}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleAlertClose}>
-        <Alert onClose={handleAlertClose} severity="error">
-          {t("formNotSent")}
-        </Alert>
-      </Snackbar>
-    </>
+        <Snackbar open={formSent} autoHideDuration={5000} onClose={handleAlertClose}>
+          <Alert onClose={handleAlertClose} severity="success">
+            {t("formSent")}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleAlertClose}>
+          <Alert onClose={handleAlertClose} severity="error">
+            {t("formNotSent")}
+          </Alert>
+        </Snackbar>
+      </fieldset>
+    </LoadingSpinner>
   );
 };
 

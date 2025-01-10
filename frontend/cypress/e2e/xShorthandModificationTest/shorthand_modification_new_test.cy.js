@@ -1,7 +1,7 @@
 import { myBeforeEach } from "../methods.js";
 
 
-const date = "03.03.2021";
+const date = "05.03.2021";
 const observer = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
@@ -17,8 +17,7 @@ describe("ShorthandModificationPerObservationPeriod", function () {
 
   it("An observation and observation day can be saved on firstpage for Vakio", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#comment-header").click();
 

@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -16,6 +16,8 @@ import { isNightValidation } from "../../shorthand/isNightValidation";
 import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 import LoadingSpinner from "../LoadingSpinner";
 import { AppContext } from "../../AppContext";
+import {dateSelector} from "../../reducers/formDataReducer/formDataReducer";
+import {setShorthand} from "../../reducers/formDataReducer/baseFormDataReducer";
 
 
 let timeout = null;
@@ -28,19 +30,30 @@ const useStyles = makeStyles({
   },
 });
 
-const CodeMirrorBlock = ({
-  dayList,
-  shorthand,
-  setShorthand,
-  setSanitizedShorthand,
-  date,
-  type
-}) => {
-
+const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
   const { observatory } = useContext(AppContext);
+
+  const date = useSelector(dateSelector);
+  const type = useSelector(state => state.formData.baseData.type);
+  const shorthand = useSelector(state => state.formData.baseData.shorthand);
+
+  const [editorInstance, setEditorInstance] = useState();
+
+  useEffect(() => {
+    if (editorInstance && dayList) {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      validateAndSetNotifications(editorInstance, shorthand);
+    }
+  }, [activeObservationPeriodIds, dayList])
+
+  const updateShorthand = (newShorthand) => {
+    dispatch(setShorthand(newShorthand));
+  }
 
   const validateObservationOnTop = async (value) => {
 
@@ -56,7 +69,7 @@ const CodeMirrorBlock = ({
     let newDate = day+"."+ month +"."+ year;
 
     const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
-    const getRowNumbers = findDay ? await observationsOnTop(findDay.id,value) : [];
+    const getRowNumbers = findDay ? await observationsOnTop(findDay.id, value, activeObservationPeriodIds) : [];
 
     if (findDay && getRowNumbers.length > 0) {
       return getRowNumbers;
@@ -110,10 +123,10 @@ const CodeMirrorBlock = ({
     return result;
   };
 
-  const validate = (editor, data, value) => {
+  const validate = (editor, value) => {
     let toErrors = [];
 
-    setSanitizedShorthand(loopThroughCheckForErrors(value));
+    loopThroughCheckForErrors(value);
     for (const marker of markers) {
       marker.clear();
     }
@@ -133,6 +146,14 @@ const CodeMirrorBlock = ({
     return toErrors;
   };
 
+  const validateAndSetNotifications = async (editor, value) => {
+    const result = validate(editor, value);
+    setValidateNightNotification(value, editor);
+    const newResult = await setValidateObsOnTopNotification(value,editor,result);
+
+    dispatch(setNotifications([[], newResult], "shorthand", 0));
+  }
+
   /**
    * Start checking for errors only after being idle for the duration of
    * the timeout (700ms).
@@ -146,12 +167,7 @@ const CodeMirrorBlock = ({
       clearTimeout(timeout);
     }
     timeout = setTimeout(async () => {
-
-      const result = validate(editor, data, value);
-      setValidateNightNotification(value, editor);
-      const newResult = await setValidateObsOnTopNotification(value,editor,result);
-
-      dispatch(setNotifications([[], newResult], "shorthand", 0));
+      validateAndSetNotifications(editor, value);
       timeout = null;
     }, 700);
   };
@@ -169,15 +185,16 @@ const CodeMirrorBlock = ({
         theme: "idea",
         lineNumbers: true,
         autoRefresh: true,
-        readOnly: false,
+        readOnly: !date,
         gutters: ["note-gutter"],
         lint: true
       }}
       editorDidMount={editor => {
+        setEditorInstance(editor);
         editor.refresh();
       }}
       onBeforeChange={(editor, data, value) => {
-        setShorthand(value);
+        updateShorthand(value);
       }}
       onChange={(editor, data, value) => {
         codemirrorOnchange(editor, data, value);
@@ -187,12 +204,8 @@ const CodeMirrorBlock = ({
 };
 
 CodeMirrorBlock.propTypes = {
-  dayList: PropTypes.array,
-  shorthand: PropTypes.string.isRequired,
-  setShorthand: PropTypes.func.isRequired,
-  setSanitizedShorthand: PropTypes.func.isRequired,
-  date: PropTypes.instanceOf(Date),
-  type: PropTypes.string
+  activeObservationPeriodIds: PropTypes.array,
+  dayList: PropTypes.array
 };
 
 export default CodeMirrorBlock;

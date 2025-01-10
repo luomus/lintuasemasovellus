@@ -14,8 +14,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
   });
 
   it("Observation with start/end time on top can't be saved", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#comment-header").click();
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);

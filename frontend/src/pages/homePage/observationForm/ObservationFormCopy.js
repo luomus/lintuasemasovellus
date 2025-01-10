@@ -16,6 +16,8 @@ import { FileCopy } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import {dateToDayString, dayStringToDate} from "../../../services";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles(() => ({
   formControlLabel: {
@@ -24,10 +26,12 @@ const useStyles = makeStyles(() => ({
 }
 ));
 
-export const ObservationFormCopy = ({ day, onCopyDay }) => {
+export const ObservationFormCopy = ({ onCopyDay }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
+
+  const day = useSelector(state => state.formData.baseData.day);
 
   const [openCopy, setOpenCopy] = useState(false);
   const [toCopy, setToCopy] = useState({
@@ -36,9 +40,9 @@ export const ObservationFormCopy = ({ day, onCopyDay }) => {
   });
 
   const handleCopyConfirm = () => {
-    let previousDay = new Date(day);
-    previousDay.setDate(day.getDate() - 1);
-    onCopyDay(previousDay, toCopy);
+    let previousDay = dayStringToDate(day);
+    previousDay.setDate(previousDay.getDate() - 1);
+    onCopyDay(dateToDayString(previousDay), toCopy);
     handleCopyClose();
   };
 
@@ -61,9 +65,11 @@ export const ObservationFormCopy = ({ day, onCopyDay }) => {
   return (
     <>
       <Tooltip title={t("copy")}>
-        <IconButton id="open-copy-button" size="medium" onClick={handleOpenCopy} variant="contained" color="primary">
-          <FileCopy fontSize="default" />
-        </IconButton>
+        <span>
+          <IconButton id="open-copy-button" disabled={!day} size="medium" onClick={handleOpenCopy} variant="contained" color="primary">
+            <FileCopy fontSize="default" />
+          </IconButton>
+        </span>
       </Tooltip>
       <Modal
         open={openCopy}
@@ -111,6 +117,5 @@ export const ObservationFormCopy = ({ day, onCopyDay }) => {
 };
 
 ObservationFormCopy.propTypes = {
-  day: PropTypes.instanceOf(Date).isRequired,
   onCopyDay: PropTypes.func.isRequired
 };

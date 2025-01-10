@@ -34,8 +34,7 @@ describe("FieldsAndAuthenticationTest", function () {
   });
 
   it("Catch row errors prevent saving", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#comment-header").click();
     cy.get("#comment").clear();
@@ -108,28 +107,24 @@ describe("FieldsAndAuthenticationTest", function () {
   });
 
   it("Incorrect date and no observers prevent saving", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(largeDate);
+    cy.get("#selectType").click().get("#Vakio").click();
+    cy.get("#selectLocation").click().get("#Bunkkeri").click();
+    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
+    cy.inputDate(largeDate);
     cy.get("#observers").clear();
     cy.get("#activity-header").click();
     cy.get("#attachments").clear();
     cy.wait(1000);
     cy.get("#observers").type(observer);
-    cy.get("#selectType").click().get("#Vakio").click();
-    cy.get("#selectLocation").click().get("#Bunkkeri").click();
-    cy.get(".CodeMirror textarea").type(shorthand, { force: true });
     cy.get("#saveButton").should("be.disabled");
     cy.contains("Päivämäärä on liian suuri");
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(smallDate);
+    cy.inputDate(smallDate);
     cy.get("#saveButton").should("be.disabled");
     cy.contains("Päivämäärä on liian pieni");
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(invalidDate);
+    cy.inputDate(invalidDate);
     cy.get("#saveButton").should("be.disabled");
     cy.contains("Virheellinen päivämäärä");
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").type(observer);
     cy.get("#saveButton").should("not.be.disabled");
     cy.should("not.contain", "Virheellinen päivämäärä");
@@ -140,8 +135,7 @@ describe("FieldsAndAuthenticationTest", function () {
   });
 
   it("Error messaging is correct", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#activity-header").click();
     cy.get("#attachments").clear();
@@ -212,8 +206,7 @@ describe("FieldsAndAuthenticationTest", function () {
   });
 
   it("Further error messaging is correct", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#activity-header").click();
     cy.contains("Rengastusvakio").click();

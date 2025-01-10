@@ -52,9 +52,8 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#comment-header").click();
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
-    cy.get("#observers").clear();
+    cy.inputDate(date);
+    cy.get("#observers").should('be.enabled').clear();
     cy.get("#observers").type(observer);
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);
@@ -76,8 +75,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
 
   it("Tallenna button is not active if observers is left empty", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#comment-header").click();
     cy.get("#comment").clear();
@@ -92,8 +90,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
 
   it("Tallenna button is not active if observers starts with a space", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(" ");
     cy.get("#comment-header").click();
@@ -110,8 +107,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
 
   it("Tallenna button is not active if type is not selected", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
     cy.get("#comment").type(comment);
@@ -124,8 +120,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
 
   it("Tallenna button is not active if location is not selected", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
     cy.get("#comment").type(comment);

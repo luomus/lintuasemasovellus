@@ -1,13 +1,15 @@
 import { getDaysObservationPeriods } from "../services";
 import { isTime, parseTime } from "./timeHelper.js";
 
-export const observationsOnTop = async (dayId,value) => {
+export const observationsOnTop = async (dayId, value, activeObservationPeriodIds) => {
 
   let periodStartTime = null;
   let periodEndTime = null;
   let nextTimeEndTime = false;
 
-  let observationPeriods = await getDaysObservationPeriods(dayId);
+  let observationPeriods = (await getDaysObservationPeriods(dayId)).filter(
+    period => !(activeObservationPeriodIds || []).includes(period.id)
+  );
 
   const lines = value.trim().split(/\n/);
 
@@ -29,7 +31,7 @@ export const observationsOnTop = async (dayId,value) => {
       if (periodEndTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.startTime && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
         periodEndTime >= obsPeriod.startTime && periodEndTime <= obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
           periodStartTime >= obsPeriod.startTime && periodStartTime <= obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ) {
-        console.log("obsPeriod: ", obsPeriod);
+
         rowNumbers.push(rowNumber);
       }
     }

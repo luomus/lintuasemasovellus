@@ -13,6 +13,7 @@ import Row from "./Row";
 import SearchBar from "../../../globalComponents/SearchBar";
 import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
 import { AppContext } from "../../../AppContext";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SpeciesTable = (props) => {
 
-  const { date, summary, defaultSpecies } = props;
+  const { summary, defaultSpecies } = props;
 
   const { t } = useTranslation();
   const classes = useStyles();
@@ -200,7 +201,7 @@ const SpeciesTable = (props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((s) =>
                 <StyledTableRow hover key={s.species}>
-                  <Row s={s} key={s.species} date={date} />
+                  <Row s={s} key={s.species} />
                 </StyledTableRow>
               )
             }
@@ -219,7 +220,6 @@ const SpeciesTable = (props) => {
 };
 
 SpeciesTable.propTypes = {
-  date: PropTypes.string.isRequired,
   summary: PropTypes.array.isRequired,
   defaultSpecies: PropTypes.array.isRequired
 };

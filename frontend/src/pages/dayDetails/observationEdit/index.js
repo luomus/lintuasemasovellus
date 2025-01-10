@@ -17,7 +17,6 @@ import { AppContext } from "../../../AppContext";
 
 
 export const ObservationEdit = ({ dayList, dayId }) => {
-  const { day } = useParams();
   const { observatory } = useContext(AppContext);
 
   const [defaultSpecies, setDefaultSpecies] = useState([]);
@@ -57,14 +56,12 @@ export const ObservationEdit = ({ dayList, dayId }) => {
 
   const table = mode === "speciesTable" ? (
     <SpeciesTable
-      date={day}
       summary={summary}
       defaultSpecies={defaultSpecies}
     ></SpeciesTable>
   ) : (
     <PeriodTable
       dayList={dayList}
-      date={day}
       obsPeriods={obsPeriods}
       refetchObservations={refetchObservations}
     ></PeriodTable>
@@ -78,7 +75,7 @@ export const ObservationEdit = ({ dayList, dayId }) => {
         </Box>
       </Grid>
       <Grid item xs={5}>
-        <ShorthandEdit dayList={dayList} day={day} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
+        <ShorthandEdit dayList={dayList} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
       </Grid>
       <Grid item xs={12}>
         {table}

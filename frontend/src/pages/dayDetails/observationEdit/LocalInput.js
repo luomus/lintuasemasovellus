@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
 import { AppContext } from "../../../AppContext";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles({
   container: {
@@ -19,10 +20,12 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ date, count, species, dataType, onChange, inputRef }) => {
+const LocalInput = ({ count, species, dataType, onChange, inputRef }) => {
 
   const classes = useStyles();
   const { observatory } = useContext(AppContext);
+
+  const day = useSelector(state => state.formData.baseData.day);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -46,10 +49,10 @@ const LocalInput = ({ date, count, species, dataType, onChange, inputRef }) => {
       onChange(newValue);
       try {
         if (dataType.includes("local")) {
-          await updateLocalObservation(date, observatory, species, newValue, dataType === "localGau" ? 1 : 0);
+          await updateLocalObservation(day, observatory, species, newValue, dataType === "localGau" ? 1 : 0);
         }
         if (dataType === "scatter") {
-          await updateScatterObservation(date, observatory, species, newValue);
+          await updateScatterObservation(day, observatory, species, newValue);
         }
       } catch (error) {
         console.log("error: ", error);
@@ -84,7 +87,6 @@ const LocalInput = ({ date, count, species, dataType, onChange, inputRef }) => {
 export default LocalInput;
 
 LocalInput.propTypes = {
-  date: PropTypes.string,
   count: PropTypes.number,
   species: PropTypes.string,
   dataType: PropTypes.string,

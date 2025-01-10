@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import EditShorthand from "../../editShorthand";
 
-export const ShorthandEdit = ({ dayList, day, dayId, onEditShorthandClose }) => {
+export const ShorthandEdit = ({ dayList, dayId, onEditShorthandClose }) => {
   const { t } = useTranslation();
 
   const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
@@ -29,7 +29,6 @@ export const ShorthandEdit = ({ dayList, day, dayId, onEditShorthandClose }) => 
       </Box>
       <EditShorthand
         dayList={dayList}
-        date={day}
         dayId={dayId}
         open={editShorthandModalOpen}
         handleCloseModal={handleEditShorthandClose}
@@ -40,7 +39,6 @@ export const ShorthandEdit = ({ dayList, day, dayId, onEditShorthandClose }) => 
 
 ShorthandEdit.propTypes = {
   dayList: PropTypes.array,
-  day: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
   onEditShorthandClose: PropTypes.func.isRequired
 };

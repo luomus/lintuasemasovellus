@@ -9,7 +9,7 @@ describe("NavigatingFromFirstPageTest", function () {
     const day = "27.05.2022";
     const observers = "Hannu Hanhi";
 
-    cy.get("#date-picker-inline").clear().type(day);
+    cy.inputDate(day);
     cy.get("#observers").clear().type(observers);
     cy.get("#toDayDetails").click();
     cy.url().should("include", `/#/daydetails/${day}`);
@@ -19,7 +19,7 @@ describe("NavigatingFromFirstPageTest", function () {
   it("ToDayDetails Button is disabled if observers field is empty", function() {
     const day = "26.05.2022";
 
-    cy.get("#date-picker-inline").clear().type(day);
+    cy.inputDate(day);
     cy.get("#observers").clear();
     cy.get("#toDayDetails").should("be.disabled");
   });
@@ -29,7 +29,7 @@ describe("NavigatingFromFirstPageTest", function () {
     const observers = "Liisa Lintubongari, Paavo Peippo";
     const comment = "Kolme yötä jouluun on. Laskin aivan itse eilen, kun näin talitintin.";
 
-    cy.get("#date-picker-inline").clear().type(day);
+    cy.inputDate(day);
     cy.get("#observers").clear().type(observers);
 
     cy.get("#comment-header").click();

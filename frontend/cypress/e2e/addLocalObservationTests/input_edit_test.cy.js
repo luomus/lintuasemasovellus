@@ -48,8 +48,7 @@ const verifyTotalCount = (species, type, count) => {
 
 const setup = () => {
   myBeforeEach();
-  cy.get("#date-picker-inline").clear();
-  cy.get("#date-picker-inline").type(date);
+  cy.inputDate(date);
   cy.get("#observers").clear();
   cy.get("#observers").type(observer);
   cy.get("#selectType").click().get("#Vakio").click();

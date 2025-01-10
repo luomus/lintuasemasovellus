@@ -10,16 +10,17 @@ import {
 import { Add, ExpandMore } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import CodeMirrorBlock from "../../../globalComponents/codemirror/CodeMirrorBlock";
 import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
-import { addOneCatchRow, } from "../../../reducers/catchRowsReducer";
+import { addOneCatchRow, } from "../../../reducers/formDataReducer/catchRowsReducer";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
 import Notification from "../../../globalComponents/Notification";
 import { AppContext } from "../../../AppContext";
+import {setComment, setLocation, setType} from "../../../reducers/formDataReducer/baseFormDataReducer";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -48,19 +49,33 @@ const useStyles = makeStyles((theme) => ({
 ));
 
 
-export const ObservationFormMainSection = ({ dayList, day, errorsInInput, comment, setComment, type, setType, location, setLocation, shorthand, setShorthand, onSanitizedShorthandChange }) => {
+export const ObservationFormMainSection = ({ dayList, errorsInInput }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
   const { station } = useContext(AppContext);
-
-  const dailyActions = useSelector(state => state.dailyActions);
-  const catchRows = useSelector(state => state.catchRows);
-
   const dispatch = useDispatch();
+
+  const comment = useSelector(state => state.formData.baseData.comment);
+  const type = useSelector(state => state.formData.baseData.type);
+  const location = useSelector(state => state.formData.baseData.location);
+  const dailyActions = useSelector(state => state.formData.dailyActions);
+  const catchRows = useSelector(state => state.formData.catchRows);
 
   const addCatchRow = () => {
     dispatch(addOneCatchRow());
+  };
+
+  const updateComment = (newComment) => {
+    dispatch(setComment(newComment));
+  };
+
+  const updateType = (newType) => {
+    dispatch(setType(newType));
+  };
+
+  const updateLocation = (newLocation) => {
+    dispatch(setLocation(newLocation));
   };
 
   return (
@@ -82,7 +97,7 @@ export const ObservationFormMainSection = ({ dayList, day, errorsInInput, commen
             id="comment"
             fullWidth={true}
             label={t("comment")}
-            onChange={(event) => setComment(event.target.value)}
+            onChange={(event) => updateComment(event.target.value)}
             value={comment}
           />
         </AccordionDetails>
@@ -189,7 +204,7 @@ export const ObservationFormMainSection = ({ dayList, day, errorsInInput, commen
                 slotProps={{
                   select: {
                     value: type,
-                    onChange: (event) => setType(event.target.value)
+                    onChange: (event) => updateType(event.target.value)
                   }
                 }}
               >
@@ -214,7 +229,7 @@ export const ObservationFormMainSection = ({ dayList, day, errorsInInput, commen
                 slotProps={{
                   select: {
                     value: location,
-                    onChange: (event) => setLocation(event.target.value)
+                    onChange: (event) => updateLocation(event.target.value)
                   }
                 }}
               >
@@ -234,11 +249,6 @@ export const ObservationFormMainSection = ({ dayList, day, errorsInInput, commen
             <Grid item xs={12}>
               <CodeMirrorBlock
                 dayList={dayList}
-                shorthand={shorthand}
-                setShorthand={setShorthand}
-                setSanitizedShorthand={onSanitizedShorthandChange}
-                date={day}
-                type={type}
               />
             </Grid>
           </Grid>
@@ -251,15 +261,5 @@ export const ObservationFormMainSection = ({ dayList, day, errorsInInput, commen
 
 ObservationFormMainSection.propTypes = {
   dayList: PropTypes.array,
-  day: PropTypes.instanceOf(Date).isRequired,
-  errorsInInput: PropTypes.func.isRequired,
-  comment: PropTypes.string.isRequired,
-  setComment: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-  setType: PropTypes.func.isRequired,
-  location: PropTypes.string.isRequired,
-  setLocation: PropTypes.func.isRequired,
-  shorthand: PropTypes.string.isRequired,
-  setShorthand: PropTypes.func.isRequired,
-  onSanitizedShorthandChange: PropTypes.func.isRequired
+  errorsInInput: PropTypes.func.isRequired
 };

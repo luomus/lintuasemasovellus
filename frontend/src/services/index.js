@@ -3,3 +3,4 @@ export * from "./observationlistService";
 export * from "./dayService";
 export * from "./observationStationService";
 export * from "./speciesService";
+export * from "./utils";

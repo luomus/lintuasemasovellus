@@ -1,4 +1,5 @@
 import React, {
+  useEffect, useRef,
   useState
 } from "react";
 import {
@@ -11,6 +12,10 @@ import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import Help from "../../../globalComponents/Help";
+import {useDispatch, useSelector} from "react-redux";
+import {setObservers, setDay} from "../../../reducers/formDataReducer/baseFormDataReducer";
+import {dateToDayString} from "../../../services";
+import {dateSelector} from "../../../reducers/formDataReducer/formDataReducer";
 
 const useStyles = makeStyles(() => ({
   sendButton: {
@@ -29,14 +34,32 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const ObservationFormHeader = ({ day, observers, onDayChange, onObserversChange, toDayDetails }) => {
+export const ObservationFormHeader = ({ confirmDateChange, toDayDetails }) => {
   const classes = useStyles();
-
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const date = useSelector(dateSelector);
+  const observers = useSelector(state => state.formData.baseData.observers);
+
+  const [datepickerDate, setDatepickerDate] = useState(date);
+  const [datepickerValidDate, setDatepickerValidDate] = useState(date);
+  const [datePickerErrorMessage, setDatePickerErrorMessage] = useState("");
+  const [dateChangeConfirmed, setDateChangeConfirmed] = useState(false);
 
   const [toDayDetailsDisabled, setToDayDetailsDisabled] = useState(false);
   const [toDayDetailsLoadingIcon, setToDayDetailsLoadingIcon] = useState(false);
-  const [datePickerErrorMessage, setDatePickerErrorMessage] = useState("");
+
+  const datePickerInput = useRef(null);
+
+  useEffect(() => {
+    if (date?.getTime() === datepickerValidDate?.getTime()) {
+      return;
+    }
+    setDatepickerDate(date);
+    setDatepickerValidDate(date);
+    setDatePickerErrorMessage("");
+  }, [date]);
 
   const handleToDayDetailsClick = async () => {
     setToDayDetailsLoadingIcon(true);
@@ -49,19 +72,35 @@ export const ObservationFormHeader = ({ day, observers, onDayChange, onObservers
   };
 
   const toDayDetailsButtonDisabled = () => {
-    if (observers === "" || observers.trim() === "")
+    if (!date || observers === "" || observers.trim() === "")
       return true;
     else
       return false;
   };
 
-  const handleDatePickerChange = (date, context) => {
-    if (!context.validationError) {
-      onDayChange(date);
+  const handleDatePickerChange = (newDate, context) => {
+    updateDatePickerErrorMessage(context?.validationError);
+
+    if (!context?.validationError) {
+      setDatepickerValidDate(newDate);
+
+      if (document.activeElement === datePickerInput.current) { // when the date is entered by typing, update it on blur
+        return;
+      }
+
+      handleDateChange(newDate);
+    } else {
+      setDatepickerValidDate(null);
     }
   };
 
-  const handleDatePickerError = (error) => {
+  const handleDatePickerBlur = () => {
+    if (datepickerValidDate?.getTime() !== date?.getTime()) {
+      handleDateChange(datepickerValidDate);
+    }
+  };
+
+  const updateDatePickerErrorMessage = (error) => {
     let errorMsg = "";
 
     if (error === "invalidDate") {
@@ -75,6 +114,32 @@ export const ObservationFormHeader = ({ day, observers, onDayChange, onObservers
     setDatePickerErrorMessage(errorMsg);
   };
 
+  const handleDateChange = (newDate) => {
+    if (!confirmDateChange || dateChangeConfirmed) {
+      dispatch(setDay(dateToDayString(newDate)));
+    } else {
+      if (confirm(t("changeDateWhenObservationsConfirm"))) {
+        confirmDate();
+        dispatch(setDay(dateToDayString(newDate)));
+      } else {
+        const oldDate = new Date(date.getTime());
+        setDatepickerDate(oldDate); // force datepicker to keep the earlier date
+        setDatepickerValidDate(oldDate);
+      }
+    }
+  };
+
+  const confirmDate = () => {
+    setDateChangeConfirmed(true);
+    setTimeout(function () {
+      setDateChangeConfirmed(false);
+    }, 10000);
+  };
+
+  const observersChange = (observers) => {
+    dispatch(setObservers(observers));
+  };
+
   return (
     <>
       <Grid item sm={3} background-color={"red"} style={{ minWidth: "150px" }}>
@@ -83,17 +148,16 @@ export const ObservationFormHeader = ({ day, observers, onDayChange, onObservers
             variant="inline"
             format="dd.MM.yyyy"
             label={t("date")}
-            value={day}
-            onChange={(date, context) => {
-              handleDatePickerChange(date, context);
-            }}
-            onError={(newError) => handleDatePickerError(newError)}
+            value={datepickerDate}
+            onChange={handleDatePickerChange}
             slotProps={{
               textField: {
+                inputRef: datePickerInput,
                 required: true,
                 id: "date-picker-inline",
                 "aria-label": "change date",
-                helperText: datePickerErrorMessage
+                helperText: datePickerErrorMessage,
+                onBlur: handleDatePickerBlur
               },
               field: {
                 clearable: true
@@ -109,7 +173,7 @@ export const ObservationFormHeader = ({ day, observers, onDayChange, onObservers
           fullWidth={true}
           id="observers"
           label={t("observers")}
-          onChange={(event) => onObserversChange(event.target.value)}
+          onChange={(event) => observersChange(event.target.value)}
           value={observers}
         />
       </Grid>
@@ -134,9 +198,6 @@ export const ObservationFormHeader = ({ day, observers, onDayChange, onObservers
 };
 
 ObservationFormHeader.propTypes = {
-  day: PropTypes.instanceOf(Date).isRequired,
-  observers: PropTypes.string.isRequired,
-  onDayChange: PropTypes.func.isRequired,
-  onObserversChange: PropTypes.func.isRequired,
+  confirmDateChange: PropTypes.bool,
   toDayDetails: PropTypes.func.isRequired
 };

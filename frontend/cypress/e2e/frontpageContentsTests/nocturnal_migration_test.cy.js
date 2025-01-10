@@ -13,8 +13,7 @@ describe.skip("When nightmigration", function () {
 
   it.skip("Tallenna button is not active if it is not night time", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").type(observer);
     cy.get("#selectType").click().get("#Yömuutto").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });

@@ -3,11 +3,10 @@ import { thunk } from "redux-thunk";
 import daysReducer from "./reducers/daysReducer";
 import stationsReducer from "./reducers/obsStationReducer";
 import userObservatoryReducer from "./reducers/userObservatoryReducer";
-import dailyActionsReducer from "./reducers/dailyActionsReducer";
-import catchRowsReducer from "./reducers/catchRowsReducer";
 import userReducer from "./reducers/userReducer";
 import notificationsReducer from "./reducers/notificationsReducer";
 import speciesReducer from "./reducers/speciesReducer";
+import formDataReducer from "./reducers/formDataReducer/formDataReducer";
 
 
 const reducer = combineReducers({
@@ -15,10 +14,9 @@ const reducer = combineReducers({
   stations: stationsReducer,
   days: daysReducer,
   userObservatory: userObservatoryReducer,
-  dailyActions: dailyActionsReducer,
-  catchRows: catchRowsReducer,
   notifications: notificationsReducer,
-  speciesData: speciesReducer
+  speciesData: speciesReducer,
+  formData: formDataReducer
 });
 
 const store = createStore(

@@ -40,9 +40,11 @@ export const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
   return (
     <>
       <Tooltip title={t("drafts")}>
-        <IconButton id="open-draft-button" size="medium" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
-          <Bookmarks fontSize="default" />
-        </IconButton>
+        <span>
+          <IconButton id="open-draft-button" size="medium" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
+            <Bookmarks fontSize="default" />
+          </IconButton>
+        </span>
       </Tooltip>
       <Modal
         open={draftsOpen}

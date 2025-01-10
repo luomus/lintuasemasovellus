@@ -23,8 +23,7 @@ describe("AddObservationDay", function () {
   });
 
   it("An observation and observation day can be saved on firstpage for Vakio", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
@@ -180,9 +179,7 @@ describe("AddObservationDay", function () {
     cy.get("#select-observatory").click().get("ul > li").eq(1).click();
     cy.get("#submit").contains("Tallenna").click();
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date2);
-    cy.wait(1000);
+    cy.inputDate(date2);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer1);
     cy.get("#comment-header").click();
@@ -216,8 +213,7 @@ describe("AddObservationDay", function () {
 
   it("Observation list only shows observations from chosen observatory", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
@@ -234,8 +230,7 @@ describe("AddObservationDay", function () {
     cy.contains("Jurmon Lintuasema").click();
     cy.get("#submit").contains("Tallenna").click();
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date2);
+    cy.inputDate(date2);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();

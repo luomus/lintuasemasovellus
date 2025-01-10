@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {
   TextField, Button, IconButton, Typography, FormGroup, FormControlLabel
@@ -7,6 +7,10 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle, Edit, RemoveCircleOutlineRounded } from "@mui/icons-material";
 import { makeStyles, withStyles } from "@mui/styles";
 import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
+import {setDailyActions} from "../../../reducers/formDataReducer/dailyActionsReducer";
+import {editActions} from "../../../services";
+import {useDispatch, useSelector} from "react-redux";
+import {AppContext} from "../../../AppContext";
 
 const useStyles = makeStyles(theme => ({
   formControlLabel: {
@@ -38,19 +42,59 @@ const DisabledTextField = withStyles({
   }
 })(TextField);
 
-const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, onActionsEditOpen, onActionsEditCancel, onActionsEditSave }) => {
+const DailyActionsEdit = ({ dayId }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { observatory } = useContext(AppContext);
+
+  const dailyActions = useSelector(state => state.formData.dailyActions);
+  const notifications = useSelector(state => state.notifications);
+
+  const [actionsEditMode, setActionsEditMode] = useState(false);
+  const [actionsBeforeEdit, setActionsBeforeEdit] = useState();
+  const [errorsInActions, setErrorsInActions] = useState(false);
+
+  useEffect(() => {
+    let value = false;
+    Object.keys(notifications["dailyactions"]).map(row => {
+      if (notifications["dailyactions"][String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    setErrorsInActions(value);
+  }, [notifications]);
+
+  const handleActionsEditOpen = useCallback(() => {
+    setActionsBeforeEdit(dailyActions);
+    setActionsEditMode(!actionsEditMode);
+  }, [actionsEditMode]);
+
+  const handleActionsEditCancel = useCallback(() => {
+    dispatch(setDailyActions(actionsBeforeEdit));
+    setActionsEditMode(!actionsEditMode);
+  }, [observatory, actionsEditMode]);
+
+  const handleActionsEditSave = useCallback(() => {
+    let actionsToSave = dailyActions;
+    if ("attachments" in actionsToSave) {
+      if (actionsToSave.attachments === "" || actionsToSave.attachments < 0) {
+        actionsToSave = { ...actionsToSave, "attachments": 0 };
+      }
+    }
+    editActions(dayId, JSON.stringify(actionsToSave));
+    setActionsEditMode(!actionsEditMode);
+  }, [dayId, dailyActions, actionsEditMode, observatory]);
 
   return (
     <>
       <Typography variant="h6" component="h2" >
         {t("ObservationActivity")}
       </Typography>
-      {(selectedActions && !actionsEditMode) ?
+      {(dailyActions && !actionsEditMode) ?
         <FormGroup row className={classes.formGroup}>
           {
-            Object.entries(selectedActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
+            Object.entries(dailyActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
               <FormControlLabel className={classes.formControlLabel}
                 control={value
                   ? <CheckCircle name="check" fontSize="small" className={classes.checkedDailyAction} />
@@ -61,11 +105,11 @@ const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, o
             )
           }
           <FormControlLabel className={classes.FormControlLabel}
-            control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + selectedActions.attachments + " " + t("pcs")}
+            control={<DisabledTextField name="attachments" id="attachments" className={classes.attachment} value={" " + dailyActions.attachments + " " + t("pcs")}
               disabled InputProps={{ disableUnderline: true }} />}
             label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
 
-          <IconButton id="actionsButton" size="small" onClick={onActionsEditOpen} variant="contained" color="primary"  >
+          <IconButton id="actionsButton" size="small" onClick={handleActionsEditOpen} variant="contained" color="primary"  >
             <Edit fontSize="default" />
           </IconButton>
         </FormGroup>
@@ -74,10 +118,10 @@ const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, o
           alignItems: "left"
         }}>
           <DailyActions />
-          <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions} onClick={onActionsEditSave} color="primary">
+          <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions} onClick={handleActionsEditSave} color="primary">
             {t("save")}
           </Button>
-          <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={onActionsEditCancel} color="secondary">
+          <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={handleActionsEditCancel} color="secondary">
             {t("cancel")}
           </Button>
         </div>
@@ -87,12 +131,7 @@ const DailyActionsEdit = ({ selectedActions, errorsInActions, actionsEditMode, o
 };
 
 DailyActionsEdit.propTypes = {
-  selectedActions: PropTypes.any,
-  errorsInActions: PropTypes.bool.isRequired,
-  actionsEditMode: PropTypes.bool.isRequired,
-  onActionsEditOpen: PropTypes.func.isRequired,
-  onActionsEditCancel: PropTypes.func.isRequired,
-  onActionsEditSave: PropTypes.func.isRequired
+  dayId: PropTypes.number.isRequired
 };
 
 export default DailyActionsEdit;

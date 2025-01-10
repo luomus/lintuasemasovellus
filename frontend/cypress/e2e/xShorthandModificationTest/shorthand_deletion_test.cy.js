@@ -16,8 +16,7 @@ describe("ShorthandDeletion", function () {
 
   it("An observation and observation day can be saved on firstpage for Vakio", function () {
 
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#comment-header").click();
     cy.get("#comment").clear();

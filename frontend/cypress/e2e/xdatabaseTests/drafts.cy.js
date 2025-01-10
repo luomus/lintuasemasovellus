@@ -11,8 +11,7 @@ describe("Drafts", function () {
   });
 
   it("Drafts are saved", function () {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();
@@ -29,8 +28,7 @@ describe("Drafts", function () {
   });
 
   it("Draft is removed after successfully submitting it", () => {
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment-header").click();

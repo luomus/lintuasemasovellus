@@ -7,12 +7,10 @@ import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/idea.css";
+import {useDispatch, useSelector} from "react-redux";
 import {
   getShorthandText,
-  sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts
+  sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts, dateToDayString
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
@@ -20,6 +18,9 @@ import {
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
+import {setLocation, setShorthand, setType} from "../../reducers/formDataReducer/baseFormDataReducer";
+import {emptyShorthand} from "../../reducers/formDataReducer/formDataReducer";
+import {loopThroughCheckForErrors} from "../../shorthand/validations";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -70,33 +71,58 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
+const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { user, station } = useContext(AppContext);
 
   const [defaultShorthand, setDefaultShorthand] = useState([]);
-  const [shorthand, setShorthand] = useState("");
-  const [type, setType] = useState("");
-  const [location, setLocation] = useState("");
+  const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
   const [selectTypes, setSelectTypes] = useState([]);
   const [selectLocations, setSelectLocations] = useState([]);
   const [warning, setWarning] = useState(false);
-  const [sanitizedShorthand, setSanitizedShorthand] = useState("");
   const [observationPeriodCounts, setObservationPeriodCounts] = useState([]);
 
+  const day = useSelector(state => state.formData.baseData.day);
+  const type = useSelector(state => state.formData.baseData.type);
+  const location = useSelector(state => state.formData.baseData.location);
+  const shorthand = useSelector(state => state.formData.baseData.shorthand);
   const notifications = useSelector(state => state.notifications);
 
   useEffect(() => {
     if (!open) {
       return;
     }
+    dispatch(emptyShorthand());
     getDaysObservationPeriodCounts(dayId).then(counts => {
       setObservationPeriodCounts(counts);
     });
-  }, [dayId, open]);
+  }, [open, dayId]);
 
   useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const retrieveShorthand = async (type, location) => {
+      if (type && location){
+        const res = await getShorthandText(dayId, type, location);
+        setDefaultShorthand(res);
+        setActiveObservationPeriodIds(res.map(shorthandObj => shorthandObj.obsPeriodId));
+        initializeDefaultShorthand(res);
+      }
+    };
+
+    if (type && location) {
+      retrieveShorthand(type, location);
+    }
+  }, [open, type, location])
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
     const locationCountByType = {};
 
     station.types.forEach(type => {
@@ -109,9 +135,13 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
 
     const selectTypes = station.types.map(type => ({ type, locationCount: locationCountByType[type] }));
     setSelectTypes(selectTypes);
-  }, [station, observationPeriodCounts]);
+  }, [open, station, observationPeriodCounts]);
 
   useEffect(() => {
+    if (!open) {
+      return;
+    }
+
     const obsPeriodCountByLocation = {};
 
     station.locations.forEach(location => {
@@ -126,7 +156,7 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
 
     const selectLocations = station.locations.map(location => ({ location, observationPeriodCount: obsPeriodCountByLocation[location] }));
     setSelectLocations(selectLocations);
-  }, [type, station, observationPeriodCounts]);
+  }, [open, type, station, observationPeriodCounts]);
 
   const initializeDefaultShorthand = (defaultShorthand) => {
     let text = "";
@@ -138,9 +168,9 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
       text += shorthandObject.endTime + "\n";
     }
     if (text.replace(/(\r\n|\n|\r)/gm, "").trim() === "") {
-      setShorthand("");
+      dispatch(setShorthand(""));
     } else {
-      setShorthand(text);
+      dispatch(setShorthand(text));
     }
   };
 
@@ -186,34 +216,22 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
       removable_ids.push(obsperiod.obsPeriodId);
     }
     await deleteObservationperiods(removable_ids);
-    retrieveShorthand(type, location);
     handleClose();
   };
 
   const handleSave = async () => {
     await handleDelete();
     setDayId(dayId);
-    const rows = sanitizedShorthand;
+    const rows = loopThroughCheckForErrors(shorthand);
     const periods = loopThroughObservationPeriods(rows, type, location);
     const observations = loopThroughObservations(rows, user.id);
 
     await sendEditedShorthand(periods, observations, dayId, user.id);
-    await retrieveShorthand(type, location);
     handleClose();
   };
 
-  const retrieveShorthand = async (type, location) => {
-    if (type && location){
-      const res = await getShorthandText(dayId, type, location);
-      setDefaultShorthand(res);
-      initializeDefaultShorthand(res);
-    }
-  };
-
   const handleClose = () => {
-    setType("");
-    setLocation("");
-    setShorthand("");
+    dispatch(emptyShorthand());
     handleCloseModal();
   };
 
@@ -230,7 +248,7 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
       <Fade in={open}>
         <div className={classes.paper}>
           <h2> {t("editShorthand")}</h2>
-          <h2> {date} </h2>
+          <h2> {day} </h2>
           <h3> {t("chooseTypeAndLocation")}</h3>
           <Grid
             container
@@ -248,8 +266,7 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
                   select: {
                     value: type,
                     onChange: (event) => {
-                      setType(event.target.value);
-                      retrieveShorthand(event.target.value, location);
+                      dispatch(setType(event.target.value));
                     }
                   }
                 }}
@@ -276,8 +293,7 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
                   select: {
                     value: location,
                     onChange: (event) => {
-                      setLocation(event.target.value);
-                      retrieveShorthand(type, event.target.value);
+                      dispatch(setLocation(event.target.value));
                     }
                   }
                 }}
@@ -293,12 +309,8 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock
+                activeObservationPeriodIds={activeObservationPeriodIds}
                 dayList={dayList}
-                setSanitizedShorthand={setSanitizedShorthand}
-                setShorthand={setShorthand}
-                shorthand={shorthand}
-                date={new Date(date)}
-                type={type}
               />
             </Grid>
             <Grid item xs={12}>
@@ -365,7 +377,6 @@ const EditShorthand = ({ dayList, date, dayId, open, handleCloseModal }) => {
 
 EditShorthand.propTypes = {
   dayList: PropTypes.array,
-  date: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
   handleCloseModal: PropTypes.func.isRequired,

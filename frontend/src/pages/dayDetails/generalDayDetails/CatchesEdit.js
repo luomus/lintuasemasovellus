@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -15,6 +15,10 @@ import { Add, Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import Notification from "../../../globalComponents/Notification";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
+import {resetNotifications} from "../../../reducers/notificationsReducer";
+import {addOneCatchRow, setCatches} from "../../../reducers/formDataReducer/catchRowsReducer";
+import {deleteCatchRow, editCatchRow} from "../../../services";
+import {useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -34,16 +38,79 @@ const useStyles = makeStyles(theme => ({
 })
 );
 
-const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEditMode, onAddNewCatch, onCatchesEditOpen, onCatchesEditSave, onCatchesEditCancel }) => {
+const CatchesEdit = ({ dayId }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const catchRows = useSelector(state => state.formData.catchRows);
+  const notifications = useSelector(state => state.notifications);
+
+  const [catchesEditMode, setCatchesEditMode] = useState(false);
+  const [catchesBeforeEdit, setCachesBeforeEdit] = useState();
+  const [catchRowKeyToEdit, setCatchRowKeyToEdit] = useState();
+  const [errorsInCatches, setErrorsInCaches] = useState(false);
+
+  useEffect(() => {
+    let value = false;
+    Object.keys(notifications["catches"]).map(row => {
+      if (notifications["catches"][String(row)].errors.length > 0) {
+        value = true;
+      }
+    });
+    Object.keys(catchRows).map(row => {
+      if (catchRows[String(row)].lukumaara === 0) {
+        value = true;
+      }
+    });
+    setErrorsInCaches(value);
+  }, [notifications, catchRows]);
+
+  const handleCatchesEditOpen = useCallback((event) => {
+    const c = event.currentTarget.getAttribute("data-cache");
+    const key = catchRows[c].key;
+    setCachesBeforeEdit(catchRows);
+    setCatchRowKeyToEdit(key);
+    setCatchesEditMode(true);
+  }, [catchRows]);
+
+  const handleCatchesEditCancel = useCallback(() => {
+    dispatch(setCatches(catchesBeforeEdit));
+    dispatch(resetNotifications());
+    setCatchesEditMode(false);
+  }, [catchesBeforeEdit]);
+
+  const handleAddNewCatch = useCallback(() => {
+    const maxKey = catchRows.length === 0 ? 0 : Math.max.apply(Math, catchRows.map(row => row.key));
+    const newKey = maxKey + 1;
+    setCachesBeforeEdit(catchRows);
+    setCatchRowKeyToEdit(newKey);
+    setCatchesEditMode(true);
+    dispatch(addOneCatchRow(newKey));
+  }, [catchRows]);
+
+  const handleCatchesEditSave = useCallback(() => {
+    const catchRow = catchRows.filter(row => row.key === catchRowKeyToEdit)[0];
+    if (!catchRow) {
+      if (catchesBeforeEdit.some(row => row.key === catchRowKeyToEdit)) {
+        deleteCatchRow(dayId, catchRowKeyToEdit);
+      }
+    } else {
+      editCatchRow(dayId, [catchRow]);
+    }
+
+    dispatch(resetNotifications());
+    setCatchesEditMode(false);
+  }, [dayId, catchRows, catchRowKeyToEdit]);
+
+  const cr = catchRows.filter(row => row.key === catchRowKeyToEdit)[0];
 
   return (
     <>
       <Typography variant="h6" component="h2" >
         {t("catches")}
       </Typography>
-      {(catches.length > 0 && !catchesEditMode)
+      {(catchRows.length > 0 && !catchesEditMode)
         ? /* LIST CATCHES */
         <Table className={classes.catchTable} size="medium" aria-label="a dense table">
           <TableHead>
@@ -55,23 +122,23 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
               <TableCell align="left">{t("netCodes")}</TableCell>
               <TableCell align="left">{t("length")}</TableCell>
               <TableCell align="left">
-                <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={onAddNewCatch} variant="contained" color="primary">
+                <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary">
                   <Add fontSize="small" />
                 </IconButton>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(catches).map((c) =>
-              <TableRow key={catches[String(c)].key}>
-                <TableCell component="th" scope="row">{catches[String(c)].pyydys}</TableCell>
-                <TableCell align="left" id="catchArea">{catches[String(c)].pyyntialue}</TableCell>
-                <TableCell align="left" id="wasOpen">{catches[String(c)].alku} - {catches[String(c)].loppu}</TableCell>
-                <TableCell align="left" id="amount">{catches[String(c)].lukumaara}</TableCell>
-                <TableCell align="left" id="netCodes">{catches[String(c)].verkkokoodit ? catches[String(c)].verkkokoodit : "-"}</TableCell>
-                <TableCell align="left" id="netLength">{catches[String(c)].verkonPituus > 0 ? catches[String(c)].verkonPituus : "-"}</TableCell>
+            {Object.keys(catchRows).map((c) =>
+              <TableRow key={catchRows[String(c)].key}>
+                <TableCell component="th" scope="row">{catchRows[String(c)].pyydys}</TableCell>
+                <TableCell align="left" id="catchArea">{catchRows[String(c)].pyyntialue}</TableCell>
+                <TableCell align="left" id="wasOpen">{catchRows[String(c)].alku} - {catchRows[String(c)].loppu}</TableCell>
+                <TableCell align="left" id="amount">{catchRows[String(c)].lukumaara}</TableCell>
+                <TableCell align="left" id="netCodes">{catchRows[String(c)].verkkokoodit ? catchRows[String(c)].verkkokoodit : "-"}</TableCell>
+                <TableCell align="left" id="netLength">{catchRows[String(c)].verkonPituus > 0 ? catchRows[String(c)].verkonPituus : "-"}</TableCell>
                 <TableCell align="left">
-                  <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={onCatchesEditOpen} variant="contained" color="primary">
+                  <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={handleCatchesEditOpen} variant="contained" color="primary">
                     <Edit fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -82,17 +149,17 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
         : (catchesEditMode) /* EDIT ONE CATCH ROW */
           ?
           <div>
-            {(editedCatches.length > 0)
+            {cr
               ? /* SHOW CATCH ROW AS EDITABLE ELEMENT */
               <div>
                 <Notification category="catches" />
-                <CatchType cr={editedCatches[0]} />
+                <CatchType cr={cr} />
                 <Button id="catchesEditSave" className={classes.button} variant="contained"
-                  onClick={onCatchesEditSave} color="primary"
+                  onClick={handleCatchesEditSave} color="primary"
                   disabled={errorsInCatches}>
                   {t("save")}
                 </Button>
-                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={onCatchesEditCancel} color="secondary">
+                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary">
                   {t("cancel")}
                 </Button>
               </div>
@@ -100,11 +167,11 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
               <div>
                 <Typography variant="body1" color="error" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
                 <Button id="catchesEditSave" className={classes.deleteButton} variant="contained"
-                  onClick={onCatchesEditSave}
+                  onClick={handleCatchesEditSave}
                   disabled={errorsInCatches}>
                   {t("remove")}
                 </Button>
-                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={onCatchesEditCancel} color="secondary">
+                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary">
                   {t("cancel")}
                 </Button>
               </div>
@@ -113,7 +180,7 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
           : /* NO CATCHES FOR THAT DAY*/
           <Typography variant="body1"  >
             {t("noCatchesDeclared")}
-            <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={onAddNewCatch} variant="contained" color="primary"  >
+            <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary"  >
               <Add fontSize="small" />
             </IconButton>
           </Typography>
@@ -122,15 +189,8 @@ const DailyActionsEdit = ({ catches, editedCatches, errorsInCatches, catchesEdit
   );
 };
 
-DailyActionsEdit.propTypes = {
-  catches: PropTypes.any.isRequired,
-  editedCatches: PropTypes.any.isRequired,
-  errorsInCatches: PropTypes.bool.isRequired,
-  catchesEditMode: PropTypes.bool.isRequired,
-  onAddNewCatch: PropTypes.func.isRequired,
-  onCatchesEditOpen: PropTypes.func.isRequired,
-  onCatchesEditSave: PropTypes.func.isRequired,
-  onCatchesEditCancel: PropTypes.func.isRequired,
+CatchesEdit.propTypes = {
+  dayId: PropTypes.number.isRequired
 };
 
-export default DailyActionsEdit;
+export default CatchesEdit;

@@ -1,10 +1,10 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 import PropTypes from "prop-types";
 import LocalInput from "./LocalInput";
-import { StyledTableCell } from "../../../globalComponents/common";
+import {StyledTableCell} from "../../../globalComponents/common";
 
 
-const Row = ({ s, date }) => {
+const Row = ({ s }) => {
   const [localOther, setLocalOther] = useState(0);
   const [localGau, setLocalGau] = useState(0);
   const [scatterObs, setScatterObs] = useState(0);
@@ -59,11 +59,11 @@ const Row = ({ s, date }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localOther} */}
-        <LocalInput inputRef={input1Ref} onChange={setLocalOther} date={date} dataType="localOther" count={localOther} species={s.species} />
+        <LocalInput inputRef={input1Ref} onChange={setLocalOther} dataType="localOther" count={localOther} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localGåu} */}
-        <LocalInput inputRef={input2Ref} onChange={setLocalGau} date={date} dataType="localGau" count={localGau} species={s.species} />
+        <LocalInput inputRef={input2Ref} onChange={setLocalGau} dataType="localGau" count={localGau} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right" name="migrantTotal" className="dotted">
         {s.constMigration + s.nightMigration + s.otherMigration + scatterObs}
@@ -79,7 +79,7 @@ const Row = ({ s, date }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* s.scatterObs */}
-        <LocalInput inputRef={input3Ref} onChange={setScatterObs} date={date} dataType="scatter" count={scatterObs} species={s.species} />
+        <LocalInput inputRef={input3Ref} onChange={setScatterObs} dataType="scatter" count={scatterObs} species={s.species} />
       </StyledTableCell>
     </>
   );
@@ -88,6 +88,5 @@ const Row = ({ s, date }) => {
 export default Row;
 
 Row.propTypes = {
-  s: PropTypes.object.isRequired,
-  date: PropTypes.string.isRequired
+  s: PropTypes.object.isRequired
 };

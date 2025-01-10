@@ -33,8 +33,7 @@ describe("validShorthand", function () {
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#comment-header").click();
-    cy.get("#date-picker-inline").clear();
-    cy.get("#date-picker-inline").type(date);
+    cy.inputDate(date);
     cy.get("#observers").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment").clear();

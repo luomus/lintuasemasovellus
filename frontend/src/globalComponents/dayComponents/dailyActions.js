@@ -5,7 +5,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleDailyActions } from "../../reducers/dailyActionsReducer";
+import { toggleDailyActions } from "../../reducers/formDataReducer/dailyActionsReducer";
 import { setNotifications } from "../../reducers/notificationsReducer";
 import Notification from "../Notification";
 import { AppContext } from "../../AppContext";
@@ -46,8 +46,9 @@ const HankoActions = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { t } = useTranslation();
-  const clicks = useSelector(state => state.dailyActions);
-  const allCatchRows = useSelector(state => state.catchRows);
+
+  const clicks = useSelector(state => state.formData.dailyActions);
+  const allCatchRows = useSelector(state => state.formData.catchRows);
 
   const validate = (target) => {
     let toNotifications = [];
@@ -101,27 +102,27 @@ const HankoActions = () => {
       <Notification category="dailyactions" />
       <Grid item xs={12} >
         <FormGroup row className={classes.formGroup} >
-          <FormControlLabel className={classes.formControlLabel}
+          { clicks.standardObs !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={clicks.standardObs} onChange={(event) => handleChange(event.target)} name="standardObs" color="primary" className={classes.checkbox} />}
-            label={t("standardObs")} labelPlacement="end" />
-          <FormControlLabel className={classes.formControlLabel}
+            label={t("standardObs")} labelPlacement="end" /> }
+          { clicks.gåu !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={clicks.gåu} onChange={(event) => handleChange(event.target)} name="gåu" color="primary" className={classes.checkbox} />}
-            label={t("gåu")} labelPlacement="end" />
-          <FormControlLabel className={classes.formControlLabel}
+            label={t("gåu")} labelPlacement="end" /> }
+          { clicks.standardRing !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={clicks.standardRing} onChange={(event) => handleChange(event.target)} name="standardRing" color="primary" className={classes.checkbox} />}
-            label={t("standardRing")} labelPlacement="end" />
-          <FormControlLabel className={classes.formControlLabel}
+            label={t("standardRing")} labelPlacement="end" /> }
+          { clicks.owlStandard !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={clicks.owlStandard} onChange={(event) => handleChange(event.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
-            label={t("owlStandard")} labelPlacement="end" />
-          <FormControlLabel className={classes.formControlLabel}
+            label={t("owlStandard")} labelPlacement="end" /> }
+          { clicks.mammals !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={clicks.mammals} onChange={(event) => handleChange(event.target)} name="mammals" color="primary" className={classes.checkbox} />}
-            label={t("mammals")} labelPlacement="end" />
-          <FormControlLabel className={classes.formControlLabel}
+            label={t("mammals")} labelPlacement="end" /> }
+          { clicks.attachments !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={clicks.attachments}
               onChange={(event) => handleChange(event.target)}
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
             </TextField>}
-            label={t("attachments")} labelPlacement="start" />
+            label={t("attachments")} labelPlacement="start" /> }
         </FormGroup>
       </Grid>
     </Grid>

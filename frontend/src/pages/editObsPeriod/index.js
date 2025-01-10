@@ -7,11 +7,9 @@ import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/idea.css";
+import {useDispatch, useSelector} from "react-redux";
 import {
-  getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand
+  getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand, dateToDayString, getDaysObservationPeriodCounts
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
@@ -19,6 +17,9 @@ import {
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
+import {loopThroughCheckForErrors} from "../../shorthand/newValidations";
+import {setLocation, setShorthand, setType} from "../../reducers/formDataReducer/baseFormDataReducer";
+import {emptyShorthand} from "../../reducers/formDataReducer/formDataReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,18 +70,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
+const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { user, station } = useContext(AppContext);
 
-  const [shorthand, setShorthand] = useState("");
-  const [type, setType] = useState("");
-  const [location, setLocation] = useState("");
-  const [warning, setWarning] = useState(false);
-  const [sanitizedShorthand, setSanitizedShorthand] = useState("");
-
+  const day = useSelector(state => state.formData.baseData.day);
+  const type = useSelector(state => state.formData.baseData.type);
+  const location = useSelector(state => state.formData.baseData.location);
+  const shorthand = useSelector(state => state.formData.baseData.shorthand);
   const notifications = useSelector(state => state.notifications);
+
+  const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
+  const [warning, setWarning] = useState(false);
+
+  useEffect(() => {
+    if (open && obsPeriod.id) {
+      dispatch(emptyShorthand());
+      dispatch(setType(obsPeriod.observationType));
+      dispatch(setLocation(obsPeriod.location));
+      getShorthandByObsPeriod(obsPeriod.id).then(shorthand => {
+        initializeDefaultShorthand(shorthand);
+      });
+      setActiveObservationPeriodIds([obsPeriod.id]);
+    }
+  }, [open, obsPeriod]);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
     let text = obsPeriod.startTime + "\n";
@@ -88,7 +103,7 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
       text += block.shorthandBlock + "\n";
     }
     text += obsPeriod.endTime;
-    setShorthand(text);
+    dispatch(setShorthand(text));
   };
 
   const handleDialogOpen = () => {
@@ -136,7 +151,7 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
   const handleSave = async () => {
     await handleDelete();
     setDayId(obsPeriod.day_id);
-    const rows = sanitizedShorthand;
+    const rows = loopThroughCheckForErrors(shorthand);
     const periods = loopThroughObservationPeriods(rows, type, location);
     const observations = loopThroughObservations(rows, user.id);
 
@@ -144,16 +159,10 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
     handleClose();
   };
 
-
-  useEffect(() => {
-    if (obsPeriod.id) {
-      setType(obsPeriod.observationType);
-      setLocation(obsPeriod.location);
-      getShorthandByObsPeriod(obsPeriod.id).then(shorthand => {
-        initializeDefaultShorthand(shorthand);
-      });
-    }
-  }, [obsPeriod]);
+  const handleClose = () => {
+    dispatch(emptyShorthand());
+    handleCloseModal();
+  }
 
   return (
     <Modal
@@ -168,7 +177,7 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
       <Fade in={open}>
         <div className={classes.paper}>
           <h2> {t("editShorthand")} </h2>
-          <h3> {t("obsPeriod")} {date} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
+          <h3> {t("obsPeriod")} {day} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
           <Grid
             container
             alignItems="flex-start"
@@ -181,11 +190,12 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
                 fullWidth
                 label={t("type")}
                 id="selectTypeInModification"
+                value={type}
                 slotProps={{
                   select: {
-                    value: type,
                     onChange: (event) => {
-                      setType(event.target.value);
+                      console.log('change');
+                      dispatch(setType(event.target.value));
                     }
                   }
                 }}
@@ -211,7 +221,7 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
                   select: {
                     value: location,
                     onChange: (event) => {
-                      setLocation(event.target.value);
+                      dispatch(setLocation(event.target.value));
                     }
                   }
                 }}
@@ -227,12 +237,8 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock
+                activeObservationPeriodIds={activeObservationPeriodIds}
                 dayList={dayList}
-                setSanitizedShorthand={setSanitizedShorthand}
-                setShorthand={setShorthand}
-                shorthand={shorthand}
-                date={new Date(date)}
-                type={type}
               />
             </Grid>
             <Grid item xs={12}>
@@ -299,10 +305,9 @@ const EditObsPeriod = ({ dayList, date, obsPeriod, open, handleClose }) => {
 
 EditObsPeriod.propTypes = {
   dayList: PropTypes.array,
-  date: PropTypes.string.isRequired,
   obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
 export default EditObsPeriod;
