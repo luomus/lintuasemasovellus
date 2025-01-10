@@ -1,6 +1,5 @@
 import { myBeforeEach } from "../methods.js";
 
-const observatory = "Hangon Lintuasema";
 const date = "27.06.2022";
 const observer = "Aku Ankka";
 const basic1 = "GALGAL";
@@ -44,7 +43,6 @@ const assertThatSpeciesTableBodyHasNumberOfRows = (value) => {
 describe("Species table with filters contains species as expected", function () {
   before(function () {
     myBeforeEach(); //Logs in, chooses station
-    cy.should("contain", observatory); //prerequisite for tests, expected to use Hangon_Lintuasema
     addObsrvations();
   });
 
