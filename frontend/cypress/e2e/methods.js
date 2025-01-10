@@ -21,4 +21,5 @@ export function myBeforeEach() {
     });
 
   cy.contains("Hangon Lintuasema");
+  cy.waitUntilHomePageReady();
 }

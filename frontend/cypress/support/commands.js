@@ -31,3 +31,7 @@ Cypress.Commands.add("inputDate", (date) => {
   cy.wait(0);
   cy.get("#date-picker-inline").should("be.enabled");
 });
+
+Cypress.Commands.add("waitUntilHomePageReady", () => {
+  cy.get("#date-picker-inline").should("be.enabled");
+});
