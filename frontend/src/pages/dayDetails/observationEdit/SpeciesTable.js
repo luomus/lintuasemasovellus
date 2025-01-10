@@ -13,7 +13,6 @@ import Row from "./Row";
 import SearchBar from "../../../globalComponents/SearchBar";
 import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
 import { AppContext } from "../../../AppContext";
-import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

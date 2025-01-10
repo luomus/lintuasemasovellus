@@ -11,6 +11,6 @@ export const dayStringToDate = (day) => {
   if (day === null) {
     return null;
   }
-  const parts = day.split('.');
+  const parts = day.split(".");
   return new Date(parts[2], parts[1] - 1, parts[0]);
 };

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -15,10 +15,10 @@ import { Add, Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import Notification from "../../../globalComponents/Notification";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
-import {resetNotifications} from "../../../reducers/notificationsReducer";
-import {addOneCatchRow, setCatches} from "../../../reducers/formDataReducer/catchRowsReducer";
-import {deleteCatchRow, editCatchRow} from "../../../services";
-import {useDispatch, useSelector} from "react-redux";
+import { resetNotifications } from "../../../reducers/notificationsReducer";
+import { addOneCatchRow, setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
+import { deleteCatchRow, editCatchRow } from "../../../services";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   button: {

@@ -16,8 +16,8 @@ import { FileCopy } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {dateToDayString, dayStringToDate} from "../../../services";
-import {useSelector} from "react-redux";
+import { dateToDayString, dayStringToDate } from "../../../services";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(() => ({
   formControlLabel: {

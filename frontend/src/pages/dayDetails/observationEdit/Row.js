@@ -1,7 +1,7 @@
-import React, {useEffect, useLayoutEffect, useState} from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import PropTypes from "prop-types";
 import LocalInput from "./LocalInput";
-import {StyledTableCell} from "../../../globalComponents/common";
+import { StyledTableCell } from "../../../globalComponents/common";
 
 
 const Row = ({ s }) => {

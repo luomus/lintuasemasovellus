@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
 import { AppContext } from "../../../AppContext";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   container: {

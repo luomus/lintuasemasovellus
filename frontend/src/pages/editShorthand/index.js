@@ -7,10 +7,10 @@ import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getShorthandText,
-  sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts, dateToDayString
+  sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
@@ -18,9 +18,9 @@ import {
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
-import {setLocation, setShorthand, setType} from "../../reducers/formDataReducer/baseFormDataReducer";
-import {emptyShorthand} from "../../reducers/formDataReducer/formDataReducer";
-import {loopThroughCheckForErrors} from "../../shorthand/validations";
+import { setLocation, setShorthand, setType } from "../../reducers/formDataReducer/baseFormDataReducer";
+import { emptyShorthand } from "../../reducers/formDataReducer/formDataReducer";
+import { loopThroughCheckForErrors } from "../../shorthand/validations";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -116,7 +116,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
     if (type && location) {
       retrieveShorthand(type, location);
     }
-  }, [open, type, location])
+  }, [open, type, location]);
 
   useEffect(() => {
     if (!open) {

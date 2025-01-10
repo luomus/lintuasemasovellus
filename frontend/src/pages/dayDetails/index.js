@@ -11,7 +11,7 @@ import { ObservationEdit } from "./observationEdit";
 import { refreshDays } from "../../reducers/daysReducer";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import {setInitialFormData} from "../../reducers/formDataReducer/formDataReducer";
+import { setInitialFormData } from "../../reducers/formDataReducer/formDataReducer";
 
 const useStyles = makeStyles(() => ({
   paper: {

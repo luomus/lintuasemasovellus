@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux'
-import dailyActionsReducer, {setDailyActions, setDefaultActions} from "./dailyActionsReducer";
-import catchRowsReducer, {setCatches} from "./catchRowsReducer";
+import { combineReducers } from "redux";
+import dailyActionsReducer, { setDailyActions, setDefaultActions } from "./dailyActionsReducer";
+import catchRowsReducer, { setCatches } from "./catchRowsReducer";
 import baseFormDataReducer, {
   setInitialBaseFormData,
   setDay,
@@ -10,8 +10,8 @@ import baseFormDataReducer, {
   setShorthand,
   setType
 } from "./baseFormDataReducer";
-import {dayStringToDate, getCatches} from "../../services";
-import {createSelector} from "reselect";
+import { dayStringToDate, getCatches } from "../../services";
+import { createSelector } from "reselect";
 
 export const dateSelector = createSelector(
   [state => state.formData.baseData.day],

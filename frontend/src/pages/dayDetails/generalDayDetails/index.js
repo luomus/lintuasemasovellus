@@ -1,14 +1,14 @@
-import React, {useCallback} from "react";
-import {Grid} from "@mui/material";
-import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useCallback } from "react";
+import { Grid } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
-import {editComment, editObservers} from "../../../services";
+import { editComment, editObservers } from "../../../services";
 import TextEdit from "./TextEdit";
 import DailyActionsEdit from "./DailyActionsEdit";
 import CatchesEdit from "./CatchesEdit";
-import {setComment, setObservers} from "../../../reducers/formDataReducer/baseFormDataReducer";
+import { setComment, setObservers } from "../../../reducers/formDataReducer/baseFormDataReducer";
 
 
 export const GeneralDayDetails = ({ dayId }) => {

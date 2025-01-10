@@ -1,32 +1,32 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
-import {Button, CircularProgress, Grid, Snackbar, Typography} from "@mui/material";
-import {makeStyles} from "@mui/styles";
-import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { Button, CircularProgress, Grid, Snackbar, Typography } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Alert from "../../../globalComponents/Alert";
-import {loopThroughObservationPeriods, loopThroughObservations,} from "../../../shorthand/parseShorthandField";
-import {searchDayInfo, sendDay, sendEverything} from "../../../services";
-import {refreshDays} from "../../../reducers/daysReducer";
-import {setDailyActions, setDefaultActions} from "../../../reducers/formDataReducer/dailyActionsReducer";
-import {setCatches} from "../../../reducers/formDataReducer/catchRowsReducer";
-import {resetNotifications} from "../../../reducers/notificationsReducer";
+import { loopThroughObservationPeriods, loopThroughObservations, } from "../../../shorthand/parseShorthandField";
+import { searchDayInfo, sendDay, sendEverything } from "../../../services";
+import { refreshDays } from "../../../reducers/daysReducer";
+import { setDailyActions, setDefaultActions } from "../../../reducers/formDataReducer/dailyActionsReducer";
+import { setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
+import { resetNotifications } from "../../../reducers/notificationsReducer";
 import Help from "../../../globalComponents/Help";
-import {addDraft, deleteDraft} from "../../../services/draftService";
-import {ObservationFormHeader} from "./ObservationFormHeader";
-import {ObservationFormMainSection} from "./ObservationFormMainSection";
-import {ObservationFormDrafts} from "./ObservationFormDrafts";
-import {ObservationFormCopy} from "./ObservationFormCopy";
+import { addDraft, deleteDraft } from "../../../services/draftService";
+import { ObservationFormHeader } from "./ObservationFormHeader";
+import { ObservationFormMainSection } from "./ObservationFormMainSection";
+import { ObservationFormDrafts } from "./ObservationFormDrafts";
+import { ObservationFormCopy } from "./ObservationFormCopy";
 import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
-import {AppContext} from "../../../AppContext";
+import { AppContext } from "../../../AppContext";
 import {
   emptyShorthand,
   setInitialFormData, updateFormDataWithDayData
 } from "../../../reducers/formDataReducer/formDataReducer";
-import {loopThroughCheckForErrors} from "../../../shorthand/newValidations";
-import {setBaseFormData} from "../../../reducers/formDataReducer/baseFormDataReducer";
-import {dateToDayString} from "../../../services";
+import { loopThroughCheckForErrors } from "../../../shorthand/newValidations";
+import { setBaseFormData } from "../../../reducers/formDataReducer/baseFormDataReducer";
+import { dateToDayString } from "../../../services";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -128,7 +128,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const initFormData = async (day) => {
     const dayJson = await searchDayInfo(day, observatory);
     await dispatch(setInitialFormData(day, observatory, dayJson[0]));
-  }
+  };
 
   const updateFormDataDay = async (day) => {
     if (day) {
@@ -137,7 +137,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     } else {
       await dispatch(updateFormDataWithDayData(day, observatory, {}));
     }
-  }
+  };
 
   const stringifyDailyActions = () => {
     if ("attachments" in formData.dailyActions) {
@@ -263,7 +263,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
 
   const handleDraftSelect = (el) => {
     setDraftID(undefined);
-    dispatch(setBaseFormData({...formData.baseData, ...el}));
+    dispatch(setBaseFormData({ ...formData.baseData, ...el }));
     if (el.selectedactions) {
       dispatch(setDailyActions(JSON.parse(el.selectedactions)));
     } else {

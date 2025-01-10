@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   TextField, Button, IconButton, Typography, FormGroup, FormControlLabel
@@ -7,10 +7,10 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle, Edit, RemoveCircleOutlineRounded } from "@mui/icons-material";
 import { makeStyles, withStyles } from "@mui/styles";
 import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
-import {setDailyActions} from "../../../reducers/formDataReducer/dailyActionsReducer";
-import {editActions} from "../../../services";
-import {useDispatch, useSelector} from "react-redux";
-import {AppContext} from "../../../AppContext";
+import { setDailyActions } from "../../../reducers/formDataReducer/dailyActionsReducer";
+import { editActions } from "../../../services";
+import { useDispatch, useSelector } from "react-redux";
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles(theme => ({
   formControlLabel: {

@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -16,8 +16,8 @@ import { isNightValidation } from "../../shorthand/isNightValidation";
 import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 import LoadingSpinner from "../LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import {dateSelector} from "../../reducers/formDataReducer/formDataReducer";
-import {setShorthand} from "../../reducers/formDataReducer/baseFormDataReducer";
+import { dateSelector } from "../../reducers/formDataReducer/formDataReducer";
+import { setShorthand } from "../../reducers/formDataReducer/baseFormDataReducer";
 
 
 let timeout = null;
@@ -49,11 +49,11 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
       }
       validateAndSetNotifications(editorInstance, shorthand);
     }
-  }, [activeObservationPeriodIds, dayList])
+  }, [activeObservationPeriodIds, dayList]);
 
   const updateShorthand = (newShorthand) => {
     dispatch(setShorthand(newShorthand));
-  }
+  };
 
   const validateObservationOnTop = async (value) => {
 
@@ -152,7 +152,7 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
     const newResult = await setValidateObsOnTopNotification(value,editor,result);
 
     dispatch(setNotifications([[], newResult], "shorthand", 0));
-  }
+  };
 
   /**
    * Start checking for errors only after being idle for the duration of

@@ -10,7 +10,7 @@ import {
 import { Add, ExpandMore } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
@@ -20,7 +20,7 @@ import { addOneCatchRow, } from "../../../reducers/formDataReducer/catchRowsRedu
 import CatchType from "../../../globalComponents/dayComponents/catchType";
 import Notification from "../../../globalComponents/Notification";
 import { AppContext } from "../../../AppContext";
-import {setComment, setLocation, setType} from "../../../reducers/formDataReducer/baseFormDataReducer";
+import { setComment, setLocation, setType } from "../../../reducers/formDataReducer/baseFormDataReducer";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

@@ -12,10 +12,10 @@ import localeFI from "date-fns/locale/fi";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import Help from "../../../globalComponents/Help";
-import {useDispatch, useSelector} from "react-redux";
-import {setObservers, setDay} from "../../../reducers/formDataReducer/baseFormDataReducer";
-import {dateToDayString} from "../../../services";
-import {dateSelector} from "../../../reducers/formDataReducer/formDataReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { setObservers, setDay } from "../../../reducers/formDataReducer/baseFormDataReducer";
+import { dateToDayString } from "../../../services";
+import { dateSelector } from "../../../reducers/formDataReducer/formDataReducer";
 
 const useStyles = makeStyles(() => ({
   sendButton: {

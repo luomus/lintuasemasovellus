@@ -53,7 +53,7 @@ describe("InvalidDataInShorthandOrLocationOrTypeOrObservers", function () {
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get("#comment-header").click();
     cy.inputDate(date);
-    cy.get("#observers").should('be.enabled').clear();
+    cy.get("#observers").should("be.enabled").clear();
     cy.get("#observers").type(observer);
     cy.get("#comment").clear();
     cy.get("#comment").type(comment);

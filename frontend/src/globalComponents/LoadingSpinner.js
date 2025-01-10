@@ -63,5 +63,8 @@ const LoadingSpinner = ({ overlay = false, spinning = true, size, children }) =>
 export default LoadingSpinner;
 
 LoadingSpinner.propTypes = {
-  size: PropTypes.string
+  size: PropTypes.string,
+  overlay: PropTypes.bool,
+  spinning: PropTypes.bool,
+  children: PropTypes.node
 };

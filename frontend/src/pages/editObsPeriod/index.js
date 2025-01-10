@@ -7,9 +7,9 @@ import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand, dateToDayString, getDaysObservationPeriodCounts
+  getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand
 } from "../../services";
 import {
   loopThroughObservationPeriods, loopThroughObservations, setDayId
@@ -17,9 +17,9 @@ import {
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
-import {loopThroughCheckForErrors} from "../../shorthand/newValidations";
-import {setLocation, setShorthand, setType} from "../../reducers/formDataReducer/baseFormDataReducer";
-import {emptyShorthand} from "../../reducers/formDataReducer/formDataReducer";
+import { loopThroughCheckForErrors } from "../../shorthand/newValidations";
+import { setLocation, setShorthand, setType } from "../../reducers/formDataReducer/baseFormDataReducer";
+import { emptyShorthand } from "../../reducers/formDataReducer/formDataReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -162,7 +162,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
   const handleClose = () => {
     dispatch(emptyShorthand());
     handleCloseModal();
-  }
+  };
 
   return (
     <Modal
@@ -194,7 +194,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
                 slotProps={{
                   select: {
                     onChange: (event) => {
-                      console.log('change');
+                      console.log("change");
                       dispatch(setType(event.target.value));
                     }
                   }
