@@ -86,14 +86,12 @@ export const setBaseFormData = (baseData) => {
   };
 };
 
-export const setInitialBaseFormData = (day, observers, comment) => {
+export const setInitialBaseFormData = (initialData = {}) => {
   return {
     type: "SET_BASE_FORM_DATA",
     data: {
       ...initialState,
-      day: day || null,
-      observers: observers || "",
-      comment: comment || ""
+      ...initialData
     }
   };
 };

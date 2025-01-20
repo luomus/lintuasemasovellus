@@ -11,7 +11,8 @@ import { ObservationEdit } from "./observationEdit";
 import { refreshDays } from "../../reducers/daysReducer";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import { setInitialFormData } from "../../reducers/formDataReducer/formDataReducer";
+import { setFormData } from "../../reducers/formDataReducer/formDataReducer";
+import { dayInfoToFormData, searchDayInfo } from "../../services";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -45,13 +46,19 @@ export const DayDetails = () => {
     const thisDay = dayList.find(d => d.day === day && d.observatory === observatory) || null;
     setDayId(thisDay ? thisDay.id : null);
     if (thisDay) {
-      dispatch(setInitialFormData(day, observatory, thisDay)).then(() => {
+      setInitialFormData(day).then(() => {
         setLoading(false);
       });
     } else {
       setLoading(false);
     }
   }, [dayList, day, observatory]);
+
+  const setInitialFormData = async (day) => {
+    const dayInfo = await searchDayInfo(day, observatory);
+    const initialFormData = dayInfoToFormData(day, dayInfo, observatory);
+    await dispatch(setFormData(initialFormData));
+  };
 
   if (loading) {
     return (

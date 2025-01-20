@@ -1,5 +1,13 @@
 const hankoInitialState = { standardObs: false, gåu: false, standardRing: false, owlStandard: false, mammals: false, attachments: "0" };
 
+export const getDefaultActions = (observatory) => {
+  if (observatory === "Hangon_Lintuasema") {
+    return hankoInitialState;
+  } else {
+    return { "attachments": 0 };
+  }
+}
+
 
 const dailyActionsReducer = (state = {}, action) => {
   switch (action.type) {
@@ -37,12 +45,7 @@ export const setDefaultActions = (observatory) => {
   if (observatory === "Hangon_Lintuasema") {
     return {
       type: "SET_ACTIONS",
-      data: { dailyActions: hankoInitialState }
-    };
-  } else {
-    return {
-      type: "SET_ACTIONS",
-      data: { dailyActions: { "attachments": 0 } }
+      data: { dailyActions: getDefaultActions(observatory) }
     };
   }
 };

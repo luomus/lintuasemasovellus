@@ -5,6 +5,7 @@ from application.api.classes.observation.models import Observation
 from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.location.services import getLocationId
 from application.api.classes.type.services import getTypeIdByName
+from application.api.classes.catch.services import get_all as get_all_catches
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
@@ -14,6 +15,7 @@ from flask_login import current_user
 from application.api.classes.account.models import Account
 
 from datetime import datetime, date
+import json
 
 def addDayFromReq(req):
     observatory_id = getObservatoryId(req['observatory'])
@@ -175,12 +177,12 @@ def get_day_without_id(day, observatory): #Tries to find a day without knowing t
     if not isinstance(day, date) and not day == '0NaN.0NaN.NaN':
         day = datetime.strptime(day, '%d.%m.%Y')
     obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
-    res = []
+
     if not obsday:
-        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
+        return { 'id': 0, 'comment': "", 'observers': "", 'catches': []}
     else:
-        res.append({ 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
-    return res
+        selectedactions = json.loads(obsday.selectedactions) if obsday.selectedactions else None
+        return { 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': selectedactions, 'catches': get_all_catches(obsday.id) }
 
 def getDayId(day, observatory_id): #finds dayid with day(=date) and observatory id
     d = Observatoryday.query.filter_by(day = day, observatory_id = observatory_id, is_deleted = 0).first()

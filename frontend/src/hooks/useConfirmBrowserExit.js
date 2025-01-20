@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const useConfirmBrowserExit = (
-  defaultEnabled = false
+  shouldConfirmExit = () => true
 ) => {
-  const [enabled, setEnabled] = useState(defaultEnabled);
-
   useEffect(() => {
     function listener(e) {
-      if (enabled) {
+      if (shouldConfirmExit()) {
         e.preventDefault();
       }
     }
@@ -17,15 +15,5 @@ export const useConfirmBrowserExit = (
     return () => {
       window.removeEventListener("beforeunload", listener);
     };
-  }, [enabled]);
-
-  return {
-    enable() {
-      setEnabled(true);
-    },
-    disable() {
-      setEnabled(false);
-    }
-  };
+  }, [shouldConfirmExit]);
 };
-

@@ -115,7 +115,7 @@ export const ObservationFormHeader = ({ confirmDateChange, toDayDetails }) => {
   };
 
   const handleDateChange = (newDate) => {
-    if (!confirmDateChange || dateChangeConfirmed) {
+    if (!confirmDateChange() || dateChangeConfirmed) {
       dispatch(setDay(dateToDayString(newDate)));
     } else {
       if (confirm(t("changeDateWhenObservationsConfirm"))) {
@@ -198,6 +198,6 @@ export const ObservationFormHeader = ({ confirmDateChange, toDayDetails }) => {
 };
 
 ObservationFormHeader.propTypes = {
-  confirmDateChange: PropTypes.bool,
+  confirmDateChange: PropTypes.func.isRequired,
   toDayDetails: PropTypes.func.isRequired
 };

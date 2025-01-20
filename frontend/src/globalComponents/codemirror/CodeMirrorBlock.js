@@ -43,19 +43,22 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
   const [editorInstance, setEditorInstance] = useState();
 
   useEffect(() => {
-    if (editorInstance && dayList && date) {
+    if (editorInstance) {
       if (timeout) {
         clearTimeout(timeout);
       }
       validateAndSetNotifications(editorInstance, shorthand);
     }
-  }, [activeObservationPeriodIds, dayList]);
+  }, [activeObservationPeriodIds, date, dayList]);
 
   const updateShorthand = (newShorthand) => {
     dispatch(setShorthand(newShorthand));
   };
 
   const validateObservationOnTop = async (value) => {
+    if (!date || !dayList) {
+      return false;
+    }
 
     const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
 

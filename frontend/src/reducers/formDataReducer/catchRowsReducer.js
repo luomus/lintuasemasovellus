@@ -83,11 +83,4 @@ export const setCatches = (rowData) => {
   }
 };
 
-export const setNewCatchRow = () => {
-  return {
-    type: "SET_ROWS",
-    data: initialState
-  };
-};
-
 export default catchRowsReducer;
