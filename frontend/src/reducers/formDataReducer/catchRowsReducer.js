@@ -6,15 +6,12 @@ const catchRowsReducer = (state = [], action) => {
     case "ADD_ROW":
       return [
         ...state,
-        {
-          key: state.length > 0 ? state[state.length-1].key +1: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0,
-          verkonPituus: 0, alku: "00:00", loppu: "00:00"
-        }
+        { ...initialState, key: state.length > 0 ? state[state.length - 1].key + 1 : 1 }
       ];
     case "ADD_ROW_WITH_KEY":
       return [
         ...state,
-        { key: action.data, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" }
+        { ...initialState, key: action.data }
       ];
     case "DELETE_ROW":
       return state.filter(row => row.key !== action.data.key);

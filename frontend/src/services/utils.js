@@ -21,16 +21,16 @@ export const dayInfoToFormData = (day, dayInfo, observatory, type, location, sho
   return {
     baseData: {
       day,
-      observers: dayInfo['observers'] || "",
-      comment: dayInfo['comment'] || "",
+      observers: dayInfo["observers"] || "",
+      comment: dayInfo["comment"] || "",
       type: type || "",
       location: location || "",
       shorthand: shorthand || ""
     },
-    dailyActions: dayInfo['selectedactions'] ? dayInfo['selectedactions'] : getDefaultActions(observatory),
-    catchRows: dayInfo['catches'] ? dayInfo['catches']: []
-  }
-}
+    dailyActions: dayInfo["selectedactions"] ? dayInfo["selectedactions"] : getDefaultActions(observatory),
+    catchRows: dayInfo["catches"] ? dayInfo["catches"]: []
+  };
+};
 
 export const objectsDiffer = (obj1, obj2, checkOnlyKeys = undefined) => {
   if (Array.isArray(obj1)) {
@@ -53,4 +53,4 @@ export const objectsDiffer = (obj1, obj2, checkOnlyKeys = undefined) => {
   }
 
   return result;
-}
+};

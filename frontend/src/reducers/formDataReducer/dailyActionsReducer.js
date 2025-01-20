@@ -6,7 +6,7 @@ export const getDefaultActions = (observatory) => {
   } else {
     return { "attachments": 0 };
   }
-}
+};
 
 
 const dailyActionsReducer = (state = {}, action) => {
