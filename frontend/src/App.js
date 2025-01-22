@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Routes, Route } from "react-router-dom";
+import {
+  Route,
+  createRoutesFromElements,
+  RouterProvider,
+  createHashRouter
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { HomePage, UserManual, DayList, DayDetails, Login } from "./pages";
-import NavBar from "./globalComponents/NavBar";
-import Footer from "./globalComponents/Footer";
+import { HomePage, UserManual, DayList, DayDetails, Logout, ClearObservatory } from "./pages";
 import { getPerson, getCurrentUser } from "./services";
 import { setUser } from "./reducers/userReducer";
 import { setUserObservatory } from "./reducers/userObservatoryReducer";
@@ -15,21 +18,15 @@ import LoadingSpinner from "./globalComponents/LoadingSpinner";
 import { makeStyles } from "@mui/styles";
 import { createSelector } from "reselect";
 import { AppContext } from "./AppContext";
+import MainContainer from "./globalComponents/MainContainer";
+import ProtectedRoute from "./globalComponents/ProtectedRoute";
 
 const useStyles = makeStyles({
-  mainContainer: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    paddingBottom: "50px",
-    overflowY: "auto"
-  },
   container: {
     height: "100%",
     display: "flex",
     flexDirection: "column"
-  },
-
+  }
 });
 
 const stationSelector = createSelector(
@@ -88,48 +85,43 @@ const App = () => {
     return (
       <LoadingSpinner/>
     );
-  } else if (!user.id) {
-    return (
-      <CssBaseline>
-        <div className={classes.mainContainer}>
-          <Login />
-          <Footer />
-        </div>
-      </CssBaseline>
-    );
-  } else {
-    let mainContent;
-    if (station) {
-      const context = {
-        user,
-        observatory,
-        station,
-        stations,
-        speciesData
-      };
-
-      mainContent = (
-        <AppContext.Provider value={context}>
-          <Routes>
-            <Route path="/listdays" element={<DayList />}/>
-            <Route className={classes.container} path="/daydetails/:day" element={<DayDetails />}/>
-            <Route path="/manual" element={<UserManual />}/>
-            <Route path="/" element={<HomePage />}/>
-          </Routes>
-        </AppContext.Provider>
-      );
-    }
-
-    return (
-      <CssBaseline>
-        <div className={classes.mainContainer}>
-          <NavBar user={user} observatory={observatory} stations={stations} />
-          { mainContent }
-          <Footer />
-        </div>
-      </CssBaseline>
-    );
   }
+
+  let showNavBar = true;
+  let appContext;
+
+  if (!user.id) {
+    showNavBar = false;
+  } else if (station) {
+    appContext = {
+      user,
+      observatory,
+      station,
+      stations,
+      speciesData
+    };
+  }
+
+  const router = createHashRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<MainContainer showNavBar={showNavBar} />}>
+        <Route path="/logout" element={<Logout />}></Route>
+        <Route path="/changeObservatory" element={<ClearObservatory />}></Route>
+        <Route path="/listdays" element={<ProtectedRoute><DayList /></ProtectedRoute>}/>
+        <Route className={classes.container} path="/daydetails/:day" element={<ProtectedRoute><DayDetails /></ProtectedRoute>}/>
+        <Route path="/manual" element={<ProtectedRoute><UserManual /></ProtectedRoute>}/>
+        <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>}/>
+      </Route>
+    )
+  );
+
+  return (
+    <CssBaseline>
+      <AppContext.Provider value={appContext}>
+        <RouterProvider router={router} />
+      </AppContext.Provider>
+    </CssBaseline>
+  );
 };
 
 export default App;

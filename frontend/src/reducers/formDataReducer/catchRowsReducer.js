@@ -1,17 +1,16 @@
-const initialState =
-  [{ key: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" }];
+const defaultCatchRow = { key: 1, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" };
 
 const catchRowsReducer = (state = [], action) => {
   switch (action.type) {
     case "ADD_ROW":
       return [
         ...state,
-        { ...initialState, key: state.length > 0 ? state[state.length - 1].key + 1 : 1 }
+        { ...defaultCatchRow, key: state.length > 0 ? state[state.length - 1].key + 1 : 1 }
       ];
     case "ADD_ROW_WITH_KEY":
       return [
         ...state,
-        { ...initialState, key: action.data }
+        { ...defaultCatchRow, key: action.data }
       ];
     case "DELETE_ROW":
       return state.filter(row => row.key !== action.data.key);

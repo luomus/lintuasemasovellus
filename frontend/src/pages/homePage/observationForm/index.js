@@ -75,6 +75,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const [errorHappened, setErrorHappened] = useState(false);
   const [draftID, setDraftID] = useState();
   const [initialFormData, setInitialFormData] = useState();
+  const [navigateToDayDetails, setNavigateToDayDetails] = useState(false);
 
   const shouldConfirmExit = () => {
     return formHasChanges();
@@ -102,8 +103,13 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   }, [formData.baseData.day]);
 
   useEffect(() => {
-    formHasChanges();
+    if (navigateToDayDetails) {
+      navigate(`/daydetails/${formData.baseData.day}`);
+      setNavigateToDayDetails(false);
+    }
+  }, [navigateToDayDetails]);
 
+  useEffect(() => {
     const { day, observers, comment, type, location, shorthand } = formData.baseData;
 
     if (!type && !location && !shorthand) return;
@@ -200,6 +206,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       observationPeriods: observationPeriodsToSend,
       observations: observationsToSend
     };
+    const newInitialFormData = { ...formData, baseData: { ...formData.baseData, type: "", location: "", shorthand: "" } };
 
     try {
       await sendEverything(data);
@@ -208,6 +215,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       dispatch(refreshDays());
       deleteDraft(draftID);
       setDraftID(undefined);
+      setInitialFormData(newInitialFormData);
       onSaveSuccess();
     } catch (error) {
       console.error(error.message);
@@ -233,8 +241,12 @@ export const ObservationForm = ({ onSaveSuccess }) => {
           selectedactions: JSON.stringify(selectedactions)
         };
         await sendDay(data);
+        setInitialFormData({
+          ...initialFormData,
+          baseData: { ...initialFormData.baseData, observers },
+        });
       }
-      navigate(`/daydetails/${day}`);
+      setNavigateToDayDetails(true);
     } catch (error) {
       console.error(error.message);
       setErrorHappened(true);

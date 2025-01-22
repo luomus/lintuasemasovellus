@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";
-import { HashRouter as Router } from "react-router-dom";
 import "./i18n";
 import { ThemeProvider } from "@mui/material/styles";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
@@ -15,9 +14,7 @@ root.render(
   <ThemeProvider theme={theme}>
     <StyledEngineProvider injectFirst>
       <Provider store={store}>
-        <Router>
-          <App />
-        </Router>
+        <App />
       </Provider>
     </StyledEngineProvider>
   </ThemeProvider>

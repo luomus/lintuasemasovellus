@@ -190,7 +190,6 @@ const CatchType = ({ cr }) => {
     dispatch(setNotifications([[], []], "catches", cr.key));
   };
 
-
   return (
     <Grid item xs={12}>
       <FormGroup row className={classes.formGroup}>

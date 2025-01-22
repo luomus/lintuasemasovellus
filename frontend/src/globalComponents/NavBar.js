@@ -17,11 +17,9 @@ import {
   Typography
 } from "@mui/material";
 import { Dehaze, Replay } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import PropTypes from "prop-types";
-import { getLogout, postUserObservatory } from "../services";
+import { useSelector } from "react-redux";
+import { postUserObservatory } from "../services";
 import { setUserObservatory } from "../reducers/userObservatoryReducer";
-import { setUser } from "../reducers/userReducer";
 import store from "../store";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -70,10 +68,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const NavBar = ({ user, observatory, stations }) => {
+const NavBar = () => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.user);
+  const observatory = useSelector(state => state.userObservatory);
+  const stations = useSelector(state => state.stations);
 
   const [state, setState] = useState({
     right: false
@@ -106,25 +107,11 @@ const NavBar = ({ user, observatory, stations }) => {
     setSelectorOpen(false);
   };
 
-  const handleSelectorOpen = () => {
-    store.dispatch(setUserObservatory(""));
-    setSelectorOpen(true);
-  };
-
   const selectUserObservatory = (event) => {
     event.preventDefault();
     postUserObservatory({ observatory:selectedObservatory });
     store.dispatch(setUserObservatory(selectedObservatory));
   };
-
-  const handleLogout = () => {
-    getLogout()
-      .then(() => {
-        dispatch(setUser({}));
-        window.location.reload(false);
-      });
-  };
-
 
   const observatorySelector =
     <Dialog id="observatory-dialog" disableEscapeKeyDown open={selectorOpen} onClose={handleDialogClose}>
@@ -145,7 +132,7 @@ const NavBar = ({ user, observatory, stations }) => {
             }}
           >
             {
-              stations.map((station, i) =>
+              (stations || []).map((station, i) =>
                 <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
                   {station.observatory.replace("_", " ")}
                 </MenuItem>
@@ -178,13 +165,14 @@ const NavBar = ({ user, observatory, stations }) => {
 
   const selectObservatory = observatoryIsSelected
     ?
-    <Button className={classes.userButton}
-      onClick={handleSelectorOpen}
-      id="observatorySelector"
-      startIcon={<Replay />}
-    >
-      {t("changeObservatory")}
-    </Button>
+    <Link to='/changeObservatory'>
+      <Button className={classes.userButton}
+        id="observatorySelector"
+        startIcon={<Replay />}
+      >
+        {t("changeObservatory")}
+      </Button>
+    </Link>
     :
     null;
 
@@ -209,7 +197,6 @@ const NavBar = ({ user, observatory, stations }) => {
             {observatoryAndUserInfo()}
             <Link to='/logout'>
               <Button className={classes.userButton}
-                onClick={handleLogout}
                 id="logout-link"
                 startIcon={<SvgIcon>
                   <path d="M0 0h24v24H0z" fill="none"/>
@@ -228,9 +215,3 @@ const NavBar = ({ user, observatory, stations }) => {
 };
 
 export default NavBar;
-
-NavBar.propTypes = {
-  user: PropTypes.object,
-  observatory: PropTypes.string,
-  stations: PropTypes.array.isRequired
-};
