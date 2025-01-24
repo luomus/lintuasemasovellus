@@ -30,7 +30,7 @@ import {
 import { loopThroughCheckForErrors } from "../../../shorthand/newValidations";
 import { setBaseFormData } from "../../../reducers/formDataReducer/baseFormDataReducer";
 import { dateToDayString } from "../../../services";
-import { useConfirmBrowserExit } from "../../../hooks/useConfirmBrowserExit";
+import { useConfirmExit } from "../../../hooks/useConfirmExit";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -77,11 +77,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const [initialFormData, setInitialFormData] = useState();
   const [navigateToDayDetails, setNavigateToDayDetails] = useState(false);
 
-  const shouldConfirmExit = () => {
-    return formHasChanges();
-  };
-
-  useConfirmBrowserExit(shouldConfirmExit);
+  useConfirmExit(() => formHasChanges());
 
   useEffect(() => {
     dispatch(refreshDays());

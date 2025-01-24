@@ -13,6 +13,7 @@ import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
 import { setFormData } from "../../reducers/formDataReducer/formDataReducer";
 import { dayInfoToFormData, searchDayInfo } from "../../services";
+import {useConfirmExit} from "../../hooks/useConfirmExit";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -34,6 +35,8 @@ export const DayDetails = () => {
 
   const [dayId, setDayId] = useState();
   const [loading, setLoading] = useState(true);
+
+  useConfirmExit(() => false);
 
   useEffect(() => {
     dispatch(refreshDays());

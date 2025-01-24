@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useBlocker } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-export const useConfirmBrowserExit = (
+export const useConfirmExit = (
   shouldConfirmExit = () => true
 ) => {
   const { t } = useTranslation();
