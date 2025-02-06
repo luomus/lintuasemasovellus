@@ -11,6 +11,7 @@ import { setDailyActions } from "../../../reducers/formDataReducer/dailyActionsR
 import { editActions } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { AppContext } from "../../../AppContext";
+import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
 
 const useStyles = makeStyles(theme => ({
   formControlLabel: {
@@ -49,7 +50,7 @@ const DailyActionsEdit = ({ dayId }) => {
   const { observatory } = useContext(AppContext);
 
   const dailyActions = useSelector(state => state.formData.dailyActions);
-  const notifications = useSelector(state => state.notifications);
+  const notifications = useSelector(state => state.formState.notifications);
 
   const [actionsEditMode, setActionsEditMode] = useState(false);
   const [actionsBeforeEdit, setActionsBeforeEdit] = useState();
@@ -82,7 +83,7 @@ const DailyActionsEdit = ({ dayId }) => {
         actionsToSave = { ...actionsToSave, "attachments": 0 };
       }
     }
-    editActions(dayId, JSON.stringify(actionsToSave));
+    dispatch(saveData(() => editActions(dayId, JSON.stringify(actionsToSave))));
     setActionsEditMode(!actionsEditMode);
   }, [dayId, dailyActions, actionsEditMode, observatory]);
 

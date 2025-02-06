@@ -9,6 +9,7 @@ import TextEdit from "./TextEdit";
 import DailyActionsEdit from "./DailyActionsEdit";
 import CatchesEdit from "./CatchesEdit";
 import { setComment, setObservers } from "../../../reducers/formDataReducer/baseFormDataReducer";
+import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
 
 
 export const GeneralDayDetails = ({ dayId }) => {
@@ -20,14 +21,14 @@ export const GeneralDayDetails = ({ dayId }) => {
 
   const observersOnSave = useCallback((newObservers) => {
     if (newObservers.length !== 0) {
-      dispatch(setObservers(observers));
-      editObservers(dayId, newObservers);
+      dispatch(setObservers(newObservers));
+      dispatch(saveData(() => editObservers(dayId, newObservers)));
     }
   }, [dayId]);
 
   const commentOnSave = useCallback((newComment) => {
-    dispatch(setComment(comment));
-    editComment(dayId, newComment);
+    dispatch(setComment(newComment));
+    dispatch(saveData(() => editComment(dayId, newComment)));
   }, [dayId]);
 
   return (

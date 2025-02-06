@@ -86,12 +86,13 @@ const PeriodTable = (props) => {
     setPage(0);
   }, []);
 
-  const handleClose = () => {
+  const handleCloseModal = () => {
     setModalOpen(false);
-    if (editModalOpen) {
-      refetchObservations();
-      setEditModalOpen(false);
-    }
+  };
+
+  const handleCloseEditModal = () => {
+    refetchObservations();
+    setEditModalOpen(false);
   };
 
   const handleErrorSnackOpen = () => {
@@ -152,14 +153,14 @@ const PeriodTable = (props) => {
           <ObservationPeriod
             obsPeriod={obsPeriod}
             open={modalOpen}
-            handleClose={handleClose}
+            handleClose={handleCloseModal}
             handleErrorSnackOpen={handleErrorSnackOpen}
           />
           <EditObsPeriod
             dayList={dayList}
             obsPeriod={obsPeriod}
             open={editModalOpen}
-            handleCloseModal={handleClose}
+            handleCloseModal={handleCloseEditModal}
           />
         </Table>
       </TableContainer>

@@ -20,6 +20,7 @@ import { AppContext } from "../../AppContext";
 import { loopThroughCheckForErrors } from "../../shorthand/newValidations";
 import { setLocation, setShorthand, setType } from "../../reducers/formDataReducer/baseFormDataReducer";
 import { emptyShorthand } from "../../reducers/formDataReducer/formDataReducer";
+import { saveData } from "../../reducers/formStateReducer/saveStateReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -80,10 +81,11 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
   const type = useSelector(state => state.formData.baseData.type);
   const location = useSelector(state => state.formData.baseData.location);
   const shorthand = useSelector(state => state.formData.baseData.shorthand);
-  const notifications = useSelector(state => state.notifications);
+  const notifications = useSelector(state => state.formState.notifications);
 
   const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
   const [warning, setWarning] = useState(false);
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
   useEffect(() => {
     if (open && obsPeriod.id) {
@@ -142,20 +144,26 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
     }
   };
 
-  const handleDelete = async () => {
-    await deleteObservationperiods([Number(obsPeriod.id)]);
-    handleClose();
+  const handleDelete = async (close=true) => {
+    setButtonsDisabled(true);
+    await dispatch(saveData(() => deleteObservationperiods([Number(obsPeriod.id)])));
+    setButtonsDisabled(false);
+    if (close) {
+      handleClose();
+    }
   };
 
 
   const handleSave = async () => {
-    await handleDelete();
+    await handleDelete(false);
     setDayId(obsPeriod.day_id);
     const rows = loopThroughCheckForErrors(shorthand);
     const periods = loopThroughObservationPeriods(rows, type, location);
     const observations = loopThroughObservations(rows, user.id);
 
-    await sendEditedShorthand(periods, observations, obsPeriod.day_id, user.id);
+    setButtonsDisabled(true);
+    await dispatch(saveData(() => sendEditedShorthand(periods, observations, obsPeriod.day_id, user.id)));
+    setButtonsDisabled(false);
     handleClose();
   };
 
@@ -249,7 +257,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
               <Box pr={2} pt={2}>
                 <Button
                   id="saveButtonInShorthandModification"
-                  disabled={saveButtonIsDisabled()}
+                  disabled={saveButtonIsDisabled() || buttonsDisabled}
                   variant="contained"
                   color="primary"
                   onClick={handleSave}>
@@ -259,6 +267,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
               <Box pr={2} pt={2}>
                 <Button
                   id="cancelButtonInShorthandModification"
+                  disabled={buttonsDisabled}
                   variant="contained"
                   color="secondary"
                   onClick={handleClose}>
@@ -268,7 +277,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
               <Box pr={2} pt={2}>
                 <Button
                   id="removeButtonInShorthandModification"
-                  disabled={deleteButtonIsDisabled()}
+                  disabled={deleteButtonIsDisabled() || buttonsDisabled}
                   variant="contained"
                   onClick={handleDialogOpen}
                   className={classes.deleteButton}>

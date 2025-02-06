@@ -4,9 +4,9 @@ import daysReducer from "./reducers/daysReducer";
 import stationsReducer from "./reducers/obsStationReducer";
 import userObservatoryReducer from "./reducers/userObservatoryReducer";
 import userReducer from "./reducers/userReducer";
-import notificationsReducer from "./reducers/notificationsReducer";
 import speciesReducer from "./reducers/speciesReducer";
 import formDataReducer from "./reducers/formDataReducer/formDataReducer";
+import formStateReducer from "./reducers/formStateReducer/formStateReducer";
 
 
 const reducer = combineReducers({
@@ -14,9 +14,9 @@ const reducer = combineReducers({
   stations: stationsReducer,
   days: daysReducer,
   userObservatory: userObservatoryReducer,
-  notifications: notificationsReducer,
   speciesData: speciesReducer,
-  formData: formDataReducer
+  formData: formDataReducer,
+  formState: formStateReducer
 });
 
 const store = createStore(

@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/formDataReducer/catchRowsReducer";
-import { setNotifications } from "../../reducers/notificationsReducer";
+import { setNotifications } from "../../reducers/formStateReducer/notificationsReducer";
 
 
 const useStyles = makeStyles((theme) => ({

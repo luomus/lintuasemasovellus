@@ -3,16 +3,20 @@ import { useBlocker } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const useConfirmExit = (
-  shouldConfirmExit = () => true
+  shouldConfirmExit = () => true,
+  onRouteExit = () => {}
 ) => {
   const { t } = useTranslation();
 
   useBlocker(() => {
+    let block = false;
     if (shouldConfirmExit()) {
-      return !window.confirm(t("confirmExit"));
-    } else {
-      return false;
+      block = !window.confirm(t("confirmExit"));
     }
+    if (!block) {
+      onRouteExit();
+    }
+    return block;
   });
 
   useEffect(() => {

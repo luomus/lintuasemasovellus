@@ -57,10 +57,6 @@ export const HomePage = () => {
       .then(daysJson => setLatestDays(daysJson));
   };
 
-  const handleDateClick = (s) => {
-    navigate(`/daydetails/${s.day}`);
-  };
-
   return (
     <div>
       <Grid container
@@ -87,8 +83,7 @@ export const HomePage = () => {
                       {
                         latestDays
                           .map((s, i) =>
-                            <TableRow id="latestDaysRow" key={i} hover
-                              onClick={() => handleDateClick(s)} className={classes.pointerCursor} >
+                            <TableRow id="latestDaysRow" key={i} hover className={classes.pointerCursor} >
                               <StyledTableCell component="th" scope="row">
                                 <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                                   {s.day}

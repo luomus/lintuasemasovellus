@@ -15,7 +15,7 @@ import {
   setDefaultActions
 } from "../../../reducers/formDataReducer/dailyActionsReducer";
 import { setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
-import { resetNotifications } from "../../../reducers/notificationsReducer";
+import { resetNotifications } from "../../../reducers/formStateReducer/notificationsReducer";
 import Help from "../../../globalComponents/Help";
 import { addDraft, deleteDraft } from "../../../services/draftService";
 import { ObservationFormHeader } from "./ObservationFormHeader";
@@ -25,12 +25,15 @@ import { ObservationFormCopy } from "./ObservationFormCopy";
 import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../../AppContext";
 import {
+  clearFormData,
   emptyShorthand, setFormData,
 } from "../../../reducers/formDataReducer/formDataReducer";
 import { loopThroughCheckForErrors } from "../../../shorthand/newValidations";
 import { setBaseFormData } from "../../../reducers/formDataReducer/baseFormDataReducer";
 import { dateToDayString } from "../../../services";
 import { useConfirmExit } from "../../../hooks/useConfirmExit";
+import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
+import { clearFormState } from "../../../reducers/formStateReducer/formStateReducer";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -63,25 +66,31 @@ export const ObservationForm = ({ onSaveSuccess }) => {
 
   const dayList = useSelector(state => state.days);
   const formData = useSelector(state => state.formData);
-  const notifications = useSelector(state => state.notifications);
+  const notifications = useSelector(state => state.formState.notifications);
+  const saving = useSelector(state => state.formState.saveState.saving);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [saveDisabled, setSaveDisabled] = useState(false);
-  const [saveLoadingIcon, setSaveLoadingIcon] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
   const [draftID, setDraftID] = useState();
   const [initialFormData, setInitialFormData] = useState();
   const [navigateToDayDetails, setNavigateToDayDetails] = useState(false);
 
-  useConfirmExit(() => formHasChanges());
+  useConfirmExit(
+    () => formHasChanges(),
+    () => {
+      setLoading(true);
+      dispatch(clearFormState());
+      dispatch(clearFormData(observatory))
+    }
+  );
 
   useEffect(() => {
     dispatch(refreshDays());
-    dispatch(resetNotifications());
+    dispatch(clearFormState());
     initFormData(dateToDayString(new Date())).then(() => {
       setLoading(false);
     });
@@ -186,11 +195,10 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const sendData = async () => {
     const { day, observers, comment, type, location } = formData.baseData;
 
-    setSaveLoadingIcon(true);
     const rows = loopThroughCheckForErrors(formData.baseData.shorthand);
     const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
     const observationsToSend = loopThroughObservations(rows, user.id);
-    setSaveDisabled(true);
+
     let data = {
       day,
       comment: comment,
@@ -205,7 +213,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     const newInitialFormData = { ...formData, baseData: { ...formData.baseData, type: "", location: "", shorthand: "" } };
 
     try {
-      await sendEverything(data);
+      await dispatch(saveData(() => sendEverything(data), true));
       setFormSent(true);
       dispatch(emptyShorthand());
       dispatch(refreshDays());
@@ -217,8 +225,6 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       console.error(error.message);
       setErrorHappened(true);
     }
-    setSaveLoadingIcon(false);
-    setSaveDisabled(false);
   };
 
   const handleToDayDetails = async () => {
@@ -341,14 +347,14 @@ export const ObservationForm = ({ onSaveSuccess }) => {
               id="saveButton"
               className={classes.sendButton}
               onClick={sendData}
-              disabled={saveButtonDisabled() || saveDisabled}
+              disabled={saveButtonDisabled() || saving}
               color="primary"
               variant="contained"
             >
-              {saveDisabled ? t("loading") : t("saveMigrant")}
+              {saving ? t("loading") : t("saveMigrant")}
             </Button>
             <Help title={t("helpForSaveMigrantButton")} placement="right"/>
-            { (saveLoadingIcon) &&
+            { (saving) &&
               <CircularProgress className={classes.loadingIcon} color="primary"/>
             }
           </Grid>

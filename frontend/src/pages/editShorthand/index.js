@@ -21,6 +21,7 @@ import { AppContext } from "../../AppContext";
 import { setLocation, setShorthand, setType } from "../../reducers/formDataReducer/baseFormDataReducer";
 import { emptyShorthand } from "../../reducers/formDataReducer/formDataReducer";
 import { loopThroughCheckForErrors } from "../../shorthand/validations";
+import { saveData } from "../../reducers/formStateReducer/saveStateReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -82,13 +83,14 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
   const [selectTypes, setSelectTypes] = useState([]);
   const [selectLocations, setSelectLocations] = useState([]);
   const [warning, setWarning] = useState(false);
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [observationPeriodCounts, setObservationPeriodCounts] = useState([]);
 
   const day = useSelector(state => state.formData.baseData.day);
   const type = useSelector(state => state.formData.baseData.type);
   const location = useSelector(state => state.formData.baseData.location);
   const shorthand = useSelector(state => state.formData.baseData.shorthand);
-  const notifications = useSelector(state => state.notifications);
+  const notifications = useSelector(state => state.formState.notifications);
 
   useEffect(() => {
     if (!open) {
@@ -210,23 +212,29 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (close=true) => {
     let removable_ids = [];
     for (const obsperiod of defaultShorthand) {
       removable_ids.push(obsperiod.obsPeriodId);
     }
-    await deleteObservationperiods(removable_ids);
-    handleClose();
+    setButtonsDisabled(true);
+    await dispatch(saveData(() => deleteObservationperiods(removable_ids)));
+    setButtonsDisabled(false);
+    if (close) {
+      handleClose();
+    }
   };
 
   const handleSave = async () => {
-    await handleDelete();
+    await handleDelete(false);
     setDayId(dayId);
     const rows = loopThroughCheckForErrors(shorthand);
     const periods = loopThroughObservationPeriods(rows, type, location);
     const observations = loopThroughObservations(rows, user.id);
 
-    await sendEditedShorthand(periods, observations, dayId, user.id);
+    setButtonsDisabled(true);
+    await dispatch(saveData(() => sendEditedShorthand(periods, observations, dayId, user.id)));
+    setButtonsDisabled(false);
     handleClose();
   };
 
@@ -321,7 +329,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
               <Box pr={2} pt={2}>
                 <Button
                   id="saveButtonInShorthandModification"
-                  disabled={saveButtonIsDisabled()}
+                  disabled={saveButtonIsDisabled() || buttonsDisabled}
                   variant="contained"
                   color="primary"
                   onClick={handleSave}>
@@ -331,6 +339,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
               <Box pr={2} pt={2}>
                 <Button
                   id="cancelButtonInShorthandModification"
+                  disabled={buttonsDisabled}
                   variant="contained"
                   color="secondary"
                   onClick={handleClose}>
@@ -340,7 +349,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
               <Box pr={2} pt={2}>
                 <Button
                   id="removeButtonInShorthandModification"
-                  disabled={deleteButtonIsDisabled()}
+                  disabled={deleteButtonIsDisabled() || buttonsDisabled}
                   variant="contained"
                   onClick={handleDialogOpen}
                   className={classes.deleteButton}>

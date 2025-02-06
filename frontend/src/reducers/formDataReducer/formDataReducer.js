@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import dailyActionsReducer, { setDailyActions } from "./dailyActionsReducer";
+import dailyActionsReducer, {setDailyActions, setDefaultActions} from "./dailyActionsReducer";
 import catchRowsReducer, { setCatches } from "./catchRowsReducer";
 import baseFormDataReducer, {
   setInitialBaseFormData,
@@ -14,6 +14,14 @@ export const dateSelector = createSelector(
   [state => state.formData.baseData.day],
   (day) => (dayStringToDate(day))
 );
+
+export const clearFormData = (observatory) => {
+  return async dispatch => {
+    dispatch(setInitialBaseFormData());
+    dispatch(setDefaultActions(observatory));
+    dispatch(setCatches([]));
+  };
+};
 
 export const setFormData = (initialFormData) => {
   return async dispatch => {

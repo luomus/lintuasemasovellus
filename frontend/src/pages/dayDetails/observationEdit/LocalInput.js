@@ -4,7 +4,8 @@ import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
 import { AppContext } from "../../../AppContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
 
 const useStyles = makeStyles({
   container: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
 });
 
 const LocalInput = ({ count, species, dataType, onChange, inputRef }) => {
-
+  const dispatch = useDispatch();
   const classes = useStyles();
   const { observatory } = useContext(AppContext);
 
@@ -47,16 +48,11 @@ const LocalInput = ({ count, species, dataType, onChange, inputRef }) => {
 
     if (newValue !== count && Number.isInteger(newValue)) {
       onChange(newValue);
-      try {
-        if (dataType.includes("local")) {
-          await updateLocalObservation(day, observatory, species, newValue, dataType === "localGau" ? 1 : 0);
-        }
-        if (dataType === "scatter") {
-          await updateScatterObservation(day, observatory, species, newValue);
-        }
-      } catch (error) {
-        console.log("error: ", error);
-        alert("Tallennus epäonnistui!");
+      if (dataType.includes("local")) {
+        await dispatch(saveData(() => updateLocalObservation(day, observatory, species, newValue, dataType === "localGau" ? 1 : 0)));
+      }
+      if (dataType === "scatter") {
+        await dispatch(saveData(() => updateScatterObservation(day, observatory, species, newValue)));
       }
     }
   };

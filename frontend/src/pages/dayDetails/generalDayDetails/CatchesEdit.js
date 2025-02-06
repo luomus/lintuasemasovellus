@@ -15,10 +15,11 @@ import { Add, Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import Notification from "../../../globalComponents/Notification";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
-import { resetNotifications } from "../../../reducers/notificationsReducer";
+import { resetNotifications } from "../../../reducers/formStateReducer/notificationsReducer";
 import { addOneCatchRow, setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
 import { deleteCatchRow, editCatchRow } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
+import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -44,7 +45,7 @@ const CatchesEdit = ({ dayId }) => {
   const dispatch = useDispatch();
 
   const catchRows = useSelector(state => state.formData.catchRows);
-  const notifications = useSelector(state => state.notifications);
+  const notifications = useSelector(state => state.formState.notifications);
 
   const [catchesEditMode, setCatchesEditMode] = useState(false);
   const [catchesBeforeEdit, setCachesBeforeEdit] = useState();
@@ -93,10 +94,10 @@ const CatchesEdit = ({ dayId }) => {
     const catchRow = catchRows.filter(row => row.key === catchRowKeyToEdit)[0];
     if (!catchRow) {
       if (catchesBeforeEdit.some(row => row.key === catchRowKeyToEdit)) {
-        deleteCatchRow(dayId, catchRowKeyToEdit);
+        dispatch(saveData(() => deleteCatchRow(dayId, catchRowKeyToEdit)));
       }
     } else {
-      editCatchRow(dayId, [catchRow]);
+      dispatch(saveData(() => editCatchRow(dayId, [catchRow])));
     }
 
     dispatch(resetNotifications());

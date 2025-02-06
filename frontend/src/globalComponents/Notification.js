@@ -50,8 +50,8 @@ const Notification = ({ category="all" }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  let allNotifications = useSelector(state => state.notifications);
-  let nocturnalNotification = useSelector(state => state.notifications.isNight);
+  let allNotifications = useSelector(state => state.formState.notifications);
+  let nocturnalNotification = useSelector(state => state.formState.notifications.isNight);
   let notificationsSet = new Set();
   let errorsSet = new Set();
 

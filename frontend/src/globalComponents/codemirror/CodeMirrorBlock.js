@@ -11,7 +11,7 @@ import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
+import { setNotifications, setNocturnalNotification } from "../../reducers/formStateReducer/notificationsReducer";
 import { isNightValidation } from "../../shorthand/isNightValidation";
 import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
 import LoadingSpinner from "../LoadingSpinner";

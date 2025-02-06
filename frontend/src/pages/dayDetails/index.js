@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  Paper, Grid, Typography
+  Paper, Grid, Typography, CircularProgress
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
@@ -11,9 +11,10 @@ import { ObservationEdit } from "./observationEdit";
 import { refreshDays } from "../../reducers/daysReducer";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import { setFormData } from "../../reducers/formDataReducer/formDataReducer";
+import { clearFormData, setFormData } from "../../reducers/formDataReducer/formDataReducer";
 import { dayInfoToFormData, searchDayInfo } from "../../services";
-import {useConfirmExit} from "../../hooks/useConfirmExit";
+import { useConfirmExit } from "../../hooks/useConfirmExit";
+import { clearFormState } from "../../reducers/formStateReducer/formStateReducer";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -32,13 +33,22 @@ export const DayDetails = () => {
   const { observatory } = useContext(AppContext);
 
   const dayList = useSelector(state => state.days);
+  const saving = useSelector(state => state.formState.saveState.saving);
 
   const [dayId, setDayId] = useState();
   const [loading, setLoading] = useState(true);
 
-  useConfirmExit(() => false);
+  useConfirmExit(
+    () => saving,
+    () => {
+      setLoading(true);
+      dispatch(clearFormState());
+      dispatch(clearFormData(observatory));
+    }
+  );
 
   useEffect(() => {
+    dispatch(clearFormState());
     dispatch(refreshDays());
   }, []);
 
@@ -88,6 +98,7 @@ export const DayDetails = () => {
               <Typography id="dayAndObservatory" variant="h4" component="h2" >
                 {day} {" "}
                 {observatory.replace("_", " ")}
+                {saving && <CircularProgress style={{ marginLeft: "6px" }} size={20}/>}
               </Typography>
             </Grid>
             <Grid item xs={12}>

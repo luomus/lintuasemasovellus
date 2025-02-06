@@ -6,7 +6,7 @@ import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDailyActions } from "../../reducers/formDataReducer/dailyActionsReducer";
-import { setNotifications } from "../../reducers/notificationsReducer";
+import { setNotifications } from "../../reducers/formStateReducer/notificationsReducer";
 import Notification from "../Notification";
 import { AppContext } from "../../AppContext";
 
