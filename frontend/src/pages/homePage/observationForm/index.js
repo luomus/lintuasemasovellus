@@ -84,7 +84,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     () => {
       setLoading(true);
       dispatch(clearFormState());
-      dispatch(clearFormData(observatory))
+      dispatch(clearFormData(observatory));
     }
   );
 

@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import dailyActionsReducer, {setDailyActions, setDefaultActions} from "./dailyActionsReducer";
+import dailyActionsReducer, { setDailyActions, setDefaultActions } from "./dailyActionsReducer";
 import catchRowsReducer, { setCatches } from "./catchRowsReducer";
 import baseFormDataReducer, {
   setInitialBaseFormData,

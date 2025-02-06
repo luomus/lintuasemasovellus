@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getLatestDays } from "../../services";
 import Notification from "../../globalComponents/Notification";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
@@ -41,7 +41,6 @@ const useStyles = makeStyles(() => ({
 export const HomePage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { observatory } = useContext(AppContext);
 
   const [latestDays, setLatestDays] = useState(null);
