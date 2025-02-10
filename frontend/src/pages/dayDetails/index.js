@@ -42,13 +42,12 @@ export const DayDetails = () => {
     () => saving,
     () => {
       setLoading(true);
-      dispatch(clearFormState());
       dispatch(clearFormData(observatory));
+      dispatch(clearFormState());
     }
   );
 
   useEffect(() => {
-    dispatch(clearFormState());
     dispatch(refreshDays());
   }, []);
 

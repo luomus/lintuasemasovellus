@@ -4,7 +4,7 @@ export const getDefaultActions = (observatory) => {
   if (observatory === "Hangon_Lintuasema") {
     return hankoInitialState;
   } else {
-    return { "attachments": 0 };
+    return { };
   }
 };
 
@@ -42,12 +42,10 @@ export const setDailyActions = (dailyActions) => {
 };
 
 export const setDefaultActions = (observatory) => {
-  if (observatory === "Hangon_Lintuasema") {
-    return {
-      type: "SET_ACTIONS",
-      data: { dailyActions: getDefaultActions(observatory) }
-    };
-  }
+  return {
+    type: "SET_ACTIONS",
+    data: { dailyActions: getDefaultActions(observatory) }
+  };
 };
 
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HighlightOff } from "@mui/icons-material";
 import {
   TextField, MenuItem, FormControl,
@@ -84,15 +84,17 @@ const preSetLengths = {
   "Muut petoverkot": 12,
 };
 
-
-
 const CatchType = ({ cr }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const dailyActions = useSelector(state => state.formData.dailyActions);
   const allCatchRows = useSelector(state => state.formData.catchRows);
+
+  useEffect(() => {
+    const result = validate(cr);
+    dispatch(setNotifications([result[0], result[1]], "catches", cr.key));
+  }, [allCatchRows]);
 
   const validate = (cr) => {
     let toNotifications = [];
@@ -124,65 +126,41 @@ const CatchType = ({ cr }) => {
     if ((cr.pyyntialue in hardAmountLimits && cr.lukumaara > hardAmountLimits[String(cr.pyyntialue)])) {
       toErrors.push(t("maxCatchValue", { char1: cr.pyyntialue, char2: hardAmountLimits[String(cr.pyyntialue)] }));
     }
-    if (dailyActions.standardRing) {
-      let standardCatch = false;
-      Object.keys(allCatchRows).map((c) => {
-        if (allCatchRows[String(c)].pyydys === "Vakioverkko") {
-          standardCatch = true;
-        }
-      });
-      if (!standardCatch) {
-        dispatch(setNotifications([[], [t("expectingStandardCatch")]], "catches", 0));
-      }
-    }
     if (cr.pyydys && cr.pyyntialue) {
-      Object.keys(allCatchRows).map((c) => {
+      for (let c of Object.keys(allCatchRows)) {
         if (allCatchRows[String(c)].key !== cr.key && allCatchRows[String(c)].pyydys === cr.pyydys && allCatchRows[String(c)].pyyntialue === cr.pyyntialue && allCatchRows[String(c)].alku === cr.alku && allCatchRows[String(c)].loppu === cr.loppu) {
           toErrors.push(t("duplicateCatches", { char: cr.pyyntialue }));
+          break;
         }
-      });
-    } else {
-      dispatch(setNotifications([[], []], "catches", 0));
+      }
     }
 
     return [toNotifications, toErrors];
   };
 
-
   const handleChange = (target) => {
-    let realTimeRow = cr;
-
-
     if (target.name === "pyydys") {
       //rechoosing catchType, empty area to prevent previous options are from persisting
       dispatch(toggleCatchDetails(cr.key, "pyyntialue", ""));
       dispatch(toggleCatchDetails(cr.key, "lukumaara", 0));
-      realTimeRow = { ...realTimeRow, lukumaara: 0, pyyntialue: "" };
     }
     if (target.name === "pyyntialue") {
       //catch actively clicked, set amount to minumn,
       dispatch(toggleCatchDetails(cr.key, "lukumaara", 1));
-      realTimeRow = { ...realTimeRow, lukumaara: 1 };
     }
 
     if (target.name === "pyyntialue" && !catchesWithoutLength.includes(cr.pyydys)) {//cr.pyydys !== "Rastasverkko") {
       //autofill length for nets that are always the same length
       if (target.value in preSetLengths) {
         dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
-        realTimeRow = { ...realTimeRow, verkonPituus: preSetLengths[String(target.value)] };
       } else {
         dispatch(toggleCatchDetails(cr.key, "verkonPituus", 9));
-        realTimeRow = { ...realTimeRow, verkonPituus: 9 };
       }
     } else if (target.name === "pyydys" && cr.verkonPituus !== 0) {
       //remove previous length autofill, when catch changes
       dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
-      realTimeRow = { ...realTimeRow, verkonPituus: 0 };
     }
     dispatch(toggleCatchDetails(cr.key, target.name, target.value));
-    //run validations on change
-    const result = validate({ ...realTimeRow, [target.name]: target.value });
-    dispatch(setNotifications([result[0], result[1]], "catches", cr.key));
   };
 
   const handleRowRemove = () => {

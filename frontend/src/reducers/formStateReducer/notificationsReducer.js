@@ -60,26 +60,25 @@ export const setNocturnalNotification = (value) => {
 };
 
 
-export const setNotifications = (validationResult, category, rowKey = -1) => {
-
+export const setNotifications = (validationResult, category, key = -1) => {
   if (category === "dailyactions") {
     return {
       type: "SET_DAILYACTION_NOTIFICATIONS",
-      key: rowKey,
+      key,
       data: { notifications: validationResult[0], errors: validationResult[1] }
     };
   }
   if (category === "catches") {
     return {
       type: "SET_CATCH_NOTIFICATIONS",
-      key: rowKey,
+      key,
       data: { notifications: validationResult[0], errors: validationResult[1] }
     };
   }
   if (category === "shorthand") {
     return {
       type: "SET_SHORTHAND_NOTIFICATIONS",
-      key: rowKey,
+      key,
       data: { notifications: validationResult[0], errors: validationResult[1] }
     };
   }

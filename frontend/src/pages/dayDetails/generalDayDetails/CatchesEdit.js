@@ -15,7 +15,6 @@ import { Add, Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import Notification from "../../../globalComponents/Notification";
 import CatchType from "../../../globalComponents/dayComponents/catchType";
-import { resetNotifications } from "../../../reducers/formStateReducer/notificationsReducer";
 import { addOneCatchRow, setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
 import { deleteCatchRow, editCatchRow } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
@@ -77,7 +76,6 @@ const CatchesEdit = ({ dayId }) => {
 
   const handleCatchesEditCancel = useCallback(() => {
     dispatch(setCatches(catchesBeforeEdit));
-    dispatch(resetNotifications());
     setCatchesEditMode(false);
   }, [catchesBeforeEdit]);
 
@@ -100,7 +98,6 @@ const CatchesEdit = ({ dayId }) => {
       dispatch(saveData(() => editCatchRow(dayId, [catchRow])));
     }
 
-    dispatch(resetNotifications());
     setCatchesEditMode(false);
   }, [dayId, catchRows, catchRowKeyToEdit]);
 

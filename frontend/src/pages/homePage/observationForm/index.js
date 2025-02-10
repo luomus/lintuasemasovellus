@@ -15,7 +15,6 @@ import {
   setDefaultActions
 } from "../../../reducers/formDataReducer/dailyActionsReducer";
 import { setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
-import { resetNotifications } from "../../../reducers/formStateReducer/notificationsReducer";
 import Help from "../../../globalComponents/Help";
 import { addDraft, deleteDraft } from "../../../services/draftService";
 import { ObservationFormHeader } from "./ObservationFormHeader";
@@ -83,14 +82,13 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     () => formHasChanges(),
     () => {
       setLoading(true);
-      dispatch(clearFormState());
       dispatch(clearFormData(observatory));
+      dispatch(clearFormState());
     }
   );
 
   useEffect(() => {
     dispatch(refreshDays());
-    dispatch(clearFormState());
     initFormData(dateToDayString(new Date())).then(() => {
       setLoading(false);
     });
@@ -101,7 +99,6 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       return;
     }
     setLoading(true);
-    dispatch(resetNotifications());
     updateFormDataAfterDayChange(formData.baseData.day).then(() => {
       setLoading(false);
     });
@@ -295,7 +292,6 @@ export const ObservationForm = ({ onSaveSuccess }) => {
         }
 
         dispatch(setFormData(newFormData));
-        dispatch(resetNotifications());
       }
     });
   };

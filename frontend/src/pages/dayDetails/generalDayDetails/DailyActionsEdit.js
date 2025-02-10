@@ -92,7 +92,7 @@ const DailyActionsEdit = ({ dayId }) => {
       <Typography variant="h6" component="h2" >
         {t("ObservationActivity")}
       </Typography>
-      {(dailyActions && !actionsEditMode) ?
+      {!actionsEditMode &&
         <FormGroup row className={classes.formGroup}>
           {
             Object.entries(dailyActions).filter(([key]) => key !== "attachments").map(([action, value], i) =>
@@ -114,19 +114,19 @@ const DailyActionsEdit = ({ dayId }) => {
             <Edit fontSize="default" />
           </IconButton>
         </FormGroup>
-        : <div style={{
-          display: "flex",
-          alignItems: "left"
-        }}>
-          <DailyActions />
-          <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions} onClick={handleActionsEditSave} color="primary">
-            {t("save")}
-          </Button>
-          <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={handleActionsEditCancel} color="secondary">
-            {t("cancel")}
-          </Button>
-        </div>
       }
+      <div style={{
+        display: actionsEditMode ? "flex" : "none",
+        alignItems: "left"
+      }}>
+        <DailyActions />
+        <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions} onClick={handleActionsEditSave} color="primary">
+          {t("save")}
+        </Button>
+        <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={handleActionsEditCancel} color="secondary">
+          {t("cancel")}
+        </Button>
+      </div>
     </>
   );
 };
