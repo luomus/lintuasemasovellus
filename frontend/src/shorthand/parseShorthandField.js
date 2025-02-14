@@ -65,6 +65,7 @@ const readyObservation = (observation, userID) => {
   return observation;
 };
 
+export const shorthandTextToLines = (shorthandText) => shorthandText.trim().split(/\n/);
 
 //remember to add dayID to periods in backend
 export const loopThroughObservationPeriods = (shorthandRows, obsType, loc) => {

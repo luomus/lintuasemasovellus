@@ -1,7 +1,7 @@
 import {
   Fade, Modal, Grid, Button,
-  MenuItem, Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle, TextField,
+  Box, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
@@ -12,15 +12,13 @@ import {
   getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand
 } from "../../services";
 import {
-  loopThroughObservationPeriods, loopThroughObservations, setDayId
+  shorthandTextToLines, loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
-import { loopThroughCheckForErrors } from "../../shorthand/newValidations";
-import { setLocation, setShorthand, setType } from "../../reducers/formDataReducer/baseFormDataReducer";
-import { emptyShorthand } from "../../reducers/formDataReducer/formDataReducer";
-import { saveData } from "../../reducers/formStateReducer/saveStateReducer";
+import { saveData } from "../../reducers/savingStateReducer";
+import Select from "../../globalComponents/formComponents/Select";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,17 +69,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
+const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
   const { user, station } = useContext(AppContext);
 
-  const day = useSelector(state => state.formData.baseData.day);
-  const type = useSelector(state => state.formData.baseData.type);
-  const location = useSelector(state => state.formData.baseData.location);
-  const shorthand = useSelector(state => state.formData.baseData.shorthand);
-  const notifications = useSelector(state => state.formState.notifications);
+  const notifications = useSelector(state => state.notifications);
+
+  const [type, setType] = useState("");
+  const [location, setLocation] = useState("");
+  const [shorthand, setShorthand] = useState("");
 
   const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
   const [warning, setWarning] = useState(false);
@@ -89,9 +87,8 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
 
   useEffect(() => {
     if (open && obsPeriod.id) {
-      dispatch(emptyShorthand());
-      dispatch(setType(obsPeriod.observationType));
-      dispatch(setLocation(obsPeriod.location));
+      setType(obsPeriod.observationType);
+      setLocation(obsPeriod.location);
       getShorthandByObsPeriod(obsPeriod.id).then(shorthand => {
         initializeDefaultShorthand(shorthand);
       });
@@ -105,7 +102,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
       text += block.shorthandBlock + "\n";
     }
     text += obsPeriod.endTime;
-    dispatch(setShorthand(text));
+    setShorthand(text);
   };
 
   const handleDialogOpen = () => {
@@ -157,7 +154,7 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
   const handleSave = async () => {
     await handleDelete(false);
     setDayId(obsPeriod.day_id);
-    const rows = loopThroughCheckForErrors(shorthand);
+    const rows = shorthandTextToLines(shorthand);
     const periods = loopThroughObservationPeriods(rows, type, location);
     const observations = loopThroughObservations(rows, user.id);
 
@@ -168,7 +165,9 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
   };
 
   const handleClose = () => {
-    dispatch(emptyShorthand());
+    setType("");
+    setLocation("");
+    setShorthand("");
     handleCloseModal();
   };
 
@@ -191,62 +190,34 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
             alignItems="flex-start"
             spacing={1}>
             <Grid item xs={2}>
-              <TextField
-                className={classes.formControl}
-                select
-                required
-                fullWidth
-                label={t("type")}
+              <Select
                 id="selectTypeInModification"
+                label={t("type")}
+                options={station.types}
                 value={type}
-                slotProps={{
-                  select: {
-                    onChange: (event) => {
-                      console.log("change");
-                      dispatch(setType(event.target.value));
-                    }
-                  }
-                }}
-              >
-                {
-                  station.types.map((type, i) =>
-                    <MenuItem id={type} value={type} key={i}>
-                      {type}
-                    </MenuItem>
-                  )
-                }
-              </TextField>
-            </Grid>
-            <Grid item xs={2}>
-              <TextField
-                className={classes.formControl}
-                select
+                onChange={setType}
                 required
-                fullWidth
-                label={t("location")}
+              />
+            </Grid>
+
+            <Grid item xs={2}>
+              <Select
                 id="selectLocationInModification"
-                slotProps={{
-                  select: {
-                    value: location,
-                    onChange: (event) => {
-                      dispatch(setLocation(event.target.value));
-                    }
-                  }
-                }}
-              >
-                {
-                  station.locations.map((location, i) =>
-                    <MenuItem id={location} value={location} key={i}>
-                      {location}
-                    </MenuItem>
-                  )
-                }
-              </TextField>
+                label={t("location")}
+                options={station.locations}
+                value={location}
+                onChange={setLocation}
+                required
+              />
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock
+                day={day}
+                dayId={dayId}
+                type={type}
+                value={shorthand}
+                onChange={setShorthand}
                 activeObservationPeriodIds={activeObservationPeriodIds}
-                dayList={dayList}
               />
             </Grid>
             <Grid item xs={12}>
@@ -313,7 +284,8 @@ const EditObsPeriod = ({ dayList, obsPeriod, open, handleCloseModal }) => {
 };
 
 EditObsPeriod.propTypes = {
-  dayList: PropTypes.array,
+  day: PropTypes.string.isRequired,
+  dayId: PropTypes.number.isRequired,
   obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleCloseModal: PropTypes.func.isRequired,

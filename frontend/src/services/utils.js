@@ -1,5 +1,3 @@
-import { getDefaultActions } from "../reducers/formDataReducer/dailyActionsReducer";
-
 export const dateToDayString = (date) => {
   if (date === null) {
     return null;
@@ -17,19 +15,41 @@ export const dayStringToDate = (day) => {
   return new Date(parts[2], parts[1] - 1, parts[0]);
 };
 
-export const dayInfoToFormData = (day, dayInfo, observatory, type, location, shorthand) => {
+export const getEmptyFormData = (day = null) => ({
+  day,
+  observers: "",
+  comment: "",
+  dailyActions: {},
+  catchRows: [],
+  type: "",
+  location: "",
+  shorthand: ""
+});
+
+export const dayInfoToFormData = (day, dayInfo, defaultActions) => {
   return {
-    baseData: {
-      day,
-      observers: dayInfo["observers"] || "",
-      comment: dayInfo["comment"] || "",
-      type: type || "",
-      location: location || "",
-      shorthand: shorthand || ""
-    },
-    dailyActions: dayInfo["selectedactions"] ? dayInfo["selectedactions"] : getDefaultActions(observatory),
-    catchRows: dayInfo["catches"] ? dayInfo["catches"]: []
+    day,
+    observers: dayInfo["observers"] || "",
+    comment: dayInfo["comment"] || "",
+    dailyActions: dayInfo["selectedactions"] ? dayInfo["selectedactions"] : defaultActions,
+    catchRows: dayInfo["catches"] ? dayInfo["catches"]: [],
+    type: "",
+    location: "",
+    shorthand: ""
   };
+};
+
+export const stringifyDailyActions = (dailyActions) => {
+  if ("attachments" in dailyActions) {
+    if (dailyActions.attachments === "" || dailyActions.attachments < 0) {
+      return JSON.stringify({ ...dailyActions, "attachments": 0 });
+    }
+  }
+  return JSON.stringify(dailyActions);
+};
+
+export const getNewCatchRow = (key) => {
+  return { key, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" };
 };
 
 export const objectsDiffer = (obj1, obj2, checkOnlyKeys = undefined) => {
@@ -46,7 +66,12 @@ export const objectsDiffer = (obj1, obj2, checkOnlyKeys = undefined) => {
       continue;
     }
 
-    if (obj1[key] !== obj2[key]) {
+    if (typeof obj1[key] === "object" && obj1[key] !== null) {
+      if (objectsDiffer(obj1[key], obj2[key])) {
+        result = true;
+        break;
+      }
+    } else if (obj1[key] !== obj2[key]) {
       result = true;
       break;
     }

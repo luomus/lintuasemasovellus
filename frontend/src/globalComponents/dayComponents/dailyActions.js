@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { memo, useContext, useEffect } from "react";
 import {
   Grid, FormControlLabel, Checkbox, FormGroup, InputAdornment, TextField
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleDailyActions } from "../../reducers/formDataReducer/dailyActionsReducer";
-import { setNotifications } from "../../reducers/formStateReducer/notificationsReducer";
+import {  useDispatch } from "react-redux";
+import { setNotifications } from "../../reducers/notificationsReducer";
 import Notification from "../Notification";
 import { AppContext } from "../../AppContext";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
 }
 ));
 
-const DailyActions = () => {
+const DailyActions = ({ value, onChange, catchRows }) => {
   const { observatory } = useContext(AppContext);
   if (observatory === "Hangon_Lintuasema") {
     return (
-      <HankoActions />
+      <HankoActions value={value} onChange={onChange} catchRows={catchRows} />
     );
   }
   return (
@@ -42,26 +42,23 @@ const DailyActions = () => {
   );
 };
 
-const HankoActions = () => {
+const HankoActions = ({ value, onChange, catchRows }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const dailyActions = useSelector(state => state.formData.dailyActions);
-  const catchRows = useSelector(state => state.formData.catchRows);
-
   useEffect(() => {
-    Object.entries(dailyActions).forEach(([key, value]) => {
+    Object.entries(value).forEach(([key, value]) => {
       if (key === "attachments") {
         const result = validateAttachments(value);
         dispatch(setNotifications([result[0], result[1]], "dailyactions", key));
       }
     });
-  }, [dailyActions]);
+  }, [value]);
 
   useEffect(() => {
     updateStandardCatchNotification();
-  }, [dailyActions, catchRows]);
+  }, [value, catchRows]);
 
   const validateAttachments = (value) => {
     const toNotifications = [];
@@ -83,7 +80,7 @@ const HankoActions = () => {
   const updateStandardCatchNotification = () => {
     const toErrors = [];
 
-    if (dailyActions.standardRing) {
+    if (value.standardRing) {
       let standardCatch = false;
       Object.keys(catchRows).map((c) => {
         if (catchRows[String(c)].pyydys === "Vakioverkko") {
@@ -99,7 +96,7 @@ const HankoActions = () => {
   };
 
   const handleChange = (target) => {
-    dispatch(toggleDailyActions(target.name, target.name === "attachments" ? target.value : target.checked));
+    onChange({ ...value, [target.name]: target.name === "attachments" ? target.value : target.checked });
   };
 
   return (
@@ -110,23 +107,23 @@ const HankoActions = () => {
       <Notification category="dailyactions" />
       <Grid item xs={12} >
         <FormGroup row className={classes.formGroup} >
-          { dailyActions.standardObs !== undefined && <FormControlLabel className={classes.formControlLabel}
-            control={<Checkbox checked={dailyActions.standardObs} onChange={(event) => handleChange(event.target)} name="standardObs" color="primary" className={classes.checkbox} />}
+          { value.standardObs !== undefined && <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={value.standardObs} onChange={(event) => handleChange(event.target)} name="standardObs" color="primary" className={classes.checkbox} />}
             label={t("standardObs")} labelPlacement="end" /> }
-          { dailyActions.gåu !== undefined && <FormControlLabel className={classes.formControlLabel}
-            control={<Checkbox checked={dailyActions.gåu} onChange={(event) => handleChange(event.target)} name="gåu" color="primary" className={classes.checkbox} />}
+          { value.gåu !== undefined && <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={value.gåu} onChange={(event) => handleChange(event.target)} name="gåu" color="primary" className={classes.checkbox} />}
             label={t("gåu")} labelPlacement="end" /> }
-          { dailyActions.standardRing !== undefined && <FormControlLabel className={classes.formControlLabel}
-            control={<Checkbox checked={dailyActions.standardRing} onChange={(event) => handleChange(event.target)} name="standardRing" color="primary" className={classes.checkbox} />}
+          { value.standardRing !== undefined && <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={value.standardRing} onChange={(event) => handleChange(event.target)} name="standardRing" color="primary" className={classes.checkbox} />}
             label={t("standardRing")} labelPlacement="end" /> }
-          { dailyActions.owlStandard !== undefined && <FormControlLabel className={classes.formControlLabel}
-            control={<Checkbox checked={dailyActions.owlStandard} onChange={(event) => handleChange(event.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
+          { value.owlStandard !== undefined && <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={value.owlStandard} onChange={(event) => handleChange(event.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
             label={t("owlStandard")} labelPlacement="end" /> }
-          { dailyActions.mammals !== undefined && <FormControlLabel className={classes.formControlLabel}
-            control={<Checkbox checked={dailyActions.mammals} onChange={(event) => handleChange(event.target)} name="mammals" color="primary" className={classes.checkbox} />}
+          { value.mammals !== undefined && <FormControlLabel className={classes.formControlLabel}
+            control={<Checkbox checked={value.mammals} onChange={(event) => handleChange(event.target)} name="mammals" color="primary" className={classes.checkbox} />}
             label={t("mammals")} labelPlacement="end" /> }
-          { dailyActions.attachments !== undefined && <FormControlLabel className={classes.formControlLabel}
-            control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={dailyActions.attachments}
+          { value.attachments !== undefined && <FormControlLabel className={classes.formControlLabel}
+            control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={value.attachments}
               onChange={(event) => handleChange(event.target)}
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
             </TextField>}
@@ -137,5 +134,16 @@ const HankoActions = () => {
   );
 };
 
+DailyActions.propTypes = {
+  value: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
+};
 
-export default DailyActions;
+HankoActions.propTypes = {
+  value: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
+};
+
+export default memo(DailyActions);

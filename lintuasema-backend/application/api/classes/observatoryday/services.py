@@ -179,7 +179,7 @@ def get_day_without_id(day, observatory): #Tries to find a day without knowing t
     obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
 
     if not obsday:
-        return { 'id': 0, 'comment': "", 'observers': "", 'catches': []}
+        return { 'id': None, 'comment': "", 'observers': "", 'catches': []}
     else:
         selectedactions = json.loads(obsday.selectedactions) if obsday.selectedactions else None
         return { 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': selectedactions, 'catches': get_all_catches(obsday.id) }

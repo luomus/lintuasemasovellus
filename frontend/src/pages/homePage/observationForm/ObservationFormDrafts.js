@@ -1,6 +1,7 @@
 import React, {
   useContext,
-  useState
+  useState,
+  memo
 } from "react";
 import {
   Modal, Dialog, DialogTitle, DialogContent, DialogContentText,
@@ -16,7 +17,7 @@ import { DraftDB, deleteDraft, clearAll } from "../../../services/draftService";
 import { StyledTableCell } from "../../../globalComponents/common";
 import { AppContext } from "../../../AppContext";
 
-export const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
+const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
   const { t } = useTranslation();
 
   const { user, observatory } = useContext(AppContext);
@@ -113,3 +114,5 @@ ObservationFormDrafts.propTypes = {
   draftID: PropTypes.number,
   onDraftSelect: PropTypes.func.isRequired
 };
+
+export default memo(ObservationFormDrafts);

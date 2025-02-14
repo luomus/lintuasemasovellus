@@ -4,7 +4,7 @@ import LocalInput from "./LocalInput";
 import { StyledTableCell } from "../../../globalComponents/common";
 
 
-const Row = ({ s }) => {
+const Row = ({ day, s }) => {
   const [localOther, setLocalOther] = useState(0);
   const [localGau, setLocalGau] = useState(0);
   const [scatterObs, setScatterObs] = useState(0);
@@ -59,11 +59,11 @@ const Row = ({ s }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localOther} */}
-        <LocalInput inputRef={input1Ref} onChange={setLocalOther} dataType="localOther" count={localOther} species={s.species} />
+        <LocalInput inputRef={input1Ref} onChange={setLocalOther} dataType="localOther" day={day} count={localOther} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* {s.localGåu} */}
-        <LocalInput inputRef={input2Ref} onChange={setLocalGau} dataType="localGau" count={localGau} species={s.species} />
+        <LocalInput inputRef={input2Ref} onChange={setLocalGau} dataType="localGau" day={day} count={localGau} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right" name="migrantTotal" className="dotted">
         {s.constMigration + s.nightMigration + s.otherMigration + scatterObs}
@@ -79,7 +79,7 @@ const Row = ({ s }) => {
       </StyledTableCell>
       <StyledTableCell align="right">
         {/* s.scatterObs */}
-        <LocalInput inputRef={input3Ref} onChange={setScatterObs} dataType="scatter" count={scatterObs} species={s.species} />
+        <LocalInput inputRef={input3Ref} onChange={setScatterObs} dataType="scatter" day={day} count={scatterObs} species={s.species} />
       </StyledTableCell>
     </>
   );
@@ -88,5 +88,6 @@ const Row = ({ s }) => {
 export default Row;
 
 Row.propTypes = {
+  day: PropTypes.string.isRequired,
   s: PropTypes.object.isRequired
 };

@@ -13,15 +13,12 @@ import {
   sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts
 } from "../../services";
 import {
-  loopThroughObservationPeriods, loopThroughObservations, setDayId
+  shorthandTextToLines, loopThroughObservationPeriods, loopThroughObservations, setDayId
 } from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
-import { setLocation, setShorthand, setType } from "../../reducers/formDataReducer/baseFormDataReducer";
-import { emptyShorthand } from "../../reducers/formDataReducer/formDataReducer";
-import { loopThroughCheckForErrors } from "../../shorthand/validations";
-import { saveData } from "../../reducers/formStateReducer/saveStateReducer";
+import { saveData } from "../../reducers/savingStateReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
+const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -86,17 +83,16 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [observationPeriodCounts, setObservationPeriodCounts] = useState([]);
 
-  const day = useSelector(state => state.formData.baseData.day);
-  const type = useSelector(state => state.formData.baseData.type);
-  const location = useSelector(state => state.formData.baseData.location);
-  const shorthand = useSelector(state => state.formData.baseData.shorthand);
-  const notifications = useSelector(state => state.formState.notifications);
+  const [type, setType] = useState("");
+  const [location, setLocation] = useState("");
+  const [shorthand, setShorthand] = useState("");
+
+  const notifications = useSelector(state => state.notifications);
 
   useEffect(() => {
     if (!open) {
       return;
     }
-    dispatch(emptyShorthand());
     getDaysObservationPeriodCounts(dayId).then(counts => {
       setObservationPeriodCounts(counts);
     });
@@ -170,9 +166,9 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
       text += shorthandObject.endTime + "\n";
     }
     if (text.replace(/(\r\n|\n|\r)/gm, "").trim() === "") {
-      dispatch(setShorthand(""));
+      setShorthand("");
     } else {
-      dispatch(setShorthand(text));
+      setShorthand(text);
     }
   };
 
@@ -228,7 +224,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
   const handleSave = async () => {
     await handleDelete(false);
     setDayId(dayId);
-    const rows = loopThroughCheckForErrors(shorthand);
+    const rows = shorthandTextToLines(shorthand);
     const periods = loopThroughObservationPeriods(rows, type, location);
     const observations = loopThroughObservations(rows, user.id);
 
@@ -239,7 +235,9 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
   };
 
   const handleClose = () => {
-    dispatch(emptyShorthand());
+    setType("");
+    setLocation("");
+    setShorthand("");
     handleCloseModal();
   };
 
@@ -274,7 +272,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
                   select: {
                     value: type,
                     onChange: (event) => {
-                      dispatch(setType(event.target.value));
+                      setType(event.target.value);
                     }
                   }
                 }}
@@ -301,7 +299,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
                   select: {
                     value: location,
                     onChange: (event) => {
-                      dispatch(setLocation(event.target.value));
+                      setLocation(event.target.value);
                     }
                   }
                 }}
@@ -317,8 +315,12 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
             </Grid>
             <Grid item xs={12}>
               <CodeMirrorBlock
+                day={day}
+                dayId={dayId}
+                type={type}
+                value={shorthand}
+                onChange={setShorthand}
                 activeObservationPeriodIds={activeObservationPeriodIds}
-                dayList={dayList}
               />
             </Grid>
             <Grid item xs={12}>
@@ -385,7 +387,7 @@ const EditShorthand = ({ dayList, dayId, open, handleCloseModal }) => {
 };
 
 EditShorthand.propTypes = {
-  dayList: PropTypes.array,
+  day: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
   handleCloseModal: PropTypes.func.isRequired,

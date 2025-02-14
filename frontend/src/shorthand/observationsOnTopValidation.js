@@ -1,13 +1,12 @@
-import { getDaysObservationPeriods } from "../services";
 import { isTime, parseTime } from "./timeHelper.js";
 
-export const observationsOnTop = async (dayId, value, activeObservationPeriodIds) => {
+export const observationsOnTop = async (value, observationPeriods, activeObservationPeriodIds) => {
 
   let periodStartTime = null;
   let periodEndTime = null;
   let nextTimeEndTime = false;
 
-  let observationPeriods = (await getDaysObservationPeriods(dayId)).filter(
+  observationPeriods = observationPeriods.filter(
     period => !(activeObservationPeriodIds || []).includes(period.id)
   );
 

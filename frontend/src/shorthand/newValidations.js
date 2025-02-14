@@ -1,15 +1,13 @@
 import { parse, resetAll } from "./shorthand";
 import { isTime, parseTime, parseTimeForComparison } from "./timeHelper.js";
 
-let errors = [];
-
 /**
  * Loop through the entire shorthand text and use the algorithm to check each
  * line for errors.
- * @param {string} shorthandRawText
+ * @param {string} lines
  */
-export const loopThroughCheckForErrors = (shorthandRawText) => {
-  const lines = shorthandRawText.trim().split(/\n/);
+export const validateShorthandLines = (lines) => {
+  const errors = [];
   let shortHandContainsMoreThanTimes = false;
   let emptyPeriod = false;
   let timeEncountered = false;
@@ -19,24 +17,24 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
   let pauseIsActive = false;
   let periodStartTime = null;
   //let previousLine = "";
-  let ret = [];
   let rowNumber = 0;
 
   for (const line of lines) {
-    if (line.trim().length === 0) {
+    const trimmedLine = line.trim();
+
+    if (trimmedLine.length === 0) {
 
       // SKIP EMPTY LINES
-      ret.push(line);
       rowNumber++;
       continue;
 
     }
 
-    if (isTime(line)) {
+    if (isTime(trimmedLine)) {
 
       // CHECK TIMES
 
-      let parsedTime = parseTime(line);
+      let parsedTime = parseTime(trimmedLine);
 
       if (timeEncountered) {
         endsWithTime = true;
@@ -60,7 +58,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
         emptyPeriod = false;
       }
 
-    } else if (line.trim() === "tauko") {
+    } else if (trimmedLine === "tauko") {
 
       // CHECK PAUSES
 
@@ -88,7 +86,7 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
       periodStartTime = null;
       endsWithTime = false;
 
-    } else if (line.trim() === "-") {
+    } else if (trimmedLine === "-") {
 
       // CHECK EMPTY
 
@@ -151,7 +149,6 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
 
     }
 
-    ret.push(line);
     // previousLine = line;
     rowNumber++;
   }
@@ -161,17 +158,9 @@ export const loopThroughCheckForErrors = (shorthandRawText) => {
     errors.push([rowNumber - 1, "mustEndWithTime"]);
   }
 
-  if (!shortHandContainsMoreThanTimes && shorthandRawText){
+  if (!shortHandContainsMoreThanTimes && lines.some(line => !!line)) {
     errors.push([rowNumber - 1, "noObservations"]);
   }
 
-  return ret;
-};
-
-export const getErrors = () => {
   return errors;
-};
-
-export const resetErrors = () => {
-  errors = [];
 };

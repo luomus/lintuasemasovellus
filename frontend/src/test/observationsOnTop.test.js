@@ -6,7 +6,7 @@ describe("observations on top tests", () => {
 
     const value = "12:00\nkk 88\n13:00";
 
-    observationsOnTop(1, value);
+    observationsOnTop(value, []);
 
   });
 

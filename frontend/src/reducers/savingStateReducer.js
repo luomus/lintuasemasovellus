@@ -1,8 +1,8 @@
 const defaultState = { savingCount: 0, saving: false, abortController: new AbortController() };
 
-export const saveData = (saveDataFunc, propagateErrors=false) => {
+export const saveData = (saveDataFunc, propagateErrors= false) => {
   return async (dispatch, getState) => {
-    const signal = getState().formState.saveState.abortController.signal;
+    const signal = getState().savingState.abortController.signal;
 
     dispatch(increaseSavingCount());
 
@@ -42,13 +42,13 @@ export const decreaseSavingCount = () => {
   };
 };
 
-export const resetSaveState = () => {
+export const resetSavingState = () => {
   return {
     type: "RESET"
   };
 };
 
-const saveStateReducer = (state = defaultState, action) => {
+const savingStateReducer = (state = defaultState, action) => {
   let savingCount = state.savingCount;
   switch (action.type) {
     case "INCREASE_SAVING_COUNT":
@@ -65,4 +65,4 @@ const saveStateReducer = (state = defaultState, action) => {
   }
 };
 
-export default saveStateReducer;
+export default savingStateReducer;

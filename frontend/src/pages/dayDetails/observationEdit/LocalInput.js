@@ -4,8 +4,8 @@ import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
 import { AppContext } from "../../../AppContext";
-import { useDispatch, useSelector } from "react-redux";
-import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
+import { useDispatch } from "react-redux";
+import { saveData } from "../../../reducers/savingStateReducer";
 
 const useStyles = makeStyles({
   container: {
@@ -21,12 +21,10 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ count, species, dataType, onChange, inputRef }) => {
+const LocalInput = ({ day, count, species, dataType, onChange, inputRef }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { observatory } = useContext(AppContext);
-
-  const day = useSelector(state => state.formData.baseData.day);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -83,6 +81,7 @@ const LocalInput = ({ count, species, dataType, onChange, inputRef }) => {
 export default LocalInput;
 
 LocalInput.propTypes = {
+  day: PropTypes.string.isRequired,
   count: PropTypes.number,
   species: PropTypes.string,
   dataType: PropTypes.string,

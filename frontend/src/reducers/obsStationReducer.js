@@ -1,8 +1,17 @@
 import { getObservationStations } from "../services";
 
+const defaultActions = { standardObs: false, gåu: false, standardRing: false, owlStandard: false, mammals: false, attachments: "0" };
+
 export const initializeStations = () => {
   return async dispatch => {
     const stations = await getObservationStations();
+    stations.forEach((station) => {
+      if (station.observatory === "Hangon_Lintuasema") {
+        station.defaultActions = defaultActions;
+      } else {
+        station.defaultActions = {};
+      }
+    });
     dispatch(setStations(stations));
   };
 };

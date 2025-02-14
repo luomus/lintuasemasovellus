@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SpeciesTable = (props) => {
 
-  const { summary, defaultSpecies } = props;
+  const { day, summary, defaultSpecies } = props;
 
   const { t } = useTranslation();
   const classes = useStyles();
@@ -200,7 +200,7 @@ const SpeciesTable = (props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((s) =>
                 <StyledTableRow hover key={s.species}>
-                  <Row s={s} key={s.species} />
+                  <Row day={day} s={s} key={s.species} />
                 </StyledTableRow>
               )
             }
@@ -219,6 +219,7 @@ const SpeciesTable = (props) => {
 };
 
 SpeciesTable.propTypes = {
+  day: PropTypes.string.isRequired,
   summary: PropTypes.array.isRequired,
   defaultSpecies: PropTypes.array.isRequired
 };

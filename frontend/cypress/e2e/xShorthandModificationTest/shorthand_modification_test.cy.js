@@ -76,8 +76,8 @@ describe("ShorthandModification", function () {
     cy.wait(2000);
     cy.get(".CodeMirror textarea").type(shorthandModified, { force: true });
     cy.wait(1000);
-    cy.contains("Tallenna").click({ force: true });
-    cy.wait(5000);
+    cy.get("#saveButtonInShorthandModification").click({ force: true });
+    cy.get("#saveButtonInShorthandModificatio").should("not.exist");
     cy.get("#onlyObservationsFilter").check();
     cy.wait(1000);
     cy.contains("GRUGRU");

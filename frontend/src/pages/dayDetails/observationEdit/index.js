@@ -15,7 +15,7 @@ import PeriodTable from "./PeriodTable";
 import { AppContext } from "../../../AppContext";
 
 
-export const ObservationEdit = ({ dayList, dayId }) => {
+export const ObservationEdit = ({ day, dayId }) => {
   const { observatory } = useContext(AppContext);
 
   const [defaultSpecies, setDefaultSpecies] = useState([]);
@@ -44,7 +44,7 @@ export const ObservationEdit = ({ dayList, dayId }) => {
         }
       });
     return () => (fetching = true);
-  }, [observatory, dayId, mode]);
+  }, [observatory, dayId]);
 
   const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
@@ -55,12 +55,14 @@ export const ObservationEdit = ({ dayList, dayId }) => {
 
   const table = mode === "speciesTable" ? (
     <SpeciesTable
+      day={day}
       summary={summary}
       defaultSpecies={defaultSpecies}
     ></SpeciesTable>
   ) : (
     <PeriodTable
-      dayList={dayList}
+      day={day}
+      dayId={dayId}
       obsPeriods={obsPeriods}
       refetchObservations={refetchObservations}
     ></PeriodTable>
@@ -74,7 +76,7 @@ export const ObservationEdit = ({ dayList, dayId }) => {
         </Box>
       </Grid>
       <Grid item xs={5}>
-        <ShorthandEdit dayList={dayList} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
+        <ShorthandEdit day={day} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
       </Grid>
       <Grid item xs={12}>
         {table}
@@ -84,6 +86,6 @@ export const ObservationEdit = ({ dayList, dayId }) => {
 };
 
 ObservationEdit.propTypes = {
-  dayList: PropTypes.array,
+  day: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired
 };

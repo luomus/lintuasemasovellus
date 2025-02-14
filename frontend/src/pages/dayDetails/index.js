@@ -6,15 +6,14 @@ import {
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { GeneralDayDetails } from "./generalDayDetails";
+import GeneralDayDetails from "./generalDayDetails";
 import { ObservationEdit } from "./observationEdit";
-import { refreshDays } from "../../reducers/daysReducer";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import { clearFormData, setFormData } from "../../reducers/formDataReducer/formDataReducer";
 import { dayInfoToFormData, searchDayInfo } from "../../services";
 import { useConfirmExit } from "../../hooks/useConfirmExit";
-import { clearFormState } from "../../reducers/formStateReducer/formStateReducer";
+import { resetNotifications } from "../../reducers/notificationsReducer";
+import { resetSavingState } from "../../reducers/savingStateReducer";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -30,53 +29,40 @@ export const DayDetails = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { observatory } = useContext(AppContext);
+  const { observatory, station } = useContext(AppContext);
 
-  const dayList = useSelector(state => state.days);
-  const saving = useSelector(state => state.formState.saveState.saving);
+  const saving = useSelector(state => state.savingState.saving);
 
   const [dayId, setDayId] = useState();
   const [loading, setLoading] = useState(true);
+  const [initialData, setInitialData] = useState();
 
   useConfirmExit(
     () => saving,
     () => {
-      setLoading(true);
-      dispatch(clearFormData(observatory));
-      dispatch(clearFormState());
+      dispatch(resetNotifications());
+      dispatch(resetSavingState());
     }
   );
 
   useEffect(() => {
-    dispatch(refreshDays());
-  }, []);
-
-  useEffect(() => {
-    if (!dayList) {
-      return;
-    }
-    const thisDay = dayList.find(d => d.day === day && d.observatory === observatory) || null;
-    setDayId(thisDay ? thisDay.id : null);
-    if (thisDay) {
-      setInitialFormData(day).then(() => {
-        setLoading(false);
-      });
-    } else {
+    setLoading(true);
+    setInitialDayData(day).then(() => {
       setLoading(false);
-    }
-  }, [dayList, day, observatory]);
+    });
+  }, [day, observatory]);
 
-  const setInitialFormData = async (day) => {
+  const setInitialDayData = async (day) => {
     const dayInfo = await searchDayInfo(day, observatory);
-    const initialFormData = dayInfoToFormData(day, dayInfo, observatory);
-    await dispatch(setFormData(initialFormData));
+    setDayId(dayInfo.id);
+    setInitialData(dayInfoToFormData(day, dayInfo, station.defaultActions));
   };
 
   if (loading) {
     return (
       <LoadingSpinner/>
     );
-  } else if (!dayId) {
+  } else if (dayId === undefined || dayId === null) {
     return (<>
       <Paper className={classes.paper}>
         <Typography variant="h4" component="h2" >
@@ -101,10 +87,13 @@ export const DayDetails = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <GeneralDayDetails dayId={dayId}></GeneralDayDetails>
+              <GeneralDayDetails
+                dayId={dayId}
+                initialData={initialData}
+              ></GeneralDayDetails>
             </Grid>
             <Grid item xs={12}>
-              <ObservationEdit dayList={dayList} dayId={dayId}></ObservationEdit>
+              <ObservationEdit day={day} dayId={dayId}></ObservationEdit>
             </Grid>
           </Grid>
         </Paper>

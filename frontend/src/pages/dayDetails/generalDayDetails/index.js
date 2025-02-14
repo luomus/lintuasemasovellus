@@ -1,34 +1,54 @@
-import React, { useCallback } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 
-import { editComment, editObservers } from "../../../services";
+import {
+  deleteCatchRow,
+  editActions,
+  editCatchRow,
+  editComment,
+  editObservers,
+  stringifyDailyActions
+} from "../../../services";
 import TextEdit from "./TextEdit";
 import DailyActionsEdit from "./DailyActionsEdit";
 import CatchesEdit from "./CatchesEdit";
-import { setComment, setObservers } from "../../../reducers/formDataReducer/baseFormDataReducer";
-import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
+import { saveData } from "../../../reducers/savingStateReducer";
 
 
-export const GeneralDayDetails = ({ dayId }) => {
+const GeneralDayDetails = ({ dayId, initialData }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const observers = useSelector(state => state.formData.baseData.observers);
-  const comment = useSelector(state => state.formData.baseData.comment);
+  const [observers, setObservers] = useState(initialData.observers);
+  const [comment, setComment] = useState(initialData.comment);
+  const [dailyActions, setDailyActions] = useState(initialData.dailyActions);
+  const [catchRows, setCatchRows] = useState(initialData.catchRows);
 
   const observersOnSave = useCallback((newObservers) => {
     if (newObservers.length !== 0) {
-      dispatch(setObservers(newObservers));
+      setObservers(newObservers);
       dispatch(saveData(() => editObservers(dayId, newObservers)));
     }
   }, [dayId]);
 
   const commentOnSave = useCallback((newComment) => {
-    dispatch(setComment(newComment));
+    setComment(newComment);
     dispatch(saveData(() => editComment(dayId, newComment)));
+  }, [dayId]);
+
+  const saveCatch = useCallback((cr) => {
+    dispatch(saveData(() => editCatchRow(dayId, [cr])));
+  }, [dayId]);
+
+  const deleteCatch = useCallback((key) => {
+    dispatch(saveData(() => deleteCatchRow(dayId, key)));
+  }, [dayId]);
+
+  const saveDailyActions = useCallback((actions) => {
+    dispatch(saveData(() => editActions(dayId, stringifyDailyActions(actions))));
   }, [dayId]);
 
   return (
@@ -40,17 +60,30 @@ export const GeneralDayDetails = ({ dayId }) => {
 
       {/* DAILY ACTIONS */}
       <Grid id="dailyActions" item xs={12} fullwidth="true">
-        <DailyActionsEdit dayId={dayId}></DailyActionsEdit>
+        <DailyActionsEdit
+          value={dailyActions}
+          onChange={setDailyActions}
+          onSave={saveDailyActions}
+          catchRows={catchRows}
+        />
       </Grid>
 
       {/* NET ACTIONS */}
       <Grid item xs={12} fullwidth="true">
-        <CatchesEdit dayId={dayId}></CatchesEdit>
+        <CatchesEdit
+          value={catchRows}
+          onChange={setCatchRows}
+          onSaveRow={saveCatch}
+          onDeleteRow={deleteCatch}
+        />
       </Grid>
     </Grid>
   );
 };
 
 GeneralDayDetails.propTypes = {
-  dayId: PropTypes.number.isRequired
+  dayId: PropTypes.number.isRequired,
+  initialData: PropTypes.object.isRequired
 };
+
+export default memo(GeneralDayDetails);

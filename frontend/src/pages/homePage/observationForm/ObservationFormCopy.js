@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Button,
   Checkbox,
@@ -17,7 +17,6 @@ import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { dateToDayString, dayStringToDate } from "../../../services";
-import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(() => ({
   formControlLabel: {
@@ -26,12 +25,10 @@ const useStyles = makeStyles(() => ({
 }
 ));
 
-export const ObservationFormCopy = ({ onCopyDay }) => {
+const ObservationFormCopy = ({ day, onCopyDay }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
-
-  const day = useSelector(state => state.formData.baseData.day);
 
   const [openCopy, setOpenCopy] = useState(false);
   const [toCopy, setToCopy] = useState({
@@ -117,5 +114,8 @@ export const ObservationFormCopy = ({ onCopyDay }) => {
 };
 
 ObservationFormCopy.propTypes = {
+  day: PropTypes.string,
   onCopyDay: PropTypes.func.isRequired
 };
+
+export default memo(ObservationFormCopy);

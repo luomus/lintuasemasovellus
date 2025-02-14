@@ -1,15 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { HighlightOff } from "@mui/icons-material";
 import {
   TextField, MenuItem, FormControl,
   FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
-import { toggleCatchDetails, deleteOneCatchRow } from "../../reducers/formDataReducer/catchRowsReducer";
-import { setNotifications } from "../../reducers/formStateReducer/notificationsReducer";
+import { setNotifications } from "../../reducers/notificationsReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -84,17 +83,15 @@ const preSetLengths = {
   "Muut petoverkot": 12,
 };
 
-const CatchType = ({ cr }) => {
+const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const allCatchRows = useSelector(state => state.formData.catchRows);
-
   useEffect(() => {
-    const result = validate(cr);
-    dispatch(setNotifications([result[0], result[1]], "catches", cr.key));
-  }, [allCatchRows]);
+    const result = validate(value);
+    dispatch(setNotifications([result[0], result[1]], "catches", value.key));
+  }, [value, catchRows]);
 
   const validate = (cr) => {
     let toNotifications = [];
@@ -127,8 +124,8 @@ const CatchType = ({ cr }) => {
       toErrors.push(t("maxCatchValue", { char1: cr.pyyntialue, char2: hardAmountLimits[String(cr.pyyntialue)] }));
     }
     if (cr.pyydys && cr.pyyntialue) {
-      for (let c of Object.keys(allCatchRows)) {
-        if (allCatchRows[String(c)].key !== cr.key && allCatchRows[String(c)].pyydys === cr.pyydys && allCatchRows[String(c)].pyyntialue === cr.pyyntialue && allCatchRows[String(c)].alku === cr.alku && allCatchRows[String(c)].loppu === cr.loppu) {
+      for (let c of Object.keys(catchRows)) {
+        if (catchRows[String(c)].key !== cr.key && catchRows[String(c)].pyydys === cr.pyydys && catchRows[String(c)].pyyntialue === cr.pyyntialue && catchRows[String(c)].alku === cr.alku && catchRows[String(c)].loppu === cr.loppu) {
           toErrors.push(t("duplicateCatches", { char: cr.pyyntialue }));
           break;
         }
@@ -139,33 +136,35 @@ const CatchType = ({ cr }) => {
   };
 
   const handleChange = (target) => {
+    const newValue = { ...value };
+
     if (target.name === "pyydys") {
       //rechoosing catchType, empty area to prevent previous options are from persisting
-      dispatch(toggleCatchDetails(cr.key, "pyyntialue", ""));
-      dispatch(toggleCatchDetails(cr.key, "lukumaara", 0));
+      newValue["pyyntialue"] = "";
+      newValue["lukumaara"] = 0;
     }
     if (target.name === "pyyntialue") {
       //catch actively clicked, set amount to minumn,
-      dispatch(toggleCatchDetails(cr.key, "lukumaara", 1));
+      newValue["lukumaara"] = 1;
     }
 
-    if (target.name === "pyyntialue" && !catchesWithoutLength.includes(cr.pyydys)) {//cr.pyydys !== "Rastasverkko") {
+    if (target.name === "pyyntialue" && !catchesWithoutLength.includes(value.pyydys)) {//cr.pyydys !== "Rastasverkko") {
       //autofill length for nets that are always the same length
       if (target.value in preSetLengths) {
-        dispatch(toggleCatchDetails(cr.key, "verkonPituus", preSetLengths[String(target.value)]));
+        newValue["verkonPituus"] = preSetLengths[String(target.value)];
       } else {
-        dispatch(toggleCatchDetails(cr.key, "verkonPituus", 9));
+        newValue["verkonPituus"] = 9;
       }
-    } else if (target.name === "pyydys" && cr.verkonPituus !== 0) {
+    } else if (target.name === "pyydys" && value.verkonPituus !== 0) {
       //remove previous length autofill, when catch changes
-      dispatch(toggleCatchDetails(cr.key, "verkonPituus", 0));
+      newValue["verkonPituus"] = 0;
     }
-    dispatch(toggleCatchDetails(cr.key, target.name, target.value));
+    onChange({ ...newValue, [target.name]: target.value });
   };
 
   const handleRowRemove = () => {
-    dispatch(deleteOneCatchRow(cr));
-    dispatch(setNotifications([[], []], "catches", cr.key));
+    onDelete();
+    dispatch(setNotifications([[], []], "catches", value.key));
   };
 
   return (
@@ -180,7 +179,7 @@ const CatchType = ({ cr }) => {
           name="pyydys"
           slotProps={{
             select: {
-              value: cr.pyydys,
+              value: value.pyydys,
               onChange: (event) => handleChange(event.target)
             }
           }}
@@ -202,13 +201,13 @@ const CatchType = ({ cr }) => {
           name="pyyntialue"
           slotProps={{
             select: {
-              value: cr.pyyntialue,
+              value: value.pyyntialue,
               onChange: (event) => handleChange(event.target)
             }
           }}
         >
           {
-            catchAreas[String(cr.pyydys)].map((cArea, i) =>
+            catchAreas[String(value.pyydys)].map((cArea, i) =>
               <MenuItem id={cArea} value={cArea} key={i}>
                 {cArea}
               </MenuItem>
@@ -216,7 +215,7 @@ const CatchType = ({ cr }) => {
           }
         </TextField>
 
-        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -224,7 +223,7 @@ const CatchType = ({ cr }) => {
             control={<TextField
               id="opened"
               type="time"
-              defaultValue={cr.alku}
+              defaultValue={value.alku}
               name="alku"
               style={{ paddingLeft: "5px" }}
               onChange={(event) => handleChange(event.target)}
@@ -237,7 +236,7 @@ const CatchType = ({ cr }) => {
             />} />
         }
 
-        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -246,7 +245,7 @@ const CatchType = ({ cr }) => {
               id="closed"
               type="time"
               name="loppu"
-              defaultValue={cr.loppu}
+              defaultValue={value.loppu}
               style={{ paddingLeft: "5px" }}
               onChange={(event) => handleChange(event.target)}
               InputLabelProps={{
@@ -258,7 +257,7 @@ const CatchType = ({ cr }) => {
             />} />
         }
 
-        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
           ? <div></div>
           :
           <FormControlLabel className={classes.formControlLabel2}
@@ -270,7 +269,7 @@ const CatchType = ({ cr }) => {
                 name="lukumaara"
                 required
                 type="number"
-                value={cr.lukumaara}
+                value={value.lukumaara}
                 onChange={(event) => handleChange(event.target)}
                 hiddenLabel={true}
                 InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
@@ -278,7 +277,7 @@ const CatchType = ({ cr }) => {
             } />
         }
 
-        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
           ? <div></div>
           :
           <FormControl className={classes.formControlLabel}>
@@ -288,15 +287,15 @@ const CatchType = ({ cr }) => {
               name="verkkokoodit"
               label={t("netCodes")}
               onChange={(event) => handleChange(event.target)}
-              value={cr.verkkokoodit}
+              value={value.verkkokoodit}
             />
           </FormControl>
         }
 
-        {(cr.pyydys === "" || cr.pyyntialue === "" || !catchAreas[String(cr.pyydys)].includes(cr.pyyntialue))
+        {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
           ? <div></div>
           :
-          (cr.pyydys.length === 0 || (cr.pyydys.length > 1 && catchesWithoutLength.indexOf(cr.pyydys) > -1)) //is a catch without length
+          (value.pyydys.length === 0 || (value.pyydys.length > 1 && catchesWithoutLength.indexOf(value.pyydys) > -1)) //is a catch without length
             ? <div></div>
             :
             <FormControlLabel className={classes.formControlLabel2}
@@ -307,7 +306,7 @@ const CatchType = ({ cr }) => {
                 required
                 name="verkonPituus"
                 type="number"
-                value={cr.verkonPituus}
+                value={value.verkonPituus}
                 onChange={(event) => handleChange(event.target)}
                 InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
               />
@@ -323,8 +322,11 @@ const CatchType = ({ cr }) => {
   );
 };
 
-CatchType.propTypes = {
-  cr: PropTypes.object.isRequired,
+CatchRow.propTypes = {
+  value: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-export default CatchType;
+export default memo(CatchRow);

@@ -46,20 +46,22 @@ const YellowTextTypography = withStyles({
   }
 })(Typography);
 
-const Notification = ({ category="all" }) => {
+const Notification = ({ category="all", keys }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  let allNotifications = useSelector(state => state.formState.notifications);
-  let nocturnalNotification = useSelector(state => state.formState.notifications.isNight);
+  let allNotifications = useSelector(state => state.notifications);
+  let nocturnalNotification = useSelector(state => state.notifications.isNight);
   let notificationsSet = new Set();
   let errorsSet = new Set();
 
   Object.keys(allNotifications).map(cat => {
     if (cat === category || category === "all") {
       Object.keys(allNotifications[String(cat)]).map(i => {
-        allNotifications[String(cat)][String(i)].notifications.forEach(n => notificationsSet.add(n));
-        allNotifications[String(cat)][String(i)].errors.forEach(e => errorsSet.add(e));
+        if (!keys || keys.includes(i)) {
+          allNotifications[String(cat)][String(i)].notifications.forEach(n => notificationsSet.add(n));
+          allNotifications[String(cat)][String(i)].errors.forEach(e => errorsSet.add(e));
+        }
       });
     }
   });
@@ -127,6 +129,7 @@ const Notification = ({ category="all" }) => {
 
 Notification.propTypes = {
   category: PropTypes.string,
+  keys: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Notification;

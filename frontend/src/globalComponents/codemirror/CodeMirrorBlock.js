@@ -1,26 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, memo } from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import {
-  loopThroughCheckForErrors, getErrors, resetErrors
+  validateShorthandLines
 } from "../../shorthand/newValidations";
 import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import { setNotifications, setNocturnalNotification } from "../../reducers/formStateReducer/notificationsReducer";
+import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
 import { isNightValidation } from "../../shorthand/isNightValidation";
 import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
-import LoadingSpinner from "../LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import { dateSelector } from "../../reducers/formDataReducer/formDataReducer";
-import { setShorthand } from "../../reducers/formDataReducer/baseFormDataReducer";
+import { shorthandTextToLines } from "../../shorthand/parseShorthandField";
+import { dayStringToDate, getDaysObservationPeriods } from "../../services";
 
 
-let timeout = null;
 let markers = new Set();
 
 const useStyles = makeStyles({
@@ -30,51 +28,35 @@ const useStyles = makeStyles({
   },
 });
 
-const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
+const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationPeriodIds }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
   const { observatory } = useContext(AppContext);
 
-  const date = useSelector(dateSelector);
-  const type = useSelector(state => state.formData.baseData.type);
-  const shorthand = useSelector(state => state.formData.baseData.shorthand);
-
+  const [observationPeriods, setObservationPeriods] = useState([]);
   const [editorInstance, setEditorInstance] = useState();
 
   useEffect(() => {
-    if (editorInstance) {
-      if (timeout) {
-        clearTimeout(timeout);
+    const timeout = setTimeout(async () => {
+      if (editorInstance) {
+        validateAndSetNotifications(editorInstance, value);
       }
-      validateAndSetNotifications(editorInstance, shorthand);
-    }
-  }, [activeObservationPeriodIds, date, dayList]);
+    }, 700);
+    return () => clearTimeout(timeout);
+  }, [value, observationPeriods, day, type, activeObservationPeriodIds]);
 
-  const updateShorthand = (newShorthand) => {
-    dispatch(setShorthand(newShorthand));
-  };
+  useEffect(() => {
+    setObservationPeriods([]);
+    getDaysObservationPeriods(dayId).then(observationPeriods => {
+      setObservationPeriods(observationPeriods);
+    });
+  }, [dayId]);
 
   const validateObservationOnTop = async (value) => {
-    if (!date || !dayList) {
-      return false;
-    }
+    const getRowNumbers = await observationsOnTop(value, observationPeriods, activeObservationPeriodIds);
 
-    const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
-
-    let month = "0";
-    let year = y;
-    let day = "0";
-
-    Number(m) < 10 ? month = month.concat(m) : month = m;
-    Number(d) < 10 ? day = day.concat(d) : day = d;
-
-    let newDate = day+"."+ month +"."+ year;
-
-    const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
-    const getRowNumbers = findDay ? await observationsOnTop(findDay.id, value, activeObservationPeriodIds) : [];
-
-    if (findDay && getRowNumbers.length > 0) {
+    if (getRowNumbers.length > 0) {
       return getRowNumbers;
     } else {
       return false;
@@ -104,8 +86,11 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
 
 
   const setValidateNightNotification = (value,editor) => {
+    if (!day) {
+      return;
+    }
     const valuesToArray = value.split("\n");
-    const nightRows = type === t("nightMigration") ? isNightValidation(observatory, value, date) : [];
+    const nightRows = type === t("nightMigration") ? isNightValidation(observatory, value, dayStringToDate(day)) : [];
     nightRows.length === 0 && dispatch(setNocturnalNotification(false));
     for (const row of nightRows) {
       nightRows.length > 0 && dispatch(setNocturnalNotification(true));
@@ -129,13 +114,15 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
   const validate = (editor, value) => {
     let toErrors = [];
 
-    loopThroughCheckForErrors(value);
+    const lines = shorthandTextToLines(value);
+    const errors = validateShorthandLines(lines);
+
     for (const marker of markers) {
       marker.clear();
     }
     editor.clearGutter("note-gutter");
-    const shorthandErrors = getErrors();
-    for (const error of shorthandErrors) {
+
+    for (const error of errors) {
       const rowNum = error[0];
       const rowMessage = error[1];
       (rowMessage.includes("unknownCharacter")) ?
@@ -144,7 +131,6 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
 
       setMarker(editor,rowNum,rowMessage,"#f5f890","#000000");
     }
-    resetErrors();
 
     return toErrors;
   };
@@ -157,38 +143,15 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
     dispatch(setNotifications([[], newResult], "shorthand", 0));
   };
 
-  /**
-   * Start checking for errors only after being idle for the duration of
-   * the timeout (700ms).
-   * @param {object} editor
-   * @param {object} data
-   * @param {string} value
-   */
-  const codemirrorOnchange = (editor, data, value) => {
-
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(async () => {
-      validateAndSetNotifications(editor, value);
-      timeout = null;
-    }, 700);
-  };
-
-  if (!dayList) {
-    return <LoadingSpinner size="small" />;
-  }
-
   return (
     <CodeMirror
       id="shorthand"
       className={classes.codemirrorBox}
-      value={shorthand}
+      value={value}
       options={{
         theme: "idea",
         lineNumbers: true,
         autoRefresh: true,
-        readOnly: !date,
         gutters: ["note-gutter"],
         lint: true
       }}
@@ -197,18 +160,19 @@ const CodeMirrorBlock = ({ activeObservationPeriodIds, dayList }) => {
         editor.refresh();
       }}
       onBeforeChange={(editor, data, value) => {
-        updateShorthand(value);
-      }}
-      onChange={(editor, data, value) => {
-        codemirrorOnchange(editor, data, value);
+        onChange(value);
       }}
     />
   );
 };
 
 CodeMirrorBlock.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  dayId: PropTypes.number,
+  day: PropTypes.string,
+  type: PropTypes.string,
   activeObservationPeriodIds: PropTypes.array,
-  dayList: PropTypes.array
 };
 
-export default CodeMirrorBlock;
+export default memo(CodeMirrorBlock);

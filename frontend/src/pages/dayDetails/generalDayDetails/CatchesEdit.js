@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -14,11 +14,9 @@ import { useTranslation } from "react-i18next";
 import { Add, Edit } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import Notification from "../../../globalComponents/Notification";
-import CatchType from "../../../globalComponents/dayComponents/catchType";
-import { addOneCatchRow, setCatches } from "../../../reducers/formDataReducer/catchRowsReducer";
-import { deleteCatchRow, editCatchRow } from "../../../services";
-import { useDispatch, useSelector } from "react-redux";
-import { saveData } from "../../../reducers/formStateReducer/saveStateReducer";
+import CatchRow from "../../../globalComponents/dayComponents/catchRow";
+import { getNewCatchRow } from "../../../services";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -38,13 +36,11 @@ const useStyles = makeStyles(theme => ({
 })
 );
 
-const CatchesEdit = ({ dayId }) => {
+const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
-  const catchRows = useSelector(state => state.formData.catchRows);
-  const notifications = useSelector(state => state.formState.notifications);
+  const notifications = useSelector(state => state.notifications);
 
   const [catchesEditMode, setCatchesEditMode] = useState(false);
   const [catchesBeforeEdit, setCachesBeforeEdit] = useState();
@@ -58,57 +54,71 @@ const CatchesEdit = ({ dayId }) => {
         value = true;
       }
     });
-    Object.keys(catchRows).map(row => {
-      if (catchRows[String(row)].lukumaara === 0) {
+    Object.keys(value).map(row => {
+      if (value[String(row)].lukumaara === 0) {
         value = true;
       }
     });
     setErrorsInCaches(value);
-  }, [notifications, catchRows]);
+  }, [notifications, value]);
 
   const handleCatchesEditOpen = useCallback((event) => {
     const c = event.currentTarget.getAttribute("data-cache");
-    const key = catchRows[c].key;
-    setCachesBeforeEdit(catchRows);
+    const key = value[c].key;
+    setCachesBeforeEdit(value);
     setCatchRowKeyToEdit(key);
     setCatchesEditMode(true);
-  }, [catchRows]);
+  }, [value]);
 
   const handleCatchesEditCancel = useCallback(() => {
-    dispatch(setCatches(catchesBeforeEdit));
+    onChange(catchesBeforeEdit);
     setCatchesEditMode(false);
   }, [catchesBeforeEdit]);
 
   const handleAddNewCatch = useCallback(() => {
-    const maxKey = catchRows.length === 0 ? 0 : Math.max.apply(Math, catchRows.map(row => row.key));
+    const maxKey = value.length === 0 ? 0 : Math.max.apply(Math, value.map(row => row.key));
     const newKey = maxKey + 1;
-    setCachesBeforeEdit(catchRows);
+    setCachesBeforeEdit(value);
     setCatchRowKeyToEdit(newKey);
     setCatchesEditMode(true);
-    dispatch(addOneCatchRow(newKey));
-  }, [catchRows]);
+    onChange([...value, getNewCatchRow(newKey)]);
+  }, [value]);
 
   const handleCatchesEditSave = useCallback(() => {
-    const catchRow = catchRows.filter(row => row.key === catchRowKeyToEdit)[0];
+    const catchRow = value.filter(row => row.key === catchRowKeyToEdit)[0];
     if (!catchRow) {
       if (catchesBeforeEdit.some(row => row.key === catchRowKeyToEdit)) {
-        dispatch(saveData(() => deleteCatchRow(dayId, catchRowKeyToEdit)));
+        onDeleteRow(catchRowKeyToEdit);
       }
     } else {
-      dispatch(saveData(() => editCatchRow(dayId, [catchRow])));
+      onSaveRow(catchRow);
     }
 
     setCatchesEditMode(false);
-  }, [dayId, catchRows, catchRowKeyToEdit]);
+  }, [value, catchRowKeyToEdit]);
 
-  const cr = catchRows.filter(row => row.key === catchRowKeyToEdit)[0];
+  const catchRowUpdate = useCallback((cr) => {
+    const newRows = value.map(row => {
+      if (row.key === catchRowKeyToEdit) {
+        return cr;
+      }
+      return row;
+    });
+    onChange(newRows);
+  }, [value]);
+
+  const catchRowDelete = useCallback(() => {
+    onChange(value.filter(row => row.key !== catchRowKeyToEdit));
+  }, [value]);
+
+  const cr = value.filter(row => row.key === catchRowKeyToEdit)[0];
 
   return (
     <>
       <Typography variant="h6" component="h2" >
         {t("catches")}
       </Typography>
-      {(catchRows.length > 0 && !catchesEditMode)
+      {(value.length > 0 && !catchesEditMode)
         ? /* LIST CATCHES */
         <Table className={classes.catchTable} size="medium" aria-label="a dense table">
           <TableHead>
@@ -127,14 +137,14 @@ const CatchesEdit = ({ dayId }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(catchRows).map((c) =>
-              <TableRow key={catchRows[String(c)].key}>
-                <TableCell component="th" scope="row">{catchRows[String(c)].pyydys}</TableCell>
-                <TableCell align="left" id="catchArea">{catchRows[String(c)].pyyntialue}</TableCell>
-                <TableCell align="left" id="wasOpen">{catchRows[String(c)].alku} - {catchRows[String(c)].loppu}</TableCell>
-                <TableCell align="left" id="amount">{catchRows[String(c)].lukumaara}</TableCell>
-                <TableCell align="left" id="netCodes">{catchRows[String(c)].verkkokoodit ? catchRows[String(c)].verkkokoodit : "-"}</TableCell>
-                <TableCell align="left" id="netLength">{catchRows[String(c)].verkonPituus > 0 ? catchRows[String(c)].verkonPituus : "-"}</TableCell>
+            {Object.keys(value).map((c) =>
+              <TableRow key={value[String(c)].key}>
+                <TableCell component="th" scope="row">{value[String(c)].pyydys}</TableCell>
+                <TableCell align="left" id="catchArea">{value[String(c)].pyyntialue}</TableCell>
+                <TableCell align="left" id="wasOpen">{value[String(c)].alku} - {value[String(c)].loppu}</TableCell>
+                <TableCell align="left" id="amount">{value[String(c)].lukumaara}</TableCell>
+                <TableCell align="left" id="netCodes">{value[String(c)].verkkokoodit ? value[String(c)].verkkokoodit : "-"}</TableCell>
+                <TableCell align="left" id="netLength">{value[String(c)].verkonPituus > 0 ? value[String(c)].verkonPituus : "-"}</TableCell>
                 <TableCell align="left">
                   <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={handleCatchesEditOpen} variant="contained" color="primary">
                     <Edit fontSize="small" />
@@ -150,8 +160,8 @@ const CatchesEdit = ({ dayId }) => {
             {cr
               ? /* SHOW CATCH ROW AS EDITABLE ELEMENT */
               <div>
-                <Notification category="catches" />
-                <CatchType cr={cr} />
+                <Notification category="catches" keys={[String(cr.key), "standardCatch"]} />
+                <CatchRow value={cr} onChange={catchRowUpdate} onDelete={catchRowDelete} catchRows={value} />
                 <Button id="catchesEditSave" className={classes.button} variant="contained"
                   onClick={handleCatchesEditSave} color="primary"
                   disabled={errorsInCatches}>
@@ -163,6 +173,7 @@ const CatchesEdit = ({ dayId }) => {
               </div>
               : /* IF ROW-TO-EDIT IS DELETED, SHOW CONFIRMATION */
               <div>
+                <Notification category="catches" keys={["standardCatch"]} />
                 <Typography variant="body1" color="error" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
                 <Button id="catchesEditSave" className={classes.deleteButton} variant="contained"
                   onClick={handleCatchesEditSave}
@@ -188,7 +199,10 @@ const CatchesEdit = ({ dayId }) => {
 };
 
 CatchesEdit.propTypes = {
-  dayId: PropTypes.number.isRequired
+  value: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSaveRow: PropTypes.func.isRequired,
+  onDeleteRow: PropTypes.func.isRequired,
 };
 
-export default CatchesEdit;
+export default memo(CatchesEdit);
