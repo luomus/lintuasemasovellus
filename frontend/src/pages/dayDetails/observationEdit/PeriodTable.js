@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, Typography,
@@ -45,6 +45,21 @@ const PeriodTable = (props) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [obsPeriod, setObsPeriod] = useState({});
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+
+  const [rows, setRows] = useState(obsPeriods);
+  const [totalCount, setTotalCount] = useState(0);
+
+  useEffect(() => {
+    const allRows = obsPeriods.filter(i => i.observationType !== "Paikallinen" && i.observationType !== "Hajahavainto");
+    const paginatedRows = rowsPerPage === -1
+      ? allRows
+      : allRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    setRows(paginatedRows);
+    setTotalCount(allRows.length);
+  }, [obsPeriods, page, rowsPerPage]);
+
   const timeDifference = (time1, time2) => {
     const startTime = time1.split(":");
     const endTime = time2.split(":");
@@ -73,9 +88,6 @@ const PeriodTable = (props) => {
     setModalOpen(false);
     setEditModalOpen(true);
   };
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage);
@@ -118,9 +130,7 @@ const PeriodTable = (props) => {
           </TableHead>
           <TableBody>
             {
-              obsPeriods
-                .filter(i => i.observationType !== "Paikallinen" && i.observationType !== "Hajahavainto")
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              rows
                 .map((s, i) =>
                   <StyledTableRow hover key={i} >
                     <StyledTableCell component="th" scope="row" className={classes.linkImitator} onClick={() => handleOpen(s)}>
@@ -165,7 +175,9 @@ const PeriodTable = (props) => {
           />
         </Table>
       </TableContainer>
-      <PeriodTablePagination list={obsPeriods} rowsPerPage={rowsPerPage}
+      <PeriodTablePagination
+        totalCount={totalCount}
+        rowsPerPage={rowsPerPage}
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}

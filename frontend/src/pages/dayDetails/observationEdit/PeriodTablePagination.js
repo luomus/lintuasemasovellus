@@ -6,13 +6,13 @@ import {
 import { useTranslation } from "react-i18next";
 
 const PeriodTablePagination = ({
-  list, rowsPerPage, handleChangePage, handleChangeRowsPerPage,
+  totalCount, rowsPerPage, handleChangePage, handleChangeRowsPerPage,
   page
 }) => {
 
   const { t } = useTranslation();
 
-  if (list.length < 50) {
+  if (totalCount < 50) {
     return null;
   }
   return (
@@ -20,7 +20,7 @@ const PeriodTablePagination = ({
       <TableFooter>
         <TableRow>
           <TablePagination
-            rowsPerPageOptions={[50, 100, { label: t("all"), value: list.length }]}
+            rowsPerPageOptions={[50, 100, { label: t("all"), value: -1 }]}
             colSpan={3}
             labelRowsPerPage={t("rowsPerPage")}
             labelDisplayedRows={
@@ -28,7 +28,7 @@ const PeriodTablePagination = ({
                 return "" + from + " - " + to + t("to") + count;
               }
             }
-            count={list.length}
+            count={totalCount}
             rowsPerPage={rowsPerPage}
             page={page}
             slotProps={{
@@ -47,7 +47,7 @@ const PeriodTablePagination = ({
 };
 
 PeriodTablePagination.propTypes = {
-  list: PropTypes.array.isRequired,
+  totalCount: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   handleChangePage: PropTypes.func.isRequired,
   handleChangeRowsPerPage: PropTypes.func.isRequired,

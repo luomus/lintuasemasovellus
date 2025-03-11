@@ -45,11 +45,12 @@ const SpeciesTable = (props) => {
   const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(false);
   const [textFilter, setTextFilter] = useState("");
   const [speciesListType, setSpeciesListType] = useState("defaults");
-  const [filteredSummary, setFilteredSummary] = useState(summary);
   const [extendedSummary, setExtendedSummary] = useState(summary);
+  const [filteredSummary, setFilteredSummary] = useState(summary);
+  const [rows, setRows] = useState(summary);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [rowsPerPage, setRowsPerPage] = useState(-1);
 
   const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage);
@@ -130,6 +131,14 @@ const SpeciesTable = (props) => {
     );
   }, [extendedSummary, birdsWithObsFilter, textFilter]);
 
+  useEffect(() => {
+    const newRows = rowsPerPage === -1
+      ? filteredSummary
+      : filteredSummary.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+    setRows(newRows);
+  }, [filteredSummary, page, rowsPerPage]);
+
   return (
     <div>
       <Typography variant="h6" >
@@ -196,8 +205,7 @@ const SpeciesTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredSummary
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {rows
               .map((s) =>
                 <StyledTableRow hover key={s.species}>
                   <Row day={day} s={s} key={s.species} />
@@ -208,7 +216,7 @@ const SpeciesTable = (props) => {
         </Table>
       </TableContainer>
       <PeriodTablePagination
-        list={filteredSummary}
+        totalCount={filteredSummary.length}
         rowsPerPage={rowsPerPage}
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
