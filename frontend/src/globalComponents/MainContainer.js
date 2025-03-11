@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
-import Footer from "./Footer";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
@@ -10,7 +9,6 @@ const useStyles = makeStyles({
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    paddingBottom: "50px",
     overflowY: "auto"
   }
 });
@@ -22,7 +20,6 @@ const MainContainer = ({ showNavBar }) => {
     <div className={classes.mainContainer}>
       { showNavBar && <NavBar /> }
       <Outlet />
-      <Footer />
     </div>
   );
 };

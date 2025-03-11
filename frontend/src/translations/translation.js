@@ -3,7 +3,6 @@ const resources = {
     translation: {
       // site-wide, headers
       "intro": "Tervetuloa lintuasemasovellus Haukkaan. Suomessa sijaitsee 16 lintuasemaa. Lintuasemasovelluksen avulla käyttäjä voi kirjata lintuasemilla tehtyjä lintujen havaintotietoja vakioidussa muodossa. Havaintojen tallentaminen järjestelmään vaatii sisäänkirjautumisen.",
-      "footer": "Lintuasemasovellus Haukka | Luonnontieteellinen keskusmuseo LUOMUS",
       "login": "Kirjaudu sisään",
       "logout": "Kirjaudu ulos",
       "User": "Käyttäjä",
