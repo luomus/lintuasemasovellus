@@ -44,7 +44,7 @@ const LocalInput = ({ day, count, species, dataType, onChange, inputRef }) => {
   const saveValue = async () => {
     const newValue = parseInt(inputValue, 10);
 
-    if (newValue !== count && Number.isInteger(newValue)) {
+    if (newValue !== count && Number.isInteger(newValue) && newValue >= 0) {
       onChange(newValue);
       if (dataType.includes("local")) {
         await dispatch(saveData(() => updateLocalObservation(day, observatory, species, newValue, dataType === "localGau" ? 1 : 0)));
@@ -68,9 +68,11 @@ const LocalInput = ({ day, count, species, dataType, onChange, inputRef }) => {
         onChange={handleChange}
         slotProps={{
           input: {
-            min: 0,
             value: inputValue,
             disableInjectingGlobalStyles: true
+          },
+          htmlInput: {
+            min: 0
           }
         }}
       ></TextField>

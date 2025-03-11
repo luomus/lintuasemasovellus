@@ -125,7 +125,7 @@ const SpeciesTable = (props) => {
     setFilteredSummary(
       [...extendedSummary]
         .filter(s =>
-          (s.allMigration + s.totalLocal) > (birdsWithObsFilter ? 0 : -1)
+          (birdsWithObsFilter ? s.allMigration + s.totalLocal > 0 : true)
           && s.species.toLowerCase().includes(textFilter.toLowerCase())
         )
     );
