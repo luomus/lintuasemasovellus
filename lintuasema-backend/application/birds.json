@@ -2710,5 +2710,38 @@
   },
   "PCYA": {
     "value": "PARCYA"
+  },
+  "Metsäkauris": {
+    "value": "Metsäkauris"
+  },
+  "Valkohäntäkauris": {
+    "value": "Valkohäntäkauris"
+  },
+  "Saukko": {
+    "value": "Saukko"
+  },
+  "Halli": {
+    "value": "Halli"
+  },
+  "Rusakko": {
+    "value": "Rusakko"
+  },
+  "Metsähiiri": {
+    "value": "Metsähiiri"
+  },
+  "Orava": {
+    "value": "Orava"
+  },
+  "Rupikonna": {
+    "value": "Rupikonna"
+  },
+  "Sammakko": {
+    "value": "Sammakko"
+  },
+  "Rantakäärme": {
+    "value": "Rantakäärme"
+  },
+  "Kyy": {
+    "value": "Kyy"
   }
 }

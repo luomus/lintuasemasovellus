@@ -57,7 +57,7 @@ const parseTime = (timeString) => {
 };
 
 const readyObservation = (observation, userID) => {
-  const speciesMap = store.getState().speciesData.speciesMap;
+  const speciesMap = store.getState().speciesData.speciesNameUpperMap;
   observation["species"] = Object.values(speciesMap.get(observation["species"].toUpperCase()))[0];
   observation["direction"] = globals.directions.get(observation["direction"].toUpperCase());
   observation["bypassSide"] = globals.bypass.get(observation["bypassSide"]);

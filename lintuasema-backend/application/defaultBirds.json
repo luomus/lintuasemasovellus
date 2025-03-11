@@ -235,9 +235,20 @@
     "EMBCIT",
     "EMBRUS/EMBPUS/EMBAUR",
     "EMBSCH",
-    "PL"
+    "PL",
+    "Metsäkauris",
+    "Valkohäntäkauris",
+    "Saukko",
+    "Halli",
+    "Rusakko",
+    "Metsähiiri",
+    "Orava",
+    "Rupikonna",
+    "Sammakko",
+    "Rantakäärme",
+    "Kyy"
   ],
   "Jurmon_Lintuasema": [
-    
+
   ]
 }

@@ -18,11 +18,15 @@ export const setSpecies = (species) => {
 
 const speciesReducer = (state = null, action) => {
   switch (action.type) {
-    case "SET_SPECIES":
+    case "SET_SPECIES": {
+      const entries = Object.entries(action.data.species);
+      const upperEntries = entries.map(entry => [entry[0].toUpperCase(), entry[1]]);
+
       return {
-        speciesMap: new Map(Object.entries(action.data.species)),
+        speciesNameUpperMap: new Map(upperEntries),
         uniqueSpecies: [...new Set(Object.values(action.data.species).map(species => species.value))]
       };
+    }
     default:
       return state;
   }

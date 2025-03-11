@@ -142,7 +142,7 @@ const ikaConstructed = () => {
 };
 
 export const constructTaysiHavainto = (startKello, endKello) => {
-  const species = store.getState().speciesData.speciesMap;
+  const species = store.getState().speciesData.speciesNameUpperMap;
   if (!species.has(lajinimi.toUpperCase())) {
     throw new Error("unknownSpeciesError");
   }
