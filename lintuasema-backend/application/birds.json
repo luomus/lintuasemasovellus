@@ -26,6 +26,12 @@
   "AFAB": {
     "value": "ANSFAB"
   },
+  "ANSFAB/ANSROS/ANSERY": {
+    "value": "ANSFAB/ANSROS/ANSERY"
+  },
+  "TUANS": {
+    "value": "ANSFAB/ANSROS/ANSERY"
+  },
   "ANSBRA": {
     "value": "ANSBRA"
   },
@@ -84,6 +90,9 @@
     "value": "BRASP"
   },
   "ANS/BRA": {
+    "value": "ANS/BRA"
+  },
+  "AB": {
     "value": "ANS/BRA"
   },
   "TADFER": {
@@ -206,6 +215,9 @@
   "SOMMOL": {
     "value": "SOMMOL"
   },
+  "SM": {
+    "value": "SOMMOL"
+  },
   "SMOL": {
     "value": "SOMMOL"
   },
@@ -219,6 +231,9 @@
     "value": "HISHIS"
   },
   "CLAHYE": {
+    "value": "CLAHYE"
+  },
+  "CH": {
     "value": "CLAHYE"
   },
   "CHYE": {
@@ -341,10 +356,16 @@
   "GAVSTE": {
     "value": "GAVSTE"
   },
+  "GS": {
+    "value": "GAVSTE"
+  },
   "GSTE": {
     "value": "GAVSTE"
   },
   "GAVARC": {
+    "value": "GAVARC"
+  },
+  "GA": {
     "value": "GAVARC"
   },
   "GARC": {
@@ -363,6 +384,9 @@
     "value": "GAVIMM/GAVADA"
   },
   "GAVSP": {
+    "value": "GAVSP"
+  },
+  "G": {
     "value": "GAVSP"
   },
   "TACRUF": {
@@ -1599,6 +1623,12 @@
     "value": "CECDAU"
   },
   "RIP/HIR/DEL": {
+    "value": "RIP/HIR/DEL"
+  },
+  "RHD": {
+    "value": "RIP/HIR/DEL"
+  },
+  "HDR": {
     "value": "RIP/HIR/DEL"
   },
   "ANTRIC": {
