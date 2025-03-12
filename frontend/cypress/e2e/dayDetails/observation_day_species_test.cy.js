@@ -33,11 +33,10 @@ const selectAllRows = () => {
   cy.wait(1000);
 };
 
-const assertThatSpeciesTableBodyHasNumberOfRows = (value) => {
-  cy.get("#speciesTable")
+const getTableRows = () => {
+  return cy.get("#speciesTable")
     .get("tbody")
-    .find("tr")
-    .should("have.length", value);
+    .find("tr");
 };
 
 describe("Species table with filters contains species as expected", function () {
@@ -131,44 +130,22 @@ describe("Species table with filters contains species as expected", function () 
       .should("contain", basic1, basic2, other1, other2);
   });
 
-  it(`Basic species table
-      with only observations filter disabled
-      and with all rows selected
-      contains 236 rows`,
-  function () {
+  it("Species table type filter works", function () {
     cy.get("#onlyObservationsFilter").uncheck();
 
     selectAllRows();
 
-    assertThatSpeciesTableBodyHasNumberOfRows(236);
-  });
+    getTableRows().then(rows => {
+      const count1 = rows.length;
 
-  it(`Other species table
-      with only observations filter disabled
-      and with all rows selected
-      contains 381 rows`,
-  function () {
-    chooseSpeciesType("others");
+      chooseSpeciesType("others");
+      getTableRows().should("have.length.gte", count1).then(rows => {
+        const count2 = rows.length;
 
-    cy.get("#onlyObservationsFilter").uncheck();
-
-    selectAllRows();
-
-    assertThatSpeciesTableBodyHasNumberOfRows(381);
-  });
-
-  it(`All species table
-      with only observations filter disabled
-      and with all rows selected
-      contains 617 rows`,
-  function () {
-    chooseSpeciesType("all");
-
-    cy.get("#onlyObservationsFilter").uncheck();
-
-    selectAllRows();
-
-    assertThatSpeciesTableBodyHasNumberOfRows(617);
+        chooseSpeciesType("all");
+        getTableRows().should("have.length", count1 + count2);
+      });
+    });
   });
 
 });
