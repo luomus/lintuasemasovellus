@@ -238,7 +238,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
           :
           <TextField
             className={classes.smallInputField}
-            label={t("pcs")}
+            label={t("pcsUpper")}
             id="selectCatchCount"
             name="lukumaara"
             required
