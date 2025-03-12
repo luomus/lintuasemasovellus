@@ -179,13 +179,19 @@ const isNumeric = (string) => {
   return !isNaN(string) && !isNaN(parseInt(string));
 };
 
+const getNextNonWhitespaceOrNoteChar = (index, line) => {
+  const remainingLine = line.substring(index + 1);
+  const remainingLineWithoutNotes = remainingLine.replace(/\(.*?\)/g, "");
+  return remainingLineWithoutNotes.trim()[0];
+};
+
 const acceptableAroundIlmansuuntaHeuristic = (index, line) => {
   if (index === line.length - 1) return true;
   if (index === 0) return false;
   if (acceptableIkaChar.has(line[index + 1])) {
     return charIsProbablyDirection(line[index + 1]);
   }
-  const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
+  const nextNonSpaceyChar = getNextNonWhitespaceOrNoteChar(index, line);
   if (nextNonSpaceyChar === ",") return true;
   if (isNumeric(nextNonSpaceyChar)) throw new Error("numberAfterDirection");
   return true;
@@ -237,13 +243,13 @@ const fillSukupuoliBucketsNotSlash = () => {
 };
 
 const isTooManyCommasHeuristic = (index, line) => {
-  const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
+  const nextNonSpaceyChar = getNextNonWhitespaceOrNoteChar(index, line);
   return nextNonSpaceyChar === ",";
 };
 
 const bypassSideIsLast = (index, line) => {
   if (index === line.length - 1) return true;
-  const nextNonSpaceyChar = line.substring(index + 1).trim()[0];
+  const nextNonSpaceyChar = getNextNonWhitespaceOrNoteChar(index, line);
   return nextNonSpaceyChar === "," || nextNonSpaceyChar === "+" || nextNonSpaceyChar === "-";
 };
 
@@ -266,8 +272,6 @@ const isDirection = (char, line, index) => {
 const handleDefaultAlpha = (char, line, index) => {
   if (lajinimiNotSet()) {
     lajinimi += char;
-  } else if (lisatietobucketIsOpen) {
-    lisatieto += char;
   } else if (isDirection(char, line, index)) {
     ilmansuunta += char;
   } else if (acceptableIkaChar.has(char)) {
@@ -278,20 +282,12 @@ const handleDefaultAlpha = (char, line, index) => {
 };
 
 const handleSpaceySymbol = () => {
-  if (lisatietobucketIsOpen) {
-    lisatieto += " ";
-    return;
-  }
   firstSpaceOfLineBreakOrSomeSuchEncountered = true;
 };
 
 const handleNumeric = (char) => {
   if (lajinimiNotSet()) {
     throw new Error("missingSpaceAfterSpecies");
-  }
-  if (lisatietobucketIsOpen) {
-    lisatieto += char;
-    return;
   }
   ageCanBeSet = true;
   yksilomaara += char;
@@ -304,6 +300,9 @@ const handleTimeSymbol = () => {
 const handleBracketOpen = () => {
   if (lajinimiNotSet()) {
     throw new Error("missingSpaceAfterSpecies");
+  }
+  if (lisatieto) {
+    lisatieto += " ";
   }
   openLisatietoBucket();
 };
@@ -321,10 +320,6 @@ const handleComma = (line, index) => {
   }
   if (isTooManyCommasHeuristic(index, line)) {
     throw new Error("extraCommas");
-  }
-  if (lisatietobucketIsOpen) {
-    lisatieto += ",";
-    return;
   }
   constructOsahavainto();
 };
@@ -369,6 +364,15 @@ const handleSlash = () => {
  * @param {number} index
  */
 const giveMeABucket = (char, line, index) => {
+  if (lisatietobucketIsOpen) {
+    if (char === ")") {
+      handleBracketClose();
+    } else {
+      lisatieto += char;
+    }
+    return;
+  }
+
   switch (char) {
     default:
       handleDefaultAlpha(char, line, index);
@@ -472,14 +476,12 @@ const checkBracketsFirstPass = (line) => {
 };
 
 const emptyObservation = (fullObservation) => {
-
   for (const subobs of fullObservation.osahavainnot) {
     for (const field in subobs) {
-      if (subobs[String(field)] === "0" || subobs[String(field)] === "w" ||
-      subobs[String(field)] === "e" || subobs[String(field)] === "n" ||
-      subobs[String(field)] === "s" || subobs[String(field)] === "ne" ||
-      subobs[String(field)] === "nw" || subobs[String(field)] === "se" ||
-      subobs[String(field)] === "sw") {
+      if (["direction", "bypassSide", "notes"].includes(String(field))) {
+        continue;
+      }
+      if (subobs[String(field)] === "0") {
         return true;
       } else if (subobs[String(field)]) {
         return false;

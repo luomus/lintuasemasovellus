@@ -13,7 +13,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
 import { isNightValidation } from "../../shorthand/isNightValidation";
-import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
+import { getOverlappingTimeRows } from "../../shorthand/overlappingTimesValidation";
 import { AppContext } from "../../AppContext";
 import { shorthandTextToLines } from "../../shorthand/parseShorthandField";
 import { dayStringToDate, getDaysObservationPeriods } from "../../services";
@@ -62,8 +62,8 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     });
   }, [dayId]);
 
-  const validateObservationOnTop = async (value) => {
-    const getRowNumbers = await observationsOnTop(value, observationPeriods, activeObservationPeriodIds);
+  const validateOverlappingTimes = async (value) => {
+    const getRowNumbers = await getOverlappingTimeRows(value, observationPeriods, activeObservationPeriodIds);
 
     if (getRowNumbers.length > 0) {
       return getRowNumbers;
@@ -107,8 +107,8 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     }
   };
 
-  const setValidateObsOnTopNotification = async (value, editor, result) => {
-    const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+  const setValidateOverlappingTimesNotification = async (value, editor, result) => {
+    const rowNumbers = await validateOverlappingTimes(value) ? await validateOverlappingTimes(value) : [];
 
     const valuesToArray = value.split("\n");
 
@@ -147,7 +147,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
   const validateAndSetNotifications = async (editor, value) => {
     const result = validate(editor, value);
     setValidateNightNotification(value, editor);
-    const newResult = await setValidateObsOnTopNotification(value,editor,result);
+    const newResult = await setValidateOverlappingTimesNotification(value,editor,result);
 
     dispatch(setNotifications([[], newResult], "shorthand", 0));
   };
@@ -168,7 +168,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
         setEditorInstance(editor);
         editor.refresh();
       }}
-      onBeforeChange={(editor, data, value) => {
+      onChange={(editor, data, value) => {
         setInputValue(value);
         onChange(value);
       }}

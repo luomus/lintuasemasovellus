@@ -647,6 +647,13 @@ describe("Bugfixes", () => {
     }).toThrow("emptyObservation");
   });
 
+  test("empty observation 2", () => {
+    const line = "sommol E";
+    expect(() => {
+      parse(line);
+    }).toThrow("emptyObservation");
+  });
+
   test("observation notes are parsed ok-ish", () => {
     let noteStr = "23, testi, hauki on kala";
     let noteStr2 = "testi 34, jee";
@@ -660,4 +667,12 @@ describe("Bugfixes", () => {
     expect(result.osahavainnot[1].notes).toBe(noteStr2);
   });
 
+  test("notes can include times", () => {
+    let noteStr = "klo 12.30 aamulla";
+    let noteStr2 = "12.1.2021 16:70";
+    let line = "sommol 1 (" + noteStr + "), 3 (" + noteStr2 + ")";
+    let result = parse(line);
+    expect(result.osahavainnot[0].notes).toBe(noteStr);
+    expect(result.osahavainnot[1].notes).toBe(noteStr2);
+  });
 });
