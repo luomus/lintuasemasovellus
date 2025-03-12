@@ -91,7 +91,7 @@ const resources = {
       "owlStandard": "Pöllövakio",
       "mammals": "Nisäkkäät yms. laskettu",
       "attachments": "Liitteitä",
-      "pcs": "kpl",
+      "pcs": "Kpl",
       "notes": "Lisätiedot",
       "filter": "Suodata",
       "drafts": "Luonnokset",

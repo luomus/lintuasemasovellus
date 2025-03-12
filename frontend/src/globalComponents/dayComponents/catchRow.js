@@ -1,8 +1,7 @@
 import React, { useEffect, memo } from "react";
 import { HighlightOff } from "@mui/icons-material";
 import {
-  TextField, MenuItem, FormControl,
-  FormControlLabel, InputAdornment, Grid, FormGroup, IconButton,
+  TextField, MenuItem, InputAdornment, Grid, FormGroup, IconButton,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -12,35 +11,20 @@ import { setNotifications } from "../../reducers/notificationsReducer";
 
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    minWidth: 105,
-    padding: "0px 10px 0px 0px",
+  inputField: {
+    flex: "4 1 0",
     margin: theme.spacing(1),
+    minWidth: 100,
+    maxWidth: 200
   },
-  formControlLabel: {
-    padding: "0px 10px 0px 0px",
+  smallInputField: {
+    flex: "1 1 0",
     margin: theme.spacing(1),
+    minWidth: 75,
+    maxWidth: 100
   },
-  formControlLabel2: {
-    padding: "0px 10px 0px 0px",
-    margin: theme.spacing(1),
-    marginTop: theme.spacing(3)
-  },
-  formControlLabel3: {
+  removeButton: {
     margin: theme.spacing(1)
-  },
-  netCodes: {
-    width: 110,
-  },
-  numberField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 90
-  },
-  netCodesField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 175
   }
 }
 ));
@@ -173,7 +157,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
         <TextField
           required
           select
-          className={classes.formControl}
+          className={classes.inputField}
           label={t("catchType")}
           id="selectCatchType"
           name="pyydys"
@@ -195,7 +179,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
         <TextField
           required
           select
-          className={classes.formControl}
+          className={classes.inputField}
           label={t("catchArea")}
           id="selectCatchArea"
           name="pyyntialue"
@@ -216,104 +200,88 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
         </TextField>
 
         {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
-          ? <div></div>
+          ? <div className={classes.smallInputField}></div>
           :
-          <FormControlLabel className={classes.formControlLabel2}
-            label={t("netopened")} labelPlacement="start"
-            control={<TextField
-              id="opened"
-              type="time"
-              defaultValue={value.alku}
-              name="alku"
-              style={{ paddingLeft: "5px" }}
-              onChange={(event) => handleChange(event.target)}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 60,
-              }}
-            />} />
+          <TextField
+            id="opened"
+            type="time"
+            className={classes.smallInputField}
+            label={t("netopened")}
+            defaultValue={value.alku}
+            name="alku"
+            onChange={(event) => handleChange(event.target)}
+            inputProps={{
+              step: 60,
+            }}
+          />
         }
 
         {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
-          ? <div></div>
+          ? <div className={classes.smallInputField}></div>
           :
-          <FormControlLabel className={classes.formControlLabel2}
-            label={t("netclosed")} labelPlacement="start"
-            control={<TextField
-              id="closed"
-              type="time"
-              name="loppu"
-              defaultValue={value.loppu}
-              style={{ paddingLeft: "5px" }}
-              onChange={(event) => handleChange(event.target)}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 60,
-              }}
-            />} />
+          <TextField
+            id="closed"
+            type="time"
+            className={classes.smallInputField}
+            label={t("netclosed")}
+            name="loppu"
+            defaultValue={value.loppu}
+            onChange={(event) => handleChange(event.target)}
+            inputProps={{
+              step: 60,
+            }}
+          />
         }
 
         {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
-          ? <div></div>
+          ? <div className={classes.smallInputField}></div>
           :
-          <FormControlLabel className={classes.formControlLabel2}
-            label="" labelPlacement="start"
-            control={
-              <TextField
-                className={classes.numberField}
-                id="selectCatchCount"
-                name="lukumaara"
-                required
-                type="number"
-                value={value.lukumaara}
-                onChange={(event) => handleChange(event.target)}
-                hiddenLabel={true}
-                InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}
-              />
-            } />
+          <TextField
+            className={classes.smallInputField}
+            label={t("pcs")}
+            id="selectCatchCount"
+            name="lukumaara"
+            required
+            type="number"
+            value={value.lukumaara}
+            onChange={(event) => handleChange(event.target)}
+            InputProps={{ inputProps: { min: 0 } }}
+          />
         }
 
         {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
-          ? <div></div>
+          ? <div className={classes.inputField}></div>
           :
-          <FormControl className={classes.formControlLabel}>
-            <TextField
-              className={classes.netCodesField}
-              id="netCodes"
-              name="verkkokoodit"
-              label={t("netCodes")}
-              onChange={(event) => handleChange(event.target)}
-              value={value.verkkokoodit}
-            />
-          </FormControl>
+          <TextField
+            className={classes.inputField}
+            id="netCodes"
+            name="verkkokoodit"
+            label={t("netCodes")}
+            onChange={(event) => handleChange(event.target)}
+            value={value.verkkokoodit}
+          />
         }
 
         {(value.pyydys === "" || value.pyyntialue === "" || !catchAreas[String(value.pyydys)].includes(value.pyyntialue))
-          ? <div></div>
+          ? <div className={classes.smallInputField}></div>
           :
           (value.pyydys.length === 0 || (value.pyydys.length > 1 && catchesWithoutLength.indexOf(value.pyydys) > -1)) //is a catch without length
-            ? <div></div>
+            ? <div className={classes.smallInputField}></div>
             :
-            <FormControlLabel className={classes.formControlLabel2}
-              label={t("netLength")} labelPlacement="start"
-              control={<TextField
-                className={classes.numberField}
-                id="selectNetLength"
-                required
-                name="verkonPituus"
-                type="number"
-                value={value.verkonPituus}
-                onChange={(event) => handleChange(event.target)}
-                InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
-              />
-              } />
+            <TextField
+              className={classes.smallInputField}
+              label={t("netLength")}
+              id="selectNetLength"
+              required
+              name="verkonPituus"
+              type="number"
+              value={value.verkonPituus}
+              onChange={(event) => handleChange(event.target)}
+              InputProps={{ endAdornment: <InputAdornment position="end">{"m"}</InputAdornment>, inputProps: { min: 0 } }}
+            />
         }
 
-        <IconButton id="removeButton" size="medium" onClick={() => handleRowRemove()} className={classes.formControlLabel3}>
+        <IconButton id="removeButton" size="medium" onClick={() => handleRowRemove()} className={classes.removeButton}>
           <HighlightOff fontSize="default" color="error" />
         </IconButton>
       </FormGroup>
