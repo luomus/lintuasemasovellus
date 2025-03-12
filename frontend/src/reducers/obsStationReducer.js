@@ -1,14 +1,54 @@
 import { getObservationStations } from "../services";
 
-const defaultActions = { standardObs: false, gåu: false, standardRing: false, owlStandard: false, mammals: false, attachments: "0" };
+const hankoStandardCatches = [
+  {
+    "pyydys": "Vakioverkko",
+    "pyyntialue": "Vakioverkot K",
+    "verkkokoodit": "",
+    "lukumaara": 1,
+    "verkonPituus": 12,
+    "alku": "00:00",
+    "loppu": "00:00"
+  },
+  {
+    "pyydys": "Vakioverkko",
+    "pyyntialue": "Vakioverkot muu",
+    "verkkokoodit": "",
+    "lukumaara": "4",
+    "verkonPituus": 9,
+    "alku": "00:00",
+    "loppu": "00:00"
+  },
+  {
+    "pyydys": "Petoverkot",
+    "pyyntialue": "Vakiopetoverkot",
+    "verkkokoodit": "",
+    "lukumaara": "7",
+    "verkonPituus": 12,
+    "alku": "00:00",
+    "loppu": "00:00"
+  },
+  {
+    "pyydys": "Lisäverkko",
+    "pyyntialue": "Piha",
+    "verkkokoodit": "",
+    "lukumaara": "7",
+    "verkonPituus": 9,
+    "alku": "00:00",
+    "loppu": "00:00"
+  }
+];
+const hankoDefaultActions = { standardObs: false, gåu: false, standardRing: false, owlStandard: false, mammals: false, attachments: "0" };
 
 export const initializeStations = () => {
   return async dispatch => {
     const stations = await getObservationStations();
     stations.forEach((station) => {
       if (station.observatory === "Hangon_Lintuasema") {
-        station.defaultActions = defaultActions;
+        station.standardCatches = hankoStandardCatches;
+        station.defaultActions = hankoDefaultActions;
       } else {
+        station.standardCatches = [];
         station.defaultActions = {};
       }
     });

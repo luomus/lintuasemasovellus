@@ -114,6 +114,7 @@ const resources = {
       "observationPeriodNotDefined": "Havainnointijaksoa ei ole määritelty!",
       "noObservationsFound": "Havainnointitietoja ei löytynyt tälle päivälle.",
       "addRowByClicking": "Lisää pyydys painamalla '+'.",
+      "addStandardCatchRowsByClicking": "Lisää vakiopyydykset painamalla '+'.",
       "rowRemoved": "Pyydysrivi poistetaan. Vahvista painamalla 'Poista'.",
       "modify": "Muokkaa",
       "save": "Tallenna",

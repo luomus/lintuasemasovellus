@@ -76,12 +76,11 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
   }, [catchesBeforeEdit]);
 
   const handleAddNewCatch = useCallback(() => {
-    const maxKey = value.length === 0 ? 0 : Math.max.apply(Math, value.map(row => row.key));
-    const newKey = maxKey + 1;
+    const newRow = getNewCatchRow(value);
     setCachesBeforeEdit(value);
-    setCatchRowKeyToEdit(newKey);
+    setCatchRowKeyToEdit(newRow.key);
     setCatchesEditMode(true);
-    onChange([...value, getNewCatchRow(newKey)]);
+    onChange([...value, newRow]);
   }, [value]);
 
   const handleCatchesEditSave = useCallback(() => {

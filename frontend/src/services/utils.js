@@ -48,8 +48,13 @@ export const stringifyDailyActions = (dailyActions) => {
   return JSON.stringify(dailyActions);
 };
 
-export const getNewCatchRow = (key) => {
-  return { key, pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" };
+export const getNextAvailableKey = (rows) => {
+  const maxKey = rows.length === 0 ? 0 : Math.max.apply(Math, rows.map(row => row.key));
+  return maxKey + 1;
+};
+
+export const getNewCatchRow = (rows) => {
+  return { key: getNextAvailableKey(rows), pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" };
 };
 
 export const objectsDiffer = (obj1, obj2, checkOnlyKeys = undefined) => {

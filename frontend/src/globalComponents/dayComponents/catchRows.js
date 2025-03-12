@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { Grid, IconButton } from "@mui/material";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
@@ -6,7 +6,8 @@ import Notification from "../Notification";
 import CatchRow from "./catchRow";
 import { Add } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { getNewCatchRow } from "../../services";
+import { getNewCatchRow, getNextAvailableKey } from "../../services";
+import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles(() => ({
   catchRowEven: {
@@ -18,9 +19,20 @@ const CatchRows = ({ value, onChange }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
+  const { station } = useContext(AppContext);
+
   const addCatchRow = () => {
-    const key = value.length > 0 ? value[value.length - 1].key + 1 : 1;
-    onChange([...value, getNewCatchRow(key)]);
+    onChange([...value, getNewCatchRow(value)]);
+  };
+
+  const addStandardCatchRows = () => {
+    const newRows = [...value];
+
+    for (const row of station.standardCatches) {
+      newRows.push({ ...row, key: getNextAvailableKey(newRows) });
+    }
+
+    onChange(newRows);
   };
 
   const updateCatchRow = (i, cr) => {
@@ -51,9 +63,13 @@ const CatchRows = ({ value, onChange }) => {
         <IconButton id="plus-catch-row-button" size="medium" onClick={addCatchRow} variant="contained" color="primary">
           <Add fontSize="default" />
         </IconButton>
-        &nbsp; {(value.length === 0) ? t("addRowByClicking") : ""}
+        &nbsp; {t("addRowByClicking")}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12}>
+        <IconButton id="plus-catch-row-button" size="medium" onClick={addStandardCatchRows} variant="contained" color="primary">
+          <Add fontSize="default" />
+        </IconButton>
+        &nbsp; {t("addStandardCatchRowsByClicking")}
       </Grid>
     </Grid>
   );
