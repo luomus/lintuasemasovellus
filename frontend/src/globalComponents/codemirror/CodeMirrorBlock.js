@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import { Controlled as CodeMirror } from "react-codemirror2";
+import { UnControlled as CodeMirror } from "react-codemirror2";
 import {
   validateShorthandLines
 } from "../../shorthand/newValidations";
@@ -36,6 +36,15 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
 
   const [observationPeriods, setObservationPeriods] = useState([]);
   const [editorInstance, setEditorInstance] = useState();
+
+  const [inputValue, setInputValue] = useState(value);
+  const [startingValue, setStartingValue] = useState(value);
+
+  useEffect(() => {
+    if (value !== inputValue) {
+      setStartingValue(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
@@ -147,7 +156,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     <CodeMirror
       id="shorthand"
       className={classes.codemirrorBox}
-      value={value}
+      value={startingValue}
       options={{
         theme: "idea",
         lineNumbers: true,
@@ -160,6 +169,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
         editor.refresh();
       }}
       onBeforeChange={(editor, data, value) => {
+        setInputValue(value);
         onChange(value);
       }}
     />
