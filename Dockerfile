@@ -1,3 +1,5 @@
+ARG target=dev
+
 FROM node:20 AS builder
 
 COPY /frontend /front
@@ -10,7 +12,7 @@ COPY . .
 
 RUN npm run build
 
-FROM python:3.12
+FROM python:3.12 AS base
 
 RUN mkdir -p /opt/oracle
 
@@ -31,6 +33,16 @@ WORKDIR /back
 
 RUN pip install -r requirements.txt
 
+FROM base AS bird-station-app-dev
+
 ENTRYPOINT ["flask"]
 
 CMD ["run", "--host=0.0.0.0", "--port=3000"]
+
+FROM base AS bird-station-app-prod
+
+ENTRYPOINT ["gunicorn"]
+
+CMD ["--bind", "0.0.0.0:3000", "lintuasemasovellus:app"]
+
+FROM bird-station-app-${target} AS final
