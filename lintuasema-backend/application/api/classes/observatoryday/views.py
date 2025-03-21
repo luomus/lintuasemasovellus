@@ -4,7 +4,9 @@ from flask import render_template, request, redirect, url_for,\
 from flask_login import login_required, current_user
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, editScatterObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, edit_local_obs, \
+    edit_scatter_obs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, \
+    update_observers, get_day_without_id, get_observation_from_object
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
@@ -85,32 +87,7 @@ def add_everything():
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:
-                    birdCount = subObservation['adultUnknownCount'] + subObservation['adultFemaleCount']\
-                    + subObservation['adultMaleCount'] + subObservation['juvenileUnknownCount'] + subObservation['juvenileFemaleCount']\
-                    + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
-                    + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
-                    + subObservation['unknownMaleCount']
-                    sub_observation = Observation(species=subObservation['species'],
-                        adultUnknownCount=subObservation['adultUnknownCount'],
-                        adultFemaleCount=subObservation['adultFemaleCount'],
-                        adultMaleCount=subObservation['adultMaleCount'],
-                        juvenileUnknownCount=subObservation['juvenileUnknownCount'],
-                        juvenileFemaleCount=subObservation['juvenileFemaleCount'],
-                        juvenileMaleCount=subObservation['juvenileMaleCount'],
-                        subadultUnknownCount=subObservation['subadultUnknownCount'],
-                        subadultFemaleCount=subObservation['subadultFemaleCount'],
-                        subadultMaleCount=subObservation['subadultMaleCount'],
-                        unknownUnknownCount=subObservation['unknownUnknownCount'],
-                        unknownFemaleCount=subObservation['unknownFemaleCount'],
-                        unknownMaleCount=subObservation['unknownMaleCount'],
-                        total_count = birdCount,
-                        direction=subObservation['direction'],
-                        bypassSide=subObservation['bypassSide'],
-                        notes=subObservation['notes'],
-                        observationperiod_id=obspId,
-                        shorthand_id=shorthand_id,
-                        account_id=req['userID'])
-
+                    sub_observation = get_observation_from_object(subObservation, obspId, shorthand_id, req['userID'])
                     db.session().add(sub_observation)
 
     db.session().commit()
@@ -125,7 +102,7 @@ def update_local():
     day=datetime.strptime(req['date'], '%d.%m.%Y') #The frontend returns us the date which we use with the observatory name to get the observatoryday id
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
-    editLocalObs(current_user.user_id, obsday_id, obserid, req['species'], req['count'], req['gau'])
+    edit_local_obs(current_user.user_id, obsday_id, obserid, req['species'], req['shorthand'], req['observation'], req['gau'])
     return jsonify(req)
 
 @bp.route('/api/updateScatterObservation', methods=['POST']) #Scatter observation = hajahavainto, a more accurate English term would be miscellaneous observation
@@ -136,7 +113,7 @@ def update_scatter():
     day=datetime.strptime(req['date'], '%d.%m.%Y')
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
-    editScatterObs(current_user.user_id, obsday_id, obserid, req['species'], req['count'])
+    edit_scatter_obs(current_user.user_id, obsday_id, obserid, req['species'], req['shorthand'], req['observation'])
     return jsonify(req)
 
 @bp.route('/api/addDay', methods=['POST'])
@@ -202,5 +179,3 @@ def get_latest_days(observatory):
         res = getLatestDays(observatory_id)
 
     return jsonify(res)
-
-

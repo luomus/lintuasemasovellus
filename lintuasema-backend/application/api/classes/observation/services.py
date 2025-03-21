@@ -35,27 +35,46 @@ def getDaySummary(day_id):
     #This SQL monster retrieves each observation and groups them in order to create a view that allows the user to see what kind of observations
     #Each species has had for the day, as well as sums up the total amount of migration observations and local observations.
     #This creates the view for the DayDetails page.
+    notes_stmt_text = ("SELECT " + prefix + "Observation.species AS species," +
+                      " " + ("GROUP_CONCAT" if "sqlite" in str(db.engine) else "LISTAGG") +
+                      "(" + prefix + "Observation.notes, ', ') " +
+                      ("WITHIN GROUP (ORDER BY " + prefix + "Observation.notes)" if "sqlite" not in str(db.engine) else "") + " AS notes"
+                      " FROM " + prefix + "Observation"
+                      " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
+                      " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
+                      " WHERE " + prefix + "Observationperiod.observatoryday_id = :day_id"
+                      " AND " + prefix + "Type.name NOT IN (:local, :scatter)"
+                      " AND " + prefix + "Observation.is_deleted = 0"
+                      " AND " + prefix + "Observationperiod.is_deleted = 0"
+                      " AND " + prefix + "Type.is_deleted = 0"
+                      " GROUP BY " + prefix + "Observation.species"
+                      )
+
+
     stmt = text("SELECT " + prefix + "Observation.species AS species,"
-                " SUM(CASE WHEN (" + prefix + "Type.name = :const OR " + prefix + "Type.name = :other OR " + prefix + "Type.name = :night OR " + prefix + "Type.name = :scatter) THEN total_count ELSE 0 END) AS all_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :const THEN total_count ELSE 0 END) AS const_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :other THEN total_count ELSE 0 END) AS other_migration,"
                 " SUM(CASE WHEN " + prefix + "Type.name = :night THEN total_count ELSE 0 END) AS night_migration,"
-                " SUM(CASE WHEN " + prefix + "Type.name = :scatter THEN total_count ELSE 0 END) AS scatter_obs,"
-                " SUM(CASE WHEN " + prefix + "Type.name = :local THEN total_count ELSE 0 END) AS total_local,"
+                " SUM(CASE WHEN " + prefix + "Type.name = :scatter THEN total_count ELSE 0 END) AS scatter,"
                 " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name <> :gou) THEN total_count ELSE 0 END) AS local_other,"
                 " SUM(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name = :gou) THEN total_count ELSE 0 END) AS local_gou,"
-                " " + ("GROUP_CONCAT" if "sqlite" in str(db.engine) else "LISTAGG") +
-                "(" + prefix + "Observation.notes, ', ') " + ("WITHIN GROUP (ORDER BY " + prefix + "Observation.notes)" if "sqlite" not in str(db.engine) else "") + "AS notes"
+                " ANY_VALUE(CASE WHEN " + prefix + "Type.name = :scatter THEN " + prefix + "Shorthand.shorthandblock ELSE '' END) AS scatter_shorthand,"
+                " ANY_VALUE(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name <> :gou) THEN " + prefix + "Shorthand.shorthandblock ELSE '' END) AS local_other_shorthand,"
+                " ANY_VALUE(CASE WHEN (" + prefix + "Type.name = :local AND " + prefix + "Location.name = :gou) THEN " + prefix + "Shorthand.shorthandblock ELSE '' END) AS local_gou_shorthand,"
+                " ANY_VALUE(c.notes) AS notes"
                 " FROM " + prefix + "Observation"
+                " LEFT JOIN (" + notes_stmt_text + ") c ON c.species = " + prefix + "Observation.species"
                 " LEFT JOIN " + prefix + "Observationperiod ON " + prefix + "Observationperiod.id = " + prefix + "Observation.observationperiod_id"
                 " LEFT JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
                 " LEFT JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
+                " LEFT JOIN " + prefix + "Shorthand ON " + prefix + "Shorthand.id = " + prefix + "Observation.shorthand_id"
                 " WHERE " + prefix + "Observationperiod.observatoryday_id = :day_id"
                 " AND " + prefix + "Observation.is_deleted = 0"
                 " AND " + prefix + "Observationperiod.is_deleted = 0"
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
-                " GROUP BY species").params(day_id = day_id,
+                " AND " + prefix + "Shorthand.is_deleted = 0"
+                " GROUP BY " + prefix + "Observation.species").params(day_id = day_id,
                     const = "Vakio", other = "Muu muutto", night = "Yömuutto", scatter = "Hajahavainto",
                     local = "Paikallinen", gou = "Luoto Gåu")
     #GÃ¥u
@@ -64,17 +83,17 @@ def getDaySummary(day_id):
 
     response = []
     for row in res:
-        print(row)
         response.append({
             "species" :row.species,
-            "allMigration":row.all_migration,
             "constMigration":row.const_migration,
             "otherMigration":row.other_migration,
             "nightMigration":row.night_migration,
-            "scatterObs":row.scatter_obs,
-            "totalLocal":row.local_other+row.local_gou,
-            "localOther":row.local_other,
-            "localGåu":row.local_gou,
+            "scatter":row.scatter,
+            "localOther": row.local_other,
+            "localGåu": row.local_gou,
+            "scatterShorthand": row.scatter_shorthand if row.scatter_shorthand else '',
+            "localOtherShorthand":row.local_other_shorthand if row.local_other_shorthand else '',
+            "localGåuShorthand":row.local_gou_shorthand if row.local_gou_shorthand else '',
             "notes":row.notes,
             "dayId" :day_id
             })

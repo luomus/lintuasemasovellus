@@ -1,4 +1,4 @@
-import { parse, resetAll } from "./shorthand";
+import ObservationParser from "./observationParser";
 import { isTime, parseTime, parseTimeForComparison } from "./timeHelper.js";
 
 /**
@@ -7,6 +7,7 @@ import { isTime, parseTime, parseTimeForComparison } from "./timeHelper.js";
  * @param {string} lines
  */
 export const validateShorthandLines = (lines) => {
+  const parser = ObservationParser();
   const errors = [];
   let shortHandContainsMoreThanTimes = false;
   let emptyPeriod = false;
@@ -136,12 +137,12 @@ export const validateShorthandLines = (lines) => {
 
       // Push errors in observation line
       try {
-        parse(line);
+        parser.parse(line);
         observationsEncountered = true;
       } catch (error) {
         errors.push([rowNumber, `${error.message}`]);
       }
-      resetAll();
+      parser.resetAll();
 
       periodContainsLines = true;
       shortHandContainsMoreThanTimes = true;

@@ -1,5 +1,5 @@
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, getDayId, editLocalObs, editScatterObs, \
+from application.api.classes.observatoryday.services import addDay, getDays, getDayId, edit_local_obs, edit_scatter_obs, \
     addDayFromReq
 from application.api.classes.observatoryday.views import add_day
 from application.api.classes.observationperiod.services import getObsPerId
@@ -77,28 +77,28 @@ def test_emptyDayAddedWithDayCreation(app):
 
 #Test editing local observations
 def test_editLocalObs(app):
-    obserid=getObservatoryId("Hangon_Lintuasema")
+    obserid=getObservatoryId('Hangon_Lintuasema')
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)#new day is added which creates the observationperiods for local and scatter observations
-    editLocalObs('MA.1', 1, obserid, 'SOMMOL', 37, 0) #local observation count for SOMMOL is edited to 37, obsday_id always starts at 1 here so we can hardcode it
+    edit_local_obs('MA.1', 1, obserid, 'SOMMOL', '37', _get_simple_observation(37, 'SOMMOL'), 0) #local observation count for SOMMOL is edited to 37, obsday_id always starts at 1 here so we can hardcode it
     obs=getObservationByPeriodAndSpecies(1, 'SOMMOL') #find observation based on obsperiod id and species name
     assert obs.species=='SOMMOL' and obs.total_count==37
 
 '''The 2 tests below work with the same principle as the one above.'''
 
 def test_editLocalGau(app): #Local Gau obsperiod is the 2nd obsperiod created by the addDay function
-    obserid=getObservatoryId("Hangon_Lintuasema")
+    obserid=getObservatoryId('Hangon_Lintuasema')
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editLocalObs('MA.1', 1, obserid, 'SOMMOL', 37, 1)
+    edit_local_obs('MA.1', 1, obserid, 'SOMMOL', '37', _get_simple_observation(37, 'SOMMOL'), 1)
     obs=getObservationByPeriodAndSpecies(2, 'SOMMOL')
     assert obs.species=='SOMMOL' and obs.total_count==37
 
 def test_editScatterObs(app):
-    obserid=getObservatoryId("Hangon_Lintuasema")
+    obserid=getObservatoryId('Hangon_Lintuasema')
     dayToAdd = Observatoryday(day=testDate2, comment='', observers='', selectedactions='', observatory_id=obserid)
     addDay(dayToAdd)
-    editScatterObs('MA.1', 1, obserid, 'FRICOE', 44)
+    edit_scatter_obs('MA.1', 1, obserid, 'FRICOE', '44', _get_simple_observation(44, 'FRICOE'))
     obs=getObservationByPeriodAndSpecies(3, 'FRICOE')
     assert obs.species=='FRICOE' and obs.total_count==44
 
@@ -112,3 +112,25 @@ def addAndFind(fields):
         if day.day == fields['day'] and day.comment == fields['comment'] and day.selectedactions == fields['selectedactions'] and day.observers == fields['observers'] and day.observatory_id == fields['observatory_id']:
             found = True
     return found
+
+def _get_simple_observation(count, species):
+    return {
+        'subObservations': [{
+            'adultUnknownCount': 0,
+            'adultFemaleCount': 0,
+            'adultMaleCount': 0,
+            'juvenileUnknownCount': 0,
+            'juvenileFemaleCount': 0,
+            'juvenileMaleCount': 0,
+            'subadultUnknownCount': 0,
+            'subadultFemaleCount': 0,
+            'subadultMaleCount': 0,
+            'unknownUnknownCount': count,
+            'unknownMaleCount': 0,
+            'unknownFemaleCount': 0,
+            'direction': '',
+            'bypassSide': '',
+            'notes': '',
+            'species': species
+        }]
+    }

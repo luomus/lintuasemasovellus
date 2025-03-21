@@ -22,10 +22,10 @@ export const deleteObservationperiods = async (idsToRemove) => {
   return await axios.post("/api/deleteObservationperiods", idsToRemove );
 };
 
-export const updateLocalObservation = async (date, observatory, species, count, gau) => {
-  return await axios.post("/api/updateLocalObservation", { "date": date, "observatory": observatory, "species": species, "count": count, "gau": gau });
+export const updateLocalObservation = async (date, observatory, species, shorthand, observation, gau) => {
+  return await axios.post("/api/updateLocalObservation", { "date": date, "observatory": observatory, "species": species, "shorthand": shorthand, "observation": observation, "gau": gau });
 };
 
-export const updateScatterObservation = async (date, observatory, species, count) => {
-  return await axios.post("/api/updateScatterObservation", { "date": date, "observatory": observatory, "species": species, "count": count });
+export const updateScatterObservation = async (date, observatory, species, shorthand, observation) => {
+  return await axios.post("/api/updateScatterObservation", { "date": date, "observatory": observatory, "species": species, "shorthand": shorthand, "observation": observation });
 };

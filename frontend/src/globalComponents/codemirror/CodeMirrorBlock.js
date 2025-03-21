@@ -17,6 +17,7 @@ import { getOverlappingTimeRows } from "../../shorthand/overlappingTimesValidati
 import { AppContext } from "../../AppContext";
 import { shorthandTextToLines } from "../../shorthand/parseShorthandField";
 import { dayStringToDate, getDaysObservationPeriods } from "../../services";
+import { translateObservationParserError } from "../../shorthand/observationParser";
 
 
 let markers = new Set();
@@ -134,10 +135,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     for (const error of errors) {
       const rowNum = error[0];
       const rowMessage = error[1];
-      (rowMessage.includes("unknownCharacter")) ?
-        toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
-        : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
-
+      toErrors.push(t("checkRow", { row: rowNum + 1 }) + translateObservationParserError(t, rowMessage));
       setMarker(editor,rowNum,rowMessage,"#f5f890","#000000");
     }
 

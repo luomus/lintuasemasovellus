@@ -1,23 +1,13 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import LocalInput from "./LocalInput";
 import { StyledTableCell } from "../../../globalComponents/common";
 
 
-const Row = ({ day, s }) => {
-  const [localOther, setLocalOther] = useState(0);
-  const [localGau, setLocalGau] = useState(0);
-  const [scatterObs, setScatterObs] = useState(0);
-
+const SpeciesTableRow = ({ day, s, onChange }) => {
   const input1Ref = React.createRef();
   const input2Ref = React.createRef();
   const input3Ref = React.createRef();
-
-  useEffect(() => {
-    setLocalOther(s.localOther);
-    setLocalGau(s.localGåu);
-    setScatterObs(s.scatterObs);
-  }, [s]);
 
   useLayoutEffect(() => {
     const handleKeyDownEvent = e => {
@@ -43,6 +33,10 @@ const Row = ({ day, s }) => {
     };
   }, [input1Ref, input2Ref, input3Ref]);
 
+  const onLocalInputChange = (name, data) => {
+    onChange({ ...s, [name]: data.totalCount, [name + "Shorthand"]: data.shorthand });
+  };
+
   return (
     <>
       <StyledTableCell component="th" scope="row">
@@ -54,19 +48,16 @@ const Row = ({ day, s }) => {
           : <>{s.species}</>}
       </StyledTableCell>
       <StyledTableCell name="localTotal" align="right">
-        {localOther + localGau}
-        {/*s.totalLocal*/}
+        {s.localOther + s.localGåu}
       </StyledTableCell>
       <StyledTableCell align="right">
-        {/* {s.localOther} */}
-        <LocalInput inputRef={input1Ref} onChange={setLocalOther} dataType="localOther" day={day} count={localOther} species={s.species} />
+        <LocalInput inputRef={input1Ref} onChange={(data) => onLocalInputChange("localOther", data)} dataType="localOther" day={day} shorthand={s.localOtherShorthand} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right">
-        {/* {s.localGåu} */}
-        <LocalInput inputRef={input2Ref} onChange={setLocalGau} dataType="localGau" day={day} count={localGau} species={s.species} />
+        <LocalInput inputRef={input2Ref} onChange={(data) => onLocalInputChange("localGåu", data)} dataType="localGau" day={day} shorthand={s.localGåuShorthand} species={s.species} />
       </StyledTableCell>
       <StyledTableCell align="right" name="migrantTotal" className="dotted">
-        {s.constMigration + s.nightMigration + s.otherMigration + scatterObs}
+        {s.constMigration + s.nightMigration + s.otherMigration + s.scatter}
       </StyledTableCell>
       <StyledTableCell align="right">
         {s.constMigration}
@@ -78,16 +69,16 @@ const Row = ({ day, s }) => {
         {s.nightMigration}
       </StyledTableCell>
       <StyledTableCell align="right">
-        {/* s.scatterObs */}
-        <LocalInput inputRef={input3Ref} onChange={setScatterObs} dataType="scatter" day={day} count={scatterObs} species={s.species} />
+        <LocalInput inputRef={input3Ref} onChange={(data) => onLocalInputChange("scatter", data)} dataType="scatter" day={day} shorthand={s.scatterShorthand} species={s.species} />
       </StyledTableCell>
     </>
   );
 };
 
-export default Row;
-
-Row.propTypes = {
+SpeciesTableRow.propTypes = {
   day: PropTypes.string.isRequired,
-  s: PropTypes.object.isRequired
+  s: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 };
+
+export default memo(SpeciesTableRow);

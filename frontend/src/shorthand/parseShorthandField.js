@@ -1,4 +1,4 @@
-import { parse, resetAll } from "./shorthand";
+import ObservationParser from "./observationParser";
 import globals from "../globalConstants";
 import store from "../store";
 
@@ -126,6 +126,7 @@ export const setDayId = (id) => {
 };
 
 export const loopThroughObservations = (shorthandRows, userID) => {
+  const parser = ObservationParser();
   let oneBeforeWasTime = false;
   let isPauseOrEmptyPeriod = false;
   let i = -1;
@@ -147,20 +148,24 @@ export const loopThroughObservations = (shorthandRows, userID) => {
         isPauseOrEmptyPeriod = true;
       } else {
         oneBeforeWasTime = false;
-        const parsed = parse(row);
-        let observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
-        observationObject["periodOrderNum"] = String(i);
-        for (const sub of parsed.osahavainnot) {
-          observation = sub;
-          observation.species = parsed.species;
-          obsCountersToNum();
-          const obsToAdd = readyObservation(observation, userID);
-          observationObject.subObservations.push(obsToAdd);
-        }
+        const observationObject = parsedRowToObservation(parser.parse(row), userID, i);
         observationsOfPeriod.push(observationObject);
-        resetAll();
+        parser.resetAll();
       }
     }
   }
   return observations;
+};
+
+export const parsedRowToObservation = (parsed, userID, periodIdx) => {
+  const observationObject = { subObservations: [] }; //create object of one observation (= shorthand row)
+  observationObject["periodOrderNum"] = String(periodIdx);
+  for (const sub of parsed.osahavainnot) {
+    observation = sub;
+    observation.species = parsed.species;
+    obsCountersToNum();
+    const obsToAdd = readyObservation(observation, userID);
+    observationObject.subObservations.push(obsToAdd);
+  }
+  return observationObject;
 };

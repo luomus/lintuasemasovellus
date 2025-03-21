@@ -1,11 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { TextField } from "@mui/material";
+import { TextField, Icon, Tooltip } from "@mui/material";
+import { Error } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { updateLocalObservation, updateScatterObservation } from "../../../services";
 import PropTypes from "prop-types";
 import { AppContext } from "../../../AppContext";
 import { useDispatch } from "react-redux";
 import { saveData } from "../../../reducers/savingStateReducer";
+import ObservationParser, { translateObservationParserError } from "../../../shorthand/observationParser";
+import { useTranslation } from "react-i18next";
+import { parsedRowToObservation } from "../../../shorthand/parseShorthandField";
 
 const useStyles = makeStyles({
   container: {
@@ -21,38 +25,74 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ day, count, species, dataType, onChange, inputRef }) => {
+const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const classes = useStyles();
-  const { observatory } = useContext(AppContext);
+  const { user, observatory } = useContext(AppContext);
 
   const [inputValue, setInputValue] = useState("");
+  const [savingShorthand, setSavingShorthand] = useState();
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    setInputValue(count);
-  }, [count]);
-
-  useEffect(() => {
-    const timeOutId = setTimeout(() => saveValue(), 500);
-    return () => clearTimeout(timeOutId);
-  }, [inputValue]);
+    setInputValue(shorthand);
+  }, [shorthand]);
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const saveValue = async () => {
-    const newValue = parseInt(inputValue, 10);
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      saveValue();
+    }
+  };
 
-    if (newValue !== count && Number.isInteger(newValue) && newValue >= 0) {
-      onChange(newValue);
-      if (dataType.includes("local")) {
-        await dispatch(saveData(() => updateLocalObservation(day, observatory, species, newValue, dataType === "localGau" ? 1 : 0)));
-      }
-      if (dataType === "scatter") {
-        await dispatch(saveData(() => updateScatterObservation(day, observatory, species, newValue)));
+  const saveValue = async () => {
+    const value = inputValue.trim();
+
+    if (value === shorthand || value === savingShorthand) {
+      setErrorMsg("");
+      return;
+    }
+
+    let parsedValue = { osahavainnot: [] };
+
+    if (value) {
+      try {
+        const parser = ObservationParser();
+        parsedValue = parser.parse(`${species} ${value}`);
+      } catch (e) {
+        setErrorMsg(translateObservationParserError(t, e.message));
+        return;
       }
     }
+
+    const observation = parsedRowToObservation(parsedValue, user, 0);
+
+    onChange({ "shorthand": value, "totalCount": getTotalCount(observation) });
+    setErrorMsg("");
+
+    setSavingShorthand(value);
+    if (dataType.includes("local")) {
+      await dispatch(saveData(() => updateLocalObservation(day, observatory, species, value, observation, dataType === "localGau" ? 1 : 0)));
+    }
+    if (dataType === "scatter") {
+      await dispatch(saveData(() => updateScatterObservation(day, observatory, species, value, observation)));
+    }
+    setSavingShorthand(undefined);
+  };
+
+  const getTotalCount = (observation) => {
+    return (observation.subObservations || []).reduce((total, subObs) => (
+      Object.keys(subObs).reduce((_total, field) => {
+        if (!field.includes("Count")) {
+          return _total;
+        }
+        return _total + subObs[String(field)];
+      }, total)
+    ), 0);
   };
 
   return (
@@ -63,9 +103,11 @@ const LocalInput = ({ day, count, species, dataType, onChange, inputRef }) => {
         className={classes.textInput}
         ref={inputRef}
         variant="standard"
-        type="number"
+        type="text"
         size="small"
         onChange={handleChange}
+        onBlur={saveValue}
+        onKeyDown={handleKeyDown}
         slotProps={{
           input: {
             value: inputValue,
@@ -76,6 +118,11 @@ const LocalInput = ({ day, count, species, dataType, onChange, inputRef }) => {
           }
         }}
       ></TextField>
+      <Tooltip title={errorMsg} style={{ visibility: errorMsg ? "visible" : "hidden" }}>
+        <Icon color="error">
+          <Error/>
+        </Icon>
+      </Tooltip>
     </div>
   );
 };
@@ -84,10 +131,10 @@ export default LocalInput;
 
 LocalInput.propTypes = {
   day: PropTypes.string.isRequired,
-  count: PropTypes.number,
+  shorthand: PropTypes.string,
   species: PropTypes.string,
   dataType: PropTypes.string,
-  onChange: PropTypes.any,
+  onChange: PropTypes.func.isRequired,
   total: PropTypes.number,
   inputRef: PropTypes.any,
 };

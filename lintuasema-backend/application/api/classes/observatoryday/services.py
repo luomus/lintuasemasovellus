@@ -100,52 +100,23 @@ def createEmptyObsPeriods(dayId):
     if added:
         db.session().commit()
 
-#Add a new observation to local obsperiod for local observations, or edit an old one if this species has already been observed locally:
-def editLocalObs(user_id, obsday_id, obserid, species, count, gau):
-    if gau==1:
-        loc1=getLocationId("Luoto Gåu", obserid) #find location Id to use for finding the right obsperiod
-    else:
-        loc1=getLocationId("Bunkkeri", obserid)
-    typid=getTypeIdByName("Paikallinen")#find type Id to use for finding the right obsperiod
-    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first() #find the correct obsperiod
-    if not per:
-        createEmptyObsPeriods(obsday_id)#this tries to create empty obsperiods if one isn't found. acts as a backup and "shouldn't" ever be needed, because these periods should have already been made
-    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first() #find observations for this species in this specific obsperiod
-    if obs: #observation already exists (=local observation for this species has already been edited)
-        obs.total_count=count #easy way to modify table entry
-        db.session().commit()
-    else: #observation does not exist, so we create it
-        #the different counts are intended for migrant observations and are not needed for local observations, so we just mark them all as unknown
-        #the shorthand id is hardcoded and refers to an empty one in the database. I think it doesn't matter even if this id doesn't refer to a real
-        #shorthand id, but might be worth checking if the app is not adding local observations
-        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-                           juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-                           subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-                           bypassSide= '', notes= '', species= species, account_id= user_id, observationperiod_id=per.id, total_count=count, shorthand_id=11387)
-            #Note! account_id is actually referring to the userid column in the account table (this is not my fault).
-        db.session().add(subobs)
-        db.session().commit()
 
-def editScatterObs(user_id, obsday_id, obserid, species, count): #This is functionally the same as editLocalObs but just does it for scatter observations
-    loc1=getLocationId("Bunkkeri", obserid)
-    typid=getTypeIdByName("Hajahavainto")
-    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
-    if not per:
-        createEmptyObsPeriods(obsday_id)
-    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
-    if obs: #observation already exists (=local observation for this species has already been edited)
-        print(obs.total_count)
-        print("doesex")
-        obs.total_count=count
-        db.session().commit()
-    else: #observation does not exist, so we create it
-        print("doesnotex")
-        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-                           juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-                           subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-                           bypassSide= '', notes= '', species= species, account_id= user_id, observationperiod_id=per.id, total_count=count, shorthand_id=11387)
-        db.session().add(subobs)
-        db.session().commit()
+def edit_local_obs(user_id, day_id, observatory_id, species, shorthand, observation, gau):
+    if gau == 1:
+        loc_id = getLocationId("Luoto Gåu", observatory_id)
+    else:
+        loc_id = getLocationId("Bunkkeri", observatory_id)
+
+    type_id = getTypeIdByName("Paikallinen")
+
+    _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorthand, observation)
+
+
+def edit_scatter_obs(user_id, day_id, observatory_id, species, shorthand, observation): #This is functionally the same as editLocalObs but just does it for scatter observations
+    loc_id = getLocationId("Bunkkeri", observatory_id)
+    type_id = getTypeIdByName("Hajahavainto")
+
+    _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorthand, observation)
 
 def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
     obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
@@ -248,3 +219,56 @@ def update_edited_day(day_new, day_old): #This function is called at the end of 
     db.session().commit()
 
     return {"id" : day_new.id}
+
+def get_observation_from_object(sub_observation, obspId, shorthand_id, user_id):
+    birdCount = sub_observation['adultUnknownCount'] + sub_observation['adultFemaleCount'] \
+                + sub_observation['adultMaleCount'] + sub_observation['juvenileUnknownCount'] + sub_observation[
+                    'juvenileFemaleCount'] \
+                + sub_observation['juvenileMaleCount'] + sub_observation['subadultUnknownCount'] + sub_observation[
+                    'subadultFemaleCount'] \
+                + sub_observation['subadultMaleCount'] + sub_observation['unknownUnknownCount'] + sub_observation[
+                    'unknownFemaleCount'] \
+                + sub_observation['unknownMaleCount']
+    return Observation(species=sub_observation['species'],
+                       adultUnknownCount=sub_observation['adultUnknownCount'],
+                       adultFemaleCount=sub_observation['adultFemaleCount'],
+                       adultMaleCount=sub_observation['adultMaleCount'],
+                       juvenileUnknownCount=sub_observation['juvenileUnknownCount'],
+                       juvenileFemaleCount=sub_observation['juvenileFemaleCount'],
+                       juvenileMaleCount=sub_observation['juvenileMaleCount'],
+                       subadultUnknownCount=sub_observation['subadultUnknownCount'],
+                       subadultFemaleCount=sub_observation['subadultFemaleCount'],
+                       subadultMaleCount=sub_observation['subadultMaleCount'],
+                       unknownUnknownCount=sub_observation['unknownUnknownCount'],
+                       unknownFemaleCount=sub_observation['unknownFemaleCount'],
+                       unknownMaleCount=sub_observation['unknownMaleCount'],
+                       total_count=birdCount,
+                       direction=sub_observation['direction'],
+                       bypassSide=sub_observation['bypassSide'],
+                       notes=sub_observation['notes'],
+                       observationperiod_id=obspId,
+                       shorthand_id=shorthand_id,
+                       account_id=user_id)
+
+def _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorthand_block, observation):
+    period = Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=day_id, location_id=loc_id, type_id=type_id).first()
+    if not period:
+        createEmptyObsPeriods(day_id)
+        period = Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=day_id, location_id=loc_id, type_id=type_id).first()
+
+    old_observations = Observation.query.filter_by(is_deleted=0, observationperiod_id=period.id, species=species).all()
+    for obs in old_observations:
+        obs.is_deleted = 1
+        old_shorthand = Shorthand.query.get(obs.shorthand_id)
+        old_shorthand.is_deleted = 1
+
+    if len(observation['subObservations']) > 0:
+        shorthand = Shorthand(shorthandblock=shorthand_block, observationperiod_id=period.id)
+        db.session().add(shorthand)
+        shorthand_id = Shorthand.query.filter_by(shorthandblock=shorthand_block, observationperiod_id=period.id, is_deleted=0).first().id
+
+        for subObservation in observation['subObservations']:
+            sub_observation = get_observation_from_object(subObservation, period.id, shorthand_id, user_id)
+            db.session().add(sub_observation)
+
+    db.session().commit()

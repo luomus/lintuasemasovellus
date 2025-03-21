@@ -2,14 +2,13 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   Table, TableHead, TableRow, TableContainer,
   TableBody, Typography,
-  FormControlLabel, Checkbox, Grid,
-  MenuItem, TextField
+  FormControlLabel, Checkbox, Grid
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import PeriodTablePagination from "./PeriodTablePagination";
-import Row from "./Row";
+import SpeciesTableRow from "./SpeciesTableRow";
 import SearchBar from "../../../globalComponents/SearchBar";
 import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
 import { AppContext } from "../../../AppContext";
@@ -44,10 +43,10 @@ const SpeciesTable = (props) => {
 
   const [birdsWithObsFilter, setBirdsWithObsFilter] = useState(false);
   const [textFilter, setTextFilter] = useState("");
-  const [speciesListType, setSpeciesListType] = useState("defaults");
-  const [extendedSummary, setExtendedSummary] = useState(summary);
-  const [filteredSummary, setFilteredSummary] = useState(summary);
-  const [rows, setRows] = useState(summary);
+
+  const [summaryWithLatestChanges, setSummaryWithLatestChanges] = useState(summary);
+  const [filteredSummary, setFilteredSummary] = useState([]);
+  const [rows, setRows] = useState([]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(-1);
@@ -62,10 +61,14 @@ const SpeciesTable = (props) => {
   }, []);
 
   useEffect(() => {
+    setSummaryWithLatestChanges(generateExtendedSummary(summary, defaultSpecies));
+  }, [summary, defaultSpecies]);
+
+  useEffect(() => {
     setPage(0);
   }, [filteredSummary]);
 
-  const generateExtendedSummary = (species) => {
+  const generateExtendedSummary = (summary, species) => {
     return (
       species.reduce((previous, current) => {
         //Use observation data if exists
@@ -77,16 +80,17 @@ const SpeciesTable = (props) => {
         return (
           previous
             .concat({
-              allMigration: 0,
               constMigration: 0,
-              localGåu: 0, //At least this one is Hanko specific
-              localOther: 0,
               nightMigration: 0,
-              notes: "",
               otherMigration: 0,
-              scatterObs: 0,
-              species: current,
-              totalLocal: 0
+              localGåu: 0,
+              localOther: 0,
+              scatter: 0,
+              localGåuShorthand: "", // At least this one is Hanko specific
+              localOtherShorthand: "",
+              notes: "",
+              scatterShorthand: "",
+              species: current
             })
         );
       }, []
@@ -98,38 +102,15 @@ const SpeciesTable = (props) => {
     setBirdsWithObsFilter(event.target.checked);
   }, []);
 
-  const handleSpeciesListChange = useCallback((event) => {
-    setSpeciesListType(event.target.value);
-  }, []);
-
-  //updateExtendedSummary if changes to summary or speciesListType filter
-  useEffect(() => {
-    let species;
-    switch (speciesListType) {
-      case "defaults":
-        species = defaultSpecies;
-        break;
-      case "others":
-        species = speciesData.uniqueSpecies.filter(bird => !defaultSpecies.includes(bird));
-        break;
-      case "all":
-        species = speciesData.uniqueSpecies;
-        break;
-    }
-    setExtendedSummary(
-      generateExtendedSummary(species)
-    );
-  }, [summary, speciesListType, defaultSpecies]);
-
   useEffect(() => {
     setFilteredSummary(
-      [...extendedSummary]
+      [...summaryWithLatestChanges]
         .filter(s =>
-          (birdsWithObsFilter ? s.allMigration + s.totalLocal > 0 : true)
+          (birdsWithObsFilter ? getTotalCount(s) > 0 : true)
           && s.species.toLowerCase().includes(textFilter.toLowerCase())
         )
     );
-  }, [extendedSummary, birdsWithObsFilter, textFilter]);
+  }, [summaryWithLatestChanges, birdsWithObsFilter, textFilter]);
 
   useEffect(() => {
     const newRows = rowsPerPage === -1
@@ -138,6 +119,26 @@ const SpeciesTable = (props) => {
 
     setRows(newRows);
   }, [filteredSummary, page, rowsPerPage]);
+
+  const onRowChange = useCallback((row) => {
+    setSummaryWithLatestChanges((prevState) => (
+      prevState.map(obj => {
+        if (obj.species === row.species) {
+          return row;
+        }
+        return obj;
+      })
+    ));
+  }, []);
+
+  const getTotalCount = (s) => {
+    return s.constMigration +
+      s.nightMigration +
+      s.otherMigration +
+      s.localGåu +
+      s.localOther +
+      s.scatter;
+  };
 
   return (
     <div>
@@ -154,24 +155,6 @@ const SpeciesTable = (props) => {
             setTextFilter={setTextFilter}
             defaultValue={textFilter}
           />
-        </Grid>
-        <Grid item xs={2}>
-          <TextField
-            fullWidth
-            select
-            label={t("shownSpecies")}
-            id="select-species-list"
-            slotProps={{
-              select: {
-                value: speciesListType,
-                onChange: handleSpeciesListChange,
-              }
-            }}
-          >
-            <MenuItem value="defaults">{t("observatoryDefaults")}</MenuItem>
-            <MenuItem value="others">{t("otherSpecies")}</MenuItem>
-            <MenuItem value="all">{t("allSpecies")}</MenuItem>
-          </TextField>
         </Grid>
         <Grid item>
           <FormControlLabel
@@ -208,7 +191,7 @@ const SpeciesTable = (props) => {
             {rows
               .map((s) =>
                 <StyledTableRow hover key={s.species}>
-                  <Row day={day} s={s} key={s.species} />
+                  <SpeciesTableRow day={day} s={s} key={s.species} onChange={onRowChange} />
                 </StyledTableRow>
               )
             }
