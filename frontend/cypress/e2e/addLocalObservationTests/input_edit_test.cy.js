@@ -6,17 +6,8 @@ const bird = "KT";
 const migrantObs = 2;
 const shorthand = `12.00\n${bird} ${migrantObs} (kommentti)\n13.00`;
 
-const chooseSpeciesType = (type) => {
-  cy.get("#select-species-list")
-    .click()
-    .get(`[data-value="${type}"]`)
-    .click();
-  cy.wait(1000);
-};
-
 const showAllBirdsWithObservations = () => {
   cy.get("#onlyObservationsFilter").check();
-  chooseSpeciesType("all");
 };
 
 Cypress.Commands.add("getRowWithNote", (species) => {

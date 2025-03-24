@@ -1,7 +1,4 @@
-import {
-  parse,
-  resetAll,
-} from "../shorthand/observationParser";
+import Parser from "../shorthand/observationParser";
 
 
 import {
@@ -19,15 +16,10 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     store.dispatch(setSpecies(speciesData));
   });
 
-  beforeEach(() => {
-    resetAll();
-  });
-
-
   test("Extremely basic test", () => {
     const lineOfText = "sommol 2/W";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
     expect(observation.species).toBe("sommol");
     const { direction, unknownMaleCount, ...rest } = observation.osahavainnot[0];
     expect(direction).toBe("w");
@@ -40,7 +32,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Harder test", () => {
     const lineOfText = "Smol /4 E";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("smol");
     const { direction, unknownFemaleCount, ...rest } = observation.osahavainnot[0];
@@ -54,7 +46,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Third tier, still going", () => {
     const lineOfText = "Smol /4 E (jp)";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("smol");
     const { direction, unknownFemaleCount, notes, ...rest } = observation.osahavainnot[0];
@@ -69,7 +61,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Fourth, god tier", () => {
     const lineOfText = "Sommol 1\"2juv3subad/W";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
     const { direction, juvenileMaleCount, adultMaleCount, subadultMaleCount, ...rest }
@@ -86,7 +78,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Fifth, legacy mode", () => {
     const lineOfText = "sommol /1W, 2/E, 3/4w";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
     const { direction: direction0, unknownFemaleCount: unknownFemaleCount0, ...rest0 }
@@ -118,7 +110,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Sixth, no more tears", () => {
     const lineOfText = " sommol /1W, 2/E ,3/4w,";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
     expect(observation.osahavainnot[0].unknownFemaleCount).toBe("1");
@@ -134,14 +126,14 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol /1W 2E";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("numberAfterDirection");
   });
 
   test("Eightball", () => {
     const lineOfText = "sommol /1/2W";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
     expect(observation.osahavainnot[0].unknownFemaleCount).toBe("1");
@@ -152,7 +144,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Nine", () => {
     const lineOfText = "sommol 1\"/2'sw";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("sommol");
     expect(observation.osahavainnot[0].adultMaleCount).toBe("1");
@@ -163,7 +155,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("Ten", () => {
     const lineOfText = "grugru 100SW+-";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("grugru");
     expect(observation.osahavainnot[0].unknownUnknownCount).toBe("100");
@@ -175,7 +167,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "grugru 100SW-+";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownBypassSide");
   });
 
@@ -183,14 +175,14 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "grugru\n100-200SW+-";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("bypassSideNotLast");
   });
 
   test("Thirteen", () => {
     const lineOfText = "grugru\n100SW+-,200 S +++\n, 300 \"W---";
 
-    const observation = parse(lineOfText);
+    const observation = Parser().parse(lineOfText);
 
     expect(observation.species).toBe("grugru");
     const { direction: direction0, unknownUnknownCount: unknownUnknownCount0,
@@ -226,7 +218,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "grugru 100SW ,,,\n,200S";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("extraCommas");
   });
 
@@ -234,7 +226,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E (jp";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("incorrectBrackets");
   });
 
@@ -242,7 +234,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E jp)";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("incorrectBrackets");
   });
 
@@ -250,7 +242,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E ((jp))";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("incorrectBrackets");
   });
 
@@ -258,14 +250,14 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E ((jp)";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("incorrectBrackets");
   });
 
   test("three bypass sides in a row", () => {
     const lineOfText = "grugru 100SW+-, 200 S +++ , 300 \"W---";
 
-    const result = parse(lineOfText);
+    const result = Parser().parse(lineOfText);
     expect(result.species).toBe("grugru");
     expect(result.osahavainnot[0].unknownUnknownCount).toBe("100");
     expect(result.osahavainnot[1].unknownUnknownCount).toBe("200");
@@ -280,7 +272,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("quite long input", () => {
     const lineOfText = "sommol 1ad2juv3subad4/1ad2juv3subad4/1ad2juv3subad4E--, 1/2 W";
-    const result = parse(lineOfText);
+    const result = Parser().parse(lineOfText);
     expect(result.species).toBe("sommol");
     expect(result.osahavainnot[0].adultMaleCount).toBe("1");
     expect(result.osahavainnot[0].juvenileMaleCount).toBe("2");
@@ -307,7 +299,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2suba ssw";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownAge");
 
   });
@@ -316,7 +308,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2sub ssw";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownAge");
   });
 
@@ -324,7 +316,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2aaa ssw";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownAge");
   });
 
@@ -332,7 +324,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2juv s, 2subad3\"e, 2/3/1a, 1'";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownAge");
   });
 
@@ -340,7 +332,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2juv ss";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownDirection");
   });
 
@@ -348,7 +340,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2juv sws";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownDirection");
   });
 
@@ -356,13 +348,13 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2juv ssw";
 
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).not.toThrow("unknownDirection");
   });
 
   test("age is separated from direction", () => {
     const lineOfText = "sommol 1subad2juv S";
-    const result = parse(lineOfText);
+    const result = Parser().parse(lineOfText);
     const { direction, subadultUnknownCount, juvenileUnknownCount,
       ...rest } = result.osahavainnot[0];
     expect(direction).toBe("s");
@@ -375,7 +367,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("age is separated from direction tricky version", () => {
     const lineOfText = "sommol 1subad2juvS";
-    const result = parse(lineOfText);
+    const result = Parser().parse(lineOfText);
     const { direction, subadultUnknownCount, juvenileUnknownCount,
       ...rest } = result.osahavainnot[0];
     expect(direction).toBe("s");
@@ -388,7 +380,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   test("age is separated from direction extra tricky version", () => {
     const lineOfText = "sommol 1s";
-    const result = parse(lineOfText);
+    const result = Parser().parse(lineOfText);
     const { direction, unknownUnknownCount,
       ...rest } = result.osahavainnot[0];
     expect(direction).toBe("s");
@@ -401,7 +393,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
   test("age is separated from direction extra special tricky version", () => {
     const lineOfText = "sommol 1su";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownAge");
 
   });
@@ -411,18 +403,14 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
 describe("Randomized tests (fuzzing)", () => {
 
-
-  beforeEach(() => {
-    resetAll();
-  });
-
   test("Random battery w/ 1 000 valid strings", () => {
+    const parser = Parser();
     for (let i = 0; i < 1000; ++i) {
       const lineOfText = makeValidLine(withValidSubObservation);
       expect(() => {
-        parse(lineOfText);
+        parser.parse(lineOfText);
       }).not.toThrow();
-      resetAll();
+      parser.resetAll();
     }
   });
 
@@ -430,32 +418,35 @@ describe("Randomized tests (fuzzing)", () => {
   * Remove ".skip" to run this test as well. Note that it might take a while to complete.
   */
   test.skip("Random battery w/ 1 000 000 valid strings", () => {
+    const parser = Parser();
     for (let i = 0; i < 1000000; ++i) {
       const line = makeValidLine(withValidSubObservation);
       expect(() => {
-        parse(line);
+        parser.parse(line);
       }).not.toThrow();
-      resetAll();
+      parser.resetAll();
     }
   });
 
   test("Random battery w/ 1 000 wrong bypassSides", () => {
+    const parser = Parser();
     for (let i = 0; i < 1000; ++i) {
       const line = makeValidLine(withBypassSideWrong);
       expect(() => {
-        parse(line);
+        parser.parse(line);
       }).toThrow();
-      resetAll();
+      parser.resetAll();
     }
   });
 
   test("Random battery w/ 1 000 wrong directions", () => {
+    const parser = Parser();
     for (let i = 0; i < 1000; ++i) {
       const line = makeValidLine(withDirectionWrong);
       expect(() => {
-        parse(line);
+        parser.parse(line);
       }).toThrow();
-      resetAll();
+      parser.resetAll();
     }
   });
 
@@ -463,56 +454,52 @@ describe("Randomized tests (fuzzing)", () => {
 
 describe("Bugfixes", () => {
 
-  beforeEach(() => {
-    resetAll();
-  });
-
   test("can't add observation with only direction", () => {
     const lineOfText = "kt s";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction2", () => {
     const lineOfText = "kt e";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction3", () => {
     const lineOfText = "kt sw";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction4", () => {
     const lineOfText = "kt ne";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction5", () => {
     const lineOfText = "kt nw";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction6", () => {
     const lineOfText = "kt se";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction7", () => {
     const lineOfText = "kt sw";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
@@ -520,62 +507,62 @@ describe("Bugfixes", () => {
   test("can't add observation with 0 birds", () => {
     const lineOfText = "kt 0";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("emptyObservation");
   });
 
   test("too long bypassSide 1", () => {
     const lineOfText = "anacre 1ad+++++";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownBypassSide");
   });
 
   test("too long bypassSide 2", () => {
     const lineOfText = "anacre 1ad-----";
     expect(() => {
-      parse(lineOfText);
+      Parser().parse(lineOfText);
     }).toThrow("unknownBypassSide");
   });
 
   test("AYTMAR is found (one with a slash)", () => {
     const line = "AYTMAR 1++";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).not.toThrow();
   });
 
   test("too many slashes 1", () => {
     const line = "sommol 1juv/3ad/12'/    ++---    ";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("extraSlashes");
   });
 
   test("too many slashes 2", () => {
     const line = "sommol 1juv/3ad/12'////    ++---    ";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("extraSlashes");
   });
 
   test("too many slashes 3", () => {
     const line = "sommol 1juv/3ad/12', 2/3/1/, 2/3/1    ++---    ";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("extraSlashes");
   });
 
   test("too many slashes 4", () => {
     const line = "sommol //1/";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("extraSlashes");
   });
 
   test("empty in-between slashes 1", () => {
     const line = "sommol 1//  +";
-    const result = parse(line);
+    const result = Parser().parse(line);
     const { unknownMaleCount, bypassSide,
       ...rest } = result.osahavainnot[0];
     expect(unknownMaleCount).toBe("1");
@@ -588,7 +575,7 @@ describe("Bugfixes", () => {
 
   test("empty in-between slashes 2", () => {
     const line = "sommol /1/  +";
-    const result = parse(line);
+    const result = Parser().parse(line);
     const { unknownFemaleCount, bypassSide,
       ...rest } = result.osahavainnot[0];
     expect(unknownFemaleCount).toBe("1");
@@ -601,7 +588,7 @@ describe("Bugfixes", () => {
 
   test("empty in-between slashes 3", () => {
     const line = "sommol //1  +";
-    const result = parse(line);
+    const result = Parser().parse(line);
     const { unknownUnknownCount, bypassSide,
       ...rest } = result.osahavainnot[0];
     expect(unknownUnknownCount).toBe("1");
@@ -615,42 +602,42 @@ describe("Bugfixes", () => {
   test("illegal bypassSides 1", () => {
     const line = "sommol 2 ++-";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("unknownBypassSide");
   });
 
   test("illegal bypassSides 2", () => {
     const line = "sommol 2 +++---";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("unknownBypassSide");
   });
 
   test("multiple ages in observation 1", () => {
     const line = "Grugru 2\"adsubad'juv";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("observationHasMultipleAges");
   });
 
   test("multiple ages in observation 2", () => {
     const line = "parmaj 1\"''''''";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("observationHasMultipleAges");
   });
 
   test("empty observation", () => {
     const line = "sommol";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("emptyObservation");
   });
 
   test("empty observation 2", () => {
     const line = "sommol E";
     expect(() => {
-      parse(line);
+      Parser().parse(line);
     }).toThrow("emptyObservation");
   });
 
@@ -658,7 +645,7 @@ describe("Bugfixes", () => {
     let noteStr = "23, testi, hauki on kala";
     let noteStr2 = "testi 34, jee";
     let line = "sommol 321 (" + noteStr + "), 555 E (" + noteStr2 + ")";
-    let result = parse(line);
+    let result = Parser().parse(line);
     expect(result.species).toBe("sommol");
     expect(result.osahavainnot[0].unknownUnknownCount).toBe("321");
     expect(result.osahavainnot[0].notes).toBe(noteStr);
@@ -671,7 +658,7 @@ describe("Bugfixes", () => {
     let noteStr = "klo 12.30 aamulla";
     let noteStr2 = "12.1.2021 16:70";
     let line = "sommol 1 (" + noteStr + "), 3 (" + noteStr2 + ")";
-    let result = parse(line);
+    let result = Parser().parse(line);
     expect(result.osahavainnot[0].notes).toBe(noteStr);
     expect(result.osahavainnot[1].notes).toBe(noteStr2);
   });
