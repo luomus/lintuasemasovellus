@@ -2711,37 +2711,208 @@
   "PCYA": {
     "value": "PARCYA"
   },
-  "Metsäkauris": {
-    "value": "Metsäkauris"
+  "PUFGRA": {
+    "value": "PUFGRA"
   },
-  "Valkohäntäkauris": {
-    "value": "Valkohäntäkauris"
+  "SULLEU": {
+    "value": "SULLEU"
   },
-  "Saukko": {
-    "value": "Saukko"
+  "PERPTI": {
+    "value": "PERPTI"
   },
-  "Halli": {
-    "value": "Halli"
+  "SYNANT": {
+    "value": "SYNANT"
   },
-  "Rusakko": {
-    "value": "Rusakko"
+  "JUNHYE": {
+    "value": "JUNHYE"
   },
-  "Metsähiiri": {
-    "value": "Metsähiiri"
+  "EMBCHR": {
+    "value": "EMBCHR"
   },
-  "Orava": {
-    "value": "Orava"
+  "UUSI": {
+    "value": "UUSI"
   },
-  "Rupikonna": {
-    "value": "Rupikonna"
+  "MPAASTA": {
+    "value": "MPAASTA"
   },
-  "Sammakko": {
-    "value": "Sammakko"
+  "VAPAAST": {
+    "value": "VAPAAST"
   },
-  "Rantakäärme": {
-    "value": "Rantakäärme"
+  "IDPAAST": {
+    "value": "IDPAAST"
   },
-  "Kyy": {
-    "value": "Kyy"
+  "VEPAAST": {
+    "value": "VEPAAST"
+  },
+  "PAASTAI": {
+    "value": "PAASTAI"
+  },
+  "VESISI": {
+    "value": "VESISI"
+  },
+  "ISOVISI": {
+    "value": "ISOVISI"
+  },
+  "SIIPPA": {
+    "value": "SIIPPA"
+  },
+  "POHLEPA": {
+    "value": "POHLEPA"
+  },
+  "ISOLEPA": {
+    "value": "ISOLEPA"
+  },
+  "KILEPA": {
+    "value": "KILEPA"
+  },
+  "PIKLEPA": {
+    "value": "PIKLEPA"
+  },
+  "LEPAKKO": {
+    "value": "LEPAKKO"
+  },
+  "MJANIS": {
+    "value": "MJANIS"
+  },
+  "RUSAKKO": {
+    "value": "RUSAKKO"
+  },
+  "KANI": {
+    "value": "KANI"
+  },
+  "PIISAM": {
+    "value": "PIISAM"
+  },
+  "VAHIIRI": {
+    "value": "VAHIIRI"
+  },
+  "MEHIIRI": {
+    "value": "MEHIIRI"
+  },
+  "KHIIRI": {
+    "value": "KHIIRI"
+  },
+  "PHIIRI": {
+    "value": "PHIIRI"
+  },
+  "ROTTA": {
+    "value": "ROTTA"
+  },
+  "MEMYYRA": {
+    "value": "MEMYYRA"
+  },
+  "PEMYYRA": {
+    "value": "PEMYYRA"
+  },
+  "KEMYYRA": {
+    "value": "KEMYYRA"
+  },
+  "IKMYYRA": {
+    "value": "IKMYYRA"
+  },
+  "VMYYRA": {
+    "value": "VMYYRA"
+  },
+  "MYYRA": {
+    "value": "MYYRA"
+  },
+  "ORAVA": {
+    "value": "ORAVA"
+  },
+  "LORAVA": {
+    "value": "LORAVA"
+  },
+  "SAUKKO": {
+    "value": "SAUKKO"
+  },
+  "KARPPA": {
+    "value": "KARPPA"
+  },
+  "LUMIKKO": {
+    "value": "LUMIKKO"
+  },
+  "MINKKI": {
+    "value": "MINKKI"
+  },
+  "NAATA": {
+    "value": "NAATA"
+  },
+  "MAYRA": {
+    "value": "MAYRA"
+  },
+  "KETTU": {
+    "value": "KETTU"
+  },
+  "SUPIKOI": {
+    "value": "SUPIKOI"
+  },
+  "KARHU": {
+    "value": "KARHU"
+  },
+  "AHMA": {
+    "value": "AHMA"
+  },
+  "SUSI": {
+    "value": "SUSI"
+  },
+  "SAKAAL": {
+    "value": "SAKAAL"
+  },
+  "ILVES": {
+    "value": "ILVES"
+  },
+  "PYORIA": {
+    "value": "PYORIA"
+  },
+  "HALLI": {
+    "value": "HALLI"
+  },
+  "NORPPA": {
+    "value": "NORPPA"
+  },
+  "HYLJE": {
+    "value": "HYLJE"
+  },
+  "HIRVI": {
+    "value": "HIRVI"
+  },
+  "MKAURIS": {
+    "value": "MKAURIS"
+  },
+  "VKAURIS": {
+    "value": "VKAURIS"
+  },
+  "TKAURIS": {
+    "value": "TKAURIS"
+  },
+  "RANTAR": {
+    "value": "RANTAR"
+  },
+  "VSIKA": {
+    "value": "VSIKA"
+  },
+  "RKONNA": {
+    "value": "RKONNA"
+  },
+  "SAMMAK": {
+    "value": "SAMMAK"
+  },
+  "VIITASA": {
+    "value": "VIITASA"
+  },
+  "KON/SAM": {
+    "value": "KON/SAM"
+  },
+  "SISILIS": {
+    "value": "SISILIS"
+  },
+  "RKAARME": {
+    "value": "RKAARME"
+  },
+  "KYY": {
+    "value": "KYY"
+  },
+  "VASKITS": {
+    "value": "VASKITS"
   }
 }

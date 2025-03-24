@@ -236,17 +236,17 @@
     "EMBRUS/EMBPUS/EMBAUR",
     "EMBSCH",
     "PL",
-    "Metsäkauris",
-    "Valkohäntäkauris",
-    "Saukko",
-    "Halli",
-    "Rusakko",
-    "Metsähiiri",
-    "Orava",
-    "Rupikonna",
-    "Sammakko",
-    "Rantakäärme",
-    "Kyy"
+    "MKAURIS",
+    "VKAURIS",
+    "SAUKKO",
+    "HALLI",
+    "RUSAKKO",
+    "MEHIIRI",
+    "ORAVA",
+    "RKONNA",
+    "SAMMAK",
+    "RKAARME",
+    "KYY"
   ],
   "Jurmon_Lintuasema": [
 

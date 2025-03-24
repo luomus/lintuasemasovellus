@@ -130,6 +130,7 @@ const resources = {
       "observatoryDefaults": "aseman peruslajit",
       "otherSpecies": "muut kuin peruslajit",
       "allSpecies": "kaikki lajit",
+      "addNewSpecies": "Lisää uusi laji",
 
       // notifications & errors
       "periodsTimesMustBeDifferent": "Aloitus- ja lopetusajan on oltava eri",

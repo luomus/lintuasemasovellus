@@ -9,18 +9,22 @@ import {
   getDaysObservationPeriods, getDefaultSpecies,
   getSummary
 } from "../../../services";
-import { ShorthandEdit } from "./ShorthandEdit";
+import ShorthandEdit from "./ShorthandEdit";
 import SpeciesTable from "./SpeciesTable";
 import PeriodTable from "./PeriodTable";
 import { AppContext } from "../../../AppContext";
 
 
 export const ObservationEdit = ({ day, dayId }) => {
-  const { observatory } = useContext(AppContext);
+  const { observatory, speciesData } = useContext(AppContext);
+
+  const [obsPeriods, setObsperiods] = useState([]);
 
   const [defaultSpecies, setDefaultSpecies] = useState([]);
-  const [obsPeriods, setObsperiods] = useState([]);
-  const [summary, setSummary] = useState([]);
+  const [addableSpecies, setAddableSpecies] = useState([]);
+  const [speciesSummary, setSpeciesSummary] = useState([]);
+  const [speciesRows, setSpeciesRows] = useState([]);
+
   const [mode, setMode] = useState("speciesTable");
 
   useEffect( () => {
@@ -38,34 +42,98 @@ export const ObservationEdit = ({ day, dayId }) => {
         }
       });
     getSummary(dayId)
-      .then(periodsJson => {
+      .then(summary => {
         if (!fetching) {
-          setSummary(periodsJson);
+          setSpeciesSummary(summary);
         }
       });
     return () => (fetching = true);
   }, [observatory, dayId]);
 
+  useEffect(() => {
+    updateSpeciesRows(speciesSummary, defaultSpecies);
+  }, [speciesSummary, defaultSpecies]);
+
+  useEffect(() => {
+    setAddableSpecies(speciesData.uniqueSpecies.filter(species => !defaultSpecies.includes(species)));
+  }, [speciesData, defaultSpecies]);
+
   const refetchObservations = useCallback(async () => {
     const res = await getDaysObservationPeriods(dayId);
     setObsperiods(res);
     const res2 = await getSummary(dayId);
-    setSummary(res2);
+    setSpeciesSummary(res2);
   }, [dayId]);
+
+  const speciesRowChange = useCallback((idx, row) => {
+    setSpeciesRows((prevState) => (
+      prevState.map((obj, i) => {
+        if (i === idx) {
+          return row;
+        }
+        return obj;
+      })
+    ));
+  }, []);
+
+  const addNewSpecies = useCallback((species) => {
+    setAddableSpecies(prevState => prevState.filter(s => s !== species));
+    setSpeciesRows((prevState) => ([...prevState, getEmptySpeciesRow(species)]));
+  }, []);
+
+  const updateSpeciesRows = (summary, defaultSpecies) => {
+    const foundSpecies = [];
+
+    const defaultRows = defaultSpecies.reduce((previous, current) => {
+      const birdInSummary = summary.find(bird => bird.species === current);
+      if (birdInSummary) {
+        foundSpecies.push(current);
+        return previous.concat(birdInSummary);
+      }
+      return previous.concat(getEmptySpeciesRow(current));
+    }, []);
+
+    const extraRows = summary.reduce((previous, current) => {
+      if (!foundSpecies.includes(current.species)) {
+        previous.push(current);
+      }
+      return previous;
+    }, []);
+
+    setSpeciesRows(defaultRows.concat(extraRows));
+  };
+
+  const getEmptySpeciesRow = (species) => {
+    return {
+      constMigration: 0,
+      nightMigration: 0,
+      otherMigration: 0,
+      localGåu: 0,
+      localOther: 0,
+      scatter: 0,
+      localGåuShorthand: "",
+      localOtherShorthand: "",
+      notes: "",
+      scatterShorthand: "",
+      species
+    };
+  };
 
   const table = mode === "speciesTable" ? (
     <SpeciesTable
       day={day}
-      summary={summary}
-      defaultSpecies={defaultSpecies}
-    ></SpeciesTable>
+      allRows={speciesRows}
+      addableSpecies={addableSpecies}
+      onRowChange={speciesRowChange}
+      onAddNewSpecies={addNewSpecies}
+    />
   ) : (
     <PeriodTable
       day={day}
       dayId={dayId}
       obsPeriods={obsPeriods}
       refetchObservations={refetchObservations}
-    ></PeriodTable>
+    />
   );
 
   return (

@@ -4,7 +4,7 @@ import LocalInput from "./LocalInput";
 import { StyledTableCell } from "../../../globalComponents/common";
 
 
-const SpeciesTableRow = ({ day, s, onChange }) => {
+const SpeciesTableRow = ({ index, day, s, onChange }) => {
   const input1Ref = React.createRef();
   const input2Ref = React.createRef();
   const input3Ref = React.createRef();
@@ -34,7 +34,7 @@ const SpeciesTableRow = ({ day, s, onChange }) => {
   }, [input1Ref, input2Ref, input3Ref]);
 
   const onLocalInputChange = (name, data) => {
-    onChange({ ...s, [name]: data.totalCount, [name + "Shorthand"]: data.shorthand });
+    onChange(index, { ...s, [name]: data.totalCount, [name + "Shorthand"]: data.shorthand });
   };
 
   return (
@@ -76,6 +76,7 @@ const SpeciesTableRow = ({ day, s, onChange }) => {
 };
 
 SpeciesTableRow.propTypes = {
+  index: PropTypes.number.isRequired,
   day: PropTypes.string.isRequired,
   s: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired

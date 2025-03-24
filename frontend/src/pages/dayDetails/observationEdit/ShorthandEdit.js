@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import {
   Box, Button
 } from "@mui/material";
@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import EditShorthand from "../../editShorthand";
 
-export const ShorthandEdit = ({ day, dayList, dayId, onEditShorthandClose }) => {
+const ShorthandEdit = ({ day, dayId, onEditShorthandClose }) => {
   const { t } = useTranslation();
 
   const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
@@ -29,7 +29,6 @@ export const ShorthandEdit = ({ day, dayList, dayId, onEditShorthandClose }) => 
       </Box>
       <EditShorthand
         day={day}
-        dayList={dayList}
         dayId={dayId}
         open={editShorthandModalOpen}
         handleCloseModal={handleEditShorthandClose}
@@ -40,7 +39,8 @@ export const ShorthandEdit = ({ day, dayList, dayId, onEditShorthandClose }) => 
 
 ShorthandEdit.propTypes = {
   day: PropTypes.string.isRequired,
-  dayList: PropTypes.array,
   dayId: PropTypes.number.isRequired,
   onEditShorthandClose: PropTypes.func.isRequired
 };
+
+export default memo(ShorthandEdit);
