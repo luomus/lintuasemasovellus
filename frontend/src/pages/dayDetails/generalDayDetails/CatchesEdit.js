@@ -122,11 +122,10 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
         <Table className={classes.catchTable} size="medium" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>{t("catchType")}</TableCell>
-              <TableCell align="left">{t("catchArea")}</TableCell>
+              <TableCell>{t("catchArea")}</TableCell>
+              <TableCell align="left">{t("catchMethod")}</TableCell>
               <TableCell align="left">{t("wasOpen")}</TableCell>
               <TableCell align="left">{t("amount")}</TableCell>
-              <TableCell align="left">{t("netCodes")}</TableCell>
               <TableCell align="left">{t("length")}</TableCell>
               <TableCell align="left">
                 <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary">
@@ -138,11 +137,10 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
           <TableBody>
             {Object.keys(value).map((c) =>
               <TableRow key={value[String(c)].key}>
-                <TableCell component="th" scope="row">{value[String(c)].pyydys}</TableCell>
-                <TableCell align="left" id="catchArea">{value[String(c)].pyyntialue}</TableCell>
+                <TableCell component="th" scope="row">{value[String(c)].pyyntialue}</TableCell>
+                <TableCell align="left" id="catchArea">{value[String(c)].pyyntitapa}</TableCell>
                 <TableCell align="left" id="wasOpen">{value[String(c)].alku} - {value[String(c)].loppu}</TableCell>
                 <TableCell align="left" id="amount">{value[String(c)].lukumaara}</TableCell>
-                <TableCell align="left" id="netCodes">{value[String(c)].verkkokoodit ? value[String(c)].verkkokoodit : "-"}</TableCell>
                 <TableCell align="left" id="netLength">{value[String(c)].verkonPituus > 0 ? value[String(c)].verkonPituus : "-"}</TableCell>
                 <TableCell align="left">
                   <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={handleCatchesEditOpen} variant="contained" color="primary">

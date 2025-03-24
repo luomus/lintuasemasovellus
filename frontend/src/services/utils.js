@@ -54,7 +54,7 @@ export const getNextAvailableKey = (rows) => {
 };
 
 export const getNewCatchRow = (rows) => {
-  return { key: getNextAvailableKey(rows), pyydys: "", pyyntialue: "", verkkokoodit: "", lukumaara: 0, verkonPituus: 0, alku: "00:00", loppu: "00:00" };
+  return { key: getNextAvailableKey(rows), pyyntialue: "", pyyntitapa: "", lukumaara: 1, verkonPituus: 9, alku: "00:00", loppu: "00:00" };
 };
 
 export const objectsDiffer = (obj1, obj2, checkOnlyKeys = undefined) => {

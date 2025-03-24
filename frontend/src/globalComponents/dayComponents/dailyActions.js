@@ -82,8 +82,8 @@ const HankoActions = ({ value, onChange, catchRows }) => {
 
     if (value.standardRing) {
       let standardCatch = false;
-      Object.keys(catchRows).map((c) => {
-        if (catchRows[String(c)].pyydys === "Vakioverkko") {
+      catchRows.map(c => {
+        if (["Vakioverkot", "Vakioverkko, K"].includes(c.pyyntialue)) {
           standardCatch = true;
         }
       });

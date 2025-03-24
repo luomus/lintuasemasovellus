@@ -2,38 +2,34 @@ import { getObservationStations } from "../services";
 
 const hankoStandardCatches = [
   {
-    "pyydys": "Vakioverkko",
-    "pyyntialue": "Vakioverkot K",
-    "verkkokoodit": "",
+    "pyyntialue": "Vakioverkot",
+    "pyyntitapa": "W / C",
+    "lukumaara": 1,
+    "verkonPituus": 9,
+    "alku": "00:00",
+    "loppu": "00:00"
+  },
+  {
+    "pyyntialue": "Vakioverkko, K",
+    "pyyntitapa": "W / C",
     "lukumaara": 1,
     "verkonPituus": 12,
     "alku": "00:00",
     "loppu": "00:00"
   },
   {
-    "pyydys": "Vakioverkko",
-    "pyyntialue": "Vakioverkot muu",
-    "verkkokoodit": "",
-    "lukumaara": "4",
-    "verkonPituus": 9,
-    "alku": "00:00",
-    "loppu": "00:00"
-  },
-  {
-    "pyydys": "Petoverkot",
-    "pyyntialue": "Vakiopetoverkot",
-    "verkkokoodit": "",
-    "lukumaara": "7",
-    "verkonPituus": 12,
-    "alku": "00:00",
-    "loppu": "00:00"
-  },
-  {
-    "pyydys": "Lisäverkko",
     "pyyntialue": "Piha",
-    "verkkokoodit": "",
-    "lukumaara": "7",
+    "pyyntitapa": "L",
+    "lukumaara": 1,
     "verkonPituus": 9,
+    "alku": "00:00",
+    "loppu": "00:00"
+  },
+  {
+    "pyyntialue": "Petoverkko",
+    "pyyntitapa": "V / C",
+    "lukumaara": 1,
+    "verkonPituus": 12,
     "alku": "00:00",
     "loppu": "00:00"
   }

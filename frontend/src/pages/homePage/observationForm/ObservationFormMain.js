@@ -215,7 +215,7 @@ export const ObservationFormMain = ({
             <Typography className={classes.secondaryHeading} color={(errorsInNotifications("catches")) ? "error" : "inherit"}>
               {
                 (errorsInNotifications("catches")) ? t("errorsInCatches")
-                  : (formData.catchRows.length === 0 || formData.catchRows[0].pyydys === "" || formData.catchRows[0].pyyntialue === "") ? t("noCatches")
+                  : (formData.catchRows.length === 0 || formData.catchRows[0].pyyntialue === "") ? t("noCatches")
                     : t("catchesAdded")
               }
             </Typography>

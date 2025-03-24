@@ -14,7 +14,6 @@ const shorthand = "10:00\nsommol 1/2 W (note, 123)\n12:00";
 const opened = "06:00";
 const opened1 = "06:30";
 const closed = "07:00";
-const netCodes = "abcde";
 
 
 describe("AddObservationDay", function () {
@@ -36,15 +35,12 @@ describe("AddObservationDay", function () {
     cy.get("#attachments").type("1");
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
-    cy.get("#selectCatchType").click();
-    cy.get(".MuiList-root").contains("Vakioverkko").click();
     cy.get("#selectCatchArea").click();
-    cy.get(".MuiList-root").contains("Vakioverkot K").click();
+    cy.get(".MuiList-root").contains("Vakioverkko, K").click();
     cy.get("#opened").clear();
     cy.get("#opened").type(opened);
     cy.get("#closed").clear();
     cy.get("#closed").type(closed);
-    cy.get("#netCodes").type(netCodes);
     cy.get("#selectType").click().get("#Vakio").click();
     cy.get("#selectLocation").click().get("#Bunkkeri").click();
     cy.get(".CodeMirror textarea").type(shorthand, { force: true });
@@ -161,16 +157,14 @@ describe("AddObservationDay", function () {
     cy.contains("Helmi Havainnoitsija").click();
     cy.wait(1000);
     cy.get("#catchesButton").click();
-    cy.get("#selectCatchType").click();
-    cy.contains("Vakioverkko").click();
     cy.get("#selectCatchArea").click();
-    cy.contains("Vakioverkot muu").click();
+    cy.contains("Vakioverkot").click();
     cy.get("#opened").clear();
     cy.get("#opened").type(opened1);
     cy.get("#catchesEditSave").click();
     cy.wait(1000);
 
-    cy.get("#catchArea").contains("Vakioverkot muu");
+    cy.get("#catchArea").contains("Vakioverkot");
   });
 
 

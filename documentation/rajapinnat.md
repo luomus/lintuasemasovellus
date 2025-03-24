@@ -57,9 +57,8 @@
         "key": number,
         "loppu": time,
         "lukumaara": number,
-        "pyydys": string,
         "pyyntialue": string,
-        "verkkokoodit": string,
+        "pyyntitapa": string,
         "verkonPituus": number
     }
 ]

@@ -57,7 +57,6 @@ describe("FirstpageFieldsAndModification", function () {
   it("Catch rows can be added and removed", function () {
     cy.get("#catches-header").click();
     cy.get("#plus-catch-row-button").click();
-    cy.get("#0").contains("Pyydys");
     cy.get("#0").contains("Pyyntialue");
     cy.get("#plus-catch-row-button").click();
     cy.get("#0 #removeButton").click();
