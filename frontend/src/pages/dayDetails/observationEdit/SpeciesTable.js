@@ -146,7 +146,7 @@ const SpeciesTable = (props) => {
             {filteredAndPaginatedRows
               .map((s, i) =>
                 <StyledTableRow hover key={i}>
-                  <SpeciesTableRow index={i} day={day} s={s} key={i} extraSpeciesList={addableSpecies} onChange={onRowChange} />
+                  <SpeciesTableRow day={day} s={s} key={i} extraSpeciesList={addableSpecies} onChange={onRowChange} />
                 </StyledTableRow>
               )
             }

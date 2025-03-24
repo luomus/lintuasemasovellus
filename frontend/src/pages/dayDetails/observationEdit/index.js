@@ -65,10 +65,10 @@ export const ObservationEdit = ({ day, dayId }) => {
     setSpeciesSummary(res2);
   }, [dayId]);
 
-  const speciesRowChange = useCallback((idx, row) => {
+  const speciesRowChange = useCallback((row) => {
     setSpeciesRows((prevState) => (
-      prevState.map((obj, i) => {
-        if (i === idx) {
+      prevState.map(obj => {
+        if (obj.species === row.species) {
           return row;
         }
         return obj;
