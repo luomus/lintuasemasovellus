@@ -7,9 +7,9 @@ import PropTypes from "prop-types";
 import { AppContext } from "../../../AppContext";
 import { useDispatch } from "react-redux";
 import { saveData } from "../../../reducers/savingStateReducer";
-import ObservationParser, { translateObservationParserError } from "../../../shorthand/observationParser";
+import { parseObservations } from "../../../shorthand/observationParsing";
 import { useTranslation } from "react-i18next";
-import { parsedRowToObservation } from "../../../shorthand/parseShorthandField";
+import { translateShorthandError } from "../../../shorthand/utils";
 
 const useStyles = makeStyles({
   container: {
@@ -29,7 +29,7 @@ const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) =
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
-  const { user, observatory } = useContext(AppContext);
+  const { observatory } = useContext(AppContext);
 
   const [inputValue, setInputValue] = useState("");
   const [savingShorthand, setSavingShorthand] = useState();
@@ -57,19 +57,16 @@ const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) =
       return;
     }
 
-    let parsedValue = { osahavainnot: [] };
+    let observation = { species, subObservations: [], periodOrderNum: 0 };
 
     if (value) {
       try {
-        const parser = ObservationParser();
-        parsedValue = parser.parse(`${species} ${value}`);
+        observation.subObservations = parseObservations(value);
       } catch (e) {
-        setErrorMsg(translateObservationParserError(t, e.message));
+        setErrorMsg(translateShorthandError(t, e.message));
         return;
       }
     }
-
-    const observation = parsedRowToObservation(parsedValue, user, 0);
 
     onChange({ "shorthand": value, "totalCount": getTotalCount(observation) });
     setErrorMsg("");

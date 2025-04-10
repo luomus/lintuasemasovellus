@@ -12,13 +12,11 @@ import {
   getShorthandText,
   sendEditedShorthand, deleteObservationperiods, getDaysObservationPeriodCounts
 } from "../../services";
-import {
-  shorthandTextToLines, loopThroughObservationPeriods, loopThroughObservations, setDayId
-} from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
 import { saveData } from "../../reducers/savingStateReducer";
+import { shorthandLinesToObservations, shorthandTextToLines } from "../../shorthand/shorthandParsing";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -223,13 +221,11 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
 
   const handleSave = async () => {
     await handleDelete(false);
-    setDayId(dayId);
     const rows = shorthandTextToLines(shorthand);
-    const periods = loopThroughObservationPeriods(rows, type, location);
-    const observations = loopThroughObservations(rows, user.id);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location);
 
     setButtonsDisabled(true);
-    await dispatch(saveData(() => sendEditedShorthand(periods, observations, dayId, user.id)));
+    await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id)));
     setButtonsDisabled(false);
     handleClose();
   };

@@ -11,14 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand
 } from "../../services";
-import {
-  shorthandTextToLines, loopThroughObservationPeriods, loopThroughObservations, setDayId
-} from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
 import { saveData } from "../../reducers/savingStateReducer";
 import Select from "../../globalComponents/formComponents/Select";
+import { shorthandTextToLines, shorthandLinesToObservations } from "../../shorthand/shorthandParsing";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -153,13 +151,11 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
 
   const handleSave = async () => {
     await handleDelete(false);
-    setDayId(obsPeriod.day_id);
     const rows = shorthandTextToLines(shorthand);
-    const periods = loopThroughObservationPeriods(rows, type, location);
-    const observations = loopThroughObservations(rows, user.id);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location);
 
     setButtonsDisabled(true);
-    await dispatch(saveData(() => sendEditedShorthand(periods, observations, obsPeriod.day_id, user.id)));
+    await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id)));
     setButtonsDisabled(false);
     handleClose();
   };

@@ -220,7 +220,7 @@ def update_edited_day(day_new, day_old): #This function is called at the end of 
 
     return {"id" : day_new.id}
 
-def get_observation_from_object(sub_observation, obspId, shorthand_id, user_id):
+def get_observation_from_object(sub_observation, species, obspId, shorthand_id, user_id):
     birdCount = sub_observation['adultUnknownCount'] + sub_observation['adultFemaleCount'] \
                 + sub_observation['adultMaleCount'] + sub_observation['juvenileUnknownCount'] + sub_observation[
                     'juvenileFemaleCount'] \
@@ -229,7 +229,7 @@ def get_observation_from_object(sub_observation, obspId, shorthand_id, user_id):
                 + sub_observation['subadultMaleCount'] + sub_observation['unknownUnknownCount'] + sub_observation[
                     'unknownFemaleCount'] \
                 + sub_observation['unknownMaleCount']
-    return Observation(species=sub_observation['species'],
+    return Observation(species=species,
                        adultUnknownCount=sub_observation['adultUnknownCount'],
                        adultFemaleCount=sub_observation['adultFemaleCount'],
                        adultMaleCount=sub_observation['adultMaleCount'],
@@ -268,7 +268,7 @@ def _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorth
         shorthand_id = Shorthand.query.filter_by(shorthandblock=shorthand_block, observationperiod_id=period.id, is_deleted=0).first().id
 
         for subObservation in observation['subObservations']:
-            sub_observation = get_observation_from_object(subObservation, period.id, shorthand_id, user_id)
+            sub_observation = get_observation_from_object(subObservation, observation['species'], period.id, shorthand_id, user_id)
             db.session().add(sub_observation)
 
     db.session().commit()

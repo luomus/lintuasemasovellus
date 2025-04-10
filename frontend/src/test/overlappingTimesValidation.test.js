@@ -1,4 +1,4 @@
-import { getOverlappingTimeRows } from "../shorthand/overlappingTimesValidation";
+import { getOverlappingTimeRows } from "../shorthand/validation/overlappingTimesValidation";
 
 describe("overlapping times validation", () => {
 

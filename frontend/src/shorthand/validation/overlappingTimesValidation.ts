@@ -1,7 +1,14 @@
-import { isTime, parseTime } from "./timeHelper.js";
+import { isTime, parseTime } from "../utils";
 
-export const getOverlappingTimeRows = (value, observationPeriods, activeObservationPeriodIds) => {
-  let rowNumbers = [];
+interface ObservationPeriod {
+    id: number;
+    startTime: string;
+    endTime: string;
+    observationType: string;
+}
+
+export const getOverlappingTimeRows = (value: string, observationPeriods: ObservationPeriod[], activeObservationPeriodIds: number[]) => {
+  const rowNumbers = [];
 
   observationPeriods = observationPeriods.filter(
     period => !(activeObservationPeriodIds || []).includes(period.id)
@@ -15,7 +22,7 @@ export const getOverlappingTimeRows = (value, observationPeriods, activeObservat
   let nextTimeEndTime = false;
 
   for (const line of lines) {
-    let parsedTime = isTime(line) && parseTime(line);
+    const parsedTime = isTime(line) && parseTime(line);
 
     if (parsedTime || !nextTimeEndTime) {
       if (nextTimeEndTime) {
@@ -32,6 +39,9 @@ export const getOverlappingTimeRows = (value, observationPeriods, activeObservat
     }
 
     for (const obsPeriod of observationPeriods) {
+      if (!periodStartTime || !periodEndTime) {
+        continue;
+      }
       if (periodEndTime > obsPeriod.startTime && periodStartTime <= obsPeriod.startTime && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
         periodEndTime > obsPeriod.startTime && periodEndTime <= obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
           periodStartTime >= obsPeriod.startTime && periodStartTime < obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ) {

@@ -115,6 +115,7 @@ def addAndFind(fields):
 
 def _get_simple_observation(count, species):
     return {
+        'species': species,
         'subObservations': [{
             'adultUnknownCount': 0,
             'adultFemaleCount': 0,
@@ -130,7 +131,6 @@ def _get_simple_observation(count, species):
             'unknownFemaleCount': 0,
             'direction': '',
             'bypassSide': '',
-            'notes': '',
-            'species': species
+            'notes': ''
         }]
     }

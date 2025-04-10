@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import tseslint from 'typescript-eslint';
 import reactPlugin from "eslint-plugin-react";
 import securityPlugin from "eslint-plugin-security";
 import cypressPlugin from "eslint-plugin-cypress/flat";
@@ -7,6 +8,7 @@ import globals from "globals";
 
 export default [
     js.configs.recommended,
+    ...tseslint.configs.recommended,
     reactPlugin.configs.flat.recommended,
     securityPlugin.configs.recommended,
     cypressPlugin.configs.globals,
@@ -59,5 +61,6 @@ export default [
                 before: true,
                 after: true,
             }],
+            "@typescript-eslint/no-unused-expressions": "off",
         },
     }];

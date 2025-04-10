@@ -44,8 +44,8 @@
     "start-api": "cd ../lintuasema-backend && . venv/bin/activate && pip3 install -r requirements.txt && flask run",
     "start-api:test": "DB_TYPE=sqlite npm run start-api",
     "build-copy": "npm run build && cp build ../lintuasema-backend/ -r",
-    "lint": "eslint './{src,cypress}/**/*.{js,jsx}'",
-    "lint:fix": "eslint './{src,cypress}/**/*.{js,jsx}' --fix",
+    "lint": "eslint './{src,cypress}/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint './{src,cypress}/**/*.{js,jsx,ts,tsx}' --fix",
     "cypress:open": "cypress open",
     "cypress:cmd": "cypress run"
   },
@@ -65,12 +65,17 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^20.17.30",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
     "cypress": "^13.16.0",
     "deep-freeze": "^0.0.1",
     "eslint-plugin-cypress": "^4.1.0",
+    "eslint-plugin-jest": "^28.9.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-security": "^3.0.1",
-    "eslint-plugin-jest": "^28.9.0",
-    "globals": "^15.12.0"
+    "globals": "^15.12.0",
+    "typescript": "^4.9.5",
+    "typescript-eslint": "^8.29.1"
   }
 }

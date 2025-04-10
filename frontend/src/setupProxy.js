@@ -1,4 +1,4 @@
-const { createProxyMiddleware } = require("http-proxy-middleware");
+const { createProxyMiddleware } = require("http-proxy-middleware"); // eslint-disable-line @typescript-eslint/no-require-imports
 
 module.exports = function(app) {
   app.use(

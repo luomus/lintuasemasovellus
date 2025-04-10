@@ -35,12 +35,9 @@ const inverseDirections = new Map(Array.from(directions, d => d.reverse()));
 
 const inverseBypass = new Map(Array.from(bypass, b => b.reverse()));
 
-const timeRegex = new RegExp(/^(([01]?[0-9])|(2[0-3]))(:|\.)[0-5][0-9]$/);
-
 export default {
   directions,
   bypass,
-  timeRegex,
   inverseDirections,
   inverseBypass,
 };

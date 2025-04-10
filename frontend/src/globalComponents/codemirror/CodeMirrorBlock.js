@@ -4,20 +4,18 @@ import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { UnControlled as CodeMirror } from "react-codemirror2";
-import {
-  validateShorthandLines
-} from "../../shorthand/newValidations";
 import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
-import { isNightValidation } from "../../shorthand/isNightValidation";
-import { getOverlappingTimeRows } from "../../shorthand/overlappingTimesValidation";
+import { isNightValidation } from "../../shorthand/validation/isNightValidation";
+import { getOverlappingTimeRows } from "../../shorthand/validation/overlappingTimesValidation";
 import { AppContext } from "../../AppContext";
-import { shorthandTextToLines } from "../../shorthand/parseShorthandField";
 import { dayStringToDate, getDaysObservationPeriods } from "../../services";
-import { translateObservationParserError } from "../../shorthand/observationParser";
+import { translateShorthandError } from "../../shorthand/utils";
+import { validateShorthandLines } from "../../shorthand/validation/validation";
+import { shorthandTextToLines } from "../../shorthand/shorthandParsing";
 
 
 let markers = new Set();
@@ -135,7 +133,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     for (const error of errors) {
       const rowNum = error[0];
       const rowMessage = error[1];
-      toErrors.push(t("checkRow", { row: rowNum + 1 }) + translateObservationParserError(t, rowMessage));
+      toErrors.push(t("checkRow", { row: rowNum + 1 }) + translateShorthandError(t, rowMessage));
       setMarker(editor,rowNum,rowMessage,"#f5f890","#000000");
     }
 

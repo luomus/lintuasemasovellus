@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Alert from "../../../globalComponents/Alert";
-import { shorthandTextToLines, loopThroughObservationPeriods, loopThroughObservations } from "../../../shorthand/parseShorthandField";
 import {
   dayInfoToFormData,
   getEmptyFormData, objectsDiffer,
@@ -22,6 +21,7 @@ import ObservationFormDrafts from "./ObservationFormDrafts";
 import ObservationFormCopy from "./ObservationFormCopy";
 import { useConfirmExit } from "../../../hooks/useConfirmExit";
 import { resetNotifications } from "../../../reducers/notificationsReducer";
+import { shorthandLinesToObservations, shorthandTextToLines } from "../../../shorthand/shorthandParsing";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -120,9 +120,8 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     setSaving(true);
     const { day, observers, comment, dailyActions, catchRows, type, location, shorthand } = formData;
 
-    const rows = shorthandTextToLines(shorthand);
-    const observationPeriodsToSend = loopThroughObservationPeriods(rows, type, location);
-    const observationsToSend = loopThroughObservations(rows, user.id);
+    const lines = shorthandTextToLines(shorthand);
+    const { observationPeriods, observations } = shorthandLinesToObservations(lines, type, location);
 
     let data = {
       day,
@@ -132,8 +131,8 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       selectedactions: stringifyDailyActions(dailyActions),
       userID: user.id,
       catches: catchRows,
-      observationPeriods: observationPeriodsToSend,
-      observations: observationsToSend
+      observationPeriods,
+      observations
     };
     const formDataAfterSave = { ...formData, type: "", location: "", shorthand: "" };
 

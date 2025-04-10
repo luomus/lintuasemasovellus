@@ -87,7 +87,7 @@ def add_everything():
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:
-                    sub_observation = get_observation_from_object(subObservation, obspId, shorthand_id, req['userID'])
+                    sub_observation = get_observation_from_object(subObservation, observation['species'], obspId, shorthand_id, req['userID'])
                     db.session().add(sub_observation)
 
     db.session().commit()

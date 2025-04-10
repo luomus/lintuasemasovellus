@@ -113,7 +113,7 @@ def save_edited_observationperiods():
                     + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
                     + subObservation['unknownMaleCount']
 
-                    sub_observation = Observation(species=subObservation['species'],
+                    sub_observation = Observation(species=observation['species'],
                         adultUnknownCount=subObservation['adultUnknownCount'],
                         adultFemaleCount=subObservation['adultFemaleCount'],
                         adultMaleCount=subObservation['adultMaleCount'],

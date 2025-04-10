@@ -2,7 +2,7 @@ import testSpecies from "./test-species.json";
 
 const spaceySymbols = [" ", "\t"];
 
-const ages = ["'", "\"", "juv", "ad", "subad"];
+const ages = ["'", "\"", "subad", "pull"];
 
 const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
   "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"];
