@@ -72,6 +72,12 @@ describe("basic higher order validations", () => {
     expect(errors).toEqual([]);//we'll expect no errors
   });
 
+  test("empty block throws err", () => {
+    const text = "9.00\nsommol 1/2 W\n12.00\n13.00";
+    const errors = validateShorthandLines(shorthandTextToLines(text));
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
   // TODO put this back after the final version of the shorthand validation is ready
   test.skip("long example shorthand from file", () => {
     const file = path.join(__dirname, "./", "longShorthandExample.txt");

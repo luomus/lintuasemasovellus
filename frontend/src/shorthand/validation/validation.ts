@@ -17,6 +17,7 @@ export const validateShorthandLines = (lines: string[]): [number, string][] => {
   let periodContainsLines = false;
   let pauseIsActive = false;
   let emptyPeriod = false;
+  let consecutiveTimes = 0;
 
   for (let rowNumber = 0; rowNumber < lines.length; rowNumber++) {
     const trimmedLine = lines[rowNumber].trim();
@@ -37,18 +38,28 @@ export const validateShorthandLines = (lines: string[]): [number, string][] => {
         timeEncountered = true;
       }
 
-      if (periodStartTime && periodContainsLines) {
-        if (timeStringToFloat(periodStartTime) === timeStringToFloat(parsedTime)) {
-          errors.push([rowNumber, "periodsTimesMustBeDifferent"]);
-        } else if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
-          errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
-        }
+      if (periodStartTime) {
+          if (periodContainsLines || pauseIsActive || emptyPeriod) {
+              if (timeStringToFloat(periodStartTime) === timeStringToFloat(parsedTime)) {
+                  errors.push([rowNumber, "periodsTimesMustBeDifferent"]);
+              } else if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
+                  errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
+              }
+          } else {
+              if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
+                  errors.push([rowNumber, "periodsStartTimeMustBeAfterPreviousEndTime"]);
+              }
+              if (consecutiveTimes > 1) {
+                  errors.push([rowNumber - 1, "periodContainsNothing"])
+              }
+          }
       }
 
       periodStartTime = parsedTime;
       periodContainsLines = false;
       pauseIsActive = false;
       emptyPeriod = false;
+      consecutiveTimes++;
     } else {
       if (!timeEncountered) {
         errors.push([rowNumber, "startTimeMissing"]);
@@ -114,11 +125,16 @@ export const validateShorthandLines = (lines: string[]): [number, string][] => {
       }
 
       endsWithTime = false;
+      consecutiveTimes = 0;
     }
   }
 
   if (!endsWithTime && observationsEncountered) {
     errors.push([lines.length - 1, "mustEndWithTime"]);
+  }
+
+  if (consecutiveTimes > 1) {
+    errors.push([lines.length - 2, "periodContainsNothing"])
   }
 
   if (!observationsEncountered && lines.some(line => !!line)) {
