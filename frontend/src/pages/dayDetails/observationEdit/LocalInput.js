@@ -61,7 +61,7 @@ const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) =
 
     if (value) {
       try {
-        observation.subObservations = parseObservations(value);
+        observation.subObservations = parseObservations(value, false, dataType === "scatter");
       } catch (e) {
         setErrorMsg(translateShorthandError(t, e.message));
         return;

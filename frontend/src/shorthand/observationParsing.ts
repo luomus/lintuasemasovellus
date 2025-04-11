@@ -58,7 +58,7 @@ export const parseLine = (text: string, speciesCodeMap: Map<string, string>): Fu
   };
 };
 
-export const parseObservations = (text: string): Observation[] => {
+export const parseObservations = (text: string, allowMultipleFlocks = true, allowDirections = true): Observation[] => {
   text = text.trim();
 
   if (!text) {
@@ -67,14 +67,20 @@ export const parseObservations = (text: string): Observation[] => {
 
   const parsedTerms = getParsedObservationTerms(text);
 
-  return parsedTermsToObservations(parsedTerms);
+  return parsedTermsToObservations(parsedTerms, allowMultipleFlocks, allowDirections);
 };
 
-const parsedTermsToObservations = (parsedTerms: ObservationTermParserResult[]): Observation[] => {
+const parsedTermsToObservations = (parsedTerms: ObservationTermParserResult[], allowMultipleFlocks = true, allowDirections = true): Observation[] => {
   const observations: Observation[] = [];
 
   let commonDirection = "";
   if (parsedTerms[0]?.type === "direction") {
+    if (!allowDirections) {
+      throw new Error("directionNotAllowed");
+    } else if (!allowMultipleFlocks) {
+      throw new Error("directionBeforeCounts");
+    }
+
     commonDirection = parsedTerms[0].value;
     parsedTerms = parsedTerms.slice(1);
   }
@@ -82,13 +88,17 @@ const parsedTermsToObservations = (parsedTerms: ObservationTermParserResult[]): 
   let flockTerms: ObservationTermParserFlockResult[] = [];
   let prevType: string|undefined = undefined;
 
-  for (let i = 0; i < parsedTerms.length; i += 1) {
+  for (let i = 0; i < parsedTerms.length; i++) {
     const term = parsedTerms[i];
     if (term.type === "flockDivider") {
+      if (!allowMultipleFlocks) {
+        throw new Error("multipleFlocksNotAllowed");
+      }
       if (i === 0 || prevType === "flockDivider" || i === parsedTerms.length - 1) {
         throw new Error("extraCommas");
       }
-      observations.push(parsedFlockTermsToObservation(flockTerms, commonDirection));
+
+      observations.push(parsedFlockTermsToObservation(flockTerms, commonDirection, allowDirections));
       flockTerms = [];
     } else {
       flockTerms.push(term as ObservationTermParserFlockResult);
@@ -96,12 +106,12 @@ const parsedTermsToObservations = (parsedTerms: ObservationTermParserResult[]): 
     prevType = term.type;
   }
 
-  observations.push(parsedFlockTermsToObservation(flockTerms, commonDirection));
+  observations.push(parsedFlockTermsToObservation(flockTerms, commonDirection, allowDirections));
 
   return observations;
 };
 
-const parsedFlockTermsToObservation = (parsedTerms: ObservationTermParserFlockResult[], commonDirection = ""): Observation => {
+const parsedFlockTermsToObservation = (parsedTerms: ObservationTermParserFlockResult[], commonDirection = "", allowDirection = true): Observation => {
   const parsed: ParsedObservation = { counts: [], direction: commonDirection, bypassSide: "", notes: "" };
 
   const allTypes: ObservationTermParserFlockResult["type"][] = parsedTerms.map(term => term.type);
@@ -157,7 +167,9 @@ const parsedFlockTermsToObservation = (parsedTerms: ObservationTermParserFlockRe
         }
         break;
       case "direction":
-        if (commonDirection) {
+        if (!allowDirection) {
+          throw new Error("directionNotAllowed");
+        } else if (commonDirection) {
           throw new Error("hasAlreadyCommonDirection");
         } else if (parsed.direction) {
           throw new Error("multipleDirections");
