@@ -36,7 +36,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
-  const { user, observatory, station } = useContext(AppContext);
+  const { user, observatory, station, speciesData } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -121,7 +121,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     const { day, observers, comment, dailyActions, catchRows, type, location, shorthand } = formData;
 
     const lines = shorthandTextToLines(shorthand);
-    const { observationPeriods, observations } = shorthandLinesToObservations(lines, type, location);
+    const { observationPeriods, observations } = shorthandLinesToObservations(lines, type, location, speciesData.speciesCodeMap);
 
     let data = {
       day,

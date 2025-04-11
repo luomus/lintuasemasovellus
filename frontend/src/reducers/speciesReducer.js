@@ -20,10 +20,10 @@ const speciesReducer = (state = null, action) => {
   switch (action.type) {
     case "SET_SPECIES": {
       const entries = Object.entries(action.data.species);
-      const upperEntries = entries.map(entry => [entry[0].toUpperCase(), entry[1]]);
+      const upperEntries = entries.map(entry => [entry[0].toUpperCase(), entry[1].value]);
 
       return {
-        speciesNameUpperMap: new Map(upperEntries),
+        speciesCodeMap: new Map(upperEntries),
         uniqueSpecies: [...new Set(Object.values(action.data.species).map(species => species.value))]
       };
     }

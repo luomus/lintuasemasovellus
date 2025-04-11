@@ -71,7 +71,7 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { user, station } = useContext(AppContext);
+  const { user, station, speciesData } = useContext(AppContext);
 
   const notifications = useSelector(state => state.notifications);
 
@@ -152,7 +152,7 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
   const handleSave = async () => {
     await handleDelete(false);
     const rows = shorthandTextToLines(shorthand);
-    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
     setButtonsDisabled(true);
     await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id)));

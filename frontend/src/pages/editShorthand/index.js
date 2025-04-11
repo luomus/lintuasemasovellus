@@ -71,7 +71,7 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { user, station } = useContext(AppContext);
+  const { user, station, speciesData } = useContext(AppContext);
 
   const [defaultShorthand, setDefaultShorthand] = useState([]);
   const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
@@ -222,7 +222,7 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   const handleSave = async () => {
     await handleDelete(false);
     const rows = shorthandTextToLines(shorthand);
-    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
     setButtonsDisabled(true);
     await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id)));

@@ -10,6 +10,7 @@ const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
 const bypassSides = ["++++", "+++", "++", "+", "+-", "-", "--", "---", "----"];
 
 export const speciesData = testSpecies;
+export const speciesCodeMap = new Map(Object.entries(speciesData).map(entry => [entry[0].toUpperCase(), entry[1].value]));
 
 const birdArr = [ ...Object.keys(speciesData) ];
 

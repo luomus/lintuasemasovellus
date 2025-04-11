@@ -1,4 +1,3 @@
-import store from "../store";
 import { Observation, FullObservation } from "./models";
 import { getParsedObservationTerms, ObservationTermParserResult, ParsedAge, ParsedSex } from "./observationTermParsing";
 
@@ -32,21 +31,18 @@ const sexAndAgeToObservationCountKey: Record<ParsedSex, Record<ParsedAge, keyof 
   }
 };
 
-export const parseLine = (text: string): FullObservation => {
-  // @ts-expect-error TODO refactor so that the speciesData is given as a parameter or move the species validation elsewhere
-  const speciesNameMap: Map<string, { value: string }> = store.getState().speciesData.speciesNameUpperMap;
-
+export const parseLine = (text: string, speciesCodeMap: Map<string, string>): FullObservation => {
   const speciesAndRestMatch = text.trim().match(/^(\S+)(?:\s(.*)|$)/);
   if (!speciesAndRestMatch) {
     throw new Error("missingSpaceAfterSpecies");
   }
   const [species, rest] = speciesAndRestMatch.slice(1);
-  if (!speciesNameMap.has(species.toUpperCase())) {
+  if (!speciesCodeMap.has(species.toUpperCase())) {
     throw new Error("unknownSpeciesError");
   }
 
   return {
-    species: speciesNameMap.get(species.toUpperCase())!.value,
+    species: speciesCodeMap.get(species.toUpperCase())!,
     subObservations: parseObservations(rest || "")
   };
 };

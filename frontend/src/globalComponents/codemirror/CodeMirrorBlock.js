@@ -31,7 +31,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
-  const { observatory } = useContext(AppContext);
+  const { observatory, speciesData } = useContext(AppContext);
 
   const [observationPeriods, setObservationPeriods] = useState([]);
   const [editorInstance, setEditorInstance] = useState();
@@ -123,7 +123,7 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     let toErrors = [];
 
     const lines = shorthandTextToLines(value);
-    const errors = validateShorthandLines(lines);
+    const errors = validateShorthandLines(lines, speciesData.speciesCodeMap);
 
     for (const marker of markers) {
       marker.clear();

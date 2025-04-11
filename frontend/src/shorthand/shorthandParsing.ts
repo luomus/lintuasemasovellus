@@ -7,8 +7,8 @@ export const shorthandTextToLines = (shorthandText: string): string[] => (
   shorthandText.trim().split(/\n/)
 );
 
-export const shorthandLinesToObservations = (shorthandLines: string[], obsType: string, loc: string): { observationPeriods: ObservationPeriod[]; observations: PeriodObservation[] } => {
-  const errors = validateShorthandLines(shorthandLines);
+export const shorthandLinesToObservations = (shorthandLines: string[], obsType: string, loc: string, speciesCodeMap: Map<string, string>): { observationPeriods: ObservationPeriod[]; observations: PeriodObservation[] } => {
+  const errors = validateShorthandLines(shorthandLines, speciesCodeMap);
   if (errors.length > 0) {
     throw new Error(errors[0][1]);
   }
@@ -47,7 +47,7 @@ export const shorthandLinesToObservations = (shorthandLines: string[], obsType: 
       }
 
       if (!(row.trim() === "tauko" || row.trim() === "-")) {
-        const observationObject: PeriodObservation = { ...parseLine(row), periodOrderNum: String(periodIdx) };
+        const observationObject: PeriodObservation = { ...parseLine(row, speciesCodeMap), periodOrderNum: String(periodIdx) };
         observations.push(observationObject);
       }
     }

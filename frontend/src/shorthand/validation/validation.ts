@@ -5,8 +5,9 @@ import { parseLine } from "../observationParsing";
  * Loop through the entire shorthand text and use the algorithm to check each
  * line for errors.
  * @param {string} lines
+ * @param {object} speciesCodeMap
  */
-export const validateShorthandLines = (lines: string[]): [number, string][] => {
+export const validateShorthandLines = (lines: string[], speciesCodeMap: Map<string, string>): [number, string][] => {
   const errors: [number, string][] = [];
 
   let timeEncountered = false;
@@ -111,7 +112,7 @@ export const validateShorthandLines = (lines: string[]): [number, string][] => {
 
         // Push errors in observation line
         try {
-          parseLine(trimmedLine);
+          parseLine(trimmedLine, speciesCodeMap);
         } catch (error: unknown) {
           if (error instanceof Error) {
             errors.push([rowNumber, `${error.message}`]);
