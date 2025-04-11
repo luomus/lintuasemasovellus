@@ -51,7 +51,7 @@ export const validateShorthandLines = (lines: string[], speciesCodeMap: Map<stri
             errors.push([rowNumber, "periodsStartTimeMustBeAfterPreviousEndTime"]);
           }
           if (consecutiveTimes > 1) {
-            errors.push([rowNumber - 1, "periodContainsNothing"]);
+            errors.push([rowNumber, "periodContainsNothing"]);
           }
         }
       }
@@ -135,7 +135,7 @@ export const validateShorthandLines = (lines: string[], speciesCodeMap: Map<stri
   }
 
   if (consecutiveTimes > 1) {
-    errors.push([lines.length - 2, "periodContainsNothing"]);
+    errors.push([lines.length - 1, "periodContainsNothing"]);
   }
 
   if (!observationsEncountered && lines.some(line => !!line)) {
