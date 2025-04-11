@@ -17,6 +17,9 @@ class Observation(Base):
     subadultUnknownCount = db.Column(db.Integer, nullable = False)
     subadultFemaleCount = db.Column(db.Integer, nullable = False)
     subadultMaleCount = db.Column(db.Integer, nullable = False)
+    chickUnknownCount = db.Column(db.Integer, nullable = False)
+    chickFemaleCount = db.Column(db.Integer, nullable = False)
+    chickMaleCount = db.Column(db.Integer, nullable = False)
     unknownUnknownCount = db.Column(db.Integer, nullable = False)
     unknownFemaleCount = db.Column(db.Integer, nullable = False)
     unknownMaleCount = db.Column(db.Integer, nullable = False)
@@ -36,7 +39,8 @@ class Observation(Base):
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
-        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction,
+        chickUnknownCount, chickFemaleCount, chickMaleCount, unknownUnknownCount,
+        unknownFemaleCount, unknownMaleCount, total_count, direction,
         bypassSide, notes, observationperiod_id, shorthand_id, account_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
@@ -48,6 +52,9 @@ class Observation(Base):
         self.subadultUnknownCount = subadultUnknownCount
         self.subadultFemaleCount = subadultFemaleCount
         self.subadultMaleCount = subadultMaleCount
+        self.chickUnknownCount = chickUnknownCount
+        self.chickFemaleCount = chickFemaleCount
+        self.chickMaleCount = chickMaleCount
         self.unknownUnknownCount = unknownUnknownCount
         self.unknownFemaleCount = unknownFemaleCount
         self.unknownMaleCount = unknownMaleCount

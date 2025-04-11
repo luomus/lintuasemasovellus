@@ -676,4 +676,12 @@ describe("Bugfixes", () => {
     expect(result.subObservations[0].notes).toBe(noteStr);
     expect(result.subObservations[1].notes).toBe(noteStr2);
   });
+
+  test("chicks are parsed ok", () => {
+    const line = "sommol 1pull/2pull/3pull";
+    let result = parseLine(line, speciesCodeMap);
+    expect(result.subObservations[0].chickMaleCount).toBe(1);
+    expect(result.subObservations[0].chickFemaleCount).toBe(2);
+    expect(result.subObservations[0].chickUnknownCount).toBe(3);
+  });
 });

@@ -110,7 +110,8 @@ def save_edited_observationperiods():
                     birdCount = subObservation['adultUnknownCount'] + subObservation['adultFemaleCount']\
                     + subObservation['adultMaleCount'] + subObservation['juvenileUnknownCount'] + subObservation['juvenileFemaleCount']\
                     + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
-                    + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
+                    + subObservation['subadultMaleCount'] + subObservation['chickUnknownCount'] + subObservation['chickFemaleCount']\
+                    + subObservation['chickMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
                     + subObservation['unknownMaleCount']
 
                     sub_observation = Observation(species=observation['species'],
@@ -123,6 +124,9 @@ def save_edited_observationperiods():
                         subadultUnknownCount=subObservation['subadultUnknownCount'],
                         subadultFemaleCount=subObservation['subadultFemaleCount'],
                         subadultMaleCount=subObservation['subadultMaleCount'],
+                        chickUnknownCount=subObservation['chickUnknownCount'],
+                        chickFemaleCount=subObservation['chickFemaleCount'],
+                        chickMaleCount=subObservation['chickMaleCount'],
                         unknownUnknownCount=subObservation['unknownUnknownCount'],
                         unknownFemaleCount=subObservation['unknownFemaleCount'],
                         unknownMaleCount=subObservation['unknownMaleCount'],

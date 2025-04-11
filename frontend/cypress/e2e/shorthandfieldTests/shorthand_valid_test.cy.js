@@ -16,7 +16,7 @@ const validShorthand6 = "09:30\nsommol 2/3\n10:00"; //yksinumeroinen aloitus nol
 const validShorthand7 = "03:30\nsommol 2/3 (kommentti)\n04:00"; //kommentti
 const validShorthand8 = "03:30\nSOMMOL 2/3\n04:00"; //isolla kirjoitettu
 const validShorthand9 = "03:30\nSommol 2/3\n04:00"; //iso alkukirjain
-const validShorthand10 = "03:00\nSommol 1\"2'3subad/2\" sw\n03:30"; //useita ikäluokkia
+const validShorthand10 = "03:00\nSommol 1\"2'3subad4pull/2\" sw\n03:30"; //useita ikäluokkia
 
 const shorthands = [validShorthand0, validShorthand1,
   validShorthand2, validShorthand3, validShorthand4, validShorthand5,

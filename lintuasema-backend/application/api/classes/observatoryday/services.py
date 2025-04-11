@@ -226,7 +226,9 @@ def get_observation_from_object(sub_observation, species, obspId, shorthand_id, 
                     'juvenileFemaleCount'] \
                 + sub_observation['juvenileMaleCount'] + sub_observation['subadultUnknownCount'] + sub_observation[
                     'subadultFemaleCount'] \
-                + sub_observation['subadultMaleCount'] + sub_observation['unknownUnknownCount'] + sub_observation[
+                + sub_observation['subadultMaleCount'] + sub_observation['chickUnknownCount'] + sub_observation[
+                    'chickFemaleCount'] \
+                + sub_observation['chickMaleCount'] + sub_observation['unknownUnknownCount'] + sub_observation[
                     'unknownFemaleCount'] \
                 + sub_observation['unknownMaleCount']
     return Observation(species=species,
@@ -239,6 +241,9 @@ def get_observation_from_object(sub_observation, species, obspId, shorthand_id, 
                        subadultUnknownCount=sub_observation['subadultUnknownCount'],
                        subadultFemaleCount=sub_observation['subadultFemaleCount'],
                        subadultMaleCount=sub_observation['subadultMaleCount'],
+                       chickUnknownCount=sub_observation['chickUnknownCount'],
+                       chickFemaleCount=sub_observation['chickFemaleCount'],
+                       chickMaleCount=sub_observation['chickMaleCount'],
                        unknownUnknownCount=sub_observation['unknownUnknownCount'],
                        unknownFemaleCount=sub_observation['unknownFemaleCount'],
                        unknownMaleCount=sub_observation['unknownMaleCount'],

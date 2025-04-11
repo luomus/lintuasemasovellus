@@ -5,7 +5,7 @@ const date = "07.01.2020";
 const observer = "Aarni Apulaishavainnoitsija";
 const comment = "Olipa sateinen sää.";
 const shorthand = "10:00\nsommol 1/2 W\n12:00";
-const shorthandModified = "10:00\ngrugru 1/2 W\n12:00";
+const shorthandModified = "10:00\ngrugru 1/2pull W\n12:00";
 
 const navigateToDay = () => {
   cy.get("#navigationbar").click();

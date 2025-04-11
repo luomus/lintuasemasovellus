@@ -23,6 +23,7 @@ def getAllObservations():
         ret.append({ 'species': obs.species, 'adultUnknownCount': obs.adultUnknownCount, 'adultFemaleCount': obs.adultFemaleCount, 'adultMaleCount': obs.adultMaleCount,
             'juvenileUnknownCount': obs.juvenileUnknownCount, 'juvenileFemaleCount': obs.juvenileFemaleCount, 'juvenileMaleCount': obs.juvenileMaleCount,
             'subadultUnknownCount': obs.subadultUnknownCount, 'subadultFemaleCount': obs.subadultFemaleCount, 'subadultMaleCount': obs.subadultMaleCount,
+            'chickUnknownCount': obs.chickUnknownCount, 'chickFemaleCount': obs.chickFemaleCount, 'chickMaleCount': obs.chickMaleCount,
             'unknownUnknownCount': obs.unknownUnknownCount, 'unknownFemaleCount': obs.unknownFemaleCount, 'unknownMaleCount': obs.unknownMaleCount, 'total_count' :obs.total_count,
             'direction': obs.direction, 'bypassSide': obs.bypassSide, 'notes': obs.notes,
             'observationperiod_id': obs.observationperiod_id, 'shorthand_id': obs.shorthand_id, 'account_id': obs.account_id})
@@ -139,6 +140,12 @@ def parseCountString(obs):
         countString = countString + str(obs.subadultFemaleCount) + " naarasta (esiaikuinen), "
     if obs.subadultMaleCount != 0:
         countString = countString + str(obs.subadultMaleCount) + " koirasta (esiaikuinen), "
+    if obs.chickUnknownCount != 0:
+        countString = countString + str(obs.chickUnknownCount) + " tunt. sukupuolta (poikanen), "
+    if obs.chickFemaleCount != 0:
+        countString = countString + str(obs.chickFemaleCount) + " naarasta (poikanen), "
+    if obs.chickMaleCount != 0:
+        countString = countString + str(obs.chickMaleCount) + " koirasta (poikanen), "
     if obs.unknownUnknownCount != 0:
         countString = countString + str(obs.unknownUnknownCount) + " tunt. sukupuolta (tunt. ikä), "
     if obs.unknownFemaleCount != 0:
