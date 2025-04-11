@@ -1,10 +1,21 @@
 import { Observation, FullObservation } from "./models";
 import { getParsedObservationTerms, ObservationTermParserResult, ParsedAge, ParsedSex } from "./observationTermParsing";
 
+type ObservationTermParserFlockResult = ObservationTermParserResult & {
+    type: Exclude<ObservationTermParserResult["type"], "flockDivider">
+};
+
 interface ParsedCount {
     count: number;
     age: ParsedAge;
     sex: ParsedSex;
+}
+
+interface ParsedObservation {
+    counts: ParsedCount[];
+    direction: string;
+    bypassSide: string;
+    notes: string;
 }
 
 const sexAndAgeToObservationCountKey: Record<ParsedSex, Record<ParsedAge, keyof Omit<Observation, "direction"|"bypassSide"|"notes">>> = {
@@ -48,52 +59,6 @@ export const parseLine = (text: string, speciesCodeMap: Map<string, string>): Fu
 };
 
 export const parseObservations = (text: string): Observation[] => {
-  const parts = splitObservationsAndValidateParenthesis(text);
-  const hasEmptyObservations = parts.some(part => !part.trim());
-
-  if (parts.length > 1 && hasEmptyObservations) {
-    throw new Error("extraCommas");
-  }
-
-  return parts.map(part => parseObservation(part));
-};
-
-const splitObservationsAndValidateParenthesis = (text: string): string[] => {
-  const result: string[] = [];
-  let curr = "";
-  let parenthesisOpenEncountered = false;
-
-  for (const char of text) {
-    if (char === "(") {
-      if (parenthesisOpenEncountered) {
-        throw new Error("incorrectBrackets");
-      }
-      parenthesisOpenEncountered = true;
-    } else if (char === ")") {
-      if (!parenthesisOpenEncountered) {
-        throw new Error("incorrectBrackets");
-      }
-      parenthesisOpenEncountered = false;
-    }
-
-    if (char === "," && !parenthesisOpenEncountered) {
-      result.push(curr);
-      curr = "";
-    } else {
-      curr += char;
-    }
-  }
-
-  result.push(curr);
-
-  if (parenthesisOpenEncountered) {
-    throw new Error("incorrectBrackets");
-  }
-
-  return result;
-};
-
-const parseObservation = (text: string): Observation => {
   text = text.trim();
 
   if (!text) {
@@ -102,73 +67,108 @@ const parseObservation = (text: string): Observation => {
 
   const parsedTerms = getParsedObservationTerms(text);
 
-  return parsedTermsToObservation(parsedTerms);
+  return parsedTermsToObservations(parsedTerms);
 };
 
-const parsedTermsToObservation = (parsedTerms: ObservationTermParserResult[]): Observation => {
-  const parsedCounts: ParsedCount[] = [];
-  let direction = "", bypassSide = "", notes = "";
+const parsedTermsToObservations = (parsedTerms: ObservationTermParserResult[]): Observation[] => {
+  const observations: Observation[] = [];
 
-  const parsedTypes: ObservationTermParserResult["type"][] = parsedTerms.map(term => term.type);
-  const countRelatedFields: ObservationTermParserResult["type"][] = ["count", "age", "sexDivider"];
+  let commonDirection = "";
+  if (parsedTerms[0]?.type === "direction") {
+    commonDirection = parsedTerms[0].value;
+    parsedTerms = parsedTerms.slice(1);
+  }
+
+  let flockTerms: ObservationTermParserFlockResult[] = [];
+  let prevType: string|undefined = undefined;
+
+  for (let i = 0; i < parsedTerms.length; i += 1) {
+    const term = parsedTerms[i];
+    if (term.type === "flockDivider") {
+      if (i === 0 || prevType === "flockDivider" || i === parsedTerms.length - 1) {
+        throw new Error("extraCommas");
+      }
+      observations.push(parsedFlockTermsToObservation(flockTerms, commonDirection));
+      flockTerms = [];
+    } else {
+      flockTerms.push(term as ObservationTermParserFlockResult);
+    }
+    prevType = term.type;
+  }
+
+  observations.push(parsedFlockTermsToObservation(flockTerms, commonDirection));
+
+  return observations;
+};
+
+const parsedFlockTermsToObservation = (parsedTerms: ObservationTermParserFlockResult[], commonDirection = ""): Observation => {
+  const parsed: ParsedObservation = { counts: [], direction: commonDirection, bypassSide: "", notes: "" };
+
+  const allTypes: ObservationTermParserFlockResult["type"][] = parsedTerms.map(term => term.type);
+  const countRelatedFields: ObservationTermParserFlockResult["type"][] = ["count", "age", "sexDivider"];
 
   for (let i = 0; i < parsedTerms.length; i++) {
     const { type, value } = parsedTerms[i];
 
-    const previousTypes = parsedTypes.slice(0, i);
-    const previousType = previousTypes[previousTypes.length - 1];
-    const nextTypes = parsedTypes.slice(i + 1);
+    const prevTypes = allTypes.slice(0, i);
+    const prevType = prevTypes[prevTypes.length - 1];
+    const nextTypes = allTypes.slice(i + 1);
 
-    const currentSlashCount = previousTypes.filter(prevType => prevType === "sexDivider").length;
+    const currentFlockSlashCount = prevTypes.filter(prevType => prevType === "sexDivider").length;
     const nextTypesIncludesCountRelatedField = countRelatedFields.some(t => nextTypes.includes(t));
 
     switch (type) {
       case "count": {
-        if (previousType === "count") {
+        if (prevType === "count") {
           throw new Error("spaceBetweenNumbers");
         }
         if (value === 0) {
           throw new Error("emptyObservation");
         }
-        const sex = currentSlashCount === 1 ? "female" : "unknown";
-        parsedCounts.push({ count: value, age: "", sex });
+
+        const sex = currentFlockSlashCount === 1 ? "female" : "unknown";
+        parsed.counts.push({ count: value, age: "", sex });
         break;
       }
       case "age": {
-        if (previousType !== "count") {
-          if (previousType === "age") {
+        if (prevType !== "count") {
+          if (prevType === "age") {
             throw new Error("observationHasMultipleAges");
           }
           throw new Error("ageNotAfterCount");
         }
-        const currentCount = parsedCounts[parsedCounts.length - 1];
-        if (parsedCounts.some(count => count.sex === currentCount.sex && count.age === value)) {
+        const currentCount = parsed.counts[parsed.counts.length - 1];
+        if (parsed.counts.some(count => count.sex === currentCount.sex && count.age === value)) {
           throw new Error("sameAgeMultipleTimes");
         }
+
         currentCount.age = value;
         break;
       }
       case "sexDivider":
-        if (currentSlashCount > 1) {
+        if (currentFlockSlashCount > 1) {
           throw new Error("extraSlashes");
         }
-        if (currentSlashCount === 0) {
-          parsedCounts.forEach(count => {
+
+        if (currentFlockSlashCount === 0) {
+          parsed.counts.forEach(count => {
             count.sex = "male";
           });
         }
         break;
       case "direction":
-        if (direction) {
+        if (commonDirection) {
+          throw new Error("hasAlreadyCommonDirection");
+        } else if (parsed.direction) {
           throw new Error("multipleDirections");
         } else if (nextTypesIncludesCountRelatedField) {
           throw new Error("directionBeforeCounts");
         }
 
-        direction = value;
+        parsed.direction = value;
         break;
       case "bypassSide":
-        if (bypassSide) {
+        if (parsed.bypassSide) {
           throw new Error("multipleBypassSides");
         } else if (nextTypesIncludesCountRelatedField) {
           throw new Error("bypassSideBeforeCounts");
@@ -176,10 +176,10 @@ const parsedTermsToObservation = (parsedTerms: ObservationTermParserResult[]): O
           throw new Error("bypassSideBeforeDirection");
         }
 
-        bypassSide = value;
+        parsed.bypassSide = value;
         break;
       case "notes":
-        if (notes) {
+        if (parsed.notes) {
           throw new Error("multipleNotes");
         } else if (nextTypesIncludesCountRelatedField) {
           throw new Error("notesBeforeCounts");
@@ -189,21 +189,21 @@ const parsedTermsToObservation = (parsedTerms: ObservationTermParserResult[]): O
           throw new Error("notesBeforeBypassSide");
         }
 
-        notes = value;
+        parsed.notes = value;
         break;
       default:
         throw new Error(`unknownTerm:${value}`);
     }
   }
 
-  if (!parsedCounts.some(count => count.count > 0)) {
+  if (parsed.counts.length === 0 || !parsed.counts.some(count => count.count > 0)) {
     throw new Error("emptyObservation");
   }
 
-  return parsedValuesToObservation(parsedCounts, direction, bypassSide, notes);
+  return parsedObservationToObservation(parsed);
 };
 
-const parsedValuesToObservation = (parsedCounts: ParsedCount[], direction: string, bypassSide: string, notes: string): Observation => {
+const parsedObservationToObservation = (parsedObservation: ParsedObservation): Observation => {
   const result: Observation = {
     adultUnknownCount: 0,
     adultFemaleCount: 0,
@@ -220,12 +220,12 @@ const parsedValuesToObservation = (parsedCounts: ParsedCount[], direction: strin
     unknownUnknownCount: 0,
     unknownFemaleCount: 0,
     unknownMaleCount: 0,
-    direction,
-    bypassSide,
-    notes
+    direction: parsedObservation.direction,
+    bypassSide: parsedObservation.bypassSide,
+    notes: parsedObservation.notes
   };
 
-  parsedCounts.forEach(val => {
+  parsedObservation.counts.forEach(val => {
     result[sexAndAgeToObservationCountKey[val.sex][val.age]] = val.count;
   });
 

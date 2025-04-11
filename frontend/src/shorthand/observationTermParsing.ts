@@ -13,7 +13,7 @@ export type ObservationTermParserResult = {
     value: ParsedAge;
     rawValue: string;
 } | {
-    type: "sexDivider"|"direction"|"bypassSide"|"notes"|"unknown";
+    type: "sexDivider"|"flockDivider"|"direction"|"bypassSide"|"notes"|"unknown";
     value: string;
     rawValue: string;
 };
@@ -25,6 +25,10 @@ const acceptableBypassSides: string[] = Array.from(bypassSides.keys()).filter(va
 const acceptableAges: ParsedAge[] = ["\"", "'", "subad", "pull"];
 
 export const getParsedObservationTerms = (text: string): ObservationTermParserResult[] => {
+  if (!text.match(/^([^()]*(\([^()]*\))*)*$/)) {
+    throw new Error("incorrectBrackets");
+  }
+
   const results: ObservationTermParserResult[] = [];
 
   const iter = makeObservationTermParserIterator(text);
@@ -75,6 +79,10 @@ const makeObservationTermParserIterator = (text: string): Iterator<ObservationTe
 
     if (text[0] === "/") {
       return { type: "sexDivider", value: text[0], rawValue: text[0] };
+    }
+
+    if (text[0] === ",") {
+      return { type: "flockDivider", value: text[0], rawValue: text[0] };
     }
 
     const directionMatch = getStringTermMatch(text, possibleDirections);

@@ -116,8 +116,9 @@ export const withBypassSideWrong = () => {
 export const withDirectionWrong = () => {
   let subObservation = "";
   if (Math.random() < 0.5) {
+    subObservation += makeValidMeatOfSubobservation();
+    subObservation += ",";
     subObservation += getRandomDirection();
-    subObservation += getRandomLineBreakOrNot();
     subObservation += makeValidMeatOfSubobservation();
     subObservation += getRandomLineBreakOrNot();
     subObservation += getRandomBypassSide();

@@ -145,6 +145,7 @@ const resources = {
       "missingSpaceAfterSpecies": "Lajinimen jälkeen puuttuu välilyönti",
       "spaceBetweenNumbers": "Numeroiden välissä ei saa olla välilyöntiä",
       "sameAgeMultipleTimes": "Sama ikä on moneen kertaan",
+      "hasAlreadyCommonDirection": "Ilmansuunta on annettu moneen kertaan",
       "directionBeforeCounts": "Ilmansuunnan tulee olla lukumäärien jälkeen",
       "bypassSideBeforeCounts": "Ohituspuolen tulee olla lukumäärien jälkeen",
       "bypassSideBeforeDirection": "Ohituspuolen tulee olla ilmansuunnan jälkeen",

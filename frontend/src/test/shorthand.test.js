@@ -684,4 +684,19 @@ describe("Bugfixes", () => {
     expect(result.subObservations[0].chickFemaleCount).toBe(2);
     expect(result.subObservations[0].chickUnknownCount).toBe(3);
   });
+
+  test("flocks can have a common direction", () => {
+    const line = "sommol E 1',2\",7";
+    let result = parseLine(line, speciesCodeMap);
+    expect(result.subObservations[0].direction).toBe("90");
+    expect(result.subObservations[1].direction).toBe("90");
+    expect(result.subObservations[2].direction).toBe("90");
+  });
+
+  test("if common direction is given, it's not possible to give directions to individual flocks", () => {
+    const line = "sommol E 1',2\"W,7";
+    expect(() => {
+      parseLine(line, speciesCodeMap);
+    }).toThrow("hasAlreadyCommonDirection");
+  });
 });
