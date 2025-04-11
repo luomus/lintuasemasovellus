@@ -1,18 +1,7 @@
 import { isTime, parseTime } from "./utils";
-import { FullObservation, parseLine } from "./observationParsing";
+import { parseLine } from "./observationParsing";
 import { validateShorthandLines } from "./validation/validation";
-
-interface ObservationPeriod {
-    location: string;
-    startTime: string;
-    endTime: string;
-    shorthandBlock: string;
-    observationType: string;
-}
-
-interface PeriodObservation extends FullObservation {
-    periodOrderNum: string;
-}
+import { ObservationPeriod, PeriodObservation } from "./models";
 
 export const shorthandTextToLines = (shorthandText: string): string[] => (
   shorthandText.trim().split(/\n/)

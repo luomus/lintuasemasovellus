@@ -20,7 +20,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const observation = parseLine(lineOfText);
     expect(observation.species).toBe("SOMMOL");
     const { direction, unknownMaleCount, bypassSide, notes, ...rest } = observation.subObservations[0];
-    expect(direction).toBe("W");
+    expect(direction).toBe("270");
     expect(unknownMaleCount).toBe(2);
     expect(notes).toBe("");
     expect(bypassSide).toBe("");
@@ -36,7 +36,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("SOMMOL");
     const { direction, unknownFemaleCount, bypassSide, notes, ...rest } = observation.subObservations[0];
-    expect(direction).toBe("E");
+    expect(direction).toBe("90");
     expect(unknownFemaleCount).toBe(4);
     expect(notes).toBe("");
     expect(bypassSide).toBe("");
@@ -52,7 +52,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("SOMMOL");
     const { direction, unknownFemaleCount, notes, bypassSide, ...rest } = observation.subObservations[0];
-    expect(direction).toBe("E");
+    expect(direction).toBe("90");
     expect(unknownFemaleCount).toBe(4);
     expect(notes).toBe("jp");
     expect(bypassSide).toBe("");
@@ -69,7 +69,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     expect(observation.species).toBe("SOMMOL");
     const { direction, juvenileMaleCount, adultMaleCount, subadultMaleCount, bypassSide, notes, ...rest }
       = observation.subObservations[0];
-    expect(direction).toBe("W");
+    expect(direction).toBe("270");
     expect(juvenileMaleCount).toBe(2);
     expect(adultMaleCount).toBe(1);
     expect(subadultMaleCount).toBe(3);
@@ -95,16 +95,16 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
       = observation.subObservations[2];
 
     expect(unknownFemaleCount0).toBe(1);
-    expect(direction0).toBe("W");
+    expect(direction0).toBe("270");
     expect(bypassSide0).toBe("");
     expect(notes0).toBe("");
     expect(unknownMaleCount1).toBe(2);
-    expect(direction1).toBe("E");
+    expect(direction1).toBe("90");
     expect(bypassSide1).toBe("");
     expect(notes1).toBe("");
     expect(unknownMaleCount2).toBe(3);
     expect(unknownFemaleCount2).toBe(4);
-    expect(direction2).toBe("W");
+    expect(direction2).toBe("270");
     expect(bypassSide2).toBe("");
     expect(notes2).toBe("");
     for (const each of Object.values(rest0)) {
@@ -125,12 +125,12 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("SOMMOL");
     expect(observation.subObservations[0].unknownFemaleCount).toBe(1);
-    expect(observation.subObservations[0].direction).toBe("W");
+    expect(observation.subObservations[0].direction).toBe("270");
     expect(observation.subObservations[1].unknownMaleCount).toBe(2);
-    expect(observation.subObservations[1].direction).toBe("E");
+    expect(observation.subObservations[1].direction).toBe("90");
     expect(observation.subObservations[2].unknownMaleCount).toBe(3);
     expect(observation.subObservations[2].unknownFemaleCount).toBe(4);
-    expect(observation.subObservations[2].direction).toBe("W");
+    expect(observation.subObservations[2].direction).toBe("270");
   });
 
   test("Seventh son", () => {
@@ -148,7 +148,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("SOMMOL");
     expect(observation.subObservations[0].unknownFemaleCount).toBe(1);
-    expect(observation.subObservations[0].direction).toBe("W");
+    expect(observation.subObservations[0].direction).toBe("270");
     expect(observation.subObservations[0].unknownUnknownCount).toBe(2);
   });
 
@@ -160,7 +160,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     expect(observation.species).toBe("SOMMOL");
     expect(observation.subObservations[0].adultMaleCount).toBe(1);
     expect(observation.subObservations[0].juvenileFemaleCount).toBe(2);
-    expect(observation.subObservations[0].direction).toBe("SW");
+    expect(observation.subObservations[0].direction).toBe("225");
   });
 
   test("Ten", () => {
@@ -170,8 +170,8 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
     expect(observation.species).toBe("GRUGRU");
     expect(observation.subObservations[0].unknownUnknownCount).toBe(100);
-    expect(observation.subObservations[0].direction).toBe("SW");
-    expect(observation.subObservations[0].bypassSide).toBe("+-");
+    expect(observation.subObservations[0].direction).toBe("225");
+    expect(observation.subObservations[0].bypassSide).toBe("0");
   });
 
   test("Eleven", () => {
@@ -215,16 +215,16 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
       expect(each).toBe(0);
     }
     expect(unknownUnknownCount0).toBe(100);
-    expect(direction0).toBe("SW");
-    expect(bypassSide0).toBe("+-");
+    expect(direction0).toBe("225");
+    expect(bypassSide0).toBe("0");
     expect(notes0).toBe("");
     expect(unknownUnknownCount1).toBe(200);
-    expect(direction1).toBe("S");
-    expect(bypassSide1).toBe("+++");
+    expect(direction1).toBe("180");
+    expect(bypassSide1).toBe("3");
     expect(notes1).toBe("");
     expect(adultUnknownCount2).toBe(300);
-    expect(direction2).toBe("W");
-    expect(bypassSide2).toBe("---");
+    expect(direction2).toBe("270");
+    expect(bypassSide2).toBe("-3");
     expect(notes2).toBe("");
   });
 
@@ -276,12 +276,12 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     expect(result.subObservations[0].unknownUnknownCount).toBe(100);
     expect(result.subObservations[1].unknownUnknownCount).toBe(200);
     expect(result.subObservations[2].adultUnknownCount).toBe(300);
-    expect(result.subObservations[0].bypassSide).toBe("+-");
-    expect(result.subObservations[1].bypassSide).toBe("+++");
-    expect(result.subObservations[2].bypassSide).toBe("---");
-    expect(result.subObservations[0].direction).toBe("SW");
-    expect(result.subObservations[1].direction).toBe("S");
-    expect(result.subObservations[2].direction).toBe("W");
+    expect(result.subObservations[0].bypassSide).toBe("0");
+    expect(result.subObservations[1].bypassSide).toBe("3");
+    expect(result.subObservations[2].bypassSide).toBe("-3");
+    expect(result.subObservations[0].direction).toBe("225");
+    expect(result.subObservations[1].direction).toBe("180");
+    expect(result.subObservations[2].direction).toBe("270");
   });
 
   test("quite long input", () => {
@@ -297,13 +297,13 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     expect(result.subObservations[0].adultUnknownCount).toBe(1);
     expect(result.subObservations[0].juvenileUnknownCount).toBe(2);
     expect(result.subObservations[0].subadultUnknownCount).toBe(3);
-    expect(result.subObservations[0].bypassSide).toBe("--");
-    expect(result.subObservations[0].direction).toBe("E");
+    expect(result.subObservations[0].bypassSide).toBe("-2");
+    expect(result.subObservations[0].direction).toBe("90");
     const { direction: direction1, unknownMaleCount: unknownMaleCount1,
       unknownFemaleCount: unknownFemaleCount1, bypassSide, notes, ...rest1 } = result.subObservations[1];
     expect(unknownMaleCount1).toBe(1);
     expect(unknownFemaleCount1).toBe(2);
-    expect(direction1).toBe("W");
+    expect(direction1).toBe("270");
     expect(bypassSide).toBe("");
     expect(notes).toBe("");
     for (const each of Object.values(rest1)) {
@@ -373,7 +373,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const result = parseLine(lineOfText);
     const { direction, subadultUnknownCount, juvenileUnknownCount, bypassSide, notes,
       ...rest } = result.subObservations[0];
-    expect(direction).toBe("S");
+    expect(direction).toBe("180");
     expect(subadultUnknownCount).toBe(1);
     expect(juvenileUnknownCount).toBe(2);
     expect(bypassSide).toBe("");
@@ -388,7 +388,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const result = parseLine(lineOfText);
     const { direction, subadultUnknownCount, juvenileUnknownCount, bypassSide, notes,
       ...rest } = result.subObservations[0];
-    expect(direction).toBe("S");
+    expect(direction).toBe("180");
     expect(subadultUnknownCount).toBe(1);
     expect(juvenileUnknownCount).toBe(2);
     expect(bypassSide).toBe("");
@@ -403,7 +403,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const result = parseLine(lineOfText);
     const { direction, unknownUnknownCount, bypassSide, notes,
       ...rest } = result.subObservations[0];
-    expect(direction).toBe("S");
+    expect(direction).toBe("180");
     expect(unknownUnknownCount).toBe(1);
     expect(bypassSide).toBe("");
     expect(notes).toBe("");
@@ -581,7 +581,7 @@ describe("Bugfixes", () => {
       ...rest } = result.subObservations[0];
     expect(unknownMaleCount).toBe(1);
     expect(result.species).toBe("SOMMOL");
-    expect(bypassSide).toBe("+");
+    expect(bypassSide).toBe("1");
     expect(direction).toBe("");
     expect(notes).toBe("");
     for (const each of Object.values(rest)) {
@@ -596,7 +596,7 @@ describe("Bugfixes", () => {
       ...rest } = result.subObservations[0];
     expect(unknownFemaleCount).toBe(1);
     expect(result.species).toBe("SOMMOL");
-    expect(bypassSide).toBe("+");
+    expect(bypassSide).toBe("1");
     expect(direction).toBe("");
     expect(notes).toBe("");
     for (const each of Object.values(rest)) {
@@ -611,7 +611,7 @@ describe("Bugfixes", () => {
       ...rest } = result.subObservations[0];
     expect(unknownUnknownCount).toBe(1);
     expect(result.species).toBe("SOMMOL");
-    expect(bypassSide).toBe("+");
+    expect(bypassSide).toBe("1");
     expect(direction).toBe("");
     expect(notes).toBe("");
     for (const each of Object.values(rest)) {
@@ -670,7 +670,7 @@ describe("Bugfixes", () => {
     expect(result.subObservations[0].unknownUnknownCount).toBe(321);
     expect(result.subObservations[0].notes).toBe(noteStr);
     expect(result.subObservations[1].unknownUnknownCount).toBe(555);
-    expect(result.subObservations[1].direction).toBe("E");
+    expect(result.subObservations[1].direction).toBe("90");
     expect(result.subObservations[1].notes).toBe(noteStr2);
   });
 

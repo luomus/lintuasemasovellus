@@ -39,20 +39,20 @@ export const validateShorthandLines = (lines: string[]): [number, string][] => {
       }
 
       if (periodStartTime) {
-          if (periodContainsLines || pauseIsActive || emptyPeriod) {
-              if (timeStringToFloat(periodStartTime) === timeStringToFloat(parsedTime)) {
-                  errors.push([rowNumber, "periodsTimesMustBeDifferent"]);
-              } else if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
-                  errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
-              }
-          } else {
-              if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
-                  errors.push([rowNumber, "periodsStartTimeMustBeAfterPreviousEndTime"]);
-              }
-              if (consecutiveTimes > 1) {
-                  errors.push([rowNumber - 1, "periodContainsNothing"])
-              }
+        if (periodContainsLines || pauseIsActive || emptyPeriod) {
+          if (timeStringToFloat(periodStartTime) === timeStringToFloat(parsedTime)) {
+            errors.push([rowNumber, "periodsTimesMustBeDifferent"]);
+          } else if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
+            errors.push([rowNumber, "periodsEndTimeMustBeAfterStartTime"]);
           }
+        } else {
+          if (timeStringToFloat(periodStartTime) > timeStringToFloat(parsedTime)) {
+            errors.push([rowNumber, "periodsStartTimeMustBeAfterPreviousEndTime"]);
+          }
+          if (consecutiveTimes > 1) {
+            errors.push([rowNumber - 1, "periodContainsNothing"]);
+          }
+        }
       }
 
       periodStartTime = parsedTime;
@@ -134,7 +134,7 @@ export const validateShorthandLines = (lines: string[]): [number, string][] => {
   }
 
   if (consecutiveTimes > 1) {
-    errors.push([lines.length - 2, "periodContainsNothing"])
+    errors.push([lines.length - 2, "periodContainsNothing"]);
   }
 
   if (!observationsEncountered && lines.some(line => !!line)) {
