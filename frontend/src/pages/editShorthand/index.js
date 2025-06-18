@@ -132,6 +132,11 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
 
     const selectTypes = station.types.map(type => ({ type, locationCount: locationCountByType[type] }));
     setSelectTypes(selectTypes);
+
+    const typesWithLocations = selectTypes.filter(({ locationCount }) => (locationCount > 0));
+    if (typesWithLocations.length === 1) {
+      setType(typesWithLocations[0].type);
+    }
   }, [open, station, observationPeriodCounts]);
 
   useEffect(() => {
@@ -153,6 +158,11 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
 
     const selectLocations = station.locations.map(location => ({ location, observationPeriodCount: obsPeriodCountByLocation[location] }));
     setSelectLocations(selectLocations);
+
+    const locationsWithObservations = selectLocations.filter(({ observationPeriodCount }) => (observationPeriodCount > 0));
+    if (locationsWithObservations.length === 1) {
+      setLocation(locationsWithObservations[0].location);
+    }
   }, [open, type, station, observationPeriodCounts]);
 
   const initializeDefaultShorthand = (defaultShorthand) => {
