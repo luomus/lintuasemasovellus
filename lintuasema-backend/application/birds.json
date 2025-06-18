@@ -26,11 +26,17 @@
   "AFAB": {
     "value": "ANSFAB"
   },
-  "ANSFAB/ANSROS/ANSERY": {
-    "value": "ANSFAB/ANSROS/ANSERY"
+  "ANSFAB/ANSSER/ANSALB/ANSERY": {
+    "value": "ANSFAB/ANSSER/ANSALB/ANSERY"
   },
-  "TUANS": {
-    "value": "ANSFAB/ANSROS/ANSERY"
+  "ANSTU": {
+    "value": "ANSFAB/ANSSER/ANSALB/ANSERY"
+  },
+  "ANSFAB/ANSSER": {
+    "value": "ANSFAB/ANSSER"
+  },
+  "ANSFS": {
+    "value": "ANSFAB/ANSSER"
   },
   "ANSBRA": {
     "value": "ANSBRA"
