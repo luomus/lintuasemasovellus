@@ -193,7 +193,7 @@ const resources = {
       "mustEndWithTime": "Havaintojen on päätyttävä kellonaikaan.",
 
       "noRequiredRoles": "Jos tarvitset pääsyn sovellukseen, voit pyytää sitä sähköpostilla.",
-      "confirmExit": "Sinulla on tallentamattomia muutoksia. Haluatko varmasti poistua?"
+      "confirmExit": "Haluatko varmasti poistua tallentamatta muutoksia?"
     },
   },
 };

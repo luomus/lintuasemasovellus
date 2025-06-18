@@ -84,6 +84,7 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [shorthand, setShorthand] = useState("");
+  const [initialShorthand, setInitialShorthand] = useState("");
 
   const notifications = useSelector(state => state.notifications);
 
@@ -163,11 +164,14 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
       }
       text += shorthandObject.endTime + "\n";
     }
+    let initialShorthand;
     if (text.replace(/(\r\n|\n|\r)/gm, "").trim() === "") {
-      setShorthand("");
+      initialShorthand = "";
     } else {
-      setShorthand(text);
+      initialShorthand = text;
     }
+    setShorthand(initialShorthand);
+    setInitialShorthand(initialShorthand);
   };
 
   const handleDialogOpen = () => {
@@ -237,13 +241,23 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
     handleCloseModal();
   };
 
+  const handleModalCloseEvent = () => {
+    let canClose = true;
+    if (shorthand !== initialShorthand) {
+      canClose = confirm(t("confirmExit"));
+    }
+    if (canClose) {
+      handleClose();
+    }
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       className={classes.modal}
       open={open}
-      onClose={handleClose}
+      onClose={handleModalCloseEvent}
       disableAutoFocus={true}
       closeAfterTransition
     >

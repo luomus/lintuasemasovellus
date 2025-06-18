@@ -78,6 +78,7 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [shorthand, setShorthand] = useState("");
+  const [initialShorthand, setInitialShorthand] = useState("");
 
   const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
   const [warning, setWarning] = useState(false);
@@ -101,6 +102,7 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
     }
     text += obsPeriod.endTime;
     setShorthand(text);
+    setInitialShorthand(text);
   };
 
   const handleDialogOpen = () => {
@@ -167,13 +169,23 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
     handleCloseModal();
   };
 
+  const handleModalCloseEvent = () => {
+    let canClose = true;
+    if (shorthand !== initialShorthand) {
+      canClose = confirm(t("confirmExit"));
+    }
+    if (canClose) {
+      handleClose();
+    }
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       className={classes.modal}
       open={open}
-      onClose={handleClose}
+      onClose={handleModalCloseEvent}
       disableAutoFocus={true}
       closeAfterTransition
     >
