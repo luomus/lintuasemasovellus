@@ -1,7 +1,9 @@
 import React from "react";
-import { Paper, Typography } from "@mui/material";
+import {Divider, Paper, Stack, Typography} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
+import lajilogo from "../../resources/LAJI_FI_sin.png";
+import luomuslogo from "../../resources/luomuslogo.png";
 
 
 const useStyles = makeStyles({
@@ -17,6 +19,9 @@ const useStyles = makeStyles({
   },
   textSection: {
     margin: "0 auto"
+  },
+  divider: {
+    marginBottom: 20
   }
 });
 
@@ -111,6 +116,37 @@ export const UserManual = () => {
           <br /><br /> Jaksojen ja havaintojen muokkaaminen tapahtuu Jaksot-näkymästä. Etsi havaintojakso, jota haluat muokata, ja paina kyseisen havaintojaksorivin lopussa olevaa kynäikonia. Havaintojakson muokkaustila aukeaa, ja voit muokata kyseisen havaintojakson tyyppiä, sijaintia sekä pikakirjoitusta. Poista-napin kautta havaintojakso voidaan myös kokonaan poistaa. Halutessaan käyttäjä voi muokata havaintoja myös havaintotyyppi- ja -paikkakohtaisesti taulukon yläpuolella olevasta <em>Muokkaa havaintoja</em> -painikkeesta.
           <br />
           <br />
+        </div>
+        <div>
+          Tuki: <a href="mailto: helpdesk@laji.fi">helpdesk@laji.fi</a>
+          <br />
+          <br />
+        </div>
+        <Divider className={classes.divider} />
+        <div>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 2, sm: 2 }} sx={{ alignItems: { xs: "center", sm: "flex-end" } }}>
+            <div>
+              <a href="https://www.laji.fi/">
+                <img
+                  src={lajilogo}
+                  width="200"
+                  alt="laji.fi"></img>
+                <br />
+              </a>
+            </div>
+            <div>
+              <a href="https://www.luomus.fi/">
+                <img
+                  src={luomuslogo}
+                  width="185"
+                  alt="luomus"></img>
+                <br />
+              </a>
+            </div>
+          </Stack>
+          <p>
+            Sovelluksen kehitys alkoi Helsingin yliopiston Ohjelmistotuotantoprojekti-kurssilla (syksy 2020, kevät 2021 ja kesä 2022) ja jatkuu Lajitietokeskuksessa.
+          </p>
         </div>
       </Paper>
       <br />
