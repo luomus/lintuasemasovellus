@@ -1,5 +1,5 @@
 import React from "react";
-import {Divider, Paper, Stack, Typography} from "@mui/material";
+import { Divider, Paper, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import lajilogo from "../../resources/LAJI_FI_sin.png";
