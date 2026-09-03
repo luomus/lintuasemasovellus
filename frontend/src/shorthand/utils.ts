@@ -15,7 +15,8 @@ export const isTime = (row: string) => {
 };
 
 export const parseTime = (timeString: string) => {
-  return timeString.replace(".", ":");
+  const [hours = "", minutes = ""] = timeString.replace(".", ":").split(":");
+  return `${hours.padStart(2, "0")}:${minutes}`;
 };
 
 export const timeStringToFloat = (timeString: string) => {

@@ -11,7 +11,7 @@ export const getOverlappingTimeRows = (value: string, observationPeriods: Observ
   const rowNumbers = [];
 
   observationPeriods = observationPeriods.filter(
-    period => !(activeObservationPeriodIds || []).includes(period.id)
+    period => !(activeObservationPeriodIds || []).includes(period.id) && !["Paikallinen", "Hajahavainto"].includes(period.observationType)
   );
 
   const lines = value.trim().split(/\n/);
@@ -21,7 +21,9 @@ export const getOverlappingTimeRows = (value: string, observationPeriods: Observ
   let periodEndTime = null;
   let nextTimeEndTime = false;
 
-  for (const line of lines) {
+  for (let line of lines) {
+    line = line.trim();
+
     const parsedTime = isTime(line) && parseTime(line);
 
     if (parsedTime || !nextTimeEndTime) {
@@ -42,9 +44,12 @@ export const getOverlappingTimeRows = (value: string, observationPeriods: Observ
       if (!periodStartTime || !periodEndTime) {
         continue;
       }
-      if (periodEndTime > obsPeriod.startTime && periodStartTime <= obsPeriod.startTime && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
-        periodEndTime > obsPeriod.startTime && periodEndTime <= obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ||
-          periodStartTime >= obsPeriod.startTime && periodStartTime < obsPeriod.endTime  && obsPeriod.observationType !== "Paikallinen" && obsPeriod.observationType !== "Hajahavainto" ) {
+
+      if (
+        periodEndTime > obsPeriod.startTime && periodStartTime <= obsPeriod.startTime ||
+        periodEndTime > obsPeriod.startTime && periodEndTime <= obsPeriod.endTime ||
+        periodStartTime >= obsPeriod.startTime && periodStartTime < obsPeriod.endTime
+      ) {
         rowNumbers.push(rowNumber);
       }
     }
