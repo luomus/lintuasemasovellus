@@ -18,7 +18,10 @@ RUN mkdir -p /opt/oracle
 
 WORKDIR /opt/oracle
 
-RUN apt-get update && apt-get install -y libaio1 wget unzip \
+RUN apt-get update \
+        && apt-get install -y wget unzip \
+        && (apt-get install -y libaio1 || apt-get install -y libaio1t64) \
+        && ([ -e /usr/lib/x86_64-linux-gnu/libaio.so.1 ] || ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1) \
         && wget https://download.oracle.com/otn_software/linux/instantclient/19800/instantclient-basiclite-linux.x64-19.8.0.0.0dbru.zip \
         && unzip instantclient-basiclite-linux.x64-19.8.0.0.0dbru.zip \
         && rm -f instantclient-basiclite-linux.x64-19.8.0.0.0dbru.zip \
@@ -31,6 +34,8 @@ COPY --from=builder /front/build/ /back/build/
 
 WORKDIR /back
 
+RUN pip install "setuptools<82" wheel
+RUN pip install --no-build-isolation cx_Oracle==8.3.0
 RUN pip install -r requirements.txt
 
 FROM base AS bird-station-app-dev
