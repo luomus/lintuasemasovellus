@@ -20,7 +20,9 @@ export const shorthandLinesToObservations = (shorthandLines: string[], obsType: 
   let periodShorthandBlock = "";
   let periodIdx = 0;
 
-  for (const row of shorthandLines) {
+  for (let row of shorthandLines) {
+    row = row.trim();
+
     if (!row) continue;
 
     if (isTime(row)) {
@@ -46,7 +48,7 @@ export const shorthandLinesToObservations = (shorthandLines: string[], obsType: 
         periodShorthandBlock = periodShorthandBlock + "\n" + row;
       }
 
-      if (!(row.trim() === "tauko" || row.trim() === "-")) {
+      if (!(row === "tauko" || row === "-")) {
         const observationObject: PeriodObservation = { ...parseLine(row, speciesCodeMap), periodOrderNum: String(periodIdx) };
         observations.push(observationObject);
       }
