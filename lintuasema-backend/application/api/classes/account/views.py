@@ -2,6 +2,7 @@ from application.api.classes.account.models import Account
 from application.api.classes.account.classes import LoggedInUser
 
 from application.api import bp
+from application.api.utils import get_laji_api_headers
 from application.db import db
 
 import os
@@ -12,7 +13,6 @@ from flask import (
 from flask_login import login_user, logout_user, current_user, login_required, user_logged_in
 
 
-AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 TARGET = os.getenv('TARGET')
 allowedRoles = os.getenv('ALLOWED_ROLES', 'MA.haukkaUser,MA.admin').split(',')
 LAJI_AUTH_URL = os.getenv('LAJI_AUTH_URL')
@@ -27,7 +27,7 @@ def loginconfirm():
     if personToken is None:
         return redirect('/')
 
-    req = requests.get('{}person/{}'.format(LAJI_API_URL, personToken), params={ 'access_token': AUTH_TOKEN }).json()
+    req = requests.get('{}person'.format(LAJI_API_URL), headers=get_laji_api_headers(personToken)).json()
     userId = req['id']
     name = req['fullName']
     email = req['emailAddress']
@@ -35,7 +35,7 @@ def loginconfirm():
 
     if not hasRole and allowedRoles != ['']:
         try:
-            requests.delete('{}person-token/{}'.format(LAJI_API_URL, personToken), params={ 'access_token': AUTH_TOKEN })
+            requests.delete('{}authentication-event'.format(LAJI_API_URL), headers=get_laji_api_headers(personToken))
         except:
             print("Error while logging out without roles")
         response = make_response(redirect('/'))
@@ -56,14 +56,14 @@ def loginconfirm():
 
 @bp.route('/api/logout', methods=['POST', 'GET'])
 def logoutCleanup():
-    req = requests.delete('{}person-token/{}'.format(LAJI_API_URL, current_user.person_token), params={ 'access_token': AUTH_TOKEN })
+    req = requests.delete('{}authentication-event'.format(LAJI_API_URL), headers=get_laji_api_headers(current_user.person_token))
     logout_user()
     return redirect('/')
 
 @bp.route('/api/getPerson', methods=['GET'])
 @login_required
 def getPersonFromLaji():
-    return requests.get('{}person/{}'.format(LAJI_API_URL, current_user.person_token), params={ 'access_token': AUTH_TOKEN }).json()
+    return requests.get('{}person'.format(LAJI_API_URL), headers=get_laji_api_headers(current_user.person_token)).json()
 
 @bp.route('/api/loginRedirect', methods=['POST', 'GET'])
 def login():
