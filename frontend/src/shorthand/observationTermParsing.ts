@@ -18,11 +18,22 @@ export type ObservationTermParserResult = {
     rawValue: string;
 };
 
+type AgeSynonym = "ad"|"juv";
+
 const directions = globals.directions;
 const possibleDirections: string[] = Array.from(directions.keys()).filter(val => !!val);
 const bypassSides = globals.bypass;
 const acceptableBypassSides: string[] = Array.from(bypassSides.keys()).filter(val => !!val);
-const acceptableAges: ParsedAge[] = ["\"", "'", "subad", "pull"];
+const ages: ParsedAge[] = ["\"", "'", "subad", "pull"];
+const ageSynonyms: AgeSynonym[] = ["ad", "juv"];
+const acceptableAges: (ParsedAge|AgeSynonym)[] = [...ages, ...ageSynonyms];
+
+const ageSynonymMap: Record<AgeSynonym, ParsedAge> = {
+    ad: "\"",
+    juv: "\'"
+};
+
+const isAgeSynonym = (val: ParsedAge|AgeSynonym): val is AgeSynonym => ageSynonyms.some(synonym => synonym === val);
 
 export const getParsedObservationTerms = (text: string): ObservationTermParserResult[] => {
   if (!text.match(/^([^()]*(\([^()]*\))*)*$/)) {
@@ -74,7 +85,8 @@ const makeObservationTermParserIterator = (text: string): Iterator<ObservationTe
 
     const ageMatch = getStringTermMatch(text, acceptableAges);
     if (ageMatch) {
-      return { type: "age", value: ageMatch, rawValue: ageMatch };
+      const value = isAgeSynonym(ageMatch) ? ageSynonymMap[ageMatch] : ageMatch;
+      return { type: "age", value, rawValue: ageMatch };
     }
 
     if (text[0] === "/") {

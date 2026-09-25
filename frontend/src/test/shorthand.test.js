@@ -414,6 +414,17 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
 
   });
 
+  test("age synonym is parsed", () => {
+    const lineOfText = "sommol 1ad";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    expect(result.subObservations[0].adultUnknownCount).toBe(1);
+  });
+
+  test("age synonym is parsed 2", () => {
+    const lineOfText = "sommol 1juv";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    expect(result.subObservations[0].juvenileUnknownCount).toBe(1);
+  });
 });
 
 
