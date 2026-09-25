@@ -179,7 +179,7 @@ const resources = {
       "noZeroAmount": "Pyydyksen '{{char}}' lukumäärä ei voi olla 0.",
       "maxCatchValue": "Pyydyksen '{{char1}}' lukumäärä voi olla korkeintaan {{char2}}.",
       "expectingStandardCatch": "Rengastusvakio on merkitty tehdyksi. Lisää ainakin yksi vakioverkko.",
-      "duplicateCatches": "Pyyntialueella '{{char}}' on ilmoitettu samanlainen pyydys useampaan kertaan. Tarkistathan pyydykset.",
+      "duplicateCatches": "Pyydys '{{char}}' on ilmoitettu useampaan kertaan. Tarkistathan pyydykset.",
       "periodsEndTimeMustBeAfterStartTime": "Havainnon lopetusajan on oltava aloitusajan jälkeen.",
       "periodsStartTimeMustBeAfterPreviousEndTime": "Havainnon aloitusaika ei voi olla ennen edellisen havainnon lopetusaikaa.",
       "pauseAlreadyActive": "Jakso on jo kirjattu tauoksi.",

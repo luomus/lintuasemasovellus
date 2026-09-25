@@ -32,6 +32,14 @@ const hankoStandardCatches = [
     "verkonPituus": 12,
     "alku": "00:00",
     "loppu": "00:00"
+  },
+  {
+    "pyyntialue": "Ruovikko",
+    "pyyntitapa": "L",
+    "lukumaara": 1,
+    "verkonPituus": 9,
+    "alku": "00:00",
+    "loppu": "00:00"
   }
 ];
 const hankoDefaultActions = { standardObs: false, gåu: false, standardRing: false, owlStandard: false, mammals: false, attachments: "0" };

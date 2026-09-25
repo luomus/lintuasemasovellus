@@ -53,16 +53,17 @@ const catchMethods = {
   "Haukkahäkki": "H"
 };
 
-
-/*const softAmountLimits = {
-  "Lisäverkko": { "Piha": 9 },
-  "Petoverkot": { "Vakiopetoverkot": 8 },
+const softAmountLimits = {
+  "Vakioverkot": 11,
+  "Vakioverkko, K": 1,
+  "Piha": 10,
+  "Petoverkko": 8,
+  "Ruovikko": 3,
+  "Kahlaajakatiska": 12,
+  "Siemenkatiska": 3,
+  "Lisäverkko": 5,
+  "Haukkahäkki": 2
 };
-
-const hardAmountLimits = {
-  "Vakioverkot K": 1,
-  "Vakioverkot muu": 11
-};*/
 
 const catchesWithoutLength = ["Kahlaajakatiska", "Siemenkatiska", "Haukkahäkki"];
 
@@ -89,9 +90,9 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
     let toErrors = [];
 
     //things for user to doublecheck
-    /*if ((cr.pyydys in softAmountLimits && cr.pyyntialue in softAmountLimits[String(cr.pyydys)] && cr.lukumaara > softAmountLimits[String(cr.pyydys)][String(cr.pyyntialue)]) || cr.lukumaara > 15) {
-      toNotifications.push(t("checkNumberOfCatches", { char: cr.pyydys }));
-    }*/
+    if (cr.pyyntialue && softAmountLimits[cr.pyyntialue] && cr.lukumaara > softAmountLimits[cr.pyyntialue]) {
+      toNotifications.push(t("recheckNumberOfCatches", { char: cr.pyyntialue }));
+    }
     if (cr.pyyntialue && !catchesWithoutLength.includes(cr.pyyntialue) && cr.verkonPituus && (cr.verkonPituus < 9 || cr.verkonPituus > 12)) {
       toNotifications.push(t("checkNetLength", { char: cr.pyyntialue }));
     }
@@ -112,17 +113,12 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
     if (cr.pyyntialue && cr.lukumaara === "0") {
       toErrors.push(t("noZeroAmount", { char: cr.pyyntialue }));
     }
-    /*if ((cr.pyyntialue in hardAmountLimits && cr.lukumaara > hardAmountLimits[String(cr.pyyntialue)])) {
-      toErrors.push(t("maxCatchValue", { char1: cr.pyyntialue, char2: hardAmountLimits[String(cr.pyyntialue)] }));
-    }*/
-    /*if (cr.pyyntialue) {
-      for (let c of Object.keys(catchRows)) {
-        if (catchRows[String(c)].key !== cr.key && catchRows[String(c)].pyyntialue === cr.pyyntialue && catchRows[String(c)].alku === cr.alku && catchRows[String(c)].loppu === cr.loppu) {
-          toErrors.push(t("duplicateCatches", { char: cr.pyyntialue }));
-          break;
-        }
+    for (let c of catchRows) {
+      if (c.key !== cr.key && c.pyyntialue === cr.pyyntialue && c.alku === cr.alku && c.loppu === cr.loppu) {
+        toErrors.push(t("duplicateCatches", { char: cr.pyyntialue }));
+        break;
       }
-    }*/
+    }
 
     return [toNotifications, toErrors];
   };
