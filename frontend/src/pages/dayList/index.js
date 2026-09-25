@@ -1,4 +1,5 @@
 import {
+  Button,
   Checkbox,
   Chip,
   ListItemText,
@@ -18,15 +19,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { refreshDays } from "../../reducers/daysReducer";
+import { refreshDays, setDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
 import parse from "date-fns/parse";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { StyledTableCell } from "../../globalComponents/common";
 import { AppContext } from "../../AppContext";
-import { dayStringToDate } from "../../services";
+import { dayStringToDate, removeDay } from "../../services";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   paper: {
     background: "white",
     padding: "20px 30px"
@@ -48,7 +49,14 @@ const useStyles = makeStyles({
   chip: {
     margin: 2,
   },
-});
+  deleteButton: {
+    color: "white",
+    backgroundColor: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
+  }
+}));
 
 const getSelectList = (observatory) => createSelector(
   [state => state.days],
@@ -110,6 +118,23 @@ export const DayList = () => {
     navigate(`/daydetails/${s.day}`);
   };
 
+  const handleRemoveDayClick = async (event, s) => {
+    event.stopPropagation();
+
+    if (confirm(t("confirmRemoveDay", { day: s.day }))) {
+      dispatch(setDays(null));
+
+      try {
+        await removeDay(s.id);
+      } catch (e) {
+        console.log("error: ", e);
+        alert(t("removeFailed"));
+      }
+
+      dispatch(refreshDays());
+    }
+  };
+
   if (!list) {
     return <LoadingSpinner />;
   }
@@ -157,9 +182,10 @@ export const DayList = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell>{t("date")}</StyledTableCell>
-                <StyledTableCell align="right">{t("observers")}</StyledTableCell>
-                <StyledTableCell align="right">{t("comment")}</StyledTableCell>
-                <StyledTableCell align="right">{t("observationStation")}</StyledTableCell>
+                <StyledTableCell>{t("observers")}</StyledTableCell>
+                <StyledTableCell>{t("comment")}</StyledTableCell>
+                <StyledTableCell>{t("observationStation")}</StyledTableCell>
+                <StyledTableCell align="right"></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -176,20 +202,25 @@ export const DayList = () => {
                           {s.day}
                         </Link>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.observers}
                         </Link>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.comment}
                         </Link>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.observatory.replace("_", " ")}
                         </Link>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Button className={classes.deleteButton} variant="contained" onClick={(event) => handleRemoveDayClick(event, s)}>
+                          {t("remove")}
+                        </Button>
                       </StyledTableCell>
                     </TableRow>
                   )

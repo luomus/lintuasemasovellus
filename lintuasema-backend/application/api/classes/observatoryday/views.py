@@ -14,7 +14,7 @@ from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId
 from application.api.classes.observationperiod.services import getObsPerId
-from application.api.classes.observatoryday.services import getDay
+from application.api.classes.observatoryday.services import getDay, deleteDay
 from application.api.classes.type.services import getTypeIdByName
 
 from application.api.classes.catch.services import create_catches
@@ -179,3 +179,11 @@ def get_latest_days(observatory):
         res = getLatestDays(observatory_id)
 
     return jsonify(res)
+
+
+@bp.route('/api/removeDay/<obsday_id>', methods=['DELETE'])
+@login_required
+def remove_day(obsday_id):
+    deleteDay(obsday_id)
+
+    return obsday_id

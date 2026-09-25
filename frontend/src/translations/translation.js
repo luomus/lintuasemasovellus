@@ -193,7 +193,9 @@ const resources = {
       "mustEndWithTime": "Havaintojen on päätyttävä kellonaikaan.",
 
       "noRequiredRoles": "Jos tarvitset pääsyn sovellukseen, voit pyytää sitä sähköpostilla.",
-      "confirmExit": "Haluatko varmasti poistua tallentamatta muutoksia?"
+      "confirmExit": "Haluatko varmasti poistua tallentamatta muutoksia?",
+      "confirmRemoveDay": "Haluatko varmasti poistaa kaikki tiedot päivältä {{day}}?",
+      "removeFailed": "Päivän poistaminen ei onnistunut. Yritä myöhemmin uudelleen.",
     },
   },
 };

@@ -44,6 +44,11 @@ def addDay(obsday): #Function for adding a new observatoryday into the database
         set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
 
+def deleteDay(obsday_id):
+    day = Observatoryday.query.get(obsday_id)
+    day.is_deleted = 1
+    db.session().commit()
+
 #Check if a period for local observations has already been added today
 def checkPeriod(dayId, type, gau):
     typid=getTypeIdByName(type) #Type is either local ("Paikallinen") or scatter ("Hajahavainto")

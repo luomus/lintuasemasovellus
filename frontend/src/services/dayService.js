@@ -79,3 +79,8 @@ export const sendDay = async (dayData) => {
   const res = await axios.post("/api/addDay", dayData);
   return res;
 };
+
+export const removeDay = async (dayId) => {
+  const res = await axios.delete(`/api/removeDay/${dayId}`);
+  return res;
+};
