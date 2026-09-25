@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import { dateToDayString, dayStringToDate } from "../../services";
 
 
-const DayPicker = ({ value, onChange, canChange, required }) => {
+const DayPicker = ({ value, onChange, canChange, required, errorText }) => {
   const { t } = useTranslation();
 
   const [datepickerDate, setDatepickerDate] = useState(null);
@@ -90,7 +90,8 @@ const DayPicker = ({ value, onChange, canChange, required }) => {
             required: required,
             id: "date-picker-inline",
             "aria-label": "change date",
-            helperText: datePickerErrorMessage,
+            error: !!(datePickerErrorMessage || errorText),
+            helperText: datePickerErrorMessage || errorText,
             onBlur: handleDatePickerBlur
           },
           field: {
@@ -107,7 +108,8 @@ DayPicker.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   canChange: PropTypes.func,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  errorText: PropTypes.string,
 };
 
 export default memo(DayPicker);

@@ -196,6 +196,7 @@ const resources = {
       "confirmExit": "Haluatko varmasti poistua tallentamatta muutoksia?",
       "confirmRemoveDay": "Haluatko varmasti poistaa kaikki tiedot päivältä {{day}}?",
       "removeFailed": "Päivän poistaminen ei onnistunut. Yritä myöhemmin uudelleen.",
+      "requiredField": "Pakollinen kenttä"
     },
   },
 };

@@ -70,8 +70,13 @@ export const ObservationFormMain = ({
 
   const notifications = useSelector(state => state.notifications);
 
+  const [hasShorthand, setHasShorthand] = useState(false);
   const [toDayDetailsDisabled, setToDayDetailsDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
+
+  useEffect(() => {
+    setHasShorthand(formData.shorthand.trim() !== "");
+  }, [formData.shorthand]);
 
   useEffect(() => {
     setToDayDetailsDisabled(formData.observers.trim() === "" || !formData.day);
@@ -129,6 +134,7 @@ export const ObservationFormMain = ({
           onChange={getUpdateFormData("day")}
           canChange={canChangeDay}
           required
+          errorText={hasShorthand && !formData.day ? t("requiredField") : ""}
         />
       </Grid>
       <Grid item sm={9}>
@@ -138,6 +144,7 @@ export const ObservationFormMain = ({
           value={formData.observers}
           onChange={getUpdateFormData("observers")}
           required
+          errorText={hasShorthand && !formData.observers.trim() ? t("requiredField") : ""}
         />
       </Grid>
       <Grid item className={classes.buttonAndIconsContainer}>
@@ -246,6 +253,7 @@ export const ObservationFormMain = ({
                   value={formData.type}
                   onChange={getUpdateFormData("type")}
                   required
+                  errorText={hasShorthand && !formData.type ? t("requiredField") : ""}
                 />
               </Grid>
 
@@ -257,6 +265,7 @@ export const ObservationFormMain = ({
                   value={formData.location}
                   onChange={getUpdateFormData("location")}
                   required
+                  errorText={hasShorthand && !formData.location ? t("requiredField") : ""}
                 />
               </Grid>
 

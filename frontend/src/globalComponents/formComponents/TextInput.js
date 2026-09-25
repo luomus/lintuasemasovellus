@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
-const TextInput = ({ id, label, value, onChange, required, rows }) => {
+const TextInput = ({ id, label, value, onChange, required, rows, errorText }) => {
   return (
     <TextField
       id={id}
@@ -13,6 +13,8 @@ const TextInput = ({ id, label, value, onChange, required, rows }) => {
       required={required}
       rows={rows}
       multiline={rows > 1}
+      error={!!errorText}
+      helperText={errorText}
     />
   );
 };
@@ -23,7 +25,8 @@ TextInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   required: PropTypes.bool,
-  rows: PropTypes.number
+  rows: PropTypes.number,
+  errorText: PropTypes.string,
 };
 
 export default memo(TextInput);
