@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, memo } from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { UnControlled as CodeMirror } from "react-codemirror2";
@@ -12,13 +12,14 @@ import { setNotifications, setNocturnalNotification } from "../../reducers/notif
 import { isNightValidation } from "../../shorthand/validation/isNightValidation";
 import { getOverlappingTimeRows } from "../../shorthand/validation/overlappingTimesValidation";
 import { AppContext } from "../../AppContext";
-import { dayStringToDate, getDaysObservationPeriods } from "../../services";
+import { dayStringToDate } from "../../services";
 import { translateShorthandError } from "../../shorthand/utils";
 import { validateShorthandLines } from "../../shorthand/validation/validation";
 import { shorthandTextToLines } from "../../shorthand/shorthandParsing";
 
 
 let markers = new Set();
+const emptyArray = [];
 
 const useStyles = makeStyles({
   codemirrorBox: {
@@ -27,21 +28,24 @@ const useStyles = makeStyles({
   },
 });
 
-const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationPeriodIds }) => {
+const CodeMirrorBlock = ({ value, onChange, day, type, activeObservationPeriodIds }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
   const { observatory, speciesData } = useContext(AppContext);
 
-  const [observationPeriods, setObservationPeriods] = useState([]);
   const [editorInstance, setEditorInstance] = useState();
-
   const [inputValue, setInputValue] = useState(value);
   const [startingValue, setStartingValue] = useState(value);
+
+  const observationPeriods = useSelector(state => state.dayData.data?.observationPeriods || emptyArray);
 
   useEffect(() => {
     if (value !== inputValue) {
       setStartingValue(value);
+      if (editorInstance) {
+        editorInstance.setValue(value);
+      }
     }
   }, [value]);
 
@@ -53,13 +57,6 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
     }, 700);
     return () => clearTimeout(timeout);
   }, [value, observationPeriods, day, type, activeObservationPeriodIds]);
-
-  useEffect(() => {
-    setObservationPeriods([]);
-    getDaysObservationPeriods(dayId).then(observationPeriods => {
-      setObservationPeriods(observationPeriods);
-    });
-  }, [dayId]);
 
   const validateOverlappingTimes = async (value) => {
     const getRowNumbers = await getOverlappingTimeRows(value, observationPeriods, activeObservationPeriodIds);
@@ -175,7 +172,6 @@ const CodeMirrorBlock = ({ value, onChange, dayId, day, type, activeObservationP
 CodeMirrorBlock.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  dayId: PropTypes.number,
   day: PropTypes.string,
   type: PropTypes.string,
   activeObservationPeriodIds: PropTypes.array,

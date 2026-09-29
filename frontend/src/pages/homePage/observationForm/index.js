@@ -22,6 +22,8 @@ import ObservationFormCopy from "./ObservationFormCopy";
 import { useConfirmExit } from "../../../hooks/useConfirmExit";
 import { resetNotifications } from "../../../reducers/notificationsReducer";
 import { shorthandLinesToObservations, shorthandTextToLines } from "../../../shorthand/shorthandParsing";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDayData, resetDayData } from "../../../reducers/dayDataReducer";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -34,17 +36,20 @@ const useStyles = makeStyles(() => ({
 
 export const ObservationForm = ({ onSaveSuccess }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const { t } = useTranslation();
   const { user, observatory, station, speciesData } = useContext(AppContext);
 
   const navigate = useNavigate();
 
-  const [dayId, setDayId] = useState();
+  const dayInfo = useSelector((state) => state.dayData.data?.dayInfo);
+  const loading = useSelector((state) => state.dayData.loading);
+  const error = useSelector((state) => state.dayData.error);
+
   const [savedFormData, setSavedFormData] = useState();
   const [formData, setFormData] = useState(getEmptyFormData(dateToDayString(new Date())));
 
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [confirmDayChange, setConfirmDayChange] = useState(false);
   const [toDayDetailsLoading, setToDayDetailsLoading] = useState(false);
@@ -57,16 +62,26 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   useConfirmExit(
     () => formHasChanges(),
     () => {
-      resetNotifications();
+      dispatch(resetNotifications());
+      dispatch(resetDayData());
     }
   );
 
   useEffect(() => {
-    setLoading(true);
-    updateFormDataAfterDayChange(formData.day).then(() => {
-      setLoading(false);
-    });
-  }, [formData.day]);
+    dispatch(fetchDayData(formData.day, observatory));
+  }, [formData.day, observatory]);
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const initialData = dayInfoToFormData(formData.day, dayInfo || {}, station.defaultActions);
+    setSavedFormData(initialData);
+
+    const { type, location, shorthand } = formData;
+    setFormData({ ...initialData, type, location, shorthand });
+  }, [dayInfo, loading]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -92,21 +107,6 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       setConfirmDayChange(false);
     }
   }, [savedFormData, formData.observers, formData.comment, formData.dailyActions, formData.catchRows]);
-
-  const updateFormDataAfterDayChange = async (day) => {
-    let dayInfo = {};
-    if (day) {
-      dayInfo = await searchDayInfo(day, observatory);
-    }
-
-    setDayId(dayInfo.id);
-
-    const initialData = dayInfoToFormData(day, dayInfo, station.defaultActions);
-    setSavedFormData(initialData);
-
-    const { type, location, shorthand } = formData;
-    setFormData({ ...initialData, type, location, shorthand });
-  };
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -147,6 +147,8 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       setSavedFormData(formDataAfterSave);
       setFormData(formDataAfterSave);
       onSaveSuccess();
+
+      dispatch(fetchDayData(day, observatory));
     } catch (error) {
       console.error(error.message);
       setSaving(false);
@@ -247,6 +249,14 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     return objectsDiffer(formData, savedFormData);
   };
 
+  if (error) {
+    return (
+      <Typography variant="h6" color="error">
+        {t("unexpectedError")}
+      </Typography>
+    );
+  }
+
   return (
     <LoadingSpinner overlay={true} spinning={loading}>
       <fieldset disabled={loading} className={classes.fieldsContainer}>
@@ -266,7 +276,6 @@ export const ObservationForm = ({ onSaveSuccess }) => {
         </Grid>
         <ObservationFormMain
           formData={formData}
-          dayId={dayId}
           toDayDetailsLoading={toDayDetailsLoading}
           saving={saving}
           confirmDayChange={confirmDayChange}

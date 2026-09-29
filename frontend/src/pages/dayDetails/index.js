@@ -10,10 +10,11 @@ import GeneralDayDetails from "./generalDayDetails";
 import { ObservationEdit } from "./observationEdit";
 import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 import { AppContext } from "../../AppContext";
-import { dayInfoToFormData, searchDayInfo } from "../../services";
+import { dayInfoToFormData } from "../../services";
 import { useConfirmExit } from "../../hooks/useConfirmExit";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import { resetSavingState } from "../../reducers/savingStateReducer";
+import { fetchDayData, resetDayData } from "../../reducers/dayDataReducer";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -31,10 +32,11 @@ export const DayDetails = () => {
   const dispatch = useDispatch();
   const { observatory, station } = useContext(AppContext);
 
+  const dayInfo = useSelector(state => state.dayData.data?.dayInfo);
+  const loading = useSelector(state => state.dayData.loading);
+  const error = useSelector((state) => state.dayData.error);
   const saving = useSelector(state => state.savingState.saving);
 
-  const [dayId, setDayId] = useState();
-  const [loading, setLoading] = useState(true);
   const [initialData, setInitialData] = useState();
 
   useConfirmExit(
@@ -42,27 +44,33 @@ export const DayDetails = () => {
     () => {
       dispatch(resetNotifications());
       dispatch(resetSavingState());
+      dispatch(resetDayData());
     }
   );
 
   useEffect(() => {
-    setLoading(true);
-    setInitialDayData(day).then(() => {
-      setLoading(false);
-    });
+    dispatch(fetchDayData(day, observatory));
   }, [day, observatory]);
 
-  const setInitialDayData = async (day) => {
-    const dayInfo = await searchDayInfo(day, observatory);
-    setDayId(dayInfo.id);
-    setInitialData(dayInfoToFormData(day, dayInfo, station.defaultActions));
-  };
+  useEffect(() => {
+    if (dayInfo) {
+      setInitialData(dayInfoToFormData(day, dayInfo, station.defaultActions));
+    }
+  }, [day, dayInfo, station.defaultActions]);
 
   if (loading) {
     return (
       <LoadingSpinner/>
     );
-  } else if (dayId === undefined || dayId === null) {
+  } else if (error) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6" color="error">
+          {t("unexpectedError")}
+        </Typography>
+      </Paper>
+    );
+  } else if (dayInfo?.id == null) {
     return (<>
       <Paper className={classes.paper}>
         <Typography variant="h4" component="h2" >
@@ -74,7 +82,7 @@ export const DayDetails = () => {
         </Typography>
       </Paper>
     </>);
-  } else {
+  } else if (initialData) {
     return (
       <>
         <Paper className={classes.paper}>
@@ -88,12 +96,12 @@ export const DayDetails = () => {
             </Grid>
             <Grid item xs={12}>
               <GeneralDayDetails
-                dayId={dayId}
+                dayId={dayInfo.id}
                 initialData={initialData}
               ></GeneralDayDetails>
             </Grid>
             <Grid item xs={12}>
-              <ObservationEdit day={day} dayId={dayId}></ObservationEdit>
+              <ObservationEdit day={day} dayId={dayInfo.id}></ObservationEdit>
             </Grid>
           </Grid>
         </Paper>

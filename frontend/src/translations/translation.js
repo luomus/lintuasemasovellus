@@ -194,9 +194,10 @@ const resources = {
 
       "noRequiredRoles": "Jos tarvitset pääsyn sovellukseen, voit pyytää sitä sähköpostilla.",
       "confirmExit": "Haluatko varmasti poistua tallentamatta muutoksia?",
-      "confirmRemoveDay": "Haluatko varmasti poistaa kaikki tiedot päivältä {{day}}?",
+      "confirmRemoveDay": "Haluatko varmasti poistaa kaikki tiedot päivältä {{day}}? Poistamista ei voi peruuttaa.",
       "removeFailed": "Päivän poistaminen ei onnistunut. Yritä myöhemmin uudelleen.",
-      "requiredField": "Pakollinen kenttä"
+      "requiredField": "Pakollinen kenttä",
+      "unexpectedError": "Odottamaton virhe tapahtui. Yritä hetken kuluttua uudestaan ja jos virhe ei korjaannu, ota yhteyttä ylläpitoon."
     },
   },
 };

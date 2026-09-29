@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PeriodTable = (props) => {
 
-  const { day, dayId, obsPeriods, refetchObservations } = props;
+  const { day, obsPeriods, refetchObservations } = props;
 
   const { t } = useTranslation();
 
@@ -168,7 +168,6 @@ const PeriodTable = (props) => {
           />
           <EditObsPeriod
             day={day}
-            dayId={dayId}
             obsPeriod={obsPeriod}
             open={editModalOpen}
             handleCloseModal={handleCloseEditModal}
@@ -188,7 +187,6 @@ const PeriodTable = (props) => {
 
 PeriodTable.propTypes = {
   day: PropTypes.string.isRequired,
-  dayId: PropTypes.number.isRequired,
   obsPeriods: PropTypes.array.isRequired,
   refetchObservations: PropTypes.func.isRequired
 };

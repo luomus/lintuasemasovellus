@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const ObservationFormMain = ({
-  formData, dayId, toDayDetailsLoading, saving, confirmDayChange, onToDayDetails, onSave, onFormDataChange
+  formData, toDayDetailsLoading, saving, confirmDayChange, onToDayDetails, onSave, onFormDataChange
 }) => {
   const classes = useStyles();
 
@@ -70,26 +70,34 @@ export const ObservationFormMain = ({
 
   const notifications = useSelector(state => state.notifications);
 
-  const [hasShorthand, setHasShorthand] = useState(false);
+  const [showDayMissingError, setShowDayMissingError] = useState(false);
+  const [showObserversMissingError, setShowObserversMissingError] = useState(false);
+  const [showTypeMissingError, setShowTypeMissingError] = useState(false);
+  const [showLocationMissingError, setShowLocationMissingError] = useState(false);
+
   const [toDayDetailsDisabled, setToDayDetailsDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
 
   useEffect(() => {
-    setHasShorthand(formData.shorthand.trim() !== "");
-  }, [formData.shorthand]);
+    const hasShorthand = formData.shorthand.trim() !== "";
+    setShowDayMissingError(!formData.day && hasShorthand);
+    setShowObserversMissingError(formData.observers.trim() === "" && hasShorthand);
+    setShowTypeMissingError(!formData.type && hasShorthand);
+    setShowLocationMissingError(!formData.location && hasShorthand);
+  }, [formData]);
 
   useEffect(() => {
     setToDayDetailsDisabled(formData.observers.trim() === "" || !formData.day);
   }, [formData.observers, formData.day]);
 
   useEffect(() => {
-    const { observers, type, location, shorthand } = formData;
-    if (observers.trim() === "" || type === "" || location === "" || shorthand.trim() === "" || errorsInNotifications()) {
+    const { day, observers, type, location, shorthand } = formData;
+    if (!day || observers.trim() === "" || !type || !location || shorthand.trim() === "" || errorsInNotifications()) {
       setSaveDisabled(true);
     } else {
       setSaveDisabled(false);
     }
-  }, [formData.observers, formData.type, formData.location, formData.shorthand, notifications]);
+  }, [formData, notifications]);
 
   const getUpdateFormData = (key) => useCallback((value) => {
     onFormDataChange((prevState) => ({ ...prevState, [key]: value }));
@@ -134,7 +142,7 @@ export const ObservationFormMain = ({
           onChange={getUpdateFormData("day")}
           canChange={canChangeDay}
           required
-          errorText={hasShorthand && !formData.day ? t("requiredField") : ""}
+          errorText={showDayMissingError ? t("requiredField") : ""}
         />
       </Grid>
       <Grid item sm={9}>
@@ -144,7 +152,7 @@ export const ObservationFormMain = ({
           value={formData.observers}
           onChange={getUpdateFormData("observers")}
           required
-          errorText={hasShorthand && !formData.observers.trim() ? t("requiredField") : ""}
+          errorText={showObserversMissingError ? t("requiredField") : ""}
         />
       </Grid>
       <Grid item className={classes.buttonAndIconsContainer}>
@@ -253,7 +261,7 @@ export const ObservationFormMain = ({
                   value={formData.type}
                   onChange={getUpdateFormData("type")}
                   required
-                  errorText={hasShorthand && !formData.type ? t("requiredField") : ""}
+                  errorText={showTypeMissingError ? t("requiredField") : ""}
                 />
               </Grid>
 
@@ -265,7 +273,7 @@ export const ObservationFormMain = ({
                   value={formData.location}
                   onChange={getUpdateFormData("location")}
                   required
-                  errorText={hasShorthand && !formData.location ? t("requiredField") : ""}
+                  errorText={showLocationMissingError ? t("requiredField") : ""}
                 />
               </Grid>
 
@@ -276,7 +284,6 @@ export const ObservationFormMain = ({
                 <CodeMirrorBlock
                   value={formData.shorthand}
                   onChange={getUpdateFormData("shorthand")}
-                  dayId={dayId}
                   day={formData.day}
                   type={formData.type}
                 />
@@ -308,7 +315,6 @@ export const ObservationFormMain = ({
 
 ObservationFormMain.propTypes = {
   formData: PropTypes.object.isRequired,
-  dayId: PropTypes.number,
   toDayDetailsLoading: PropTypes.bool,
   saving: PropTypes.bool,
   confirmDayChange: PropTypes.bool,

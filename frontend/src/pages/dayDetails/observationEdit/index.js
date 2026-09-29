@@ -130,7 +130,6 @@ export const ObservationEdit = ({ day, dayId }) => {
   ) : (
     <PeriodTable
       day={day}
-      dayId={dayId}
       obsPeriods={obsPeriods}
       refetchObservations={refetchObservations}
     />

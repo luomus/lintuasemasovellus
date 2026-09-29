@@ -336,7 +336,6 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
             <Grid item xs={12}>
               <CodeMirrorBlock
                 day={day}
-                dayId={dayId}
                 type={type}
                 value={shorthand}
                 onChange={setShorthand}

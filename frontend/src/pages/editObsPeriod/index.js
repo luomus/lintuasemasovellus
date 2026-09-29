@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
+const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -221,7 +221,6 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
             <Grid item xs={12}>
               <CodeMirrorBlock
                 day={day}
-                dayId={dayId}
                 type={type}
                 value={shorthand}
                 onChange={setShorthand}
@@ -293,7 +292,6 @@ const EditObsPeriod = ({ day, dayId, obsPeriod, open, handleCloseModal }) => {
 
 EditObsPeriod.propTypes = {
   day: PropTypes.string.isRequired,
-  dayId: PropTypes.number.isRequired,
   obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleCloseModal: PropTypes.func.isRequired,
