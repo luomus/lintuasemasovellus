@@ -29,8 +29,8 @@ const ageSynonyms: AgeSynonym[] = ["ad", "juv"];
 const acceptableAges: (ParsedAge|AgeSynonym)[] = [...ages, ...ageSynonyms];
 
 const ageSynonymMap: Record<AgeSynonym, ParsedAge> = {
-    ad: "\"",
-    juv: "\'"
+  ad: "\"",
+  juv: "'"
 };
 
 const isAgeSynonym = (val: ParsedAge|AgeSynonym): val is AgeSynonym => ageSynonyms.some(synonym => synonym === val);

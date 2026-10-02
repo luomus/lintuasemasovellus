@@ -50,7 +50,7 @@ const resources = {
       "days": "Päivät",
       "observationStation": "Havainnointiasema",
       "formSent": "Lomake lähetetty!",
-      "formNotSent": "Lomakkeen lähetys ei onnistunut.",
+      "formNotSent": "Lomakkeen lähetys ei onnistunut. Yritä hetken kuluttua uudelleen ja jos virhe ei korjaannu, ota yhteyttä ylläpitoon.",
       "readMore": "Lue lisää",
       "location": "Sijainti",
       "observationperiod": "Havaintoperiodi",
@@ -194,10 +194,18 @@ const resources = {
 
       "noRequiredRoles": "Jos tarvitset pääsyn sovellukseen, voit pyytää sitä sähköpostilla.",
       "confirmExit": "Haluatko varmasti poistua tallentamatta muutoksia?",
+      "dayObservationsFetchFailed": "Havaintojen hakeminen epäonnistui. Yritä hetken kuluttua uudelleen.",
+      "observationsFetchFailed": "Havaintojen hakeminen epäonnistui. Yritä hetken kuluttua uudelleen.",
+      "shorthandFetchFailed": "Pikakirjoituksen hakeminen epäonnistui. Yritä hetken kuluttua uudelleen.",
+      "observationPeriodCountsFetchFailed": "Havaintojaksojen hakeminen epäonnistui. Yritä hetken kuluttua uudelleen.",
+      "copyDayFailed": "Päivän tietojen kopioiminen epäonnistui. Yritä hetken kuluttua uudelleen.",
       "confirmRemoveDay": "Haluatko varmasti poistaa kaikki tiedot päivältä {{day}}? Poistamista ei voi peruuttaa.",
-      "removeFailed": "Päivän poistaminen ei onnistunut. Yritä myöhemmin uudelleen.",
+      "removeFailed": "Päivän poistaminen ei onnistunut. Yritä hetken kuluttua uudelleen.",
       "requiredField": "Pakollinen kenttä",
-      "unexpectedError": "Odottamaton virhe tapahtui. Yritä hetken kuluttua uudestaan ja jos virhe ei korjaannu, ota yhteyttä ylläpitoon."
+      "unexpectedError": "Odottamaton virhe tapahtui. Yritä hetken kuluttua uudelleen ja jos virhe ei korjaannu, ota yhteyttä ylläpitoon.",
+      "latestDaysError": "Viimeisimpien päivien haku ei onnistunut. Yritä hetken kuluttua uudelleen.",
+      "errorMessage": "Virhe",
+      "logoutFailed": "Uloskirjautuminen epäonnistui. Yritä hetken kuluttua uudelleen."
     },
   },
 };

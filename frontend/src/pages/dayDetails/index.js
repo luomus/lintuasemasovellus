@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Paper, Grid, Typography, CircularProgress
@@ -14,7 +14,7 @@ import { dayInfoToFormData } from "../../services";
 import { useConfirmExit } from "../../hooks/useConfirmExit";
 import { resetNotifications } from "../../reducers/notificationsReducer";
 import { resetSavingState } from "../../reducers/savingStateReducer";
-import { fetchDayData, resetDayData } from "../../reducers/dayDataReducer";
+import { refreshDayData, refreshObservationPeriods, resetDayData } from "../../reducers/dayDataReducer";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -49,7 +49,7 @@ export const DayDetails = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchDayData(day, observatory));
+    dispatch(refreshDayData(day, observatory));
   }, [day, observatory]);
 
   useEffect(() => {
@@ -57,6 +57,12 @@ export const DayDetails = () => {
       setInitialData(dayInfoToFormData(day, dayInfo, station.defaultActions));
     }
   }, [day, dayInfo, station.defaultActions]);
+
+  const refreshObservations = useCallback(async () => {
+    if (dayInfo?.id !== undefined) {
+      dispatch(refreshObservationPeriods(dayInfo.id));
+    }
+  }, [dayInfo?.id, dispatch]);
 
   if (loading) {
     return (
@@ -70,7 +76,7 @@ export const DayDetails = () => {
         </Typography>
       </Paper>
     );
-  } else if (dayInfo?.id == null) {
+  } else if (dayInfo?.id === undefined) {
     return (<>
       <Paper className={classes.paper}>
         <Typography variant="h4" component="h2" >
@@ -101,7 +107,7 @@ export const DayDetails = () => {
               ></GeneralDayDetails>
             </Grid>
             <Grid item xs={12}>
-              <ObservationEdit day={day} dayId={dayInfo.id}></ObservationEdit>
+              <ObservationEdit day={day} dayId={dayInfo.id} refreshObservations={refreshObservations}></ObservationEdit>
             </Grid>
           </Grid>
         </Paper>

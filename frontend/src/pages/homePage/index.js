@@ -1,11 +1,12 @@
 import React, {
   useContext,
   useEffect,
+  useRef,
   useState
 } from "react";
 import {
   Paper, Grid, Typography,
-  Table, TableRow, TableBody
+  Table, TableRow, TableBody, Alert
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
@@ -35,25 +36,42 @@ const useStyles = makeStyles(() => ({
     cursor: "pointer",
     textDecoration: "underline",
   }
-}
-));
+}));
 
 export const HomePage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { observatory } = useContext(AppContext);
 
+  const abortControllerRef = useRef(null);
+
   const [latestDays, setLatestDays] = useState(null);
+  const [latestDaysHasError, setLatestDaysHasError] = useState(false);
 
   useEffect(() => {
-    getLatestDays(observatory)
-      .then(daysJson => setLatestDays(daysJson));
+    refreshLatestDays();
   }, [observatory]);
 
-  const handleSaveSuccess = () => {
+  const refreshLatestDays = async () => {
+    abortControllerRef.current?.abort();
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setLatestDays(null);
-    getLatestDays(observatory)
-      .then(daysJson => setLatestDays(daysJson));
+    setLatestDaysHasError(false);
+
+    try {
+      const daysJson = await getLatestDays(observatory);
+      if (!controller.signal.aborted) {
+        setLatestDays(daysJson);
+      }
+    } catch (e) {
+      if (!controller.signal.aborted) {
+        console.error(e);
+        setLatestDaysHasError(true);
+      }
+    }
   };
 
   return (
@@ -63,7 +81,7 @@ export const HomePage = () => {
       >
         <Grid item xs={9}>
           <Paper className={classes.obsPaper}>
-            <ObservationForm onSaveSuccess={handleSaveSuccess} />
+            <ObservationForm onSaveSuccess={refreshLatestDays} />
           </Paper>
         </Grid>
 
@@ -76,28 +94,32 @@ export const HomePage = () => {
                   {t("latestDays")}
                 </Typography>
                 <br />
-                { latestDays ?
-                  <Table>
-                    <TableBody>
-                      {
-                        latestDays
-                          .map((s, i) =>
-                            <TableRow id="latestDaysRow" key={i} hover className={classes.pointerCursor} >
-                              <StyledTableCell component="th" scope="row">
-                                <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
-                                  {s.day}
-                                </Link>
-                              </StyledTableCell>
-                              <StyledTableCell component="th" scope="row">
-                                <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
-                                  {t("speciesCount", { count: s.speciesCount })}
-                                </Link>
-                              </StyledTableCell>
-                            </TableRow>
-                          )
-                      }
-                    </TableBody>
-                  </Table> : <LoadingSpinner size="small" /> }
+                {
+                  latestDaysHasError ?
+                    <Alert severity="error">{t("latestDaysError")}</Alert> :
+                    latestDays ?
+                      <Table>
+                        <TableBody>
+                          {
+                            latestDays
+                              .map((s, i) =>
+                                <TableRow id="latestDaysRow" key={i} hover className={classes.pointerCursor} >
+                                  <StyledTableCell component="th" scope="row">
+                                    <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
+                                      {s.day}
+                                    </Link>
+                                  </StyledTableCell>
+                                  <StyledTableCell component="th" scope="row">
+                                    <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
+                                      {t("speciesCount", { count: s.speciesCount })}
+                                    </Link>
+                                  </StyledTableCell>
+                                </TableRow>
+                              )
+                          }
+                        </TableBody>
+                      </Table> : <LoadingSpinner size="small" />
+                }
               </Grid>
               <br />
               <br />

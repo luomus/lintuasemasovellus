@@ -20,6 +20,7 @@ import { createSelector } from "reselect";
 import { AppContext } from "./AppContext";
 import MainContainer from "./globalComponents/MainContainer";
 import ProtectedRoute from "./globalComponents/ProtectedRoute";
+import { ErrorPage, RouterErrorPage } from "./globalComponents/ErrorPage";
 
 const useStyles = makeStyles({
   container: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles({
 });
 
 const stationSelector = createSelector(
-  [state => state.stations, state => state.userObservatory],
+  [state => state.stations.data, state => state.userObservatory],
   (stations, userObservatory) => (
     stations?.find(s => s.observatory === userObservatory) || null
   )
@@ -42,35 +43,43 @@ const App = () => {
 
   const [userLoading, setUserLoading] = useState(true);
   const [contextDataLoading, setContextDataLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const user = useSelector(state => state.user);
   const observatory = useSelector(state => state.userObservatory);
+
   const station = useSelector(stationSelector);
-  const stations = useSelector(state => state.stations);
-  const speciesData = useSelector(state => state.speciesData);
+  const stations = useSelector(state => state.stations.data);
+  const stationsError = useSelector(state => state.stations.error);
+  const speciesData = useSelector(state => state.speciesData.data);
+  const speciesDataError = useSelector(state => state.speciesData.error);
 
   useEffect(() => {
     getPerson()
       .then(response => response.data)
       .then(response => {
         dispatch(setUser(response));
-        getCurrentUser()
-          .then(currentUser => {
-            const observatory = currentUser.data[0].observatory;
-            if (observatory) {
-              dispatch(setUserObservatory(observatory));
-            }
-
-            setContextDataLoading(true);
-            dispatch(initializeStations());
-            dispatch(initializeSpecies());
-
-            DraftsClean();
-
-            setUserLoading(false);
-          });
+        return getCurrentUser();
       })
-      .catch(() => {
+      .then(currentUser => {
+        const observatory = currentUser.data[0].observatory;
+        if (observatory) {
+          dispatch(setUserObservatory(observatory));
+        }
+
+        setContextDataLoading(true);
+        dispatch(initializeStations());
+        dispatch(initializeSpecies());
+
+        DraftsClean();
+
+        setUserLoading(false);
+      })
+      .catch((e) => {
+        if (e.status !== 401) {
+          console.error(e);
+          setHasError(true);
+        }
         setUserLoading(false);
       });
   }, []);
@@ -81,9 +90,20 @@ const App = () => {
     }
   }, [stations, speciesData]);
 
+  useEffect(() => {
+    if (stationsError || speciesDataError) {
+      setHasError(true);
+      setContextDataLoading(false);
+    }
+  }, [stationsError, speciesDataError]);
+
   if (userLoading || contextDataLoading) {
     return (
       <LoadingSpinner/>
+    );
+  } else if (hasError) {
+    return (
+      <ErrorPage/>
     );
   }
 
@@ -104,7 +124,7 @@ const App = () => {
 
   const router = createHashRouter(
     createRoutesFromElements(
-      <Route path="/" element={<MainContainer showNavBar={showNavBar} />}>
+      <Route path="/" element={<MainContainer showNavBar={showNavBar} />} errorElement={<RouterErrorPage />}>
         <Route path="/logout" element={<Logout />}></Route>
         <Route path="/changeObservatory" element={<ClearObservatory />}></Route>
         <Route path="/listdays" element={<ProtectedRoute><DayList /></ProtectedRoute>}/>

@@ -25,14 +25,14 @@ const useStyles = makeStyles({
   }
 });
 
-const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) => {
+const LocalInput = ({ day, shorthand, totalCount, species, dataType, onChange, inputRef }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
   const { observatory } = useContext(AppContext);
 
   const [inputValue, setInputValue] = useState("");
-  const [savingShorthand, setSavingShorthand] = useState();
+  const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
@@ -50,9 +50,12 @@ const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) =
   };
 
   const saveValue = async () => {
+    const previousValue = shorthand || "";
+    const previousTotalCount = totalCount || 0;
+
     const value = inputValue.trim();
 
-    if (value === shorthand || value === savingShorthand) {
+    if (value === previousValue) {
       setErrorMsg("");
       return;
     }
@@ -70,15 +73,21 @@ const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) =
 
     onChange({ "shorthand": value, "totalCount": getTotalCount(observation) });
     setErrorMsg("");
+    setSaving(true);
 
-    setSavingShorthand(value);
-    if (dataType.includes("local")) {
-      await dispatch(saveData(() => updateLocalObservation(day, observatory, species, value, observation, dataType === "localGau" ? 1 : 0)));
+    try {
+      if (dataType.includes("local")) {
+        await dispatch(saveData(() => updateLocalObservation(day, observatory, species, value, observation, dataType === "localGau" ? 1 : 0)));
+      }
+      if (dataType === "scatter") {
+        await dispatch(saveData(() => updateScatterObservation(day, observatory, species, value, observation)));
+      }
+    } catch (e) {
+      onChange({ "shorthand": previousValue, "totalCount": previousTotalCount });
+      setInputValue(previousValue);
+    } finally {
+      setSaving(false);
     }
-    if (dataType === "scatter") {
-      await dispatch(saveData(() => updateScatterObservation(day, observatory, species, value, observation)));
-    }
-    setSavingShorthand(undefined);
   };
 
   const getTotalCount = (observation) => {
@@ -105,6 +114,7 @@ const LocalInput = ({ day, shorthand, species, dataType, onChange, inputRef }) =
         onChange={handleChange}
         onBlur={saveValue}
         onKeyDown={handleKeyDown}
+        disabled={saving}
         slotProps={{
           input: {
             value: inputValue,
@@ -129,9 +139,9 @@ export default LocalInput;
 LocalInput.propTypes = {
   day: PropTypes.string.isRequired,
   shorthand: PropTypes.string,
+  totalCount: PropTypes.number,
   species: PropTypes.string,
   dataType: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  total: PropTypes.number,
   inputRef: PropTypes.any,
 };

@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
 }
 ));
 
-const DailyActions = ({ value, onChange, catchRows }) => {
+const DailyActions = ({ value, onChange, catchRows, disabled }) => {
   const { observatory } = useContext(AppContext);
   if (observatory === "Hangon_Lintuasema") {
     return (
-      <HankoActions value={value} onChange={onChange} catchRows={catchRows} />
+      <HankoActions value={value} onChange={onChange} catchRows={catchRows} disabled={disabled} />
     );
   }
   return (
@@ -42,7 +42,7 @@ const DailyActions = ({ value, onChange, catchRows }) => {
   );
 };
 
-const HankoActions = ({ value, onChange, catchRows }) => {
+const HankoActions = ({ value, onChange, catchRows, disabled }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { t } = useTranslation();
@@ -109,22 +109,22 @@ const HankoActions = ({ value, onChange, catchRows }) => {
         <FormGroup row className={classes.formGroup} >
           { value.standardObs !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={value.standardObs} onChange={(event) => handleChange(event.target)} name="standardObs" color="primary" className={classes.checkbox} />}
-            label={t("standardObs")} labelPlacement="end" /> }
+            label={t("standardObs")} labelPlacement="end" disabled={disabled} /> }
           { value.gåu !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={value.gåu} onChange={(event) => handleChange(event.target)} name="gåu" color="primary" className={classes.checkbox} />}
-            label={t("gåu")} labelPlacement="end" /> }
+            label={t("gåu")} labelPlacement="end" disabled={disabled} /> }
           { value.standardRing !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={value.standardRing} onChange={(event) => handleChange(event.target)} name="standardRing" color="primary" className={classes.checkbox} />}
-            label={t("standardRing")} labelPlacement="end" /> }
+            label={t("standardRing")} labelPlacement="end" disabled={disabled} /> }
           { value.owlStandard !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={value.owlStandard} onChange={(event) => handleChange(event.target)} name="owlStandard" color="primary" className={classes.checkbox} />}
-            label={t("owlStandard")} labelPlacement="end" /> }
+            label={t("owlStandard")} labelPlacement="end" disabled={disabled} /> }
           { value.mammals !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<Checkbox checked={value.mammals} onChange={(event) => handleChange(event.target)} name="mammals" color="primary" className={classes.checkbox} />}
-            label={t("mammals")} labelPlacement="end" /> }
+            label={t("mammals")} labelPlacement="end" disabled={disabled} /> }
           { value.attachments !== undefined && <FormControlLabel className={classes.formControlLabel}
             control={<TextField name="attachments" id="attachments" type="number" className={classes.attachmentField} value={value.attachments}
-              onChange={(event) => handleChange(event.target)}
+              onChange={(event) => handleChange(event.target)} disabled={disabled}
               InputProps={{ endAdornment: <InputAdornment position="end">{t("pcs")}</InputAdornment>, inputProps: { min: 0 } }}>
             </TextField>}
             label={t("attachments")} labelPlacement="start" /> }
@@ -137,13 +137,15 @@ const HankoActions = ({ value, onChange, catchRows }) => {
 DailyActions.propTypes = {
   value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  disabled: PropTypes.bool
 };
 
 HankoActions.propTypes = {
   value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  disabled: PropTypes.bool
 };
 
 export default memo(DailyActions);

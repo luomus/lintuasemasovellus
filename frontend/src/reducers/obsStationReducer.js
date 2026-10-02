@@ -1,5 +1,10 @@
 import { getObservationStations } from "../services";
 
+const initialState = {
+  data: null,
+  error: null,
+};
+
 const hankoStandardCatches = [
   {
     "pyyntialue": "Vakioverkot",
@@ -46,33 +51,39 @@ const hankoDefaultActions = { standardObs: false, gåu: false, standardRing: fal
 
 export const initializeStations = () => {
   return async dispatch => {
-    const stations = await getObservationStations();
-    stations.forEach((station) => {
-      if (station.observatory === "Hangon_Lintuasema") {
-        station.standardCatches = hankoStandardCatches;
-        station.defaultActions = hankoDefaultActions;
-      } else {
-        station.standardCatches = [];
-        station.defaultActions = {};
-      }
-    });
-    dispatch(setStations(stations));
-  };
-};
-
-export const setStations = (stations) => {
-  return {
-    type: "SET_STATIONS",
-    data: {
-      stations
+    try {
+      const stations = await getObservationStations();
+      stations.forEach((station) => {
+        if (station.observatory === "Hangon_Lintuasema") {
+          station.standardCatches = hankoStandardCatches;
+          station.defaultActions = hankoDefaultActions;
+        } else {
+          station.standardCatches = [];
+          station.defaultActions = {};
+        }
+      });
+      dispatch({
+        type: "SET_STATIONS",
+        data: {
+          stations
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      dispatch({
+        type: "SET_STATIONS_ERROR",
+        error: e.message
+      });
     }
   };
 };
 
-const stationsReducer = (state = null, action) => {
+const stationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_STATIONS":
-      return action.data.stations;
+      return { data: action.data.stations, error: null };
+    case "SET_STATIONS_ERROR":
+      return { data: null, error: action.error };
     default:
       return state;
   }

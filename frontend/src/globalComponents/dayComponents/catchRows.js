@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const CatchRows = ({ value, onChange }) => {
+const CatchRows = ({ value, onChange, disabled }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -55,18 +55,18 @@ const CatchRows = ({ value, onChange }) => {
 
       {value.map((cr, i) => (
         <Grid key={i} id={i} item xs={12} className={i % 2 === 0 ? classes.catchRowEven : ""}>
-          <CatchRow key={cr.key} value={cr} onChange={(cr) => updateCatchRow(i, cr)} onDelete={() => deleteCatchRow(i)} catchRows={value} />
+          <CatchRow key={cr.key} value={cr} onChange={(cr) => updateCatchRow(i, cr)} onDelete={() => deleteCatchRow(i)} catchRows={value} disabled={disabled} />
         </Grid>
       ))}
 
       <Grid item xs={12}>
-        <IconButton id="plus-catch-row-button" size="medium" onClick={addCatchRow} variant="contained" color="primary">
+        <IconButton id="plus-catch-row-button" size="medium" onClick={addCatchRow} variant="contained" color="primary" disabled={disabled}>
           <Add fontSize="default" />
         </IconButton>
         &nbsp; {t("addRowByClicking")}
       </Grid>
       <Grid item xs={12}>
-        <IconButton id="plus-catch-row-button" size="medium" onClick={addStandardCatchRows} variant="contained" color="primary">
+        <IconButton id="plus-catch-row-button" size="medium" onClick={addStandardCatchRows} variant="contained" color="primary" disabled={disabled}>
           <Add fontSize="default" />
         </IconButton>
         &nbsp; {t("addStandardCatchRowsByClicking")}
@@ -77,7 +77,8 @@ const CatchRows = ({ value, onChange }) => {
 
 CatchRows.propTypes = {
   value: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default memo(CatchRows);

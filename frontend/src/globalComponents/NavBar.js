@@ -74,7 +74,7 @@ const NavBar = () => {
 
   const user = useSelector(state => state.user);
   const observatory = useSelector(state => state.userObservatory);
-  const stations = useSelector(state => state.stations);
+  const stations = useSelector(state => state.stations.data);
 
   const [state, setState] = useState({
     right: false

@@ -1,7 +1,7 @@
 import {
   Fade, Modal, Grid, Button,
   Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle
+  DialogContent, DialogContentText, DialogTitle, Alert
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import { AppContext } from "../../AppContext";
 import { saveData } from "../../reducers/savingStateReducer";
 import Select from "../../globalComponents/formComponents/Select";
 import { shorthandTextToLines, shorthandLinesToObservations } from "../../shorthand/shorthandParsing";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -82,17 +83,49 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
 
   const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
   const [warning, setWarning] = useState(false);
-  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  const [shorthandLoading, setShorthandLoading] = useState(true);
+  const [shorthandFetchError, setShorthandFetchError] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (open && obsPeriod.id) {
-      setType(obsPeriod.observationType);
-      setLocation(obsPeriod.location);
-      getShorthandByObsPeriod(obsPeriod.id).then(shorthand => {
-        initializeDefaultShorthand(shorthand);
-      });
-      setActiveObservationPeriodIds([obsPeriod.id]);
+    if (!open || !obsPeriod.id) {
+      return;
     }
+
+    let cancelled = false;
+
+    setType(obsPeriod.observationType);
+    setLocation(obsPeriod.location);
+    setActiveObservationPeriodIds([obsPeriod.id]);
+
+    const retrieveShorthand = async () => {
+      setShorthandLoading(true);
+      setShorthandFetchError(false);
+
+      try {
+        const res = await getShorthandByObsPeriod(obsPeriod.id);
+        if (cancelled) {
+          return;
+        }
+        initializeDefaultShorthand(res);
+      } catch (e) {
+        if (cancelled) {
+          return;
+        }
+        console.error(e);
+        setShorthandFetchError(true);
+      } finally {
+        if (!cancelled) {
+          setShorthandLoading(false);
+        }
+      }
+    };
+
+    retrieveShorthand();
+
+    return () => {
+      cancelled = true;
+    };
   }, [open, obsPeriod]);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
@@ -142,11 +175,16 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
   };
 
   const handleDelete = async (close=true) => {
-    setButtonsDisabled(true);
-    await dispatch(saveData(() => deleteObservationperiods([Number(obsPeriod.id)])));
-    setButtonsDisabled(false);
-    if (close) {
-      handleClose();
+    setSaving(true);
+    try {
+      await dispatch(saveData(() => deleteObservationperiods([Number(obsPeriod.id)])));
+      if (close) {
+        closeModal(true);
+      }
+    } catch (e) {
+      // error handled in saveData
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -156,26 +194,41 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
     const rows = shorthandTextToLines(shorthand);
     const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
-    setButtonsDisabled(true);
-    await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id)));
-    setButtonsDisabled(false);
-    handleClose();
+    setSaving(true);
+    try {
+      await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id)));
+      closeModal(true);
+    } catch (e) {
+      // error handled in saveData
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleClose = () => {
+    closeModal();
+  };
+
+  const closeModal = (afterSave = false) => {
     setType("");
     setLocation("");
     setShorthand("");
-    handleCloseModal();
+    setShorthandLoading(true);
+    setShorthandFetchError(false);
+    handleCloseModal(afterSave);
   };
 
   const handleModalCloseEvent = () => {
+    if (saving) {
+      return;
+    }
+
     let canClose = true;
     if (shorthand !== initialShorthand) {
       canClose = confirm(t("confirmExit"));
     }
     if (canClose) {
-      handleClose();
+      closeModal();
     }
   };
 
@@ -193,77 +246,88 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
         <div className={classes.paper}>
           <h2> {t("editShorthand")} </h2>
           <h3> {t("obsPeriod")} {day} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
-          <Grid
-            container
-            alignItems="flex-start"
-            spacing={1}>
-            <Grid item xs={2}>
-              <Select
-                id="selectTypeInModification"
-                label={t("type")}
-                options={station.types}
-                value={type}
-                onChange={setType}
-                required
-              />
-            </Grid>
+          {shorthandLoading ? (
+            <LoadingSpinner size="small" />
+          ) : shorthandFetchError ? (
+            <Alert severity="error">
+              {t("shorthandFetchFailed")}
+            </Alert>
+          ) : (
+            <Grid
+              container
+              alignItems="flex-start"
+              spacing={1}>
+              <Grid item xs={2}>
+                <Select
+                  id="selectTypeInModification"
+                  label={t("type")}
+                  options={station.types}
+                  value={type}
+                  onChange={setType}
+                  required
+                  disabled={saving}
+                />
+              </Grid>
 
-            <Grid item xs={2}>
-              <Select
-                id="selectLocationInModification"
-                label={t("location")}
-                options={station.locations}
-                value={location}
-                onChange={setLocation}
-                required
-              />
+              <Grid item xs={2}>
+                <Select
+                  id="selectLocationInModification"
+                  label={t("location")}
+                  options={station.locations}
+                  value={location}
+                  onChange={setLocation}
+                  required
+                  disabled={saving}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <CodeMirrorBlock
+                  day={day}
+                  type={type}
+                  value={shorthand}
+                  onChange={setShorthand}
+                  activeObservationPeriodIds={activeObservationPeriodIds}
+                  disabled={saving}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Notification category="shorthand" />
+                <Notification category="nocturnalMigration" />
+              </Grid>
+              <Grid container item xs={12} alignItems="flex-end">
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="saveButtonInShorthandModification"
+                    disabled={saveButtonIsDisabled() || saving}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}>
+                    {t("save")}
+                  </Button>
+                </Box>
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="cancelButtonInShorthandModification"
+                    disabled={saving}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClose}>
+                    {t("cancel")}
+                  </Button>
+                </Box>
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="removeButtonInShorthandModification"
+                    disabled={deleteButtonIsDisabled() || saving}
+                    variant="contained"
+                    onClick={handleDialogOpen}
+                    className={classes.deleteButton}>
+                    {t("remove")}
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <CodeMirrorBlock
-                day={day}
-                type={type}
-                value={shorthand}
-                onChange={setShorthand}
-                activeObservationPeriodIds={activeObservationPeriodIds}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Notification category="shorthand" />
-              <Notification category="nocturnalMigration" />
-            </Grid>
-            <Grid container item xs={12} alignItems="flex-end">
-              <Box pr={2} pt={2}>
-                <Button
-                  id="saveButtonInShorthandModification"
-                  disabled={saveButtonIsDisabled() || buttonsDisabled}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSave}>
-                  {t("save")}
-                </Button>
-              </Box>
-              <Box pr={2} pt={2}>
-                <Button
-                  id="cancelButtonInShorthandModification"
-                  disabled={buttonsDisabled}
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleClose}>
-                  {t("cancel")}
-                </Button>
-              </Box>
-              <Box pr={2} pt={2}>
-                <Button
-                  id="removeButtonInShorthandModification"
-                  disabled={deleteButtonIsDisabled() || buttonsDisabled}
-                  variant="contained"
-                  onClick={handleDialogOpen}
-                  className={classes.deleteButton}>
-                  {t("remove")}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+          )}
           <Dialog
             open={warning}
             aria-labelledby="alert-dialog-title"

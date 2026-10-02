@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 }
 ));
 
-const ObservationFormCopy = ({ day, onCopyDay }) => {
+const ObservationFormCopy = ({ day, onCopyDay, disabled }) => {
   const classes = useStyles();
 
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ const ObservationFormCopy = ({ day, onCopyDay }) => {
     <>
       <Tooltip title={t("copy")}>
         <span>
-          <IconButton id="open-copy-button" disabled={!day} size="medium" onClick={handleOpenCopy} variant="contained" color="primary">
+          <IconButton id="open-copy-button" disabled={disabled || !day} size="medium" onClick={handleOpenCopy} variant="contained" color="primary">
             <FileCopy fontSize="default" />
           </IconButton>
         </span>
@@ -115,7 +115,8 @@ const ObservationFormCopy = ({ day, onCopyDay }) => {
 
 ObservationFormCopy.propTypes = {
   day: PropTypes.string,
-  onCopyDay: PropTypes.func.isRequired
+  onCopyDay: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default memo(ObservationFormCopy);

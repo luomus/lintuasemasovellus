@@ -23,7 +23,7 @@ import { useConfirmExit } from "../../../hooks/useConfirmExit";
 import { resetNotifications } from "../../../reducers/notificationsReducer";
 import { shorthandLinesToObservations, shorthandTextToLines } from "../../../shorthand/shorthandParsing";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDayData, resetDayData } from "../../../reducers/dayDataReducer";
+import { refreshDayData, refreshObservationPeriods, resetDayData } from "../../../reducers/dayDataReducer";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -50,11 +50,14 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const [savedFormData, setSavedFormData] = useState();
   const [formData, setFormData] = useState(getEmptyFormData(dateToDayString(new Date())));
 
-  const [saving, setSaving] = useState(false);
   const [confirmDayChange, setConfirmDayChange] = useState(false);
+
   const [toDayDetailsLoading, setToDayDetailsLoading] = useState(false);
-  const [formSent, setFormSent] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [copying, setCopying] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
+  const [copyErrorHappened, setCopyErrorHappened] = useState(false);
+  const [formSent, setFormSent] = useState(false);
 
   const [draftID, setDraftID] = useState();
   const [navigateToDayDetailsDay, setNavigateToDayDetailsDay] = useState(null);
@@ -68,7 +71,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   );
 
   useEffect(() => {
-    dispatch(fetchDayData(formData.day, observatory));
+    dispatch(refreshDayData(formData.day, observatory));
   }, [formData.day, observatory]);
 
   useEffect(() => {
@@ -114,10 +117,13 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     }
     setFormSent(false);
     setErrorHappened(false);
+    setCopyErrorHappened(false);
   };
 
   const sendData = async (formData) => {
     setSaving(true);
+    setErrorHappened(false);
+
     const { day, observers, comment, dailyActions, catchRows, type, location, shorthand } = formData;
 
     const lines = shorthandTextToLines(shorthand);
@@ -148,9 +154,9 @@ export const ObservationForm = ({ onSaveSuccess }) => {
       setFormData(formDataAfterSave);
       onSaveSuccess();
 
-      dispatch(fetchDayData(day, observatory));
+      dispatch(refreshObservationPeriods(dayInfo.id));
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       setSaving(false);
       setErrorHappened(true);
     }
@@ -158,6 +164,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
 
   const handleToDayDetails = async (formData) => {
     setToDayDetailsLoading(true);
+    setErrorHappened(false);
 
     const { day, observers } = formData;
 
@@ -179,7 +186,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
 
       setNavigateToDayDetailsDay(day);
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       setErrorHappened(true);
     }
 
@@ -195,8 +202,11 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     });
   }, [station]);
 
-  const handleCopyDay = useCallback((copyDay, toCopy) => {
-    searchDayInfo(copyDay, observatory).then(dayInfo => {
+  const handleCopyDay = useCallback(async (copyDay, toCopy) => {
+    setCopyErrorHappened(false);
+    setCopying(true);
+    try {
+      const dayInfo = await searchDayInfo(copyDay, observatory);
       if (dayInfo["id"] !== undefined && dayInfo["id"] !== null) {
         const newFormData = {};
         if (toCopy.observers) {
@@ -213,7 +223,12 @@ export const ObservationForm = ({ onSaveSuccess }) => {
         }
         setFormData(prevFormData => ({ ...prevFormData, ...newFormData }));
       }
-    });
+    } catch (error) {
+      console.error(error);
+      setCopyErrorHappened(true);
+    } finally {
+      setCopying(false);
+    }
   }, [observatory]);
 
   const updateDraft = () => {
@@ -270,12 +285,13 @@ export const ObservationForm = ({ onSaveSuccess }) => {
             <br />
           </Grid>
           <Grid container item xs={2} justifyContent="flex-end">
-            <ObservationFormDrafts draftID={draftID} onDraftSelect={handleDraftSelect} />
-            <ObservationFormCopy day={formData.day} onCopyDay={handleCopyDay} />
+            <ObservationFormDrafts disabled={loading || saving || copying || toDayDetailsLoading} draftID={draftID} onDraftSelect={handleDraftSelect} />
+            <ObservationFormCopy disabled={loading || saving || copying || toDayDetailsLoading} day={formData.day} onCopyDay={handleCopyDay} />
           </Grid>
         </Grid>
         <ObservationFormMain
           formData={formData}
+          disabled={loading || saving || copying || toDayDetailsLoading}
           toDayDetailsLoading={toDayDetailsLoading}
           saving={saving}
           confirmDayChange={confirmDayChange}
@@ -292,6 +308,11 @@ export const ObservationForm = ({ onSaveSuccess }) => {
         <Snackbar open={errorHappened} autoHideDuration={5000} onClose={handleAlertClose}>
           <Alert onClose={handleAlertClose} severity="error">
             {t("formNotSent")}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={copyErrorHappened} autoHideDuration={5000} onClose={handleAlertClose}>
+          <Alert onClose={handleAlertClose} severity="error">
+            {t("copyDayFailed")}
           </Alert>
         </Snackbar>
       </fieldset>

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import EditShorthand from "../../editShorthand";
 
-const ShorthandEdit = ({ day, dayId, onEditShorthandClose }) => {
+const ShorthandEdit = ({ day, dayId, onEditSuccess }) => {
   const { t } = useTranslation();
 
   const [editShorthandModalOpen, setEditShorthandModalOpen] = useState(false);
@@ -15,10 +15,12 @@ const ShorthandEdit = ({ day, dayId, onEditShorthandClose }) => {
     setEditShorthandModalOpen(true);
   }, []);
 
-  const handleEditShorthandClose = useCallback(() => {
+  const handleEditShorthandClose = useCallback((afterSave) => {
     setEditShorthandModalOpen(false);
-    onEditShorthandClose();
-  }, []);
+    if (afterSave) {
+      onEditSuccess();
+    }
+  }, [onEditSuccess]);
 
   return (
     <>
@@ -40,7 +42,7 @@ const ShorthandEdit = ({ day, dayId, onEditShorthandClose }) => {
 ShorthandEdit.propTypes = {
   day: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
-  onEditShorthandClose: PropTypes.func.isRequired
+  onEditSuccess: PropTypes.func.isRequired
 };
 
 export default memo(ShorthandEdit);

@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 })
 );
 
-const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
+const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow, disabled }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -73,7 +73,7 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
   const handleCatchesEditCancel = useCallback(() => {
     onChange(catchesBeforeEdit);
     setCatchesEditMode(false);
-  }, [catchesBeforeEdit]);
+  }, [catchesBeforeEdit, onChange]);
 
   const handleAddNewCatch = useCallback(() => {
     const newRow = getNewCatchRow(value);
@@ -81,20 +81,24 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
     setCatchRowKeyToEdit(newRow.key);
     setCatchesEditMode(true);
     onChange([...value, newRow]);
-  }, [value]);
+  }, [value, onChange]);
 
-  const handleCatchesEditSave = useCallback(() => {
+  const handleCatchesEditSave = useCallback(async () => {
     const catchRow = value.filter(row => row.key === catchRowKeyToEdit)[0];
-    if (!catchRow) {
-      if (catchesBeforeEdit.some(row => row.key === catchRowKeyToEdit)) {
-        onDeleteRow(catchRowKeyToEdit);
+    try {
+      if (!catchRow) {
+        if (catchesBeforeEdit.some(row => row.key === catchRowKeyToEdit)) {
+          await onDeleteRow(catchRowKeyToEdit);
+        }
+      } else {
+        await onSaveRow(catchRow);
       }
-    } else {
-      onSaveRow(catchRow);
-    }
 
-    setCatchesEditMode(false);
-  }, [value, catchRowKeyToEdit]);
+      setCatchesEditMode(false);
+    } catch (e) {
+      // error handled in saveData
+    }
+  }, [value, catchRowKeyToEdit, catchesBeforeEdit, onDeleteRow, onSaveRow]);
 
   const catchRowUpdate = useCallback((cr) => {
     const newRows = value.map(row => {
@@ -104,11 +108,11 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
       return row;
     });
     onChange(newRows);
-  }, [value]);
+  }, [value, catchRowKeyToEdit, onChange]);
 
   const catchRowDelete = useCallback(() => {
     onChange(value.filter(row => row.key !== catchRowKeyToEdit));
-  }, [value]);
+  }, [value, catchRowKeyToEdit, onChange]);
 
   const cr = value.filter(row => row.key === catchRowKeyToEdit)[0];
 
@@ -128,7 +132,7 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
               <TableCell align="left">{t("amount")}</TableCell>
               <TableCell align="left">{t("length")}</TableCell>
               <TableCell align="left">
-                <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary">
+                <IconButton id="addCatchButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary" disabled={disabled}>
                   <Add fontSize="small" />
                 </IconButton>
               </TableCell>
@@ -143,7 +147,7 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
                 <TableCell align="left" id="amount">{value[String(c)].lukumaara}</TableCell>
                 <TableCell align="left" id="netLength">{value[String(c)].verkonPituus > 0 ? value[String(c)].verkonPituus : "-"}</TableCell>
                 <TableCell align="left">
-                  <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={handleCatchesEditOpen} variant="contained" color="primary">
+                  <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} data-cache={c} onClick={handleCatchesEditOpen} variant="contained" color="primary" disabled={disabled}>
                     <Edit fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -158,13 +162,13 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
               ? /* SHOW CATCH ROW AS EDITABLE ELEMENT */
               <div>
                 <Notification category="catches" keys={[String(cr.key), "standardCatch"]} />
-                <CatchRow value={cr} onChange={catchRowUpdate} onDelete={catchRowDelete} catchRows={value} />
+                <CatchRow value={cr} onChange={catchRowUpdate} onDelete={catchRowDelete} catchRows={value} disabled={disabled} />
                 <Button id="catchesEditSave" className={classes.button} variant="contained"
                   onClick={handleCatchesEditSave} color="primary"
-                  disabled={errorsInCatches}>
+                  disabled={errorsInCatches || disabled}>
                   {t("save")}
                 </Button>
-                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary">
+                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary" disabled={disabled}>
                   {t("cancel")}
                 </Button>
               </div>
@@ -174,10 +178,10 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
                 <Typography variant="body1" color="error" style={{ padding: 5, }}> {t("rowRemoved")}</Typography>
                 <Button id="catchesEditSave" className={classes.deleteButton} variant="contained"
                   onClick={handleCatchesEditSave}
-                  disabled={errorsInCatches}>
+                  disabled={errorsInCatches || disabled}>
                   {t("remove")}
                 </Button>
-                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary">
+                <Button id="catchesEditCancel" className={classes.button} variant="contained" onClick={handleCatchesEditCancel} color="secondary" disabled={disabled}>
                   {t("cancel")}
                 </Button>
               </div>
@@ -186,7 +190,7 @@ const CatchesEdit = ({ value, onChange, onSaveRow, onDeleteRow }) => {
           : /* NO CATCHES FOR THAT DAY*/
           <Typography variant="body1"  >
             {t("noCatchesDeclared")}
-            <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary"  >
+            <IconButton id="catchesButton" size="small" style={{ left: "75px", alignItems: "left" }} onClick={handleAddNewCatch} variant="contained" color="primary" disabled={disabled}>
               <Add fontSize="small" />
             </IconButton>
           </Typography>
@@ -200,6 +204,7 @@ CatchesEdit.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSaveRow: PropTypes.func.isRequired,
   onDeleteRow: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default memo(CatchesEdit);

@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const ObservationFormMain = ({
-  formData, toDayDetailsLoading, saving, confirmDayChange, onToDayDetails, onSave, onFormDataChange
+  formData, disabled, toDayDetailsLoading, saving, confirmDayChange, onToDayDetails, onSave, onFormDataChange
 }) => {
   const classes = useStyles();
 
@@ -143,6 +143,7 @@ export const ObservationFormMain = ({
           canChange={canChangeDay}
           required
           errorText={showDayMissingError ? t("requiredField") : ""}
+          disabled={disabled}
         />
       </Grid>
       <Grid item sm={9}>
@@ -153,6 +154,7 @@ export const ObservationFormMain = ({
           onChange={getUpdateFormData("observers")}
           required
           errorText={showObserversMissingError ? t("requiredField") : ""}
+          disabled={disabled}
         />
       </Grid>
       <Grid item className={classes.buttonAndIconsContainer}>
@@ -160,7 +162,7 @@ export const ObservationFormMain = ({
           id="toDayDetails"
           className={classes.sendButton}
           onClick={toDayDetails}
-          disabled={toDayDetailsDisabled || toDayDetailsLoading}
+          disabled={disabled || toDayDetailsDisabled}
           color="primary"
           variant="contained"
         >
@@ -189,6 +191,7 @@ export const ObservationFormMain = ({
               label={t("comment")}
               onChange={getUpdateFormData("comment")}
               value={formData.comment}
+              disabled={disabled}
             />
           </AccordionDetails>
         </Accordion>
@@ -215,7 +218,7 @@ export const ObservationFormMain = ({
               spacing={1}
               style={{ marginLeft: 0 }}
             >
-              <DailyActions value={formData.dailyActions} onChange={getUpdateFormData("dailyActions")} catchRows={formData.catchRows} />
+              <DailyActions value={formData.dailyActions} onChange={getUpdateFormData("dailyActions")} catchRows={formData.catchRows} disabled={disabled} />
             </Grid>
           </AccordionDetails>
         </Accordion>
@@ -236,7 +239,7 @@ export const ObservationFormMain = ({
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CatchRows value={formData.catchRows} onChange={getUpdateFormData("catchRows")} />
+            <CatchRows value={formData.catchRows} onChange={getUpdateFormData("catchRows")} disabled={disabled} />
           </AccordionDetails>
         </Accordion>
 
@@ -262,6 +265,7 @@ export const ObservationFormMain = ({
                   onChange={getUpdateFormData("type")}
                   required
                   errorText={showTypeMissingError ? t("requiredField") : ""}
+                  disabled={disabled}
                 />
               </Grid>
 
@@ -274,6 +278,7 @@ export const ObservationFormMain = ({
                   onChange={getUpdateFormData("location")}
                   required
                   errorText={showLocationMissingError ? t("requiredField") : ""}
+                  disabled={disabled}
                 />
               </Grid>
 
@@ -286,6 +291,7 @@ export const ObservationFormMain = ({
                   onChange={getUpdateFormData("shorthand")}
                   day={formData.day}
                   type={formData.type}
+                  disabled={disabled}
                 />
               </Grid>
             </Grid>
@@ -298,7 +304,7 @@ export const ObservationFormMain = ({
           id="saveButton"
           className={classes.sendButton}
           onClick={sendData}
-          disabled={saveDisabled || saving}
+          disabled={disabled || saveDisabled}
           color="primary"
           variant="contained"
         >
@@ -315,6 +321,7 @@ export const ObservationFormMain = ({
 
 ObservationFormMain.propTypes = {
   formData: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
   toDayDetailsLoading: PropTypes.bool,
   saving: PropTypes.bool,
   confirmDayChange: PropTypes.bool,

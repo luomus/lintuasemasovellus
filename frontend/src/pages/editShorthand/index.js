@@ -1,7 +1,7 @@
 import {
   Fade, Modal, Grid, Button,
   MenuItem, Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle, TextField,
+  DialogContent, DialogContentText, DialogTitle, TextField, Alert,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import Notification from "../../globalComponents/Notification";
 import { AppContext } from "../../AppContext";
 import { saveData } from "../../reducers/savingStateReducer";
 import { shorthandLinesToObservations, shorthandTextToLines } from "../../shorthand/shorthandParsing";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +79,7 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   const [selectTypes, setSelectTypes] = useState([]);
   const [selectLocations, setSelectLocations] = useState([]);
   const [warning, setWarning] = useState(false);
-  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [observationPeriodCounts, setObservationPeriodCounts] = useState([]);
 
   const [type, setType] = useState("");
@@ -86,33 +87,89 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   const [shorthand, setShorthand] = useState("");
   const [initialShorthand, setInitialShorthand] = useState("");
 
+  const [countsLoading, setCountsLoading] = useState(true);
+  const [countsFetchError, setCountsFetchError] = useState(false);
+  const [shorthandLoading, setShorthandLoading] = useState(false);
+  const [shorthandFetchError, setShorthandFetchError] = useState(false);
+
   const notifications = useSelector(state => state.notifications);
 
   useEffect(() => {
     if (!open) {
       return;
     }
-    getDaysObservationPeriodCounts(dayId).then(counts => {
-      setObservationPeriodCounts(counts);
-    });
+
+    let cancelled = false;
+
+    const retrieveCounts = async () => {
+      setCountsLoading(true);
+      setCountsFetchError(false);
+
+      try {
+        const counts = await getDaysObservationPeriodCounts(dayId);
+        if (cancelled) {
+          return;
+        }
+        setObservationPeriodCounts(counts);
+      } catch (e) {
+        if (cancelled) {
+          return;
+        }
+        console.error(e);
+        setCountsFetchError(true);
+      } finally {
+        if (!cancelled) {
+          setCountsLoading(false);
+        }
+      }
+    };
+
+    retrieveCounts();
+
+    return () => {
+      cancelled = true;
+    };
   }, [open, dayId]);
 
   useEffect(() => {
     if (!open) {
       return;
     }
+
+    let cancelled = false;
+
     const retrieveShorthand = async (type, location) => {
-      if (type && location){
+      setShorthandLoading(true);
+      setShorthandFetchError(false);
+
+      try {
         const res = await getShorthandText(dayId, type, location);
+        if (cancelled) {
+          return;
+        }
         setDefaultShorthand(res);
         setActiveObservationPeriodIds(res.map(shorthandObj => shorthandObj.obsPeriodId));
         initializeDefaultShorthand(res);
+      } catch (e) {
+        if (cancelled) {
+          return;
+        }
+        console.error(e);
+        setShorthandFetchError(true);
+      } finally {
+        if (!cancelled) {
+          setShorthandLoading(false);
+        }
       }
     };
 
     if (type && location) {
       retrieveShorthand(type, location);
     }
+
+    return () => {
+      cancelled = true;
+    };
   }, [open, type, location]);
 
   useEffect(() => {
@@ -225,11 +282,16 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
     for (const obsperiod of defaultShorthand) {
       removable_ids.push(obsperiod.obsPeriodId);
     }
-    setButtonsDisabled(true);
-    await dispatch(saveData(() => deleteObservationperiods(removable_ids)));
-    setButtonsDisabled(false);
-    if (close) {
-      handleClose();
+    setSaving(true);
+    try {
+      await dispatch(saveData(() => deleteObservationperiods(removable_ids)));
+      if (close) {
+        closeModal(true);
+      }
+    } catch (e) {
+      // error handled in saveData
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -238,26 +300,43 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
     const rows = shorthandTextToLines(shorthand);
     const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
-    setButtonsDisabled(true);
-    await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id)));
-    setButtonsDisabled(false);
-    handleClose();
+    setSaving(true);
+    try {
+      await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id)));
+      closeModal(true);
+    } catch (e) {
+      // error handled in saveData
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleClose = () => {
+    closeModal();
+  };
+
+  const closeModal = (afterSave = false) => {
     setType("");
     setLocation("");
     setShorthand("");
-    handleCloseModal();
+    setCountsLoading(true);
+    setCountsFetchError(false);
+    setShorthandLoading(false);
+    setShorthandFetchError(false);
+    handleCloseModal(afterSave);
   };
 
   const handleModalCloseEvent = () => {
+    if (saving) {
+      return;
+    }
+
     let canClose = true;
     if (shorthand !== initialShorthand) {
       canClose = confirm(t("confirmExit"));
     }
     if (canClose) {
-      handleClose();
+      closeModal();
     }
   };
 
@@ -275,110 +354,128 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
         <div className={classes.paper}>
           <h2> {t("editShorthand")}</h2>
           <h2> {day} </h2>
-          <h3> {t("chooseTypeAndLocation")}</h3>
-          <Grid
-            container
-            alignItems="flex-start"
-            spacing={1}>
-            <Grid item xs={2}>
-              <TextField
-                className={classes.formControl}
-                select
-                required
-                fullWidth
-                label={t("type")}
-                id="selectTypeInModification"
-                slotProps={{
-                  select: {
-                    value: type,
-                    onChange: (event) => {
-                      setType(event.target.value);
+          {countsLoading ? (
+            <LoadingSpinner size="small" />
+          ) : countsFetchError ? (
+            <Alert severity="error">
+              {t("observationPeriodCountsFetchFailed")}
+            </Alert>
+          ) : (<>
+            <h3> {t("chooseTypeAndLocation")}</h3>
+            <Grid
+              container
+              alignItems="flex-start"
+              spacing={1}>
+              <Grid item xs={2}>
+                <TextField
+                  className={classes.formControl}
+                  select
+                  required
+                  fullWidth
+                  label={t("type")}
+                  id="selectTypeInModification"
+                  disabled={saving}
+                  slotProps={{
+                    select: {
+                      value: type,
+                      onChange: (event) => {
+                        setType(event.target.value);
+                      }
                     }
+                  }}
+                >
+                  {
+                    selectTypes.map(({ type, locationCount }, i) =>
+                      <MenuItem id={type} value={type} key={i}>
+                        {type} ({t("locationCount", { count: locationCount })})
+                      </MenuItem>
+                    )
                   }
-                }}
-              >
-                {
-                  selectTypes.map(({ type, locationCount }, i) =>
-                    <MenuItem id={type} value={type} key={i}>
-                      {type} ({t("locationCount", { count: locationCount })})
-                    </MenuItem>
-                  )
-                }
-              </TextField>
-            </Grid>
-            <Grid item xs={2}>
-              <TextField
-                className={classes.formControl}
-                select
-                required
-                fullWidth
-                label={t("location")}
-                id="selectLocationInModification"
-                disabled={!type}
-                slotProps={{
-                  select: {
-                    value: location,
-                    onChange: (event) => {
-                      setLocation(event.target.value);
+                </TextField>
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  className={classes.formControl}
+                  select
+                  required
+                  fullWidth
+                  label={t("location")}
+                  id="selectLocationInModification"
+                  disabled={!type || saving}
+                  slotProps={{
+                    select: {
+                      value: location,
+                      onChange: (event) => {
+                        setLocation(event.target.value);
+                      }
                     }
+                  }}
+                >
+                  {
+                    selectLocations.map(({ location, observationPeriodCount }, i) =>
+                      <MenuItem id={location} value={location} key={i}>
+                        {location} ({t("observationPeriodCount", { count: observationPeriodCount })})
+                      </MenuItem>
+                    )
                   }
-                }}
-              >
-                {
-                  selectLocations.map(({ location, observationPeriodCount }, i) =>
-                    <MenuItem id={location} value={location} key={i}>
-                      {location} ({t("observationPeriodCount", { count: observationPeriodCount })})
-                    </MenuItem>
-                  )
-                }
-              </TextField>
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                {shorthandLoading ? (
+                  <LoadingSpinner size="small" />
+                ) : shorthandFetchError ? (
+                  <Alert severity="error">
+                    {t("shorthandFetchFailed")}
+                  </Alert>
+                ) : (
+                  <CodeMirrorBlock
+                    day={day}
+                    type={type}
+                    value={shorthand}
+                    onChange={setShorthand}
+                    activeObservationPeriodIds={activeObservationPeriodIds}
+                    disabled={saving}
+                  />
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <Notification category="shorthand" />
+                <Notification category="nocturnalMigration" />
+              </Grid>
+              <Grid container item xs={12} alignItems="flex-end">
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="saveButtonInShorthandModification"
+                    disabled={saveButtonIsDisabled() || saving}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}>
+                    {t("save")}
+                  </Button>
+                </Box>
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="cancelButtonInShorthandModification"
+                    disabled={saving}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClose}>
+                    {t("cancel")}
+                  </Button>
+                </Box>
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="removeButtonInShorthandModification"
+                    disabled={deleteButtonIsDisabled() || saving}
+                    variant="contained"
+                    onClick={handleDialogOpen}
+                    className={classes.deleteButton}>
+                    {t("remove")}
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <CodeMirrorBlock
-                day={day}
-                type={type}
-                value={shorthand}
-                onChange={setShorthand}
-                activeObservationPeriodIds={activeObservationPeriodIds}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Notification category="shorthand" />
-              <Notification category="nocturnalMigration" />
-            </Grid>
-            <Grid container item xs={12} alignItems="flex-end">
-              <Box pr={2} pt={2}>
-                <Button
-                  id="saveButtonInShorthandModification"
-                  disabled={saveButtonIsDisabled() || buttonsDisabled}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSave}>
-                  {t("save")}
-                </Button>
-              </Box>
-              <Box pr={2} pt={2}>
-                <Button
-                  id="cancelButtonInShorthandModification"
-                  disabled={buttonsDisabled}
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleClose}>
-                  {t("cancel")}
-                </Button>
-              </Box>
-              <Box pr={2} pt={2}>
-                <Button
-                  id="removeButtonInShorthandModification"
-                  disabled={deleteButtonIsDisabled() || buttonsDisabled}
-                  variant="contained"
-                  onClick={handleDialogOpen}
-                  className={classes.deleteButton}>
-                  {t("remove")}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+          </>)}
           <Dialog
             open={warning}
             aria-labelledby="alert-dialog-title"

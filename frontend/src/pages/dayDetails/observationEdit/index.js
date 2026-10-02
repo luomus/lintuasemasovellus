@@ -1,24 +1,29 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
-  Box, Grid
+  Alert, Box, Grid
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import AntTabs from "./AntTabs";
 
 import {
-  getDaysObservationPeriods, getDefaultSpecies,
+  getDefaultSpecies,
   getSummary
 } from "../../../services";
 import ShorthandEdit from "./ShorthandEdit";
 import SpeciesTable from "./SpeciesTable";
 import PeriodTable from "./PeriodTable";
 import { AppContext } from "../../../AppContext";
+import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
 
+const emptyArray = [];
 
-export const ObservationEdit = ({ day, dayId }) => {
+export const ObservationEdit = ({ day, dayId, refreshObservations }) => {
+  const { t } = useTranslation();
   const { observatory, speciesData } = useContext(AppContext);
 
-  const [obsPeriods, setObsperiods] = useState([]);
+  const obsPeriods = useSelector(state => state.dayData.data?.observationPeriods || emptyArray);
 
   const [defaultSpecies, setDefaultSpecies] = useState([]);
   const [addableSpecies, setAddableSpecies] = useState([]);
@@ -26,28 +31,44 @@ export const ObservationEdit = ({ day, dayId }) => {
   const [speciesRows, setSpeciesRows] = useState([]);
 
   const [mode, setMode] = useState("speciesTable");
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
 
-  useEffect( () => {
-    let fetching = false;
-    getDefaultSpecies(observatory)
-      .then(defaultSpeciesJson => {
-        if (!fetching) {
-          setDefaultSpecies(defaultSpeciesJson);
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setFetchError(false);
+
+      try {
+        const [defaultSpeciesJson, summary] = await Promise.all([
+          getDefaultSpecies(observatory),
+          getSummary(dayId),
+        ]);
+        if (cancelled) {
+          return;
         }
-      });
-    getDaysObservationPeriods(dayId)
-      .then(periodsJson => {
-        if (!fetching) {
-          setObsperiods(periodsJson);
+        setDefaultSpecies(defaultSpeciesJson);
+        setSpeciesSummary(summary);
+      } catch (e) {
+        if (cancelled) {
+          return;
         }
-      });
-    getSummary(dayId)
-      .then(summary => {
-        if (!fetching) {
-          setSpeciesSummary(summary);
+        console.error(e);
+        setFetchError(true);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
         }
-      });
-    return () => (fetching = true);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
   }, [observatory, dayId]);
 
   useEffect(() => {
@@ -57,13 +78,6 @@ export const ObservationEdit = ({ day, dayId }) => {
   useEffect(() => {
     setAddableSpecies(speciesData.uniqueSpecies.filter(species => !defaultSpecies.includes(species)));
   }, [speciesData, defaultSpecies]);
-
-  const refetchObservations = useCallback(async () => {
-    const res = await getDaysObservationPeriods(dayId);
-    setObsperiods(res);
-    const res2 = await getSummary(dayId);
-    setSpeciesSummary(res2);
-  }, [dayId]);
 
   const speciesRowChange = useCallback((row) => {
     setSpeciesRows((prevState) => (
@@ -131,7 +145,7 @@ export const ObservationEdit = ({ day, dayId }) => {
     <PeriodTable
       day={day}
       obsPeriods={obsPeriods}
-      refetchObservations={refetchObservations}
+      onEditSuccess={refreshObservations}
     />
   );
 
@@ -143,10 +157,16 @@ export const ObservationEdit = ({ day, dayId }) => {
         </Box>
       </Grid>
       <Grid item xs={5}>
-        <ShorthandEdit day={day} dayId={dayId} onEditShorthandClose={refetchObservations}></ShorthandEdit>
+        <ShorthandEdit day={day} dayId={dayId} onEditSuccess={refreshObservations}></ShorthandEdit>
       </Grid>
       <Grid item xs={12}>
-        {table}
+        {loading ? (
+          <LoadingSpinner size="small" />
+        ) : fetchError ? (
+          <Alert severity="error">
+            {t("dayObservationsFetchFailed")}
+          </Alert>
+        ) : table}
       </Grid>
     </Grid>
   );
@@ -154,5 +174,6 @@ export const ObservationEdit = ({ day, dayId }) => {
 
 ObservationEdit.propTypes = {
   day: PropTypes.string.isRequired,
-  dayId: PropTypes.number.isRequired
+  dayId: PropTypes.number.isRequired,
+  refreshObservations: PropTypes.func.isRequired,
 };

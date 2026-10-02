@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const getSelectList = (observatory) => createSelector(
-  [state => state.days],
+  [state => state.days.data],
   (days) => (
     days?.filter((day) => day.observatory === observatory)
   )
@@ -127,7 +127,7 @@ export const DayList = () => {
       try {
         await removeDay(s.id);
       } catch (e) {
-        console.log("error: ", e);
+        console.error(e);
         alert(t("removeFailed"));
       }
 

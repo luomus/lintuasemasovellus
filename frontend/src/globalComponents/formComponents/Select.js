@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Select = ({ id, label, options, value, onChange, required, errorText }) => {
+const Select = ({ id, label, options, value, onChange, required, errorText, disabled }) => {
   const classes = useStyles();
 
   return (
@@ -23,6 +23,7 @@ const Select = ({ id, label, options, value, onChange, required, errorText }) =>
       label={label}
       error={!!errorText}
       helperText={errorText}
+      disabled={disabled}
       slotProps={{
         select: {
           value,
@@ -49,6 +50,7 @@ Select.propTypes = {
   onChange: PropTypes.func.isRequired,
   required: PropTypes.bool,
   errorText: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default memo(Select);

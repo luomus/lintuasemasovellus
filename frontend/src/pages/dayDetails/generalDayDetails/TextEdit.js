@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 })
 );
 
-const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
+const TextEdit = ({ label, defaultValue, onSave, dataCy, disabled }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -29,10 +29,14 @@ const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
   const cancelClick = useCallback(() => setEditMode(false), []);
   const valueChange = useCallback((event) => setEditedValue(event.target.value), []);
 
-  const valueOnSubmit = (event) => {
+  const valueOnSubmit = async (event) => {
     event.preventDefault();
-    onSave(editedValue);
-    setEditMode(false);
+    try {
+      await onSave(editedValue);
+      setEditMode(false);
+    } catch (e) {
+      // error handled in saveData
+    }
   };
 
   return (
@@ -44,7 +48,7 @@ const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
         {label}{": "}{defaultValue}{" "}
       </Typography>
       {editMode === false ? (
-        <IconButton size="small" onClick={editClick} variant="contained" color="primary" data-cy="edit">
+        <IconButton size="small" onClick={editClick} variant="contained" color="primary" data-cy="edit" disabled={disabled}>
           <Edit fontSize="small"/>
         </IconButton>
       ) : (
@@ -55,11 +59,11 @@ const TextEdit = ({ label, defaultValue, onSave, dataCy }) => {
             defaultValue={defaultValue}
             onChange={valueChange}
           />
-          <Button className={classes.button} type="submit" variant="contained" color="primary"
+          <Button className={classes.button} type="submit" variant="contained" color="primary" disabled={disabled}
             data-cy="submit">
             {t("save")}
           </Button>
-          <Button className={classes.button} variant="contained" onClick={cancelClick} color="secondary"
+          <Button className={classes.button} variant="contained" onClick={cancelClick} color="secondary" disabled={disabled}
             data-cy="cancel">
             {t("cancel")}
           </Button>
@@ -73,7 +77,8 @@ TextEdit.propTypes = {
   label: PropTypes.string.isRequired,
   defaultValue: PropTypes.string,
   onSave: PropTypes.func.isRequired,
-  dataCy: PropTypes.string
+  dataCy: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default TextEdit;

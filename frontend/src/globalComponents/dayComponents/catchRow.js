@@ -75,7 +75,7 @@ const preSetLengths = {
   "Ruovikko": 9,
 };
 
-const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
+const CatchRow = ({ value, onChange, onDelete, catchRows, disabled }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -160,6 +160,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
               onChange: (event) => handleChange(event.target)
             }
           }}
+          disabled={disabled}
         >
           {
             catchAreas.map((catchArea, i) =>
@@ -183,6 +184,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
             slotProps={{
               input: { readOnly: true }
             }}
+            disabled={disabled}
           >
             {value.pyyntitapa}
           </TextField>
@@ -204,6 +206,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
               htmlInput: { step: 60 },
               inputLabel: { shrink: true }
             }}
+            disabled={disabled}
           />
         }
 
@@ -223,6 +226,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
               htmlInput: { step: 60 },
               inputLabel: { shrink: true }
             }}
+            disabled={disabled}
           />
         }
 
@@ -242,6 +246,7 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
               htmlInput: { min: 0 },
               inputLabel: { shrink: true }
             }}
+            disabled={disabled}
           />
         }
 
@@ -264,10 +269,11 @@ const CatchRow = ({ value, onChange, onDelete, catchRows }) => {
               htmlInput: { min: 0 },
               inputLabel: { shrink: true }
             }}
+            disabled={disabled}
           />
         }
 
-        <IconButton id="removeButton" size="medium" onClick={() => handleRowRemove()} className={classes.removeButton}>
+        <IconButton id="removeButton" size="medium" onClick={() => handleRowRemove()} className={classes.removeButton} disabled={disabled}>
           <HighlightOff fontSize="default" color="error" />
         </IconButton>
       </FormGroup>
@@ -280,7 +286,8 @@ CatchRow.propTypes = {
   value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  disabled: PropTypes.bool
 };
 
 export default memo(CatchRow);

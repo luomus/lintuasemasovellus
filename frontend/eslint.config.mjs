@@ -62,5 +62,8 @@ export default [
                 after: true,
             }],
             "@typescript-eslint/no-unused-expressions": "off",
+            "@typescript-eslint/no-unused-vars": ["error", {
+                caughtErrors: "none"
+            }]
         },
     }];

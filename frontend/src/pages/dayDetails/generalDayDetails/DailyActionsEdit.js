@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useContext, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   TextField, Button, IconButton, Typography, FormGroup, FormControlLabel
@@ -8,7 +8,6 @@ import { CheckCircle, Edit, RemoveCircleOutlineRounded } from "@mui/icons-materi
 import { makeStyles, withStyles } from "@mui/styles";
 import DailyActions from "../../../globalComponents/dayComponents/dailyActions";
 import { useSelector } from "react-redux";
-import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles(theme => ({
   formControlLabel: {
@@ -40,10 +39,9 @@ const DisabledTextField = withStyles({
   }
 })(TextField);
 
-const DailyActionsEdit = ({ value, onChange, onSave, catchRows }) => {
+const DailyActionsEdit = ({ value, onChange, onSave, catchRows, disabled }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { observatory } = useContext(AppContext);
 
   const notifications = useSelector(state => state.notifications);
 
@@ -63,18 +61,22 @@ const DailyActionsEdit = ({ value, onChange, onSave, catchRows }) => {
 
   const handleActionsEditOpen = useCallback(() => {
     setActionsBeforeEdit(value);
-    setActionsEditMode(!actionsEditMode);
-  }, [actionsEditMode]);
+    setActionsEditMode(true);
+  }, [value]);
 
   const handleActionsEditCancel = useCallback(() => {
     onChange(actionsBeforeEdit);
-    setActionsEditMode(!actionsEditMode);
-  }, [observatory, actionsEditMode]);
+    setActionsEditMode(false);
+  }, [actionsBeforeEdit, onChange]);
 
-  const handleActionsEditSave = useCallback(() => {
-    onSave(value);
-    setActionsEditMode(!actionsEditMode);
-  }, [value, actionsEditMode, observatory]);
+  const handleActionsEditSave = useCallback(async () => {
+    try {
+      await onSave(value);
+      setActionsEditMode(false);
+    } catch (e) {
+      // error handled in saveData
+    }
+  }, [onSave, value]);
 
   return (
     <>
@@ -99,7 +101,7 @@ const DailyActionsEdit = ({ value, onChange, onSave, catchRows }) => {
               disabled InputProps={{ disableUnderline: true }} />}
             label={<span style={{ color: "rgba(0, 0, 0, 1)" }}>{t("attachments")}</span>} labelPlacement="start" />
 
-          <IconButton id="actionsButton" size="small" onClick={handleActionsEditOpen} variant="contained" color="primary"  >
+          <IconButton id="actionsButton" size="small" onClick={handleActionsEditOpen} variant="contained" color="primary" disabled={disabled}>
             <Edit fontSize="default" />
           </IconButton>
         </FormGroup>
@@ -108,11 +110,11 @@ const DailyActionsEdit = ({ value, onChange, onSave, catchRows }) => {
         display: actionsEditMode ? "flex" : "none",
         alignItems: "left"
       }}>
-        <DailyActions value={value} onChange={onChange} catchRows={catchRows} />
-        <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions} onClick={handleActionsEditSave} color="primary">
+        <DailyActions value={value} onChange={onChange} catchRows={catchRows} disabled={disabled} />
+        <Button id="actionsEditSave" className={classes.button} variant="contained" disabled={errorsInActions || disabled} onClick={handleActionsEditSave} color="primary">
           {t("save")}
         </Button>
-        <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={handleActionsEditCancel} color="secondary">
+        <Button id="actionsEditCancel" className={classes.button} variant="contained" onClick={handleActionsEditCancel} color="secondary" disabled={disabled}>
           {t("cancel")}
         </Button>
       </div>
@@ -124,7 +126,8 @@ DailyActionsEdit.propTypes = {
   value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired
+  catchRows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  disabled: PropTypes.bool
 };
 
 export default memo(DailyActionsEdit);

@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import { dateToDayString, dayStringToDate } from "../../services";
 
 
-const DayPicker = ({ value, onChange, canChange, required, errorText }) => {
+const DayPicker = ({ value, onChange, canChange, required, errorText, disabled }) => {
   const { t } = useTranslation();
 
   const [datepickerDate, setDatepickerDate] = useState(null);
@@ -83,6 +83,7 @@ const DayPicker = ({ value, onChange, canChange, required, errorText }) => {
         format="dd.MM.yyyy"
         label={t("date")}
         value={datepickerDate}
+        disabled={disabled}
         onChange={handleDatePickerChange}
         slotProps={{
           textField: {
@@ -110,6 +111,7 @@ DayPicker.propTypes = {
   canChange: PropTypes.func,
   required: PropTypes.bool,
   errorText: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default memo(DayPicker);

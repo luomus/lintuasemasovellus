@@ -51,10 +51,10 @@ const SpeciesTableRow = ({ day, s, onChange }) => {
         {s.localOther + s.localGåu}
       </StyledTableCell>
       <StyledTableCell align="right">
-        <LocalInput inputRef={input1Ref} onChange={(data) => onLocalInputChange("localOther", data)} dataType="localOther" day={day} shorthand={s.localOtherShorthand} species={s.species} />
+        <LocalInput inputRef={input1Ref} onChange={(data) => onLocalInputChange("localOther", data)} dataType="localOther" day={day} shorthand={s.localOtherShorthand} species={s.species} totalCount={s.localOther} />
       </StyledTableCell>
       <StyledTableCell align="right">
-        <LocalInput inputRef={input2Ref} onChange={(data) => onLocalInputChange("localGåu", data)} dataType="localGau" day={day} shorthand={s.localGåuShorthand} species={s.species} />
+        <LocalInput inputRef={input2Ref} onChange={(data) => onLocalInputChange("localGåu", data)} dataType="localGau" day={day} shorthand={s.localGåuShorthand} species={s.species} totalCount={s.localGåu} />
       </StyledTableCell>
       <StyledTableCell align="right" name="migrantTotal" className="dotted">
         {s.constMigration + s.nightMigration + s.otherMigration + s.scatter}
@@ -69,7 +69,7 @@ const SpeciesTableRow = ({ day, s, onChange }) => {
         {s.nightMigration}
       </StyledTableCell>
       <StyledTableCell align="right">
-        <LocalInput inputRef={input3Ref} onChange={(data) => onLocalInputChange("scatter", data)} dataType="scatter" day={day} shorthand={s.scatterShorthand} species={s.species} />
+        <LocalInput inputRef={input3Ref} onChange={(data) => onLocalInputChange("scatter", data)} dataType="scatter" day={day} shorthand={s.scatterShorthand} species={s.species} totalCount={s.scatter} />
       </StyledTableCell>
     </>
   );

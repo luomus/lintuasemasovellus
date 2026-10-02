@@ -1,32 +1,46 @@
 import { getSpecies } from "../services";
 
-export const initializeSpecies = () => {
-  return async dispatch => {
-    const species = await getSpecies();
-    dispatch(setSpecies(species));
-  };
+const initialState = {
+  data: null,
+  error: null,
 };
 
-export const setSpecies = (species) => {
-  return {
-    type: "SET_SPECIES",
-    data: {
-      species
+export const initializeSpecies = () => {
+  return async dispatch => {
+    try {
+      const species = await getSpecies();
+      dispatch({
+        type: "SET_SPECIES",
+        data: {
+          species
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      dispatch({
+        type: "SET_SPECIES_ERROR",
+        error: e.message
+      });
     }
   };
 };
 
-const speciesReducer = (state = null, action) => {
+const speciesReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_SPECIES": {
       const entries = Object.entries(action.data.species);
       const upperEntries = entries.map(entry => [entry[0].toUpperCase(), entry[1].value]);
 
       return {
-        speciesCodeMap: new Map(upperEntries),
-        uniqueSpecies: [...new Set(Object.values(action.data.species).map(species => species.value))]
+        data: {
+          speciesCodeMap: new Map(upperEntries),
+          uniqueSpecies: [...new Set(Object.values(action.data.species).map(species => species.value))]
+        },
+        error: null
       };
     }
+    case "SET_SPECIES_ERROR":
+      return { data: null, error: action.error };
     default:
       return state;
   }

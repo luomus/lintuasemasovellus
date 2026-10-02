@@ -1,31 +1,32 @@
-const defaultState = { savingCount: 0, saving: false, abortController: new AbortController() };
+import i18n from "../i18n";
 
-export const saveData = (saveDataFunc, propagateErrors= false) => {
-  return async (dispatch, getState) => {
-    const signal = getState().savingState.abortController.signal;
+const defaultState = { savingCount: 0, saving: false };
+let currentController = new AbortController();
+
+export const saveData = (saveDataFunc) => {
+  return async (dispatch) => {
+    const controller = currentController;
 
     dispatch(increaseSavingCount());
 
     try {
       await saveDataFunc();
-      if (signal.aborted) {
+      if (controller.signal.aborted) {
         return;
       }
 
       dispatch(decreaseSavingCount());
     } catch (e) {
-      if (signal.aborted) {
+      if (controller.signal.aborted) {
         return;
       }
 
       dispatch(decreaseSavingCount());
 
-      if (propagateErrors) {
-        throw e;
-      } else {
-        console.log("error: ", e);
-        alert("Tallennus epäonnistui!");
-      }
+      console.error(e);
+      alert(i18n.t("unexpectedError"));
+
+      throw e;
     }
   };
 };
@@ -58,8 +59,10 @@ const savingStateReducer = (state = defaultState, action) => {
       savingCount--;
       return { ...state, savingCount, saving: savingCount > 0 };
     case "RESET":
-      state.abortController.abort();
-      return { savingCount: 0, saving: false, abortController: new AbortController() };
+      currentController.abort();
+      currentController = new AbortController();
+
+      return { savingCount: 0, saving: false };
     default:
       return state;
   }

@@ -1,10 +1,11 @@
-import { Fade, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Alert, Fade, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getObservationsByObsPeriod } from "../../services";
 import { useTranslation } from "react-i18next";
 import globals from "../../globalConstants";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
 
@@ -37,13 +38,43 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
   const classes = useStyles();
 
   const [observations, setObservations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
-    if (obsPeriod.id) {
-      getObservationsByObsPeriod(obsPeriod.id)
-        .then(observationsJson => setObservations(observationsJson));
+    let cancelled = false;
+
+    const retrieveObservations = async (id) => {
+      setLoading(true);
+      setFetchError(false);
+
+      try {
+        const res = await getObservationsByObsPeriod(id);
+        if (cancelled) {
+          return;
+        }
+        setObservations(res);
+      } catch (e) {
+        if (cancelled) {
+          return;
+        }
+        console.error(e);
+        setFetchError(true);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    if (obsPeriod?.id) {
+      retrieveObservations(obsPeriod.id);
     }
-  }, [obsPeriod.id]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [obsPeriod?.id]);
 
   if (!obsPeriod) return <div>{t("observationPeriodNotDefined")}</div>;
 
@@ -61,45 +92,38 @@ const ObservationPeriod = ({ obsPeriod, open, handleClose }) => {
           <h2 id="transition-modal-title">{t("observations")}</h2>
           <h3>{obsPeriod.location}, klo {obsPeriod.startTime} - {obsPeriod.endTime}</h3>
 
-
-          <Table>
-            <TableHead>
-              <TableRow>
-
-                <TableCell >{t("species")}</TableCell>
-                <TableCell >{t("count")}</TableCell>
-                <TableCell >{t("direction")}</TableCell>
-                <TableCell >{t("bypassSide")}</TableCell>
-                <TableCell >{t("notes")}</TableCell>
-              </TableRow>
-            </TableHead>
-
-
-            <TableBody>
-              {
-                observations
-                  .map((s, i) =>
-                    <TableRow key={i} >
-                      <TableCell>
-                        {s.species}
-                      </TableCell>
-                      <TableCell>
-                        {(s.count)}
-                      </TableCell>
-                      <TableCell>
-                        {(globals.inverseDirections.get(s.direction))}, {(s.direction)}&#176;
-                      </TableCell>
-                      <TableCell>
-                        {(globals.inverseBypass.get(s.bypassSide))}
-                      </TableCell>
-                      <TableCell>
-                        {s.notes}
-                      </TableCell>
-                    </TableRow>
-                  )
-              }
-            </TableBody>
-          </Table>
+          {loading ? (
+            <LoadingSpinner size="small" />
+          ) : fetchError ? (
+            <Alert severity="error">
+              {t("observationsFetchFailed")}
+            </Alert>
+          ) : (
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t("species")}</TableCell>
+                  <TableCell>{t("count")}</TableCell>
+                  <TableCell>{t("direction")}</TableCell>
+                  <TableCell>{t("bypassSide")}</TableCell>
+                  <TableCell>{t("notes")}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {observations.map((s, i) =>
+                  <TableRow key={i}>
+                    <TableCell>{s.species}</TableCell>
+                    <TableCell>{s.count}</TableCell>
+                    <TableCell>
+                      {globals.inverseDirections.get(s.direction)}, {s.direction}&#176;
+                    </TableCell>
+                    <TableCell>{globals.inverseBypass.get(s.bypassSide)}</TableCell>
+                    <TableCell>{s.notes}</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </Fade>
     </Modal>

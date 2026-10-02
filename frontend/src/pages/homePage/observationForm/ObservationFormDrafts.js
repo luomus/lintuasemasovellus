@@ -17,7 +17,7 @@ import { DraftDB, deleteDraft, clearAll } from "../../../services/draftService";
 import { StyledTableCell } from "../../../globalComponents/common";
 import { AppContext } from "../../../AppContext";
 
-const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
+const ObservationFormDrafts = ({ draftID, onDraftSelect, disabled }) => {
   const { t } = useTranslation();
 
   const { user, observatory } = useContext(AppContext);
@@ -36,13 +36,14 @@ const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
   const handleDraftConfirm = (e) => {
     let el = drafts.find(d => d.id === e);
     onDraftSelect(el);
+    setDraftsOpen(false);
   };
 
   return (
     <>
       <Tooltip title={t("drafts")}>
         <span>
-          <IconButton id="open-draft-button" size="medium" onClick={() => setDraftsOpen(true)} variant="contained" color="primary">
+          <IconButton id="open-draft-button" size="medium" onClick={() => setDraftsOpen(true)} variant="contained" color="primary" disabled={disabled}>
             <Bookmarks fontSize="default" />
           </IconButton>
         </span>
@@ -112,7 +113,8 @@ const ObservationFormDrafts = ({ draftID, onDraftSelect }) => {
 
 ObservationFormDrafts.propTypes = {
   draftID: PropTypes.number,
-  onDraftSelect: PropTypes.func.isRequired
+  onDraftSelect: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default memo(ObservationFormDrafts);
