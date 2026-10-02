@@ -50,9 +50,8 @@ def create_catch(row, day_id):
     db.session().add(catch)
     db.session().commit()
   elif (old_catch.observatoryday_id != catch.observatoryday_id
-     or old_catch.catchType != catch.catchType
-     or old_catch.location != catch.location
-     or old_catch.netCode != catch.netCode
+     or old_catch.catchArea != catch.catchArea
+     or old_catch.catchMethod != catch.catchMethod
      or int(old_catch.amount) != int(catch.amount)
      or int(old_catch.length) != int(catch.length)
      or old_catch.openedAt != catch.openedAt
