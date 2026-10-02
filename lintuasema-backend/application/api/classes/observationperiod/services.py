@@ -162,8 +162,12 @@ def getObservationperiods():
     return Observationperiod.query.filter_by(is_deleted=0).all()
 
 def deleteObservationperiod(obsperiod_id, commit=True):
-    delete_shorthands_by_obsperiod(obsperiod_id, commit=commit)
     deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
+    if deleted_obsperiod is None:
+        raise ValueError(f'Observation period {obsperiod_id} not found')
+    if deleted_obsperiod.is_deleted:
+        raise ValueError(f'Observation period {obsperiod_id} has already been deleted')
+    delete_shorthands_by_obsperiod(obsperiod_id, commit=commit)
     deleted_obsperiod.is_deleted = 1
     if commit:
         db.session.commit()

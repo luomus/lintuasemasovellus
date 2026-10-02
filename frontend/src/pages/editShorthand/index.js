@@ -291,13 +291,9 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   };
 
   const handleSave = async () => {
-    const removable_ids = defaultShorthand.map(obsperiod => obsperiod.obsPeriodId);
-    const rows = shorthandTextToLines(shorthand);
-    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
-
     setSaving(true);
     try {
-      await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id, removable_ids)));
+      await dispatch(saveData(save));
       closeModal(true);
     } catch (e) {
       // error handled in saveData
@@ -305,6 +301,13 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
       setSaving(false);
     }
   };
+
+  const save = async () => {
+    const removable_ids = defaultShorthand.map(obsperiod => obsperiod.obsPeriodId);
+    const rows = shorthandTextToLines(shorthand);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
+    await sendEditedShorthand(observationPeriods, observations, dayId, user.id, removable_ids);
+  }
 
   const handleClose = () => {
     closeModal();

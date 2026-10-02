@@ -107,6 +107,11 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
         if (cancelled) {
           return;
         }
+        if (!res?.length) {
+          console.error(`No shorthand found for observation period ${obsPeriod.id}`);
+          setShorthandFetchError(true);
+          return;
+        }
         initializeDefaultShorthand(res);
       } catch (e) {
         if (cancelled) {
@@ -188,14 +193,9 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
 
 
   const handleSave = async () => {
-    const rows = shorthandTextToLines(shorthand);
-    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
-
     setSaving(true);
     try {
-      await dispatch(saveData(() => sendEditedShorthand(
-        observationPeriods, observations, obsPeriod.day_id, user.id, [Number(obsPeriod.id)]
-      )));
+      await dispatch(saveData(save));
       closeModal(true);
     } catch (e) {
       // error handled in saveData
@@ -203,6 +203,13 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
       setSaving(false);
     }
   };
+
+  const save = async () => {
+    const rows = shorthandTextToLines(shorthand);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
+
+    await sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id, [Number(obsPeriod.id)]);
+  }
 
   const handleClose = () => {
     closeModal();
@@ -212,6 +219,7 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
     setType("");
     setLocation("");
     setShorthand("");
+    setInitialShorthand("");
     setShorthandLoading(true);
     setShorthandFetchError(false);
     handleCloseModal(afterSave);
