@@ -149,4 +149,19 @@ def init_app(database, print_db_echo):
         except Exception as e:
             print(e)
 
+    if app.config.get('EMAIL_HOST') and app.config.get('SERVER_EMAIL') and app.config.get('ADMIN_EMAIL'):
+        mail_handler = SMTPHandler(
+            mailhost=app.config['EMAIL_HOST'],
+            fromaddr=app.config['SERVER_EMAIL'],
+            toaddrs=[app.config['ADMIN_EMAIL']],
+            subject='Lintuasemat Error'
+        )
+
+        mail_handler.setLevel(logging.ERROR)
+        mail_handler.setFormatter(formatter)
+        mail_handler.addFilter(
+            RateLimitingFilter(rate=1, per=60 * 1, burst=1, match='auto')
+        )
+        app.logger.addHandler(mail_handler)
+
     return app

@@ -119,6 +119,21 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
                       key: SECRET_KEY
+                - name: EMAIL_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: EMAIL_HOST
+                - name: SERVER_EMAIL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: SERVER_EMAIL
+                - name: ADMIN_EMAIL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${BRANCH}
+                      key: ADMIN_EMAIL
                 - name: DB_TYPE
                   value: "oracle"
                 - name: BEHIND_PROXY
