@@ -209,7 +209,7 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
     const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
     await sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id, [Number(obsPeriod.id)]);
-  }
+  };
 
   const handleClose = () => {
     closeModal();

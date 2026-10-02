@@ -307,7 +307,7 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
     const rows = shorthandTextToLines(shorthand);
     const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
     await sendEditedShorthand(observationPeriods, observations, dayId, user.id, removable_ids);
-  }
+  };
 
   const handleClose = () => {
     closeModal();
