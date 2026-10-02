@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { makeStyles, withStyles } from "@mui/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -60,10 +60,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function CustomizedTabs({ setMode }) {
+export default function CustomizedTabs({ mode, setMode }) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
+  const [value, setValue] = useState(mode === "speciesTable" ? 0 : 1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -85,5 +84,6 @@ export default function CustomizedTabs({ setMode }) {
 }
 
 CustomizedTabs.propTypes = {
+  mode: PropTypes.oneOf(["speciesTable", "obsPeriodTable"]).isRequired,
   setMode: PropTypes.func.isRequired
 };

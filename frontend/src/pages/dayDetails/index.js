@@ -37,6 +37,8 @@ export const DayDetails = () => {
   const error = useSelector((state) => state.dayData.error);
   const saving = useSelector(state => state.savingState.saving);
 
+  const [mode, setMode] = useState("speciesTable");
+
   const [initialData, setInitialData] = useState();
 
   useConfirmExit(
@@ -107,7 +109,13 @@ export const DayDetails = () => {
               ></GeneralDayDetails>
             </Grid>
             <Grid item xs={12}>
-              <ObservationEdit day={day} dayId={dayInfo.id} refreshObservations={refreshObservations}></ObservationEdit>
+              <ObservationEdit
+                day={day}
+                dayId={dayInfo.id}
+                refreshObservations={refreshObservations}
+                mode={mode}
+                setMode={setMode}
+              ></ObservationEdit>
             </Grid>
           </Grid>
         </Paper>

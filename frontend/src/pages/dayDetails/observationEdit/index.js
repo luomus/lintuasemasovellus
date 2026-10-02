@@ -19,7 +19,7 @@ import LoadingSpinner from "../../../globalComponents/LoadingSpinner";
 
 const emptyArray = [];
 
-export const ObservationEdit = ({ day, dayId, refreshObservations }) => {
+export const ObservationEdit = ({ day, dayId, refreshObservations, mode, setMode }) => {
   const { t } = useTranslation();
   const { observatory, speciesData } = useContext(AppContext);
 
@@ -29,8 +29,6 @@ export const ObservationEdit = ({ day, dayId, refreshObservations }) => {
   const [addableSpecies, setAddableSpecies] = useState([]);
   const [speciesSummary, setSpeciesSummary] = useState([]);
   const [speciesRows, setSpeciesRows] = useState([]);
-
-  const [mode, setMode] = useState("speciesTable");
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
 
@@ -176,4 +174,6 @@ ObservationEdit.propTypes = {
   day: PropTypes.string.isRequired,
   dayId: PropTypes.number.isRequired,
   refreshObservations: PropTypes.func.isRequired,
+  mode: PropTypes.oneOf(["speciesTable", "obsPeriodTable"]).isRequired,
+  setMode: PropTypes.func.isRequired
 };
