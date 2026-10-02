@@ -193,4 +193,4 @@ PeriodTable.propTypes = {
   onEditSuccess: PropTypes.func.isRequired
 };
 
-export default PeriodTable;
+export default React.memo(PeriodTable);

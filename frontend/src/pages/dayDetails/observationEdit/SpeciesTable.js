@@ -179,4 +179,4 @@ SpeciesTable.propTypes = {
   onAddNewSpecies: PropTypes.func.isRequired,
 };
 
-export default SpeciesTable;
+export default React.memo(SpeciesTable);

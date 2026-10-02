@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { startTransition, useCallback, useContext, useEffect, useState } from "react";
 import {
   Alert, Box, Grid
 } from "@mui/material";
@@ -31,6 +31,8 @@ export const ObservationEdit = ({ day, dayId, refreshObservations, mode, setMode
   const [speciesRows, setSpeciesRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
+
+  const [visitedModes, setVisitedModes] = useState(() => new Set([mode]));
 
   useEffect(() => {
     let cancelled = false;
@@ -76,6 +78,10 @@ export const ObservationEdit = ({ day, dayId, refreshObservations, mode, setMode
   useEffect(() => {
     setAddableSpecies(speciesData.uniqueSpecies.filter(species => !defaultSpecies.includes(species)));
   }, [speciesData, defaultSpecies]);
+
+  useEffect(() => {
+    setVisitedModes(prev => (prev.has(mode) ? prev : new Set(prev).add(mode)));
+  }, [mode]);
 
   const speciesRowChange = useCallback((row) => {
     setSpeciesRows((prevState) => (
@@ -131,27 +137,40 @@ export const ObservationEdit = ({ day, dayId, refreshObservations, mode, setMode
     };
   };
 
-  const table = mode === "speciesTable" ? (
-    <SpeciesTable
-      day={day}
-      allRows={speciesRows}
-      addableSpecies={addableSpecies}
-      onRowChange={speciesRowChange}
-      onAddNewSpecies={addNewSpecies}
-    />
-  ) : (
-    <PeriodTable
-      day={day}
-      obsPeriods={obsPeriods}
-      onEditSuccess={refreshObservations}
-    />
+  const changeMode = useCallback((newMode) => {
+    startTransition(() => setMode(newMode));
+  }, [setMode]);
+
+  const table = (
+    <>
+      {visitedModes.has("speciesTable") && (
+        <div style={{ display: mode === "speciesTable" ? "block" : "none" }}>
+          <SpeciesTable
+            day={day}
+            allRows={speciesRows}
+            addableSpecies={addableSpecies}
+            onRowChange={speciesRowChange}
+            onAddNewSpecies={addNewSpecies}
+          />
+        </div>
+      )}
+      {visitedModes.has("obsPeriodTable") && (
+        <div style={{ display: mode === "obsPeriodTable" ? "block" : "none" }}>
+          <PeriodTable
+            day={day}
+            obsPeriods={obsPeriods}
+            onEditSuccess={refreshObservations}
+          />
+        </div>
+      )}
+    </>
   );
 
   return (
     <Grid container style={{ justifyContent: "space-between" }}>
       <Grid item xs={1}>
         <Box display="flex" justifyContent="flex-start">
-          <AntTabs setMode={setMode}/>
+          <AntTabs mode={mode} setMode={changeMode}/>
         </Box>
       </Grid>
       <Grid item xs={5}>
