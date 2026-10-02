@@ -161,11 +161,12 @@ def deleteObservation(shorthand_id):
     observation = Observation.query.filter_by(shorthand_id).first()
     observation.is_deleted = 1
 
-def deleteObservations(shorthand_id):
+def deleteObservations(shorthand_id, commit=True):
     observations_to_delete = Observation.query.filter_by(shorthand_id=shorthand_id, is_deleted=0).all()
     for observation in observations_to_delete:
         observation.is_deleted = 1
-    db.session.commit()
+    if commit:
+        db.session.commit()
 
 def update_edited_observation(observation_new, observation_old):
     observation_old.is_deleted = 1

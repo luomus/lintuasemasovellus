@@ -8,7 +8,7 @@ from application.api.classes.location.services import getLocationId
 from application.api.classes.type.services import getTypeIdByName
 from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, \
     getObservationperiodList, addObservationperiod, deleteObservationperiod, delete_observationperiods, \
-    getObservationPeriodCountsByDayId
+    getObservationPeriodCountsByDayId, find_overlapping_periods
 
 from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.observation.models import Observation
@@ -78,7 +78,25 @@ def save_edited_observationperiods():
     observation_periods = req["periods"]
     observations = req["observations"]
     dayId =req["dayId"]
+    removed_ids = req.get("removedPeriodIds") or []
 
+    obs_day = getDay(dayId)
+    overlaps = find_overlapping_periods(observation_periods, obs_day.day, obs_day.observatory_id, exclude_ids=removed_ids)
+    if overlaps:
+        return jsonify({'error': 'Overlapping observation periods', 'overlapping': overlaps}), 400
+
+    try:
+        delete_observationperiods(removed_ids, commit=False)
+        _add_edited_observationperiods(req, observation_periods, observations, dayId)
+        db.session().commit()
+    except Exception:
+        db.session().rollback()
+        raise
+
+    return jsonify(req)
+
+
+def _add_edited_observationperiods(req, observation_periods, observations, dayId):
     day = getDay(dayId)
     obsId = day.observatory_id
 
@@ -139,6 +157,3 @@ def save_edited_observationperiods():
                         account_id=req['userID'])
 
                     db.session().add(sub_observation)
-
-    db.session().commit()
-    return jsonify(req)

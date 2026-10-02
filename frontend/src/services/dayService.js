@@ -69,8 +69,8 @@ export const sendEverything = async (everything) => {
   return res;
 };
 
-export const sendEditedShorthand = async (periods, observations, dayId, userID) => {
-  const data = { periods: periods, observations: observations, dayId: dayId, userID: userID };
+export const sendEditedShorthand = async (periods, observations, dayId, userID, removedPeriodIds = []) => {
+  const data = { periods, observations, dayId, userID, removedPeriodIds };
   const res = await axios.post("/api/saveEditedObservations", data);
   return res;
 };

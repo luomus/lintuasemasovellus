@@ -174,13 +174,11 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
     }
   };
 
-  const handleDelete = async (close=true) => {
+  const handleDelete = async () => {
     setSaving(true);
     try {
       await dispatch(saveData(() => deleteObservationperiods([Number(obsPeriod.id)])));
-      if (close) {
-        closeModal(true);
-      }
+      closeModal(true);
     } catch (e) {
       // error handled in saveData
     } finally {
@@ -190,13 +188,14 @@ const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
 
 
   const handleSave = async () => {
-    await handleDelete(false);
     const rows = shorthandTextToLines(shorthand);
     const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
     setSaving(true);
     try {
-      await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id)));
+      await dispatch(saveData(() => sendEditedShorthand(
+        observationPeriods, observations, obsPeriod.day_id, user.id, [Number(obsPeriod.id)]
+      )));
       closeModal(true);
     } catch (e) {
       // error handled in saveData

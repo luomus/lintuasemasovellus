@@ -161,13 +161,59 @@ def getObservationperiodList():
 def getObservationperiods():
     return Observationperiod.query.filter_by(is_deleted=0).all()
 
-def deleteObservationperiod(obsperiod_id):
-    delete_shorthands_by_obsperiod(obsperiod_id)
+def deleteObservationperiod(obsperiod_id, commit=True):
+    delete_shorthands_by_obsperiod(obsperiod_id, commit=commit)
     deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
     deleted_obsperiod.is_deleted = 1
-    db.session.commit()
+    if commit:
+        db.session.commit()
 
-def delete_observationperiods(req):
+def delete_observationperiods(req, commit=True):
     for observationperiod_id in req:
-        deleteObservationperiod(observationperiod_id)
+        deleteObservationperiod(observationperiod_id, commit=commit)
 
+def find_overlapping_periods(periods, day, observatory_id, exclude_ids=None):
+    excluded = {int(exclude_id) for exclude_id in (exclude_ids or [])}
+
+    new_periods = []
+    for i, obsperiod in enumerate(periods):
+        new_periods.append((i, _to_hhmm(obsperiod['startTime']), _to_hhmm(obsperiod['endTime'])))
+
+    existing_periods = []
+    existing_day = Observatoryday.query.filter_by(day=day, observatory_id=observatory_id, is_deleted=0).first()
+    if existing_day:
+        rows = Observationperiod.query.filter(
+            Observationperiod.observatoryday_id == existing_day.id,
+            Observationperiod.is_deleted == 0
+        ).join(
+            Observationperiod.type
+        ).filter(
+            Type.name.notin_(('Paikallinen', 'Hajahavainto'))
+        ).all()
+        for period in rows:
+            if period.id in excluded:
+                continue
+            existing_periods.append((period.id, _to_hhmm(period.start_time), _to_hhmm(period.end_time)))
+
+    overlaps = []
+    for idx, (i, start, end) in enumerate(new_periods):
+        for (pid, e_start, e_end) in existing_periods:
+            if _periods_overlap(start, end, e_start, e_end):
+                overlaps.append({'periodOrderNum': i, 'startTime': start, 'endTime': end, 'conflictsWithExistingPeriodId': pid})
+        for (j, o_start, o_end) in new_periods[idx + 1:]:
+            if _periods_overlap(start, end, o_start, o_end):
+                overlaps.append({'periodOrderNum': i, 'startTime': start, 'endTime': end, 'conflictsWithPeriodOrderNum': j})
+    return overlaps
+
+def _to_hhmm(value):
+    if isinstance(value, str):
+        time_part = value.split(' ')[-1] if ' ' in value else value
+        hours, minutes = time_part.split(':')[0:2]
+        return hours[-2:].zfill(2) + ':' + minutes[0:2]
+    return value.strftime('%H:%M')
+
+
+def _periods_overlap(start_a, end_a, start_b, end_b):
+    return (start_b < end_a and start_a <= start_b) or \
+        (start_b < end_a <= end_b) or \
+        (start_b <= start_a < end_b)

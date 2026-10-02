@@ -13,7 +13,7 @@ from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId
-from application.api.classes.observationperiod.services import getObsPerId
+from application.api.classes.observationperiod.services import getObsPerId, find_overlapping_periods
 from application.api.classes.observatoryday.services import getDay, deleteDay
 from application.api.classes.type.services import getTypeIdByName
 
@@ -45,6 +45,11 @@ def add_everything():
     # Save observatoryDay
     observatory_id = getObservatoryId(req['observatory'])
     day = datetime.strptime(req['day'], '%d.%m.%Y')
+
+    # Validate that observation periods don't overlap
+    overlaps = find_overlapping_periods(req.get('observationPeriods', []), day, observatory_id)
+    if overlaps:
+        return jsonify({'error': 'Overlapping observation periods', 'overlapping': overlaps}), 400
 
     new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id)
     addDay(new_obsday)

@@ -277,17 +277,12 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
     }
   };
 
-  const handleDelete = async (close=true) => {
-    let removable_ids = [];
-    for (const obsperiod of defaultShorthand) {
-      removable_ids.push(obsperiod.obsPeriodId);
-    }
+  const handleDelete = async () => {
+    const removable_ids = defaultShorthand.map(obsperiod => obsperiod.obsPeriodId);
     setSaving(true);
     try {
       await dispatch(saveData(() => deleteObservationperiods(removable_ids)));
-      if (close) {
-        closeModal(true);
-      }
+      closeModal(true);
     } catch (e) {
       // error handled in saveData
     } finally {
@@ -296,13 +291,13 @@ const EditShorthand = ({ day, dayId, open, handleCloseModal }) => {
   };
 
   const handleSave = async () => {
-    await handleDelete(false);
+    const removable_ids = defaultShorthand.map(obsperiod => obsperiod.obsPeriodId);
     const rows = shorthandTextToLines(shorthand);
     const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
     setSaving(true);
     try {
-      await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id)));
+      await dispatch(saveData(() => sendEditedShorthand(observationPeriods, observations, dayId, user.id, removable_ids)));
       closeModal(true);
     } catch (e) {
       // error handled in saveData

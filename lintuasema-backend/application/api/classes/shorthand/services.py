@@ -17,16 +17,17 @@ def get_shorthands_by_obsperiod(obsperiod_id):
 
     return ret
 
-def delete_shorthands_by_obsperiod(obsperiod_id):
+def delete_shorthands_by_obsperiod(obsperiod_id, commit=True):
     shorthands = get_shorthands_by_obsperiod(obsperiod_id)
     for shorthand in shorthands:
-        delete_shorthand(shorthand['id'])
+        delete_shorthand(shorthand['id'], commit=commit)
 
-def delete_shorthand(shorthand_id):
+def delete_shorthand(shorthand_id, commit=True):
     shorthand_to_delete = Shorthand.query.get(shorthand_id)
-    deleteObservations(shorthand_id)
+    deleteObservations(shorthand_id, commit=commit)
     shorthand_to_delete.is_deleted = 1
-    db.session.commit()
+    if commit:
+        db.session.commit()
 
 def get_shorthands_for_editing(obsday_id, type_name, location_name):
     stmt = text("SELECT " + prefix + "Shorthand.id AS shorthand_id,"

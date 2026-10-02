@@ -23,7 +23,7 @@ import { useConfirmExit } from "../../../hooks/useConfirmExit";
 import { resetNotifications } from "../../../reducers/notificationsReducer";
 import { shorthandLinesToObservations, shorthandTextToLines } from "../../../shorthand/shorthandParsing";
 import { useDispatch, useSelector } from "react-redux";
-import { refreshDayData, refreshObservationPeriods, resetDayData } from "../../../reducers/dayDataReducer";
+import { refreshDayData, resetDayData } from "../../../reducers/dayDataReducer";
 
 const useStyles = makeStyles(() => ({
   fieldsContainer: {
@@ -47,7 +47,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   const loading = useSelector((state) => state.dayData.loading);
   const error = useSelector((state) => state.dayData.error);
 
-  const [savedFormData, setSavedFormData] = useState();
+  const [initialFormData, setInitialFormData] = useState();
   const [formData, setFormData] = useState(getEmptyFormData(dateToDayString(new Date())));
 
   const [confirmDayChange, setConfirmDayChange] = useState(false);
@@ -80,7 +80,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
     }
 
     const initialData = dayInfoToFormData(formData.day, dayInfo || {}, station.defaultActions);
-    setSavedFormData(initialData);
+    setInitialFormData(initialData);
 
     const { type, location, shorthand } = formData;
     setFormData({ ...initialData, type, location, shorthand });
@@ -101,15 +101,15 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   }, [navigateToDayDetailsDay]);
 
   useEffect(() => {
-    if (!savedFormData) {
+    if (!initialFormData) {
       return;
     }
-    if (objectsDiffer(formData, savedFormData, ["observers", "comment", "dailyActions", "catchRows"])) {
+    if (objectsDiffer(formData, initialFormData, ["observers", "comment", "dailyActions", "catchRows"])) {
       setConfirmDayChange(true);
     } else {
       setConfirmDayChange(false);
     }
-  }, [savedFormData, formData.observers, formData.comment, formData.dailyActions, formData.catchRows]);
+  }, [initialFormData, formData.observers, formData.comment, formData.dailyActions, formData.catchRows]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -126,23 +126,22 @@ export const ObservationForm = ({ onSaveSuccess }) => {
 
     const { day, observers, comment, dailyActions, catchRows, type, location, shorthand } = formData;
 
-    const lines = shorthandTextToLines(shorthand);
-    const { observationPeriods, observations } = shorthandLinesToObservations(lines, type, location, speciesData.speciesCodeMap);
-
-    let data = {
-      day,
-      comment,
-      observers,
-      observatory,
-      selectedactions: stringifyDailyActions(dailyActions),
-      userID: user.id,
-      catches: catchRows,
-      observationPeriods,
-      observations
-    };
-    const formDataAfterSave = { ...formData, type: "", location: "", shorthand: "" };
-
     try {
+      const lines = shorthandTextToLines(shorthand);
+      const { observationPeriods, observations } = shorthandLinesToObservations(lines, type, location, speciesData.speciesCodeMap);
+
+      let data = {
+        day,
+        comment,
+        observers,
+        observatory,
+        selectedactions: stringifyDailyActions(dailyActions),
+        userID: user.id,
+        catches: catchRows,
+        observationPeriods,
+        observations
+      };
+
       await sendEverything(data);
       setSaving(false);
       setFormSent(true);
@@ -150,11 +149,10 @@ export const ObservationForm = ({ onSaveSuccess }) => {
         deleteDraft(draftID);
       }
       setDraftID(undefined);
-      setSavedFormData(formDataAfterSave);
-      setFormData(formDataAfterSave);
+      setFormData(getEmptyFormData(day));
       onSaveSuccess();
 
-      dispatch(refreshObservationPeriods(dayInfo.id));
+      dispatch(refreshDayData(day, observatory));
     } catch (error) {
       console.error(error);
       setSaving(false);
@@ -181,7 +179,7 @@ export const ObservationForm = ({ onSaveSuccess }) => {
           selectedactions: JSON.stringify(selectedactions)
         };
         await sendDay(data);
-        setSavedFormData({ ...savedFormData, observers });
+        setInitialFormData({ ...initialFormData, observers });
       }
 
       setNavigateToDayDetailsDay(day);
@@ -257,11 +255,11 @@ export const ObservationForm = ({ onSaveSuccess }) => {
   };
 
   const formHasChanges = () => {
-    if (!savedFormData) {
+    if (!initialFormData) {
       return false;
     }
 
-    return objectsDiffer(formData, savedFormData);
+    return objectsDiffer(formData, initialFormData);
   };
 
   if (error) {
