@@ -18,7 +18,7 @@ parameters:
     required: true
   - name: HOSTNAME
     required: true
-  - name: SERVICEID
+  - name: SERVICE_NAME
     required: true
   - name: LAJI_API_URL
     required: true
@@ -53,7 +53,7 @@ objects:
       USERNAME: ${USERNAME}
       PASSWORD: ${PASSWORD}
       HOSTNAME: ${HOSTNAME}
-      SERVICEID: ${SERVICEID}
+      SERVICE_NAME: ${SERVICE_NAME}
       LAJI_AUTH_URL: ${LAJI_AUTH_URL}
       LAJI_API_URL: ${LAJI_API_URL}
       SECRET_KEY: ${SECRET_KEY}
@@ -109,11 +109,11 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
                       key: HOSTNAME
-                - name: SERVICEID
+                - name: SERVICE_NAME
                   valueFrom:
                     secretKeyRef:
                       name: ${APP}-${BRANCH}
-                      key: SERVICEID
+                      key: SERVICE_NAME
                 - name: LAJI_API_URL
                   valueFrom:
                     secretKeyRef:

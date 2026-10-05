@@ -8,6 +8,7 @@ API projektia varten konffaa Pythonin virtuaaliympäristö(venv). Alla ohjeet Ub
 * Siirry `lintuasema-backend/` hakemistoon
 * Suorita `. install.sh`
 * Skripti aktivoi virtuaaliympäristön, kun lopetat työskentelyn poistu virtuaaliympäristöstä `deactivate` komennolla
+* Täytä ympäristömuuttujat `.env` tiedostoon, voit ottaa mallia `.env.example` tiedostosta.
 
 Kun aloitat työskentelyn aktivoi virtuaaliympäristö suorittamalla `. venv/bin/activate` ja lopettaessa poistu virtuaaliympäristöstä `deactivate` komennolla.
 
@@ -15,7 +16,7 @@ Jos asennat/päivität paketteja, päivitä riippuvuudet aktiivisessa virtuaaliy
 
 Jos riipuuvuudet tarvitsee päivittää, esimerkiksi `git pull` jälkeen, suorita `pip install -r requirements.txt` aktiivisessa virtuaaliympäristössä (tai `. install.sh`).
 
-Kehityspalvelin käynnistetään suorittamalla `flask run` lintuasema-backend/ hakemistossa. Käytössä on python-dotenv moduuli jolloin flask lataa ympäristömuuttujat `.flaskenv` tiedostosta.
+Kehityspalvelin käynnistetään suorittamalla `flask run` lintuasema-backend/ hakemistossa. Käytössä on python-dotenv moduuli jolloin flask lataa ympäristömuuttujat `.flaskenv` ja `.env` tiedostoista.
 
 
 ## Windows

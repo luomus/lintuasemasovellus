@@ -90,8 +90,7 @@ def init_app(database, print_db_echo):
 
     #määrittele tietokantayhteys
     if database == "oracle":
-        dnsStr = cx_Oracle.makedsn('oracle.luomus.fi', 1521, service_name='oracle.luomus.fi')
-        dnsStr = dnsStr.replace('SID', 'SERVICE_TYPE')
+        dnsStr = cx_Oracle.makedsn(oracleConfig.hostname, 1521, service_name=oracleConfig.service_name)
         try:
             app.config["SQLALCHEMY_DATABASE_URI"] = "oracle://"+oracleConfig.username+":"+oracleConfig.password+"@"+dnsStr
             app.config["SQLALCHEMY_ECHO"] = print_db_echo
