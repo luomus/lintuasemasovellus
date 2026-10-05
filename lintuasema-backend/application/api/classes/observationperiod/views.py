@@ -6,7 +6,9 @@ from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observatoryday.services import getDay
 from application.api.classes.location.services import getLocationId
 from application.api.classes.type.services import getTypeIdByName
-from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, getObservationperiodList, addObservationperiod, deleteObservationperiod, delete_observationperiods
+from application.api.classes.observationperiod.services import getObsPerId, getObservationPeriodsByDayId, \
+    getObservationperiodList, addObservationperiod, deleteObservationperiod, delete_observationperiods, \
+    getObservationPeriodCountsByDayId, find_overlapping_periods
 
 from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.observation.models import Observation
@@ -21,7 +23,7 @@ from datetime import datetime
 @login_required
 def addObservationPeriod():
     req = request.get_json()
-    
+
     ret = addObservationperiod(req['day_id'], req['location'], req['observationType'], req['startTime'], req['endTime'])
 
     return jsonify(ret)
@@ -34,19 +36,28 @@ def getObservationPeriods():
     return jsonify(ret)
 
 
-@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"]) 
+@bp.route('/api/getDaysObservationPeriods/<day_id>/', methods=["GET"])
 @login_required
 def getDaysObservationPeriods(day_id):
     ret = getObservationPeriodsByDayId(day_id)
-    
+
     return ret
+
+
+@bp.route('/api/getDaysObservationPeriodCounts/<day_id>/', methods=["GET"])
+@login_required
+def getDaysObservationPeriodCounts(day_id):
+    ret = getObservationPeriodCountsByDayId(day_id)
+
+    return ret
+
 
 @bp.route("/api/deleteObservationperiods", methods=["POST"])
 @login_required
 def delete_all():
     req = request.get_json()
     delete_observationperiods(req)
-    
+
     return jsonify(req)
 
 
@@ -54,9 +65,9 @@ def delete_all():
 @login_required
 def observationperiod_delete():
     req = request.get_json()
-    
+
     deleteObservationperiod(req['obsperiod_id'])
-    
+
     return jsonify(req)
 
 
@@ -67,7 +78,25 @@ def save_edited_observationperiods():
     observation_periods = req["periods"]
     observations = req["observations"]
     dayId =req["dayId"]
+    removed_ids = req.get("removedPeriodIds") or []
 
+    obs_day = getDay(dayId)
+    overlaps = find_overlapping_periods(observation_periods, obs_day.day, obs_day.observatory_id, exclude_ids=removed_ids)
+    if overlaps:
+        return jsonify({'error': 'Overlapping observation periods', 'overlapping': overlaps}), 400
+
+    try:
+        delete_observationperiods(removed_ids, commit=False)
+        _add_edited_observationperiods(req, observation_periods, observations, dayId)
+        db.session().commit()
+    except Exception:
+        db.session().rollback()
+        raise
+
+    return jsonify(req)
+
+
+def _add_edited_observationperiods(req, observation_periods, observations, dayId):
     day = getDay(dayId)
     obsId = day.observatory_id
 
@@ -99,10 +128,11 @@ def save_edited_observationperiods():
                     birdCount = subObservation['adultUnknownCount'] + subObservation['adultFemaleCount']\
                     + subObservation['adultMaleCount'] + subObservation['juvenileUnknownCount'] + subObservation['juvenileFemaleCount']\
                     + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
-                    + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
+                    + subObservation['subadultMaleCount'] + subObservation['chickUnknownCount'] + subObservation['chickFemaleCount']\
+                    + subObservation['chickMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
                     + subObservation['unknownMaleCount']
-                    
-                    sub_observation = Observation(species=subObservation['species'],
+
+                    sub_observation = Observation(species=observation['species'],
                         adultUnknownCount=subObservation['adultUnknownCount'],
                         adultFemaleCount=subObservation['adultFemaleCount'],
                         adultMaleCount=subObservation['adultMaleCount'],
@@ -112,6 +142,9 @@ def save_edited_observationperiods():
                         subadultUnknownCount=subObservation['subadultUnknownCount'],
                         subadultFemaleCount=subObservation['subadultFemaleCount'],
                         subadultMaleCount=subObservation['subadultMaleCount'],
+                        chickUnknownCount=subObservation['chickUnknownCount'],
+                        chickFemaleCount=subObservation['chickFemaleCount'],
+                        chickMaleCount=subObservation['chickMaleCount'],
                         unknownUnknownCount=subObservation['unknownUnknownCount'],
                         unknownFemaleCount=subObservation['unknownFemaleCount'],
                         unknownMaleCount=subObservation['unknownMaleCount'],
@@ -124,6 +157,3 @@ def save_edited_observationperiods():
                         account_id=req['userID'])
 
                     db.session().add(sub_observation)
-
-    db.session().commit()
-    return jsonify(req)

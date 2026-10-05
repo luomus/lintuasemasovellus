@@ -1,23 +1,25 @@
-import globals from "../globalConstants";
-
+import testSpecies from "./test-species.json";
 
 const spaceySymbols = [" ", "\t"];
 
-const ages = ["'", "\"", "juv", "ad", "subad"];
+const ages = ["'", "\"", "subad", "pull"];
 
 const directions = ["N", "W", "S", "E", "NE", "NW", "SW", "SE",
   "NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"];
 
 const bypassSides = ["++++", "+++", "++", "+", "+-", "-", "--", "---", "----"];
 
-const birdArr = [ ...globals.birdMap.keys() ];
+export const speciesData = testSpecies;
+export const speciesCodeMap = new Map(Object.entries(speciesData).map(entry => [entry[0].toUpperCase(), entry[1].value]));
+
+const birdArr = [ ...Object.keys(speciesData) ];
 
 const randomIndex = (len) => {
   return Math.floor(Math.random() * len);
 };
 
 const getRandomBird = () => {
-  return birdArr[Number(randomIndex(birdArr.length))];
+  return birdArr[0];
 };
 
 const getRandomLineBreaks = () => {
@@ -114,8 +116,9 @@ export const withBypassSideWrong = () => {
 export const withDirectionWrong = () => {
   let subObservation = "";
   if (Math.random() < 0.5) {
+    subObservation += makeValidMeatOfSubobservation();
+    subObservation += ",";
     subObservation += getRandomDirection();
-    subObservation += getRandomLineBreakOrNot();
     subObservation += makeValidMeatOfSubobservation();
     subObservation += getRandomLineBreakOrNot();
     subObservation += getRandomBypassSide();

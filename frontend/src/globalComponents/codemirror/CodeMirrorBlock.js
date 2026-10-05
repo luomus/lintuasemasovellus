@@ -1,24 +1,25 @@
-import React from "react";
+import React, { useContext, useEffect, useState, memo } from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import { makeStyles } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
-import { Controlled as CodeMirror } from "react-codemirror2";
-import {
-  loopThroughCheckForErrors, getErrors, resetErrors
-} from "../../shorthand/newValidations";
+import { UnControlled as CodeMirror } from "react-codemirror2";
 import errorImg from "../../resources/warningTriangle.svg";
 import "./cmError.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 import { setNotifications, setNocturnalNotification } from "../../reducers/notificationsReducer";
-import { useSelector } from "react-redux";
-import { isNightValidation } from "../../shorthand/isNightValidation";
-import { observationsOnTop } from "../../shorthand/observationsOnTopValidation";
+import { isNightValidation } from "../../shorthand/validation/isNightValidation";
+import { getOverlappingTimeRows } from "../../shorthand/validation/overlappingTimesValidation";
+import { AppContext } from "../../AppContext";
+import { dayStringToDate } from "../../services";
+import { translateShorthandError } from "../../shorthand/utils";
+import { validateShorthandLines } from "../../shorthand/validation/validation";
+import { shorthandTextToLines } from "../../shorthand/shorthandParsing";
 
 
-let timeout = null;
 let markers = new Set();
+const emptyArray = [];
 
 const useStyles = makeStyles({
   codemirrorBox: {
@@ -27,38 +28,40 @@ const useStyles = makeStyles({
   },
 });
 
-const CodeMirrorBlock = ({
-  shorthand,
-  setShorthand,
-  setSanitizedShorthand,
-  date,
-  type
-}) => {
-
+const CodeMirrorBlock = ({ value, onChange, day, type, activeObservationPeriodIds, disabled }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
+  const { observatory, speciesData } = useContext(AppContext);
 
-  const observatory = useSelector(state => state.userObservatory);
-  const dayList = useSelector(state => state.days);
+  const [editorInstance, setEditorInstance] = useState();
+  const [inputValue, setInputValue] = useState(value);
+  const [startingValue, setStartingValue] = useState(value);
 
-  const validateObservationOnTop = async (value) => {
+  const observationPeriods = useSelector(state => state.dayData.data?.observationPeriods || emptyArray);
 
-    const [d, m, y] = [date.getDate(), date.getMonth()+1, date.getFullYear()];
+  useEffect(() => {
+    if (value !== inputValue) {
+      setStartingValue(value);
+      if (editorInstance) {
+        editorInstance.setValue(value);
+      }
+    }
+  }, [value]);
 
-    let month = "0";
-    let year = y;
-    let day = "0";
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (editorInstance) {
+        validateAndSetNotifications(editorInstance, value);
+      }
+    }, 700);
+    return () => clearTimeout(timeout);
+  }, [value, observationPeriods, day, type, activeObservationPeriodIds]);
 
-    Number(m) < 10 ? month = month.concat(m) : month = m;
-    Number(d) < 10 ? day = day.concat(d) : day = d;
+  const validateOverlappingTimes = (value) => {
+    const getRowNumbers = getOverlappingTimeRows(value, observationPeriods, activeObservationPeriodIds);
 
-    let newDate = day+"."+ month +"."+ year;
-
-    const findDay = dayList.length > 0 && dayList.find(d => d.day === newDate && d.observatory === observatory);
-    const getRowNumbers = findDay ? await observationsOnTop(findDay.id,value) : [];
-
-    if (findDay && getRowNumbers.length > 0) {
+    if (getRowNumbers.length > 0) {
       return getRowNumbers;
     } else {
       return false;
@@ -88,8 +91,11 @@ const CodeMirrorBlock = ({
 
 
   const setValidateNightNotification = (value,editor) => {
+    if (!day) {
+      return;
+    }
     const valuesToArray = value.split("\n");
-    const nightRows = type === t("nightMigration") ? isNightValidation(observatory, value, date) : [];
+    const nightRows = type === t("nightMigration") ? isNightValidation(observatory, value, dayStringToDate(day)) : [];
     nightRows.length === 0 && dispatch(setNocturnalNotification(false));
     for (const row of nightRows) {
       nightRows.length > 0 && dispatch(setNocturnalNotification(true));
@@ -97,8 +103,8 @@ const CodeMirrorBlock = ({
     }
   };
 
-  const setValidateObsOnTopNotification = async (value, editor, result) => {
-    const rowNumbers = await validateObservationOnTop(value) ? await validateObservationOnTop(value) : [];
+  const setValidateOverlappingTimesNotification = (value, editor, result) => {
+    const rowNumbers = validateOverlappingTimes(value) || [];
 
     const valuesToArray = value.split("\n");
 
@@ -110,85 +116,67 @@ const CodeMirrorBlock = ({
     return result;
   };
 
-  const validate = (editor, data, value) => {
+  const validate = (editor, value) => {
     let toErrors = [];
 
-    setSanitizedShorthand(loopThroughCheckForErrors(value));
+    const lines = shorthandTextToLines(value);
+    const errors = validateShorthandLines(lines, speciesData.speciesCodeMap);
+
     for (const marker of markers) {
       marker.clear();
     }
     editor.clearGutter("note-gutter");
-    const shorthandErrors = getErrors();
-    for (const error of shorthandErrors) {
+
+    for (const error of errors) {
       const rowNum = error[0];
       const rowMessage = error[1];
-      (rowMessage.includes("unknownCharacter")) ?
-        toErrors.push(t("checkRow", { row: rowNum + 1 }) + t("unknownCharacter", { char: (rowMessage.slice(-1)) }))
-        : toErrors.push(t("checkRow", { row: rowNum + 1 }) + t(rowMessage));
-
+      toErrors.push(t("checkRow", { row: rowNum + 1 }) + translateShorthandError(t, rowMessage));
       setMarker(editor,rowNum,rowMessage,"#f5f890","#000000");
     }
-    resetErrors();
 
     return toErrors;
   };
 
-  /**
-   * Start checking for errors only after being idle for the duration of
-   * the timeout (700ms).
-   * @param {object} editor
-   * @param {object} data
-   * @param {string} value
-   */
-  const codemirrorOnchange = (editor, data, value) => {
+  const validateAndSetNotifications = (editor, value) => {
+    const result = validate(editor, value);
+    setValidateNightNotification(value, editor);
+    const newResult = setValidateOverlappingTimesNotification(value,editor,result);
 
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(async () => {
-
-      const result = validate(editor, data, value);
-      setValidateNightNotification(value, editor);
-      const newResult = await setValidateObsOnTopNotification(value,editor,result);
-
-      dispatch(setNotifications([[], newResult], "shorthand", 0));
-      timeout = null;
-    }, 700);
+    dispatch(setNotifications([[], newResult], "shorthand", 0));
   };
-
 
   return (
     <CodeMirror
       id="shorthand"
       className={classes.codemirrorBox}
-      value={shorthand}
+      value={startingValue}
       options={{
         theme: "idea",
         lineNumbers: true,
         autoRefresh: true,
-        readOnly: false,
         gutters: ["note-gutter"],
-        lint: true
+        lint: true,
+        readOnly: disabled
       }}
       editorDidMount={editor => {
+        setEditorInstance(editor);
         editor.refresh();
       }}
-      onBeforeChange={(editor, data, value) => {
-        setShorthand(value);
-      }}
       onChange={(editor, data, value) => {
-        codemirrorOnchange(editor, data, value);
+        setInputValue(value);
+        onChange(value);
       }}
     />
   );
 };
 
 CodeMirrorBlock.propTypes = {
-  shorthand: PropTypes.string.isRequired,
-  setShorthand: PropTypes.func.isRequired,
-  setSanitizedShorthand: PropTypes.func.isRequired,
-  date: PropTypes.instanceOf(Date),
-  type: PropTypes.string
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  day: PropTypes.string,
+  type: PropTypes.string,
+  activeObservationPeriodIds: PropTypes.array,
+  disabled: PropTypes.bool
 };
 
-export default CodeMirrorBlock;
+export default memo(CodeMirrorBlock);

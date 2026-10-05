@@ -1,227 +1,232 @@
 import {
-  parse,
-  resetAll
-} from "../shorthand/shorthand";
-
-
-import {
   makeValidLine,
   withValidSubObservation,
   withBypassSideWrong,
-  withDirectionWrong
+  withDirectionWrong,
+  speciesCodeMap
 } from "./testHelpers";
-
+import { parseLine } from "../shorthand/observationParsing";
 
 describe("Test algorithm with all the cases mentioned in the customer's docs", () => {
-
-  beforeEach(() => {
-    resetAll();
-  });
-
-
   test("Extremely basic test", () => {
     const lineOfText = "sommol 2/W";
 
-    const observation = parse(lineOfText);
-    expect(observation.species).toBe("sommol");
-    const { direction, unknownMaleCount, ...rest } = observation.osahavainnot[0];
-    expect(direction).toBe("w");
-    expect(unknownMaleCount).toBe("2");
+    const observation = parseLine(lineOfText, speciesCodeMap);
+    expect(observation.species).toBe("SOMMOL");
+    const { direction, unknownMaleCount, bypassSide, notes, ...rest } = observation.subObservations[0];
+    expect(direction).toBe("270");
+    expect(unknownMaleCount).toBe(2);
+    expect(notes).toBe("");
+    expect(bypassSide).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("Harder test", () => {
     const lineOfText = "Smol /4 E";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("smol");
-    const { direction, unknownFemaleCount, ...rest } = observation.osahavainnot[0];
-    expect(direction).toBe("e");
-    expect(unknownFemaleCount).toBe("4");
+    expect(observation.species).toBe("SOMMOL");
+    const { direction, unknownFemaleCount, bypassSide, notes, ...rest } = observation.subObservations[0];
+    expect(direction).toBe("90");
+    expect(unknownFemaleCount).toBe(4);
+    expect(notes).toBe("");
+    expect(bypassSide).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("Third tier, still going", () => {
     const lineOfText = "Smol /4 E (jp)";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("smol");
-    const { direction, unknownFemaleCount, notes, ...rest } = observation.osahavainnot[0];
-    expect(direction).toBe("e");
-    expect(unknownFemaleCount).toBe("4");
+    expect(observation.species).toBe("SOMMOL");
+    const { direction, unknownFemaleCount, notes, bypassSide, ...rest } = observation.subObservations[0];
+    expect(direction).toBe("90");
+    expect(unknownFemaleCount).toBe(4);
     expect(notes).toBe("jp");
+    expect(bypassSide).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("Fourth, god tier", () => {
-    const lineOfText = "Sommol 1\"2juv3subad/W";
+    const lineOfText = "Sommol 1\"2'3subad/W";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("sommol");
-    const { direction, juvenileMaleCount, adultMaleCount, subadultMaleCount, ...rest }
-      = observation.osahavainnot[0];
-    expect(direction).toBe("w");
-    expect(juvenileMaleCount).toBe("2");
-    expect(adultMaleCount).toBe("1");
-    expect(subadultMaleCount).toBe("3");
+    expect(observation.species).toBe("SOMMOL");
+    const { direction, juvenileMaleCount, adultMaleCount, subadultMaleCount, bypassSide, notes, ...rest }
+      = observation.subObservations[0];
+    expect(direction).toBe("270");
+    expect(juvenileMaleCount).toBe(2);
+    expect(adultMaleCount).toBe(1);
+    expect(subadultMaleCount).toBe(3);
+    expect(bypassSide).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("Fifth, legacy mode", () => {
     const lineOfText = "sommol /1W, 2/E, 3/4w";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("sommol");
-    const { direction: direction0, unknownFemaleCount: unknownFemaleCount0, ...rest0 }
-      = observation.osahavainnot[0];
-    const { direction: direction1, unknownMaleCount: unknownMaleCount1, ...rest1 }
-      = observation.osahavainnot[1];
+    expect(observation.species).toBe("SOMMOL");
+    const { direction: direction0, unknownFemaleCount: unknownFemaleCount0, bypassSide: bypassSide0, notes: notes0, ...rest0 }
+      = observation.subObservations[0];
+    const { direction: direction1, unknownMaleCount: unknownMaleCount1, bypassSide: bypassSide1, notes: notes1, ...rest1 }
+      = observation.subObservations[1];
     const { direction: direction2, unknownFemaleCount: unknownFemaleCount2,
-      unknownMaleCount: unknownMaleCount2, ...rest2 }
-      = observation.osahavainnot[2];
+      unknownMaleCount: unknownMaleCount2, bypassSide: bypassSide2, notes: notes2, ...rest2 }
+      = observation.subObservations[2];
 
-    expect(unknownFemaleCount0).toBe("1");
-    expect(direction0).toBe("w");
-    expect(unknownMaleCount1).toBe("2");
-    expect(direction1).toBe("e");
-    expect(unknownMaleCount2).toBe("3");
-    expect(unknownFemaleCount2).toBe("4");
-    expect(direction2).toBe("w");
+    expect(unknownFemaleCount0).toBe(1);
+    expect(direction0).toBe("270");
+    expect(bypassSide0).toBe("");
+    expect(notes0).toBe("");
+    expect(unknownMaleCount1).toBe(2);
+    expect(direction1).toBe("90");
+    expect(bypassSide1).toBe("");
+    expect(notes1).toBe("");
+    expect(unknownMaleCount2).toBe(3);
+    expect(unknownFemaleCount2).toBe(4);
+    expect(direction2).toBe("270");
+    expect(bypassSide2).toBe("");
+    expect(notes2).toBe("");
     for (const each of Object.values(rest0)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
     for (const each of Object.values(rest1)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
     for (const each of Object.values(rest2)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("Sixth, no more tears", () => {
-    const lineOfText = " sommol /1W, 2/E ,3/4w,";
+    const lineOfText = " sommol /1W, 2/E ,3/4w";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("sommol");
-    expect(observation.osahavainnot[0].unknownFemaleCount).toBe("1");
-    expect(observation.osahavainnot[0].direction).toBe("w");
-    expect(observation.osahavainnot[1].unknownMaleCount).toBe("2");
-    expect(observation.osahavainnot[1].direction).toBe("e");
-    expect(observation.osahavainnot[2].unknownMaleCount).toBe("3");
-    expect(observation.osahavainnot[2].unknownFemaleCount).toBe("4");
-    expect(observation.osahavainnot[2].direction).toBe("w");
+    expect(observation.species).toBe("SOMMOL");
+    expect(observation.subObservations[0].unknownFemaleCount).toBe(1);
+    expect(observation.subObservations[0].direction).toBe("270");
+    expect(observation.subObservations[1].unknownMaleCount).toBe(2);
+    expect(observation.subObservations[1].direction).toBe("90");
+    expect(observation.subObservations[2].unknownMaleCount).toBe(3);
+    expect(observation.subObservations[2].unknownFemaleCount).toBe(4);
+    expect(observation.subObservations[2].direction).toBe("270");
   });
 
   test("Seventh son", () => {
     const lineOfText = "sommol /1W 2E";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("numberAfterDirection");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("directionBeforeCounts");
   });
 
   test("Eightball", () => {
     const lineOfText = "sommol /1/2W";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("sommol");
-    expect(observation.osahavainnot[0].unknownFemaleCount).toBe("1");
-    expect(observation.osahavainnot[0].direction).toBe("w");
-    expect(observation.osahavainnot[0].unknownUnknownCount).toBe("2");
+    expect(observation.species).toBe("SOMMOL");
+    expect(observation.subObservations[0].unknownFemaleCount).toBe(1);
+    expect(observation.subObservations[0].direction).toBe("270");
+    expect(observation.subObservations[0].unknownUnknownCount).toBe(2);
   });
 
   test("Nine", () => {
     const lineOfText = "sommol 1\"/2'sw";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("sommol");
-    expect(observation.osahavainnot[0].adultMaleCount).toBe("1");
-    expect(observation.osahavainnot[0].juvenileFemaleCount).toBe("2");
-    expect(observation.osahavainnot[0].direction).toBe("sw");
+    expect(observation.species).toBe("SOMMOL");
+    expect(observation.subObservations[0].adultMaleCount).toBe(1);
+    expect(observation.subObservations[0].juvenileFemaleCount).toBe(2);
+    expect(observation.subObservations[0].direction).toBe("225");
   });
 
   test("Ten", () => {
     const lineOfText = "grugru 100SW+-";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("grugru");
-    expect(observation.osahavainnot[0].unknownUnknownCount).toBe("100");
-    expect(observation.osahavainnot[0].direction).toBe("sw");
-    expect(observation.osahavainnot[0].bypassSide).toBe("+-");
+    expect(observation.species).toBe("GRUGRU");
+    expect(observation.subObservations[0].unknownUnknownCount).toBe(100);
+    expect(observation.subObservations[0].direction).toBe("225");
+    expect(observation.subObservations[0].bypassSide).toBe("0");
   });
 
   test("Eleven", () => {
     const lineOfText = "grugru 100SW-+";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownBypassSide");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("multipleBypassSides");
   });
 
   test("Twelve", () => {
-    const lineOfText = "grugru\n100-200SW+-";
+    const lineOfText = "grugru 100-200SW+-";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("bypassSideNotLast");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("bypassSideBeforeCounts");
   });
 
   test("Thirteen", () => {
-    const lineOfText = "grugru\n100SW+-,200 S +++\n, 300 \"W---";
+    const lineOfText = "grugru 100SW+-,200 S +++ , 300 \"W---";
 
-    const observation = parse(lineOfText);
+    const observation = parseLine(lineOfText, speciesCodeMap);
 
-    expect(observation.species).toBe("grugru");
+    expect(observation.species).toBe("GRUGRU");
     const { direction: direction0, unknownUnknownCount: unknownUnknownCount0,
-      bypassSide: bypassSide0, ...rest0 }
-      = observation.osahavainnot[0];
+      bypassSide: bypassSide0, notes: notes0, ...rest0 }
+      = observation.subObservations[0];
     const { direction: direction1, unknownUnknownCount: unknownUnknownCount1,
-      bypassSide: bypassSide1, ...rest1 }
-      = observation.osahavainnot[1];
+      bypassSide: bypassSide1, notes: notes1, ...rest1 }
+      = observation.subObservations[1];
     const { direction: direction2, adultUnknownCount: adultUnknownCount2,
-      bypassSide: bypassSide2, ...rest2 }
-      = observation.osahavainnot[2];
+      bypassSide: bypassSide2, notes: notes2, ...rest2 }
+      = observation.subObservations[2];
     for (const each of Object.values(rest0)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
     for (const each of Object.values(rest1)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
     for (const each of Object.values(rest2)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
-    expect(unknownUnknownCount0).toBe("100");
-    expect(direction0).toBe("sw");
-    expect(bypassSide0).toBe("+-");
-    expect(unknownUnknownCount1).toBe("200");
-    expect(direction1).toBe("s");
-    expect(bypassSide1).toBe("+++");
-    expect(adultUnknownCount2).toBe("300");
-    expect(direction2).toBe("w");
-    expect(bypassSide2).toBe("---");
+    expect(unknownUnknownCount0).toBe(100);
+    expect(direction0).toBe("225");
+    expect(bypassSide0).toBe("0");
+    expect(notes0).toBe("");
+    expect(unknownUnknownCount1).toBe(200);
+    expect(direction1).toBe("180");
+    expect(bypassSide1).toBe("3");
+    expect(notes1).toBe("");
+    expect(adultUnknownCount2).toBe(300);
+    expect(direction2).toBe("270");
+    expect(bypassSide2).toBe("-3");
+    expect(notes2).toBe("");
   });
 
   test("Fourteen", () => {
     const lineOfText = "grugru 100SW ,,,\n,200S";
 
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("extraCommas");
   });
 
@@ -229,7 +234,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E (jp";
 
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("incorrectBrackets");
   });
 
@@ -237,7 +242,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E jp)";
 
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("incorrectBrackets");
   });
 
@@ -245,7 +250,7 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E ((jp))";
 
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("incorrectBrackets");
   });
 
@@ -253,48 +258,50 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "Smol /4 E ((jp)";
 
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("incorrectBrackets");
   });
 
   test("three bypass sides in a row", () => {
     const lineOfText = "grugru 100SW+-, 200 S +++ , 300 \"W---";
 
-    const result = parse(lineOfText);
-    expect(result.species).toBe("grugru");
-    expect(result.osahavainnot[0].unknownUnknownCount).toBe("100");
-    expect(result.osahavainnot[1].unknownUnknownCount).toBe("200");
-    expect(result.osahavainnot[2].adultUnknownCount).toBe("300");
-    expect(result.osahavainnot[0].bypassSide).toBe("+-");
-    expect(result.osahavainnot[1].bypassSide).toBe("+++");
-    expect(result.osahavainnot[2].bypassSide).toBe("---");
-    expect(result.osahavainnot[0].direction).toBe("sw");
-    expect(result.osahavainnot[1].direction).toBe("s");
-    expect(result.osahavainnot[2].direction).toBe("w");
+    const result = parseLine(lineOfText, speciesCodeMap);
+    expect(result.species).toBe("GRUGRU");
+    expect(result.subObservations[0].unknownUnknownCount).toBe(100);
+    expect(result.subObservations[1].unknownUnknownCount).toBe(200);
+    expect(result.subObservations[2].adultUnknownCount).toBe(300);
+    expect(result.subObservations[0].bypassSide).toBe("0");
+    expect(result.subObservations[1].bypassSide).toBe("3");
+    expect(result.subObservations[2].bypassSide).toBe("-3");
+    expect(result.subObservations[0].direction).toBe("225");
+    expect(result.subObservations[1].direction).toBe("180");
+    expect(result.subObservations[2].direction).toBe("270");
   });
 
   test("quite long input", () => {
-    const lineOfText = "sommol 1ad2juv3subad4/1ad2juv3subad4/1ad2juv3subad4E--, 1/2 W";
-    const result = parse(lineOfText);
-    expect(result.species).toBe("sommol");
-    expect(result.osahavainnot[0].adultMaleCount).toBe("1");
-    expect(result.osahavainnot[0].juvenileMaleCount).toBe("2");
-    expect(result.osahavainnot[0].subadultMaleCount).toBe("3");
-    expect(result.osahavainnot[0].adultFemaleCount).toBe("1");
-    expect(result.osahavainnot[0].juvenileFemaleCount).toBe("2");
-    expect(result.osahavainnot[0].subadultFemaleCount).toBe("3");
-    expect(result.osahavainnot[0].adultUnknownCount).toBe("1");
-    expect(result.osahavainnot[0].juvenileUnknownCount).toBe("2");
-    expect(result.osahavainnot[0].subadultUnknownCount).toBe("3");
-    expect(result.osahavainnot[0].bypassSide).toBe("--");
-    expect(result.osahavainnot[0].direction).toBe("e");
+    const lineOfText = "sommol 1\"2'3subad4/1\"2'3subad4/1\"2'3subad4E--, 1/2 W";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    expect(result.species).toBe("SOMMOL");
+    expect(result.subObservations[0].adultMaleCount).toBe(1);
+    expect(result.subObservations[0].juvenileMaleCount).toBe(2);
+    expect(result.subObservations[0].subadultMaleCount).toBe(3);
+    expect(result.subObservations[0].adultFemaleCount).toBe(1);
+    expect(result.subObservations[0].juvenileFemaleCount).toBe(2);
+    expect(result.subObservations[0].subadultFemaleCount).toBe(3);
+    expect(result.subObservations[0].adultUnknownCount).toBe(1);
+    expect(result.subObservations[0].juvenileUnknownCount).toBe(2);
+    expect(result.subObservations[0].subadultUnknownCount).toBe(3);
+    expect(result.subObservations[0].bypassSide).toBe("-2");
+    expect(result.subObservations[0].direction).toBe("90");
     const { direction: direction1, unknownMaleCount: unknownMaleCount1,
-      unknownFemaleCount: unknownFemaleCount1, ...rest1 } = result.osahavainnot[1];
-    expect(unknownMaleCount1).toBe("1");
-    expect(unknownFemaleCount1).toBe("2");
-    expect(direction1).toBe("w");
+      unknownFemaleCount: unknownFemaleCount1, bypassSide, notes, ...rest1 } = result.subObservations[1];
+    expect(unknownMaleCount1).toBe(1);
+    expect(unknownFemaleCount1).toBe(2);
+    expect(direction1).toBe("270");
+    expect(bypassSide).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest1)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
@@ -302,8 +309,8 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2suba ssw";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownAge");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("unknownTerm:suba");
 
   });
 
@@ -311,113 +318,124 @@ describe("Test algorithm with all the cases mentioned in the customer's docs", (
     const lineOfText = "sommol 2sub ssw";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownAge");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("unknownTerm:sub");
   });
 
   test("wrong age 3", () => {
     const lineOfText = "sommol 2aaa ssw";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownAge");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("unknownTerm:aaa");
   });
 
   test("some wrong ages", () => {
-    const lineOfText = "sommol 2juv s, 2subad3\"e, 2/3/1a, 1'";
+    const lineOfText = "sommol 2' s, 2subad3\"e, 2/3/1a, 1'";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownAge");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("unknownTerm:a");
   });
 
   test("wrong direction 1", () => {
-    const lineOfText = "sommol 2juv ss";
+    const lineOfText = "sommol 2' ss";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownDirection");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("multipleDirections");
   });
 
   test("wrong direction 2", () => {
-    const lineOfText = "sommol 2juv sws";
+    const lineOfText = "sommol 2' sws";
 
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownDirection");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("multipleDirections");
   });
 
   test("not wrong direction", () => {
-    const lineOfText = "sommol 2juv ssw";
+    const lineOfText = "sommol 2' ssw";
 
     expect(() => {
-      parse(lineOfText);
-    }).not.toThrow("unknownDirection");
+      parseLine(lineOfText, speciesCodeMap);
+    }).not.toThrow("multipleDirections");
   });
 
   test("age is separated from direction", () => {
-    const lineOfText = "sommol 1subad2juv S";
-    const result = parse(lineOfText);
-    const { direction, subadultUnknownCount, juvenileUnknownCount,
-      ...rest } = result.osahavainnot[0];
-    expect(direction).toBe("s");
-    expect(subadultUnknownCount).toBe("1");
-    expect(juvenileUnknownCount).toBe("2");
+    const lineOfText = "sommol 1subad2' S";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    const { direction, subadultUnknownCount, juvenileUnknownCount, bypassSide, notes,
+      ...rest } = result.subObservations[0];
+    expect(direction).toBe("180");
+    expect(subadultUnknownCount).toBe(1);
+    expect(juvenileUnknownCount).toBe(2);
+    expect(bypassSide).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("age is separated from direction tricky version", () => {
-    const lineOfText = "sommol 1subad2juvS";
-    const result = parse(lineOfText);
-    const { direction, subadultUnknownCount, juvenileUnknownCount,
-      ...rest } = result.osahavainnot[0];
-    expect(direction).toBe("s");
-    expect(subadultUnknownCount).toBe("1");
-    expect(juvenileUnknownCount).toBe("2");
+    const lineOfText = "sommol 1subad2'S";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    const { direction, subadultUnknownCount, juvenileUnknownCount, bypassSide, notes,
+      ...rest } = result.subObservations[0];
+    expect(direction).toBe("180");
+    expect(subadultUnknownCount).toBe(1);
+    expect(juvenileUnknownCount).toBe(2);
+    expect(bypassSide).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("age is separated from direction extra tricky version", () => {
     const lineOfText = "sommol 1s";
-    const result = parse(lineOfText);
-    const { direction, unknownUnknownCount,
-      ...rest } = result.osahavainnot[0];
-    expect(direction).toBe("s");
-    expect(unknownUnknownCount).toBe("1");
+    const result = parseLine(lineOfText, speciesCodeMap);
+    const { direction, unknownUnknownCount, bypassSide, notes,
+      ...rest } = result.subObservations[0];
+    expect(direction).toBe("180");
+    expect(unknownUnknownCount).toBe(1);
+    expect(bypassSide).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("age is separated from direction extra special tricky version", () => {
     const lineOfText = "sommol 1su";
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownAge");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("unknownTerm:su");
 
   });
 
+  test("age synonym is parsed", () => {
+    const lineOfText = "sommol 1ad";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    expect(result.subObservations[0].adultUnknownCount).toBe(1);
+  });
+
+  test("age synonym is parsed 2", () => {
+    const lineOfText = "sommol 1juv";
+    const result = parseLine(lineOfText, speciesCodeMap);
+    expect(result.subObservations[0].juvenileUnknownCount).toBe(1);
+  });
 });
 
 
 describe("Randomized tests (fuzzing)", () => {
 
-
-  beforeEach(() => {
-    resetAll();
-  });
-
   test("Random battery w/ 1 000 valid strings", () => {
     for (let i = 0; i < 1000; ++i) {
       const lineOfText = makeValidLine(withValidSubObservation);
       expect(() => {
-        parse(lineOfText);
+        parseLine(lineOfText, speciesCodeMap);
       }).not.toThrow();
-      resetAll();
     }
   });
 
@@ -428,9 +446,8 @@ describe("Randomized tests (fuzzing)", () => {
     for (let i = 0; i < 1000000; ++i) {
       const line = makeValidLine(withValidSubObservation);
       expect(() => {
-        parse(line);
+        parseLine(line, speciesCodeMap);
       }).not.toThrow();
-      resetAll();
     }
   });
 
@@ -438,9 +455,8 @@ describe("Randomized tests (fuzzing)", () => {
     for (let i = 0; i < 1000; ++i) {
       const line = makeValidLine(withBypassSideWrong);
       expect(() => {
-        parse(line);
+        parseLine(line, speciesCodeMap);
       }).toThrow();
-      resetAll();
     }
   });
 
@@ -448,9 +464,8 @@ describe("Randomized tests (fuzzing)", () => {
     for (let i = 0; i < 1000; ++i) {
       const line = makeValidLine(withDirectionWrong);
       expect(() => {
-        parse(line);
+        parseLine(line, speciesCodeMap);
       }).toThrow();
-      resetAll();
     }
   });
 
@@ -458,56 +473,52 @@ describe("Randomized tests (fuzzing)", () => {
 
 describe("Bugfixes", () => {
 
-  beforeEach(() => {
-    resetAll();
-  });
-
   test("can't add observation with only direction", () => {
     const lineOfText = "kt s";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction2", () => {
     const lineOfText = "kt e";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction3", () => {
     const lineOfText = "kt sw";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction4", () => {
     const lineOfText = "kt ne";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction5", () => {
     const lineOfText = "kt nw";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction6", () => {
     const lineOfText = "kt se";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("can't add observation with only direction7", () => {
     const lineOfText = "kt sw";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
@@ -515,130 +526,143 @@ describe("Bugfixes", () => {
   test("can't add observation with 0 birds", () => {
     const lineOfText = "kt 0";
     expect(() => {
-      parse(lineOfText);
+      parseLine(lineOfText, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
   test("too long bypassSide 1", () => {
-    const lineOfText = "anacre 1ad+++++";
+    const lineOfText = "anacre 1\"+++++";
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownBypassSide");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("multipleBypassSides");
   });
 
   test("too long bypassSide 2", () => {
-    const lineOfText = "anacre 1ad-----";
+    const lineOfText = "anacre 1\"-----";
     expect(() => {
-      parse(lineOfText);
-    }).toThrow("unknownBypassSide");
+      parseLine(lineOfText, speciesCodeMap);
+    }).toThrow("multipleBypassSides");
   });
 
   test("AYTMAR is found (one with a slash)", () => {
     const line = "AYTMAR 1++";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).not.toThrow();
   });
 
   test("too many slashes 1", () => {
-    const line = "sommol 1juv/3ad/12'/    ++---    ";
+    const line = "sommol 1'/3\"/12'/    ++---    ";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).toThrow("extraSlashes");
   });
 
   test("too many slashes 2", () => {
-    const line = "sommol 1juv/3ad/12'////    ++---    ";
+    const line = "sommol 1'/3\"/12'////    ++---    ";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).toThrow("extraSlashes");
   });
 
   test("too many slashes 3", () => {
-    const line = "sommol 1juv/3ad/12', 2/3/1/, 2/3/1    ++---    ";
+    const line = "sommol 1'/3\"/12', 2/3/1/, 2/3/1    ++---    ";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).toThrow("extraSlashes");
   });
 
   test("too many slashes 4", () => {
     const line = "sommol //1/";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).toThrow("extraSlashes");
   });
 
   test("empty in-between slashes 1", () => {
     const line = "sommol 1//  +";
-    const result = parse(line);
-    const { unknownMaleCount, bypassSide,
-      ...rest } = result.osahavainnot[0];
-    expect(unknownMaleCount).toBe("1");
-    expect(result.species).toBe("sommol");
-    expect(bypassSide).toBe("+");
+    const result = parseLine(line, speciesCodeMap);
+    const { unknownMaleCount, bypassSide, direction, notes,
+      ...rest } = result.subObservations[0];
+    expect(unknownMaleCount).toBe(1);
+    expect(result.species).toBe("SOMMOL");
+    expect(bypassSide).toBe("1");
+    expect(direction).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("empty in-between slashes 2", () => {
     const line = "sommol /1/  +";
-    const result = parse(line);
-    const { unknownFemaleCount, bypassSide,
-      ...rest } = result.osahavainnot[0];
-    expect(unknownFemaleCount).toBe("1");
-    expect(result.species).toBe("sommol");
-    expect(bypassSide).toBe("+");
+    const result = parseLine(line, speciesCodeMap);
+    const { unknownFemaleCount, bypassSide, direction, notes,
+      ...rest } = result.subObservations[0];
+    expect(unknownFemaleCount).toBe(1);
+    expect(result.species).toBe("SOMMOL");
+    expect(bypassSide).toBe("1");
+    expect(direction).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("empty in-between slashes 3", () => {
     const line = "sommol //1  +";
-    const result = parse(line);
-    const { unknownUnknownCount, bypassSide,
-      ...rest } = result.osahavainnot[0];
-    expect(unknownUnknownCount).toBe("1");
-    expect(result.species).toBe("sommol");
-    expect(bypassSide).toBe("+");
+    const result = parseLine(line, speciesCodeMap);
+    const { unknownUnknownCount, bypassSide, direction, notes,
+      ...rest } = result.subObservations[0];
+    expect(unknownUnknownCount).toBe(1);
+    expect(result.species).toBe("SOMMOL");
+    expect(bypassSide).toBe("1");
+    expect(direction).toBe("");
+    expect(notes).toBe("");
     for (const each of Object.values(rest)) {
-      expect(each).toBe("");
+      expect(each).toBe(0);
     }
   });
 
   test("illegal bypassSides 1", () => {
     const line = "sommol 2 ++-";
     expect(() => {
-      parse(line);
-    }).toThrow("unknownBypassSide");
+      parseLine(line, speciesCodeMap);
+    }).toThrow("multipleBypassSides");
   });
 
   test("illegal bypassSides 2", () => {
     const line = "sommol 2 +++---";
     expect(() => {
-      parse(line);
-    }).toThrow("unknownBypassSide");
+      parseLine(line, speciesCodeMap);
+    }).toThrow("multipleBypassSides");
   });
 
   test("multiple ages in observation 1", () => {
-    const line = "Grugru 2\"adsubad'juv";
+    const line = "Grugru 2\"subad'pull";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).toThrow("observationHasMultipleAges");
   });
 
   test("multiple ages in observation 2", () => {
     const line = "parmaj 1\"''''''";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
     }).toThrow("observationHasMultipleAges");
   });
 
   test("empty observation", () => {
     const line = "sommol";
     expect(() => {
-      parse(line);
+      parseLine(line, speciesCodeMap);
+    }).toThrow("emptyObservation");
+  });
+
+  test("empty observation 2", () => {
+    const line = "sommol E";
+    expect(() => {
+      parseLine(line, speciesCodeMap);
     }).toThrow("emptyObservation");
   });
 
@@ -646,13 +670,44 @@ describe("Bugfixes", () => {
     let noteStr = "23, testi, hauki on kala";
     let noteStr2 = "testi 34, jee";
     let line = "sommol 321 (" + noteStr + "), 555 E (" + noteStr2 + ")";
-    let result = parse(line);
-    expect(result.species).toBe("sommol");
-    expect(result.osahavainnot[0].unknownUnknownCount).toBe("321");
-    expect(result.osahavainnot[0].notes).toBe(noteStr);
-    expect(result.osahavainnot[1].unknownUnknownCount).toBe("555");
-    expect(result.osahavainnot[1].direction).toBe("e");
-    expect(result.osahavainnot[1].notes).toBe(noteStr2);
+    let result = parseLine(line, speciesCodeMap);
+    expect(result.species).toBe("SOMMOL");
+    expect(result.subObservations[0].unknownUnknownCount).toBe(321);
+    expect(result.subObservations[0].notes).toBe(noteStr);
+    expect(result.subObservations[1].unknownUnknownCount).toBe(555);
+    expect(result.subObservations[1].direction).toBe("90");
+    expect(result.subObservations[1].notes).toBe(noteStr2);
   });
 
+  test("notes can include times", () => {
+    let noteStr = "klo 12.30 aamulla";
+    let noteStr2 = "12.1.2021 16:70";
+    let line = "sommol 1 (" + noteStr + "), 3 (" + noteStr2 + ")";
+    let result = parseLine(line, speciesCodeMap);
+    expect(result.subObservations[0].notes).toBe(noteStr);
+    expect(result.subObservations[1].notes).toBe(noteStr2);
+  });
+
+  test("chicks are parsed ok", () => {
+    const line = "sommol 1pull/2pull/3pull";
+    let result = parseLine(line, speciesCodeMap);
+    expect(result.subObservations[0].chickMaleCount).toBe(1);
+    expect(result.subObservations[0].chickFemaleCount).toBe(2);
+    expect(result.subObservations[0].chickUnknownCount).toBe(3);
+  });
+
+  test("flocks can have a common direction", () => {
+    const line = "sommol E 1',2\",7";
+    let result = parseLine(line, speciesCodeMap);
+    expect(result.subObservations[0].direction).toBe("90");
+    expect(result.subObservations[1].direction).toBe("90");
+    expect(result.subObservations[2].direction).toBe("90");
+  });
+
+  test("if common direction is given, it's not possible to give directions to individual flocks", () => {
+    const line = "sommol E 1',2\"W,7";
+    expect(() => {
+      parseLine(line, speciesCodeMap);
+    }).toThrow("hasAlreadyCommonDirection");
+  });
 });

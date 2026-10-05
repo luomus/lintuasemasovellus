@@ -1,0 +1,16 @@
+import "./addLocalObservationTests/input_edit_test.cy";
+import "./authenticationTests/login_test.cy";
+import "./dayDetails/observation_day_species_test.cy";
+import "./frontpageContentsTests/fields_and_modification_test.cy";
+import "./frontpageContentsTests/fields_authenitication_test.cy";
+import "./frontpageContentsTests/navigation_test.cy";
+import "./frontpageContentsTests/nocturnal_migration_test.cy";
+import "./shorthandfieldTests/shorthand_invalid_test.cy";
+import "./shorthandfieldTests/shorthand_valid_test.cy";
+import "./xdatabaseTests/copy_yesterday.cy";
+import "./xdatabaseTests/drafts.cy";
+import "./xdatabaseTests/observation_day_test.cy";
+import "./xdatabaseTests/observations_on_top.test.cy";
+import "./xShorthandModificationTest/shorthand_deletion_test.cy";
+import "./xShorthandModificationTest/shorthand_modification_new_test.cy";
+import "./xShorthandModificationTest/shorthand_modification_test.cy";

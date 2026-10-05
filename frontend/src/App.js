@@ -1,132 +1,147 @@
 import React, { useEffect, useState } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { Switch, Route } from "react-router-dom";
+import CssBaseline from "@mui/material/CssBaseline";
+import {
+  Route,
+  createRoutesFromElements,
+  RouterProvider,
+  createHashRouter
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { HomePage, UserManual, DayList, DayDetails, Login } from "./pages";
-import NavBar from "./globalComponents/NavBar";
-import Footer from "./globalComponents/Footer";
+import { HomePage, UserManual, DayList, DayDetails, Logout, ClearObservatory } from "./pages";
 import { getPerson, getCurrentUser } from "./services";
 import { setUser } from "./reducers/userReducer";
 import { setUserObservatory } from "./reducers/userObservatoryReducer";
-import { retrieveDays } from "./reducers/daysReducer";
 import { initializeStations } from "./reducers/obsStationReducer";
-import { makeStyles } from "@material-ui/core/";
 import { clean as DraftsClean } from "./services/draftService";
+import { initializeSpecies } from "./reducers/speciesReducer";
+import LoadingSpinner from "./globalComponents/LoadingSpinner";
+import { makeStyles } from "@mui/styles";
+import { createSelector } from "reselect";
+import { AppContext } from "./AppContext";
+import MainContainer from "./globalComponents/MainContainer";
+import ProtectedRoute from "./globalComponents/ProtectedRoute";
+import { ErrorPage, RouterErrorPage } from "./globalComponents/ErrorPage";
+
+const useStyles = makeStyles({
+  container: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column"
+  }
+});
+
+const stationSelector = createSelector(
+  [state => state.stations.data, state => state.userObservatory],
+  (stations, userObservatory) => (
+    stations?.find(s => s.observatory === userObservatory) || null
+  )
+);
 
 const App = () => {
-
-  const useStyles = makeStyles({
-    flexi: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "column",
-      height: "95vh",
-      width:"98vw",
-    },
-    spinner: {
-      padding: "0px",
-      margin: "60px 60px",
-      fontSize: "10px",
-      position: "relative",
-      borderTop: "1.1em solid lightgrey",
-      borderRight: "1.1em solid lightgrey",
-      borderBottom: "1.1em solid lightgrey",
-      borderLeft: "1.1em solid #2691d9",
-      animation: "$spin 1.1s infinite linear",
-      "&, :after": {
-        borderRadius: "50%",
-        width: "10em",
-        height: "10em",
-      },
-    },
-    "@keyframes spin": {
-      "0%": {
-        transform: "rotate(0deg)",
-      },
-      "100%": {
-        transform: "rotate(360deg)",
-      },
-    },
-  });
-
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
+  const [contextDataLoading, setContextDataLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const user = useSelector(state => state.user);
-  const userObservatory = useSelector(state => state.userObservatory);
+  const observatory = useSelector(state => state.userObservatory);
+
+  const station = useSelector(stationSelector);
+  const stations = useSelector(state => state.stations.data);
+  const stationsError = useSelector(state => state.stations.error);
+  const speciesData = useSelector(state => state.speciesData.data);
+  const speciesDataError = useSelector(state => state.speciesData.error);
 
   useEffect(() => {
-    console.log(user.id);
-    dispatch(initializeStations());
-    dispatch(retrieveDays());
-    if (user.id) return;
-    getPerson().then(response => response.data).then(response => { dispatch(setUser(response)); setLoading(false); }).catch((error) => { console.error("getPerson error", error); setLoading(false); });
-    DraftsClean();
-  }, [dispatch, user]);
-
-  useEffect(() => {
-    getCurrentUser()
+    getPerson()
+      .then(response => response.data)
+      .then(response => {
+        dispatch(setUser(response));
+        return getCurrentUser();
+      })
       .then(currentUser => {
         const observatory = currentUser.data[0].observatory;
         if (observatory) {
           dispatch(setUserObservatory(observatory));
         }
-      });
-  }, [user]);
 
-  if (loading) {
+        setContextDataLoading(true);
+        dispatch(initializeStations());
+        dispatch(initializeSpecies());
+
+        DraftsClean();
+
+        setUserLoading(false);
+      })
+      .catch((e) => {
+        if (e.status !== 401) {
+          console.error(e);
+          setHasError(true);
+        }
+        setUserLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (stations && speciesData) {
+      setContextDataLoading(false);
+    }
+  }, [stations, speciesData]);
+
+  useEffect(() => {
+    if (stationsError || speciesDataError) {
+      setHasError(true);
+      setContextDataLoading(false);
+    }
+  }, [stationsError, speciesDataError]);
+
+  if (userLoading || contextDataLoading) {
     return (
-      <div className={classes.flexi}>
-        <div className={classes.spinner}>
-        </div>
-      </div>
+      <LoadingSpinner/>
     );
-  } else if (!user.id && !loading) {
+  } else if (hasError) {
     return (
-      <CssBaseline>
-        <div>
-          <Login />
-          <Footer />
-        </div>
-      </CssBaseline>
-    );
-  } else if (userObservatory !== "") {
-    return (
-      <CssBaseline>
-        <div>
-          <NavBar user={user} />
-          <Switch>
-            <Route path="/listdays">
-              <DayList userObservatory={userObservatory} />
-            </Route>
-            <Route path="/daydetails/:day">
-              <DayDetails userObservatory={userObservatory} />
-            </Route>
-            <Route path="/manual">
-              <UserManual />
-            </Route>
-            <Route path="/">
-              <HomePage user={user} userObservatory={userObservatory} />
-            </Route>
-          </Switch>
-          <Footer />
-        </div>
-      </CssBaseline>
-    );
-  } else {
-    return (
-      <CssBaseline>
-        <div>
-          <NavBar user={user} />
-          <Footer />
-        </div>
-      </CssBaseline>
+      <ErrorPage/>
     );
   }
 
+  let showNavBar = true;
+  let appContext;
+
+  if (!user.id) {
+    showNavBar = false;
+  } else if (station) {
+    appContext = {
+      user,
+      observatory,
+      station,
+      stations,
+      speciesData
+    };
+  }
+
+  const router = createHashRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<MainContainer showNavBar={showNavBar} />} errorElement={<RouterErrorPage />}>
+        <Route path="/logout" element={<Logout />}></Route>
+        <Route path="/changeObservatory" element={<ClearObservatory />}></Route>
+        <Route path="/listdays" element={<ProtectedRoute><DayList /></ProtectedRoute>}/>
+        <Route className={classes.container} path="/daydetails/:day" element={<ProtectedRoute><DayDetails /></ProtectedRoute>}/>
+        <Route path="/manual" element={<ProtectedRoute><UserManual /></ProtectedRoute>}/>
+        <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>}/>
+      </Route>
+    )
+  );
+
+  return (
+    <CssBaseline>
+      <AppContext.Provider value={appContext}>
+        <RouterProvider router={router} />
+      </AppContext.Provider>
+    </CssBaseline>
+  );
 };
 
 export default App;

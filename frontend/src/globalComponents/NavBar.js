@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from "react";
-import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Toolbar, IconButton, Typography, Box, Button,
-  Dialog, DialogTitle, DialogContent, DialogActions,
-  FormControl, InputLabel, Select, MenuItem, SvgIcon
-} from "@material-ui/core";
-import { Dehaze, Replay } from "@material-ui/icons";
-import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import { getLogout, postUserObservatory } from "../services";
+import React, { useEffect, useState } from "react";
+import Drawer from "@mui/material/Drawer";
+import { makeStyles } from "@mui/styles";
+import {
+  AppBar,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  SvgIcon,
+  TextField,
+  Toolbar,
+  Typography
+} from "@mui/material";
+import { Dehaze, Replay } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { postUserObservatory } from "../services";
 import { setUserObservatory } from "../reducers/userObservatoryReducer";
-import { setUser } from "../reducers/userReducer";
 import store from "../store";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -47,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    width: `calc(100% - ${theme.spacing(2)})`
   },
   submit: {
     minWidth: 120,
@@ -58,22 +68,21 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const NavBar = ({ user }) => {
-
+const NavBar = () => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.user);
+  const observatory = useSelector(state => state.userObservatory);
+  const stations = useSelector(state => state.stations.data);
 
   const [state, setState] = useState({
     right: false
   });
-  const [observatory, setObservatory] = useState("");
+  const [selectedObservatory, setSelectedObservatory] = useState("");
   const [selectorOpen, setSelectorOpen] = useState(false);
 
-  const userObservatory = useSelector(state => state.userObservatory);
-  const stations = useSelector(state => state.stations);
-
-  const observatoryIsSelected = Boolean(userObservatory !== "");
+  const observatoryIsSelected = Boolean(observatory !== "");
 
   useEffect(() => {
     if (observatoryIsSelected) {
@@ -81,73 +90,69 @@ const NavBar = ({ user }) => {
     } else {
       setSelectorOpen(true);
     }
-  }, [userObservatory]);
+  }, [observatory]);
 
   const toggleMenu = (slider, open) => () => {
     setState({ ...state, [slider]: open });
+  };
+
+  const handleDialogClose = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    handleSelectorClose();
   };
 
   const handleSelectorClose = () => {
     setSelectorOpen(false);
   };
 
-  const handleSelectorOpen = () => {
-    store.dispatch(setUserObservatory(""));
-    setSelectorOpen(true);
-  };
-
   const selectUserObservatory = (event) => {
     event.preventDefault();
-    postUserObservatory({ observatory:observatory });
-    store.dispatch(setUserObservatory(observatory));
+    postUserObservatory({ observatory:selectedObservatory });
+    store.dispatch(setUserObservatory(selectedObservatory));
   };
-
-  const handleLogout = () => {
-    getLogout()
-      .then(() => {
-        dispatch(setUser({}));
-        window.location.reload(false);
-      });
-  };
-
 
   const observatorySelector =
-    <Dialog id="observatory-dialog" disableBackdropClick disableEscapeKeyDown open={selectorOpen} onClose={handleSelectorClose}>
+    <Dialog id="observatory-dialog" disableEscapeKeyDown open={selectorOpen} onClose={handleDialogClose}>
       <DialogTitle>{t("chooseObservatory")}</DialogTitle>
       <DialogContent>
         <form id="observatorySelect" onSubmit={selectUserObservatory} className={classes.container}>
-          <FormControl required className={classes.formControl}>
-            <InputLabel id="Lintuasema">{t("observatory")}</InputLabel>
-            <Select
-              autoWidth={true}
-              labelId="observatory"
-              id="select-observatory"
-              value={observatory}
-              onChange={(event) => setObservatory(event.target.value)}
-            >
-              {
-                stations.map((station, i) =>
-                  <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
-                    {station.observatory.replace("_", " ")}
-                  </MenuItem>
-                )
+          <TextField
+            required
+            className={classes.formControl}
+            select
+            label={t("observatory")}
+            id="select-observatory"
+            slotProps={{
+              select: {
+                value: selectedObservatory,
+                onChange: (event) => setSelectedObservatory(event.target.value)
               }
-            </Select>
-          </FormControl>
+            }}
+          >
+            {
+              (stations || []).map((station, i) =>
+                <MenuItem id={station.observatory.replace(/ /g, "")} value={station.observatory} key={i}>
+                  {station.observatory.replace("_", " ")}
+                </MenuItem>
+              )
+            }
+          </TextField>
         </form>
       </DialogContent>
       <DialogActions>
-        <Button id="submit" disabled={!observatory} form="observatorySelect" onClick={handleSelectorClose} color="primary" type="submit">
+        <Button id="submit" disabled={!selectedObservatory} form="observatorySelect" onClick={handleSelectorClose} color="primary" type="submit">
           {t("save")}
         </Button>
       </DialogActions>
     </Dialog>;
 
   const observatoryAndUserInfo = () => {
-    if (userObservatory !== "") {
+    if (observatory !== "") {
       return (
         <Typography className={classes.title}>
-          {userObservatory.replace("_", " ")} / {t("User")}: {user.fullName}
+          {observatory.replace("_", " ")} / {t("User")}: {user.fullName}
         </Typography>
       );
     }
@@ -160,13 +165,14 @@ const NavBar = ({ user }) => {
 
   const selectObservatory = observatoryIsSelected
     ?
-    <Button className={classes.userButton}
-      onClick={handleSelectorOpen}
-      id="observatorySelector"
-      startIcon={<Replay />}
-    >
-      {t("changeObservatory")}
-    </Button>
+    <Link to='/changeObservatory'>
+      <Button className={classes.userButton}
+        id="observatorySelector"
+        startIcon={<Replay />}
+      >
+        {t("changeObservatory")}
+      </Button>
+    </Link>
     :
     null;
 
@@ -191,7 +197,6 @@ const NavBar = ({ user }) => {
             {observatoryAndUserInfo()}
             <Link to='/logout'>
               <Button className={classes.userButton}
-                onClick={handleLogout}
                 id="logout-link"
                 startIcon={<SvgIcon>
                   <path d="M0 0h24v24H0z" fill="none"/>
@@ -210,7 +215,3 @@ const NavBar = ({ user }) => {
 };
 
 export default NavBar;
-
-NavBar.propTypes = {
-  user: PropTypes.object
-};

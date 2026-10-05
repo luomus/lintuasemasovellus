@@ -28,9 +28,9 @@ def addObservationperiod(day_id, location, observationType, startTime, endTime):
         location_id=locId, observatoryday_id=day_id)#Tähän pitää lisätä pikakirjoitus sitten, kun se on frontissa tehty. Olio pitää luoda ennen tätä kohtaa (shorthand_id=req['shorthand_id'])
     db.session().add(obsp)
     db.session().commit()
-    
+
     obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
-    
+
     return { 'id': obspId }
 
 
@@ -44,7 +44,39 @@ def setObservationId(observationperiod_id_old, observationperiod_id_new):
         x.observationperiod_id = observationperiod_id_new
     db.session().commit()
 
-def getObservationPeriodsByDayId(observatoryday_id):     
+def getObservationPeriodCountsByDayId(observatoryday_id):
+    stmt = text(
+        " SELECT " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname,"
+        " COUNT(DISTINCT " + prefix + "Observationperiod.id) AS obsperiod_count"
+        " FROM " + prefix + "Observationperiod"
+        " JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
+        " JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
+        " WHERE " + prefix + "Observationperiod.observatoryday_id = :dayId"
+        " AND " + prefix + "Type.name NOT IN ('Paikallinen', 'Hajahavainto')"
+        " AND " + prefix + "Observationperiod.is_deleted = 0"
+        " AND " + prefix + "Type.is_deleted = 0"
+        " AND " + prefix + "Location.is_deleted = 0"
+        " GROUP BY " + prefix + "Type.id, " + prefix + "Location.id, " + prefix + "Type.name, " + prefix + "Location.name"
+        " ORDER BY " + prefix + "Type.id, " + prefix + "Location.id"
+    ).params(
+        dayId = observatoryday_id
+    )
+
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
+
+    response = []
+
+    for row in res:
+        response.append({
+            'observationType': row.typename,
+            'location': row.locationname,
+            'observationPeriodCount': row.obsperiod_count
+        })
+
+    return jsonify(response)
+
+def getObservationPeriodsByDayId(observatoryday_id):
     stmt = text(" SELECT " + prefix + "Observationperiod.id AS obsperiod_id,"
                 " " + prefix + "Observationperiod.start_time, " + prefix + "Observationperiod.end_time,"
                 " " + prefix + "Type.name AS typename, " + prefix + "Location.name AS locationname,"
@@ -54,23 +86,23 @@ def getObservationPeriodsByDayId(observatoryday_id):
                 " JOIN " + prefix + "Type ON " + prefix + "Type.id = " + prefix + "Observationperiod.type_id"
                 " JOIN " + prefix + "Location ON " + prefix + "Location.id = " + prefix + "Observationperiod.location_id"
                 " JOIN " + prefix + "Observatoryday ON " + prefix + "Observatoryday.id = " + prefix + "Observationperiod.observatoryday_id"
-                " JOIN " + prefix + "Observation ON " + prefix + "Observation.observationperiod_id = " + prefix + "Observationperiod.id"
+                " LEFT JOIN " + prefix + "Observation ON " + prefix + "Observation.observationperiod_id = " + prefix + "Observationperiod.id AND " + prefix + "Observation.is_deleted = 0"
                 " WHERE " + prefix + "Observatoryday.id = :dayId"
                 " AND " + prefix + "Observationperiod.is_deleted = 0"
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
                 " AND " + prefix + "Observatoryday.is_deleted = 0"
-                " AND " + prefix + "Observation.is_deleted = 0"
                 " GROUP BY " + prefix + "Observationperiod.id, " + prefix + "Observationperiod.start_time,"
                 " " + prefix + "Observationperiod.end_time, " + prefix + "Type.name, " + prefix + "Location.name, " + prefix + "Observatoryday.id"
                 " ORDER BY " + prefix + "Observationperiod.start_time").params(dayId = observatoryday_id)
 
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     response = []
 
     for row in res:
-        
+
         starthours = ""
         startminutes = ""
         endhours = ""
@@ -101,7 +133,7 @@ def getObservationPeriodsByDayId(observatoryday_id):
             'day_id': row.day_id,
             'speciesCount': row.speciescount,
         })
-  
+
     return jsonify(response)
 
 def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
@@ -110,7 +142,7 @@ def getObsPerId(starttime, endtime, type_id, location_id, observatoryday_id):
 
 def getObservationperiodList():
     observationPeriods = Observationperiod.query.filter_by(is_deleted=0).all()
-    
+
     ret = []
 
     for obsPeriod in observationPeriods:
@@ -129,13 +161,63 @@ def getObservationperiodList():
 def getObservationperiods():
     return Observationperiod.query.filter_by(is_deleted=0).all()
 
-def deleteObservationperiod(obsperiod_id):
-    delete_shorthands_by_obsperiod(obsperiod_id)
+def deleteObservationperiod(obsperiod_id, commit=True):
     deleted_obsperiod = Observationperiod.query.get(obsperiod_id)
+    if deleted_obsperiod is None:
+        raise ValueError(f'Observation period {obsperiod_id} not found')
+    if deleted_obsperiod.is_deleted:
+        raise ValueError(f'Observation period {obsperiod_id} has already been deleted')
+    delete_shorthands_by_obsperiod(obsperiod_id, commit=commit)
     deleted_obsperiod.is_deleted = 1
-    db.session.commit()
+    if commit:
+        db.session.commit()
 
-def delete_observationperiods(req):
+def delete_observationperiods(req, commit=True):
     for observationperiod_id in req:
-        deleteObservationperiod(observationperiod_id)
-    
+        deleteObservationperiod(observationperiod_id, commit=commit)
+
+def find_overlapping_periods(periods, day, observatory_id, exclude_ids=None):
+    excluded = {int(exclude_id) for exclude_id in (exclude_ids or [])}
+
+    new_periods = []
+    for i, obsperiod in enumerate(periods):
+        new_periods.append((i, _to_hhmm(obsperiod['startTime']), _to_hhmm(obsperiod['endTime'])))
+
+    existing_periods = []
+    existing_day = Observatoryday.query.filter_by(day=day, observatory_id=observatory_id, is_deleted=0).first()
+    if existing_day:
+        rows = Observationperiod.query.filter(
+            Observationperiod.observatoryday_id == existing_day.id,
+            Observationperiod.is_deleted == 0
+        ).join(
+            Observationperiod.type
+        ).filter(
+            Type.name.notin_(('Paikallinen', 'Hajahavainto'))
+        ).all()
+        for period in rows:
+            if period.id in excluded:
+                continue
+            existing_periods.append((period.id, _to_hhmm(period.start_time), _to_hhmm(period.end_time)))
+
+    overlaps = []
+    for idx, (i, start, end) in enumerate(new_periods):
+        for (pid, e_start, e_end) in existing_periods:
+            if _periods_overlap(start, end, e_start, e_end):
+                overlaps.append({'periodOrderNum': i, 'startTime': start, 'endTime': end, 'conflictsWithExistingPeriodId': pid})
+        for (j, o_start, o_end) in new_periods[idx + 1:]:
+            if _periods_overlap(start, end, o_start, o_end):
+                overlaps.append({'periodOrderNum': i, 'startTime': start, 'endTime': end, 'conflictsWithPeriodOrderNum': j})
+    return overlaps
+
+def _to_hhmm(value):
+    if isinstance(value, str):
+        time_part = value.split(' ')[-1] if ' ' in value else value
+        hours, minutes = time_part.split(':')[0:2]
+        return hours[-2:].zfill(2) + ':' + minutes[0:2]
+    return value.strftime('%H:%M')
+
+
+def _periods_overlap(start_a, end_a, start_b, end_b):
+    return (start_b < end_a and start_a <= start_b) or \
+        (start_b < end_a <= end_b) or \
+        (start_b <= start_a < end_b)

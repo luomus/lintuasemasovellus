@@ -5,6 +5,7 @@ from application.api.classes.observation.models import Observation
 from application.api.classes.shorthand.models import Shorthand
 from application.api.classes.location.services import getLocationId
 from application.api.classes.type.services import getTypeIdByName
+from application.api.classes.catch.services import get_all as get_all_catches
 from application.db import db, prefix
 from sqlalchemy.sql import text
 from application.api.classes.catch.services import set_catch_day_id
@@ -14,23 +15,24 @@ from flask_login import current_user
 from application.api.classes.account.models import Account
 
 from datetime import datetime, date
+import json
 
 def addDayFromReq(req):
     observatory_id = getObservatoryId(req['observatory'])
     day=datetime.strptime(req['day'], '%d.%m.%Y')
-    
-    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id) 
+
+    new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id)
 
     addDay(new_obsday) #Calls function to add new observatoryday to database
     addedId = getDayId(new_obsday.day, new_obsday.observatory_id) #Gets the id of the newly added day which is then returned
-    
+
     return { 'id': addedId }
 
 def addDay(obsday): #Function for adding a new observatoryday into the database
     d = Observatoryday.query.filter_by(day = obsday.day, observatory_id = obsday.observatory_id, is_deleted = 0).first()
     if  not d and obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None: #Day doesn't exist and mandatory fields are filled
         db.session().add(obsday)
-        db.session().commit() 
+        db.session().commit()
         dayId=getDayId(obsday.day, obsday.observatory_id)
         createEmptyObsPeriods(dayId)#Auxiliary observation periods are added upon day creation
     elif obsday.observatory_id is not None and obsday.day is not None and obsday.observers is not None: #Day already exists
@@ -41,6 +43,11 @@ def addDay(obsday): #Function for adding a new observatoryday into the database
         db.session.commit()
         set_new_day_id(d.id, obsday.id)
         set_catch_day_id(d.id, obsday.id)
+
+def deleteDay(obsday_id):
+    day = Observatoryday.query.get(obsday_id)
+    day.is_deleted = 1
+    db.session().commit()
 
 #Check if a period for local observations has already been added today
 def checkPeriod(dayId, type, gau):
@@ -60,7 +67,7 @@ def checkPeriod(dayId, type, gau):
         return False
 
 def createEmptyObsPeriods(dayId):
-    '''Local and scatter (miscellaneous) observations are added via updating input fields on the daydetails page. 
+    '''Local and scatter (miscellaneous) observations are added via updating input fields on the daydetails page.
     This function creates 3 observation periods for the given day. In order to add observations, they must have an observation period to
     be added into. The location (Gåu or not Gåu) and type (Local or Scatter) are also defined by the observation period that the observation
     goes into, which is why three periods must be created. The periods are created when a new day is made, and are hidden from the observation
@@ -98,70 +105,23 @@ def createEmptyObsPeriods(dayId):
     if added:
         db.session().commit()
 
-#Add a new observation to local obsperiod for local observations, or edit an old one if this species has already been observed locally:
-def editLocalObs(obsday_id, obserid, species, count, gau):
-    if not current_user: #First we find the current user's userId (userId on the account - table)
-        u="MA.4658" #This is my (Ville) userId, to be used if the user's own id is not found.
-    else:
-        u = current_user.get_id()
-        user = Account.query.filter_by(id=u).first()
-        if user:
-            u=user.userId
-        else:
-            u="MA.4658"
-    if gau==1:
-        loc1=getLocationId("Luoto Gåu", obserid) #find location Id to use for finding the right obsperiod
-    else:
-        loc1=getLocationId("Bunkkeri", obserid)
-    typid=getTypeIdByName("Paikallinen")#find type Id to use for finding the right obsperiod
-    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first() #find the correct obsperiod
-    if not per:
-        createEmptyObsPeriods(obsday_id)#this tries to create empty obsperiods if one isn't found. acts as a backup and "shouldn't" ever be needed, because these periods should have already been made
-    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first() #find observations for this species in this specific obsperiod
-    if obs: #observation already exists (=local observation for this species has already been edited)
-        obs.total_count=count #easy way to modify table entry
-        db.session().commit()
-    else: #observation does not exist, so we create it
-        #the different counts are intended for migrant observations and are not needed for local observations, so we just mark them all as unknown
-        #the shorthand id is hardcoded and refers to an empty one in the database. I think it doesn't matter even if this id doesn't refer to a real
-        #shorthand id, but might be worth checking if the app is not adding local observations
-        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0, 
-            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
-            #Note! account_id is actually referring to the userid column in the account table (this is not my fault).
-        db.session().add(subobs)
-        db.session().commit()
 
-def editScatterObs(obsday_id, obserid, species, count): #This is functionally the same as editLocalObs but just does it for scatter observations
-    if not current_user:
-        u="MA.4658" #This is my (Ville) userId, to be used if the user's own id is not found.
+def edit_local_obs(user_id, day_id, observatory_id, species, shorthand, observation, gau):
+    if gau == 1:
+        loc_id = getLocationId("Luoto Gåu", observatory_id)
     else:
-        u = current_user.get_id()
-        user = Account.query.filter_by(id=u).first()
-        if user:
-            u=user.userId
-        else:
-            u="MA.4658"
-    loc1=getLocationId("Bunkkeri", obserid)
-    typid=getTypeIdByName("Hajahavainto")
-    per=Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=obsday_id, location_id=loc1, type_id=typid).first()
-    if not per:
-        createEmptyObsPeriods(obsday_id)
-    obs=Observation.query.filter_by(observationperiod_id=per.id, species=species).first()
-    if obs: #observation already exists (=local observation for this species has already been edited)
-        print(obs.total_count)
-        print("doesex")
-        obs.total_count=count
-        db.session().commit()
-    else: #observation does not exist, so we create it
-        print("doesnotex")
-        subobs=Observation(adultUnknownCount= 0, adultFemaleCount= 0, adultMaleCount= 0, juvenileUnknownCount= 0,
-            juvenileFemaleCount= 0, juvenileMaleCount= 0, subadultUnknownCount= 0, subadultFemaleCount= 0,
-            subadultMaleCount= 0, unknownUnknownCount= count, unknownMaleCount= 0, unknownFemaleCount= 0, direction= '',
-            bypassSide= '', notes= '', species= species, account_id= u, observationperiod_id=per.id,total_count=count, shorthand_id=11387)
-        db.session().add(subobs)
-        db.session().commit()
+        loc_id = getLocationId("Bunkkeri", observatory_id)
+
+    type_id = getTypeIdByName("Paikallinen")
+
+    _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorthand, observation)
+
+
+def edit_scatter_obs(user_id, day_id, observatory_id, species, shorthand, observation): #This is functionally the same as editLocalObs but just does it for scatter observations
+    loc_id = getLocationId("Bunkkeri", observatory_id)
+    type_id = getTypeIdByName("Hajahavainto")
+
+    _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorthand, observation)
 
 def set_new_day_id(observatoryday_id_old, observatoryday_id_new):
     obsp = Observationperiod.query.filter_by(observatoryday_id = observatoryday_id_old).all()
@@ -175,11 +135,11 @@ def listDays():
     ret = []
     for obsday in dayObjects:
         dayDatetime = obsday.day
-        if not isinstance(dayDatetime, datetime): 
+        if not isinstance(dayDatetime, datetime):
             dayDatetime=datetime.strptime(dayDatetime, '%d.%m.%Y')
         dayString = dayDatetime.strftime('%d.%m.%Y')
         ret.append({ 'id': obsday.id, 'day': dayString, 'observers': obsday.observers, 'comment': obsday.comment, 'selectedactions': obsday.selectedactions, 'observatory': getObservatoryName(obsday.observatory_id) })
-    
+
     return ret
 
 def getDays(): #Finds all days in the table
@@ -193,12 +153,12 @@ def get_day_without_id(day, observatory): #Tries to find a day without knowing t
     if not isinstance(day, date) and not day == '0NaN.0NaN.NaN':
         day = datetime.strptime(day, '%d.%m.%Y')
     obsday = Observatoryday.query.filter_by(day = day, observatory_id = getObservatoryId(observatory), is_deleted = 0).first()
-    res = []
+
     if not obsday:
-        res.append({ 'id': 0, 'comment': "", 'observers': "", 'selectedactions': ""})
+        return { 'id': None, 'comment': "", 'observers': "", 'catches': []}
     else:
-        res.append({ 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': obsday.selectedactions})
-    return res
+        selectedactions = json.loads(obsday.selectedactions) if obsday.selectedactions else None
+        return { 'id': obsday.id, 'comment': obsday.comment or "", 'observers': obsday.observers, 'selectedactions': selectedactions, 'catches': get_all_catches(obsday.id) }
 
 def getDayId(day, observatory_id): #finds dayid with day(=date) and observatory id
     d = Observatoryday.query.filter_by(day = day, observatory_id = observatory_id, is_deleted = 0).first()
@@ -215,7 +175,8 @@ def getLatestDays(observatory_id): #Finds the date and total amount of observati
                 " GROUP BY day"
                 " ORDER BY day DESC").params(observatory_id = observatory_id)
 
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     response = []
     i = 0
@@ -226,31 +187,31 @@ def getLatestDays(observatory_id): #Finds the date and total amount of observati
         dayDatetime = row[0]
         if not isinstance(dayDatetime, datetime):
             dayDatetime = datetime.strptime(dayDatetime, '%Y-%m-%d %H:%M:%S.%f')
-        dayString = dayDatetime.strftime('%d.%m.%Y')   
+        dayString = dayDatetime.strftime('%d.%m.%Y')
         response.append({
             "day": dayString,
             "speciesCount": row.species_count
             })
-      
+
     return response
 
 #These functions are for editing parts of observatorydays
 def update_comment(obsday_id, comment):
     day_old=Observatoryday.query.get(obsday_id)
     day_new = Observatoryday(day = day_old.day, comment = comment, observers = day_old.observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
-    
+
     return update_edited_day(day_new, day_old)
 
 def update_observers(obsday_id, observers):
     day_old=Observatoryday.query.get(obsday_id)
     day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = observers, selectedactions = day_old.selectedactions, observatory_id = day_old.observatory_id)
-    
+
     return update_edited_day(day_new, day_old)
 
 def update_actions(obsday_id, actions):
     day_old=Observatoryday.query.get(obsday_id)
     day_new = Observatoryday(day = day_old.day, comment = day_old.comment, observers = day_old.observers, selectedactions = actions, observatory_id = day_old.observatory_id)
-    
+
     return update_edited_day(day_new, day_old)
 
 def update_edited_day(day_new, day_old): #This function is called at the end of other update-functions. It deletes the original entry in the database and adds the new, edited one
@@ -263,3 +224,61 @@ def update_edited_day(day_new, day_old): #This function is called at the end of 
     db.session().commit()
 
     return {"id" : day_new.id}
+
+def get_observation_from_object(sub_observation, species, obspId, shorthand_id, user_id):
+    birdCount = sub_observation['adultUnknownCount'] + sub_observation['adultFemaleCount'] \
+                + sub_observation['adultMaleCount'] + sub_observation['juvenileUnknownCount'] + sub_observation[
+                    'juvenileFemaleCount'] \
+                + sub_observation['juvenileMaleCount'] + sub_observation['subadultUnknownCount'] + sub_observation[
+                    'subadultFemaleCount'] \
+                + sub_observation['subadultMaleCount'] + sub_observation['chickUnknownCount'] + sub_observation[
+                    'chickFemaleCount'] \
+                + sub_observation['chickMaleCount'] + sub_observation['unknownUnknownCount'] + sub_observation[
+                    'unknownFemaleCount'] \
+                + sub_observation['unknownMaleCount']
+    return Observation(species=species,
+                       adultUnknownCount=sub_observation['adultUnknownCount'],
+                       adultFemaleCount=sub_observation['adultFemaleCount'],
+                       adultMaleCount=sub_observation['adultMaleCount'],
+                       juvenileUnknownCount=sub_observation['juvenileUnknownCount'],
+                       juvenileFemaleCount=sub_observation['juvenileFemaleCount'],
+                       juvenileMaleCount=sub_observation['juvenileMaleCount'],
+                       subadultUnknownCount=sub_observation['subadultUnknownCount'],
+                       subadultFemaleCount=sub_observation['subadultFemaleCount'],
+                       subadultMaleCount=sub_observation['subadultMaleCount'],
+                       chickUnknownCount=sub_observation['chickUnknownCount'],
+                       chickFemaleCount=sub_observation['chickFemaleCount'],
+                       chickMaleCount=sub_observation['chickMaleCount'],
+                       unknownUnknownCount=sub_observation['unknownUnknownCount'],
+                       unknownFemaleCount=sub_observation['unknownFemaleCount'],
+                       unknownMaleCount=sub_observation['unknownMaleCount'],
+                       total_count=birdCount,
+                       direction=sub_observation['direction'],
+                       bypassSide=sub_observation['bypassSide'],
+                       notes=sub_observation['notes'],
+                       observationperiod_id=obspId,
+                       shorthand_id=shorthand_id,
+                       account_id=user_id)
+
+def _edit_local_or_scatter_obs(loc_id, type_id, user_id, day_id, species, shorthand_block, observation):
+    period = Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=day_id, location_id=loc_id, type_id=type_id).first()
+    if not period:
+        createEmptyObsPeriods(day_id)
+        period = Observationperiod.query.filter_by(is_deleted=0, observatoryday_id=day_id, location_id=loc_id, type_id=type_id).first()
+
+    old_observations = Observation.query.filter_by(is_deleted=0, observationperiod_id=period.id, species=species).all()
+    for obs in old_observations:
+        obs.is_deleted = 1
+        old_shorthand = Shorthand.query.get(obs.shorthand_id)
+        old_shorthand.is_deleted = 1
+
+    if len(observation['subObservations']) > 0:
+        shorthand = Shorthand(shorthandblock=shorthand_block, observationperiod_id=period.id)
+        db.session().add(shorthand)
+        shorthand_id = Shorthand.query.filter_by(shorthandblock=shorthand_block, observationperiod_id=period.id, is_deleted=0).first().id
+
+        for subObservation in observation['subObservations']:
+            sub_observation = get_observation_from_object(subObservation, observation['species'], period.id, shorthand_id, user_id)
+            db.session().add(sub_observation)
+
+    db.session().commit()

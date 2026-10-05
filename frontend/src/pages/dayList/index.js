@@ -1,31 +1,36 @@
 import {
-  Paper, withStyles, makeStyles, Table, TableBody,
-  TableCell, TableHead, TableRow,
-  TableContainer,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  Input,
-  MenuItem,
+  Button,
   Checkbox,
+  Chip,
   ListItemText,
-  Chip
-} from "@material-ui/core";
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+  MenuItem,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
-import { retrieveDays } from "../../reducers/daysReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { refreshDays, setDays } from "../../reducers/daysReducer";
 import DayPagination from "./DayPagination";
 import parse from "date-fns/parse";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
+import { StyledTableCell } from "../../globalComponents/common";
+import { AppContext } from "../../AppContext";
+import { dayStringToDate, removeDay } from "../../services";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   paper: {
     background: "white",
-    padding: "20px 30px",
-    margin: "0px 0px 50px 0px",
+    padding: "20px 30px"
   },
   linkImitator: {
     cursor: "pointer",
@@ -44,45 +49,47 @@ const useStyles = makeStyles({
   chip: {
     margin: 2,
   },
-});
-
-const StyledTableCell = withStyles(() => ({
-  head: {
-    backgroundColor: "grey",
+  deleteButton: {
     color: "white",
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
+    backgroundColor: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
+  }
+}));
 
-export const DayList = ({ userObservatory }) => {
+const getSelectList = (observatory) => createSelector(
+  [state => state.days.data],
+  (days) => (
+    days?.filter((day) => day.observatory === observatory)
+  )
+);
 
+export const DayList = () => {
   const { t } = useTranslation();
-
-  const history = useHistory();
-
+  const navigate = useNavigate();
   const classes = useStyles();
-
-  const list = useSelector(state => state.days.filter((day) => day.observatory === userObservatory));
-
-  console.log("list: ", list);
-
   const dispatch = useDispatch();
+  const { observatory } = useContext(AppContext);
+
+  const list = useSelector(getSelectList(observatory));
 
   const [selectedYears, setSelectedYears] = useState([]);
   const [availableYears, setAvailableYears] = useState([]);
 
   useEffect(() => {
-    if(availableYears.length < 1)
-      setAvailableYears([...new Set(list.map(i => parse(i.day, "dd.MM.yyyy", new Date()).getFullYear()))].sort());
-  }, [list]);
+    dispatch(refreshDays());
+  }, []);
 
   useEffect(() => {
-    dispatch(retrieveDays());
-  }, [dispatch]);
+    if (!list) {
+      return;
+    }
 
-  if (!list) return null;
+    if (availableYears.length < 1 && list.length > 0) {
+      setAvailableYears([...new Set(list.map(i => dayStringToDate(i.day).getFullYear()))].sort());
+    }
+  }, [list]);
 
   const comparator = (a, b) => {
     const day1 = a.day.split(".");
@@ -108,54 +115,77 @@ export const DayList = ({ userObservatory }) => {
   };
 
   const handleDateClick = (s) => {
-    history.push(`/daydetails/${s.day}`);
+    navigate(`/daydetails/${s.day}`);
   };
 
-  console.log("list: ", list);
+  const handleRemoveDayClick = async (event, s) => {
+    event.stopPropagation();
+
+    if (confirm(t("confirmRemoveDay", { day: s.day }))) {
+      dispatch(setDays(null));
+
+      try {
+        await removeDay(s.id);
+      } catch (e) {
+        console.error(e);
+        alert(t("removeFailed"));
+      }
+
+      dispatch(refreshDays());
+    }
+  };
+
+  if (!list) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div>
       <Paper className={classes.paper}>
 
-        <Typography variant="h5" component="h2" >
+        <Typography variant="h4" component="h2" >
           {t("days")}
         </Typography>
-        <br />
-        {t("filter")}
-        <br />
-        <FormControl className={classes.formControl}>
-          <InputLabel id="filter-year-label">{t("year")}</InputLabel>
-          <Select
-            labelId="filter-year-label"
-            id="filter-year"
-            multiple
-            input={<Input />}
-            value={selectedYears}
-            onChange={(e) => setSelectedYears(e.target.value)}
-            renderValue={(selected) => (
-              <div className={classes.chips}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} className={classes.chip} />
-                ))}
-              </div>
-            )}
-          >
-            {availableYears.map((y) => (
-              <MenuItem key={y} value={y}>
-                <Checkbox checked={selectedYears.indexOf(y) > -1} />
-                <ListItemText primary={y} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <br/>
+        <Typography variant="subtitle1">
+          {t("filter")}
+        </Typography>
+        <TextField
+          className={classes.formControl}
+          label={t("year")}
+          id="filter-year"
+          select
+          slotProps={{
+            select: {
+              multiple: true,
+              value: selectedYears,
+              onChange: (e) => setSelectedYears(e.target.value),
+              renderValue: (selected) => (
+                <div className={classes.chips}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} className={classes.chip}/>
+                  ))}
+                </div>
+              )
+            }
+          }}
+        >
+          {availableYears.map((y) => (
+            <MenuItem key={y} value={y}>
+              <Checkbox checked={selectedYears.indexOf(y) > -1} />
+              <ListItemText primary={y} />
+            </MenuItem>
+          ))}
+        </TextField>
         <TableContainer>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
                 <StyledTableCell>{t("date")}</StyledTableCell>
-                <StyledTableCell align="right">{t("observers")}</StyledTableCell>
-                <StyledTableCell align="right">{t("comment")}</StyledTableCell>
-                <StyledTableCell align="right">{t("observationStation")}</StyledTableCell>
+                <StyledTableCell>{t("observers")}</StyledTableCell>
+                <StyledTableCell>{t("comment")}</StyledTableCell>
+                <StyledTableCell>{t("observationStation")}</StyledTableCell>
+                <StyledTableCell align="right"></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -172,26 +202,31 @@ export const DayList = ({ userObservatory }) => {
                           {s.day}
                         </Link>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.observers}
                         </Link>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.comment}
                         </Link>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         <Link style={{ color: "black" }} to={`/daydetails/${s.day}`}>
                           {s.observatory.replace("_", " ")}
                         </Link>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Button className={classes.deleteButton} variant="contained" onClick={(event) => handleRemoveDayClick(event, s)}>
+                          {t("remove")}
+                        </Button>
                       </StyledTableCell>
                     </TableRow>
                   )
               }
             </TableBody>
-            <DayPagination list={list} rowsPerPage={rowsPerPage}
+            <DayPagination totalCount={list.length} rowsPerPage={rowsPerPage}
               handleChangePage={handleChangePage}
               handleChangeRowsPerPage={handleChangeRowsPerPage}
               page={page}
@@ -201,8 +236,4 @@ export const DayList = ({ userObservatory }) => {
       </Paper>
     </div>
   );
-};
-
-DayList.propTypes = {
-  userObservatory: PropTypes.string.isRequired
 };

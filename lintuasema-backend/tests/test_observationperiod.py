@@ -2,7 +2,7 @@ from attr import fields
 from sqlalchemy import null
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.observationperiod.services import addObservation, addObservationperiod, getObservationperiods
-from application.api.classes.observatoryday.services import addDay, addDayFromReq, getDays, editLocalObs
+from application.api.classes.observatoryday.services import addDay, addDayFromReq, getDays, edit_local_obs
 from application.api.classes.location.services import createLocation, getLocationId
 from application.api.classes.observatory.services import getObservatoryId
 from application.api.classes.type.services import getTypeIdByName
@@ -16,8 +16,8 @@ from pytest import raises
 '''
 Comment from summer 2022 project:
 In practice, these are integration tests
-(excluding one that calls addAndFindObservation 
-that in turn calls addObservation, presumably used 
+(excluding one that calls addAndFindObservation
+that in turn calls addObservation, presumably used
 as a workround for setting up DB).
 This is so because it requires setting up the DB before executing the actual tests.
 DB could be mocked to limit the scope of the tests but so far not done.
@@ -26,7 +26,7 @@ DB could be mocked to limit the scope of the tests but so far not done.
 # Support functions
 '''
 Observatory, location and observation type are by default set up based on locations.json
-IDs are needed for find tests of added periods. Another approach is to hard code IDs 
+IDs are needed for find tests of added periods. Another approach is to hard code IDs
 based on order defined in locations.json if necessary to isolate get functions.
 '''
 def setup_default_fields():
@@ -102,7 +102,7 @@ def add_and_find_observation_period(fields):
 This test is older version, created prior to summer 2022.
 It is not using same add function as the main application.
 Presumably addObservation of observation period services is created
-to act as workaround for need to setup DB (addObservationPeriod 
+to act as workaround for need to setup DB (addObservationPeriod
 performs other DB operations as well and therefore requires certain
 amount of existing data).
 '''
@@ -125,16 +125,16 @@ def test_added_obsperiod_goes_to_db_using_addObservation_func(app):
 
 
 '''
-Tests below expect to have dictionary 'fields' initialized. 
+Tests below expect to have dictionary 'fields' initialized.
 It includes following fields by default:
-observatory, observatory_id, 
+observatory, observatory_id,
 day, observatoryday_id, observers, comment, selectedactions
 location, location_id
 observationType, type_id
 startTime, endTime
 
 Tests can be varied by changing these fields:
-call setupFields and give chosen key, value pair to be changed 
+call setupFields and give chosen key, value pair to be changed
 from default values. Defaults are set in setupDefaultFields.
 Remember to change the assertion accordingly.
 '''
@@ -151,21 +151,21 @@ def test_added_observation_goes_to_db_2(app):
 
 
 def test_added_observation_goes_to_db_3(app):
-    fields = setup_fields(startTime = '12:59', 
+    fields = setup_fields(startTime = '12:59',
                           endTime = '16:00')
     assert add_and_find_observation_period(fields) == True
 
 
 def test_obs_period_with_non_existing_location_is_not_added_and_found(app):
-    fields = setup_fields(startTime = '12:59', 
-                          endTime = '15:00', 
+    fields = setup_fields(startTime = '12:59',
+                          endTime = '15:00',
                           location = 'Location that does not exist')
     assert add_and_find_observation_period(fields) == False
 
 
 def test_obs_period_with_invalid_day_id_is_not_added_and_found(app):
-    fields = setup_fields(startTime = '00:59', 
-                          endTime = '04:00', 
+    fields = setup_fields(startTime = '00:59',
+                          endTime = '04:00',
                           observatoryday_id = -1)
     assert add_and_find_observation_period(fields) == False
 
@@ -194,7 +194,7 @@ def test_adding_empty_obsperiod_when_migrants_saved(app):
                          type_id=typid,
                          location_id=loc1)
     assert observation_period_found(fields2) == True
-    
+
     fields3 = setup_fields(startTime = '0:00',
                            type_id=typid,
                            location_id=loc2)

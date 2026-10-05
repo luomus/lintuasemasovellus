@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { IconButton, TextField, InputAdornment } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import BackspaceIcon from "@material-ui/icons/Backspace";
+import { IconButton, TextField, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import BackspaceIcon from "@mui/icons-material/Backspace";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 

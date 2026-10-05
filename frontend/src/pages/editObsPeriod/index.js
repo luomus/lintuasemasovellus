@@ -1,22 +1,23 @@
 import {
-  Backdrop, Fade, makeStyles, Modal, Grid, Button,
-  FormControl, InputLabel, Select, MenuItem, Box, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle,
-} from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+  Fade, Modal, Grid, Button,
+  Box, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle, Alert
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/idea.css";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getShorthandByObsPeriod, deleteObservationperiods, sendEditedShorthand
 } from "../../services";
-import {
-  loopThroughObservationPeriods, loopThroughObservations, setDayId
-} from "../../shorthand/parseShorthandField";
 import CodeMirrorBlock from "../../globalComponents/codemirror/CodeMirrorBlock";
 import Notification from "../../globalComponents/Notification";
+import { AppContext } from "../../AppContext";
+import { saveData } from "../../reducers/savingStateReducer";
+import Select from "../../globalComponents/formComponents/Select";
+import { shorthandTextToLines, shorthandLinesToObservations } from "../../shorthand/shorthandParsing";
+import LoadingSpinner from "../../globalComponents/LoadingSpinner";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,23 +68,70 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
+const EditObsPeriod = ({ day, obsPeriod, open, handleCloseModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { user, station, speciesData } = useContext(AppContext);
 
-  const [shorthand, setShorthand] = useState("");
+  const notifications = useSelector(state => state.notifications);
+
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const [types, setTypes] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const [shorthand, setShorthand] = useState("");
+  const [initialShorthand, setInitialShorthand] = useState("");
+
+  const [activeObservationPeriodIds, setActiveObservationPeriodIds] = useState([]);
   const [warning, setWarning] = useState(false);
-  const [sanitizedShorthand, setSanitizedShorthand] = useState("");
+  const [shorthandLoading, setShorthandLoading] = useState(true);
+  const [shorthandFetchError, setShorthandFetchError] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const userID = useSelector(state => state.user.id);
+  useEffect(() => {
+    if (!open || !obsPeriod.id) {
+      return;
+    }
 
-  const userObservatory = useSelector(state => state.userObservatory);
-  const stations = useSelector(state => state.stations);
-  const notifications = useSelector(state => state.notifications);
+    let cancelled = false;
+
+    setType(obsPeriod.observationType);
+    setLocation(obsPeriod.location);
+    setActiveObservationPeriodIds([obsPeriod.id]);
+
+    const retrieveShorthand = async () => {
+      setShorthandLoading(true);
+      setShorthandFetchError(false);
+
+      try {
+        const res = await getShorthandByObsPeriod(obsPeriod.id);
+        if (cancelled) {
+          return;
+        }
+        if (!res?.length) {
+          console.error(`No shorthand found for observation period ${obsPeriod.id}`);
+          setShorthandFetchError(true);
+          return;
+        }
+        initializeDefaultShorthand(res);
+      } catch (e) {
+        if (cancelled) {
+          return;
+        }
+        console.error(e);
+        setShorthandFetchError(true);
+      } finally {
+        if (!cancelled) {
+          setShorthandLoading(false);
+        }
+      }
+    };
+
+    retrieveShorthand();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, obsPeriod]);
 
   const initializeDefaultShorthand = (shorthandblocks) => {
     let text = obsPeriod.startTime + "\n";
@@ -92,6 +140,7 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
     }
     text += obsPeriod.endTime;
     setShorthand(text);
+    setInitialShorthand(text);
   };
 
   const handleDialogOpen = () => {
@@ -131,52 +180,64 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
   };
 
   const handleDelete = async () => {
-    await deleteObservationperiods([Number(obsPeriod.id)]);
-    handleClose();
+    setSaving(true);
+    try {
+      await dispatch(saveData(() => deleteObservationperiods([Number(obsPeriod.id)])));
+      closeModal(true);
+    } catch (e) {
+      // error handled in saveData
+    } finally {
+      setSaving(false);
+    }
   };
 
 
   const handleSave = async () => {
-    await handleDelete();
-    setDayId(obsPeriod.day_id);
-    const rows = sanitizedShorthand;
-    const periods = loopThroughObservationPeriods(rows, type, location);
-    const observations = loopThroughObservations(rows, userID);
-
-    await sendEditedShorthand(periods, observations, obsPeriod.day_id, userID);
-    handleClose();
+    setSaving(true);
+    try {
+      await dispatch(saveData(save));
+      closeModal(true);
+    } catch (e) {
+      // error handled in saveData
+    } finally {
+      setSaving(false);
+    }
   };
 
+  const save = async () => {
+    const rows = shorthandTextToLines(shorthand);
+    const { observationPeriods, observations } = shorthandLinesToObservations(rows, type, location, speciesData.speciesCodeMap);
 
-  useEffect(async () => {
-    if (obsPeriod.id) {
-      setType(obsPeriod.observationType);
-      setLocation(obsPeriod.location);
-      const shorthand = await getShorthandByObsPeriod(obsPeriod.id);
-      initializeDefaultShorthand(shorthand);
+    await sendEditedShorthand(observationPeriods, observations, obsPeriod.day_id, user.id, [Number(obsPeriod.id)]);
+  };
+
+  const handleClose = () => {
+    closeModal();
+  };
+
+  const closeModal = (afterSave = false) => {
+    setType("");
+    setLocation("");
+    setShorthand("");
+    setInitialShorthand("");
+    setShorthandLoading(true);
+    setShorthandFetchError(false);
+    handleCloseModal(afterSave);
+  };
+
+  const handleModalCloseEvent = () => {
+    if (saving) {
+      return;
     }
-  }, [obsPeriod]);
 
-
-  useEffect(() => {
-    if (userObservatory !== "") {
-      setTypes(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .types
-      );
+    let canClose = true;
+    if (shorthand !== initialShorthand) {
+      canClose = confirm(t("confirmExit"));
     }
-  });
-
-  useEffect(() => {
-    if (userObservatory !== "") {
-      setLocations(
-        stations
-          .find(s => s.observatory === userObservatory)
-          .locations
-      );
+    if (canClose) {
+      closeModal();
     }
-  });
+  };
 
   return (
     <Modal
@@ -184,111 +245,96 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
       aria-describedby="transition-modal-description"
       className={classes.modal}
       open={open}
-      onClose={handleClose}
+      onClose={handleModalCloseEvent}
       disableAutoFocus={true}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
     >
       <Fade in={open}>
         <div className={classes.paper}>
           <h2> {t("editShorthand")} </h2>
-          <h3> {t("obsPeriod")} {date} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
-          <Grid
-            container
-            height="100%"
-            alignItems="flex-start"
-            spacing={1}>
-            <Grid item xs={2}>
-              <FormControl className={classes.formControl}>
-                <InputLabel id="Tyyppi">{t("type")}</InputLabel>
-                <Select required
-                  labelId="type"
-                  fullWidth={true}
+          <h3> {t("obsPeriod")} {day} {t("at")} {obsPeriod.startTime} - {obsPeriod.endTime} </h3>
+          {shorthandLoading ? (
+            <LoadingSpinner size="small" />
+          ) : shorthandFetchError ? (
+            <Alert severity="error">
+              {t("shorthandFetchFailed")}
+            </Alert>
+          ) : (
+            <Grid
+              container
+              alignItems="flex-start"
+              spacing={1}>
+              <Grid item xs={2}>
+                <Select
                   id="selectTypeInModification"
+                  label={t("type")}
+                  options={station.types}
                   value={type}
-                  onChange={(event) => {
-                    setType(event.target.value);
-                  }}
-                >
-                  {
-                    types.map((type, i) =>
-                      <MenuItem id={type} value={type} key={i}>
-                        {type}
-                      </MenuItem>
-                    )
-                  }
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={2}>
-              <FormControl className={classes.formControl}>
-                <InputLabel id="Location">{t("location")}</InputLabel>
-                <Select required
-                  labelId="location"
+                  onChange={setType}
+                  required
+                  disabled={saving}
+                />
+              </Grid>
+
+              <Grid item xs={2}>
+                <Select
                   id="selectLocationInModification"
+                  label={t("location")}
+                  options={station.locations}
                   value={location}
-                  onChange={(event) => {
-                    setLocation(event.target.value);
-                  }}
-                >
-                  {
-                    locations.map((location, i) =>
-                      <MenuItem id={location} value={location} key={i}>
-                        {location}
-                      </MenuItem>
-                    )
-                  }
-                </Select>
-              </FormControl>
+                  onChange={setLocation}
+                  required
+                  disabled={saving}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <CodeMirrorBlock
+                  day={day}
+                  type={type}
+                  value={shorthand}
+                  onChange={setShorthand}
+                  activeObservationPeriodIds={activeObservationPeriodIds}
+                  disabled={saving}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Notification category="shorthand" />
+                <Notification category="nocturnalMigration" />
+              </Grid>
+              <Grid container item xs={12} alignItems="flex-end">
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="saveButtonInShorthandModification"
+                    disabled={saveButtonIsDisabled() || saving}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}>
+                    {t("save")}
+                  </Button>
+                </Box>
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="cancelButtonInShorthandModification"
+                    disabled={saving}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClose}>
+                    {t("cancel")}
+                  </Button>
+                </Box>
+                <Box pr={2} pt={2}>
+                  <Button
+                    id="removeButtonInShorthandModification"
+                    disabled={deleteButtonIsDisabled() || saving}
+                    variant="contained"
+                    onClick={handleDialogOpen}
+                    className={classes.deleteButton}>
+                    {t("remove")}
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <CodeMirrorBlock
-                setSanitizedShorthand={setSanitizedShorthand}
-                setShorthand={setShorthand}
-                shorthand={shorthand}
-                date={new Date(date)}
-                type={type}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Notification category="shorthand" />
-              <Notification category="nocturnalMigration" />
-            </Grid>
-            <Grid container item xs={12} alignItems="flex-end">
-              <Box pr={2} pt={2}>
-                <Button
-                  id="saveButtonInShorthandModification"
-                  disabled={saveButtonIsDisabled()}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSave}>
-                  {t("save")}
-                </Button>
-              </Box>
-              <Box pr={2} pt={2}>
-                <Button
-                  id="cancelButtonInShorthandModification"
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleClose}>
-                  {t("cancel")}
-                </Button>
-              </Box>
-              <Box pr={2} pt={2}>
-                <Button
-                  id="removeButtonInShorthandModification"
-                  disabled={deleteButtonIsDisabled()}
-                  variant="contained"
-                  onClick={handleDialogOpen}
-                  className={classes.deleteButton}>
-                  {t("remove")}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+          )}
           <Dialog
             open={warning}
             aria-labelledby="alert-dialog-title"
@@ -316,10 +362,10 @@ const EditObsPeriod = ({ date, obsPeriod, open, handleClose }) => {
 };
 
 EditObsPeriod.propTypes = {
-  date: PropTypes.string.isRequired,
+  day: PropTypes.string.isRequired,
   obsPeriod: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
 export default EditObsPeriod;

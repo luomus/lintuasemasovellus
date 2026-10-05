@@ -57,9 +57,8 @@
         "key": number,
         "loppu": time,
         "lukumaara": number,
-        "pyydys": string,
         "pyyntialue": string,
-        "verkkokoodit": string,
+        "pyyntitapa": string,
         "verkonPituus": number
     }
 ]
@@ -68,16 +67,18 @@
 	- day
 	- speaciesCount
 #### api/getObservationsSummary/dayId
-	-allMigration
 	-constMigration
-	-localGåu
-	-localOther
 	-nightMigration
-	-notes
 	-otherMigration
-	-scatterObs
+    -localGåu
+    -localOther
+    -scatter
+	-localGåuShorthand
+	-localOtherShorthand
+	-scatterShorthand
+	-notes
 	-species
-	-totalLocal
+    -dayId
 #### api/getShorthandText/dayId/Type/Location
 	- endTime
 	- obsPeriodId

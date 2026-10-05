@@ -2,7 +2,11 @@
 
 1. Process the Template 
 Create an env file (you can take example-env file as an example) and fill in the values. The values need to be base64
-encoded.
+encoded. You can use for example the following command to encode a value:
+```
+echo -n value | base64
+```
+Then run the following command to process the template:
 ```
 oc process -f template.yaml --param-file=test.env > processed-template.yaml
 ```

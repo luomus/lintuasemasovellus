@@ -4,15 +4,17 @@
 Luo cypress.env.json niminen tiedosto frontend-kansion juureen ja laita sinne seuraavat muuttujat:
 ```
 {
-  "person_token": <test user's person token>,
-  "login_port": 5000
+  "person_token": <test user's person token>
 }
 ```
 
 Asenna uusimmat riippuvuudet (frontendissa komennolla npm install, backendissa komennolla . install.sh)
 Käynnistä backend ja frontend erikseen. Backend käynnistetään frontend-kansiosta ja kirjoittamalla
 
-`npm run start-api`.
+`npm run start-api:test`.
+
+Backend käyttää tällöin muistissa olevaa sqlite-tietokantaa. Testit eivät toimi, jos käytössä on tietokanta,
+jossa on jo valmiiksi dataa.
 
 Frontend käynnistetään toisessa komentorivi-ikkunassa frontend-kansiosta komennolla
 

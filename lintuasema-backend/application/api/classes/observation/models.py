@@ -17,6 +17,9 @@ class Observation(Base):
     subadultUnknownCount = db.Column(db.Integer, nullable = False)
     subadultFemaleCount = db.Column(db.Integer, nullable = False)
     subadultMaleCount = db.Column(db.Integer, nullable = False)
+    chickUnknownCount = db.Column(db.Integer, nullable = False)
+    chickFemaleCount = db.Column(db.Integer, nullable = False)
+    chickMaleCount = db.Column(db.Integer, nullable = False)
     unknownUnknownCount = db.Column(db.Integer, nullable = False)
     unknownFemaleCount = db.Column(db.Integer, nullable = False)
     unknownMaleCount = db.Column(db.Integer, nullable = False)
@@ -36,7 +39,8 @@ class Observation(Base):
     def __init__ (self, species, adultUnknownCount,
         adultFemaleCount, adultMaleCount, juvenileUnknownCount, juvenileFemaleCount,
         juvenileMaleCount, subadultUnknownCount, subadultFemaleCount, subadultMaleCount,
-        unknownUnknownCount, unknownFemaleCount, unknownMaleCount, total_count, direction, 
+        chickUnknownCount, chickFemaleCount, chickMaleCount, unknownUnknownCount,
+        unknownFemaleCount, unknownMaleCount, total_count, direction,
         bypassSide, notes, observationperiod_id, shorthand_id, account_id):
         self.species = species
         self.adultUnknownCount = adultUnknownCount
@@ -48,6 +52,9 @@ class Observation(Base):
         self.subadultUnknownCount = subadultUnknownCount
         self.subadultFemaleCount = subadultFemaleCount
         self.subadultMaleCount = subadultMaleCount
+        self.chickUnknownCount = chickUnknownCount
+        self.chickFemaleCount = chickFemaleCount
+        self.chickMaleCount = chickMaleCount
         self.unknownUnknownCount = unknownUnknownCount
         self.unknownFemaleCount = unknownFemaleCount
         self.unknownMaleCount = unknownMaleCount
@@ -60,16 +67,16 @@ class Observation(Base):
         self.account_id = account_id
         #self.localObservationsCount = localObservationsCount
         #self.localObservationsGåuCount = localObservationsGåuCount
-        #lisää local ja localgåu 
+        #lisää local ja localgåu
 
         @staticmethod
         def summaryOfBirdsPerDay():
             stmt = text("SELECT Observation.species FROM Observation")
-            res = db.engine.execute(stmt)
+            with db.engine.connect() as conn:
+                res = conn.execute(stmt)
             response = []
             for row in res:
                 response.append({"species": row[0]})
-  
+
             return response
 
-        

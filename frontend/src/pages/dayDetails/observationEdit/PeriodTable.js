@@ -1,0 +1,196 @@
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Table, TableHead, TableRow, TableContainer,
+  TableBody, Typography,
+  IconButton
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import EditIcon from "@mui/icons-material/Edit";
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+import ObservationPeriod from "../../obsPeriod";
+import EditObsPeriod from "../../editObsPeriod";
+import PeriodTablePagination from "./PeriodTablePagination";
+import { StyledTableCell, StyledTableRow } from "../../../globalComponents/common";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    background: "white",
+    padding: "20px 30px",
+    margin: "0px 0px 50px 0px",
+  },
+  linkImitator: {
+    cursor: "pointer",
+    textDecoration: "underline",
+    color: "black",
+  },
+  checkbox: {
+    color: theme.palette.primary.main
+  },
+  filterContainer: {
+    marginBottom: "5px",
+    justifyContent: "flex-start"
+  },
+}));
+
+const PeriodTable = (props) => {
+
+  const { day, obsPeriods, onEditSuccess } = props;
+
+  const { t } = useTranslation();
+
+  const classes = useStyles();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [obsPeriod, setObsPeriod] = useState({});
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+
+  const [rows, setRows] = useState(obsPeriods);
+  const [totalCount, setTotalCount] = useState(0);
+
+  useEffect(() => {
+    const allRows = obsPeriods.filter(i => i.observationType !== "Paikallinen" && i.observationType !== "Hajahavainto");
+    const paginatedRows = rowsPerPage === -1
+      ? allRows
+      : allRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    setRows(paginatedRows);
+    setTotalCount(allRows.length);
+  }, [obsPeriods, page, rowsPerPage]);
+
+  const timeDifference = (time1, time2) => {
+    const startTime = time1.split(":");
+    const endTime = time2.split(":");
+    const dateST = new Date(0, 0, 0, startTime[0], startTime[1]);
+    const dateET = new Date(0, 0, 0, endTime[0], endTime[1]);
+    const diff = dateET.getTime() - dateST.getTime();
+    return diff;
+  };
+
+  const msToTime = (ms) => {
+    var s = ms / 1000;
+    var mins = s / 60;
+    var hrs = Math.floor(mins / 60);
+    var mins2 = mins % 60;
+    return hrs + "h " + mins2 + "min";
+  };
+
+  const handleOpen = (obsPeriod) => {
+    setObsPeriod(obsPeriod);
+    setModalOpen(true);
+    setEditModalOpen(false);
+  };
+
+  const handleOpenEdit = (obsPeriod) => {
+    setObsPeriod(obsPeriod);
+    setModalOpen(false);
+    setEditModalOpen(true);
+  };
+
+  const handleChangePage = useCallback((event, newPage) => {
+    setPage(newPage);
+  }, []);
+
+  const handleChangeRowsPerPage = useCallback((event) => {
+    setRowsPerPage(Number(event.target.value));
+    setPage(0);
+  }, []);
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleCloseEditModal = (afterSave) => {
+    setEditModalOpen(false);
+    if (afterSave) {
+      onEditSuccess();
+    }
+  };
+
+  const handleErrorSnackOpen = () => {
+  };
+
+  return (
+    <div>
+      <Typography variant="h6" >
+        {t("obsPeriods")}
+      </Typography>
+      <TableContainer>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>{t("location")}</StyledTableCell>
+              <StyledTableCell align="right">{t("startTime")}</StyledTableCell>
+              <StyledTableCell align="right">{t("endTime")}</StyledTableCell>
+              <StyledTableCell align="right">{t("duration")}</StyledTableCell>
+              <StyledTableCell align="right">{t("type")}</StyledTableCell>
+              <StyledTableCell align="right">{t("speciesTotal")}</StyledTableCell>
+              <StyledTableCell align="right">{t("modify")}</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              rows
+                .map((s, i) =>
+                  <StyledTableRow hover key={i} >
+                    <StyledTableCell component="th" scope="row" className={classes.linkImitator} onClick={() => handleOpen(s)}>
+                      {s.location}
+                    </StyledTableCell>
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
+                      {s.startTime}
+                    </StyledTableCell>
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
+                      {s.endTime}
+                    </StyledTableCell>
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
+                      {msToTime(timeDifference(s.startTime, s.endTime))}
+                    </StyledTableCell>
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
+                      {s.observationType}
+                    </StyledTableCell>
+                    <StyledTableCell align="right" className={classes.linkImitator} onClick={() => handleOpen(s)}>
+                      {s.speciesCount}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <IconButton size="small" variant="contained" color="primary" onClick={() => handleOpenEdit(s)}>
+                        <EditIcon fontSize="small" id="editObsPeriod" />
+                      </IconButton>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )
+            }
+          </TableBody>
+          <ObservationPeriod
+            obsPeriod={obsPeriod}
+            open={modalOpen}
+            handleClose={handleCloseModal}
+            handleErrorSnackOpen={handleErrorSnackOpen}
+          />
+          <EditObsPeriod
+            day={day}
+            obsPeriod={obsPeriod}
+            open={editModalOpen}
+            handleCloseModal={handleCloseEditModal}
+          />
+        </Table>
+      </TableContainer>
+      <PeriodTablePagination
+        totalCount={totalCount}
+        rowsPerPage={rowsPerPage}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        page={page}
+      />
+    </div>
+  );
+};
+
+PeriodTable.propTypes = {
+  day: PropTypes.string.isRequired,
+  obsPeriods: PropTypes.array.isRequired,
+  onEditSuccess: PropTypes.func.isRequired
+};
+
+export default React.memo(PeriodTable);

@@ -1,18 +1,20 @@
 from flask import render_template, request, redirect, url_for,\
     jsonify
 
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from application.api.classes.observatoryday.models import Observatoryday
-from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, editLocalObs, editScatterObs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, update_observers, get_day_without_id
+from application.api.classes.observatoryday.services import addDay, getDays, createEmptyObsPeriods, edit_local_obs, \
+    edit_scatter_obs, checkPeriod, getDayId, getLatestDays, addDayFromReq, listDays, update_actions, update_comment, \
+    update_observers, get_day_without_id, get_observation_from_object
 from application.api.classes.observatory.services import getObservatoryId
 
 from application.api.classes.observationperiod.models import Observationperiod
 from application.api.classes.type.models import Type
 from application.api.classes.observatory.models import Observatory
 from application.api.classes.location.services import getLocationId
-from application.api.classes.observationperiod.services import getObsPerId
-from application.api.classes.observatoryday.services import getDay
+from application.api.classes.observationperiod.services import getObsPerId, find_overlapping_periods
+from application.api.classes.observatoryday.services import getDay, deleteDay
 from application.api.classes.type.services import getTypeIdByName
 
 from application.api.classes.catch.services import create_catches
@@ -29,7 +31,7 @@ from datetime import datetime
 @bp.route('/api/addEverything', methods=['POST'])
 @login_required
 def add_everything():
-  # This is used for taking the given shorthand and turning it into an observatory day, observation periods and observations. 
+  # This is used for taking the given shorthand and turning it into an observatory day, observation periods and observations.
   # ARRIVING DATA:
   # {
   #    day, comment, observers, observatory, selectedactions, userID,
@@ -40,9 +42,14 @@ def add_everything():
 
     req = request.get_json()
 
-    # Save observatoryDay 
+    # Save observatoryDay
     observatory_id = getObservatoryId(req['observatory'])
     day = datetime.strptime(req['day'], '%d.%m.%Y')
+
+    # Validate that observation periods don't overlap
+    overlaps = find_overlapping_periods(req.get('observationPeriods', []), day, observatory_id)
+    if overlaps:
+        return jsonify({'error': 'Overlapping observation periods', 'overlapping': overlaps}), 400
 
     new_obsday = Observatoryday(day=day, comment=req['comment'], observers=req['observers'], selectedactions=req['selectedactions'], observatory_id=observatory_id)
     addDay(new_obsday)
@@ -60,16 +67,16 @@ def add_everything():
         catches_with_dayId.insert(0, dayId)
         create_catches(catches_with_dayId)
 
-    #Save observation periods 
+    #Save observation periods
     for i, obsperiod in enumerate(req['observationPeriods']):
         locId = getLocationId(obsperiod['location'], obsId)
         obsp = Observationperiod(
-            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),        
+            start_time=datetime.strptime(obsperiod['startTime'], '%H:%M'),
             end_time=datetime.strptime(obsperiod['endTime'], '%H:%M'),
             type_id=getTypeIdByName(obsperiod['observationType']),
             location_id=locId, observatoryday_id=dayId)
         db.session().add(obsp)
-        
+
 
         # observation period ID
         obspId = getObsPerId(obsp.start_time, obsp.end_time, obsp.type_id, obsp.location_id, obsp.observatoryday_id)
@@ -85,32 +92,7 @@ def add_everything():
             if observation['periodOrderNum'] == str(i):
 
                 for subObservation in observation['subObservations']:
-                    birdCount = subObservation['adultUnknownCount'] + subObservation['adultFemaleCount']\
-                    + subObservation['adultMaleCount'] + subObservation['juvenileUnknownCount'] + subObservation['juvenileFemaleCount']\
-                    + subObservation['juvenileMaleCount'] + subObservation['subadultUnknownCount'] + subObservation['subadultFemaleCount']\
-                    + subObservation['subadultMaleCount'] + subObservation['unknownUnknownCount'] + subObservation['unknownFemaleCount']\
-                    + subObservation['unknownMaleCount']
-                    sub_observation = Observation(species=subObservation['species'],
-                        adultUnknownCount=subObservation['adultUnknownCount'],
-                        adultFemaleCount=subObservation['adultFemaleCount'],
-                        adultMaleCount=subObservation['adultMaleCount'],
-                        juvenileUnknownCount=subObservation['juvenileUnknownCount'],
-                        juvenileFemaleCount=subObservation['juvenileFemaleCount'],
-                        juvenileMaleCount=subObservation['juvenileMaleCount'],
-                        subadultUnknownCount=subObservation['subadultUnknownCount'],
-                        subadultFemaleCount=subObservation['subadultFemaleCount'],
-                        subadultMaleCount=subObservation['subadultMaleCount'],
-                        unknownUnknownCount=subObservation['unknownUnknownCount'],
-                        unknownFemaleCount=subObservation['unknownFemaleCount'],
-                        unknownMaleCount=subObservation['unknownMaleCount'],
-                        total_count = birdCount,
-                        direction=subObservation['direction'],
-                        bypassSide=subObservation['bypassSide'],
-                        notes=subObservation['notes'],
-                        observationperiod_id=obspId,
-                        shorthand_id=shorthand_id,
-                        account_id=req['userID'])   
-
+                    sub_observation = get_observation_from_object(subObservation, observation['species'], obspId, shorthand_id, req['userID'])
                     db.session().add(sub_observation)
 
     db.session().commit()
@@ -125,25 +107,25 @@ def update_local():
     day=datetime.strptime(req['date'], '%d.%m.%Y') #The frontend returns us the date which we use with the observatory name to get the observatoryday id
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
-    editLocalObs(obsday_id, obserid, req['species'], req['count'], req['gau'])
-    return req['count']
+    edit_local_obs(current_user.user_id, obsday_id, obserid, req['species'], req['shorthand'], req['observation'], req['gau'])
+    return jsonify(req)
 
 @bp.route('/api/updateScatterObservation', methods=['POST']) #Scatter observation = hajahavainto, a more accurate English term would be miscellaneous observation
 @login_required
 def update_scatter():
     #This is almost exactly the same as above
     req=request.get_json()
-    day=datetime.strptime(req['date'], '%d.%m.%Y') 
+    day=datetime.strptime(req['date'], '%d.%m.%Y')
     obserid=getObservatoryId(req['observatory'])
     obsday_id=getDayId(day, obserid)
-    editScatterObs(obsday_id, obserid, req['species'], req['count'])
-    return req['count']
+    edit_scatter_obs(current_user.user_id, obsday_id, obserid, req['species'], req['shorthand'], req['observation'])
+    return jsonify(req)
 
 @bp.route('/api/addDay', methods=['POST'])
 @login_required
 def add_day():
     req = request.get_json()
-  
+
     ret = addDayFromReq(req)
 
     return jsonify(ret)
@@ -181,7 +163,7 @@ def edit_observers(obsday_id, observers):
 @login_required
 def edit_actions(obsday_id, actions):
     ret = update_actions(obsday_id, actions)
-    
+
     return jsonify(ret)
 
 @bp.route('/api/searchDayInfo/<day>/<observatory>', methods=['GET'])
@@ -198,10 +180,15 @@ def get_latest_days(observatory):
     #Jos lintuasemaa ei ole valittu, frontista tulee merkkijono '[object Object]' ja kysely menee rikki
     if observatory != '[object Object]':
         observatory_id = getObservatoryId(observatory)
-        
+
         res = getLatestDays(observatory_id)
 
     return jsonify(res)
 
 
-    
+@bp.route('/api/removeDay/<obsday_id>', methods=['DELETE'])
+@login_required
+def remove_day(obsday_id):
+    deleteDay(obsday_id)
+
+    return obsday_id

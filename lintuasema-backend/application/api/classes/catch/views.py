@@ -23,16 +23,16 @@ def getCatchDetails(dayId):
 
 
 @bp.route('/api/editCatches/<dayId>', methods=['POST'])
-@login_required  
+@login_required
 def editCatches(dayId):
     req = request.get_json()
     if len(req) > 0:
         create_catch(req[0], dayId)
-    
+
     return jsonify(req)
 
 @bp.route('/api/deleteCatch/<dayId>/<dayRowNumber>', methods=['DELETE'])
-@login_required  
+@login_required
 def deleteCatch(dayId, dayRowNumber):
     delete_catch(dayRowNumber, dayId)
 

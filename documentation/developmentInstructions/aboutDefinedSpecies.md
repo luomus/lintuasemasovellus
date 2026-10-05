@@ -2,9 +2,9 @@
 
 _Merkintöjä kesältä 2022._
 
-Sovellus käyttää kahta frontendiin määriteltyä tiedostoa, jonka perusteella päätellään käytettävissä olevat lintulajit: 
-1. [birds.json](../../frontend/src/birds.json) ja
-2. [defaultBirds.json](../../frontend/src/defaultBirds.json).
+Sovellus käyttää kahta backendiin määriteltyä tiedostoa, jonka perusteella päätellään käytettävissä olevat lintulajit: 
+1. [birds.json](../../lintuasema-backend/application/birds.json) ja
+2. [defaultBirds.json](../../lintuasema-backend/application/defaultBirds.json).
 
 Molemmissa tiedostoissa sekä itse sovelluksessa käytetään lajien tunnisteina näiden kuusikirjaimisia lyhenteitä. Esimerkiksi kyhmyjoutsenta vastaava tunniste on "CYGOLO", joka tulee tämän tieteellisestä nimestä "Cygnus olor". Tämä vastaa Luomuksen käytössä olevien asemakohtaisten lajilistojen (esim. _Halias_sp_v1.6.csv_) kentän `Species_Abb` tietoa. 
 ![image](https://user-images.githubusercontent.com/47885648/176842971-6c828b67-75c6-481c-a552-2c27b8d1f482.png)

@@ -13,8 +13,8 @@ Tällä hetkellä ns. "tyhjät"
 havainnointijaksot luodaan uutta havainnointipäivää luodessa, joka taas luodaan päivän ensimmäisia muuttohavaintoja tallennettaessa tai ensimmäistä kertaa
 koonti- eli päivänäkymään siirryttäessä. Molemmissa näissä tapauksissa kutsutaan observatorydayn addDay - funktiota, joka taas kutsuu createEmptyObsPeriodsia,
 joka luo havainnointijaksot päivänäkymässä muokattaville arvoille. Nämä jaksot ovat piilotettu käyttäjältä, eli ne eivät näy jaksot - listassa.
-Sitten näitä kolmea arvoa voidaan päivänäkymässä muokata nuolilla tai syöttämällä kentälle uuden arvon. Kentästä pois siirryttäessä Local- tai ScatterInput- komponentti
-kerää talteen lajin nimen, annetun määrän, päivämäärän, käyttäjän id:n ja LocalInputin tapauksessa vielä sen, oliko kirjattu havainto Gåulle vai ei.
+Sitten näitä kolmea arvoa voidaan päivänäkymässä muokata syöttämällä kentälle uuden arvon. Kentästä pois siirryttäessä LocalInput-komponentti
+kerää talteen lajin nimen, annetun määrän, päivämäärän, käyttäjän id:n ja vielä sen, oliko kirjattu havainto Gåulle vai ei.
 Nämä sitten annetaan services-kansion observationlistService.js:n funktiolle updateLocalObservation tai updateScatterObservation, joka suorittaa
 kutsun apille observatoryday/views.py - tiedostoon, missä pyynnöstä otetaan havainnointipäivän id päivämäärän ja observatorion avulla ja sitten kutsutaan
 observatory/services.py:n funktiota, joka saa parametreinä havainnointipäivän, havainnoijan userId:n, lajin nimen ja havaintojen määrän.

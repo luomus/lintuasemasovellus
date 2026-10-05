@@ -1,14 +1,13 @@
 import React from "react";//
 import {
   Typography, Grid, Paper, List, ListItem
-} from "@material-ui/core/";
-import WarningIcon from "@material-ui/icons/Warning";
-import NightsStay from "@material-ui/icons/NightsStay";
+} from "@mui/material";
+import WarningIcon from "@mui/icons-material/Warning";
+import NightsStay from "@mui/icons-material/NightsStay";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -19,14 +18,14 @@ const useStyles = makeStyles(() => ({
     background: "#f5f890",
     padding: "20px 30px",
     marginTop: "20px",
-    maxHeight: "8vw",
+    maxHeight: "200px",
     overflow: "auto",
   },
   nocturnalPaper: {
     background: "#402158",
     padding: "20px 30px",
     marginTop: "20px",
-    maxHeight: "8vw",
+    maxHeight: "200px",
     overflow: "auto",
   },
   errorHeading: {
@@ -47,7 +46,7 @@ const YellowTextTypography = withStyles({
   }
 })(Typography);
 
-const Notification = ({ category="all" }) => {
+const Notification = ({ category="all", keys }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -59,8 +58,10 @@ const Notification = ({ category="all" }) => {
   Object.keys(allNotifications).map(cat => {
     if (cat === category || category === "all") {
       Object.keys(allNotifications[String(cat)]).map(i => {
-        allNotifications[String(cat)][String(i)].notifications.forEach(n => notificationsSet.add(n));
-        allNotifications[String(cat)][String(i)].errors.forEach(e => errorsSet.add(e));
+        if (!keys || keys.includes(i)) {
+          allNotifications[String(cat)][String(i)].notifications.forEach(n => notificationsSet.add(n));
+          allNotifications[String(cat)][String(i)].errors.forEach(e => errorsSet.add(e));
+        }
       });
     }
   });
@@ -128,6 +129,7 @@ const Notification = ({ category="all" }) => {
 
 Notification.propTypes = {
   category: PropTypes.string,
+  keys: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Notification;

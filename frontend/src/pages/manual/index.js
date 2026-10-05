@@ -1,7 +1,9 @@
 import React from "react";
-import { Paper, Typography } from "@material-ui/core/";
-import { makeStyles } from "@material-ui/core/styles";
+import { Divider, Paper, Stack, Typography } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
+import lajilogo from "../../resources/LAJI_FI_sin.png";
+import luomuslogo from "../../resources/luomuslogo.png";
 
 
 const useStyles = makeStyles({
@@ -15,6 +17,12 @@ const useStyles = makeStyles({
     background: "white",
     margin: "10px 10px 10px 10px"
   },
+  textSection: {
+    margin: "0 auto"
+  },
+  divider: {
+    marginBottom: 20
+  }
 });
 
 
@@ -27,11 +35,11 @@ export const UserManual = () => {
     <div>
 
       <Paper className={classes.paper}>
-        <Typography variant="h5" component="h2" >
+        <Typography variant="h4" component="h2" >
           {t("manualTitle")}
         </Typography>
         <br />
-        <div align="justify">
+        <div className={classes.textSection}>
           Lintuasemasovellus Haukka toimii selaimessa eikä sitä tarvitse erikseen asentaa. Sovellus tarvitsee toimiakseen Internet-yhteyden. Lisätäkseen ja selatakseen sovelluksen tietoja käyttäjän tulee kirjautua sisään.
           Sovellukseen voi tunnistautua mm. Laji.fi- sekä Google-tunnuksilla.
           Sisäänkirjautuminen tapahtuu login-sivulta jonne sisäänkirjautumaton käyttäjä ohjataan automaattisesti. Uloskirjautuminen tapahtuu sovelluksen oikeasta yläkulmasta.
@@ -45,7 +53,7 @@ export const UserManual = () => {
           Päivän ja havaintojen lisääminen
         </Typography>
         <br />
-        <div align="justify">
+        <div className={classes.textSection}>
           Sovelluksen etusivulta löytyy päivä- ja havaintotietojen lisäämistä varten lomake. Käyttäjä valitsee kalenterista tai kirjoittaa päivämäärän jolle havaintojaksot lisätään. Oletuksena sovelluksessa
           on valittuna kuluvan päivän tiedot. Jos päivä löytyy jo tietokannasta, sovellus näyttää kyseiselle päivälle tallennetut havainnoijat, kommentit, havaintoaktiivisuuden ja pyydystiedot.
           Käyttäjä voi halutessaan päivittää nämä mieleisikseen. Kommentti-, havaintoaktiivisuus- ja pyydystiedot on oletuksena piilotettu, mutta ne saa avattua klikkaamalla niiden otsikkoa.
@@ -71,7 +79,7 @@ export const UserManual = () => {
         </em>
         <br />
         <br />
-        <div align="justify">
+        <div className={classes.textSection}>
           Havainnot kirjataan siis aina kahden kellonajan väliin, ja nämä kellonajat toimivat havaintojakson alku- ja loppuaikoina. Jos uusi havaintojakso alkaa heti edellisen jakson päätyttyä,
           ei aloitusaikaa tarvitse kirjoittaa uudelleen. Esimerkissä kello 12-13 suoritettiin havainnointia, mutta havaintoja ei ollut, joten kyseisen havaintojaksoon on merkitty vain viiva.
           Myös tauot voi halutessaan kirjata kirjoittamalla <em>tauko</em> - tällöin kyseiselle havaintojaksolle ei voi kirjata varsinaisia havaintoja. Pelkkää taukojaksoa, ilman varsinaisia
@@ -102,12 +110,43 @@ export const UserManual = () => {
           Päivän ja havaintojen tietojen muokkaaminen
         </Typography>
         <br />
-        <div align="justify">
+        <div className={classes.textSection}>
           Havainnoijien, kommentin, havaintoaktiivisuuden ja pyydystietojen muokkaaminen tapahtuu yhteenvetosivulta. Havainnoija(t), Kommentti ja Havaintoaktiivisuus -kenttien vieressä olevia kynäikoneja painamalla aukeavat muokkauskentät, joiden avulla tietoja voidaan päivittää.
           <br /><br />Pyydystietoihin voi lisätä uusia pyydyksiä painamalla pyydysosion oikeassa yläkulmassa olevaa vihreää pluspainiketta (+). Jo lisättyä yksittäistä pyydystä pääsee muokkaamaan painamalla pyydysrivin lopussa olevaa vihreää kynäikonia. Lisätyn yksittäisen pyydysrivin voi poistaa menemällä muokkaustilaan ja painamalla rivin loppuun ilmestyvää punaista rastipainiketta (x).
           <br /><br /> Jaksojen ja havaintojen muokkaaminen tapahtuu Jaksot-näkymästä. Etsi havaintojakso, jota haluat muokata, ja paina kyseisen havaintojaksorivin lopussa olevaa kynäikonia. Havaintojakson muokkaustila aukeaa, ja voit muokata kyseisen havaintojakson tyyppiä, sijaintia sekä pikakirjoitusta. Poista-napin kautta havaintojakso voidaan myös kokonaan poistaa. Halutessaan käyttäjä voi muokata havaintoja myös havaintotyyppi- ja -paikkakohtaisesti taulukon yläpuolella olevasta <em>Muokkaa havaintoja</em> -painikkeesta.
           <br />
           <br />
+        </div>
+        <div>
+          Tuki: <a href="mailto: helpdesk@laji.fi">helpdesk@laji.fi</a>
+          <br />
+          <br />
+        </div>
+        <Divider className={classes.divider} />
+        <div>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 2, sm: 2 }} sx={{ alignItems: { xs: "center", sm: "flex-end" } }}>
+            <div>
+              <a href="https://www.laji.fi/">
+                <img
+                  src={lajilogo}
+                  width="200"
+                  alt="laji.fi"></img>
+                <br />
+              </a>
+            </div>
+            <div>
+              <a href="https://www.luomus.fi/">
+                <img
+                  src={luomuslogo}
+                  width="185"
+                  alt="luomus"></img>
+                <br />
+              </a>
+            </div>
+          </Stack>
+          <p>
+            Sovelluksen kehitys alkoi Helsingin yliopiston Ohjelmistotuotantoprojekti-kurssilla (syksy 2020, kevät 2021 ja kesä 2022) ja jatkuu Lajitietokeskuksessa.
+          </p>
         </div>
       </Paper>
       <br />

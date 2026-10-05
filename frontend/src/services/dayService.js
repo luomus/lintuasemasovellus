@@ -24,8 +24,7 @@ export const editCatchRow = async (dayId, editedRow) => {
   return await axios.post(`/api/editCatches/${dayId}`, editedRow);
 };
 
-export const deleteCatchRow = async (dayId, catchRowToDelete) => {
-  const dayRowNumber = catchRowToDelete.key;
+export const deleteCatchRow = async (dayId, dayRowNumber) => {
   return await axios.delete(`/api/deleteCatch/${dayId}/${dayRowNumber}`);
 };
 
@@ -66,19 +65,22 @@ export const getShorthandByObsPeriod = async (obsPeriodId) => {
 };
 
 export const sendEverything = async (everything) => {
-  console.log("everything: ", everything);
   const res = await axios.post("/api/addEverything", everything);
   return res;
 };
 
-export const sendEditedShorthand = async (periods, observations, dayId, userID) => {
-  const data = { periods: periods, observations: observations, dayId: dayId, userID: userID };
+export const sendEditedShorthand = async (periods, observations, dayId, userID, removedPeriodIds = []) => {
+  const data = { periods, observations, dayId, userID, removedPeriodIds };
   const res = await axios.post("/api/saveEditedObservations", data);
   return res;
 };
 
 export const sendDay = async (dayData) => {
-  console.log("day data: ", dayData);
   const res = await axios.post("/api/addDay", dayData);
+  return res;
+};
+
+export const removeDay = async (dayId) => {
+  const res = await axios.delete(`/api/removeDay/${dayId}`);
   return res;
 };

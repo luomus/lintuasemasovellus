@@ -1,26 +1,20 @@
 import os
-import requests
 import json
 from datetime import timedelta
+import logging
+from logging.handlers import SMTPHandler
+from ratelimitingfilter import RateLimitingFilter
 
 
-from flask import (Flask, render_template,
-    request, redirect, session, url_for,
-    make_response, jsonify, json)
+from flask import (Flask, json)
 from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
+    LoginManager
 )
-from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from sqlalchemy.engine import create_engine
-
 from application.api import bp as api_blueprint
+from application.api.classes.account.classes import LoggedInUser, get_logged_in_user
 
 from application.api.classes.observatory import models
 from application.api.classes.account import models
@@ -41,6 +35,7 @@ from application.api.classes.shorthand import views
 from application.api.classes.observation import views
 from application.api.classes.type import services
 from application.api.classes.catch import views, services
+from application.api.classes.species import views
 
 
 from application.api.classes.account.models import Account
@@ -53,8 +48,7 @@ from application.api.classes.type.services import createType
 
 
 from application.db import db
-
-from os import urandom
+from application.custom_json_provider import CustomJSONProvider
 
 from flask_cors import CORS #siirretty vikaksi tietokantatestijärjestelmän debuggausta varten
 
@@ -71,21 +65,28 @@ def init_app(database, print_db_echo):
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     cors = CORS(app)
 
+    app.json = CustomJSONProvider(app)
+
     #kirjautuminen
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=3)
     app.config["SESSION_REFRESH_EACH_REQUEST"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     login_manager = LoginManager()
     login_manager.init_app(app)
-    app.config["SECRET_KEY"] = urandom(32)
-    if database == "oracle":
-        app.config['LOGIN_DISABLED'] = False
-    else:
-        app.config['LOGIN_DISABLED'] = True
+    app.config["SECRET_KEY"] = os.environ['SECRET_KEY']
+    app.config['LOGIN_DISABLED'] = False
 
     @login_manager.user_loader
-    def load_user(account_id):
-        return Account.query.get(account_id)
+    def load_user(user_data):
+        user = get_logged_in_user(user_data)
+
+        # check if the account exists if using a non-persistent database
+        if database != 'oracle' and user is not None:
+            account = Account.query.filter_by(userId=user.user_id).first()
+            if account is None:
+                return None
+
+        return user
 
     #määrittele tietokantayhteys
     if database == "oracle":
@@ -142,5 +143,24 @@ def init_app(database, print_db_echo):
 
         except Exception as e:
             print(e)
+
+    logging_formatter = logging.Formatter(
+        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+    )
+
+    if os.getenv('EMAIL_HOST') and os.getenv('SERVER_EMAIL') and os.getenv('ADMIN_EMAIL'):
+        mail_handler = SMTPHandler(
+            mailhost=os.environ['EMAIL_HOST'],
+            fromaddr=os.environ['SERVER_EMAIL'],
+            toaddrs=[os.environ['ADMIN_EMAIL']],
+            subject='Lintuasemat Error'
+        )
+
+        mail_handler.setLevel(logging.ERROR)
+        mail_handler.setFormatter(logging_formatter)
+        mail_handler.addFilter(
+            RateLimitingFilter(rate=1, per=60 * 1, burst=1, match='auto')
+        )
+        app.logger.addHandler(mail_handler)
 
     return app

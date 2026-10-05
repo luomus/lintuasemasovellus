@@ -14,19 +14,20 @@ def get_shorthands_by_obsperiod(obsperiod_id):
     ret = []
     if (shorthandblock):
         ret.append({ 'id': shorthandblock.id, 'shorthandBlock': shorthandblock.shorthandblock })
-    
+
     return ret
 
-def delete_shorthands_by_obsperiod(obsperiod_id):
+def delete_shorthands_by_obsperiod(obsperiod_id, commit=True):
     shorthands = get_shorthands_by_obsperiod(obsperiod_id)
     for shorthand in shorthands:
-        delete_shorthand(shorthand['id'])
+        delete_shorthand(shorthand['id'], commit=commit)
 
-def delete_shorthand(shorthand_id):
+def delete_shorthand(shorthand_id, commit=True):
     shorthand_to_delete = Shorthand.query.get(shorthand_id)
-    deleteObservations(shorthand_id)
+    deleteObservations(shorthand_id, commit=commit)
     shorthand_to_delete.is_deleted = 1
-    db.session.commit()
+    if commit:
+        db.session.commit()
 
 def get_shorthands_for_editing(obsday_id, type_name, location_name):
     stmt = text("SELECT " + prefix + "Shorthand.id AS shorthand_id,"
@@ -48,9 +49,10 @@ def get_shorthands_for_editing(obsday_id, type_name, location_name):
                 " AND " + prefix + "Type.is_deleted = 0"
                 " AND " + prefix + "Location.is_deleted = 0"
                 " AND " + prefix + "Observatoryday.is_deleted = 0"
-                " ORDER BY " + prefix + "Observationperiod.id, shorthand_id").params(dayId=obsday_id, type=type_name, location=location_name)
+                " ORDER BY " + prefix + "Observationperiod.start_time, shorthand_id").params(dayId=obsday_id, type=type_name, location=location_name)
 
-    res = db.engine.execute(stmt)
+    with db.engine.connect() as conn:
+        res = conn.execute(stmt)
 
     obsPeriodList = createObsperiodList(res)
 
@@ -101,11 +103,12 @@ def createObsperiodList(res):
         endTime = formatTime(row.end_time)
         shorthandText = row.shorthandblock
 
-    addToShorthandList(shorthandList, shorthandId, shorthandText, observationList)
-    observationList.clear()
+    if index > 0:
+        addToShorthandList(shorthandList, shorthandId, shorthandText, observationList)
+        observationList.clear()
 
-    addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
-    shorthandList.clear()
+        addObsPeriod(obsPeriodList, obsPeriodId, startTime, endTime, shorthandList)
+        shorthandList.clear()
 
     return obsPeriodList
 
