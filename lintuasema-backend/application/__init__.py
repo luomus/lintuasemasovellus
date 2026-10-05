@@ -1,20 +1,17 @@
 import os
-import requests
 import json
 from datetime import timedelta
+import logging
+from logging.handlers import SMTPHandler
+from ratelimitingfilter import RateLimitingFilter
 
 
-from flask import (Flask, render_template,
-    request, redirect, session, url_for,
-    make_response, jsonify, json)
+from flask import (Flask, json)
 from flask_login import (
     LoginManager
 )
-from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.middleware.proxy_fix import ProxyFix
-
-from sqlalchemy.engine import create_engine
 
 from application.api import bp as api_blueprint
 from application.api.classes.account.classes import LoggedInUser, get_logged_in_user
@@ -52,8 +49,6 @@ from application.api.classes.type.services import createType
 
 from application.db import db
 from application.custom_json_provider import CustomJSONProvider
-
-from os import urandom
 
 from flask_cors import CORS #siirretty vikaksi tietokantatestijärjestelmän debuggausta varten
 
@@ -149,16 +144,20 @@ def init_app(database, print_db_echo):
         except Exception as e:
             print(e)
 
-    if app.config.get('EMAIL_HOST') and app.config.get('SERVER_EMAIL') and app.config.get('ADMIN_EMAIL'):
+    logging_formatter = logging.Formatter(
+        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+    )
+
+    if os.getenv('EMAIL_HOST') and os.getenv('SERVER_EMAIL') and os.getenv('ADMIN_EMAIL'):
         mail_handler = SMTPHandler(
-            mailhost=app.config['EMAIL_HOST'],
-            fromaddr=app.config['SERVER_EMAIL'],
-            toaddrs=[app.config['ADMIN_EMAIL']],
+            mailhost=os.environ['EMAIL_HOST'],
+            fromaddr=os.environ['SERVER_EMAIL'],
+            toaddrs=[os.environ['ADMIN_EMAIL']],
             subject='Lintuasemat Error'
         )
 
         mail_handler.setLevel(logging.ERROR)
-        mail_handler.setFormatter(formatter)
+        mail_handler.setFormatter(logging_formatter)
         mail_handler.addFilter(
             RateLimitingFilter(rate=1, per=60 * 1, burst=1, match='auto')
         )
