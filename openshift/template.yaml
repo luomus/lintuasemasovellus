@@ -7,6 +7,7 @@ parameters:
   - name: BRANCH
     required: true
     value: dev
+  - name: HOST
   - name: AUTH_TOKEN
     required: true
   - name: TARGET
@@ -173,7 +174,7 @@ objects:
       labels:
         app: ${APP}-${BRANCH}
     spec:
-      host: "lintuasema-dev-new.2.rahtiapp.fi"
+      host: ${HOST}
       to:
         kind: Service
         name: ${APP}-${BRANCH}
