@@ -1,12 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 import os
-import requests
-import urllib.parse as urlparse
-from flask import (Flask, render_template,
-    request, redirect, session, url_for,
-    make_response, jsonify)
-from application import init_app, redirect
+from application import init_app
 
 # ASETUKSET
 # db_type: Jos käytetään Oraclea, anna "oracle"; muuten käytetään oletuksena SQLitea
