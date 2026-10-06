@@ -8,6 +8,7 @@ parameters:
     required: true
     value: dev
   - name: HOST
+    required: true
   - name: AUTH_TOKEN
     required: true
   - name: TARGET
